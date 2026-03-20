@@ -5,6 +5,7 @@ import SwapPage from './pages/SwapPage';
 import LiquidityPage from './pages/LiquidityPage';
 import FarmsPage from './pages/FarmsPage';
 import StakingPage from './pages/StakingPage';
+import RoadmapPage from './pages/RoadmapPage';
 import { useWeb3Store, useTokenStore } from './stores';
 import { TrendUp, TrendDown, Skull } from '@phosphor-icons/react';
 
@@ -179,6 +180,8 @@ function App() {
         return <FarmsPage />;
       case 'staking':
         return <StakingPage />;
+      case 'roadmap':
+        return <RoadmapPage />;
       default:
         return <SwapPage />;
     }

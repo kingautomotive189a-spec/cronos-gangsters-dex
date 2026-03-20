@@ -42,7 +42,7 @@ export const Header = ({ currentPage, setCurrentPage }) => {
             
             {/* Navigation */}
             <nav className="hidden md:flex items-center gap-1">
-              {['swap', 'liquidity', 'farms', 'staking'].map((page) => (
+              {['swap', 'liquidity', 'farms', 'staking', 'roadmap'].map((page) => (
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
@@ -98,7 +98,7 @@ export const Header = ({ currentPage, setCurrentPage }) => {
           
           {/* Mobile Navigation */}
           <nav className="md:hidden flex items-center gap-1 pb-4 overflow-x-auto">
-            {['swap', 'liquidity', 'farms', 'staking'].map((page) => (
+            {['swap', 'liquidity', 'farms', 'staking', 'roadmap'].map((page) => (
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
