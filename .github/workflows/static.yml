@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main, master ]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -22,15 +22,11 @@ jobs:
         with:
           node-version: '18'
       
-      - name: Install dependencies
+      - name: Install and Build
         run: |
           cd frontend
-          yarn install
-      
-      - name: Build
-        run: |
-          cd frontend
-          CI=false yarn build
+          npm install
+          CI=false npm run build
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
