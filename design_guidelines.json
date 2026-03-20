@@ -1,0 +1,120 @@
+{
+  "theme": "dark",
+  "style_archetype": "JEWEL & LUXURY meets SWISS BRUTALIST",
+  "emotional_tone": "Ruthless, Premium, Exclusive, High-Stakes (Gangster/Mafia aesthetic)",
+  "colors": {
+    "background": {
+      "base": "#0f0f10",
+      "surface": "#151515",
+      "surface_hover": "#1f1f22"
+    },
+    "primary": {
+      "DEFAULT": "#D4A017",
+      "hover": "#F4C430",
+      "glow": "rgba(212, 160, 23, 0.4)"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A1A1AA",
+      "muted": "#71717A"
+    },
+    "status": {
+      "success": "#27AE60",
+      "danger": "#E74C3C"
+    },
+    "borders": {
+      "DEFAULT": "rgba(255, 255, 255, 0.05)",
+      "focus": "rgba(212, 160, 23, 0.5)"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "headings": "Bebas Neue, sans-serif",
+      "body": "IBM Plex Mono, monospace",
+      "data": "IBM Plex Mono, monospace"
+    },
+    "rules": {
+      "headings": "Uppercase, tracking-widest (tracking-[0.1em]), crisp and imposing.",
+      "body": "Clean, technical, legible. Use for all tabular data and token amounts.",
+      "labels": "Uppercase, text-xs, tracking-widest, text-zinc-500."
+    }
+  },
+  "spacing_and_layout": {
+    "philosophy": "Generous Spacing (p-6, p-8) to exude premium luxury. The void is as important as the content.",
+    "container": "Max-w-7xl mx-auto, w-full, px-4 md:px-8",
+    "grid_system": {
+      "dashboard": "Bento Grid: grid-cols-1 md:grid-cols-12 gap-6. Hero metric spans 8 cols, secondary stats span 4.",
+      "cards": "Strict alignment. Flex column with gap-4 or gap-6."
+    }
+  },
+  "surface_strategies": {
+    "cards": "Solid background (#151515), sharp edges (rounded-none or rounded-sm), 1px subtle border (border-white/5). On hover: border glows gold (border-[#D4A017]/30).",
+    "header": "Crystal Glass variant: bg-[#0f0f10]/90 backdrop-blur-xl border-b border-white/5. NO completely transparent headers.",
+    "swap_module": "Elevated Neumorphism/Glow: bg-[#151515], sharp corners, surrounded by a faint gold radial gradient glow behind the container."
+  },
+  "motion": {
+    "hover": "Subtle border color transitions (border-white/5 to border-[#D4A017]/50), slight transform (-translate-y-0.5) for interactive cards.",
+    "buttons": "Background color shifts to a brighter gold, text remains #0f0f10 for contrast. Immediate snap, no floaty slow transitions.",
+    "page_transitions": "Fade in and slight upward slide (framer-motion opacity: 0 -> 1, y: 10 -> 0)."
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#D4A017] text-[#0f0f10] font-bold font-['Bebas_Neue'] text-xl tracking-wider uppercase px-8 py-4 rounded-none hover:bg-[#F4C430] transition-colors",
+      "secondary": "bg-transparent text-[#D4A017] border border-[#D4A017] font-bold font-['Bebas_Neue'] text-xl tracking-wider uppercase px-8 py-4 rounded-none hover:bg-[#D4A017]/10 transition-colors"
+    },
+    "inputs": {
+      "token_input": "bg-[#0f0f10] border border-white/10 rounded-none p-4 text-2xl font-['IBM_Plex_Mono'] text-white focus:border-[#D4A017] focus:ring-1 focus:ring-[#D4A017] transition-all outline-none"
+    },
+    "badges": {
+      "apr": "bg-[#27AE60]/20 text-[#27AE60] border border-[#27AE60]/30 px-2 py-1 text-xs font-['IBM_Plex_Mono'] tracking-widest uppercase"
+    }
+  },
+  "visual_enhancers": {
+    "textures": "Use CSS noise or grain overlay (opacity 0.03) to break digital flatness and give a gritty 'street' texture.",
+    "charts": "Recharts with gold (#D4A017) stroke, no grid lines, transparent tooltip background with blur."
+  },
+  "3d_libraries": {
+    "recommendation": "Use Recharts for the DEX data. Avoid heavy 3D for performance, but use framer-motion for smooth layout transitions.",
+    "charts": "Recharts - LineChart for token price with stroke='#D4A017', strokeWidth=2, and a gradient fill."
+  },
+  "media": {
+    "icons": "@phosphor-icons/react (Duotone or Regular weight). They feel more premium than generic Lucide for this aesthetic.",
+    "images": [
+      {
+        "category": "hero_background_texture",
+        "url": "https://images.unsplash.com/photo-1761437855740-c894da924d79?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwxfHxkYXJrJTIwbHV4dXJ5JTIwZ29sZCUyMGFic3RyYWN0fGVufDB8fHx8MTc3NDAzOTE2OXww&ixlib=rb-4.1.0&q=85",
+        "description": "Golden metallic lines against a black background. Use as a low-opacity (10-15%) background image behind the main swap interface or hero section."
+      },
+      {
+        "category": "vault_background",
+        "url": "https://images.pexels.com/photos/147634/pexels-photo-147634.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Dark room with a glowing light. Use as a moody background for the Staking Vaults page with heavy dark overlay."
+      }
+    ]
+  },
+  "accessibility": {
+    "contrast": "Ensure pure white text is used against #151515 and #0f0f10. Gold (#D4A017) should only be used for large text or borders, not small body text.",
+    "focus": "All interactive elements must have a focus ring: focus:ring-2 focus:ring-[#D4A017] focus:outline-none"
+  },
+  "instructions_to_main_agent": [
+    "Use plain React + Tailwind CSS + Shadcn UI. All files are .js (no TypeScript).",
+    "MANDATORY: Install required icon library: `yarn add @phosphor-icons/react`",
+    "MANDATORY: Add Google Fonts 'Bebas Neue' and 'IBM Plex Mono' in the index.css or HTML head.",
+    "Apply Bebas Neue exclusively to headings, buttons, and major numbers. Use IBM Plex Mono for tables, body text, and token amounts.",
+    "Do not use default Shadcn border radiuses. Set everything to sharp corners (rounded-none) or very slight curves (rounded-sm) to match the ruthless aesthetic.",
+    "The background must be completely dark (#0f0f10). Do not use Vercel's default light mode. Hardcode dark mode styles.",
+    "When building the Token Swap component, make it look like a high-end trading terminal. Dark inputs, gold hover states, clear token symbols.",
+    "Do not use completely transparent backgrounds for any overlays, dialogs, or dropdowns. Use bg-[#151515] with border-white/10.",
+    "In charts, make the line gold (#D4A017) and hide the background grid to keep it clean.",
+    "Ensure all data-testid attributes are included on buttons, inputs, and major interaction points (e.g., data-testid='swap-button', data-testid='token-input-amount')."
+  ],
+  "universal_guidelines_for_main_agent": [
+    "Do not apply global transition: all. Target specific properties.",
+    "Do not center-align the app container. Align left by default for readability.",
+    "Never use AI assistant emoji characters for icons. Use the specified Phosphor icons.",
+    "Use sonner for toasts, placed in /app/frontend/src/components/ui/sonner.js.",
+    "Add micro-animations to all buttons using Tailwind hover and active states.",
+    "Use 2-3x more spacing than typical defaults. Empty space implies luxury.",
+    "All components must be exported properly. Pages as default exports, UI components as named exports."
+  ]
+}
