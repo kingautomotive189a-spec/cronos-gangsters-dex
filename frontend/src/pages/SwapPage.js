@@ -306,8 +306,8 @@ const SwapPage = () => {
               <h3 className="font-display text-xl text-[#D4A017] mb-4">
                 {fromToken?.symbol} PRICE (24H)
               </h3>
-              <div className="h-[200px]">
-                <ResponsiveContainer width="100%" height="100%">
+              <div style={{ width: '100%', height: 200 }}>
+                <ResponsiveContainer width="100%" height={200}>
                   <LineChart data={priceHistory}>
                     <XAxis 
                       dataKey="time" 
