@@ -1,188 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import { ArrowRight, Lightning, Info, CaretDown } from '@phosphor-icons/react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Lightning, Info, Gear, ArrowRight } from '@phosphor-icons/react';
 import { Card, TokenSelector, TokenModal, SwapArrowButton, TokenInput, LoadingSpinner } from '../components/ui/shared';
-import { useWalletStore, useTokensStore, useToastStore } from '../stores';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+import { useWeb3Store, useTokenStore, useSwapStore, useToastStore } from '../stores';
+import { ethers } from 'ethers';
 
 const SwapPage = () => {
-  const { isConnected, address, balances, updateBalance, connect } = useWalletStore();
-  const { tokens, fetchTokens, loading: tokensLoading } = useTokensStore();
+  const { isConnected, address } = useWeb3Store();
+  const { getAllTokens, getBalance } = useTokenStore();
+  const { 
+    fromToken, toToken, fromAmount, toAmount, quote, isLoading,
+    setFromToken, setToToken, setFromAmount, switchTokens, getQuote, executeSwap, slippage, setSlippage
+  } = useSwapStore();
   const { addToast } = useToastStore();
   
-  const [fromToken, setFromToken] = useState(null);
-  const [toToken, setToToken] = useState(null);
-  const [fromAmount, setFromAmount] = useState('');
-  const [toAmount, setToAmount] = useState('');
-  const [quote, setQuote] = useState(null);
-  const [isSwapping, setIsSwapping] = useState(false);
-  const [isLoadingQuote, setIsLoadingQuote] = useState(false);
   const [tokenModalOpen, setTokenModalOpen] = useState(null);
-  const [slippage, setSlippage] = useState(0.5);
-  const [priceHistory, setPriceHistory] = useState([]);
-  const [swapHistory, setSwapHistory] = useState([]);
+  const [isSwapping, setIsSwapping] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  
+  const tokens = getAllTokens();
   
   // Initialize tokens
   useEffect(() => {
-    fetchTokens();
-  }, [fetchTokens]);
-  
-  // Set default tokens
-  useEffect(() => {
     if (tokens.length > 0 && !fromToken) {
-      const gangToken = tokens.find(t => t.symbol === 'GANG');
-      const wcroToken = tokens.find(t => t.symbol === 'WCRO');
-      setFromToken(wcroToken || tokens[0]);
-      setToToken(gangToken || tokens[1]);
+      const cro = tokens.find(t => t.symbol === 'CRO');
+      const gang = tokens.find(t => t.symbol === 'GANG');
+      setFromToken(cro || tokens[0]);
+      setToToken(gang || tokens[1]);
     }
-  }, [tokens, fromToken]);
+  }, [tokens, fromToken, setFromToken, setToToken]);
   
-  // Fetch price history for chart
+  // Debounced quote fetching
   useEffect(() => {
-    const fetchPriceHistory = async () => {
-      if (!fromToken) return;
-      try {
-        const response = await fetch(`${API}/price-history/${fromToken.symbol}?timeframe=24h`);
-        const data = await response.json();
-        setPriceHistory(data.data.map(d => ({
-          time: new Date(d.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          price: d.price
-        })));
-      } catch (error) {
-        console.error('Error fetching price history:', error);
-      }
-    };
+    if (!fromToken || !toToken || !fromAmount || parseFloat(fromAmount) <= 0) return;
     
-    fetchPriceHistory();
-  }, [fromToken]);
-  
-  // Fetch swap history
-  useEffect(() => {
-    const fetchSwapHistory = async () => {
-      if (!address) return;
-      try {
-        const response = await fetch(`${API}/swap/history/${address}`);
-        const data = await response.json();
-        setSwapHistory(data.slice(0, 5));
-      } catch (error) {
-        console.error('Error fetching swap history:', error);
-      }
-    };
+    const timer = setTimeout(() => {
+      getQuote().catch(err => {
+        console.error('Quote error:', err);
+      });
+    }, 500);
     
-    if (isConnected) {
-      fetchSwapHistory();
-    }
-  }, [address, isConnected]);
-  
-  // Fetch quote when amounts change
-  useEffect(() => {
-    const fetchQuote = async () => {
-      if (!fromToken || !toToken || !fromAmount || parseFloat(fromAmount) <= 0) {
-        setQuote(null);
-        setToAmount('');
-        return;
-      }
-      
-      setIsLoadingQuote(true);
-      try {
-        const response = await fetch(
-          `${API}/swap/quote?from_token=${fromToken.symbol}&to_token=${toToken.symbol}&amount=${fromAmount}`,
-          { method: 'POST' }
-        );
-        const data = await response.json();
-        setQuote(data);
-        setToAmount(data.to_amount.toFixed(6));
-      } catch (error) {
-        console.error('Error fetching quote:', error);
-        setQuote(null);
-      }
-      setIsLoadingQuote(false);
-    };
-    
-    const debounce = setTimeout(fetchQuote, 500);
-    return () => clearTimeout(debounce);
-  }, [fromToken, toToken, fromAmount]);
-  
-  const handleSwapDirection = () => {
-    const temp = fromToken;
-    setFromToken(toToken);
-    setToToken(temp);
-    setFromAmount(toAmount);
-    setToAmount(fromAmount);
-  };
+    return () => clearTimeout(timer);
+  }, [fromToken, toToken, fromAmount, getQuote]);
   
   const handleSwap = async () => {
     if (!isConnected) {
-      connect();
+      addToast('Please connect your wallet first', 'error');
       return;
     }
     
-    if (!quote || parseFloat(fromAmount) <= 0) return;
+    if (!quote) {
+      addToast('Please wait for quote', 'error');
+      return;
+    }
     
-    // Check balance
-    const userBalance = balances[fromToken.symbol] || 0;
-    if (parseFloat(fromAmount) > userBalance) {
+    const balance = getBalance(fromToken.symbol);
+    if (parseFloat(fromAmount) > parseFloat(balance)) {
       addToast(`Insufficient ${fromToken.symbol} balance`, 'error');
       return;
     }
     
     setIsSwapping(true);
     try {
-      const response = await fetch(`${API}/swap/execute`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          from_token: fromToken.symbol,
-          to_token: toToken.symbol,
-          amount: parseFloat(fromAmount),
-          wallet_address: address,
-          slippage
-        })
-      });
-      
-      const result = await response.json();
-      
-      // Update balances
-      const newFromBalance = (balances[fromToken.symbol] || 0) - parseFloat(fromAmount);
-      const newToBalance = (balances[toToken.symbol] || 0) + result.to_amount;
-      
-      await updateBalance(fromToken.symbol, newFromBalance);
-      await updateBalance(toToken.symbol, newToBalance);
-      
-      addToast(`Swapped ${fromAmount} ${fromToken.symbol} for ${result.to_amount.toFixed(6)} ${toToken.symbol}`, 'success');
-      
-      // Reset form
-      setFromAmount('');
-      setToAmount('');
-      setQuote(null);
-      
-      // Refresh history
-      const historyRes = await fetch(`${API}/swap/history/${address}`);
-      const historyData = await historyRes.json();
-      setSwapHistory(historyData.slice(0, 5));
-      
+      const receipt = await executeSwap();
+      addToast(
+        `Swapped ${fromAmount} ${fromToken.symbol} for ${toAmount} ${toToken.symbol}!`,
+        'success'
+      );
     } catch (error) {
       console.error('Swap error:', error);
-      addToast('Swap failed. Please try again.', 'error');
+      addToast(error.message || 'Swap failed', 'error');
     }
     setIsSwapping(false);
   };
   
   const handleMax = () => {
-    if (fromToken && balances[fromToken.symbol]) {
-      setFromAmount(balances[fromToken.symbol].toString());
+    if (fromToken) {
+      const balance = getBalance(fromToken.symbol);
+      // Leave some for gas if native
+      if (fromToken.isNative && parseFloat(balance) > 0.1) {
+        setFromAmount((parseFloat(balance) - 0.1).toString());
+      } else {
+        setFromAmount(balance);
+      }
     }
   };
   
-  if (tokensLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <LoadingSpinner size={48} />
-      </div>
-    );
-  }
+  const fromBalance = fromToken ? getBalance(fromToken.symbol) : '0';
+  const toBalance = toToken ? getBalance(toToken.symbol) : '0';
   
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
@@ -192,11 +96,38 @@ const SwapPage = () => {
           <Card glow className="p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-3xl text-[#D4A017]">SWAP TOKENS</h2>
-              <button className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors">
-                <Info size={18} />
-                <span className="text-xs uppercase tracking-widest">Slippage: {slippage}%</span>
+              <button 
+                onClick={() => setShowSettings(!showSettings)}
+                className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors p-2"
+              >
+                <Gear size={20} />
               </button>
             </div>
+            
+            {/* Settings Panel */}
+            {showSettings && (
+              <div className="mb-6 p-4 bg-[#0f0f10] border border-white/10">
+                <p className="text-xs text-zinc-500 uppercase tracking-widest mb-3">Slippage Tolerance</p>
+                <div className="flex gap-2">
+                  {[0.1, 0.5, 1.0].map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setSlippage(s)}
+                      className={`slippage-btn ${slippage === s ? 'active' : ''}`}
+                    >
+                      {s}%
+                    </button>
+                  ))}
+                  <input
+                    type="number"
+                    value={slippage}
+                    onChange={(e) => setSlippage(parseFloat(e.target.value) || 0.5)}
+                    className="w-20 bg-[#151515] border border-white/10 px-3 py-2 text-sm text-center outline-none focus:border-[#D4A017]"
+                    placeholder="Custom"
+                  />
+                </div>
+              </div>
+            )}
             
             {/* From Token */}
             <div className="space-y-2">
@@ -211,13 +142,13 @@ const SwapPage = () => {
                 value={fromAmount}
                 onChange={setFromAmount}
                 token={fromToken}
-                balance={balances[fromToken?.symbol]}
+                balance={fromBalance}
                 onMax={handleMax}
                 label="You Pay"
               />
             </div>
             
-            <SwapArrowButton onClick={handleSwapDirection} />
+            <SwapArrowButton onClick={switchTokens} />
             
             {/* To Token */}
             <div className="space-y-2">
@@ -231,22 +162,25 @@ const SwapPage = () => {
               <div className="bg-[#0f0f10] border border-white/10 p-4">
                 <div className="flex justify-between mb-2">
                   <span className="text-xs text-zinc-500 uppercase tracking-widest">You Receive</span>
-                  {balances[toToken?.symbol] !== undefined && (
-                    <span className="text-xs text-zinc-500">
-                      Balance: <span className="text-[#D4A017]">{balances[toToken?.symbol]?.toLocaleString() || '0'}</span>
-                    </span>
-                  )}
+                  <span className="text-xs text-zinc-500">
+                    Balance: <span className="text-[#D4A017]">{parseFloat(toBalance).toFixed(6)}</span>
+                  </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  {isLoadingQuote ? (
+                  {toToken?.logo && (
+                    <img 
+                      src={toToken.logo} 
+                      alt={toToken.symbol} 
+                      className="w-8 h-8 rounded-full"
+                      onError={(e) => { e.target.src = 'https://via.placeholder.com/32?text=' + toToken?.symbol?.[0]; }}
+                    />
+                  )}
+                  {isLoading ? (
                     <LoadingSpinner size={24} />
                   ) : (
                     <span className="text-2xl font-mono text-white">{toAmount || '0.0'}</span>
                   )}
                 </div>
-                <p className="text-sm text-zinc-500 mt-2">
-                  ≈ ${toToken && toAmount ? (parseFloat(toAmount) * toToken.price_usd).toFixed(2) : '0.00'}
-                </p>
               </div>
             </div>
             
@@ -255,21 +189,23 @@ const SwapPage = () => {
               <div className="mt-4 p-4 bg-[#0f0f10] border border-white/5 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-zinc-500">Rate</span>
-                  <span className="font-mono">1 {fromToken.symbol} = {quote.rate.toFixed(6)} {toToken.symbol}</span>
+                  <span className="font-mono">1 {fromToken?.symbol} = {quote.rate?.toFixed(6)} {toToken?.symbol}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-zinc-500">Price Impact</span>
-                  <span className={`font-mono ${quote.price_impact > 1 ? 'text-[#E74C3C]' : 'text-[#27AE60]'}`}>
-                    {quote.price_impact.toFixed(4)}%
+                  <span className={`font-mono ${quote.priceImpact > 1 ? 'text-[#E74C3C]' : 'text-[#27AE60]'}`}>
+                    ~{quote.priceImpact?.toFixed(2)}%
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-zinc-500">Trading Fee (0.3%)</span>
-                  <span className="font-mono">{quote.fee.toFixed(6)} {toToken.symbol}</span>
+                  <span className="text-zinc-500">Slippage Tolerance</span>
+                  <span className="font-mono">{slippage}%</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-zinc-500">Minimum Received</span>
-                  <span className="font-mono">{quote.minimum_received.toFixed(6)} {toToken.symbol}</span>
+                  <span className="text-zinc-500">Route</span>
+                  <span className="font-mono text-xs">
+                    {quote.path?.length === 2 ? 'Direct' : 'Via WCRO'}
+                  </span>
                 </div>
               </div>
             )}
@@ -277,7 +213,7 @@ const SwapPage = () => {
             {/* Swap Button */}
             <button
               onClick={handleSwap}
-              disabled={isSwapping || (!isConnected ? false : (!quote || parseFloat(fromAmount) <= 0))}
+              disabled={isSwapping || isLoading || (!isConnected ? false : !quote)}
               className="btn-primary w-full mt-6 flex items-center justify-center gap-2"
               data-testid="swap-button"
             >
@@ -294,57 +230,15 @@ const SwapPage = () => {
               ) : (
                 <>
                   <Lightning size={20} weight="fill" />
-                  <span>SWAP NOW</span>
+                  <span>SWAP VIA VVS FINANCE</span>
                 </>
               )}
             </button>
+            
+            <p className="text-xs text-zinc-500 text-center mt-4">
+              Powered by VVS Finance Router on Cronos
+            </p>
           </Card>
-          
-          {/* Price Chart */}
-          {priceHistory.length > 0 && (
-            <Card className="mt-6 p-6">
-              <h3 className="font-display text-xl text-[#D4A017] mb-4">
-                {fromToken?.symbol} PRICE (24H)
-              </h3>
-              <div style={{ width: '100%', height: 200 }}>
-                <ResponsiveContainer width="100%" height={200}>
-                  <LineChart data={priceHistory}>
-                    <XAxis 
-                      dataKey="time" 
-                      stroke="#71717A" 
-                      fontSize={10}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis 
-                      stroke="#71717A" 
-                      fontSize={10}
-                      tickLine={false}
-                      axisLine={false}
-                      tickFormatter={(val) => `$${val.toFixed(6)}`}
-                      width={80}
-                    />
-                    <Tooltip 
-                      contentStyle={{
-                        background: '#151515',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        borderRadius: 0
-                      }}
-                      labelStyle={{ color: '#D4A017' }}
-                      formatter={(val) => [`$${val.toFixed(8)}`, 'Price']}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="price" 
-                      stroke="#D4A017" 
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </Card>
-          )}
         </div>
         
         {/* Sidebar */}
@@ -355,45 +249,26 @@ const SwapPage = () => {
             {fromToken && (
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <img src={fromToken.logo} alt={fromToken.symbol} className="w-12 h-12 rounded-full" />
+                  <img 
+                    src={fromToken.logo} 
+                    alt={fromToken.symbol} 
+                    className="w-12 h-12 rounded-full"
+                    onError={(e) => { e.target.src = 'https://via.placeholder.com/48?text=' + fromToken?.symbol?.[0]; }}
+                  />
                   <div>
                     <p className="font-display text-lg">{fromToken.symbol}</p>
                     <p className="text-sm text-zinc-500">{fromToken.name}</p>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-xs text-zinc-500 uppercase tracking-widest">Price USD</p>
-                    <p className="font-mono text-lg">${fromToken.price_usd.toFixed(fromToken.price_usd < 0.01 ? 8 : 4)}</p>
+                {fromToken.address !== 'NATIVE' && (
+                  <div className="bg-[#0f0f10] p-3 border border-white/5">
+                    <p className="text-xs text-zinc-500 uppercase tracking-widest mb-1">Contract</p>
+                    <p className="font-mono text-xs text-[#D4A017] break-all">{fromToken.address}</p>
                   </div>
-                  <div>
-                    <p className="text-xs text-zinc-500 uppercase tracking-widest">Price CRO</p>
-                    <p className="font-mono text-lg">{fromToken.price_cro.toFixed(6)}</p>
-                  </div>
-                </div>
+                )}
               </div>
             )}
           </Card>
-          
-          {/* Swap History */}
-          {isConnected && swapHistory.length > 0 && (
-            <Card className="p-6">
-              <h3 className="font-display text-xl text-[#D4A017] mb-4">RECENT SWAPS</h3>
-              <div className="space-y-3">
-                {swapHistory.map((tx) => (
-                  <div key={tx.id} className="flex items-center justify-between p-3 bg-[#0f0f10] border border-white/5">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-sm">{tx.from_amount.toFixed(4)}</span>
-                      <span className="text-zinc-500">{tx.from_token}</span>
-                      <ArrowRight size={14} className="text-[#D4A017]" />
-                      <span className="font-mono text-sm">{tx.to_amount.toFixed(4)}</span>
-                      <span className="text-zinc-500">{tx.to_token}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          )}
           
           {/* Quick Actions */}
           <Card className="p-6">
@@ -402,16 +277,22 @@ const SwapPage = () => {
               <button 
                 onClick={() => {
                   const gang = tokens.find(t => t.symbol === 'GANG');
-                  const wcro = tokens.find(t => t.symbol === 'WCRO');
-                  if (gang && wcro) {
-                    setFromToken(wcro);
+                  const cro = tokens.find(t => t.symbol === 'CRO');
+                  if (gang && cro) {
+                    setFromToken(cro);
                     setToToken(gang);
                   }
                 }}
-                className="w-full btn-secondary !py-3 text-sm"
+                className="w-full btn-secondary !py-3 text-sm flex items-center justify-center gap-2"
                 data-testid="buy-gang-btn"
               >
-                🔫 BUY $GANG
+                <img 
+                  src="https://dd.dexscreener.com/ds-data/tokens/cronos/0x34be5b8c30ee4fde069dc878989686abe9884470.png" 
+                  alt="GANG" 
+                  className="w-5 h-5 rounded-full"
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
+                BUY $GANG
               </button>
               <button 
                 onClick={() => {
@@ -424,9 +305,24 @@ const SwapPage = () => {
                 }}
                 className="w-full btn-secondary !py-3 text-sm"
               >
-                💰 SELL $GANG
+                SELL $GANG
               </button>
             </div>
+          </Card>
+          
+          {/* VVS Info */}
+          <Card className="p-6 bg-gradient-to-br from-[#151515] to-[#1a1510] border-[#D4A017]/20">
+            <div className="flex items-center gap-3 mb-4">
+              <img 
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/14519.png" 
+                alt="VVS" 
+                className="w-8 h-8 rounded-full"
+              />
+              <h3 className="font-display text-lg text-[#D4A017]">VVS FINANCE</h3>
+            </div>
+            <p className="text-sm text-zinc-400">
+              All swaps are executed through VVS Finance, the leading DEX on Cronos chain with deep liquidity.
+            </p>
           </Card>
         </div>
       </div>
@@ -435,7 +331,6 @@ const SwapPage = () => {
       <TokenModal
         isOpen={tokenModalOpen !== null}
         onClose={() => setTokenModalOpen(null)}
-        tokens={tokens}
         onSelect={(token) => {
           if (tokenModalOpen === 'from') {
             setFromToken(token);

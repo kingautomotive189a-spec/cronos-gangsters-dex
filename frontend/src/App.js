@@ -2,26 +2,15 @@ import React, { useState, useEffect } from 'react';
 import "@/App.css";
 import { Header, ToastContainer } from './components/ui/shared';
 import SwapPage from './pages/SwapPage';
+import LiquidityPage from './pages/LiquidityPage';
 import FarmsPage from './pages/FarmsPage';
 import StakingPage from './pages/StakingPage';
-import { useTokensStore, useDexStatsStore, useWalletStore } from './stores';
-import { TrendUp, TrendDown, Coins, Users, ChartLine, Skull } from '@phosphor-icons/react';
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+import { useWeb3Store, useTokenStore } from './stores';
+import { TrendUp, TrendDown, Skull } from '@phosphor-icons/react';
 
 // Hero Stats Component
 const HeroStats = () => {
-  const { stats, fetchStats, loading } = useDexStatsStore();
-  
-  useEffect(() => {
-    fetchStats();
-    // Refresh stats every 30 seconds
-    const interval = setInterval(fetchStats, 30000);
-    return () => clearInterval(interval);
-  }, [fetchStats]);
-  
-  if (loading || !stats) return null;
+  const { isConnected } = useWeb3Store();
   
   return (
     <div className="bg-gradient-to-r from-[#0f0f10] via-[#151515] to-[#0f0f10] border-b border-white/5">
@@ -29,18 +18,19 @@ const HeroStats = () => {
         <div className="flex items-center justify-between flex-wrap gap-4">
           {/* GANG Price */}
           <div className="flex items-center gap-3">
-            <div className="bg-[#D4A017]/20 p-2 rounded-full">
-              <Skull size={20} weight="fill" className="text-[#D4A017]" />
-            </div>
+            <img 
+              src="https://dd.dexscreener.com/ds-data/tokens/cronos/0x34be5b8c30ee4fde069dc878989686abe9884470.png"
+              alt="GANG"
+              className="w-10 h-10 rounded-full"
+              onError={(e) => { e.target.src = 'https://via.placeholder.com/40?text=G'; }}
+            />
             <div>
               <p className="text-xs text-zinc-500 uppercase tracking-widest">$GANG Price</p>
               <div className="flex items-center gap-2">
-                <span className="font-display text-xl text-white">
-                  ${stats.gang_price?.toFixed(8) || '0.00001306'}
-                </span>
-                <span className={`text-sm flex items-center gap-1 ${stats.gang_24h_change >= 0 ? 'text-[#27AE60]' : 'text-[#E74C3C]'}`}>
-                  {stats.gang_24h_change >= 0 ? <TrendUp size={14} /> : <TrendDown size={14} />}
-                  {Math.abs(stats.gang_24h_change || 0).toFixed(2)}%
+                <span className="font-display text-xl text-white">$0.00001306</span>
+                <span className="text-sm flex items-center gap-1 text-[#E74C3C]">
+                  <TrendDown size={14} />
+                  0.15%
                 </span>
               </div>
             </div>
@@ -49,25 +39,34 @@ const HeroStats = () => {
           {/* Market Cap */}
           <div className="hidden sm:block">
             <p className="text-xs text-zinc-500 uppercase tracking-widest">Market Cap</p>
-            <p className="font-display text-lg text-white">${(stats.gang_market_cap || 13000).toLocaleString()}</p>
+            <p className="font-display text-lg text-white">$13,000</p>
           </div>
           
           {/* Liquidity */}
           <div className="hidden md:block">
             <p className="text-xs text-zinc-500 uppercase tracking-widest">Liquidity</p>
-            <p className="font-display text-lg text-white">${(stats.gang_liquidity || 1300).toLocaleString()}</p>
+            <p className="font-display text-lg text-white">$1,300</p>
           </div>
           
-          {/* 24h Volume */}
+          {/* Chain */}
           <div className="hidden lg:block">
-            <p className="text-xs text-zinc-500 uppercase tracking-widest">24h Volume</p>
-            <p className="font-display text-lg text-white">${(stats.volume_24h || 0).toLocaleString()}</p>
+            <p className="text-xs text-zinc-500 uppercase tracking-widest">Chain</p>
+            <div className="flex items-center gap-2">
+              <img 
+                src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png"
+                alt="CRO"
+                className="w-5 h-5 rounded-full"
+              />
+              <p className="font-display text-lg text-white">Cronos</p>
+            </div>
           </div>
           
-          {/* Total TVL */}
+          {/* Connection Status */}
           <div>
-            <p className="text-xs text-zinc-500 uppercase tracking-widest">Total TVL</p>
-            <p className="font-display text-lg text-[#27AE60]">${(stats.total_tvl || 215000).toLocaleString()}</p>
+            <p className="text-xs text-zinc-500 uppercase tracking-widest">Status</p>
+            <p className={`font-display text-lg ${isConnected ? 'text-[#27AE60]' : 'text-zinc-400'}`}>
+              {isConnected ? 'Connected' : 'Not Connected'}
+            </p>
           </div>
         </div>
       </div>
@@ -91,7 +90,10 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-sm text-zinc-500 max-w-md">
-              The premier decentralized exchange on Cronos chain. Swap, farm, and stake with the gangsters.
+              The premier decentralized exchange on Cronos chain. Swap, provide liquidity, farm, and stake with the gangsters.
+            </p>
+            <p className="text-xs text-zinc-600 mt-4">
+              Powered by VVS Finance Router
             </p>
           </div>
           
@@ -100,19 +102,45 @@ const Footer = () => {
             <h4 className="font-display text-sm text-[#D4A017] mb-4 tracking-widest">PRODUCTS</h4>
             <ul className="space-y-2 text-sm text-zinc-500">
               <li><a href="#" className="hover:text-[#D4A017] transition-colors">Swap</a></li>
+              <li><a href="#" className="hover:text-[#D4A017] transition-colors">Add Liquidity</a></li>
               <li><a href="#" className="hover:text-[#D4A017] transition-colors">LP Farms</a></li>
               <li><a href="#" className="hover:text-[#D4A017] transition-colors">Staking Vault</a></li>
-              <li><a href="#" className="hover:text-[#D4A017] transition-colors">Analytics</a></li>
             </ul>
           </div>
           
           <div>
-            <h4 className="font-display text-sm text-[#D4A017] mb-4 tracking-widest">COMMUNITY</h4>
+            <h4 className="font-display text-sm text-[#D4A017] mb-4 tracking-widest">RESOURCES</h4>
             <ul className="space-y-2 text-sm text-zinc-500">
-              <li><a href="#" className="hover:text-[#D4A017] transition-colors">Twitter</a></li>
-              <li><a href="#" className="hover:text-[#D4A017] transition-colors">Telegram</a></li>
-              <li><a href="#" className="hover:text-[#D4A017] transition-colors">Discord</a></li>
-              <li><a href="#" className="hover:text-[#D4A017] transition-colors">Docs</a></li>
+              <li>
+                <a 
+                  href="https://dexscreener.com/cronos/0x34be5b8c30ee4fde069dc878989686abe9884470" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-[#D4A017] transition-colors"
+                >
+                  DexScreener
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://explorer.cronos.org/token/0x34be5b8c30ee4fde069dc878989686abe9884470" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-[#D4A017] transition-colors"
+                >
+                  Cronos Explorer
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://vvs.finance" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-[#D4A017] transition-colors"
+                >
+                  VVS Finance
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -121,9 +149,16 @@ const Footer = () => {
           <p className="text-xs text-zinc-600">
             © 2024 Cronos Gangsters. All rights reserved.
           </p>
-          <p className="text-xs text-zinc-600">
-            Built on Cronos Chain
-          </p>
+          <div className="flex items-center gap-4">
+            <img 
+              src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png"
+              alt="Cronos"
+              className="w-6 h-6 rounded-full"
+            />
+            <p className="text-xs text-zinc-600">
+              Built on Cronos Chain
+            </p>
+          </div>
         </div>
       </div>
     </footer>
@@ -132,11 +167,14 @@ const Footer = () => {
 
 function App() {
   const [currentPage, setCurrentPage] = useState('swap');
+  const { fetchAllBalances } = useTokenStore();
   
   const renderPage = () => {
     switch (currentPage) {
       case 'swap':
         return <SwapPage />;
+      case 'liquidity':
+        return <LiquidityPage />;
       case 'farms':
         return <FarmsPage />;
       case 'staking':
