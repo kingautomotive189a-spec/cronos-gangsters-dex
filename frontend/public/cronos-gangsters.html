@@ -1116,16 +1116,7 @@
       </div>
     </div>
 
-    <!-- OWNER: Fix PEPE/GANG Farm (one-click) -->
-    <div id="fixPepePanel" data-testid="fix-pepe-panel" style="display:none;background:linear-gradient(135deg,rgba(255,0,0,0.04),rgba(255,140,0,0.06));border:1px solid rgba(255,140,0,0.4);border-radius:14px;padding:16px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-        <div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#ff8c00;letter-spacing:2px;">FIX PEPE/GANG FARM</div>
-          <div style="font-size:11px;color:var(--muted);">Re-registers PEPE/GANG with the correct LP on MasterChef. One click.</div>
-        </div>
-        <button id="fixPepeBtn" data-testid="fix-pepe-btn" onclick="fixPepeFarm()" style="background:linear-gradient(135deg,#ff8c00,#e67300);color:#000;border:none;padding:12px 24px;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;white-space:nowrap;">FIX PEPE/GANG FARM</button>
-      </div>
-    </div>
+    <!-- PEPE/GANG Farm fix completed - button removed -->
 
     <div class="farm-grid" id="farmGrid">
       <!-- Farms injected by JS -->
@@ -9866,8 +9857,7 @@ function checkOwnerPanels() {
   const vaultPanel = document.getElementById('vaultRewardPanel');
   if (farmPanel) farmPanel.style.display = isOwner ? 'block' : 'none';
   if (vaultPanel) vaultPanel.style.display = isOwner ? 'block' : 'none';
-  const fixPepePanel = document.getElementById('fixPepePanel');
-  if (fixPepePanel) fixPepePanel.style.display = isOwner ? 'block' : 'none';
+  // fixPepePanel removed - PEPE farm already fixed
   if (isOwner) {
     loadRewardBalances();
   }
