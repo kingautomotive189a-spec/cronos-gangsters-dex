@@ -18,7 +18,7 @@ TELEGRAM_GROUP = os.environ.get("TELEGRAM_GROUP", "https://t.me/+DrWDScTEiLg1ZGQ
 GROUP_ID = int(os.environ.get("GROUP_ID", "-1003284963991"))
 DEXSCREENER = f"https://dexscreener.com/cronos/{CONTRACT}"
 EXPLORER = f"https://explorer.cronos.org/token/{CONTRACT}"
-PRICE_UPDATE_INTERVAL = int(os.environ.get("PRICE_UPDATE_INTERVAL", "300"))  # 5 minutes default
+PRICE_UPDATE_INTERVAL = int(os.environ.get("PRICE_UPDATE_INTERVAL", "900"))  # 15 minutes default
 
 # Contract Addresses from cronosgangsters.com
 CONTRACTS = {
