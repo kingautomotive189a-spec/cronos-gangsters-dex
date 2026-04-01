@@ -66,7 +66,7 @@ h1{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:3px;text-
 const CONTRACTS = {
   GANG: "0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF",
   XRP: "0xb9Ce0dd29C91E02d4620F57a66700Fc5e41d6D15",
-  PEPE: "0x9d5991f523f3aF7c14e91Ca6063C8E08F3c97fbB",
+  PEPE: "0xf868c454784048AF4f857991583E34243c92Ff48",
   DOGE: "0x1a8E39ae59e5556B56b76fCBA98d22c9ae557396",
   FACTORY: "0x3B44B2a187a7b3824131F8db5a74194D0a42Fc15",
   CHEF: "0x3713567b8DB60D7127B2614965eef71cE50871Ea",
@@ -249,7 +249,7 @@ async function addToMasterChef(idx) {
 // Init — clean up any zero-address LP entries from failed creations
 ['FARM_LP_XRP_GANG','FARM_LP_PEPE_GANG','FARM_LP_DOGE_GANG'].forEach(function(key) {
   var val = localStorage.getItem(key);
-  if (val && val.replace(/0x0*/,'') === '') localStorage.removeItem(key);
+  if (val && (val.replace(/0x0*/,'') === '' || val === '0x39e1B2f1B73810C611e83b733c2baF4A64C58C6e')) localStorage.removeItem(key);
 });
 farmStates = FARMS.map(function(f) {
   var lp = localStorage.getItem(f.storageKey) || '';
