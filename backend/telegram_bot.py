@@ -188,7 +188,7 @@ def main_keyboard():
          InlineKeyboardButton("🏦 Vaults", callback_data="menu_vaults"),
          InlineKeyboardButton("🔒 Staking", callback_data="menu_staking")],
         [InlineKeyboardButton("🚀 Launchpad", callback_data="menu_launchpad"),
-         InlineKeyboardButton("🔐 Token Locker", callback_data="menu_locker"),
+         InlineKeyboardButton("🔐 LP Lock Proof", callback_data="menu_locker"),
          InlineKeyboardButton("🎯 Sniper Bot", callback_data="menu_sniper")],
         [InlineKeyboardButton("🎴 NFTs", callback_data="menu_nft"),
          InlineKeyboardButton("👥 Referral", callback_data="menu_referral"),
@@ -273,6 +273,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🔒 Staking — Lock $GANG for APY\n"
         "🌉 Bridge — Cross-chain transfers\n"
         "🔐 Token Locker — Lock LP tokens\n\n"
+        "━━━ *SECURITY* ━━━\n\n"
+        "🔒 *Liquidity LOCKED until Mar 2027*\n"
+        "2,830 VVS-LP locked on DX.app\n"
+        "✅ Verified — NO rug pull possible\n\n"
         "━━━ *MORE* ━━━\n\n"
         "🚀 Launchpad — IDO access\n"
         "🎯 Sniper Bot — Fast trading\n"
@@ -1844,6 +1848,45 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ===== MAIN =====
 
+async def on_bot_startup(application: Application):
+    """Send welcome message to group when bot starts"""
+    try:
+        msg = (
+            "🔫 *$GANG BOT IS LIVE!*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "The Cronos Gangsters Bot is online!\n\n"
+            f"📋 *Contract:*\n`{CONTRACT}`\n\n"
+            "━━━ *EARN FREE $GANG* ━━━\n\n"
+            "⛏ *Mining Hub* — Earn 5 $GANG daily for FREE!\n"
+            "🎰 *19 Casino Games* — Slots, Crash, Roulette & more!\n"
+            "⚡ *Leverage Trading* — 8 pairs, up to 100x!\n"
+            "💰 *Reach 100 $GANG → Withdraw REAL tokens!*\n\n"
+            "━━━ *DeFi FEATURES* ━━━\n\n"
+            "🌾 Farms — Yield farming with LP\n"
+            "🏦 Vaults — Auto-compound pools\n"
+            "🔒 Staking — Lock $GANG for APY\n"
+            "🌉 Bridge — Cross-chain transfers\n\n"
+            "━━━ *SECURITY* ━━━\n\n"
+            "🔒 *Liquidity LOCKED until Mar 2027*\n"
+            "2,830 VVS-LP locked & verified on DX.app\n"
+            "✅ NO rug pull possible\n\n"
+            "━━━ *MORE* ━━━\n\n"
+            "🚀 Launchpad | 🎯 Sniper | 🎴 NFTs\n"
+            "👥 Referral | 🛠 Token Creator | 🏪 Marketplace\n\n"
+            "👇 *Tap any button to explore!*"
+        )
+
+        await application.bot.send_message(
+            chat_id=GROUP_ID,
+            text=msg,
+            parse_mode="Markdown",
+            reply_markup=main_keyboard()
+        )
+        logger.info(f"Startup message sent to group {GROUP_ID}")
+    except Exception as e:
+        logger.error(f"Failed to send startup message: {e}")
+
+
 def main():
     """Main function to run the bot"""
     if not BOT_TOKEN:
@@ -1852,7 +1895,7 @@ def main():
 
     logger.info("Starting Cronos Gangsters Bot...")
 
-    app = Application.builder().token(BOT_TOKEN).build()
+    app = Application.builder().token(BOT_TOKEN).post_init(on_bot_startup).build()
 
     # Command handlers
     app.add_handler(CommandHandler("start", start))
