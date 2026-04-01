@@ -197,14 +197,24 @@ def format_number(num):
 
 
 def main_keyboard():
-    """Main inline keyboard for bot messages"""
+    """Main inline keyboard with ALL features visible"""
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("💰 Buy $GANG", url=DEX_LINK),
          InlineKeyboardButton("📊 Chart", url=DEXSCREENER)],
+        [InlineKeyboardButton("🌾 Farms", callback_data="menu_farms"),
+         InlineKeyboardButton("🏦 Vaults", callback_data="menu_vaults"),
+         InlineKeyboardButton("🔒 Staking", callback_data="menu_staking")],
+        [InlineKeyboardButton("🚀 Launchpad", callback_data="menu_launchpad"),
+         InlineKeyboardButton("🔐 Token Locker", callback_data="menu_locker"),
+         InlineKeyboardButton("🎯 Sniper Bot", callback_data="menu_sniper")],
+        [InlineKeyboardButton("🎴 NFTs", callback_data="menu_nft"),
+         InlineKeyboardButton("👥 Referral", callback_data="menu_referral"),
+         InlineKeyboardButton("🌉 Bridge", callback_data="menu_bridge")],
+        [InlineKeyboardButton("🎰 Lottery", callback_data="menu_lottery"),
+         InlineKeyboardButton("🛠 Token Creator", callback_data="menu_create"),
+         InlineKeyboardButton("🏪 Marketplace", callback_data="menu_marketplace")],
         [InlineKeyboardButton("🌐 Website", url=DEX_LINK),
          InlineKeyboardButton("🐦 Twitter", url=TWITTER)],
-        [InlineKeyboardButton("💬 Telegram", url=TELEGRAM_GROUP),
-         InlineKeyboardButton("🔍 Explorer", url=EXPLORER)],
     ])
 
 
@@ -254,15 +264,22 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle /start command"""
     msg = (
         "🔫 *$GANG - Cronos Gangsters*\n\n"
-        "The most gangster DEX on Cronos!\n\n"
+        "The Most Gangster DEX on Cronos!\n\n"
         f"📋 *Contract:*\n`{CONTRACT}`\n\n"
-        "💰 *Features:*\n"
-        "• Swap - Farm - Stake\n"
-        "• CRO/GANG Farm — 1,883% APR\n"
-        "• GANG/USDC Farm — 10,000%+ APR\n"
-        "• GANG Staking — daily rewards\n\n"
-        "🎴 *500 Unique NFTs* — Mint for 50 CRO\n\n"
-        "Join the gang! The streets are ours. 🤝"
+        "⚡ *All Features:*\n"
+        "🌾 Farms — Yield farming with LP\n"
+        "🏦 Vaults — Auto-compound pools\n"
+        "🔒 Staking — Lock $GANG for APY\n"
+        "🚀 Launchpad — IDO access\n"
+        "🔐 Token Locker — Lock LP tokens\n"
+        "🎯 Sniper Bot — Fast trading\n"
+        "🎴 NFTs — 500 unique gangsters\n"
+        "👥 Referral — Earn 5% from crew\n"
+        "🌉 Bridge — Cross-chain transfers\n"
+        "🎰 Lottery — Win the pot\n"
+        "🛠 Token Creator — Deploy tokens\n"
+        "🏪 Marketplace — Trade NFTs\n\n"
+        "👇 *Tap any button below to explore!*"
     )
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=main_keyboard())
 
@@ -1308,6 +1325,202 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if user_id in price_alerts:
             del price_alerts[user_id]
         await query.edit_message_text("✅ All your price alerts have been cleared!", reply_markup=alert_keyboard())
+
+    elif query.data == "menu_back":
+        msg = (
+            "🔫 *$GANG - Cronos Gangsters*\n\n"
+            "The Most Gangster DEX on Cronos!\n\n"
+            "👇 *Tap any button below to explore!*"
+        )
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=main_keyboard())
+
+    elif query.data == "menu_farms":
+        msg = "🌾 *GANGSTER FARMS*\n\nStake LP tokens to earn $GANG rewards!\n\n"
+        for farm in FARMS:
+            msg += f"*{farm['name']}*\n   APR: {farm['apr']} | Alloc: {farm['allocation']}\n"
+            if 'tvl' in farm:
+                msg += f"   TVL: {farm['tvl']}\n"
+            msg += "\n"
+        msg += f"🔗 *MasterChef:*\n`{CONTRACTS['MASTERCHEF']}`"
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🌾 Open Farms", url=DEX_LINK)],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_vaults":
+        msg = "🏦 *AUTO-COMPOUND VAULTS*\n\nDeposit and let us compound for you!\n\n"
+        for vault in VAULTS:
+            msg += f"*{vault['name']}*\n   APY: {vault['apy']} | {vault['strategy']}\n\n"
+        msg += "💡 Deposit LP → vault auto-compounds → position grows!"
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🏦 Open Vaults", url=DEX_LINK)],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_staking":
+        msg = "🔒 *$GANG STAKING VAULT*\n\nLock $GANG for boosted rewards!\n\n*Tiers:*\n"
+        for tier in STAKING_TIERS:
+            emoji = "🔥" if tier['multiplier'] == "MAX" else "✓"
+            msg += f"• *{tier['period']}*: {tier['apy']} APY ({tier['multiplier']}) {emoji}\n"
+        msg += f"\n🎴 *+20% NFT Holder Boost!*\n⚠️ Early Exit Penalty: *25%*\n\n🔗 `{CONTRACTS['STAKING']}`"
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔒 Stake $GANG", url=DEX_LINK),
+             InlineKeyboardButton("🎴 NFT Boost", url=DEX_LINK)],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_launchpad":
+        msg = "🚀 *GANGSTER LAUNCHPAD*\n\nGet early access to new tokens!\n\n*Staking Tiers:*\n"
+        for tier in LAUNCHPAD_TIERS:
+            emoji = "💎" if tier['tier'] == "Diamond" else "🥇" if tier['tier'] == "Gold" else "🥈" if tier['tier'] == "Silver" else "🥉"
+            msg += f"{emoji} *{tier['tier']}*: Stake {tier['stake']} → {tier['allocation']} alloc\n"
+        msg += "\n💰 *Platform Fee:* 3% of raised funds"
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🚀 Open Launchpad", url=DEX_LINK)],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_locker":
+        msg = (
+            "🔐 *LP TOKEN LOCKER*\n\n"
+            "Lock your LP tokens to build trust!\n\n"
+            "*Features:*\n"
+            "• Lock any LP token\n"
+            "• Choose lock duration\n"
+            "• Option to burn LP (permanent)\n"
+            "• Verified on DexScreener\n"
+            "• Public lock verification\n\n"
+            f"💰 *Lock Fee:* {LOCKER_INFO['lock_fee']} per lock\n\n"
+            "✓ Prevents rug pulls\n"
+            "✓ Builds investor confidence"
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔐 Open Locker", url=DEX_LINK),
+             InlineKeyboardButton("🔥 Burn LP", url=DEX_LINK)],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_sniper":
+        features_list = "\n".join([f"   ✓ {f}" for f in SNIPER_INFO['features']])
+        msg = (
+            f"🎯 *GANGSTER SNIPER BOT*\n\n"
+            f"Trade faster than everyone else!\n\n"
+            f"💰 *Trading Fee:* {SNIPER_INFO['fee']} per trade\n\n"
+            f"*Features:*\n{features_list}\n\n"
+            f"⚠️ *Anti-Rug Protection Active!*"
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🎯 Open Sniper", url=DEX_LINK)],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_nft":
+        msg = (
+            "🎴 *CRONOS GANGSTERS NFTs*\n\n"
+            "500 Unique Gangsters on Cronos!\n\n"
+            f"💰 *Mint Price:* {NFT_INFO['mint_price']}\n"
+            f"📦 *Total Supply:* {NFT_INFO['total_supply']}\n"
+            f"⚡ *Utility:* {NFT_INFO['boost']}\n\n"
+            "*Rarity:* Legendary 2.4% | Epic 6% | Rare 31%\n\n"
+            f"🔗 `{NFT_INFO['contract']}`"
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🎴 Mint NFT", url=f"{DEX_LINK}/mint-nft.html"),
+             InlineKeyboardButton("🖼 Gallery", url=DEX_LINK)],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_referral":
+        msg = (
+            "👥 *INVITE THE FAMILY*\n\n"
+            "Share your link. Earn *5%* in $GANG\n"
+            "when your crew swaps!\n\n"
+            "*How It Works:*\n"
+            "1️⃣ Connect wallet on cronosgangsters.com\n"
+            "2️⃣ Copy your unique invite link\n"
+            "3️⃣ Share with friends\n"
+            "4️⃣ Earn 5% of swap value in $GANG\n\n"
+            f"🔗 `{CONTRACTS['REFERRAL']}`"
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔗 Get Referral Link", url=DEX_LINK)],
+            [InlineKeyboardButton("📢 Share on Telegram", url=f"https://t.me/share/url?url={DEX_LINK}"),
+             InlineKeyboardButton("🐦 Share on X", url=f"https://twitter.com/intent/tweet?text=Join%20Cronos%20Gangsters!%20{DEX_LINK}")],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_bridge":
+        chains_list = ", ".join(BRIDGE_INFO['supported'][:5]) + "..."
+        msg = (
+            f"🌉 *CROSS-CHAIN BRIDGE*\n\n"
+            f"Bridge across {BRIDGE_INFO['chains']} chains!\n"
+            f"Powered by {BRIDGE_INFO['provider']}\n\n"
+            f"*Chains:* {chains_list}\n\n"
+            f"💡 Best rates aggregated automatically"
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🌉 Open Bridge", url=DEX_LINK)],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_lottery":
+        msg = (
+            "🎰 *GANGSTER LOTTERY*\n\n"
+            f"🎟 *Ticket:* {LOTTERY_INFO['ticket_price']}\n"
+            f"🏆 *Pool Fee:* {LOTTERY_INFO['pool_fee']}\n"
+            f"⏰ *Draw:* {LOTTERY_INFO['draw_frequency']}\n\n"
+            "Winner takes 90% of the pot!\n"
+            "🍀 Good luck, gangster!"
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🎟 Buy Tickets", url=DEX_LINK)],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_create":
+        msg = (
+            "🛠 *TOKEN CREATOR*\n\n"
+            "Deploy your own token on Cronos!\n\n"
+            f"🟢 *BASIC* — {TOKEN_CREATOR['basic']['price']}\n"
+            f"   {TOKEN_CREATOR['basic']['features']}\n\n"
+            f"🟡 *PREMIUM* — {TOKEN_CREATOR['premium']['price']}\n"
+            f"   {TOKEN_CREATOR['premium']['features']}\n\n"
+            f"💎 *DIAMOND* — {TOKEN_CREATOR['diamond']['price']}\n"
+            f"   {TOKEN_CREATOR['diamond']['features']}"
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🛠 Create Token", url=DEX_LINK)],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_marketplace":
+        msg = (
+            "🏪 *NFT MARKETPLACE*\n\n"
+            "Buy & sell any NFT on Cronos!\n\n"
+            f"💰 *Trading Fee:* {MARKETPLACE_INFO['fee']}\n\n"
+            "*Features:*\n"
+            "• List any Cronos NFT\n"
+            "• Auto-detect collections\n"
+            "• Instant settlements\n"
+            "• No listing fees\n"
+            "• Royalties supported"
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🏪 Browse NFTs", url=DEX_LINK)],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
 
 
 # ===== ADMIN COMMANDS =====
