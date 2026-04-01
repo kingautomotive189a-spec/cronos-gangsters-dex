@@ -1783,8 +1783,11 @@ async def warn(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # ===== PERIODIC TASKS =====
 
+# Track last known transaction count to detect new buys
+_last_txn_count = None
+
 async def post_price_update(context: ContextTypes.DEFAULT_TYPE):
-    """Periodic price update to group"""
+    """Periodic price update to group — posts full features message with price"""
     global last_price
 
     try:
@@ -1794,6 +1797,8 @@ async def post_price_update(context: ContextTypes.DEFAULT_TYPE):
             price_usd = token_data.get("priceUsd", "N/A")
             change_h24 = token_data.get("priceChange", {}).get("h24", "N/A")
             volume_h24 = token_data.get("volume", {}).get("h24", "N/A")
+            liquidity = token_data.get("liquidity", {}).get("usd", "N/A")
+            market_cap = token_data.get("fdv", "N/A")
 
             try:
                 current_price = float(price_usd)
@@ -1824,11 +1829,21 @@ async def post_price_update(context: ContextTypes.DEFAULT_TYPE):
             change_str = format_change(change_h24)
 
             msg = (
-                f"💰 *$GANG Price Update*\n\n"
-                f"💵 Price: ${price_usd}\n"
-                f"📈 24h Change: {change_str}\n"
-                f"📊 24h Volume: {format_number(volume_h24)}\n\n"
-                f"[Buy $GANG]({DEX_LINK}) | [Chart]({DEXSCREENER})"
+                f"🔫 *$GANG — Cronos Gangsters*\n"
+                f"━━━━━━━━━━━━━━━━━━━━━\n\n"
+                f"💵 *Price:* ${price_usd}\n"
+                f"📈 *24h:* {change_str}\n"
+                f"📊 *Volume:* {format_number(volume_h24)}\n"
+                f"💎 *MCap:* {format_number(market_cap)}\n"
+                f"💧 *Liquidity:* {format_number(liquidity)}\n\n"
+                f"━━━ *EARN FREE $GANG* ━━━\n\n"
+                f"⛏ *Mining Hub* — 5 $GANG daily + 19 games!\n"
+                f"⚡ *Leverage Trading* — 8 pairs, up to 100x!\n"
+                f"💰 Reach 100 $GANG → Withdraw REAL tokens!\n\n"
+                f"🌾 Farms | 🏦 Vaults | 🔒 Staking | 🌉 Bridge\n\n"
+                f"🔒 *Liquidity LOCKED until Mar 2027*\n"
+                f"✅ Verified on DX.app — NO rug pull\n\n"
+                f"👇 *Tap any button to explore!*"
             )
 
             await context.bot.send_message(
@@ -1839,6 +1854,58 @@ async def post_price_update(context: ContextTypes.DEFAULT_TYPE):
             )
     except Exception as e:
         logger.error(f"Price update error: {e}")
+
+
+async def check_new_buys(context: ContextTypes.DEFAULT_TYPE):
+    """Monitor DexScreener for new $GANG buys and post alerts"""
+    global _last_txn_count
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            url = f"https://api.dexscreener.com/latest/dex/tokens/{CONTRACT}"
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=15)) as resp:
+                if resp.status != 200:
+                    return
+                data = await resp.json()
+                pairs = data.get("pairs", [])
+                if not pairs:
+                    return
+
+                pair = pairs[0]
+                txns_h24 = pair.get("txns", {}).get("h24", {})
+                buys = txns_h24.get("buys", 0)
+                price_usd = pair.get("priceUsd", "N/A")
+                volume_h24 = pair.get("volume", {}).get("h24", 0)
+
+                # First run — just store the count
+                if _last_txn_count is None:
+                    _last_txn_count = buys
+                    return
+
+                # Check if new buys happened
+                new_buys = buys - _last_txn_count
+                if new_buys > 0:
+                    _last_txn_count = buys
+
+                    msg = (
+                        f"🟢 *NEW $GANG BUY DETECTED!*\n\n"
+                        f"💰 *{new_buys} new buy{'s' if new_buys > 1 else ''}* in the last 2 minutes!\n\n"
+                        f"💵 Price: ${price_usd}\n"
+                        f"📊 24h Volume: {format_number(volume_h24)}\n"
+                        f"📈 Total buys today: {buys}\n\n"
+                        f"[💰 Buy $GANG]({DEX_LINK}) | [📊 Chart]({DEXSCREENER})"
+                    )
+
+                    await context.bot.send_message(
+                        chat_id=GROUP_ID,
+                        text=msg,
+                        parse_mode="Markdown"
+                    )
+                else:
+                    _last_txn_count = buys
+
+    except Exception as e:
+        logger.error(f"Buy check error: {e}")
 
 
 async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1940,9 +2007,12 @@ def main():
     # Error handler
     app.add_error_handler(error_handler)
 
-    # Periodic price updates
+    # Periodic price updates (every 15 min)
     job_queue = app.job_queue
     job_queue.run_repeating(post_price_update, interval=PRICE_UPDATE_INTERVAL, first=10)
+
+    # Buy alert checker (every 2 min)
+    job_queue.run_repeating(check_new_buys, interval=120, first=30)
 
     logger.info("Bot started successfully!")
     app.run_polling(drop_pending_updates=True)
