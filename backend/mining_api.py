@@ -40,6 +40,15 @@ HOUSE_EDGE = {
     "leverage": 0.05,
     "tournament": 0.30,
     "mysterybox": 0.40,
+    "roulette": 0.027,
+    "baccarat": 0.05,
+    "videopoker": 0.05,
+    "horseracing": 0.10,
+    "carracing": 0.10,
+    "scratchcard": 0.30,
+    "mines": 0.03,
+    "plinko": 0.04,
+    "tower": 0.04,
 }
 
 VIP_TIERS = {
@@ -817,6 +826,366 @@ async def play_blackjack(request: GameRequest):
     )
     
     return {"success": True, "game": "blackjack", "player": player_hand, "dealer": dealer_hand, "result": result, "payout": round(payout, 4)}
+
+
+# ============ NEW CASINO GAMES ============
+
+@router.post("/game/roulette")
+async def play_roulette(request: GameRequest):
+    wallet = request.wallet_address.lower()
+    amount = request.amount
+    choice = (request.choice or "red").lower()
+    miner = await get_user(wallet)
+    if not miner or miner["balance"] < amount:
+        return {"success": False, "error": "Insufficient balance"}
+    
+    number = random.randint(0, 36)
+    reds = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]
+    color = "green" if number == 0 else ("red" if number in reds else "black")
+    is_odd = number % 2 == 1 if number > 0 else False
+    
+    win = False
+    multiplier = 0
+    if choice in ["red", "black"]:
+        win = choice == color
+        multiplier = 2
+    elif choice in ["odd", "even"]:
+        win = (choice == "odd" and is_odd) or (choice == "even" and not is_odd and number > 0)
+        multiplier = 2
+    elif choice in ["1-18", "low"]:
+        win = 1 <= number <= 18
+        multiplier = 2
+    elif choice in ["19-36", "high"]:
+        win = 19 <= number <= 36
+        multiplier = 2
+    elif choice in ["1-12", "dozen1"]:
+        win = 1 <= number <= 12
+        multiplier = 3
+    elif choice in ["13-24", "dozen2"]:
+        win = 13 <= number <= 24
+        multiplier = 3
+    elif choice in ["25-36", "dozen3"]:
+        win = 25 <= number <= 36
+        multiplier = 3
+    else:
+        try:
+            num_choice = int(choice)
+            win = num_choice == number
+            multiplier = 36
+        except:
+            return {"success": False, "error": "Invalid choice"}
+    
+    house = amount * HOUSE_EDGE["roulette"]
+    await add_to_jackpot(amount * 0.01)
+    if win:
+        payout = (amount * multiplier) - house
+        profit = payout - amount
+    else:
+        payout = 0
+        profit = -amount
+        await add_house_earnings("roulette", amount)
+    await update_balance(wallet, -amount + payout)
+    await db.miners.update_one({"wallet_address": wallet}, {"$inc": {"game_stats.wins": 1 if win else 0, "game_stats.losses": 0 if win else 1, "game_stats.profit": profit}})
+    return {"success": True, "game": "roulette", "choice": choice, "number": number, "color": color, "win": win, "payout": round(payout, 4)}
+
+@router.post("/game/baccarat")
+async def play_baccarat(request: GameRequest):
+    wallet = request.wallet_address.lower()
+    amount = request.amount
+    choice = (request.choice or "player").lower()
+    if choice not in ["player", "banker", "tie"]:
+        return {"success": False, "error": "Choose player, banker, or tie"}
+    miner = await get_user(wallet)
+    if not miner or miner["balance"] < amount:
+        return {"success": False, "error": "Insufficient balance"}
+    
+    def card_val(c): return min(c, 9)
+    def hand_total(cards): return sum(card_val(c) for c in cards) % 10
+    
+    deck = list(range(1, 10)) * 4 + [0] * 16
+    random.shuffle(deck)
+    player = [deck.pop(), deck.pop()]
+    banker = [deck.pop(), deck.pop()]
+    pt, bt = hand_total(player), hand_total(banker)
+    if pt <= 5: player.append(deck.pop())
+    if bt <= 5: banker.append(deck.pop())
+    pt, bt = hand_total(player), hand_total(banker)
+    
+    result = "tie" if pt == bt else ("player" if pt > bt else "banker")
+    win = choice == result
+    
+    house = amount * HOUSE_EDGE["baccarat"]
+    await add_to_jackpot(amount * 0.01)
+    if win:
+        multiplier = 8 if result == "tie" else (1.95 if result == "banker" else 2)
+        payout = (amount * multiplier) - house
+        profit = payout - amount
+    else:
+        payout = 0
+        profit = -amount
+        await add_house_earnings("baccarat", amount)
+    await update_balance(wallet, -amount + payout)
+    await db.miners.update_one({"wallet_address": wallet}, {"$inc": {"game_stats.wins": 1 if win else 0, "game_stats.losses": 0 if win else 1, "game_stats.profit": profit}})
+    return {"success": True, "game": "baccarat", "choice": choice, "player_total": pt, "banker_total": bt, "result": result, "win": win, "payout": round(payout, 4)}
+
+@router.post("/game/videopoker")
+async def play_videopoker(request: GameRequest):
+    wallet = request.wallet_address.lower()
+    amount = request.amount
+    miner = await get_user(wallet)
+    if not miner or miner["balance"] < amount:
+        return {"success": False, "error": "Insufficient balance"}
+    
+    suits = ["H", "D", "C", "S"]
+    ranks = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
+    deck = [(r, s) for r in ranks for s in suits]
+    random.shuffle(deck)
+    hand = [deck.pop() for _ in range(5)]
+    
+    rank_counts = {}
+    for r, s in hand:
+        rank_counts[r] = rank_counts.get(r, 0) + 1
+    counts = sorted(rank_counts.values(), reverse=True)
+    suits_in_hand = set(s for _, s in hand)
+    rank_indices = sorted([ranks.index(r) for r, _ in hand])
+    is_flush = len(suits_in_hand) == 1
+    is_straight = (rank_indices[-1] - rank_indices[0] == 4 and len(set(rank_indices)) == 5) or rank_indices == [0,1,2,3,12]
+    
+    if is_flush and is_straight and rank_indices[-1] == 12: result, multi = "Royal Flush", 250
+    elif is_flush and is_straight: result, multi = "Straight Flush", 50
+    elif counts[0] == 4: result, multi = "Four of a Kind", 25
+    elif counts == [3, 2]: result, multi = "Full House", 9
+    elif is_flush: result, multi = "Flush", 6
+    elif is_straight: result, multi = "Straight", 4
+    elif counts[0] == 3: result, multi = "Three of a Kind", 3
+    elif counts[:2] == [2, 2]: result, multi = "Two Pair", 2
+    elif counts[0] == 2 and any(r in ["J","Q","K","A"] for r in rank_counts if rank_counts[r] == 2): result, multi = "Jacks or Better", 1
+    else: result, multi = "No Win", 0
+    
+    house = amount * HOUSE_EDGE["videopoker"]
+    await add_to_jackpot(amount * 0.01)
+    win = multi > 0
+    if win:
+        payout = (amount * multi) - house
+        profit = payout - amount
+    else:
+        payout = 0
+        profit = -amount
+        await add_house_earnings("videopoker", amount)
+    await update_balance(wallet, -amount + payout)
+    await db.miners.update_one({"wallet_address": wallet}, {"$inc": {"game_stats.wins": 1 if win else 0, "game_stats.losses": 0 if win else 1, "game_stats.profit": profit}})
+    hand_str = [f"{r}{s}" for r, s in hand]
+    return {"success": True, "game": "videopoker", "hand": hand_str, "result": result, "multiplier": multi, "win": win, "payout": round(payout, 4)}
+
+@router.post("/game/horseracing")
+async def play_horseracing(request: GameRequest):
+    wallet = request.wallet_address.lower()
+    amount = request.amount
+    choice = (request.choice or "1")
+    if choice not in ["1","2","3","4"]:
+        return {"success": False, "error": "Choose horse 1-4"}
+    miner = await get_user(wallet)
+    if not miner or miner["balance"] < amount:
+        return {"success": False, "error": "Insufficient balance"}
+    
+    horses = ["1","2","3","4"]
+    speeds = {h: sum(random.randint(1, 6) for _ in range(3)) for h in horses}
+    ranking = sorted(horses, key=lambda h: speeds[h], reverse=True)
+    winner = ranking[0]
+    win = choice == winner
+    
+    house = amount * HOUSE_EDGE["horseracing"]
+    await add_to_jackpot(amount * 0.01)
+    if win:
+        payout = (amount * 4) - house
+        profit = payout - amount
+    else:
+        payout = 0
+        profit = -amount
+        await add_house_earnings("horseracing", amount)
+    await update_balance(wallet, -amount + payout)
+    await db.miners.update_one({"wallet_address": wallet}, {"$inc": {"game_stats.wins": 1 if win else 0, "game_stats.losses": 0 if win else 1, "game_stats.profit": profit}})
+    return {"success": True, "game": "horseracing", "choice": choice, "winner": winner, "ranking": ranking, "speeds": speeds, "win": win, "payout": round(payout, 4)}
+
+@router.post("/game/carracing")
+async def play_carracing(request: GameRequest):
+    wallet = request.wallet_address.lower()
+    amount = request.amount
+    choice = (request.choice or "1")
+    if choice not in ["1","2","3","4"]:
+        return {"success": False, "error": "Choose car 1-4"}
+    miner = await get_user(wallet)
+    if not miner or miner["balance"] < amount:
+        return {"success": False, "error": "Insufficient balance"}
+    
+    cars = ["1","2","3","4"]
+    speeds = {c: sum(random.randint(1, 8) for _ in range(3)) for c in cars}
+    ranking = sorted(cars, key=lambda c: speeds[c], reverse=True)
+    winner = ranking[0]
+    win = choice == winner
+    
+    house = amount * HOUSE_EDGE["carracing"]
+    await add_to_jackpot(amount * 0.01)
+    if win:
+        payout = (amount * 4) - house
+        profit = payout - amount
+    else:
+        payout = 0
+        profit = -amount
+        await add_house_earnings("carracing", amount)
+    await update_balance(wallet, -amount + payout)
+    await db.miners.update_one({"wallet_address": wallet}, {"$inc": {"game_stats.wins": 1 if win else 0, "game_stats.losses": 0 if win else 1, "game_stats.profit": profit}})
+    return {"success": True, "game": "carracing", "choice": choice, "winner": winner, "ranking": ranking, "speeds": speeds, "win": win, "payout": round(payout, 4)}
+
+@router.post("/game/scratchcard")
+async def play_scratchcard(request: GameRequest):
+    wallet = request.wallet_address.lower()
+    amount = request.amount
+    miner = await get_user(wallet)
+    if not miner or miner["balance"] < amount:
+        return {"success": False, "error": "Insufficient balance"}
+    
+    symbols = ["GANG", "CRO", "BTC", "ETH", "MOON", "STAR", "7"]
+    grid = [[random.choice(symbols) for _ in range(3)] for _ in range(3)]
+    
+    matches = 0
+    for row in grid:
+        if row[0] == row[1] == row[2]: matches += 1
+    for col in range(3):
+        if grid[0][col] == grid[1][col] == grid[2][col]: matches += 1
+    if grid[0][0] == grid[1][1] == grid[2][2]: matches += 1
+    if grid[0][2] == grid[1][1] == grid[2][0]: matches += 1
+    
+    multipliers = {0: 0, 1: 2, 2: 5, 3: 15, 4: 50, 5: 100}
+    multi = multipliers.get(matches, 200)
+    
+    house = amount * HOUSE_EDGE["scratchcard"]
+    await add_to_jackpot(amount * 0.01)
+    win = multi > 0
+    if win:
+        payout = (amount * multi) - house
+        profit = payout - amount
+    else:
+        payout = 0
+        profit = -amount
+        await add_house_earnings("scratchcard", amount)
+    await update_balance(wallet, -amount + payout)
+    await db.miners.update_one({"wallet_address": wallet}, {"$inc": {"game_stats.wins": 1 if win else 0, "game_stats.losses": 0 if win else 1, "game_stats.profit": profit}})
+    return {"success": True, "game": "scratchcard", "grid": grid, "matches": matches, "multiplier": multi, "win": win, "payout": round(payout, 4)}
+
+@router.post("/game/mines")
+async def play_mines(request: GameRequest):
+    wallet = request.wallet_address.lower()
+    amount = request.amount
+    num_mines = max(1, min(24, int(request.choice or "3")))
+    miner = await get_user(wallet)
+    if not miner or miner["balance"] < amount:
+        return {"success": False, "error": "Insufficient balance"}
+    
+    grid_size = 25
+    mine_positions = random.sample(range(grid_size), num_mines)
+    safe_picks = random.randint(1, grid_size - num_mines)
+    safe_count = grid_size - num_mines
+    
+    multiplier = 1.0
+    for i in range(safe_picks):
+        multiplier *= grid_size / (grid_size - i - num_mines * (i / safe_count))
+    multiplier = round(min(multiplier, 100), 2)
+    hit_mine = random.random() < (num_mines / grid_size) * 0.6
+    
+    house = amount * HOUSE_EDGE["mines"]
+    await add_to_jackpot(amount * 0.01)
+    if not hit_mine:
+        payout = (amount * multiplier) - house
+        profit = payout - amount
+        win = True
+    else:
+        payout = 0
+        profit = -amount
+        win = False
+        await add_house_earnings("mines", amount)
+    await update_balance(wallet, -amount + payout)
+    await db.miners.update_one({"wallet_address": wallet}, {"$inc": {"game_stats.wins": 1 if win else 0, "game_stats.losses": 0 if win else 1, "game_stats.profit": profit}})
+    return {"success": True, "game": "mines", "mines": num_mines, "picks": safe_picks, "multiplier": multiplier, "hit_mine": hit_mine, "win": win, "payout": round(payout, 4)}
+
+@router.post("/game/plinko")
+async def play_plinko(request: GameRequest):
+    wallet = request.wallet_address.lower()
+    amount = request.amount
+    miner = await get_user(wallet)
+    if not miner or miner["balance"] < amount:
+        return {"success": False, "error": "Insufficient balance"}
+    
+    rows = 12
+    position = 6
+    path = []
+    for _ in range(rows):
+        direction = random.choice([-1, 1])
+        position += direction
+        position = max(0, min(12, position))
+        path.append(position)
+    
+    multipliers = [100, 25, 10, 5, 2, 0.5, 0.2, 0.5, 2, 5, 10, 25, 100]
+    slot = min(position, len(multipliers) - 1)
+    multi = multipliers[slot]
+    
+    house = amount * HOUSE_EDGE["plinko"]
+    await add_to_jackpot(amount * 0.01)
+    win = multi > 1
+    if multi > 0:
+        payout = (amount * multi) - house
+        profit = payout - amount
+    else:
+        payout = 0
+        profit = -amount
+    if not win:
+        await add_house_earnings("plinko", amount * (1 - multi) if multi < 1 else 0)
+    await update_balance(wallet, -amount + payout)
+    await db.miners.update_one({"wallet_address": wallet}, {"$inc": {"game_stats.wins": 1 if win else 0, "game_stats.losses": 0 if win else 1, "game_stats.profit": profit}})
+    return {"success": True, "game": "plinko", "path": path, "slot": slot, "multiplier": multi, "win": win, "payout": round(payout, 4)}
+
+@router.post("/game/tower")
+async def play_tower(request: GameRequest):
+    wallet = request.wallet_address.lower()
+    amount = request.amount
+    floors_to_climb = max(1, min(10, int(request.choice or "5")))
+    miner = await get_user(wallet)
+    if not miner or miner["balance"] < amount:
+        return {"success": False, "error": "Insufficient balance"}
+    
+    doors_per_floor = 3
+    safe_doors_per_floor = 2
+    floors_cleared = 0
+    hit_trap = False
+    floor_results = []
+    
+    for f in range(floors_to_climb):
+        trap_door = random.randint(0, doors_per_floor - 1)
+        chosen_door = random.randint(0, doors_per_floor - 1)
+        if chosen_door == trap_door:
+            hit_trap = True
+            floor_results.append({"floor": f + 1, "chosen": chosen_door, "trap": trap_door, "safe": False})
+            break
+        else:
+            floors_cleared += 1
+            floor_results.append({"floor": f + 1, "chosen": chosen_door, "trap": trap_door, "safe": True})
+    
+    multiplier = round(1.5 ** floors_cleared, 2) if floors_cleared > 0 else 0
+    
+    house = amount * HOUSE_EDGE["tower"]
+    await add_to_jackpot(amount * 0.01)
+    win = not hit_trap
+    if win and multiplier > 0:
+        payout = (amount * multiplier) - house
+        profit = payout - amount
+    else:
+        payout = 0
+        profit = -amount
+        await add_house_earnings("tower", amount)
+    await update_balance(wallet, -amount + payout)
+    await db.miners.update_one({"wallet_address": wallet}, {"$inc": {"game_stats.wins": 1 if win else 0, "game_stats.losses": 0 if win else 1, "game_stats.profit": profit}})
+    return {"success": True, "game": "tower", "floors_target": floors_to_climb, "floors_cleared": floors_cleared, "multiplier": multiplier, "floor_results": floor_results, "win": win, "payout": round(payout, 4)}
+
 
 # ============ SPECIAL FEATURES ============
 

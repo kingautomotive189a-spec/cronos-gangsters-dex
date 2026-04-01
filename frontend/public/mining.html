@@ -155,7 +155,7 @@ var gameResult = null;
 
 var tabs = [
   {id:'mine',icon:'Mine'},{id:'games',icon:'Games'},{id:'casino',icon:'Casino'},
-  {id:'lottery',icon:'Lottery'},{id:'stake',icon:'Stake'},{id:'more',icon:'More'}
+  {id:'racing',icon:'Racing'},{id:'lottery',icon:'Lottery'},{id:'stake',icon:'Stake'},{id:'more',icon:'More'}
 ];
 
 function showToast(msg) {
@@ -289,6 +289,7 @@ function renderTab() {
   if(activeTab === 'mine') c.innerHTML = renderMineTab();
   else if(activeTab === 'games') c.innerHTML = renderGamesTab();
   else if(activeTab === 'casino') c.innerHTML = renderCasinoTab();
+  else if(activeTab === 'racing') c.innerHTML = renderRacingTab();
   else if(activeTab === 'lottery') c.innerHTML = renderLotteryTab();
   else if(activeTab === 'stake') c.innerHTML = renderStakeTab();
   else if(activeTab === 'more') c.innerHTML = renderMoreTab();
@@ -331,9 +332,42 @@ function renderGamesTab() {
 
   html += '<h3>Rock Paper Scissors (2x)</h3><div class="game-grid" style="grid-template-columns:1fr 1fr 1fr"><button class="game-btn" onclick="doAction(\'/game/rps\',{amount:betAmount,choice:\'rock\'})">ROCK</button><button class="game-btn" onclick="doAction(\'/game/rps\',{amount:betAmount,choice:\'paper\'})">PAPER</button><button class="game-btn" onclick="doAction(\'/game/rps\',{amount:betAmount,choice:\'scissors\'})">SCISSORS</button></div>';
 
+function renderRacingTab() {
+  var html = '<div class="panel"><h2>RACING GAMES</h2>';
+  html += '<div class="bet-row"><span>Bet:</span><input type="number" class="bet-input" value="'+betAmount+'" onchange="betAmount=Math.max(1,+this.value)"/><span>$GANG</span></div>';
+
+  html += '<h3>Horse Racing (4x)</h3><p style="color:var(--muted);font-size:12px;margin-bottom:8px">Pick a horse. Fastest wins!</p>';
+  html += '<div class="game-grid">';
+  html += '<button class="game-btn" style="background:#c0392b;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'1\'})" data-testid="horse-1">HORSE 1</button>';
+  html += '<button class="game-btn" style="background:#2980b9;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'2\'})">HORSE 2</button>';
+  html += '<button class="game-btn" style="background:#27ae60;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'3\'})">HORSE 3</button>';
+  html += '<button class="game-btn" style="background:#8e44ad;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'4\'})">HORSE 4</button>';
+  html += '</div>';
+
+  html += '<h3 style="margin-top:16px">Car Racing (4x)</h3><p style="color:var(--muted);font-size:12px;margin-bottom:8px">Pick a car. Fastest wins!</p>';
+  html += '<div class="game-grid">';
+  html += '<button class="game-btn" style="background:#e74c3c;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'1\'})" data-testid="car-1">CAR 1</button>';
+  html += '<button class="game-btn" style="background:#3498db;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'2\'})">CAR 2</button>';
+  html += '<button class="game-btn" style="background:#2ecc71;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'3\'})">CAR 3</button>';
+  html += '<button class="game-btn" style="background:#f39c12;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'4\'})">CAR 4</button>';
+  html += '</div>';
+
+  html += '</div>';
+  return html;
+}
+
+
+
   html += '<h3>Higher or Lower (2x)</h3><div class="game-grid"><button class="game-btn green" onclick="doAction(\'/game/highlow\',{amount:betAmount,choice:\'high\'})">HIGH</button><button class="game-btn red" onclick="doAction(\'/game/highlow\',{amount:betAmount,choice:\'low\'})">LOW</button></div>';
 
   html += '<h3>Blackjack (2x)</h3><button class="action-btn" onclick="doAction(\'/game/blackjack\',{amount:betAmount})" data-testid="play-blackjack">PLAY BLACKJACK</button>';
+
+  html += '<h3>Roulette (2x-36x)</h3><div class="game-grid" style="grid-template-columns:1fr 1fr"><button class="game-btn red" onclick="doAction(\'/game/roulette\',{amount:betAmount,choice:\'red\'})" data-testid="roulette-red">RED</button><button class="game-btn" style="background:#222;color:#fff" onclick="doAction(\'/game/roulette\',{amount:betAmount,choice:\'black\'})">BLACK</button></div><div class="game-grid" style="grid-template-columns:1fr 1fr;margin-top:6px"><button class="game-btn purple" onclick="doAction(\'/game/roulette\',{amount:betAmount,choice:\'odd\'})">ODD</button><button class="game-btn purple" onclick="doAction(\'/game/roulette\',{amount:betAmount,choice:\'even\'})">EVEN</button></div>';
+
+  html += '<h3>Baccarat (2x / 8x tie)</h3><div class="game-grid" style="grid-template-columns:1fr 1fr 1fr"><button class="game-btn green" onclick="doAction(\'/game/baccarat\',{amount:betAmount,choice:\'player\'})" data-testid="baccarat-player">PLAYER</button><button class="game-btn" style="background:var(--gold);color:#000" onclick="doAction(\'/game/baccarat\',{amount:betAmount,choice:\'tie\'})">TIE 8x</button><button class="game-btn red" onclick="doAction(\'/game/baccarat\',{amount:betAmount,choice:\'banker\'})">BANKER</button></div>';
+
+  html += '<h3>Video Poker (up to 250x)</h3><button class="action-btn" onclick="doAction(\'/game/videopoker\',{amount:betAmount})" data-testid="play-videopoker">DEAL CARDS</button>';
+
   html += '</div>';
   return html;
 }
@@ -349,6 +383,14 @@ function renderCasinoTab() {
   html += '<h3>Wheel of Fortune</h3><button class="action-btn" onclick="doAction(\'/game/wheel\',{amount:betAmount})">SPIN WHEEL</button>';
 
   html += '<h3>Limbo</h3><div class="bet-row"><span>Target:</span><input type="number" step="0.1" class="bet-input" value="'+limboTarget+'" onchange="limboTarget=Math.max(1.01,+this.value)"/><span>x</span></div><button class="action-btn" onclick="doAction(\'/game/limbo\',{amount:betAmount,choice:String(limboTarget)})">PLAY LIMBO</button>';
+
+  html += '<h3>Mines (up to 100x)</h3><div class="bet-row"><span>Mines:</span><input type="number" class="bet-input" value="3" min="1" max="24" id="minesCount"/></div><button class="action-btn" onclick="doAction(\'/game/mines\',{amount:betAmount,choice:document.getElementById(\'minesCount\').value})" data-testid="play-mines">DIG!</button>';
+
+  html += '<h3>Plinko (up to 100x)</h3><button class="action-btn" onclick="doAction(\'/game/plinko\',{amount:betAmount})" data-testid="play-plinko">DROP BALL</button>';
+
+  html += '<h3>Tower (up to 57x)</h3><div class="bet-row"><span>Floors:</span><input type="number" class="bet-input" value="5" min="1" max="10" id="towerFloors"/></div><button class="action-btn" onclick="doAction(\'/game/tower\',{amount:betAmount,choice:document.getElementById(\'towerFloors\').value})" data-testid="play-tower">CLIMB!</button>';
+
+  html += '<h3>Scratch Cards (up to 200x)</h3><button class="action-btn" onclick="doAction(\'/game/scratchcard\',{amount:betAmount})" data-testid="play-scratch">SCRATCH!</button>';
 
   html += '<h3>Leverage Trading</h3><div class="lev-row">';
   [10,25,50,100].forEach(function(l){ html += '<button class="lev-btn'+(leverage===l?' active':'')+'" onclick="leverage='+l+';renderTab()">'+l+'x</button>'; });
