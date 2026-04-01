@@ -10,14 +10,14 @@ Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/ca
 - Blockchain: Cronos mainnet via ethers.js v5
 
 ## Key Files
-- `/frontend/public/cronos-gangsters.html` — Main DApp (Swap, Farms, Vaults, etc.)
+- `/frontend/public/cronos-gangsters.html` — Main DApp
 - `/frontend/public/mining.html` — Mining Hub + 19 casino games
 - `/frontend/public/trading.html` — Leverage trading with TradingView charts
 - `/frontend/public/dashboard.html` — Bot control panel
-- `/frontend/public/deploy-farms.html` — Farm deployer (completed)
-- `/frontend/public/deploy.html` — Contract deployer (completed)
+- `/frontend/public/deploy-farms.html` — Farm deployer
+- `/frontend/public/deploy.html` — Contract deployer
 - `/backend/server.py` — Main FastAPI server
-- `/backend/telegram_bot.py` — Telegram bot (refactored)
+- `/backend/telegram_bot.py` — Telegram bot (refactored, dispatch table)
 - `/backend/mining_api.py` — Casino/mining backend
 - `/backend/trading_api.py` — Leverage trading backend
 
@@ -26,39 +26,31 @@ Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/ca
 
 ## Key Contracts
 - GANG Token: `0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF`
-- Mining Rewards: `0xBdAaDDb1cd25758aa40F38c273C355cA943e1c8F` (funded with 25,000 GANG)
-- MasterChef: `0x3713567b8DB60D7127B2614965eef71cE50871Ea` (holds 301M+ GANG)
+- Mining Rewards: `0xBdAaDDb1cd25758aa40F38c273C355cA943e1c8F`
+- MasterChef: `0x3713567b8DB60D7127B2614965eef71cE50871Ea` (301M+ GANG)
+- Liquidity Lock: `0xfa7f753a1e4ef3f1f3c8438f53855dfb58fde389` (DX.app, expires Mar 2027)
 
-## Token Addresses (Cronos Mainnet)
-- XRP: `0xb9Ce0dd29C91E02d4620F57a66700Fc5e41d6D15`
-- PEPE: `0xf868c454784048AF4f857991583E34243c92Ff48`
-- DOGE: `0x1a8E39ae59e5556B56b76fCBA98d22c9ae557396`
+## Farm Allocations (On-Chain — Confirmed)
+- CRO/GANG (Pool 0): 250,000 pts = 50%
+- All other 12 pools: 20,833 pts each = 4.17% each
+- 7 farms + 6 auto-compound vaults = 13 pools total
 
-## Completed Features
-- Image optimization (22MB→5MB), lazy loading
-- Telegram bot with callback popups for all features
-- Mining Hub (19 games, tap-to-earn, VIP, referrals, lottery, staking, tournaments)
-- Leverage Trading (8 pairs, 100x, live TradingView charts)
+## Completed Features (All Sessions)
+- Image optimization, lazy loading
+- Telegram bot — full feature popups, BuyBot alerts, auto-post on start, LP Lock proof
+- Mining Hub — 19 games, tap-to-earn, VIP, referrals, lottery, staking, tournaments
+- Leverage Trading — 8 pairs, 100x, live TradingView charts
 - 3 new farms (XRP/GANG, PEPE/GANG, DOGE/GANG)
-- Dashboard with bot start/stop
-- Deploy Farms + Deploy Contract (completed, banners removed from nav)
-- Owner revenue collection banners
-- Fund Mining Rewards banner on mining page
-- "How to Earn Real $GANG" user guide on mining page
-- Roadmap updated: Phase 7 (DONE), Phase 8 (COMING SOON)
-- Nav scroll indicator (pulsing >> arrows)
-- Fixed: PEPE address, XRP address, owner wallet, bot Python path
-- All token logos from CoinGecko (original/real)
-- Code Quality Refactor: telegram_bot.py callback_handler reduced from 440 lines/36 branches to 16 lines/2 branches via dispatch table
-- Security: Replaced `random` with `secrets` for captcha generation
-- Cleanup: Removed dead anti_scam_filter, SCAM_PATTERNS, SUSPICIOUS_DOMAINS code
-- Bug Fix: FARMS data 'apr' key crash in /farms command
-- Bug Fix: trading_api.py duplicate _id parameter causing TypeError
-- Bug Fix: server.py ObjectId serialization in record-price endpoint
-- MasterChef balance verified on-chain: 301,224,949.75 GANG
+- Dashboard — bot start/stop, quickstart guide, full command list
+- Deploy Farms + Deploy Contract pages
+- Nav bar — wrapped rows, all items visible, header gangster banner
+- Farms — single column, sorted by highest APR, rebalance button (owner-only)
+- Vault APR calculations from MasterChef on-chain data
+- Code quality refactor — telegram_bot.py dispatch table, secrets module, dead code removed
+- MasterChef rebalance — 13 pools set to 50%/4.17% split
+- Cleanup — removed old debug elements, duplicate HTML files (57MB freed), old zip packages
+- Download package: cronos-gangsters-full-app.zip (12MB)
 
 ## Backlog
-- P1: Verify owner revenue Web3 transactions end-to-end
-- P1: Remind user to click "FIX PEPE/GANG FARM" button on live site after deploying
 - P2: Add max payout limits for trading
-- P2: Fix use-toast.js stale closures (React frontend, low priority)
+- P3: Fix use-toast.js stale closures (React, low priority)

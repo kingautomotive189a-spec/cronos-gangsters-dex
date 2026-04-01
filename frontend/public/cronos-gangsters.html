@@ -1057,7 +1057,6 @@
       <div>
         <h2 style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--gold);text-shadow:0 0 20px rgba(212,160,23,0.3);">GANGSTER FARMS</h2>
         <div style="color:var(--muted);font-size:14px">Stake LP tokens to earn $GANG rewards</div>
-        <pre id="farmDebug" style="color:lime;font-size:10px;background:#111;padding:8px;border-radius:6px;margin-top:8px;white-space:pre-wrap;max-width:100%;overflow-x:auto;display:none"></pre>
       </div>
       <div style="display:flex;gap:10px">
         <button class="btn-secondary" onclick="harvestAll()">HARVEST ALL</button>
@@ -4388,8 +4387,7 @@ async function loadBalances() {
             debugInfo.push(`${farm.name}|pid:${farm.pid}|PARSE_ERR`);
           }
         }
-        console.log("FARM_DEBUG:", debugInfo.join(" | "));
-      } catch(e) { console.warn("Chef load failed:", e); }
+      } catch(e) { /* chef load skipped */ }
     }
 
     // Load LP token wallet balances per farm
