@@ -56,12 +56,120 @@ NFT_INFO = {
     "boost": "+20% Staking Boost",
 }
 
+# Vaults Info (Auto-Compound)
+VAULTS = [
+    {"name": "GANG / WETH", "apy": "~120%", "strategy": "Auto-compound"},
+    {"name": "GANG / WBTC", "apy": "~95%", "strategy": "Auto-compound"},
+    {"name": "GANG / ATOM", "apy": "~85%", "strategy": "Auto-compound"},
+    {"name": "GANG / CROID", "apy": "~110%", "strategy": "Auto-compound"},
+    {"name": "GANG / USDT", "apy": "~75%", "strategy": "Auto-compound"},
+    {"name": "GANG / FUL", "apy": "~90%", "strategy": "Auto-compound"},
+]
+
+# Launchpad Tiers
+LAUNCHPAD_TIERS = [
+    {"tier": "Bronze", "stake": "1,000 GANG", "allocation": "Base"},
+    {"tier": "Silver", "stake": "5,000 GANG", "allocation": "2x"},
+    {"tier": "Gold", "stake": "25,000 GANG", "allocation": "5x"},
+    {"tier": "Diamond", "stake": "100,000 GANG", "allocation": "10x"},
+]
+
+# Token Creator Tiers
+TOKEN_CREATOR = {
+    "basic": {"price": "25 CRO", "features": "Transfer, Approve, TransferFrom"},
+    "premium": {"price": "100 CRO", "features": "Basic + Mint, Burn, Pause"},
+    "diamond": {"price": "500 CRO", "features": "Premium + Auto-Liquidity, Auto-Lock LP, Verified Badge"},
+}
+
+# Lottery Info
+LOTTERY_INFO = {
+    "ticket_price": "10 CRO",
+    "pool_fee": "10%",
+    "draw_frequency": "Weekly",
+}
+
+# Sniper Bot Info
+SNIPER_INFO = {
+    "fee": "1%",
+    "features": ["Anti-Rug Protection", "Auto-Buy", "Auto-Sell", "Stop-Loss", "Take-Profit"],
+}
+
+# LP Locker Info
+LOCKER_INFO = {
+    "lock_fee": "1 CRO",
+    "burn_option": True,
+}
+
+# Bridge Info (LI.FI)
+BRIDGE_INFO = {
+    "chains": "60+",
+    "provider": "LI.FI",
+    "supported": ["Ethereum", "BSC", "Polygon", "Arbitrum", "Optimism", "Avalanche", "Fantom"],
+}
+
+# Marketplace Info
+MARKETPLACE_INFO = {
+    "fee": "2.5%",
+    "features": ["Buy/Sell NFTs", "Auto-detect Collections", "Cronos NFTs"],
+}
+
 # Admin user IDs (add your Telegram user IDs here)
 ADMIN_IDS = set(map(int, os.environ.get("ADMIN_IDS", "").split(",") if os.environ.get("ADMIN_IDS") else []))
 
 # Price alert thresholds
 price_alerts = {}  # user_id: {"above": price, "below": price}
 last_price = None
+
+# ===== ANTI-SCAM & VERIFICATION SYSTEM =====
+import random
+import re
+
+# Pending verifications: {user_id: {"answer": int, "chat_id": int, "message_id": int, "timestamp": datetime}}
+pending_verifications = {}
+VERIFICATION_TIMEOUT = 120  # 2 minutes to verify
+
+# Verified users (persistent would need database)
+verified_users = set()
+
+# Scam patterns to detect
+SCAM_PATTERNS = [
+    r"airdrop.*claim",
+    r"free.*token",
+    r"send.*eth.*receive",
+    r"send.*cro.*receive",
+    r"double.*your",
+    r"validate.*wallet",
+    r"connect.*wallet.*claim",
+    r"metamask.*support",
+    r"trust.*wallet.*support",
+    r"admin.*will.*never.*dm",
+    r"wallet.*sync",
+    r"dapps.*connect",
+    r"claim.*reward.*http",
+    r"won.*prize.*click",
+    r"urgent.*action.*required",
+]
+
+# Suspicious link patterns
+SUSPICIOUS_DOMAINS = [
+    "bit.ly", "tinyurl", "t.co", "goo.gl", "shorturl",
+    "discord.gift", "discordapp.gift", "steamcommunity.ru",
+]
+
+# Allowed domains (whitelist)
+ALLOWED_DOMAINS = [
+    "cronosgangsters.com",
+    "t.me",
+    "telegram.me",
+    "dexscreener.com",
+    "explorer.cronos.org",
+    "cronos.org",
+    "x.com",
+    "twitter.com",
+]
+
+# Warning counts for users
+user_warnings_spam = {}  # user_id: count
 
 logging.basicConfig(
     level=logging.INFO,
@@ -165,33 +273,49 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     msg = (
         "📖 *Cronos Gangsters Bot Commands*\n\n"
-        "*General Commands:*\n"
-        "• /start - Welcome message & info\n"
-        "• /help - Show this help menu\n"
+        "*💰 Token & Price:*\n"
         "• /price - Current $GANG price & stats\n"
-        "• /contract - Token contract address\n"
-        "• /buy - How to buy $GANG\n"
-        "• /website - DEX website link\n"
-        "• /socials - Social media links\n"
-        "• /shill - Shareable promo message\n"
         "• /stats - Detailed token statistics\n"
-        "• /alert - Set price alerts\n"
-        "• /farms - View yield farms & APRs\n"
+        "• /contract - Token contract address\n"
+        "• /alert - Set price alerts\n\n"
+        "*🌾 DeFi Features:*\n"
+        "• /farms - Yield farms & APRs\n"
+        "• /vaults - Auto-compound vaults\n"
         "• /staking - Staking vault info\n"
+        "• /launchpad - IDO launchpad\n"
+        "• /locker - LP token locker\n"
+        "• /bridge - Cross-chain bridge\n\n"
+        "*🎮 Extras:*\n"
+        "• /lottery - Play the lottery\n"
+        "• /sniper - Sniper bot info\n"
+        "• /create - Token creator\n"
+        "• /marketplace - NFT marketplace\n"
         "• /nft - NFT collection info\n"
-        "• /referral - Referral program info\n"
+        "• /referral - Earn 5% referrals\n\n"
+        "*📱 Links:*\n"
+        "• /buy - How to buy $GANG\n"
+        "• /website - DEX website\n"
+        "• /socials - Social media links\n"
+        "• /shill - Shareable promo\n"
     )
     
     if is_admin:
         msg += (
-            "\n*Admin Commands:*\n"
-            "• /ban - Reply to ban a user\n"
-            "• /unban - Unban a user by ID\n"
-            "• /mute - Reply to mute a user\n"
-            "• /unmute - Reply to unmute a user\n"
-            "• /warn - Reply to warn a user\n"
-            "• /kick - Reply to kick a user\n"
+            "\n*🔐 Admin Commands:*\n"
+            "• /ban - Ban a user\n"
+            "• /unban - Unban by ID\n"
+            "• /mute - Mute a user\n"
+            "• /unmute - Unmute a user\n"
+            "• /warn - Warn (3 = ban)\n"
+            "• /kick - Kick from group\n"
         )
+    
+    msg += (
+        "\n*🛡️ Security:*\n"
+        "✓ Human verification for new members\n"
+        "✓ Anti-scam link detection\n"
+        "✓ Auto-ban scammers\n"
+    )
     
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=main_keyboard())
 
@@ -530,15 +654,558 @@ async def referral(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
 
 
+# ===== NEW COMMANDS (8 MISSING FEATURES) =====
+
+async def vaults(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /vaults command - show auto-compound vault info"""
+    msg = (
+        "🏦 *AUTO-COMPOUND VAULTS*\n\n"
+        "Deposit and let us compound for you!\n"
+        "No manual harvesting needed.\n\n"
+    )
+    
+    for vault in VAULTS:
+        msg += (
+            f"*{vault['name']}*\n"
+            f"   • APY: {vault['apy']}\n"
+            f"   • Strategy: {vault['strategy']}\n\n"
+        )
+    
+    msg += (
+        "💡 *How it works:*\n"
+        "1. Deposit LP tokens\n"
+        "2. Vault auto-compounds rewards\n"
+        "3. Watch your position grow!\n\n"
+        f"[🏦 Open Vaults]({DEX_LINK})"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🏦 Open Vaults", url=DEX_LINK),
+         InlineKeyboardButton("📊 Chart", url=DEXSCREENER)],
+        [InlineKeyboardButton("💰 Buy $GANG", url=DEX_LINK)],
+    ])
+    
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def launchpad(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /launchpad command - show IDO launchpad info"""
+    msg = (
+        "🚀 *GANGSTER LAUNCHPAD*\n\n"
+        "Participate in IDOs. Get early access to new tokens!\n\n"
+        "*Staking Tiers:*\n"
+    )
+    
+    for tier in LAUNCHPAD_TIERS:
+        emoji = "💎" if tier['tier'] == "Diamond" else "🥇" if tier['tier'] == "Gold" else "🥈" if tier['tier'] == "Silver" else "🥉"
+        msg += f"{emoji} *{tier['tier']}*: Stake {tier['stake']} → {tier['allocation']} allocation\n"
+    
+    msg += (
+        "\n*How to participate:*\n"
+        "1️⃣ Stake $GANG to reach a tier\n"
+        "2️⃣ Wait for IDO announcement\n"
+        "3️⃣ Contribute during sale window\n"
+        "4️⃣ Claim tokens at TGE\n\n"
+        "💰 *Platform Fee:* 3% of raised funds\n\n"
+        f"[🚀 View Launchpad]({DEX_LINK})"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🚀 Open Launchpad", url=DEX_LINK),
+         InlineKeyboardButton("🔒 Stake $GANG", url=DEX_LINK)],
+    ])
+    
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def locker(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /locker command - show LP locker info"""
+    msg = (
+        "🔐 *LP LOCKER*\n\n"
+        "Lock your LP tokens to build trust!\n"
+        "Show investors your liquidity is safe.\n\n"
+        "*Features:*\n"
+        "• Lock any LP token\n"
+        "• Choose lock duration\n"
+        "• Option to burn LP (permanent)\n"
+        "• Verified on DexScreener\n"
+        "• Public lock verification\n\n"
+        f"💰 *Lock Fee:* {LOCKER_INFO['lock_fee']} per lock\n\n"
+        "*Why lock LP?*\n"
+        "✓ Prevents rug pulls\n"
+        "✓ Builds investor confidence\n"
+        "✓ Shows on chart platforms\n\n"
+        f"[🔐 Lock Your LP]({DEX_LINK})"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔐 Open Locker", url=DEX_LINK),
+         InlineKeyboardButton("🔥 Burn LP", url=DEX_LINK)],
+        [InlineKeyboardButton("✅ Verify Lock", url=DEX_LINK)],
+    ])
+    
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /lottery command - show lottery info"""
+    msg = (
+        "🎰 *GANGSTER LOTTERY*\n\n"
+        "Buy tickets. Win the pot!\n\n"
+        f"🎟 *Ticket Price:* {LOTTERY_INFO['ticket_price']}\n"
+        f"🏆 *Pool Fee:* {LOTTERY_INFO['pool_fee']} (to platform)\n"
+        f"⏰ *Draw:* {LOTTERY_INFO['draw_frequency']}\n\n"
+        "*How it works:*\n"
+        "1️⃣ Buy lottery tickets (10 CRO each)\n"
+        "2️⃣ Each ticket = 1 entry\n"
+        "3️⃣ Random winner drawn weekly\n"
+        "4️⃣ Winner takes 90% of the pot!\n\n"
+        "🍀 *Good luck, gangster!*\n\n"
+        f"[🎰 Play Lottery]({DEX_LINK})"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🎟 Buy Tickets", url=DEX_LINK),
+         InlineKeyboardButton("🏆 View Pot", url=DEX_LINK)],
+    ])
+    
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def sniper(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /sniper command - show sniper bot info"""
+    features_list = "\n".join([f"   ✓ {f}" for f in SNIPER_INFO['features']])
+    
+    msg = (
+        "🎯 *GANGSTER SNIPER BOT*\n\n"
+        "Trade faster than everyone else!\n\n"
+        f"💰 *Trading Fee:* {SNIPER_INFO['fee']} per trade\n\n"
+        "*Features:*\n"
+        f"{features_list}\n\n"
+        "*Commands:*\n"
+        "• `/snipe <token>` - Snipe a token\n"
+        "• `/buy <amount>` - Quick buy\n"
+        "• `/sell <amount>` - Quick sell\n"
+        "• `/sl <price>` - Set stop-loss\n"
+        "• `/tp <price>` - Set take-profit\n\n"
+        "⚠️ *Anti-Rug Protection:*\n"
+        "Bot checks for honeypots & rugs!\n\n"
+        f"[🎯 Start Sniping]({DEX_LINK})"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🎯 Open Sniper", url=DEX_LINK),
+         InlineKeyboardButton("⚙️ Settings", url=DEX_LINK)],
+        [InlineKeyboardButton("📖 Tutorial", url=DEX_LINK)],
+    ])
+    
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def bridge(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /bridge command - show cross-chain bridge info"""
+    chains_list = ", ".join(BRIDGE_INFO['supported'][:5]) + "..."
+    
+    msg = (
+        "🌉 *CROSS-CHAIN BRIDGE*\n\n"
+        f"Bridge assets across {BRIDGE_INFO['chains']} chains!\n"
+        f"Powered by {BRIDGE_INFO['provider']}\n\n"
+        "*Supported Chains:*\n"
+        f"{chains_list}\n\n"
+        "*How to bridge:*\n"
+        "1️⃣ Select source chain\n"
+        "2️⃣ Select destination (Cronos)\n"
+        "3️⃣ Choose token & amount\n"
+        "4️⃣ Approve & bridge!\n\n"
+        "💡 *Best rates aggregated automatically*\n\n"
+        f"[🌉 Open Bridge]({DEX_LINK})"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🌉 Bridge to Cronos", url=DEX_LINK),
+         InlineKeyboardButton("🌉 Bridge from Cronos", url=DEX_LINK)],
+    ])
+    
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def create(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /create command - show token creator info"""
+    msg = (
+        "🛠 *TOKEN CREATOR*\n\n"
+        "Deploy your own token on Cronos in seconds!\n\n"
+        "*Pricing Tiers:*\n\n"
+        f"🟢 *BASIC* — {TOKEN_CREATOR['basic']['price']}\n"
+        f"   {TOKEN_CREATOR['basic']['features']}\n\n"
+        f"🟡 *PREMIUM* — {TOKEN_CREATOR['premium']['price']}\n"
+        f"   {TOKEN_CREATOR['premium']['features']}\n\n"
+        f"💎 *DIAMOND* — {TOKEN_CREATOR['diamond']['price']}\n"
+        f"   {TOKEN_CREATOR['diamond']['features']}\n\n"
+        "*What you get:*\n"
+        "✓ Verified source code\n"
+        "✓ Instant deployment\n"
+        "✓ Full ownership\n"
+        "✓ CronoScan verified\n\n"
+        f"[🛠 Create Token]({DEX_LINK})"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🟢 Basic (25 CRO)", url=DEX_LINK),
+         InlineKeyboardButton("🟡 Premium (100 CRO)", url=DEX_LINK)],
+        [InlineKeyboardButton("💎 Diamond (500 CRO)", url=DEX_LINK)],
+    ])
+    
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def marketplace(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /marketplace command - show NFT marketplace info"""
+    msg = (
+        "🏪 *NFT MARKETPLACE*\n\n"
+        "Buy & sell any NFT on Cronos!\n\n"
+        f"💰 *Trading Fee:* {MARKETPLACE_INFO['fee']} on sales\n\n"
+        "*Features:*\n"
+        "• List any Cronos NFT\n"
+        "• Auto-detect collections\n"
+        "• Instant settlements\n"
+        "• No listing fees\n"
+        "• Royalties supported\n\n"
+        "*How to sell:*\n"
+        "1️⃣ Connect wallet\n"
+        "2️⃣ Select NFT to list\n"
+        "3️⃣ Set your price\n"
+        "4️⃣ Approve & list!\n\n"
+        "*How to buy:*\n"
+        "1️⃣ Browse listings\n"
+        "2️⃣ Click Buy\n"
+        "3️⃣ Confirm transaction\n"
+        "4️⃣ NFT is yours!\n\n"
+        f"[🏪 Open Marketplace]({DEX_LINK})"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🏪 Browse NFTs", url=DEX_LINK),
+         InlineKeyboardButton("📤 Sell NFT", url=DEX_LINK)],
+        [InlineKeyboardButton("🎴 My NFTs", url=DEX_LINK)],
+    ])
+    
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+# ===== ANTI-SCAM & VERIFICATION FUNCTIONS =====
+
+def generate_captcha():
+    """Generate a simple math captcha"""
+    a = random.randint(1, 10)
+    b = random.randint(1, 10)
+    operators = [('+', a + b), ('-', abs(a - b)), ('×', a * b)]
+    op, answer = random.choice(operators)
+    if op == '-':
+        a, b = max(a, b), min(a, b)
+        answer = a - b
+    question = f"{a} {op} {b}"
+    return question, answer
+
+
+def check_scam_patterns(text):
+    """Check if text contains scam patterns"""
+    text_lower = text.lower()
+    for pattern in SCAM_PATTERNS:
+        if re.search(pattern, text_lower):
+            return True
+    return False
+
+
+def check_suspicious_links(text):
+    """Check for suspicious links"""
+    # Find all URLs
+    urls = re.findall(r'https?://[^\s]+|www\.[^\s]+', text.lower())
+    
+    for url in urls:
+        # Check if it's a suspicious domain
+        for sus_domain in SUSPICIOUS_DOMAINS:
+            if sus_domain in url:
+                return True
+        
+        # Check if it's NOT in allowed domains
+        is_allowed = False
+        for allowed in ALLOWED_DOMAINS:
+            if allowed in url:
+                is_allowed = True
+                break
+        
+        if not is_allowed and urls:
+            return True  # Unknown domain with link = suspicious
+    
+    return False
+
+
+def verification_keyboard(answer):
+    """Generate verification keyboard with wrong options"""
+    options = [answer]
+    while len(options) < 4:
+        wrong = random.randint(0, 20)
+        if wrong not in options:
+            options.append(wrong)
+    random.shuffle(options)
+    
+    buttons = [[InlineKeyboardButton(str(opt), callback_data=f"verify_{opt}") for opt in options]]
+    return InlineKeyboardMarkup(buttons)
+
+
+async def welcome_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Welcome new members with verification captcha"""
+    for member in update.message.new_chat_members:
+        if member.is_bot:
+            continue
+        
+        user_id = member.id
+        chat_id = update.effective_chat.id
+        name = member.first_name or "Gangster"
+        
+        # Generate captcha
+        question, answer = generate_captcha()
+        
+        # Restrict user until verified
+        try:
+            await context.bot.restrict_chat_member(
+                chat_id,
+                user_id,
+                permissions=ChatPermissions(
+                    can_send_messages=False,
+                    can_send_other_messages=False,
+                    can_add_web_page_previews=False
+                )
+            )
+        except Exception as e:
+            logger.error(f"Failed to restrict user: {e}")
+        
+        # Send verification message
+        msg = (
+            f"🔫 *Welcome, {name}!*\n\n"
+            f"⚠️ *HUMAN VERIFICATION REQUIRED*\n\n"
+            f"To protect our family from bots and scammers, "
+            f"please solve this:\n\n"
+            f"🧮 *What is {question}?*\n\n"
+            f"⏰ You have {VERIFICATION_TIMEOUT} seconds.\n"
+            f"Wrong answer = kicked."
+        )
+        
+        sent_msg = await update.message.reply_text(
+            msg, 
+            parse_mode="Markdown",
+            reply_markup=verification_keyboard(answer)
+        )
+        
+        # Store pending verification
+        pending_verifications[user_id] = {
+            "answer": answer,
+            "chat_id": chat_id,
+            "message_id": sent_msg.message_id,
+            "timestamp": datetime.now(timezone.utc),
+            "name": name
+        }
+        
+        # Schedule timeout check
+        context.job_queue.run_once(
+            verification_timeout,
+            VERIFICATION_TIMEOUT,
+            data={"user_id": user_id, "chat_id": chat_id},
+            name=f"verify_timeout_{user_id}"
+        )
+
+
+async def verification_timeout(context: ContextTypes.DEFAULT_TYPE):
+    """Handle verification timeout - kick user"""
+    data = context.job.data
+    user_id = data["user_id"]
+    chat_id = data["chat_id"]
+    
+    if user_id in pending_verifications:
+        try:
+            # Kick user
+            await context.bot.ban_chat_member(chat_id, user_id)
+            await context.bot.unban_chat_member(chat_id, user_id)  # Allow rejoin
+            
+            # Delete verification message
+            msg_id = pending_verifications[user_id].get("message_id")
+            if msg_id:
+                try:
+                    await context.bot.delete_message(chat_id, msg_id)
+                except:
+                    pass
+            
+            await context.bot.send_message(
+                chat_id,
+                "⏰ User failed to verify in time and was removed.",
+                parse_mode="Markdown"
+            )
+        except Exception as e:
+            logger.error(f"Timeout kick error: {e}")
+        
+        del pending_verifications[user_id]
+
+
+async def handle_verification_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle verification button clicks"""
+    query = update.callback_query
+    user_id = query.from_user.id
+    
+    if not query.data.startswith("verify_"):
+        return False
+    
+    if user_id not in pending_verifications:
+        await query.answer("This verification is not for you!", show_alert=True)
+        return True
+    
+    selected = int(query.data.replace("verify_", ""))
+    correct_answer = pending_verifications[user_id]["answer"]
+    chat_id = pending_verifications[user_id]["chat_id"]
+    name = pending_verifications[user_id]["name"]
+    
+    # Cancel timeout job
+    jobs = context.job_queue.get_jobs_by_name(f"verify_timeout_{user_id}")
+    for job in jobs:
+        job.schedule_removal()
+    
+    if selected == correct_answer:
+        # Correct! Unrestrict user
+        try:
+            await context.bot.restrict_chat_member(
+                chat_id,
+                user_id,
+                permissions=ChatPermissions(
+                    can_send_messages=True,
+                    can_send_other_messages=True,
+                    can_add_web_page_previews=True,
+                    can_send_polls=True,
+                    can_invite_users=True
+                )
+            )
+            
+            verified_users.add(user_id)
+            
+            await query.edit_message_text(
+                f"✅ *Welcome to the family, {name}!*\n\n"
+                f"You've been verified. GANG or nothing! 🔫\n\n"
+                f"💰 Use /help to see all commands\n"
+                f"📊 Use /price to check $GANG price\n"
+                f"🌐 Website: {DEX_LINK}",
+                parse_mode="Markdown",
+                reply_markup=main_keyboard()
+            )
+        except Exception as e:
+            logger.error(f"Verify unrestrict error: {e}")
+            await query.answer("Error during verification. Contact admin.")
+    else:
+        # Wrong answer - kick
+        try:
+            await context.bot.ban_chat_member(chat_id, user_id)
+            await context.bot.unban_chat_member(chat_id, user_id)
+            
+            await query.edit_message_text(
+                f"❌ Wrong answer! {name} has been removed.\n"
+                f"They can rejoin and try again."
+            )
+        except Exception as e:
+            logger.error(f"Verify kick error: {e}")
+    
+    del pending_verifications[user_id]
+    return True
+
+
+async def anti_scam_filter(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Filter messages for scams and spam"""
+    if not update.message or not update.message.text:
+        return
+    
+    user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+    text = update.message.text
+    
+    # Skip admins
+    if user_id in ADMIN_IDS:
+        return
+    
+    try:
+        member = await context.bot.get_chat_member(chat_id, user_id)
+        if member.status in ["administrator", "creator"]:
+            return
+    except:
+        pass
+    
+    # Check for scam patterns
+    if check_scam_patterns(text):
+        await handle_scam_detection(update, context, "scam pattern")
+        return
+    
+    # Check for suspicious links (only for unverified or new users)
+    if user_id not in verified_users:
+        if check_suspicious_links(text):
+            await handle_scam_detection(update, context, "suspicious link")
+            return
+
+
+async def handle_scam_detection(update: Update, context: ContextTypes.DEFAULT_TYPE, reason: str):
+    """Handle detected scam attempt"""
+    user_id = update.effective_user.id
+    chat_id = update.effective_chat.id
+    user_name = update.effective_user.first_name or "User"
+    
+    # Delete the message
+    try:
+        await update.message.delete()
+    except:
+        pass
+    
+    # Add warning
+    if user_id not in user_warnings_spam:
+        user_warnings_spam[user_id] = 0
+    user_warnings_spam[user_id] += 1
+    
+    warnings = user_warnings_spam[user_id]
+    
+    if warnings >= 2:
+        # Ban on 2nd offense
+        try:
+            await context.bot.ban_chat_member(chat_id, user_id)
+            await context.bot.send_message(
+                chat_id,
+                f"🚫 *{user_name}* banned for repeated {reason}.\n"
+                f"We don't tolerate scammers here! 🔫",
+                parse_mode="Markdown"
+            )
+        except Exception as e:
+            logger.error(f"Ban error: {e}")
+    else:
+        # Warn on first offense
+        try:
+            await context.bot.send_message(
+                chat_id,
+                f"⚠️ *Warning to {user_name}*\n\n"
+                f"Your message was removed ({reason}).\n"
+                f"Warnings: {warnings}/2\n"
+                f"Next offense = BAN 🔨",
+                parse_mode="Markdown"
+            )
+        except Exception as e:
+            logger.error(f"Warning error: {e}")
 
 
 async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle button callbacks"""
     global last_price
     query = update.callback_query
-    await query.answer()
     
     user_id = update.effective_user.id
+    
+    # Handle verification callbacks first
+    if query.data.startswith("verify_"):
+        handled = await handle_verification_callback(update, context)
+        if handled:
+            return
+    
+    await query.answer()
     
     if query.data == "refresh_price":
         token_data = await fetch_token_data()
@@ -641,22 +1308,6 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if user_id in price_alerts:
             del price_alerts[user_id]
         await query.edit_message_text("✅ All your price alerts have been cleared!", reply_markup=alert_keyboard())
-
-
-async def welcome_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Welcome new members joining the group"""
-    for member in update.message.new_chat_members:
-        if member.is_bot:
-            continue
-        name = member.first_name or "Boss"
-        msg = (
-            f"🔫 *Welcome to the family, {name}!*\n\n"
-            "You've just joined the most ruthless DEX on Cronos.\n\n"
-            f"💰 Buy $GANG: {DEX_LINK}\n"
-            f"📋 Contract: `{CONTRACT}`\n\n"
-            "GANG or nothing! 🤝"
-        )
-        await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=main_keyboard())
 
 
 # ===== ADMIN COMMANDS =====
@@ -920,6 +1571,16 @@ def main():
     app.add_handler(CommandHandler("nft", nft))
     app.add_handler(CommandHandler("referral", referral))
     
+    # NEW: 8 additional commands to match website
+    app.add_handler(CommandHandler("vaults", vaults))
+    app.add_handler(CommandHandler("launchpad", launchpad))
+    app.add_handler(CommandHandler("locker", locker))
+    app.add_handler(CommandHandler("lottery", lottery))
+    app.add_handler(CommandHandler("sniper", sniper))
+    app.add_handler(CommandHandler("bridge", bridge))
+    app.add_handler(CommandHandler("create", create))
+    app.add_handler(CommandHandler("marketplace", marketplace))
+    
     # Admin commands
     app.add_handler(CommandHandler("ban", ban))
     app.add_handler(CommandHandler("unban", unban))
@@ -931,7 +1592,8 @@ def main():
     # Callback handlers for buttons
     app.add_handler(CallbackQueryHandler(callback_handler))
     
-    # Message handlers
+    # Message handlers - Anti-scam filter for all text messages
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, anti_scam_filter))
     app.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome_new_member))
     
     # Error handler

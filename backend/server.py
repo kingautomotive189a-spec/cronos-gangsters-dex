@@ -266,7 +266,15 @@ async def get_bot_commands():
         {"command": "/shill", "description": "Shareable promo message"},
         {"command": "/alert", "description": "Set price alerts"},
         {"command": "/farms", "description": "View yield farms & APRs"},
+        {"command": "/vaults", "description": "Auto-compound vaults"},
         {"command": "/staking", "description": "Staking vault info & APYs"},
+        {"command": "/launchpad", "description": "IDO launchpad info"},
+        {"command": "/locker", "description": "LP token locker"},
+        {"command": "/lottery", "description": "Play the lottery"},
+        {"command": "/sniper", "description": "Sniper bot info"},
+        {"command": "/bridge", "description": "Cross-chain bridge"},
+        {"command": "/create", "description": "Token creator"},
+        {"command": "/marketplace", "description": "NFT marketplace"},
         {"command": "/nft", "description": "NFT collection info & minting"},
         {"command": "/referral", "description": "Referral program (earn 5%)"},
     ]
@@ -278,7 +286,13 @@ async def get_bot_commands():
         {"command": "/kick", "description": "Kick a user from group"},
         {"command": "/warn", "description": "Warn a user (3 warnings = ban)"},
     ]
-    return {"commands": commands, "admin_commands": admin_commands}
+    security_features = [
+        {"feature": "Human Verification", "description": "Math captcha for new members"},
+        {"feature": "Anti-Scam Filter", "description": "Detects scam patterns & suspicious links"},
+        {"feature": "Auto-Ban", "description": "2 warnings = automatic ban"},
+        {"feature": "Link Whitelist", "description": "Only trusted domains allowed"},
+    ]
+    return {"commands": commands, "admin_commands": admin_commands, "security": security_features}
 
 # Include the router in the main app
 app.include_router(api_router)

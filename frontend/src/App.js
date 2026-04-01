@@ -56,7 +56,7 @@ function App() {
   const [tokenData, setTokenData] = useState(null);
   const [botConfig, setBotConfig] = useState(null);
   const [botStatus, setBotStatus] = useState({ running: false });
-  const [commands, setCommands] = useState({ commands: [], admin_commands: [] });
+  const [commands, setCommands] = useState({ commands: [], admin_commands: [], security: [] });
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -309,19 +309,36 @@ function App() {
         <section className="section commands-section" data-testid="commands-section">
           <h2>Bot Commands</h2>
           
-          <h3>General Commands</h3>
+          <h3>General Commands ({commands.commands.length})</h3>
           <div className="commands-grid">
             {commands.commands.map((cmd) => (
               <CommandCard key={cmd.command} command={cmd.command} description={cmd.description} />
             ))}
           </div>
 
-          <h3>Admin Commands</h3>
+          <h3>Admin Commands ({commands.admin_commands.length})</h3>
           <div className="commands-grid">
             {commands.admin_commands.map((cmd) => (
               <CommandCard key={cmd.command} command={cmd.command} description={cmd.description} isAdmin />
             ))}
           </div>
+
+          {commands.security && commands.security.length > 0 && (
+            <>
+              <h3>Security Features</h3>
+              <div className="security-grid">
+                {commands.security.map((sec) => (
+                  <div key={sec.feature} className="security-card">
+                    <span className="security-icon">🛡️</span>
+                    <div>
+                      <strong>{sec.feature}</strong>
+                      <p>{sec.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </section>
 
         {/* Social Links */}
