@@ -357,8 +357,7 @@ async def get_positions(wallet_address: str):
     
     # Get open positions
     open_positions = await db.positions.find(
-        {"wallet_address": wallet, "status": "open"}, {"_id": 0},
-        {"_id": 0}
+        {"wallet_address": wallet, "status": "open"}, {"_id": 0}
     ).to_list(100)
     
     # Calculate live PnL for each

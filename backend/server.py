@@ -220,6 +220,8 @@ async def record_price():
                         "market_cap": p.get("fdv"),
                     }
                     await db.price_history.insert_one(record)
+                    # Remove _id from response (MongoDB ObjectId is not JSON serializable)
+                    record.pop("_id", None)
                     return {"success": True, "data": record}
                 return {"success": False, "error": "No pairs found"}
     except Exception as e:
