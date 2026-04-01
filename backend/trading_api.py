@@ -154,7 +154,7 @@ async def get_price(pair: str) -> Optional[float]:
 
 async def get_user_balance(wallet: str) -> float:
     """Get user's $GANG balance"""
-    miner = await db.miners.find_one({"wallet_address": wallet.lower()})
+    miner = await db.miners.find_one({"wallet_address": wallet.lower()}, {"_id": 0})
     return miner["balance"] if miner else 0
 
 async def update_user_balance(wallet: str, amount: float):
@@ -290,7 +290,7 @@ async def close_position(request: ClosePositionRequest):
         "position_id": position_id,
         "wallet_address": wallet,
         "status": "open"
-    })
+    }, {"_id": 0})
     
     if not position:
         return {"success": False, "error": "Position not found or already closed"}
@@ -357,7 +357,7 @@ async def get_positions(wallet_address: str):
     
     # Get open positions
     open_positions = await db.positions.find(
-        {"wallet_address": wallet, "status": "open"},
+        {"wallet_address": wallet, "status": "open"}, {"_id": 0},
         {"_id": 0}
     ).to_list(100)
     

@@ -171,7 +171,7 @@ async def add_to_jackpot(amount):
     )
 
 async def get_user(wallet):
-    return await db.miners.find_one({"wallet_address": wallet.lower()})
+    return await db.miners.find_one({"wallet_address": wallet.lower()}, {"_id": 0})
 
 async def update_balance(wallet, amount):
     await db.miners.update_one(
@@ -218,14 +218,14 @@ async def get_stats():
 @router.post("/register")
 async def register(request: RegisterRequest):
     wallet = request.wallet_address.lower()
-    existing = await db.miners.find_one({"wallet_address": wallet})
+    existing = await db.miners.find_one({"wallet_address": wallet}, {"_id": 0})
     
     if existing:
         return {"success": True, "message": "Welcome back!", "is_new": False, "referral_code": existing["referral_code"]}
     
     referrer = None
     if request.referrer_code:
-        ref = await db.miners.find_one({"referral_code": request.referrer_code.upper()})
+        ref = await db.miners.find_one({"referral_code": request.referrer_code.upper()}, {"_id": 0})
         if ref:
             referrer = ref["wallet_address"]
             await db.miners.update_one({"wallet_address": referrer}, {"$inc": {"referral_count": 1}})
@@ -272,10 +272,10 @@ async def get_user_data(wallet_address: str):
         if datetime.now(timezone.utc) < next_time:
             can_daily_wheel = False
     
-    lottery = await db.lottery_rounds.find_one({"status": "active"})
+    lottery = await db.lottery_rounds.find_one({"status": "active"}, {"_id": 0})
     tickets = 0
     if lottery:
-        t = await db.lottery_tickets.find_one({"round_id": lottery["round_id"], "wallet_address": wallet})
+        t = await db.lottery_tickets.find_one({"round_id": lottery["round_id"], "wallet_address": wallet}, {"_id": 0})
         tickets = t["tickets"] if t else 0
     
     stakes = await db.stakes.find({"wallet_address": wallet, "status": "active"}, {"_id": 0}).to_list(100)
@@ -415,7 +415,7 @@ async def buy_lottery(request: LotteryRequest):
     if not miner or miner["balance"] < cost:
         return {"success": False, "error": "Insufficient balance"}
     
-    lottery = await db.lottery_rounds.find_one({"status": "active"})
+    lottery = await db.lottery_rounds.find_one({"status": "active"}, {"_id": 0})
     if not lottery:
         return {"success": False, "error": "No active lottery"}
     
@@ -454,11 +454,11 @@ async def bet_prediction(request: PredictionRequest):
     if not miner or miner["balance"] < amount:
         return {"success": False, "error": "Insufficient balance"}
     
-    pred = await db.prediction_rounds.find_one({"status": "active"})
+    pred = await db.prediction_rounds.find_one({"status": "active"}, {"_id": 0})
     if not pred:
         return {"success": False, "error": "No active round"}
     
-    existing = await db.predictions.find_one({"round_id": pred["round_id"], "wallet_address": wallet})
+    existing = await db.predictions.find_one({"round_id": pred["round_id"], "wallet_address": wallet}, {"_id": 0})
     if existing:
         return {"success": False, "error": "Already bet this round"}
     
@@ -943,7 +943,7 @@ async def get_tournament():
 async def join_tournament(request: TournamentJoinRequest):
     wallet = request.wallet_address.lower()
     
-    tournament = await db.tournaments.find_one({"tournament_id": request.tournament_id, "status": "active"})
+    tournament = await db.tournaments.find_one({"tournament_id": request.tournament_id, "status": "active"}, {"_id": 0})
     if not tournament:
         return {"success": False, "error": "Tournament not found"}
     
@@ -997,7 +997,7 @@ async def stake(request: StakeRequest):
 @router.post("/unstake")
 async def unstake(request: UnstakeRequest):
     wallet = request.wallet_address.lower()
-    stake = await db.stakes.find_one({"stake_id": request.stake_id, "wallet_address": wallet, "status": "active"})
+    stake = await db.stakes.find_one({"stake_id": request.stake_id, "wallet_address": wallet, "status": "active"}, {"_id": 0})
     
     if not stake:
         return {"success": False, "error": "Stake not found"}
