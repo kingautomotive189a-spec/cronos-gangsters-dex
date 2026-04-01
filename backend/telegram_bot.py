@@ -197,23 +197,24 @@ def format_number(num):
 
 
 def main_keyboard():
-    """Main inline keyboard with ALL features visible"""
+    """Main inline keyboard with ALL features as direct links"""
+    site = DEX_LINK
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("💰 Buy $GANG", url=DEX_LINK),
+        [InlineKeyboardButton("💰 Buy $GANG", url=site),
          InlineKeyboardButton("📊 Chart", url=DEXSCREENER)],
-        [InlineKeyboardButton("🌾 Farms", callback_data="menu_farms"),
-         InlineKeyboardButton("🏦 Vaults", callback_data="menu_vaults"),
-         InlineKeyboardButton("🔒 Staking", callback_data="menu_staking")],
-        [InlineKeyboardButton("🚀 Launchpad", callback_data="menu_launchpad"),
-         InlineKeyboardButton("🔐 Token Locker", callback_data="menu_locker"),
-         InlineKeyboardButton("🎯 Sniper Bot", callback_data="menu_sniper")],
-        [InlineKeyboardButton("🎴 NFTs", callback_data="menu_nft"),
-         InlineKeyboardButton("👥 Referral", callback_data="menu_referral"),
-         InlineKeyboardButton("🌉 Bridge", callback_data="menu_bridge")],
-        [InlineKeyboardButton("🎰 Lottery", callback_data="menu_lottery"),
-         InlineKeyboardButton("🛠 Token Creator", callback_data="menu_create"),
-         InlineKeyboardButton("🏪 Marketplace", callback_data="menu_marketplace")],
-        [InlineKeyboardButton("🌐 Website", url=DEX_LINK),
+        [InlineKeyboardButton("🌾 Farms", url=f"{site}/#farms"),
+         InlineKeyboardButton("🏦 Vaults", url=f"{site}/#vaults"),
+         InlineKeyboardButton("🔒 Staking", url=f"{site}/#staking")],
+        [InlineKeyboardButton("🚀 Launchpad", url=f"{site}/#launchpad"),
+         InlineKeyboardButton("🔐 Token Locker", url=f"{site}/#locker"),
+         InlineKeyboardButton("🎯 Sniper Bot", url=f"{site}/#sniper")],
+        [InlineKeyboardButton("🎴 NFTs", url=f"{site}/#nfts"),
+         InlineKeyboardButton("👥 Referral", url=f"{site}/#referral"),
+         InlineKeyboardButton("🌉 Bridge", url=f"{site}/#bridge")],
+        [InlineKeyboardButton("🎰 Lottery", url=f"{site}/#lottery"),
+         InlineKeyboardButton("🛠 Token Creator", url=f"{site}/#create"),
+         InlineKeyboardButton("🏪 Marketplace", url=f"{site}/#marketplace")],
+        [InlineKeyboardButton("🌐 Website", url=site),
          InlineKeyboardButton("🐦 Twitter", url=TWITTER)],
     ])
 
