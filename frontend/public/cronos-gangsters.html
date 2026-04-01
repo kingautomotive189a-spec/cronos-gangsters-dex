@@ -2898,6 +2898,7 @@
           <option value="farm">MasterChef (Farms)</option>
           <option value="vault">Vault (Auto-Compound)</option>
           <option value="staking">Staking Vault</option>
+          <option value="mining">Mining Rewards</option>
         </select>
       </div>
       <button class="ref-copy-btn" data-testid="rev-fund-btn" onclick="revFundRewards()" style="width:100%;background:linear-gradient(135deg,var(--gold),#b8860b);">
@@ -3586,7 +3587,7 @@ const CONTRACTS = {
   DOGE: "0x1a8E39ae59e5556B56b76fCBA98d22c9ae557396",
   ATOM: "0xB888d8Dd1733d72681b30c00ee76BDE93ae7aa93",
   DAI:  "0xF2001B145b43032AAF5Ee2884e456CCd805F677D",
-  XRP:  "0x2Fb4Bfc7f6c26D97f47eA9b1c40E76c6BFab7D39",
+  XRP:  "0xb9Ce0dd29C91E02d4620F57a66700Fc5e41d6D15",
   PEPE: "0x9d5991f523f3aF7c14e91Ca6063C8E08F3c97fbB",
   CROID: "0xCbF0ADeA24fd5f32c6e7f0474f0d1b94Ace4E2e7",
   FUL: "0x83aFB1C32E5637ACd0a452D87c3249f4a9F0013A",
@@ -3596,6 +3597,7 @@ const CONTRACTS = {
   // ── Launchpad (deploy GANGLaunchpad.sol → paste address here) ──
   LAUNCHPAD: localStorage.getItem('GANG_LAUNCHPAD_ADDR') || "0x8d702E84a5f0dc6Fe84417a0fC20FB258690C546",
   LOCKER: localStorage.getItem('GANG_LOCKER_ADDR') || "",
+  MINING_REWARDS: "0xBdAaDDb1cd25758aa40F38c273C355cA943e1c8F",
 };
 // Restore V2 vault address from localStorage if a newer one was deployed
 (function() {
@@ -3760,8 +3762,8 @@ const FARMS = [
   { pid: 5,  name: "CRO / WETH",   tokens: ["CRO","WETH"],  apy: 0, tvl: '—', multiplier: "16x", lpAddr: "0xA111C17f8B8303280d3EB01BBcd61000AA7F39F9", earned: 0, comingSoon: true },
   { pid: 6,  name: "CRO / VVS",    tokens: ["CRO","VVS"],   apy: 0, tvl: '—', multiplier: "14x", lpAddr: "0xbf62c67eA509E86F07c8c69d0286C0636C50270b", earned: 0, comingSoon: true },
   { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_XRP_GANG') || null, earned: 0, needsChefAdd: true },
-  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_PEPE_GANG') || null, earned: 0, needsChefAdd: true },
-  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_DOGE_GANG') || null, earned: 0, needsChefAdd: true },
+  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_PEPE_GANG') || "0x39e1B2f1B73810C611e83b733c2baF4A64C58C6e", earned: 0, needsChefAdd: true },
+  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_DOGE_GANG') || "0x657f64DDFE52a12AfF9B6fdc64eB778dB076AD52", earned: 0, needsChefAdd: true },
 ];
 
 // ── Auto-Compound Vault Definitions ──
@@ -9795,6 +9797,7 @@ async function revFundRewards() {
   if (target === 'farm') await _fundContract(CONTRACTS.CHEF, inputId, 'MasterChef');
   else if (target === 'vault') await _fundContract(CONTRACTS.VAULT, inputId, 'Vault');
   else if (target === 'staking') await _fundContract(CONTRACTS.STAKING, inputId, 'Staking');
+  else if (target === 'mining') await _fundContract(CONTRACTS.MINING_REWARDS, inputId, 'Mining Rewards');
   // Refresh balances on revenue page
   loadRevRewardBalances();
 }
