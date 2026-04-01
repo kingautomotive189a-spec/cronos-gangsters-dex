@@ -68,9 +68,12 @@
   nav::-webkit-scrollbar{display:none;}
   nav button{background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:6px 9px;border-radius:6px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
   nav button:hover{color:var(--text);background:var(--surface2);}
-  .scroll-hint{position:absolute;right:0;top:0;bottom:0;width:40px;background:linear-gradient(90deg,transparent,var(--bg));pointer-events:none;display:flex;align-items:center;justify-content:flex-end;z-index:5;}
-  .scroll-arrow{color:var(--gold);font-size:14px;animation:pulseArrow 1.5s ease-in-out infinite;padding-right:4px;}
-  @keyframes pulseArrow{0%,100%{opacity:1;transform:translateX(0)}50%{opacity:0.4;transform:translateX(-4px)}}
+  .scroll-hint{position:absolute;right:0;top:0;bottom:0;width:50px;background:linear-gradient(90deg,transparent,rgba(10,10,18,0.95));pointer-events:none;display:flex;align-items:center;justify-content:flex-end;z-index:5;}
+  .scroll-arrow{display:flex;flex-direction:column;align-items:center;gap:1px;padding-right:4px;}
+  .scroll-arrow-icon{color:var(--gold);font-size:18px;font-weight:900;animation:bounceRight 1s ease-in-out infinite;text-shadow:0 0 8px rgba(255,215,0,0.6);}
+  .scroll-arrow-text{color:var(--gold);font-size:7px;font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;animation:fadeInOut 1.5s ease-in-out infinite;white-space:nowrap;}
+  @keyframes bounceRight{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+  @keyframes fadeInOut{0%,100%{opacity:0.5}50%{opacity:1}}
   nav button.active{color:var(--gold);background:rgba(212,160,23,0.1);border-bottom:2px solid var(--gold);}
   .wallet-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000!important;border:none;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;box-shadow:0 3px 0 #6b4f0a;}
   .wallet-btn:hover{transform:translateY(-1px);box-shadow:0 4px 0 #6b4f0a,0 6px 16px rgba(212,160,23,0.3);}
@@ -516,7 +519,7 @@
     <button class="nav-btn" data-testid="nav-trading-btn" onclick="window.location.href='/trading.html'" style="color:#ff8c00;font-weight:800;">Trading</button>
     <button class="nav-btn" data-testid="nav-dashboard-btn" onclick="window.location.href='/dashboard.html'" style="color:#2AABEE;font-weight:800;">Dashboard</button>
   </nav>
-  <div class="scroll-hint" id="scrollHint"><span class="scroll-arrow">&#x276F;&#x276F;</span></div>
+  <div class="scroll-hint" id="scrollHint"><div class="scroll-arrow"><span class="scroll-arrow-icon">&#x276F;</span><span class="scroll-arrow-text">MORE</span></div></div>
 
   <button class="wallet-btn" id="connectBtn">Connect Wallet</button>
   <div style="display:flex;gap:12px;align-items:center;margin-top:8px;">
