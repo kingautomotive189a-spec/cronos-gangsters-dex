@@ -6032,71 +6032,104 @@ async function setFarmAllocVVS(allocPoint, btnEl) {
 }
 
 // ── REBALANCE ALL FARMS ──
-// Sets CRO/GANG to 20%, all other farms to 13.3% each
-// Uses hardcoded on-chain pool IDs to avoid discovery issues
+// Sets CRO/GANG to 20%, all other farms+vaults to 6.67% each
+// Skips pools already at correct allocation, 6s delay between TXs
+let _isRebalancing = false;
 async function rebalanceAllFarms() {
+  if (_isRebalancing) { showToast('Rebalance already running! Wait for it to finish.', 'error'); return; }
   if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+  
+  _isRebalancing = true;
   const logEl = document.getElementById('rebalanceLog');
   const btn = document.getElementById('rebalanceBtn');
+  btn.disabled = true;
   
   const chef = new ethers.Contract(CONTRACTS.CHEF, [
-    'function setPoolAllocPoint(uint256 _pid, uint256 _allocPoint) external'
+    'function setPoolAllocPoint(uint256 _pid, uint256 _allocPoint) external',
+    'function poolInfo(uint256) view returns (address, uint256, uint256, uint256, uint16)'
   ], state.signer);
 
-  // Hardcoded on-chain pool IDs (verified from MasterChef contract)
-  // CRO/GANG = 20%, all other 12 pools (6 farms + 6 vaults) = 6.67% each
-  const rebalanceList = [
-    // === FARMS ===
-    { name: "CRO / GANG",   chefPid: 0,  allocPoint: 100000 },  // 20%
-    { name: "GANG / USDC",  chefPid: 1,  allocPoint: 33333 },   // 6.67%
-    { name: "GANG Staking", chefPid: 4,  allocPoint: 33333 },   // 6.67%
-    { name: "GANG / VVS",   chefPid: 14, allocPoint: 33333 },   // 6.67%
-    { name: "XRP / GANG",   chefPid: 7,  allocPoint: 33333 },   // 6.67%
-    { name: "PEPE / GANG",  chefPid: 8,  allocPoint: 33333 },   // 6.67%
-    { name: "DOGE / GANG",  chefPid: 9,  allocPoint: 33333 },   // 6.67%
-    // === AUTO-COMPOUND VAULTS ===
-    { name: "GANG / WETH (Vault)",  chefPid: 30, allocPoint: 33333 },  // 6.67%
-    { name: "GANG / WBTC (Vault)",  chefPid: 31, allocPoint: 33333 },  // 6.67%
-    { name: "GANG / ATOM (Vault)",  chefPid: 32, allocPoint: 33333 },  // 6.67%
-    { name: "GANG / CROID (Vault)", chefPid: 33, allocPoint: 33333 },  // 6.67%
-    { name: "GANG / USDT (Vault)",  chefPid: 34, allocPoint: 33333 },  // 6.67%
-    { name: "GANG / FUL (Vault)",   chefPid: 35, allocPoint: 33333 },  // 6.67%
+  const allPools = [
+    { name: "CRO / GANG",            chefPid: 0,  target: 100000 },
+    { name: "GANG / USDC",           chefPid: 1,  target: 33333 },
+    { name: "GANG Staking",          chefPid: 4,  target: 33333 },
+    { name: "GANG / VVS",            chefPid: 14, target: 33333 },
+    { name: "XRP / GANG",            chefPid: 7,  target: 33333 },
+    { name: "PEPE / GANG",           chefPid: 8,  target: 33333 },
+    { name: "DOGE / GANG",           chefPid: 9,  target: 33333 },
+    { name: "GANG / WETH (Vault)",   chefPid: 30, target: 33333 },
+    { name: "GANG / WBTC (Vault)",   chefPid: 31, target: 33333 },
+    { name: "GANG / ATOM (Vault)",   chefPid: 32, target: 33333 },
+    { name: "GANG / CROID (Vault)",  chefPid: 33, target: 33333 },
+    { name: "GANG / USDT (Vault)",   chefPid: 34, target: 33333 },
+    { name: "GANG / FUL (Vault)",    chefPid: 35, target: 33333 },
   ];
 
-  btn.disabled = true;
-  let completed = 0;
-  
-  for (const item of rebalanceList) {
+  // Step 1: Check which pools need fixing
+  logEl.textContent = 'Checking current allocations on-chain...';
+  const needsFix = [];
+  for (const pool of allPools) {
     try {
-      logEl.textContent = `(${completed + 1}/${rebalanceList.length}) Setting ${item.name} → Pool ${item.chefPid} = ${item.allocPoint}... Confirm in wallet`;
-      showToast(`Confirm ${item.name}...`, 'info');
-      const tx = await chef.setPoolAllocPoint(item.chefPid, item.allocPoint, { gasLimit: 200000 });
-      logEl.textContent = `(${completed + 1}/${rebalanceList.length}) ${item.name} — TX sent, waiting for block...`;
+      const info = await chef.poolInfo(pool.chefPid);
+      const currentAlloc = info[1].toNumber ? info[1].toNumber() : Number(info[1]);
+      if (currentAlloc === pool.target) {
+        logEl.textContent = pool.name + ' already correct, skipping...';
+      } else {
+        needsFix.push(pool);
+      }
+      await new Promise(r => setTimeout(r, 500));
+    } catch(e) {
+      needsFix.push(pool);
+    }
+  }
+
+  if (needsFix.length === 0) {
+    logEl.textContent = 'All 13 pools already correct! Nothing to do.';
+    btn.textContent = 'ALL POOLS CORRECT';
+    btn.style.background = 'var(--gold)';
+    btn.style.color = '#000';
+    _isRebalancing = false;
+    return;
+  }
+
+  logEl.textContent = needsFix.length + ' pools need updating. Starting...';
+  await new Promise(r => setTimeout(r, 2000));
+
+  // Step 2: Fix each pool with 6s delay between
+  let done = 0;
+  for (const pool of needsFix) {
+    try {
+      logEl.textContent = '(' + (done+1) + '/' + needsFix.length + ') ' + pool.name + ' → ' + pool.target + '... Confirm in wallet';
+      const tx = await chef.setPoolAllocPoint(pool.chefPid, pool.target, { gasLimit: 200000 });
+      logEl.textContent = '(' + (done+1) + '/' + needsFix.length + ') ' + pool.name + ' — waiting for block...';
       await tx.wait();
-      completed++;
-      logEl.textContent = `(${completed}/${rebalanceList.length}) ${item.name} DONE! ✓`;
-      showToast(`${item.name} updated! (${completed}/${rebalanceList.length})`, 'success');
-      // 3 second delay between transactions to avoid RPC rate limiting
-      if (completed < rebalanceList.length) {
-        logEl.textContent = `(${completed}/${rebalanceList.length}) Waiting 3s before next TX...`;
-        await new Promise(r => setTimeout(r, 3000));
+      done++;
+      logEl.textContent = '(' + done + '/' + needsFix.length + ') ' + pool.name + ' DONE';
+      showToast(pool.name + ' done (' + done + '/' + needsFix.length + ')', 'success');
+      if (done < needsFix.length) {
+        for (let s = 6; s > 0; s--) {
+          logEl.textContent = '(' + done + '/' + needsFix.length + ') Next TX in ' + s + 's...';
+          await new Promise(r => setTimeout(r, 1000));
+        }
       }
     } catch(e) {
-      const msg = (e.reason || e.message || String(e)).slice(0, 120);
-      logEl.textContent = `Error on ${item.name} (${completed}/${rebalanceList.length} done): ${msg}. Press button to retry remaining.`;
-      showToast(`Error: ${msg}`, 'error');
+      const msg = (e.reason || e.message || String(e)).slice(0, 150);
+      logEl.textContent = 'Error on ' + pool.name + ': ' + msg;
+      showToast('Error - press RETRY to continue', 'error');
       btn.disabled = false;
-      btn.textContent = `RETRY REMAINING (${rebalanceList.length - completed} left)`;
+      btn.textContent = 'RETRY (' + (needsFix.length - done) + ' remaining)';
+      _isRebalancing = false;
       return;
     }
   }
 
-  logEl.textContent = `All ${completed} farms rebalanced! CRO/GANG=20%, others=13.3%. Rewards will speed up now!`;
-  btn.textContent = 'REBALANCE COMPLETE ✓';
+  logEl.textContent = 'All ' + done + ' pools updated! Rewards are now balanced!';
+  btn.textContent = 'REBALANCE COMPLETE';
   btn.style.background = 'var(--gold)';
   btn.style.color = '#000';
-  showToast('All farms rebalanced successfully!', 'success');
-  setTimeout(() => { fetchFarmTVLs().then(() => calcFarmAPRs()); }, 3000);
+  showToast('All farms and vaults rebalanced!', 'success');
+  _isRebalancing = false;
+  setTimeout(function() { fetchFarmTVLs().then(function() { calcFarmAPRs(); }); }, 3000);
 }
 
 // ── Add Pool to MasterChef (owner only) ──
