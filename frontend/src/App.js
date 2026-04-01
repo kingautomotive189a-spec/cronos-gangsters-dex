@@ -366,7 +366,7 @@ function App() {
       </main>
 
       <footer className="dashboard-footer" data-testid="footer">
-        <p>🔫 Cronos Gangsters — The most gangster DEX on Cronos</p>
+        <p><img src="https://cronosgangsters.com/gang-logo.png" alt="GANG" style={{width: '20px', height: '20px', borderRadius: '50%', verticalAlign: 'middle', marginRight: '6px'}} />Cronos Gangsters — The most gangster DEX on Cronos</p>
         <p className="footer-sub">GANG or nothing! 🤝</p>
       </footer>
     </div>
