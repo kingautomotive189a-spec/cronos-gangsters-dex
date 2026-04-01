@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>$GANG Mining Hub</title>
+<link rel="icon" type="image/png" href="/gang-logo.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0a0a12;--s1:#12121e;--s2:#1a1a2e;--border:#ffd70020;--gold:#ffd700;--orange:#ff8c00;--green:#0f8;--red:#f44;--purple:#8b5cf6;--text:#e8e0d0;--muted:#888;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh;}
+.wrap{max-width:520px;margin:0 auto;padding:12px 15px 80px;}
+
+/* Revenue Banner */
+.revenue-banner{background:linear-gradient(135deg,#1a0a2e,#0a1a2e);border:1px solid var(--purple);border-radius:14px;padding:16px;margin-bottom:16px;display:none;}
+.revenue-banner.show{display:block;}
+.rev-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--purple);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.rev-item{background:rgba(139,92,246,0.08);border-radius:8px;padding:10px;text-align:center;}
+.rev-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.rev-val{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);}
+.rev-btn{width:100%;background:linear-gradient(135deg,var(--purple),#6d28d9);color:#fff;border:none;padding:12px;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;}
+
+.ad{background:var(--s2);padding:10px 14px;border-radius:10px;margin-bottom:14px;display:flex;align-items:center;gap:10px;border:1px solid var(--border);}
+.ad-tag{background:var(--gold);color:#000;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;}
+h1{text-align:center;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(90deg,var(--gold),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0 0 4px;}
+.price-bar{text-align:center;color:var(--muted);margin-bottom:14px;font-size:14px;font-family:'Space Mono',monospace;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;}
+.stat{background:rgba(255,255,255,0.03);padding:10px 4px;border-radius:8px;text-align:center;}
+.stat-v{font-size:15px;font-weight:700;color:var(--gold);font-family:'Bebas Neue',sans-serif;}
+.stat-l{font-size:9px;color:#666;}
+.connect-btn{width:100%;background:linear-gradient(90deg,var(--gold),var(--orange));color:#000;border:none;padding:16px;border-radius:12px;font-size:18px;font-weight:700;cursor:pointer;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;}
+.user-card{background:rgba(255,255,255,0.03);padding:14px;border-radius:12px;margin-bottom:14px;}
+.user-row{display:flex;justify-content:space-between;margin-bottom:8px;align-items:center;}
+.vip-badge{background:rgba(255,215,0,0.2);color:var(--gold);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.balance{text-align:center;font-size:28px;font-weight:800;color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+.withdraw-btn{width:100%;margin-top:10px;background:var(--purple);color:#fff;border:none;padding:12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;}
+.tabs{display:flex;gap:4px;margin-bottom:14px;}
+.tab-btn{flex:1;padding:10px;border:none;border-radius:8px;cursor:pointer;font-size:18px;text-align:center;background:#222;color:#fff;transition:background .15s;}
+.tab-btn.active{background:var(--gold);color:#000;}
+.panel{background:rgba(255,255,255,0.02);border-radius:12px;padding:16px;margin-bottom:14px;}
+.panel h2{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold);margin-bottom:12px;}
+.panel h3{font-size:15px;margin:14px 0 8px;color:#ccc;font-weight:600;}
+.claim-btn{width:100%;background:linear-gradient(90deg,var(--green),#0a5);color:#000;border:none;padding:16px;border-radius:12px;font-size:18px;font-weight:800;cursor:pointer;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;}
+.cooldown{text-align:center;padding:16px;background:rgba(255,255,255,0.03);border-radius:12px;color:var(--orange);font-weight:600;}
+.bet-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.bet-input{flex:1;background:rgba(255,255,255,0.06);border:1px solid #333;border-radius:8px;padding:10px;color:#fff;font-size:16px;max-width:100px;font-family:'Space Mono',monospace;}
+.game-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.game-btn{padding:14px;background:var(--gold);color:#000;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:15px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;transition:opacity .15s;}
+.game-btn:disabled{opacity:0.5;}
+.game-btn.green{background:linear-gradient(135deg,#0a5,#072);color:#fff;}
+.game-btn.red{background:linear-gradient(135deg,#a00,#700);color:#fff;}
+.game-btn.purple{background:var(--purple);color:#fff;}
+.dice-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;}
+.dice-btn{padding:10px;background:var(--purple);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;}
+.action-btn{width:100%;background:linear-gradient(90deg,var(--gold),var(--orange));color:#000;border:none;padding:13px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+.lev-row{display:flex;gap:4px;margin-bottom:8px;}
+.lev-btn{padding:8px 12px;border:none;border-radius:6px;cursor:pointer;font-weight:600;background:#333;color:#fff;font-size:13px;}
+.lev-btn.active{background:var(--gold);color:#000;}
+.card{background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;margin-bottom:12px;}
+.pot-display{font-size:30px;font-weight:800;color:var(--gold);text-align:center;font-family:'Bebas Neue',sans-serif;}
+.pool-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.pool-item{background:rgba(255,255,255,0.03);padding:10px;border-radius:8px;text-align:center;}
+.tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.tier-card{background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;text-align:center;border:1px solid #333;}
+.tier-card.current{border-color:var(--gold);}
+.tier-name{font-weight:600;margin-bottom:4px;}
+.tier-multi{color:var(--gold);font-weight:700;font-size:18px;font-family:'Bebas Neue',sans-serif;}
+.tier-cost{color:var(--muted);font-size:12px;margin-bottom:6px;}
+.tier-btn{background:var(--gold);color:#000;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-weight:600;font-size:12px;}
+.pool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.pool-card{background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;text-align:center;cursor:pointer;border:1px solid #333;}
+.pool-card.selected{border-color:var(--gold);}
+.pool-name{font-weight:600;font-size:13px;}
+.pool-apy{color:var(--green);font-weight:700;font-size:18px;font-family:'Bebas Neue',sans-serif;}
+.stake-card{background:rgba(255,255,255,0.03);padding:14px;border-radius:10px;margin-top:8px;}
+.small-btn{background:var(--purple);color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;margin-top:6px;font-size:12px;}
+.box-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.box-btn{background:linear-gradient(135deg,var(--gold),var(--orange));color:#000;border:none;padding:14px;border-radius:10px;cursor:pointer;font-weight:600;}
+.jackpot{font-size:34px;font-weight:800;color:var(--gold);text-align:center;font-family:'Bebas Neue',sans-serif;}
+.result-box{padding:18px;border-radius:12px;margin-bottom:14px;text-align:center;border:1px solid var(--border);}
+.result-text{font-size:22px;font-weight:800;margin-bottom:8px;font-family:'Bebas Neue',sans-serif;}
+.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;padding:10px 22px;border-radius:10px;font-weight:600;z-index:1000;cursor:pointer;font-size:14px;display:none;}
+.toast.show{display:block;}
+.ref-box{margin-top:16px;background:rgba(139,92,246,0.1);padding:14px;border-radius:10px;border:1px solid rgba(139,92,246,0.25);}
+.copy-btn{background:var(--purple);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;margin-top:8px;font-size:13px;}
+.footer{display:flex;justify-content:center;gap:20px;padding:14px;border-top:1px solid #333;margin-top:10px;}
+.footer a{color:var(--muted);text-decoration:none;font-size:18px;}
+.back-link{display:block;text-align:center;color:var(--gold);text-decoration:none;font-size:14px;padding:10px;font-weight:600;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Owner Revenue Banner -->
+<div class="revenue-banner" id="revBanner" data-testid="mining-revenue-banner">
+  <div class="rev-title">OWNER REVENUE</div>
+  <div class="rev-grid">
+    <div class="rev-item"><div class="rev-label">House Earnings</div><div class="rev-val" id="revHouse">0</div></div>
+    <div class="rev-item"><div class="rev-label">Total Burned</div><div class="rev-val" id="revBurned">0</div></div>
+    <div class="rev-item"><div class="rev-label">Total Users</div><div class="rev-val" id="revUsers">0</div></div>
+    <div class="rev-item"><div class="rev-label">Jackpot Pool</div><div class="rev-val" id="revJackpot">0</div></div>
+  </div>
+  <button class="rev-btn" onclick="collectRevenue('mining')" data-testid="collect-mining-revenue">COLLECT MINING REVENUE</button>
+</div>
+
+<div class="ad"><span class="ad-tag">AD</span> Your Ad Here - Contact @CronosGangsters</div>
+<h1>$GANG HUB</h1>
+<div class="price-bar" id="priceBar">$--- | 0%</div>
+<div class="stats-row" id="statsRow">
+  <div class="stat"><div class="stat-v" id="sMiners">0</div><div class="stat-l">MINERS</div></div>
+  <div class="stat"><div class="stat-v" id="sJackpot">0</div><div class="stat-l">JACKPOT</div></div>
+  <div class="stat"><div class="stat-v" id="sLottery">0</div><div class="stat-l">LOTTERY</div></div>
+  <div class="stat"><div class="stat-v" id="sDaily">5</div><div class="stat-l">DAILY</div></div>
+</div>
+
+<div id="connectArea">
+  <button class="connect-btn" onclick="connectWallet()" data-testid="mining-connect-btn">CONNECT WALLET</button>
+</div>
+
+<div id="userArea" style="display:none">
+  <div class="user-card">
+    <div class="user-row">
+      <span id="walletAddr" style="font-family:'Space Mono',monospace;font-size:13px;color:#aaa"></span>
+      <span class="vip-badge" id="vipBadge">FREE</span>
+    </div>
+    <div class="balance" id="userBalance">0 $GANG</div>
+    <button class="withdraw-btn" id="withdrawBtn" style="display:none" onclick="doAction('/withdraw')" data-testid="mining-withdraw-btn">WITHDRAW (5% BURN)</button>
+  </div>
+
+  <div class="tabs" id="tabsRow"></div>
+  <div id="tabContent"></div>
+</div>
+
+<div class="result-box" id="resultBox" style="display:none"></div>
+<div class="toast" id="toast"></div>
+
+<div class="footer">
+  <a href="/cronos-gangsters.html">DApp</a>
+  <a href="https://t.me/+DrWDScTEiLg1ZGQ0" target="_blank">Telegram</a>
+  <a href="https://x.com/AhmadOm93837106" target="_blank">Twitter</a>
+</div>
+<a href="/cronos-gangsters.html" class="back-link" data-testid="back-to-dapp">BACK TO GANG DEX</a>
+</div>
+
+<script>
+var API = window.location.origin + '/api';
+var wallet = null, userData = null, stats = null, lottery = null, prediction = null, tournament = null, jackpot = 0, tokenPrice = null;
+var activeTab = 'mine';
+var betAmount = 10, crashCashout = 2, limboTarget = 2, leverage = 10, lotteryTickets = 1, predAmount = 10, stakeAmount = 100, selectedPool = '30days';
+var OWNER_WALLET = '0xedb10BeD5b9e0be39FE1CCDd417C20D5c76A8baf';
+var gameResult = null;
+
+var tabs = [
+  {id:'mine',icon:'Mine'},{id:'games',icon:'Games'},{id:'casino',icon:'Casino'},
+  {id:'lottery',icon:'Lottery'},{id:'stake',icon:'Stake'},{id:'more',icon:'More'}
+];
+
+function showToast(msg) {
+  var t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast show';
+  setTimeout(function(){ t.className = 'toast'; }, 3000);
+}
+
+function formatTime(iso) {
+  if (!iso) return '';
+  var diff = new Date(iso) - new Date();
+  if (diff <= 0) return 'Ready!';
+  return Math.floor(diff/3600000)+'h '+Math.floor((diff%3600000)/60000)+'m';
+}
+
+async function fetchAll() {
+  try {
+    var [sr,lr,pr,tr,jr,pricr] = await Promise.all([
+      fetch(API+'/mining/stats'), fetch(API+'/mining/lottery/current'), fetch(API+'/mining/prediction/current'),
+      fetch(API+'/mining/tournament/current'), fetch(API+'/mining/jackpot'), fetch(API+'/token/price')
+    ]);
+    var [s,l,p,t,j,px] = await Promise.all([sr.json(),lr.json(),pr.json(),tr.json(),jr.json(),pricr.json()]);
+    if(s.success) stats = s;
+    if(l.success) lottery = l.lottery;
+    if(p.success) prediction = p.prediction;
+    if(t.success) tournament = t.tournament;
+    if(j.success) jackpot = j.pool;
+    if(px.success) tokenPrice = px.data;
+    updateUI();
+  } catch(e){}
+}
+
+async function fetchUser() {
+  if(!wallet) return;
+  try {
+    var r = await fetch(API+'/mining/user/'+wallet);
+    var d = await r.json();
+    if(d.success) userData = d;
+    updateUI();
+  } catch(e){}
+}
+
+function updateUI() {
+  if(tokenPrice) {
+    var p = parseFloat(tokenPrice.price_usd);
+    var c = tokenPrice.change_h24 || 0;
+    document.getElementById('priceBar').innerHTML = '$'+(p<0.01?p.toFixed(6):p.toFixed(4))+' <span style="color:'+(c>=0?'var(--green)':'var(--red)')+'">'+c+'%</span>';
+  }
+  if(stats) {
+    document.getElementById('sMiners').textContent = stats.total_users || 0;
+    document.getElementById('sDaily').textContent = stats.current_reward || 5;
+    // Revenue banner for owner
+    if(wallet && wallet.toLowerCase() === OWNER_WALLET.toLowerCase()) {
+      document.getElementById('revBanner').className = 'revenue-banner show';
+      document.getElementById('revHouse').textContent = Math.round(stats.house_earnings || 0);
+      document.getElementById('revBurned').textContent = Math.round(stats.total_burned || 0);
+      document.getElementById('revUsers').textContent = stats.total_users || 0;
+    }
+  }
+  document.getElementById('sJackpot').textContent = Math.round(jackpot);
+  document.getElementById('sLottery').textContent = lottery ? lottery.pot : 0;
+  document.getElementById('revJackpot').textContent = Math.round(jackpot);
+
+  if(userData) {
+    document.getElementById('walletAddr').textContent = wallet.slice(0,6)+'...'+wallet.slice(-4);
+    document.getElementById('vipBadge').textContent = (userData.vip_tier||'FREE').toUpperCase();
+    document.getElementById('userBalance').textContent = (userData.balance||0).toFixed(2)+' $GANG';
+    document.getElementById('withdrawBtn').style.display = userData.balance >= 100 ? 'block' : 'none';
+  }
+  renderTab();
+}
+
+async function connectWallet() {
+  if(!window.ethereum) { showToast('Open in wallet browser!'); return; }
+  try {
+    var accs = await window.ethereum.request({method:'eth_requestAccounts'});
+    wallet = accs[0];
+    var r = await fetch(API+'/mining/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({wallet_address:wallet,referrer_code:localStorage.getItem('referrer')})});
+    var d = await r.json();
+    if(d.success) showToast(d.message||'Connected!');
+    document.getElementById('connectArea').style.display='none';
+    document.getElementById('userArea').style.display='block';
+    renderTabs();
+    fetchUser();
+    fetchAll();
+  } catch(e){ showToast('Failed to connect'); }
+}
+
+async function doAction(endpoint, body) {
+  try {
+    gameResult = null;
+    var r = await fetch(API+'/mining'+endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({wallet_address:wallet},body||{}))});
+    var d = await r.json();
+    if(d.success) {
+      if(d.payout !== undefined || d.win !== undefined || d.result) { gameResult = d; showResult(d); }
+      showToast(d.message || (d.win ? 'WON '+d.payout+' $GANG!' : d.payout === 0 ? 'Lost!' : 'Success!'));
+    } else {
+      showToast(d.error || 'Failed');
+    }
+    fetchUser(); fetchAll();
+    return d;
+  } catch(e){ showToast('Error'); return null; }
+}
+
+function showResult(d) {
+  var box = document.getElementById('resultBox');
+  var bg = (d.win || d.payout > 0) ? 'rgba(0,255,136,0.08)' : 'rgba(255,0,0,0.08)';
+  var html = '';
+  if(d.win !== undefined) html += '<div class="result-text">'+(d.win ? 'WIN!' : 'LOST')+'</div>';
+  if(d.payout !== undefined) html += '<div>Payout: '+d.payout+' $GANG</div>';
+  if(d.result) html += '<div>Result: '+d.result+'</div>';
+  if(d.reels) html += '<div style="font-size:24px;margin-top:6px">'+d.reels.join(' ')+'</div>';
+  if(d.crash_point) html += '<div>Crashed at '+d.crash_point+'x</div>';
+  box.style.display = 'block'; box.style.background = bg; box.innerHTML = html;
+  setTimeout(function(){ box.style.display='none'; }, 5000);
+}
+
+async function collectRevenue(type) {
+  showToast('Revenue collection requires on-chain withdrawal from contract');
+}
+
+function renderTabs() {
+  document.getElementById('tabsRow').innerHTML = tabs.map(function(t){
+    return '<button class="tab-btn'+(activeTab===t.id?' active':'')+'" onclick="switchTab(\''+t.id+'\')" data-testid="tab-'+t.id+'">'+t.icon+'</button>';
+  }).join('');
+}
+
+function switchTab(id) { activeTab = id; renderTabs(); renderTab(); }
+
+function renderTab() {
+  var c = document.getElementById('tabContent');
+  if(activeTab === 'mine') c.innerHTML = renderMineTab();
+  else if(activeTab === 'games') c.innerHTML = renderGamesTab();
+  else if(activeTab === 'casino') c.innerHTML = renderCasinoTab();
+  else if(activeTab === 'lottery') c.innerHTML = renderLotteryTab();
+  else if(activeTab === 'stake') c.innerHTML = renderStakeTab();
+  else if(activeTab === 'more') c.innerHTML = renderMoreTab();
+}
+
+function renderMineTab() {
+  var canClaim = userData ? userData.can_claim : false;
+  var html = '<div class="panel"><h2>DAILY MINING</h2>';
+  html += '<p style="color:var(--muted);font-size:14px;margin-bottom:14px">Earn '+(stats?stats.current_reward:5)+' $GANG daily'+(userData&&userData.vip_multiplier>1?' ('+userData.vip_multiplier+'x VIP!)':'')+'</p>';
+  if(canClaim) html += '<button class="claim-btn" onclick="doAction(\'/claim\')" data-testid="mine-now-btn">MINE NOW</button>';
+  else html += '<div class="cooldown">Next: '+formatTime(userData?userData.next_claim_time:null)+'</div>';
+
+  html += '<h3>VIP Tiers</h3><div class="tier-grid">';
+  if(stats && stats.vip_tiers) {
+    Object.keys(stats.vip_tiers).forEach(function(k){
+      var v = stats.vip_tiers[k]; var isCurrent = userData && userData.vip_tier === k;
+      html += '<div class="tier-card'+(isCurrent?' current':'')+'"><div class="tier-name">'+v.name+'</div><div class="tier-multi">'+v.multiplier+'x</div><div class="tier-cost">'+v.cost+' $GANG</div>';
+      if(!isCurrent && v.cost > 0) html += '<button class="tier-btn" onclick="doAction(\'/vip/upgrade\',{tier:\''+k+'\'})">Upgrade</button>';
+      html += '</div>';
+    });
+  }
+  html += '</div>';
+
+  html += '<h3>Daily Bonus Wheel</h3><button class="action-btn" onclick="doAction(\'/daily-wheel\')" '+(userData&&!userData.can_daily_wheel?'disabled':'')+' data-testid="spin-wheel-btn">'+(userData&&userData.can_daily_wheel?'SPIN FREE':'COME BACK TOMORROW')+'</button>';
+
+  html += '<div class="ref-box"><h3>Referrals (10% bonus)</h3><p>Referrals: '+(userData?userData.referral_count:0)+'</p><button class="copy-btn" onclick="navigator.clipboard.writeText(window.location.origin+\'/mining.html?ref=\'+(userData?userData.referral_code:\'\'));showToast(\'Copied!\')">COPY REFERRAL LINK</button></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderGamesTab() {
+  var html = '<div class="panel"><h2>MINI GAMES</h2>';
+  html += '<div class="bet-row"><span>Bet:</span><input type="number" class="bet-input" value="'+betAmount+'" onchange="betAmount=Math.max(1,+this.value)" data-testid="bet-input"/><span>$GANG</span></div>';
+
+  html += '<h3>Coin Flip (2x)</h3><div class="game-grid"><button class="game-btn" onclick="doAction(\'/game/coinflip\',{amount:betAmount,choice:\'heads\'})" data-testid="coinflip-heads">HEADS</button><button class="game-btn" onclick="doAction(\'/game/coinflip\',{amount:betAmount,choice:\'tails\'})" data-testid="coinflip-tails">TAILS</button></div>';
+
+  html += '<h3>Dice (6x)</h3><div class="dice-grid">';
+  for(var i=1;i<=6;i++) html += '<button class="dice-btn" onclick="doAction(\'/game/dice\',{amount:betAmount,choice:\''+i+'\'})">'+i+'</button>';
+  html += '</div>';
+
+  html += '<h3>Rock Paper Scissors (2x)</h3><div class="game-grid" style="grid-template-columns:1fr 1fr 1fr"><button class="game-btn" onclick="doAction(\'/game/rps\',{amount:betAmount,choice:\'rock\'})">ROCK</button><button class="game-btn" onclick="doAction(\'/game/rps\',{amount:betAmount,choice:\'paper\'})">PAPER</button><button class="game-btn" onclick="doAction(\'/game/rps\',{amount:betAmount,choice:\'scissors\'})">SCISSORS</button></div>';
+
+  html += '<h3>Higher or Lower (2x)</h3><div class="game-grid"><button class="game-btn green" onclick="doAction(\'/game/highlow\',{amount:betAmount,choice:\'high\'})">HIGH</button><button class="game-btn red" onclick="doAction(\'/game/highlow\',{amount:betAmount,choice:\'low\'})">LOW</button></div>';
+
+  html += '<h3>Blackjack (2x)</h3><button class="action-btn" onclick="doAction(\'/game/blackjack\',{amount:betAmount})" data-testid="play-blackjack">PLAY BLACKJACK</button>';
+  html += '</div>';
+  return html;
+}
+
+function renderCasinoTab() {
+  var html = '<div class="panel"><h2>CASINO</h2>';
+  html += '<div class="bet-row"><span>Bet:</span><input type="number" class="bet-input" value="'+betAmount+'" onchange="betAmount=Math.max(1,+this.value)"/></div>';
+
+  html += '<h3>Crash</h3><div class="bet-row"><span>Cashout at:</span><input type="number" step="0.1" class="bet-input" value="'+crashCashout+'" onchange="crashCashout=Math.max(1.1,+this.value)"/><span>x</span></div><button class="action-btn" onclick="doAction(\'/game/crash\',{amount:betAmount,auto_cashout:crashCashout})" data-testid="play-crash">PLAY CRASH</button>';
+
+  html += '<h3>Slots (up to 100x)</h3><button class="action-btn" onclick="doAction(\'/game/slots\',{amount:betAmount})" data-testid="play-slots">SPIN SLOTS</button>';
+
+  html += '<h3>Wheel of Fortune</h3><button class="action-btn" onclick="doAction(\'/game/wheel\',{amount:betAmount})">SPIN WHEEL</button>';
+
+  html += '<h3>Limbo</h3><div class="bet-row"><span>Target:</span><input type="number" step="0.1" class="bet-input" value="'+limboTarget+'" onchange="limboTarget=Math.max(1.01,+this.value)"/><span>x</span></div><button class="action-btn" onclick="doAction(\'/game/limbo\',{amount:betAmount,choice:String(limboTarget)})">PLAY LIMBO</button>';
+
+  html += '<h3>Leverage Trading</h3><div class="lev-row">';
+  [10,25,50,100].forEach(function(l){ html += '<button class="lev-btn'+(leverage===l?' active':'')+'" onclick="leverage='+l+';renderTab()">'+l+'x</button>'; });
+  html += '</div><div class="game-grid"><button class="game-btn green" onclick="doAction(\'/game/leverage\',{amount:betAmount,direction:\'long\',leverage:leverage})">LONG</button><button class="game-btn red" onclick="doAction(\'/game/leverage\',{amount:betAmount,direction:\'short\',leverage:leverage})">SHORT</button></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderLotteryTab() {
+  var html = '<div class="panel"><h2>LOTTERY & PREDICTIONS</h2>';
+  html += '<div class="card"><h3>Weekly Lottery</h3><div class="pot-display">'+(lottery?lottery.pot:0)+' $GANG</div>';
+  html += '<p style="color:var(--muted);font-size:13px">Tickets sold: '+(lottery?lottery.tickets_sold:0)+' | Yours: '+(userData?userData.lottery_tickets:0)+'</p>';
+  html += '<div class="bet-row"><input type="number" class="bet-input" value="'+lotteryTickets+'" onchange="lotteryTickets=Math.max(1,+this.value)" min="1"/><span>= '+(lotteryTickets*10)+' $GANG</span></div>';
+  html += '<button class="action-btn" onclick="doAction(\'/lottery/buy\',{tickets:lotteryTickets})" data-testid="buy-lottery">BUY TICKETS</button></div>';
+
+  html += '<div class="card"><h3>Price Prediction</h3><div class="pool-row"><div class="pool-item">UP: '+(prediction?prediction.up_pool:0)+'</div><div class="pool-item">DOWN: '+(prediction?prediction.down_pool:0)+'</div></div>';
+  html += '<div class="bet-row"><input type="number" class="bet-input" value="'+predAmount+'" onchange="predAmount=Math.max(1,+this.value)"/><span>$GANG</span></div>';
+  html += '<div class="game-grid"><button class="game-btn green" onclick="doAction(\'/prediction/bet\',{prediction:\'up\',amount:predAmount})">UP</button><button class="game-btn red" onclick="doAction(\'/prediction/bet\',{prediction:\'down\',amount:predAmount})">DOWN</button></div></div>';
+
+  html += '<div class="card"><h3>Tournament</h3><p style="color:var(--muted);font-size:13px">Entry: '+(tournament?tournament.entry_fee:50)+' $GANG | Prize: '+(tournament?tournament.prize_pool:0)+' $GANG | Players: '+(tournament&&tournament.players?tournament.players.length:0)+'</p>';
+  html += '<button class="action-btn" onclick="doAction(\'/tournament/join\',{tournament_id:\''+(tournament?tournament.tournament_id:'')+'\'})">JOIN TOURNAMENT</button></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderStakeTab() {
+  var html = '<div class="panel"><h2>STAKING</h2><div class="pool-grid">';
+  if(stats && stats.staking_pools) {
+    Object.keys(stats.staking_pools).forEach(function(k){
+      var v = stats.staking_pools[k];
+      html += '<div class="pool-card'+(selectedPool===k?' selected':'')+'" onclick="selectedPool=\''+k+'\';renderTab()"><div class="pool-name">'+v.name+'</div><div class="pool-apy">'+v.apy+'%</div></div>';
+    });
+  }
+  html += '</div><div class="bet-row"><input type="number" class="bet-input" value="'+stakeAmount+'" onchange="stakeAmount=Math.max(10,+this.value)"/><span>$GANG</span></div>';
+  html += '<button class="action-btn" onclick="doAction(\'/stake\',{pool:selectedPool,amount:stakeAmount})" data-testid="stake-btn">STAKE</button>';
+
+  if(userData && userData.active_stakes && userData.active_stakes.length > 0) {
+    html += '<h3 style="margin-top:16px">Your Stakes</h3>';
+    userData.active_stakes.forEach(function(st){
+      var locked = new Date(st.unlocks_at) > new Date();
+      html += '<div class="stake-card"><p>'+st.amount+' $GANG in '+st.pool+'</p><p style="color:var(--green)">+'+st.reward.toFixed(2)+' reward</p><p style="color:var(--muted);font-size:12px">Unlocks: '+formatTime(st.unlocks_at)+'</p>';
+      html += '<button class="small-btn" onclick="doAction(\'/unstake\',{stake_id:\''+st.stake_id+'\'})" '+(locked?'disabled':'')+' >'+(locked?'Locked':'Unstake')+'</button></div>';
+    });
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderMoreTab() {
+  var html = '<div class="panel"><h2>MORE FEATURES</h2>';
+  html += '<div class="card"><h3>Mystery Boxes</h3><div class="box-grid">';
+  if(stats && stats.mystery_boxes) {
+    Object.keys(stats.mystery_boxes).forEach(function(k){
+      var v = stats.mystery_boxes[k];
+      html += '<button class="box-btn" onclick="doAction(\'/mystery-box\',{box_type:\''+k+'\'})"><div>'+k.toUpperCase()+'</div><div>'+v.cost+' $GANG</div></button>';
+    });
+  }
+  html += '</div></div>';
+  html += '<div class="card"><h3>Jackpot Pool</h3><div class="jackpot">'+Math.round(jackpot)+' $GANG</div><p style="color:var(--muted);font-size:12px">1% of all bets goes here. Random winner weekly!</p></div>';
+  html += '<div class="card"><h3>Burn Stats</h3><p>Total Burned: '+(stats?Math.round(stats.total_burned||0):0)+' $GANG</p><p style="color:var(--muted);font-size:12px">5% burned on every withdrawal</p></div>';
+  html += '<div class="card"><h3>Your Stats</h3><p>Wins: '+(userData&&userData.game_stats?userData.game_stats.wins:0)+'</p><p>Losses: '+(userData&&userData.game_stats?userData.game_stats.losses:0)+'</p><p>Profit: '+(userData&&userData.game_stats?userData.game_stats.profit.toFixed(2):0)+' $GANG</p></div>';
+  html += '</div>';
+  return html;
+}
+
+// Init
+var ref = new URLSearchParams(window.location.search).get('ref');
+if(ref) localStorage.setItem('referrer', ref);
+fetchAll();
+setInterval(fetchAll, 30000);
+if(window.ethereum) {
+  window.ethereum.request({method:'eth_accounts'}).then(function(accs){
+    if(accs.length > 0) { wallet = accs[0]; document.getElementById('connectArea').style.display='none'; document.getElementById('userArea').style.display='block'; renderTabs(); fetchUser(); }
+  });
+}
+</script>
+</body>
+</html>
