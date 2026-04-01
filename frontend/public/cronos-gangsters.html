@@ -298,7 +298,7 @@
   .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(212,160,23,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px;}
   @keyframes spin{to{transform:rotate(360deg);}}
   @keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.4}}
-  @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  /* removed tickerScroll */
 
   /* ── REFERRAL ── */
   .ref-hero{text-align:center;margin-bottom:28px;padding:20px 12px;}
@@ -509,23 +509,12 @@
     <button class="nav-btn" data-page="locker" data-testid="nav-locker-btn">Locker</button>
     <button class="nav-btn" data-page="lottery" data-testid="nav-lottery-btn">Lottery</button>
     <button class="nav-btn" data-page="sniper" data-testid="nav-sniper-btn">Sniper</button>
+    <button class="nav-btn" data-testid="nav-mining-btn" onclick="window.location.href='/mining.html'" style="color:#ffd700;font-weight:800;">Mining</button>
+    <button class="nav-btn" data-testid="nav-trading-btn" onclick="window.location.href='/trading.html'" style="color:#ff8c00;font-weight:800;">Trading</button>
+    <button class="nav-btn" data-testid="nav-deploy-farms-btn" onclick="window.location.href='/deploy-farms.html'" style="color:#27ae60;font-weight:800;">Deploy Farms</button>
+    <button class="nav-btn" data-testid="nav-deploy-btn" onclick="window.location.href='/deploy.html'" style="color:#8b5cf6;font-weight:800;">Deploy</button>
+    <button class="nav-btn" data-testid="nav-dashboard-btn" onclick="window.location.href='/dashboard.html'" style="color:#2AABEE;font-weight:800;">Dashboard</button>
   </nav>
-
-  <!-- Rotating Feature Ticker -->
-  <div style="overflow:hidden;margin:10px 0 6px;border:1px solid rgba(212,160,23,0.2);border-radius:10px;background:rgba(15,15,15,0.6);padding:0;">
-    <div id="featureTicker" style="display:flex;white-space:nowrap;animation:tickerScroll 20s linear infinite;">
-      <a href="/mining.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;color:#ffd700;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;border-right:1px solid rgba(212,160,23,0.15);">⛏ MINING HUB</a>
-      <a href="/trading.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;color:#ff8c00;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;border-right:1px solid rgba(212,160,23,0.15);">⚡ LEVERAGE TRADING</a>
-      <a href="/deploy-farms.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;color:#27ae60;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;border-right:1px solid rgba(212,160,23,0.15);">🌱 DEPLOY FARMS</a>
-      <a href="/deploy.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;color:#8b5cf6;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;border-right:1px solid rgba(212,160,23,0.15);">📜 DEPLOY CONTRACT</a>
-      <a href="/dashboard.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;color:#2AABEE;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;border-right:1px solid rgba(212,160,23,0.15);">🤖 BOT DASHBOARD</a>
-      <a href="/mining.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;color:#ffd700;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;border-right:1px solid rgba(212,160,23,0.15);">⛏ MINING HUB</a>
-      <a href="/trading.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;color:#ff8c00;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;border-right:1px solid rgba(212,160,23,0.15);">⚡ LEVERAGE TRADING</a>
-      <a href="/deploy-farms.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;color:#27ae60;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;border-right:1px solid rgba(212,160,23,0.15);">🌱 DEPLOY FARMS</a>
-      <a href="/deploy.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;color:#8b5cf6;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;border-right:1px solid rgba(212,160,23,0.15);">📜 DEPLOY CONTRACT</a>
-      <a href="/dashboard.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;color:#2AABEE;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;">🤖 BOT DASHBOARD</a>
-    </div>
-  </div>
 
   <button class="wallet-btn" id="connectBtn">Connect Wallet</button>
   <div style="display:flex;gap:12px;align-items:center;margin-top:8px;">

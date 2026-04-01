@@ -332,32 +332,6 @@ function renderGamesTab() {
 
   html += '<h3>Rock Paper Scissors (2x)</h3><div class="game-grid" style="grid-template-columns:1fr 1fr 1fr"><button class="game-btn" onclick="doAction(\'/game/rps\',{amount:betAmount,choice:\'rock\'})">ROCK</button><button class="game-btn" onclick="doAction(\'/game/rps\',{amount:betAmount,choice:\'paper\'})">PAPER</button><button class="game-btn" onclick="doAction(\'/game/rps\',{amount:betAmount,choice:\'scissors\'})">SCISSORS</button></div>';
 
-function renderRacingTab() {
-  var html = '<div class="panel"><h2>RACING GAMES</h2>';
-  html += '<div class="bet-row"><span>Bet:</span><input type="number" class="bet-input" value="'+betAmount+'" onchange="betAmount=Math.max(1,+this.value)"/><span>$GANG</span></div>';
-
-  html += '<h3>Horse Racing (4x)</h3><p style="color:var(--muted);font-size:12px;margin-bottom:8px">Pick a horse. Fastest wins!</p>';
-  html += '<div class="game-grid">';
-  html += '<button class="game-btn" style="background:#c0392b;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'1\'})" data-testid="horse-1">HORSE 1</button>';
-  html += '<button class="game-btn" style="background:#2980b9;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'2\'})">HORSE 2</button>';
-  html += '<button class="game-btn" style="background:#27ae60;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'3\'})">HORSE 3</button>';
-  html += '<button class="game-btn" style="background:#8e44ad;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'4\'})">HORSE 4</button>';
-  html += '</div>';
-
-  html += '<h3 style="margin-top:16px">Car Racing (4x)</h3><p style="color:var(--muted);font-size:12px;margin-bottom:8px">Pick a car. Fastest wins!</p>';
-  html += '<div class="game-grid">';
-  html += '<button class="game-btn" style="background:#e74c3c;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'1\'})" data-testid="car-1">CAR 1</button>';
-  html += '<button class="game-btn" style="background:#3498db;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'2\'})">CAR 2</button>';
-  html += '<button class="game-btn" style="background:#2ecc71;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'3\'})">CAR 3</button>';
-  html += '<button class="game-btn" style="background:#f39c12;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'4\'})">CAR 4</button>';
-  html += '</div>';
-
-  html += '</div>';
-  return html;
-}
-
-
-
   html += '<h3>Higher or Lower (2x)</h3><div class="game-grid"><button class="game-btn green" onclick="doAction(\'/game/highlow\',{amount:betAmount,choice:\'high\'})">HIGH</button><button class="game-btn red" onclick="doAction(\'/game/highlow\',{amount:betAmount,choice:\'low\'})">LOW</button></div>';
 
   html += '<h3>Blackjack (2x)</h3><button class="action-btn" onclick="doAction(\'/game/blackjack\',{amount:betAmount})" data-testid="play-blackjack">PLAY BLACKJACK</button>';
@@ -395,6 +369,27 @@ function renderCasinoTab() {
   html += '<h3>Leverage Trading</h3><div class="lev-row">';
   [10,25,50,100].forEach(function(l){ html += '<button class="lev-btn'+(leverage===l?' active':'')+'" onclick="leverage='+l+';renderTab()">'+l+'x</button>'; });
   html += '</div><div class="game-grid"><button class="game-btn green" onclick="doAction(\'/game/leverage\',{amount:betAmount,direction:\'long\',leverage:leverage})">LONG</button><button class="game-btn red" onclick="doAction(\'/game/leverage\',{amount:betAmount,direction:\'short\',leverage:leverage})">SHORT</button></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderRacingTab() {
+  var html = '<div class="panel"><h2>RACING GAMES</h2>';
+  html += '<div class="bet-row"><span>Bet:</span><input type="number" class="bet-input" value="'+betAmount+'" onchange="betAmount=Math.max(1,+this.value)"/><span>$GANG</span></div>';
+  html += '<h3>Horse Racing (4x)</h3><p style="color:var(--muted);font-size:12px;margin-bottom:8px">Pick a horse. Fastest wins!</p>';
+  html += '<div class="game-grid">';
+  html += '<button class="game-btn" style="background:#c0392b;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'1\'})" data-testid="horse-1">HORSE 1</button>';
+  html += '<button class="game-btn" style="background:#2980b9;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'2\'})">HORSE 2</button>';
+  html += '<button class="game-btn" style="background:#27ae60;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'3\'})">HORSE 3</button>';
+  html += '<button class="game-btn" style="background:#8e44ad;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'4\'})">HORSE 4</button>';
+  html += '</div>';
+  html += '<h3 style="margin-top:16px">Car Racing (4x)</h3><p style="color:var(--muted);font-size:12px;margin-bottom:8px">Pick a car. Fastest wins!</p>';
+  html += '<div class="game-grid">';
+  html += '<button class="game-btn" style="background:#e74c3c;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'1\'})" data-testid="car-1">CAR 1</button>';
+  html += '<button class="game-btn" style="background:#3498db;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'2\'})">CAR 2</button>';
+  html += '<button class="game-btn" style="background:#2ecc71;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'3\'})">CAR 3</button>';
+  html += '<button class="game-btn" style="background:#f39c12;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'4\'})">CAR 4</button>';
+  html += '</div>';
   html += '</div>';
   return html;
 }
