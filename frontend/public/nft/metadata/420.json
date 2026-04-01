@@ -1,0 +1,40 @@
+{
+  "name": "Cronos Gangster #420 \u2014 Frost Blade",
+  "description": "A Rare Enforcer from the Cronos Gangsters collection. Frost Blade runs the streets of Cronos. 500 unique gangsters. Own one, join the family.",
+  "image": "/nft/images/the_family.png",
+  "external_url": "https://cronosgangsters.com",
+  "attributes": [
+    {
+      "trait_type": "Base",
+      "value": "The Family"
+    },
+    {
+      "trait_type": "Rank",
+      "value": "Enforcer"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Burning Streets"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "None"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Gold Chain"
+    },
+    {
+      "trait_type": "Suit",
+      "value": "Black Suit"
+    },
+    {
+      "trait_type": "Special",
+      "value": "Glowing Eyes"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}

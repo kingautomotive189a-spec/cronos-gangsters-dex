@@ -1,0 +1,40 @@
+{
+  "name": "Cronos Gangster #3 \u2014 Ghost Knuckles",
+  "description": "A Common Enforcer from the Cronos Gangsters collection. Ghost Knuckles runs the streets of Cronos. 500 unique gangsters. Own one, join the family.",
+  "image": "/nft/images/harvest_farm.png",
+  "external_url": "https://cronosgangsters.com",
+  "attributes": [
+    {
+      "trait_type": "Base",
+      "value": "Farm Boss"
+    },
+    {
+      "trait_type": "Rank",
+      "value": "Enforcer"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Neon City"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "Baseball Bat"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Monocle"
+    },
+    {
+      "trait_type": "Suit",
+      "value": "Black Suit"
+    },
+    {
+      "trait_type": "Special",
+      "value": "None"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}

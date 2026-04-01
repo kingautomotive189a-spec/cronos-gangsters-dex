@@ -1,0 +1,40 @@
+{
+  "name": "Cronos Gangster #250 \u2014 Viper Crown",
+  "description": "A Common Soldier from the Cronos Gangsters collection. Viper Crown runs the streets of Cronos. 500 unique gangsters. Own one, join the family.",
+  "image": "/nft/images/the_don.png",
+  "external_url": "https://cronosgangsters.com",
+  "attributes": [
+    {
+      "trait_type": "Base",
+      "value": "The Don OG"
+    },
+    {
+      "trait_type": "Rank",
+      "value": "Soldier"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Throne Room"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "Diamond Knuckles"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Skull Ring"
+    },
+    {
+      "trait_type": "Suit",
+      "value": "Military Coat"
+    },
+    {
+      "trait_type": "Special",
+      "value": "None"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}

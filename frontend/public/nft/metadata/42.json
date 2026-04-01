@@ -1,0 +1,40 @@
+{
+  "name": "Cronos Gangster #42 \u2014 Ghost Bones",
+  "description": "A Common Enforcer from the Cronos Gangsters collection. Ghost Bones runs the streets of Cronos. 500 unique gangsters. Own one, join the family.",
+  "image": "/nft/images/rise_up.png",
+  "external_url": "https://cronosgangsters.com",
+  "attributes": [
+    {
+      "trait_type": "Base",
+      "value": "Rise Up"
+    },
+    {
+      "trait_type": "Rank",
+      "value": "Enforcer"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Casino Floor"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "Golden AK"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Diamond Watch"
+    },
+    {
+      "trait_type": "Suit",
+      "value": "Gold Armor"
+    },
+    {
+      "trait_type": "Special",
+      "value": "None"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}

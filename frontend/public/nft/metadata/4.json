@@ -1,0 +1,40 @@
+{
+  "name": "Cronos Gangster #4 \u2014 Iron Shank",
+  "description": "A Rare Boss from the Cronos Gangsters collection. Iron Shank runs the streets of Cronos. 500 unique gangsters. Own one, join the family.",
+  "image": "/nft/images/enforcer.png",
+  "external_url": "https://cronosgangsters.com",
+  "attributes": [
+    {
+      "trait_type": "Base",
+      "value": "The Enforcer"
+    },
+    {
+      "trait_type": "Rank",
+      "value": "Boss"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Neon City"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "None"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Gold Chain"
+    },
+    {
+      "trait_type": "Suit",
+      "value": "White Tuxedo"
+    },
+    {
+      "trait_type": "Special",
+      "value": "None"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}

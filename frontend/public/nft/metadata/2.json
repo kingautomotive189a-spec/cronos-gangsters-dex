@@ -1,0 +1,40 @@
+{
+  "name": "Cronos Gangster #2 \u2014 Chrome Claw",
+  "description": "A Rare Soldier from the Cronos Gangsters collection. Chrome Claw runs the streets of Cronos. 500 unique gangsters. Own one, join the family.",
+  "image": "/nft/images/street_style.png",
+  "external_url": "https://cronosgangsters.com",
+  "attributes": [
+    {
+      "trait_type": "Base",
+      "value": "Street Style"
+    },
+    {
+      "trait_type": "Rank",
+      "value": "Soldier"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Dark Alley"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "None"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Skull Ring"
+    },
+    {
+      "trait_type": "Suit",
+      "value": "Pinstripe"
+    },
+    {
+      "trait_type": "Special",
+      "value": "Glowing Eyes"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}

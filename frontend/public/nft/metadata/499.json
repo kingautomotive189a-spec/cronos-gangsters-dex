@@ -1,0 +1,40 @@
+{
+  "name": "Cronos Gangster #499 \u2014 Chrome Claw",
+  "description": "A Rare Enforcer from the Cronos Gangsters collection. Chrome Claw runs the streets of Cronos. 500 unique gangsters. Own one, join the family.",
+  "image": "/nft/images/defi_soldier.png",
+  "external_url": "https://cronosgangsters.com",
+  "attributes": [
+    {
+      "trait_type": "Base",
+      "value": "DeFi Soldier"
+    },
+    {
+      "trait_type": "Rank",
+      "value": "Enforcer"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Crimson Sunset"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "Brass Knuckles"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Gold Teeth"
+    },
+    {
+      "trait_type": "Suit",
+      "value": "Military Coat"
+    },
+    {
+      "trait_type": "Special",
+      "value": "Fire Aura"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}

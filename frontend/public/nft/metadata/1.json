@@ -1,0 +1,40 @@
+{
+  "name": "Cronos Gangster #1 \u2014 Gold Scar",
+  "description": "A Rare Soldier from the Cronos Gangsters collection. Gold Scar runs the streets of Cronos. 500 unique gangsters. Own one, join the family.",
+  "image": "/nft/images/4.png",
+  "external_url": "https://cronosgangsters.com",
+  "attributes": [
+    {
+      "trait_type": "Base",
+      "value": "The Don"
+    },
+    {
+      "trait_type": "Rank",
+      "value": "Soldier"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Neon City"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "None"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Crown"
+    },
+    {
+      "trait_type": "Suit",
+      "value": "Red Velvet"
+    },
+    {
+      "trait_type": "Special",
+      "value": "Gold Aura"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}

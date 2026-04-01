@@ -1,0 +1,40 @@
+{
+  "name": "Cronos Gangster #200 \u2014 Ghost Wolf",
+  "description": "A Rare Enforcer from the Cronos Gangsters collection. Ghost Wolf runs the streets of Cronos. 500 unique gangsters. Own one, join the family.",
+  "image": "/nft/images/2.png",
+  "external_url": "https://cronosgangsters.com",
+  "attributes": [
+    {
+      "trait_type": "Base",
+      "value": "Neon Kingpin"
+    },
+    {
+      "trait_type": "Rank",
+      "value": "Enforcer"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Dark Alley"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "Dual Uzis"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Gold Chain"
+    },
+    {
+      "trait_type": "Suit",
+      "value": "Pinstripe"
+    },
+    {
+      "trait_type": "Special",
+      "value": "Glowing Eyes"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}

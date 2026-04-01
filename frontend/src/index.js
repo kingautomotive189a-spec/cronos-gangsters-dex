@@ -1,11 +1,3 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "@/index.css";
-import App from "@/App";
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+// DApp is served as static HTML from public/cronos-gangsters.html
+// index.html redirects to it via meta refresh
+// React app is intentionally empty

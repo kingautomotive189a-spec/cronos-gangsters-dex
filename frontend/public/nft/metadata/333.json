@@ -1,0 +1,40 @@
+{
+  "name": "Cronos Gangster #333 \u2014 Iron Fury",
+  "description": "A Common Soldier from the Cronos Gangsters collection. Iron Fury runs the streets of Cronos. 500 unique gangsters. Own one, join the family.",
+  "image": "/nft/images/2.png",
+  "external_url": "https://cronosgangsters.com",
+  "attributes": [
+    {
+      "trait_type": "Base",
+      "value": "Neon Kingpin"
+    },
+    {
+      "trait_type": "Rank",
+      "value": "Soldier"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Throne Room"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "None"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Crown"
+    },
+    {
+      "trait_type": "Suit",
+      "value": "Diamond Suit"
+    },
+    {
+      "trait_type": "Special",
+      "value": "None"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    }
+  ]
+}

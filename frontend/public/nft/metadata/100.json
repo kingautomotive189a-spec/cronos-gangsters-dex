@@ -1,0 +1,40 @@
+{
+  "name": "Cronos Gangster #100 \u2014 Ghost Dagger",
+  "description": "A Rare Soldier from the Cronos Gangsters collection. Ghost Dagger runs the streets of Cronos. 500 unique gangsters. Own one, join the family.",
+  "image": "/nft/images/take_control.png",
+  "external_url": "https://cronosgangsters.com",
+  "attributes": [
+    {
+      "trait_type": "Base",
+      "value": "Take Control"
+    },
+    {
+      "trait_type": "Rank",
+      "value": "Soldier"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Dark Alley"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "Baseball Bat"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Diamond Crown"
+    },
+    {
+      "trait_type": "Suit",
+      "value": "Black Suit"
+    },
+    {
+      "trait_type": "Special",
+      "value": "Glowing Eyes"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}

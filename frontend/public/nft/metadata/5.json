@@ -1,0 +1,40 @@
+{
+  "name": "Cronos Gangster #5 \u2014 Phantom Scar",
+  "description": "A Rare Soldier from the Cronos Gangsters collection. Phantom Scar runs the streets of Cronos. 500 unique gangsters. Own one, join the family.",
+  "image": "/nft/images/the_family.png",
+  "external_url": "https://cronosgangsters.com",
+  "attributes": [
+    {
+      "trait_type": "Base",
+      "value": "The Family"
+    },
+    {
+      "trait_type": "Rank",
+      "value": "Soldier"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Midnight Harbor"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "None"
+    },
+    {
+      "trait_type": "Accessory",
+      "value": "Fedora"
+    },
+    {
+      "trait_type": "Suit",
+      "value": "Red Velvet"
+    },
+    {
+      "trait_type": "Special",
+      "value": "Gold Aura"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    }
+  ]
+}
