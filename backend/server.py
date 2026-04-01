@@ -8,6 +8,7 @@ import aiohttp
 import asyncio
 import subprocess
 import signal
+import sys
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional, Dict, Any
@@ -263,7 +264,7 @@ async def start_bot():
     try:
         bot_script = ROOT_DIR / "telegram_bot.py"
         bot_process = subprocess.Popen(
-            ["/root/.venv/bin/python", str(bot_script)],
+            [sys.executable, str(bot_script)],
             cwd=str(ROOT_DIR),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
