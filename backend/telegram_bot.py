@@ -722,27 +722,28 @@ async def launchpad(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def locker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle /locker command"""
     msg = (
-        "🔐 *LP LOCKER*\n\n"
-        "Lock your LP tokens to build trust!\n"
-        "Show investors your liquidity is safe.\n\n"
-        "*Features:*\n"
-        "• Lock any LP token\n"
-        "• Choose lock duration\n"
-        "• Option to burn LP (permanent)\n"
-        "• Verified on DexScreener\n"
-        "• Public lock verification\n\n"
-        f"💰 *Lock Fee:* {LOCKER_INFO['lock_fee']} per lock\n\n"
-        "*Why lock LP?*\n"
-        "✓ Prevents rug pulls\n"
-        "✓ Builds investor confidence\n"
-        "✓ Shows on chart platforms\n\n"
-        f"[🔐 Lock Your LP]({DEX_LINK})"
+        "🔐 *LIQUIDITY IS LOCKED*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Your investment is SAFE. LP tokens are locked!\n\n"
+        "🔒 *GANG / WCRO LP Lock Details:*\n\n"
+        "📅 *Created:* Mar 26, 2026 07:55\n"
+        "⏰ *Expires:* Mar 26, 2027 07:50\n"
+        "🔐 *Amount Locked:* 2,830.410 VVS-LP\n"
+        "⛓ *Chain:* Cronos\n\n"
+        "📋 *Addresses:*\n"
+        "• *Token:* `0x1f77...Cb65`\n"
+        "• *Locker:* `0xfa7f753a1e4ef3f1f3c8438f53855dfb58fde389`\n"
+        "• *Owner:* `0xaA3C5749628610fF410EF9133a4ac4f58e9A52eA`\n\n"
+        "✅ *Verified on DX.app*\n"
+        "✅ *Cannot be withdrawn until Mar 2027*\n"
+        "✅ *100% of LP is locked — NO rug pull possible*\n\n"
+        "🔍 View the lock proof yourself:"
     )
 
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🔐 Open Locker", url=f"{DEX_LINK}#locker"),
-         InlineKeyboardButton("🔥 Burn LP", url=f"{DEX_LINK}#locker")],
-        [InlineKeyboardButton("✅ Verify Lock", url=f"{DEX_LINK}#locker")],
+        [InlineKeyboardButton("🔐 View Lock on DX.app", url="https://dx.app/dxlock/view/liquidity-locker?address=0xfa7f753a1e4ef3f1f3c8438f53855dfb58fde389&chain=cronos")],
+        [InlineKeyboardButton("📊 View on Explorer", url="https://explorer.cronos.org/address/0xfa7f753a1e4ef3f1f3c8438f53855dfb58fde389")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
 
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
@@ -1288,21 +1289,26 @@ async def _cb_menu_launchpad(query, context):
 
 async def _cb_menu_locker(query, context):
     msg = (
-        "🔐 *LP TOKEN LOCKER*\n\n"
-        "Lock your LP tokens to build trust!\n\n"
-        "*Features:*\n"
-        "• Lock any LP token\n"
-        "• Choose lock duration\n"
-        "• Option to burn LP (permanent)\n"
-        "• Verified on DexScreener\n"
-        "• Public lock verification\n\n"
-        f"💰 *Lock Fee:* {LOCKER_INFO['lock_fee']} per lock\n\n"
-        "✓ Prevents rug pulls\n"
-        "✓ Builds investor confidence"
+        "🔐 *LIQUIDITY IS LOCKED*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Your investment is SAFE. LP tokens are locked!\n\n"
+        "🔒 *GANG / WCRO LP Lock Details:*\n\n"
+        "📅 *Created:* Mar 26, 2026 07:55\n"
+        "⏰ *Expires:* Mar 26, 2027 07:50\n"
+        "🔐 *Amount Locked:* 2,830.410 VVS-LP\n"
+        "⛓ *Chain:* Cronos\n\n"
+        "📋 *Addresses:*\n"
+        "• *Token:* `0x1f77...Cb65`\n"
+        "• *Locker:* `0xfa7f753a1e4ef3f1f3c8438f53855dfb58fde389`\n"
+        "• *Owner:* `0xaA3C5749628610fF410EF9133a4ac4f58e9A52eA`\n\n"
+        "✅ *Verified on DX.app*\n"
+        "✅ *Cannot be withdrawn until Mar 2027*\n"
+        "✅ *100% of LP is locked — NO rug pull possible*\n\n"
+        "🔍 View the lock proof yourself:"
     )
     kb = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🔐 Open Locker", url=f"{DEX_LINK}#locker"),
-         InlineKeyboardButton("🔥 Burn LP", url=f"{DEX_LINK}#locker")],
+        [InlineKeyboardButton("🔐 View Lock on DX.app", url="https://dx.app/dxlock/view/liquidity-locker?address=0xfa7f753a1e4ef3f1f3c8438f53855dfb58fde389&chain=cronos")],
+        [InlineKeyboardButton("📊 View on Explorer", url="https://explorer.cronos.org/address/0xfa7f753a1e4ef3f1f3c8438f53855dfb58fde389")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
