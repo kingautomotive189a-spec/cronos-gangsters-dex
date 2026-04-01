@@ -64,10 +64,13 @@
   .logo-icon{width:26px;height:26px;border-radius:50%;overflow:hidden;flex-shrink:0;}
   .logo-text{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;color:var(--gold);line-height:1;}
   .logo-sub{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
-  nav{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1;min-width:0;}
+  nav{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1;min-width:0;position:relative;}
   nav::-webkit-scrollbar{display:none;}
   nav button{background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:6px 9px;border-radius:6px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
   nav button:hover{color:var(--text);background:var(--surface2);}
+  .scroll-hint{position:absolute;right:0;top:0;bottom:0;width:40px;background:linear-gradient(90deg,transparent,var(--bg));pointer-events:none;display:flex;align-items:center;justify-content:flex-end;z-index:5;}
+  .scroll-arrow{color:var(--gold);font-size:14px;animation:pulseArrow 1.5s ease-in-out infinite;padding-right:4px;}
+  @keyframes pulseArrow{0%,100%{opacity:1;transform:translateX(0)}50%{opacity:0.4;transform:translateX(-4px)}}
   nav button.active{color:var(--gold);background:rgba(212,160,23,0.1);border-bottom:2px solid var(--gold);}
   .wallet-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000!important;border:none;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;box-shadow:0 3px 0 #6b4f0a;}
   .wallet-btn:hover{transform:translateY(-1px);box-shadow:0 4px 0 #6b4f0a,0 6px 16px rgba(212,160,23,0.3);}
@@ -515,6 +518,7 @@
     <button class="nav-btn" data-testid="nav-deploy-btn" onclick="window.location.href='/deploy.html'" style="color:#8b5cf6;font-weight:800;">Deploy</button>
     <button class="nav-btn" data-testid="nav-dashboard-btn" onclick="window.location.href='/dashboard.html'" style="color:#2AABEE;font-weight:800;">Dashboard</button>
   </nav>
+  <div class="scroll-hint" id="scrollHint"><span class="scroll-arrow">&#x276F;&#x276F;</span></div>
 
   <button class="wallet-btn" id="connectBtn">Connect Wallet</button>
   <div style="display:flex;gap:12px;align-items:center;margin-top:8px;">
@@ -529,6 +533,18 @@
     </a>
   </div>
 </header>
+<script>
+(function(){
+  var nav = document.querySelector('nav');
+  var hint = document.getElementById('scrollHint');
+  if(nav && hint) {
+    nav.addEventListener('scroll', function(){
+      if(nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 10) hint.style.opacity='0';
+      else hint.style.opacity='1';
+    });
+  }
+})();
+</script>
 
 <main>
 
@@ -1670,18 +1686,36 @@
         </div>
       </div>
 
-      <!-- PHASE 7 — NEXT -->
+      <!-- PHASE 7 — DONE -->
       <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:0;margin-bottom:40px;align-items:center;">
-        <div class="gang-img-card" style="margin-right:20px;opacity:0.75;">
+        <div class="gang-img-card" style="margin-right:20px;">
           <img src="/nft/images/5.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
-          <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> WORLD DOMINATION</div>
+          <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> THE UNDERWORLD</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;z-index:1;">
-          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,rgba(212,160,23,0.4),rgba(212,160,23,0.15));display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(212,160,23,0.5);border:2px solid var(--gold);animation:pulseDot 2s ease-in-out infinite;color:var(--gold);font-family:'Bebas Neue',sans-serif;">7</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--gold);letter-spacing:2px;margin-top:6px;text-align:center;">NEXT</div>
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--green),#1a8a4a);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(39,174,96,0.5);border:2px solid var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;">7</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--green);letter-spacing:2px;margin-top:6px;text-align:center;">DONE</div>
         </div>
-        <div class="card" style="margin-left:20px;border-color:rgba(212,160,23,0.5);box-shadow:0 0 20px rgba(212,160,23,0.15);">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:6px;">PHASE 7 — COMING SOON</div>
+        <div class="card" style="margin-left:20px;border-color:rgba(39,174,96,0.4);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--green);margin-bottom:6px;">PHASE 7 — COMPLETE</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">THE UNDERWORLD</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Mining Hub — Tap to Earn $GANG daily</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> 19 Casino Games (Slots, Crash, Roulette, Poker & more)</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Leverage Trading (8 pairs, up to 100x)</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Horse & Car Racing Games</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Deploy Farms (XRP, PEPE, DOGE)</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Bot Dashboard with Start/Stop controls</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> VIP Tiers, Lottery, Staking, Tournaments</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> GANGRewards Smart Contract for Mining payouts</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 8 — NEXT -->
+      <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:0;margin-bottom:40px;align-items:center;">
+        <div class="card" style="margin-right:20px;border-color:rgba(212,160,23,0.5);box-shadow:0 0 20px rgba(212,160,23,0.15);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:6px;">PHASE 8 — COMING SOON</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">WORLD DOMINATION</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);"><span>&#9675;</span> Gangster NFT Gallery with rarity &amp; trait filters</div>
@@ -1692,8 +1726,13 @@
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);"><span>&#9675;</span> Multi-chain expansion</div>
           </div>
         </div>
-      </div>
-          </div>
+        <div style="display:flex;flex-direction:column;align-items:center;z-index:1;">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,rgba(212,160,23,0.4),rgba(212,160,23,0.15));display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(212,160,23,0.5);border:2px solid var(--gold);animation:pulseDot 2s ease-in-out infinite;color:var(--gold);font-family:'Bebas Neue',sans-serif;">8</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--gold);letter-spacing:2px;margin-top:6px;text-align:center;">NEXT</div>
+        </div>
+        <div class="gang-img-card" style="margin-left:20px;opacity:0.75;">
+          <img src="/nft/images/1.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
+          <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> WORLD DOMINATION</div>
         </div>
       </div>
 

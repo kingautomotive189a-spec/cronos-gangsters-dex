@@ -32,10 +32,13 @@ CONTRACTS = {
 
 # Farm data from website
 FARMS = [
-    {"name": "GANG / VVS", "apr": "~500%", "allocation": "10%", "pid": 0},
-    {"name": "CRO / GANG", "apr": "~500%", "tvl": "$1.3K", "allocation": "40%", "pid": 1},
-    {"name": "GANG / USDC", "apr": "~500%", "tvl": "$201", "allocation": "30%", "pid": 2},
-    {"name": "GANG Staking", "apr": "~500%", "allocation": "20%", "pid": 3},
+    {"name": "GANG / VVS", "allocation": "10%", "pid": 0},
+    {"name": "CRO / GANG", "tvl": "$1.3K", "allocation": "40%", "pid": 1},
+    {"name": "GANG / USDC", "tvl": "$201", "allocation": "30%", "pid": 2},
+    {"name": "GANG Staking", "allocation": "20%", "pid": 3},
+    {"name": "XRP / GANG", "allocation": "15%", "pid": 7},
+    {"name": "PEPE / GANG", "allocation": "15%", "pid": 8},
+    {"name": "DOGE / GANG", "allocation": "15%", "pid": 9},
 ]
 
 # Staking tiers from website
@@ -201,6 +204,9 @@ def main_keyboard():
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("💰 Buy $GANG", url=DEX_LINK),
          InlineKeyboardButton("📊 Chart", url=DEXSCREENER)],
+        [InlineKeyboardButton("⛏ Mining Hub", callback_data="menu_mining"),
+         InlineKeyboardButton("⚡ Trading", callback_data="menu_trading"),
+         InlineKeyboardButton("🤖 Dashboard", callback_data="menu_dashboard")],
         [InlineKeyboardButton("🌾 Farms", callback_data="menu_farms"),
          InlineKeyboardButton("🏦 Vaults", callback_data="menu_vaults"),
          InlineKeyboardButton("🔒 Staking", callback_data="menu_staking")],
@@ -213,6 +219,8 @@ def main_keyboard():
         [InlineKeyboardButton("🎰 Lottery", callback_data="menu_lottery"),
          InlineKeyboardButton("🛠 Token Creator", callback_data="menu_create"),
          InlineKeyboardButton("🏪 Marketplace", callback_data="menu_marketplace")],
+        [InlineKeyboardButton("🌱 Deploy Farms", callback_data="menu_deployfarms"),
+         InlineKeyboardButton("📜 Deploy Contract", callback_data="menu_deploy")],
         [InlineKeyboardButton("🌐 Website", url=DEX_LINK),
          InlineKeyboardButton("🐦 Twitter", url=TWITTER)],
     ])
@@ -267,19 +275,24 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "The Most Gangster DEX on Cronos!\n\n"
         f"📋 *Contract:*\n`{CONTRACT}`\n\n"
         "⚡ *All Features:*\n"
+        "⛏ Mining Hub — Earn 5 $GANG daily + 19 casino games!\n"
+        "⚡ Leverage Trading — 8 pairs, up to 100x\n"
         "🌾 Farms — Yield farming with LP\n"
         "🏦 Vaults — Auto-compound pools\n"
         "🔒 Staking — Lock $GANG for APY\n"
+        "🎰 Casino — Slots, Crash, Roulette, Poker & more\n"
+        "🏇 Racing — Horse & Car racing games\n"
         "🚀 Launchpad — IDO access\n"
         "🔐 Token Locker — Lock LP tokens\n"
         "🎯 Sniper Bot — Fast trading\n"
         "🎴 NFTs — 500 unique gangsters\n"
         "👥 Referral — Earn 5% from crew\n"
         "🌉 Bridge — Cross-chain transfers\n"
-        "🎰 Lottery — Win the pot\n"
         "🛠 Token Creator — Deploy tokens\n"
-        "🏪 Marketplace — Trade NFTs\n\n"
-        "👇 *Tap any button below to explore!*"
+        "🏪 Marketplace — Trade NFTs\n"
+        "🌱 Deploy Farms — 1-click farm deployer\n\n"
+        "🔥 *START MINING NOW!* Tap ⛏ Mining Hub below!\n\n"
+        "👇 *Tap any button to explore!*"
     )
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=main_keyboard())
 
@@ -295,6 +308,9 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "• /stats - Detailed token statistics\n"
         "• /contract - Token contract address\n"
         "• /alert - Set price alerts\n\n"
+        "*⛏ Mining & Gaming:*\n"
+        "• /mining - Mining Hub (earn $GANG daily!)\n"
+        "• /trading - Leverage Trading (up to 100x)\n\n"
         "*🌾 DeFi Features:*\n"
         "• /farms - Yield farms & APRs\n"
         "• /vaults - Auto-compound vaults\n"
@@ -327,12 +343,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "• /kick - Kick from group\n"
         )
     
-    msg += (
-        "\n*🛡️ Security:*\n"
-        "✓ Human verification for new members\n"
-        "✓ Anti-scam link detection\n"
-        "✓ Auto-ban scammers\n"
-    )
+    msg += "\n"
     
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=main_keyboard())
 
@@ -509,8 +520,10 @@ async def shill(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     msg = (
         f"🔫 *$GANG - Cronos Gangsters*\n\n"
-        f"The most gangster DEX on Cronos!{price_line}\n"
-        "Swap - Farm - Stake\n\n"
+        f"The most gangster DEX on Cronos!{price_line}\n\n"
+        "⛏ Mine 5 $GANG daily + 19 Casino Games!\n"
+        "⚡ Leverage Trading up to 100x!\n"
+        "🌾 Farm | 🏦 Vault | 🔒 Stake | 🌉 Bridge\n\n"
         f"📋 Contract:\n`{CONTRACT}`\n\n"
         "Join the gang! The streets are ours. 🤝\n\n"
         f"🌐 Website: {DEX_LINK}\n"
@@ -521,6 +534,7 @@ async def shill(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("💰 Buy $GANG", url=DEX_LINK),
          InlineKeyboardButton("📊 Chart", url=DEXSCREENER)],
+        [InlineKeyboardButton("⛏ Mine $GANG", url=f"{DEX_LINK}/mining.html")],
         [InlineKeyboardButton("💬 Join Telegram", url=TELEGRAM_GROUP)],
     ])
     
@@ -906,6 +920,55 @@ async def marketplace(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("🎴 My NFTs", url=f"{DEX_LINK}#nfts")],
     ])
     
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def mining(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /mining command - show mining hub info"""
+    msg = (
+        "⛏ *$GANG MINING HUB*\n\n"
+        "🔥 *Earn 5 $GANG every day just by tapping!*\n\n"
+        "*What's inside:*\n"
+        "• Tap to Mine — Claim 5 $GANG daily\n"
+        "• 19 Casino Games (Slots, Crash, Roulette & more)\n"
+        "• Horse & Car Racing\n"
+        "• Lottery & Jackpot\n"
+        "• Staking pools (30/60/90 day locks)\n"
+        "• Tournaments with prize pools\n"
+        "• Mystery Boxes & Scratch Cards\n"
+        "• VIP Tiers (Bronze/Silver/Gold)\n\n"
+        "💰 *Withdraw at 100+ $GANG* (5% burn fee)\n"
+        "👥 *Refer friends — earn 10% bonus!*\n\n"
+        f"[⛏ Start Mining NOW!]({DEX_LINK}/mining.html)"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("⛏ Open Mining Hub", url=f"{DEX_LINK}/mining.html")],
+        [InlineKeyboardButton("👥 Referral Link", url=f"{DEX_LINK}/mining.html")],
+        [InlineKeyboardButton("💰 Buy $GANG", url=DEX_LINK)],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def trading(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /trading command - show leverage trading info"""
+    msg = (
+        "⚡ *LEVERAGE TRADING*\n\n"
+        "Trade with up to *100x leverage!*\n\n"
+        "*Available Pairs:*\n"
+        "• BTC/USD | ETH/USD | CRO/USD | SOL/USD\n"
+        "• DOGE/USD | PEPE/USD | XRP/USD | AVAX/USD\n\n"
+        "*Features:*\n"
+        "• Long & Short positions\n"
+        "• Adjustable leverage (2x–100x)\n"
+        "• Real-time PnL tracking\n"
+        "• Close anytime\n\n"
+        "⚠️ *High risk = high reward!*\n\n"
+        f"[⚡ Start Trading]({DEX_LINK}/trading.html)"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("⚡ Start Trading", url=f"{DEX_LINK}/trading.html")],
+        [InlineKeyboardButton("📊 Chart", url=DEXSCREENER)],
+    ])
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
 
 
@@ -1337,10 +1400,10 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif query.data == "menu_farms":
         msg = "🌾 *GANGSTER FARMS*\n\nStake LP tokens to earn $GANG rewards!\n\n"
         for farm in FARMS:
-            msg += f"*{farm['name']}*\n   APR: {farm['apr']} | Alloc: {farm['allocation']}\n"
+            msg += f"*{farm['name']}*\n   Alloc: {farm['allocation']}"
             if 'tvl' in farm:
-                msg += f"   TVL: {farm['tvl']}\n"
-            msg += "\n"
+                msg += f" | TVL: {farm['tvl']}"
+            msg += "\n\n"
         msg += f"🔗 *MasterChef:*\n`{CONTRACTS['MASTERCHEF']}`"
         kb = InlineKeyboardMarkup([
             [InlineKeyboardButton("🌾 Open Farms", url=f"{DEX_LINK}#farms")],
@@ -1518,6 +1581,110 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         kb = InlineKeyboardMarkup([
             [InlineKeyboardButton("🏪 Browse NFTs", url=f"{DEX_LINK}#marketplace")],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_mining":
+        msg = (
+            "⛏ *$GANG MINING HUB*\n\n"
+            "🔥 *Earn 5 $GANG every day just by tapping!*\n\n"
+            "*What's inside:*\n"
+            "• Tap to Mine — Claim 5 $GANG daily\n"
+            "• 19 Casino Games (Slots, Crash, Roulette, Dice, Poker & more)\n"
+            "• Horse & Car Racing\n"
+            "• Lottery & Jackpot\n"
+            "• Staking pools (30/60/90 day locks)\n"
+            "• Tournaments with prize pools\n"
+            "• Mystery Boxes & Scratch Cards\n"
+            "• VIP Tiers (Bronze/Silver/Gold)\n\n"
+            "💰 *Withdraw at 100+ $GANG* (5% burn fee)\n"
+            "👥 *Refer friends — earn 10% bonus!*\n\n"
+            "🎰 *Start mining and playing NOW!*"
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("⛏ Open Mining Hub", url=f"{DEX_LINK}/mining.html")],
+            [InlineKeyboardButton("👥 Get Referral Link", url=f"{DEX_LINK}/mining.html")],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_trading":
+        msg = (
+            "⚡ *LEVERAGE TRADING*\n\n"
+            "Trade with up to *100x leverage!*\n\n"
+            "*Available Pairs:*\n"
+            "• BTC/USD\n"
+            "• ETH/USD\n"
+            "• CRO/USD\n"
+            "• SOL/USD\n"
+            "• DOGE/USD\n"
+            "• PEPE/USD\n"
+            "• XRP/USD\n"
+            "• AVAX/USD\n\n"
+            "*Features:*\n"
+            "• Long & Short positions\n"
+            "• Adjustable leverage (2x–100x)\n"
+            "• Real-time PnL tracking\n"
+            "• Close anytime\n\n"
+            "⚠️ *High risk = high reward!*"
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("⚡ Start Trading", url=f"{DEX_LINK}/trading.html")],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_dashboard":
+        msg = (
+            "🤖 *BOT DASHBOARD*\n\n"
+            "Control the Cronos Gangsters Bot!\n\n"
+            "*Features:*\n"
+            "• Start / Stop the bot\n"
+            "• Live $GANG price & stats\n"
+            "• DexScreener integration\n"
+            "• Real-time monitoring\n\n"
+            "Only accessible to the owner."
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🤖 Open Dashboard", url=f"{DEX_LINK}/dashboard.html")],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_deployfarms":
+        msg = (
+            "🌱 *DEPLOY NEW FARMS*\n\n"
+            "1-Click LP Pair Creation & MasterChef Registration!\n\n"
+            "*Available Farms:*\n"
+            "• XRP / GANG\n"
+            "• PEPE / GANG\n"
+            "• DOGE / GANG\n\n"
+            "*Steps:*\n"
+            "1. Create LP pair on VVS Factory\n"
+            "2. Register on MasterChef\n"
+            "3. Farm is live!\n\n"
+            "Owner only."
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🌱 Deploy Farms", url=f"{DEX_LINK}/deploy-farms.html")],
+            [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+        ])
+        await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+    elif query.data == "menu_deploy":
+        msg = (
+            "📜 *DEPLOY $GANG REWARDS*\n\n"
+            "Deploy a GANGRewards smart contract.\n\n"
+            "*What it does:*\n"
+            "• Holds $GANG tokens for mining rewards\n"
+            "• sendReward — distribute to users\n"
+            "• withdrawAll — owner withdraws balance\n"
+            "• getBalance — check contract balance\n\n"
+            "⚠️ Only deploy once! Don't create duplicates."
+        )
+        kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("📜 Deploy Contract", url=f"{DEX_LINK}/deploy.html")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -1793,6 +1960,8 @@ def main():
     app.add_handler(CommandHandler("bridge", bridge))
     app.add_handler(CommandHandler("create", create))
     app.add_handler(CommandHandler("marketplace", marketplace))
+    app.add_handler(CommandHandler("mining", mining))
+    app.add_handler(CommandHandler("trading", trading))
     
     # Admin commands
     app.add_handler(CommandHandler("ban", ban))
@@ -1806,7 +1975,7 @@ def main():
     app.add_handler(CallbackQueryHandler(callback_handler))
     
     # Message handlers - Anti-scam filter for all text messages
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, anti_scam_filter))
+    # No message filter - removed anti-scam
     app.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome_new_member))
     
     # Error handler
