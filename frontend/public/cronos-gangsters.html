@@ -496,6 +496,7 @@
     </div>
   </a>
 
+  <div style="position:relative;flex:1;min-width:0;overflow:hidden;">
   <nav>
     <button class="nav-btn active" data-page="swap">Swap</button>
     <button class="nav-btn" data-page="liquidity">Liquidity</button>
@@ -520,6 +521,7 @@
     <button class="nav-btn" data-testid="nav-dashboard-btn" onclick="window.location.href='/dashboard.html'" style="color:#2AABEE;font-weight:800;">Dashboard</button>
   </nav>
   <div class="scroll-hint" id="scrollHint"><div class="scroll-arrow"><span class="scroll-arrow-icon">&#x276F;</span><span class="scroll-arrow-text">MORE</span></div></div>
+  </div>
 
   <button class="wallet-btn" id="connectBtn">Connect Wallet</button>
   <div style="display:flex;gap:12px;align-items:center;margin-top:8px;">
@@ -3808,16 +3810,18 @@ function tImg(sym, size) {
 // lpAddr: Replace null entries with your deployed LP pair addresses once
 //         GangstersFactory has been deployed and pairs created.
 const FARMS = [
-  { pid: 0,  name: "GANG / VVS",   tokens: ["GANG","VVS"],  apy: 0, tvl: '—', multiplier: "10%", lpAddr: "0xB47121251578f148f15949B7816b3D152EaE4cFF", earned: 0, _onChain: true },
+  // ── Working farms first ──
   { pid: 1,  name: "CRO / GANG",   tokens: ["CRO","GANG"],  apy: 0, tvl: "—", multiplier: "40%", lpAddr: "0x00991825a6871353390b6972A6aB450D4206557f", earned: 0, chefPid: 0, _onChain: true },
   { pid: 2,  name: "GANG / USDC",  tokens: ["GANG","USDC"], apy: 0, tvl: '—', multiplier: "30%", lpAddr: "0x1f77938E1109E1Fc8e3dD697B95525303094Cb65", earned: 0, chefPid: 1, _onChain: true },
   { pid: 3,  name: "GANG Staking", tokens: ["GANG"],         apy: 0, tvl: '—', multiplier: "20%", lpAddr: CONTRACTS.GANG, earned: 0, chefPid: 4, _onChain: true },
+  { pid: 0,  name: "GANG / VVS",   tokens: ["GANG","VVS"],  apy: 0, tvl: '—', multiplier: "10%", lpAddr: "0xB47121251578f148f15949B7816b3D152EaE4cFF", earned: 0, _onChain: true },
+  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_PEPE_GANG') || null, earned: 0, needsChefAdd: true },
+  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_DOGE_GANG') || "0x657f64DDFE52a12AfF9B6fdc64eB778dB076AD52", earned: 0, needsChefAdd: true },
+  { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_XRP_GANG') || null, earned: 0, needsChefAdd: true },
+  // ── Coming soon ──
   { pid: 4,  name: "CRO / USDC",   tokens: ["CRO","USDC"],  apy: 0, tvl: '—', multiplier: "36x", lpAddr: "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6", earned: 0, comingSoon: true },
   { pid: 5,  name: "CRO / WETH",   tokens: ["CRO","WETH"],  apy: 0, tvl: '—', multiplier: "16x", lpAddr: "0xA111C17f8B8303280d3EB01BBcd61000AA7F39F9", earned: 0, comingSoon: true },
   { pid: 6,  name: "CRO / VVS",    tokens: ["CRO","VVS"],   apy: 0, tvl: '—', multiplier: "14x", lpAddr: "0xbf62c67eA509E86F07c8c69d0286C0636C50270b", earned: 0, comingSoon: true },
-  { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_XRP_GANG') || null, earned: 0, needsChefAdd: true },
-  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_PEPE_GANG') || null, earned: 0, needsChefAdd: true },
-  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_DOGE_GANG') || "0x657f64DDFE52a12AfF9B6fdc64eB778dB076AD52", earned: 0, needsChefAdd: true },
 ];
 
 // ── Auto-Compound Vault Definitions ──
@@ -5251,10 +5255,10 @@ async function calcFarmAPRs() {
     for (const farm of FARMS) {
       if (farm.comingSoon) continue;
       if (farm.chefPid === undefined && !farm._onChain) {
-        // Farm not yet discovered on MasterChef — show estimated APR
-        farm.apy = 9999;
+        // Farm not yet discovered on MasterChef — show dash, not fake number
+        farm.apy = 0;
         const aprEl = document.getElementById("apr-" + farm.pid);
-        if (aprEl) aprEl.textContent = '9999%';
+        if (aprEl) aprEl.textContent = '—';
         continue;
       }
       const pid = farm.chefPid ?? farm.pid;
@@ -5285,9 +5289,11 @@ async function calcFarmAPRs() {
         }
         if (tvlUSD > 0) {
           farm.apy = Math.round(rewardsUSD / tvlUSD * 100);
-          if (farm.apy > 9999) farm.apy = 9999;
+          // Cap unrealistic APR — show dash if absurdly high
+          if (farm.apy > 10000) farm.apy = 0;
         } else {
-          farm.apy = 500;
+          // No TVL = show dash, not a fake number
+          farm.apy = 0;
         }
       } catch {}
 
@@ -7275,7 +7281,7 @@ function calcVaultAPR(vault) {
   const tvlUSD = vault.totalLP > 0 ? estimateVaultTVL(vault) : 0;
   if (tvlUSD <= 0) return '—';
   const apr = (yearlyGangValue / tvlUSD) * 100;
-  if (apr > 9999) return '>9999%';
+  if (apr > 9999) return '—';
   if (apr >= 100) return Math.round(apr) + '%';
   return apr.toFixed(1) + '%';
 }
