@@ -3722,7 +3722,7 @@ const TOKENS = {
   USDC: { symbol: "USDC", name: "USD Coin",         icon: "💵", logo: "https://assets.coingecko.com/coins/images/6319/small/usdc.png", address: CONTRACTS.USDC,  decimals: 6,  price: 1.0       },
   USDT: { symbol: "USDT", name: "Tether USD",       icon: "💲", logo: "https://assets.coingecko.com/coins/images/325/small/Tether.png", address: CONTRACTS.USDT,  decimals: 6,  price: 1.0       },
   WETH: { symbol: "WETH", name: "Wrapped Ethereum", icon: "💎", logo: "https://assets.coingecko.com/coins/images/279/small/ethereum.png", address: CONTRACTS.WETH,  decimals: 18, price: 3800      },
-  VVS:  { symbol: "VVS",  name: "VVS Finance",      icon: "💠", logo: "https://assets.coingecko.com/coins/images/20210/small/8glQIRx.png", address: CONTRACTS.VVS,   decimals: 18, price: 0.0000025 },
+  VVS:  { symbol: "VVS",  name: "VVS Finance",      icon: "💠", logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/14519.png", address: CONTRACTS.VVS,   decimals: 18, price: 0.0000025 },
   WBTC: { symbol: "WBTC", name: "Wrapped Bitcoin",   icon: "₿", logo: "https://assets.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png", address: CONTRACTS.WBTC,  decimals: 8,  price: 90000     },
   SHIB: { symbol: "SHIB", name: "Shiba Inu",        icon: "🐕", logo: "https://assets.coingecko.com/coins/images/11939/small/shiba.png", address: CONTRACTS.SHIB,  decimals: 18, price: 0         },
   DOGE: { symbol: "DOGE", name: "Dogecoin",         icon: "🐶", logo: "https://assets.coingecko.com/coins/images/5/small/dogecoin.png", address: CONTRACTS.DOGE,  decimals: 8,  price: 0         },
@@ -3730,8 +3730,8 @@ const TOKENS = {
   DAI:  { symbol: "DAI",  name: "Dai Stablecoin",   icon: "🟡", logo: "https://assets.coingecko.com/coins/images/9956/small/Badge_Dai.png", address: CONTRACTS.DAI,   decimals: 18, price: 1.0       },
   XRP:  { symbol: "XRP",  name: "XRP",              icon: "✖️", logo: "https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png", address: CONTRACTS.XRP,   decimals: 6,  price: 0         },
   PEPE: { symbol: "PEPE", name: "Pepe",             icon: "🐸", logo: "https://assets.coingecko.com/coins/images/29850/small/pepe-token.jpeg", address: CONTRACTS.PEPE,  decimals: 18, price: 0         },
-  CROID: { symbol: "CROID", name: "Cronos ID",       icon: "C", logo: "https://assets.coingecko.com/coins/images/28528/small/croid.png", address: CONTRACTS.CROID, decimals: 18, price: 0         },
-  FUL:   { symbol: "FUL",   name: "Fulcrom",         icon: "F", logo: "https://assets.coingecko.com/coins/images/29408/small/fulcrom.png", address: CONTRACTS.FUL,   decimals: 18, price: 0         },
+  CROID: { symbol: "CROID", name: "Cronos ID",       icon: "C", logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/22407.png", address: CONTRACTS.CROID, decimals: 18, price: 0         },
+  FUL:   { symbol: "FUL",   name: "Fulcrom",         icon: "F", logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/23380.png", address: CONTRACTS.FUL,   decimals: 18, price: 0         },
 };
 
 // Helper: render token as small inline logo image, fallback to symbol text
@@ -3753,6 +3753,9 @@ const FARMS = [
   { pid: 4,  name: "CRO / USDC",   tokens: ["CRO","USDC"],  apy: 0, tvl: '—', multiplier: "36x", lpAddr: "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6", earned: 0, comingSoon: true },
   { pid: 5,  name: "CRO / WETH",   tokens: ["CRO","WETH"],  apy: 0, tvl: '—', multiplier: "16x", lpAddr: "0xA111C17f8B8303280d3EB01BBcd61000AA7F39F9", earned: 0, comingSoon: true },
   { pid: 6,  name: "CRO / VVS",    tokens: ["CRO","VVS"],   apy: 0, tvl: '—', multiplier: "14x", lpAddr: "0xbf62c67eA509E86F07c8c69d0286C0636C50270b", earned: 0, comingSoon: true },
+  { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_XRP_GANG') || null, earned: 0, needsChefAdd: true },
+  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_PEPE_GANG') || null, earned: 0, needsChefAdd: true },
+  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, tvl: '—', multiplier: "15%", lpAddr: localStorage.getItem('FARM_LP_DOGE_GANG') || null, earned: 0, needsChefAdd: true },
 ];
 
 // ── Auto-Compound Vault Definitions ──
@@ -6028,10 +6031,16 @@ function renderFarms() {
           </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;text-align:center;">
+          ${farm.lpAddr ? `
           <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--gold);margin-bottom:8px;">ACTIVATE THIS FARM</div>
           <div style="font-size:12px;color:var(--muted);max-width:220px;margin-bottom:14px;">This pool needs to be registered on MasterChef. Tap below to activate it (owner only).</div>
           <button class="btn-primary" data-testid="add-chef-pool-${idx}" onclick="addFarmToChef(${idx})" style="padding:12px 24px;background:linear-gradient(135deg,var(--gold),#b8860b);color:#000;font-weight:bold;border-radius:10px;border:none;cursor:pointer;font-size:14px">ADD POOL TO MASTERCHEF</button>
           <div id="addChefLog-${idx}" style="margin-top:8px;font-family:'Space Mono',monospace;font-size:11px;color:var(--green);min-height:16px"></div>
+          ` : `
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--gold);margin-bottom:8px;">DEPLOY LP PAIR</div>
+          <div style="font-size:12px;color:var(--muted);max-width:220px;margin-bottom:14px;">Create the LP pair on-chain first, then activate on MasterChef.</div>
+          <a href="/deploy-farms" data-testid="deploy-lp-${idx}" style="display:inline-block;padding:12px 24px;background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#fff;font-weight:bold;border-radius:10px;text-decoration:none;cursor:pointer;font-size:14px;letter-spacing:1px">CREATE LP PAIR</a>
+          `}
         </div>
         ${farm.tokens.length >= 2 ? `
         <div class="farm-actions" style="padding:0 16px 16px;">

@@ -18,6 +18,10 @@ from datetime import datetime, timezone
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
+# Import mining and trading routers
+from mining_api import router as mining_router
+from trading_api import router as trading_router
+
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
@@ -77,6 +81,48 @@ class TokenData(BaseModel):
 @api_router.get("/")
 async def root():
     return {"message": "Hello World"}
+
+@api_router.get("/contract-code")
+async def get_contract_code():
+    """Return the smart contract code as plain text"""
+    code = """// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+interface IERC20 {
+    function transfer(address to, uint256 amount) external returns (bool);
+    function balanceOf(address account) external view returns (uint256);
+}
+
+contract GANGRewards {
+    address public owner;
+    IERC20 public token;
+    
+    constructor(address _token) {
+        owner = msg.sender;
+        token = IERC20(_token);
+    }
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+    
+    function sendReward(address to, uint256 amount) external onlyOwner returns (bool) {
+        return token.transfer(to, amount);
+    }
+    
+    function getBalance() external view returns (uint256) {
+        return token.balanceOf(address(this));
+    }
+    
+    function withdrawAll() external onlyOwner {
+        uint256 balance = token.balanceOf(address(this));
+        require(balance > 0, "No tokens");
+        token.transfer(owner, balance);
+    }
+}"""
+    from fastapi.responses import PlainTextResponse
+    return PlainTextResponse(code)
 
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
@@ -296,6 +342,8 @@ async def get_bot_commands():
 
 # Include the router in the main app
 app.include_router(api_router)
+app.include_router(mining_router, prefix="/api")
+app.include_router(trading_router, prefix="/api")
 
 app.add_middleware(
     CORSMiddleware,
