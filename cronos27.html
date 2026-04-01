@@ -2297,19 +2297,6 @@ const CRONOS_RPC_LIST = [
 let _publicProvider = null;
 let _rpcIndex = 0;
 
-// ── LP Address Cache (avoids repeated factory.getPair RPCs) ──
-const _lpAddrCache = {};
-async function getCachedPairAddr(factory, addrA, addrB) {
-  const key = [addrA, addrB].map(a => a.toLowerCase()).sort().join("-");
-  if (_lpAddrCache[key] !== undefined) return _lpAddrCache[key];
-  try {
-    const found = await factory.getPair(addrA, addrB);
-    const valid = found && found !== "0x0000000000000000000000000000000000000000";
-    _lpAddrCache[key] = valid ? found : null;
-    return _lpAddrCache[key];
-  } catch { _lpAddrCache[key] = null; return null; }
-}
-
 function getReadProvider() {
   if (state.provider) return state.provider;
   if (!_publicProvider) _publicProvider = _makeProvider(_rpcIndex);
@@ -2722,14 +2709,14 @@ async function autoDiscoverFarmPools() {
     const onChainPools = {};
     poolResults.forEach((pInfo, i) => { if (pInfo) onChainPools[pInfo[0].toLowerCase()] = i; });
 
-    // Resolve all LP addresses in parallel (using cache)
+    // Resolve all LP addresses in parallel
     const pairPromises = FARMS.map(farm => {
       if (farm.tokens.length >= 2) {
         const tA = TOKENS[farm.tokens[0]], tB = TOKENS[farm.tokens[1]];
         if (!tA || !tB) return Promise.resolve(null);
         const addrA = tA.address === "native" ? CONTRACTS.WCRO : tA.address;
         const addrB = tB.address === "native" ? CONTRACTS.WCRO : tB.address;
-        return getCachedPairAddr(factory, addrA, addrB);
+        return factory.getPair(addrA, addrB).catch(() => null);
       }
       return Promise.resolve(null);
     });
@@ -2761,23 +2748,19 @@ async function autoDiscoverFarmPools() {
 async function loadBalances() {
   if (!state.address) return;
   try {
-    // ── PHASE 1: ALL token balances in PARALLEL ──
-    const tokenEntries = Object.entries(TOKENS).filter(([, tok]) => tok.address !== "native");
-    const [croResult, ...tokenResults] = await Promise.allSettled([
-      state.provider.getBalance(state.address),
-      ...tokenEntries.map(([, tok]) => {
-        const c = new ethers.Contract(tok.address, ERC20_ABI, state.provider);
-        return c.balanceOf(state.address);
-      })
-    ]);
-    if (croResult.status === "fulfilled") {
-      state.balances["CRO"] = parseFloat(ethers.formatEther(croResult.value));
+    // Load native CRO balance
+    const croBalance = await state.provider.getBalance(state.address);
+    state.balances["CRO"] = parseFloat(ethers.formatEther(croBalance));
+
+    // Load ERC-20 token balances
+    for (const [sym, tok] of Object.entries(TOKENS)) {
+      if (tok.address === "native") continue;
+      try {
+        const contract = new ethers.Contract(tok.address, ERC20_ABI, state.provider);
+        const bal = await contract.balanceOf(state.address);
+        state.balances[sym] = parseFloat(ethers.formatUnits(bal, tok.decimals));
+      } catch { state.balances[sym] = 0; }
     }
-    tokenEntries.forEach(([sym, tok], i) => {
-      if (tokenResults[i].status === "fulfilled") {
-        state.balances[sym] = parseFloat(ethers.formatUnits(tokenResults[i].value, tok.decimals));
-      } else { state.balances[sym] = state.balances[sym] || 0; }
-    });
 
     // Load pending farm rewards from MasterChef (if deployed)
     if (CONTRACTS.CHEF) {
@@ -2832,48 +2815,41 @@ async function loadBalances() {
       } catch(e) { console.warn("Chef load failed:", e); }
     }
 
-    // ── PHASE 3: LP token wallet balances ALL in PARALLEL ──
+    // Load LP token wallet balances per farm
+    // Auto-discover lpAddr from VVS Factory if not set
     if (!state.lpBalances) state.lpBalances = {};
     const factory = CONTRACTS.FACTORY ? new ethers.Contract(CONTRACTS.FACTORY, FACTORY_ABI, state.provider) : null;
-
-    // Resolve all missing LP addresses in parallel first
-    if (factory) {
-      const unresolvedFarms = FARMS.filter(f => !f.lpAddr && f.tokens.length >= 2);
-      if (unresolvedFarms.length > 0) {
-        const pairResults = await Promise.allSettled(unresolvedFarms.map(farm => {
-          const tA = TOKENS[farm.tokens[0]], tB = TOKENS[farm.tokens[1]];
-          if (!tA || !tB) return Promise.resolve(null);
-          const addrA = tA.address === "native" ? CONTRACTS.WCRO : tA.address;
-          const addrB = tB.address === "native" ? CONTRACTS.WCRO : tB.address;
-          return getCachedPairAddr(factory, addrA, addrB);
-        }));
-        unresolvedFarms.forEach((farm, i) => {
-          if (pairResults[i].status === "fulfilled" && pairResults[i].value) farm.lpAddr = pairResults[i].value;
-        });
-      }
+    for (const farm of FARMS) {
+      try {
+        // Resolve LP address — use configured one or query factory
+        let lpAddr = farm.lpAddr;
+        if (!lpAddr && factory && farm.tokens.length >= 2) {
+          const tA = TOKENS[farm.tokens[0]];
+          const tB = TOKENS[farm.tokens[1]];
+          if (tA && tB) {
+            const addrA = tA.address === "native" ? CONTRACTS.WCRO : tA.address;
+            const addrB = tB.address === "native" ? CONTRACTS.WCRO : tB.address;
+            try {
+              lpAddr = await factory.getPair(addrA, addrB);
+              if (lpAddr && lpAddr !== "0x0000000000000000000000000000000000000000") {
+                farm.lpAddr = lpAddr; // cache it so future calls are instant
+              } else {
+                lpAddr = null;
+              }
+            } catch { lpAddr = null; }
+          }
+        }
+        if (lpAddr && lpAddr !== "native" && lpAddr !== "0x0000000000000000000000000000000000000000") {
+          const lp = new ethers.Contract(lpAddr, ERC20_ABI, state.provider);
+          const bal = await lp.balanceOf(state.address);
+          state.lpBalancesRaw[farm.pid] = bal;
+          state.lpBalances[farm.pid] = parseFloat(ethers.formatUnits(bal, 18));
+        } else if (!lpAddr) {
+          state.lpBalancesRaw[farm.pid] = 0n;
+          state.lpBalances[farm.pid] = state.lpBalances[farm.pid] || 0;
+        }
+      } catch { state.lpBalancesRaw[farm.pid] = 0n; state.lpBalances[farm.pid] = 0; }
     }
-
-    // Now fetch ALL LP balances in parallel
-    const lpResults = await Promise.allSettled(FARMS.map(async (farm) => {
-      const lpAddr = farm.lpAddr;
-      if (lpAddr && lpAddr !== "native" && lpAddr !== "0x0000000000000000000000000000000000000000") {
-        const lp = new ethers.Contract(lpAddr, ERC20_ABI, state.provider);
-        const bal = await lp.balanceOf(state.address);
-        return { pid: farm.pid, bal, raw: true };
-      }
-      return { pid: farm.pid, bal: null, raw: false };
-    }));
-    lpResults.forEach(r => {
-      if (r.status !== "fulfilled") return;
-      const { pid, bal, raw } = r.value;
-      if (raw && bal !== null) {
-        state.lpBalancesRaw[pid] = bal;
-        state.lpBalances[pid] = parseFloat(ethers.formatUnits(bal, 18));
-      } else {
-        state.lpBalancesRaw[pid] = state.lpBalancesRaw[pid] || 0n;
-        state.lpBalances[pid] = state.lpBalances[pid] || 0;
-      }
-    });
 
     updateBalanceDisplays();
     // Refresh liq page if visible
@@ -3381,18 +3357,14 @@ const PAIR_ABI = [
   "function token0() view returns(address)",
 ];
 
-let _gangPairAddr = null;
-
 async function fetchGangPriceOnChain() {
   try {
     const _rp = getReadProvider();
     if (!_rp || !CONTRACTS.FACTORY) return;
-    if (!_gangPairAddr) {
-      const factory = new ethers.Contract(CONTRACTS.FACTORY, FACTORY_ABI, _rp);
-      _gangPairAddr = await getCachedPairAddr(factory, CONTRACTS.WCRO, CONTRACTS.GANG);
-    }
-    if (!_gangPairAddr) return;
-    const pair = new ethers.Contract(_gangPairAddr, PAIR_ABI, _rp);
+    const factory = new ethers.Contract(CONTRACTS.FACTORY, FACTORY_ABI, _rp);
+    const pairAddr = await factory.getPair(CONTRACTS.WCRO, CONTRACTS.GANG);
+    if (!pairAddr || pairAddr === "0x0000000000000000000000000000000000000000") return;
+    const pair = new ethers.Contract(pairAddr, PAIR_ABI, _rp);
     const [token0, reserves] = await Promise.all([pair.token0(), pair.getReserves()]);
     const isCROtoken0 = token0.toLowerCase() === CONTRACTS.WCRO.toLowerCase();
     const reserveCRO  = isCROtoken0 ? reserves[0] : reserves[1];
@@ -3401,7 +3373,7 @@ async function fetchGangPriceOnChain() {
       const croPerGang = parseFloat(ethers.formatUnits(reserveCRO, 18)) / parseFloat(ethers.formatUnits(reserveGANG, 18));
       TOKENS.GANG.price = croPerGang * TOKENS.CRO.price;
     }
-  } catch(e) { _rotateRpc(); }
+  } catch(e) { _rotateRpc(); /* keep last price */ }
 }
 
 // ── Fetch live pool ratio for liquidity page ─────────────────
@@ -3415,15 +3387,15 @@ async function fetchPoolRatio(symA, symB) {
     const addrA = TOKENS[symA]?.address === "native" ? CONTRACTS.WCRO : TOKENS[symA]?.address;
     const addrB = TOKENS[symB]?.address === "native" ? CONTRACTS.WCRO : TOKENS[symB]?.address;
     if (!addrA || !addrB) return null;
-    const pairAddr = await getCachedPairAddr(factory, addrA, addrB);
-    if (!pairAddr) return null;
+    const pairAddr = await factory.getPair(addrA, addrB);
+    if (!pairAddr || pairAddr === "0x0000000000000000000000000000000000000000") return null;
     const pair = new ethers.Contract(pairAddr, PAIR_ABI, _rp2);
     const [token0, reserves] = await Promise.all([pair.token0(), pair.getReserves()]);
     const isAtoken0 = token0.toLowerCase() === addrA.toLowerCase();
     const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], TOKENS[symA].decimals));
     const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], TOKENS[symB].decimals));
     if (resA > 0 && resB > 0) {
-      const ratio = resB / resA;
+      const ratio = resB / resA; // how many B per A
       _poolReserves[symA+"-"+symB] = { ratio, resA, resB, pairAddr };
       return ratio;
     }
@@ -3439,87 +3411,116 @@ async function fetchFarmTVLs() {
     const factory = new ethers.Contract(CONTRACTS.FACTORY, FACTORY_ABI, rp);
     let totalTVLUSD = 0;
 
-    // ── Resolve ALL missing LP addresses in PARALLEL ──
-    const unresolvedFarms = FARMS.filter(f => !f.lpAddr && f.tokens.length >= 2);
-    if (unresolvedFarms.length > 0) {
-      const pairResults = await Promise.allSettled(unresolvedFarms.map(farm => {
-        const tA = TOKENS[farm.tokens[0]], tB = TOKENS[farm.tokens[1]];
+    for (const farm of FARMS) {
+      try {
+        let lpAddr = farm.lpAddr;
+
+        // Auto-discover LP address if not cached
+        if (!lpAddr && farm.tokens.length >= 2) {
+          const tA = TOKENS[farm.tokens[0]];
+          const tB = TOKENS[farm.tokens[1]];
+          const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
+          const addrB = tB?.address === "native" ? CONTRACTS.WCRO : tB?.address;
+          if (addrA && addrB) {
+            try {
+              const found = await factory.getPair(addrA, addrB);
+              if (found && found !== "0x0000000000000000000000000000000000000000") {
+                lpAddr = found;
+                farm.lpAddr = found;
+              }
+            } catch {}
+          }
+        }
+
+        // If farm is not active on MasterChef, skip TVL only for coming-soon farms
+        if (farm.comingSoon) {
+          farm.tvl = "0";
+          farm.tvlUSD = 0;
+          const tvlEl = document.getElementById("tvl-" + farm.pid);
+          if (tvlEl) tvlEl.textContent = "$0";
+          continue;
+        }
+
+        // Single-token staking pool (GANG staking) — TVL from totalStaked in MasterChef poolInfo
+        if (farm.tokens.length === 1) {
+          try {
+            const tok = TOKENS[farm.tokens[0]];
+            let stakedAmt = 0;
+            if (CONTRACTS.CHEF && (farm.chefPid !== undefined || farm._onChain)) {
+              const chef = new ethers.Contract(CONTRACTS.CHEF, CHEF_ABI, rp);
+              const pid = farm.chefPid ?? farm.pid;
+              const pInfo = await chef.poolInfo(pid);
+              stakedAmt = parseFloat(ethers.formatUnits(pInfo[4], tok.decimals)); // totalStaked field
+            }
+            const tvlUSD = stakedAmt * (tok.price || 0);
+            farm.tvlUSD = tvlUSD;
+            farm.tvl = _fmtTVL(tvlUSD);
+            totalTVLUSD += tvlUSD;
+          } catch {}
+          const tvlEl = document.getElementById("tvl-" + farm.pid);
+          if (tvlEl) tvlEl.textContent = "$" + (farm.tvl || "0");
+          continue;
+        }
+
+        if (!lpAddr || lpAddr === "0x0000000000000000000000000000000000000000") {
+          farm.tvl = "0";
+          farm.tvlUSD = 0;
+          continue;
+        }
+
+        // LP pair — compute TVL from on-chain data
+        const pair = new ethers.Contract(lpAddr, PAIR_ABI, rp);
+        const lpToken = new ethers.Contract(lpAddr, ERC20_ABI, rp);
+
+        // Get LP staked in MasterChef via balanceOf (most reliable method)
+        let lpStakedInChef = 0n;
+        if (CONTRACTS.CHEF) {
+          try { lpStakedInChef = await lpToken.balanceOf(CONTRACTS.CHEF); } catch {}
+        }
+
+        const [token0addr, reserves, lpTotalSupply] = await Promise.all([
+          pair.token0(),
+          pair.getReserves(),
+          lpToken.totalSupply()
+        ]);
+
+        const symA = farm.tokens[0];
+        const symB = farm.tokens[1];
+        const tA   = TOKENS[symA];
+        const tB   = TOKENS[symB];
         const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
-        const addrB = tB?.address === "native" ? CONTRACTS.WCRO : tB?.address;
-        if (!addrA || !addrB) return Promise.resolve(null);
-        return getCachedPairAddr(factory, addrA, addrB);
-      }));
-      unresolvedFarms.forEach((farm, i) => {
-        if (pairResults[i].status === "fulfilled" && pairResults[i].value) farm.lpAddr = pairResults[i].value;
-      });
+
+        const isAtoken0 = token0addr.toLowerCase() === addrA?.toLowerCase();
+        const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
+        const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
+
+        // Total pool value in USD
+        const totalPoolUSD = (resA * (tA?.price || 0)) + (resB * (tB?.price || 0));
+
+        let tvlUSD = totalPoolUSD;
+        // If we got staked balance, compute farm's share only
+        if (lpStakedInChef > 0n && lpTotalSupply > 0n) {
+          const totalSupplyFloat = parseFloat(ethers.formatUnits(lpTotalSupply, 18));
+          const stakedFloat = parseFloat(ethers.formatUnits(lpStakedInChef, 18));
+          const farmShare = totalSupplyFloat > 0 ? stakedFloat / totalSupplyFloat : 1;
+          tvlUSD = totalPoolUSD * farmShare;
+        }
+
+        farm.tvlUSD = tvlUSD;
+        farm.tvl    = _fmtTVL(tvlUSD);
+        totalTVLUSD += tvlUSD;
+
+        // Update TVL display in farm card if rendered
+        const tvlEl = document.getElementById("tvl-" + farm.pid);
+        if (tvlEl) tvlEl.textContent = "$" + farm.tvl;
+
+      } catch(e) {
+        // Keep last value on error
+      }
     }
 
-    // ── Fetch ALL farm TVLs in PARALLEL ──
-    const tvlResults = await Promise.allSettled(FARMS.map(async (farm) => {
-      // Skip coming-soon farms
-      if (farm.comingSoon) return { pid: farm.pid, tvlUSD: 0 };
-
-      // Single-token staking pool
-      if (farm.tokens.length === 1) {
-        let stakedAmt = 0;
-        if (CONTRACTS.CHEF && (farm.chefPid !== undefined || farm._onChain)) {
-          const chef = new ethers.Contract(CONTRACTS.CHEF, CHEF_ABI, rp);
-          const pid = farm.chefPid ?? farm.pid;
-          const pInfo = await chef.poolInfo(pid);
-          const tok = TOKENS[farm.tokens[0]];
-          stakedAmt = parseFloat(ethers.formatUnits(pInfo[4], tok.decimals));
-        }
-        const tok = TOKENS[farm.tokens[0]];
-        return { pid: farm.pid, tvlUSD: stakedAmt * (tok?.price || 0) };
-      }
-
-      const lpAddr = farm.lpAddr;
-      if (!lpAddr || lpAddr === "0x0000000000000000000000000000000000000000") {
-        return { pid: farm.pid, tvlUSD: 0 };
-      }
-
-      // LP pair — compute TVL from on-chain data
-      const pair = new ethers.Contract(lpAddr, PAIR_ABI, rp);
-      const lpToken = new ethers.Contract(lpAddr, ERC20_ABI, rp);
-
-      let lpStakedInChef = 0n;
-      if (CONTRACTS.CHEF) {
-        try { lpStakedInChef = await lpToken.balanceOf(CONTRACTS.CHEF); } catch {}
-      }
-
-      const [token0addr, reserves, lpTotalSupply] = await Promise.all([
-        pair.token0(), pair.getReserves(), lpToken.totalSupply()
-      ]);
-
-      const tA = TOKENS[farm.tokens[0]], tB = TOKENS[farm.tokens[1]];
-      const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
-      const isAtoken0 = token0addr.toLowerCase() === addrA?.toLowerCase();
-      const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
-      const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
-      const totalPoolUSD = (resA * (tA?.price || 0)) + (resB * (tB?.price || 0));
-
-      let tvlUSD = totalPoolUSD;
-      if (lpStakedInChef > 0n && lpTotalSupply > 0n) {
-        const totalSupplyFloat = parseFloat(ethers.formatUnits(lpTotalSupply, 18));
-        const stakedFloat = parseFloat(ethers.formatUnits(lpStakedInChef, 18));
-        const farmShare = totalSupplyFloat > 0 ? stakedFloat / totalSupplyFloat : 1;
-        tvlUSD = totalPoolUSD * farmShare;
-      }
-      return { pid: farm.pid, tvlUSD };
-    }));
-
-    // Apply results
-    tvlResults.forEach(r => {
-      if (r.status !== "fulfilled") return;
-      const { pid, tvlUSD } = r.value;
-      const farm = FARMS.find(f => f.pid === pid);
-      if (!farm) return;
-      farm.tvlUSD = tvlUSD;
-      farm.tvl = _fmtTVL(tvlUSD);
-      totalTVLUSD += tvlUSD;
-      const tvlEl = document.getElementById("tvl-" + farm.pid);
-      if (tvlEl) tvlEl.textContent = "$" + farm.tvl;
-    });
+    // Farm TVLs are shown per-card, not in the stats bar
+    // Stats bar TVL comes from DexScreener only (to avoid flickering)
 
   } catch(e) { _rotateRpc(); }
 }
@@ -3543,40 +3544,44 @@ async function calcFarmAPRs() {
     const gangPrice = TOKENS.GANG?.price || 0;
     const SECONDS_PER_YEAR = 365.25 * 86400;
 
-    // ── Fetch ALL pool infos in PARALLEL ──
-    const poolInfoResults = await Promise.allSettled(
-      FARMS.map(farm => chef.poolInfo(farm.chefPid ?? farm.pid))
-    );
+    for (const farm of FARMS) {
+      const pid = farm.chefPid ?? farm.pid;
+      try {
+        const poolInfo = await chef.poolInfo(pid);
+        const allocPoint = Number(poolInfo[1]);
+        if (allocPoint === 0) { farm.apy = 0; continue; }
 
-    // ── Calculate APRs (uses cached reserves when possible) ──
-    const aprCalcResults = await Promise.allSettled(FARMS.map(async (farm, idx) => {
-      if (poolInfoResults[idx].status !== "fulfilled") return;
-      const poolInfo = poolInfoResults[idx].value;
-      const allocPoint = Number(poolInfo[1]);
-      if (allocPoint === 0) { farm.apy = 0; return; }
+        // Annual GANG rewards for this pool in USD
+        const poolGangPerYear = (gangPerSec * allocPoint / totalAlloc) * SECONDS_PER_YEAR;
+        const rewardsUSD = poolGangPerYear * gangPrice;
 
-      const poolGangPerYear = (gangPerSec * allocPoint / totalAlloc) * SECONDS_PER_YEAR;
-      const rewardsUSD = poolGangPerYear * gangPrice;
+        // APR = annual rewards / TVL * 100
+        let tvlUSD = farm.tvlUSD || 0;
+        // If no LP staked in MasterChef yet, estimate using total LP pool value
+        if (tvlUSD <= 0 && farm.lpAddr && farm.tokens.length >= 2) {
+          try {
+            const pair = new ethers.Contract(farm.lpAddr, PAIR_ABI, rp);
+            const [t0addr, reserves] = await Promise.all([pair.token0(), pair.getReserves()]);
+            const tA = TOKENS[farm.tokens[0]];
+            const tB = TOKENS[farm.tokens[1]];
+            const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
+            const isAtoken0 = t0addr.toLowerCase() === addrA?.toLowerCase();
+            const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
+            const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
+            tvlUSD = (resA * (tA?.price || 0)) + (resB * (tB?.price || 0));
+          } catch {}
+        }
+        if (tvlUSD > 0) {
+          farm.apy = Math.round(rewardsUSD / tvlUSD * 100);
+        } else {
+          farm.apy = 0;
+        }
+      } catch {}
 
-      let tvlUSD = farm.tvlUSD || 0;
-      if (tvlUSD <= 0 && farm.lpAddr && farm.tokens.length >= 2) {
-        try {
-          const pair = new ethers.Contract(farm.lpAddr, PAIR_ABI, rp);
-          const [t0addr, reserves] = await Promise.all([pair.token0(), pair.getReserves()]);
-          const tA = TOKENS[farm.tokens[0]], tB = TOKENS[farm.tokens[1]];
-          const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
-          const isAtoken0 = t0addr.toLowerCase() === addrA?.toLowerCase();
-          const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
-          const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
-          tvlUSD = (resA * (tA?.price || 0)) + (resB * (tB?.price || 0));
-        } catch {}
-      }
-      farm.apy = tvlUSD > 0 ? Math.round(rewardsUSD / tvlUSD * 100) : 0;
-
+      // Update APR display
       const aprEl = document.getElementById("apr-" + farm.pid);
       if (aprEl) aprEl.textContent = farm.apy > 0 ? farm.apy + '%' : '—';
-    }));
-
+    }
   } catch(e) { console.error("APR calc error:", e); }
 }
 
@@ -3691,7 +3696,7 @@ let _fetchInProgress = false;
 let _lastCoinGeckoFetch = 0;
 
 async function fetchLivePrices() {
-  if (_fetchInProgress) return;
+  if (_fetchInProgress) return; // skip if previous call still running
   _fetchInProgress = true;
   try {
     const now = Date.now();
@@ -3699,27 +3704,25 @@ async function fetchLivePrices() {
 
     setPriceStatus(true);
 
-    // ── Run CoinGecko + DexScreener + FarmTVLs ALL in PARALLEL ──
-    const parallelTasks = [fetchDexScreenerStats()];
     if (needCoinGecko) {
-      parallelTasks.push((async () => {
-        try {
-          const ids = Object.values(COINGECKO_IDS).filter(Boolean).join(",");
-          const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`);
-          if (res.ok) {
-            const data = await res.json();
-            for (const [sym, id] of Object.entries(COINGECKO_IDS)) {
-              if (id && data[id]?.usd) TOKENS[sym].price = data[id].usd;
-            }
-            _lastCoinGeckoFetch = now;
+      try {
+        const ids = Object.values(COINGECKO_IDS).filter(Boolean).join(",");
+        const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`);
+        if (res.ok) {
+          const data = await res.json();
+          for (const [sym, id] of Object.entries(COINGECKO_IDS)) {
+            if (id && data[id]?.usd) TOKENS[sym].price = data[id].usd;
           }
-        } catch {}
-      })());
+          _lastCoinGeckoFetch = now;
+        }
+      } catch(e) { /* keep stale CoinGecko prices */ }
     }
-    // Farm TVLs + APRs fire in parallel
-    parallelTasks.push(fetchFarmTVLs().then(() => calcFarmAPRs()));
 
-    await Promise.allSettled(parallelTasks);
+    // Always fetch on-chain GANG price from reserves (fast, own RPC)
+    // await fetchGangPriceOnChain(); // Disabled - using DexScreener as source of truth
+    await fetchDexScreenerStats(); // Use DexScreener for accurate GANG price FIRST
+    // Then fetch real TVL for all farms (needs up-to-date prices)
+    fetchFarmTVLs().then(() => calcFarmAPRs()); // fire-and-forget, non-blocking
 
     setPriceStatus(false);
     updateTickerPrices();
@@ -3736,10 +3739,7 @@ async function fetchLivePrices() {
     const fromAmt = parseFloat(document.getElementById("swapFrom")?.value);
     if (fromAmt > 0) calcSwap();
 
-    // Only calc liq ratio if liquidity page is visible
-    if (document.getElementById("page-liquidity")?.classList.contains("active")) {
-      calcLiqRatioOnChain();
-    }
+    await calcLiqRatioOnChain();
   } catch(e) {
     setPriceStatus(false);
   } finally {
@@ -5920,43 +5920,39 @@ async function loadOnChainStakes() {
     }
     const n = Number(count);
     _onChainStakes = [];
-
-    // ── Fetch ALL stakes in PARALLEL ──
-    const stakeResults = await Promise.allSettled(
-      Array.from({length: n}, (_, i) => (async () => {
+    for (let i = 0; i < n; i++) {
+      try {
+        let stakeData, pending;
+        // Fetch stake data and pending rewards together
         for (let retry = 0; retry < 2; retry++) {
           try {
-            const [stakeData, pending] = await Promise.all([
+            [stakeData, pending] = await Promise.all([
               sc.getUserStake(state.address, i),
               sc.pendingRewards(state.address, i)
             ]);
-            return { idx: i, stakeData, pending };
-          } catch { await new Promise(r => setTimeout(r, 800)); }
+            break;
+          } catch(re) { await new Promise(r => setTimeout(r, 800)); }
         }
-        return null;
-      })())
-    );
-
-    const tierNames = ['6 Months','1 Year','18 Months','2 Years','3 Years','4 Years'];
-    stakeResults.forEach(r => {
-      if (r.status !== "fulfilled" || !r.value || !r.value.stakeData) return;
-      const { idx, stakeData, pending } = r.value;
-      const [amount, startTime, unlockTime, apyBps, tierIndex, withdrawn] = stakeData;
-      if (withdrawn) return;
-      _onChainStakes.push({
-        id: idx,
-        amount: parseFloat(ethers.formatUnits(amount, 18)),
-        startTime: Number(startTime) * 1000,
-        unlockTime: Number(unlockTime) * 1000,
-        apy: Number(apyBps) / 100,
-        tierIndex: Number(tierIndex),
-        label: tierNames[Number(tierIndex)] || 'Tier ' + Number(tierIndex),
-        earned: parseFloat(ethers.formatUnits(pending || 0n, 18)),
-        withdrawn: false,
-        onChain: true,
-      });
-    });
-
+        if (!stakeData) continue;
+        const [amount, startTime, unlockTime, apyBps, tierIndex, withdrawn] = stakeData;
+        if (withdrawn) continue;
+        const tierNames = ['6 Months','1 Year','18 Months','2 Years','3 Years','4 Years'];
+        _onChainStakes.push({
+          id: i,
+          amount: parseFloat(ethers.formatUnits(amount, 18)),
+          startTime: Number(startTime) * 1000,
+          unlockTime: Number(unlockTime) * 1000,
+          apy: Number(apyBps) / 100,
+          tierIndex: Number(tierIndex),
+          label: tierNames[Number(tierIndex)] || 'Tier ' + Number(tierIndex),
+          earned: parseFloat(ethers.formatUnits(pending || 0n, 18)),
+          withdrawn: false,
+          onChain: true,
+        });
+      } catch(stakeErr) {
+        console.warn('Error loading stake', i, stakeErr);
+      }
+    }
     if (_onChainStakes.length > 0) {
       _localStakes = [];
       localStorage.removeItem('gangStakes');
@@ -6587,24 +6583,20 @@ async function loadNftPreviewGallery() {
   const gallery = document.getElementById("nftPreviewGallery");
   if (!gallery) return;
   const previews = [1, 42, 100, 200, 250, 333, 420, 499];
-  // ── Fetch ALL NFT metadata in PARALLEL ──
-  const results = await Promise.allSettled(previews.map(async (id) => {
-    const res = await fetch("/nft/metadata/" + id + ".json");
-    const meta = await res.json();
-    const rarity = meta.attributes.find(a => a.trait_type === "Rarity")?.value || "Common";
-    const rank = meta.attributes.find(a => a.trait_type === "Rank")?.value || "Soldier";
-    return { id, meta, rarity, rank };
-  }));
   let html = "";
-  results.forEach(r => {
-    if (r.status !== "fulfilled") return;
-    const { id, meta, rarity, rank } = r.value;
-    html += `<div class="gang-img-card" style="position:relative;">
-      <img src="${meta.image}" class="gang-side-img" style="height:200px;object-fit:cover;" />
-      <div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);border:1px solid rgba(212,160,23,0.3);border-radius:6px;padding:2px 8px;font-size:10px;color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">${rarity}</div>
-      <div class="gang-img-caption">#${id} — ${rank}</div>
-    </div>`;
-  });
+  for (const id of previews) {
+    try {
+      const res = await fetch("/nft/metadata/" + id + ".json");
+      const meta = await res.json();
+      const rarity = meta.attributes.find(a => a.trait_type === "Rarity")?.value || "Common";
+      const rank = meta.attributes.find(a => a.trait_type === "Rank")?.value || "Soldier";
+      html += `<div class="gang-img-card" style="position:relative;">
+        <img src="${meta.image}" class="gang-side-img" style="height:200px;object-fit:cover;" />
+        <div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);border:1px solid rgba(212,160,23,0.3);border-radius:6px;padding:2px 8px;font-size:10px;color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">${rarity}</div>
+        <div class="gang-img-caption">#${id} — ${rank}</div>
+      </div>`;
+    } catch(e) {}
+  }
   gallery.innerHTML = html;
 }
 
@@ -6641,25 +6633,21 @@ async function loadUserNfts() {
 
     document.getElementById("nftYourSection").style.display = "block";
     const grid = document.getElementById("nftYourGrid");
-    // ── Fetch ALL user NFT metadata in PARALLEL ──
-    const results = await Promise.allSettled(ids.map(async (id) => {
-      const tokenId = Number(id);
-      const res = await fetch("/nft/metadata/" + tokenId + ".json");
-      const meta = await res.json();
-      const rank = meta.attributes.find(a => a.trait_type === "Rank")?.value || "";
-      const rarity = meta.attributes.find(a => a.trait_type === "Rarity")?.value || "";
-      return { tokenId, meta, rank, rarity };
-    }));
     let html = "";
-    results.forEach(r => {
-      if (r.status !== "fulfilled") return;
-      const { tokenId, meta, rank, rarity } = r.value;
-      html += `<div class="gang-img-card" style="position:relative;">
-        <img src="${meta.image}" class="gang-side-img" style="height:180px;object-fit:cover;" />
-        <div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);border:1px solid rgba(212,160,23,0.3);border-radius:6px;padding:2px 8px;font-size:10px;color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">${rarity}</div>
-        <div class="gang-img-caption">#${tokenId} — ${rank}</div>
-      </div>`;
-    });
+    for (const id of ids) {
+      const tokenId = Number(id);
+      try {
+        const res = await fetch("/nft/metadata/" + tokenId + ".json");
+        const meta = await res.json();
+        const rank = meta.attributes.find(a => a.trait_type === "Rank")?.value || "";
+        const rarity = meta.attributes.find(a => a.trait_type === "Rarity")?.value || "";
+        html += `<div class="gang-img-card" style="position:relative;">
+          <img src="${meta.image}" class="gang-side-img" style="height:180px;object-fit:cover;" />
+          <div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);border:1px solid rgba(212,160,23,0.3);border-radius:6px;padding:2px 8px;font-size:10px;color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">${rarity}</div>
+          <div class="gang-img-caption">#${tokenId} — ${rank}</div>
+        </div>`;
+      } catch(e) {}
+    }
     grid.innerHTML = html;
   } catch(e) { console.warn("loadUserNfts:", e); }
 }
@@ -6708,19 +6696,18 @@ async function mintNftFromDex() {
 
 // ── App startup ───────────────────────────────────────────────
 (function init() {
-  // Kick off live price fetching immediately
+  // Kick off live price fetching immediately on page load
   fetchLivePrices();
-  // 10s interval — balanced between responsiveness and RPC load
-  setInterval(fetchLivePrices, 10000);
-  // Render initial farm view immediately
+  // Then repeat every 5 seconds
+  setInterval(fetchLivePrices, 5000);
+  // Render initial farm view immediately (will update after pool discovery)
   renderFarms();
-  // Fetch DexScreener + discover pools IN PARALLEL for fastest startup
-  Promise.allSettled([
-    fetchDexScreenerStats(),
-    autoDiscoverFarmPools()
-  ]).then(() => {
-    renderFarms();
-    fetchFarmTVLs().then(() => calcFarmAPRs());
+  // Fetch DexScreener prices FIRST, then discover pools and compute TVL
+  fetchDexScreenerStats().then(() => {
+    autoDiscoverFarmPools().then(() => {
+      renderFarms();
+      fetchFarmTVLs().then(() => calcFarmAPRs());
+    });
   });
 
   // Auto-reconnect wallet on page load
