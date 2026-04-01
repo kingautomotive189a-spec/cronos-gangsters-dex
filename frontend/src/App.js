@@ -135,7 +135,7 @@ function App() {
         <div className="header-content">
           <div className="header-left">
             <div className="logo-section">
-              <span className="logo-icon">🔫</span>
+              <img src="https://cronosgangsters.com/gang-logo.png" alt="GANG" className="logo-img" />
               <div>
                 <h1 className="header-title">Cronos Gangsters</h1>
                 <p className="header-subtitle">$GANG Telegram Bot Dashboard</p>
