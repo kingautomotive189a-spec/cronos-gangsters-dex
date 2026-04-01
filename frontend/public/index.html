@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
 <script>
-// Redirect to DApp immediately, preserving hash fragment
+// Redirect to DApp only for root path, let React handle /mining, /trading, /deploy, /deploy-farms
 (function() {
-  var h = window.location.hash || '';
-  if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+  var p = window.location.pathname;
+  var reactRoutes = ['/mining', '/trading', '/deploy', '/deploy-farms'];
+  var isReactRoute = reactRoutes.some(function(r) { return p === r || p.startsWith(r + '/'); });
+  if (!isReactRoute && (p === '/' || p === '/index.html')) {
+    var h = window.location.hash || '';
     window.location.replace('/cronos-gangsters.html' + h);
   }
 })();
