@@ -6080,6 +6080,7 @@ async function setFarmAllocVVS(allocPoint, btnEl) {
 // Sets CRO/GANG to 20%, all other farms+vaults to 6.67% each
 // Skips pools already at correct allocation, 6s delay between TXs
 let _isRebalancing = false;
+let _rebalanceStartIdx = 0;
 async function rebalanceAllFarms() {
   if (_isRebalancing) { showToast('Already running!', 'error'); return; }
   if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
@@ -6105,21 +6106,21 @@ async function rebalanceAllFarms() {
     { name: "GANG / USDT (Vault)",   chefPid: 34, target: 20833 },
     { name: "GANG / FUL (Vault)",    chefPid: 35, target: 20833 },
   ];
-  var done = 0;
   var total = allPools.length;
-  for (var i = 0; i < total; i++) {
+  var startFrom = _rebalanceStartIdx;
+  for (var i = startFrom; i < total; i++) {
     var pool = allPools[i];
     try {
-      logEl.textContent = '(' + (done+1) + '/' + total + ') ' + pool.name + ' ... Confirm in wallet';
+      logEl.textContent = '(' + (i+1) + '/' + total + ') ' + pool.name + ' ... Confirm in wallet';
       var tx = await chef.setPoolAllocPoint(pool.chefPid, pool.target, { gasLimit: 200000 });
-      logEl.textContent = '(' + (done+1) + '/' + total + ') ' + pool.name + ' — waiting for block...';
+      logEl.textContent = '(' + (i+1) + '/' + total + ') ' + pool.name + ' — waiting for block...';
       await tx.wait();
-      done++;
-      logEl.textContent = '(' + done + '/' + total + ') ' + pool.name + ' DONE';
-      showToast(pool.name + ' done (' + done + '/' + total + ')', 'success');
-      if (done < total) {
+      _rebalanceStartIdx = i + 1;
+      logEl.textContent = '(' + (i+1) + '/' + total + ') ' + pool.name + ' DONE';
+      showToast(pool.name + ' done (' + (i+1) + '/' + total + ')', 'success');
+      if (i + 1 < total) {
         for (var s = 6; s > 0; s--) {
-          logEl.textContent = '(' + done + '/' + total + ') Next in ' + s + 's...';
+          logEl.textContent = '(' + (i+1) + '/' + total + ') Next in ' + s + 's...';
           await new Promise(function(r) { setTimeout(r, 1000); });
         }
       }
@@ -6128,17 +6129,19 @@ async function rebalanceAllFarms() {
       logEl.textContent = 'Error on ' + pool.name + ': ' + msg;
       showToast('Error - press RETRY', 'error');
       btn.disabled = false;
-      btn.textContent = 'RETRY (' + (total - done) + ' remaining)';
+      _rebalanceStartIdx = i;
+      btn.textContent = 'RETRY (' + (total - i) + ' remaining)';
       _isRebalancing = false;
       return;
     }
   }
-  logEl.textContent = 'All ' + done + ' pools done! CRO/GANG=20%, rest=6.67% each.';
+  logEl.textContent = 'All 13 pools done! CRO/GANG=50%, rest=4.17% each.';
   btn.textContent = 'REBALANCE COMPLETE';
   btn.style.background = 'var(--gold)';
   btn.style.color = '#000';
   showToast('All farms and vaults rebalanced!', 'success');
   _isRebalancing = false;
+  _rebalanceStartIdx = 0;
   setTimeout(function() { fetchFarmTVLs().then(function() { calcFarmAPRs(); }); }, 3000);
 }
 
