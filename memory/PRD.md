@@ -1,44 +1,57 @@
-# Cronos Gangsters — Product Requirements Document
+# Cronos Gangsters — PRD
 
 ## Original Problem Statement
-Build a Telegram Bot for the Cronos Gangsters Web3 DEX with ALL website features. Optimize DApp loading speed. Merge all features from previous builds. Add Mining, Trading, and Deploy pages. Owner revenue collection banners on all fee-generating features.
+Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/casino games, leverage trading, deploy farms, dashboard, and owner revenue collection.
 
-## All Pages
-| Page | URL | Description |
-|------|-----|-------------|
-| DApp (Main) | `/cronos-gangsters.html` | Full DEX: Swap, Liquidity, Farms, Vaults, Staking, Bridge, etc. |
-| Dashboard | `/dashboard.html` | Bot Start/Stop, live $GANG stats, all features, bot commands |
-| Mining Hub | `/mining.html` | Tap-to-earn, 10 games, VIP, lottery, staking, tournaments |
-| Leverage Trading | `/trading.html` | Trade 8 pairs with up to 100x leverage |
-| Deploy Contract | `/deploy.html` | 1-click GANGRewards contract deployment |
-| Deploy Farms | `/deploy-farms.html` | Create LP pairs + register on MasterChef |
+## Architecture
+- Frontend: Vanilla JS/HTML standalone pages in /frontend/public/
+- Backend: FastAPI + python-telegram-bot (v20+)
+- Database: MongoDB (Motor async driver)
+- Blockchain: Cronos mainnet via ethers.js v5
 
-## Owner Revenue Banners
-- **Mining page**: Shows house earnings, total burned, users, jackpot pool + COLLECT button (visible only to owner wallet)
-- **Trading page**: Shows total fees earned (0.1% per trade) + COLLECT button (visible only to owner wallet)
-- Owner wallet: `0xedb10BeD5b9e0be39FE1CCDd417C20D5c76A8baf`
+## Key Files
+- `/frontend/public/cronos-gangsters.html` — Main DApp (Swap, Farms, Vaults, etc.)
+- `/frontend/public/mining.html` — Mining Hub + 19 casino games
+- `/frontend/public/trading.html` — Leverage trading with TradingView charts
+- `/frontend/public/dashboard.html` — Bot control panel
+- `/frontend/public/deploy-farms.html` — Farm deployer (completed)
+- `/frontend/public/deploy.html` — Contract deployer (completed)
+- `/backend/server.py` — Main FastAPI server
+- `/backend/telegram_bot.py` — Telegram bot
+- `/backend/mining_api.py` — Casino/mining backend
+- `/backend/trading_api.py` — Leverage trading backend
 
-## Farm Pools (10 total)
-| PID | Name | Status |
-|-----|------|--------|
-| 0-3 | GANG/VVS, CRO/GANG, GANG/USDC, GANG Staking | Active |
-| 4-6 | CRO/USDC, CRO/WETH, CRO/VVS | Coming Soon |
-| 7-9 | XRP/GANG, PEPE/GANG, DOGE/GANG | Needs LP Deploy |
+## Owner Wallet
+`0xaA3C5749628610fF410EF9133a4ac4f58e9A52eA`
 
-## Tech Stack
-- Frontend: Vanilla JS/Ethers.js v5+v6 (DApp + standalone pages)
-- Backend: FastAPI, Python Telegram Bot (v20+)
-- Database: MongoDB (mining/trading data)
-- Blockchain: Cronos chain (Chain ID 25)
-- APIs: CoinGecko, DexScreener, CoinMarketCap, Telegram Bot API
+## Key Contracts
+- GANG Token: `0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF`
+- Mining Rewards: `0xBdAaDDb1cd25758aa40F38c273C355cA943e1c8F` (funded with 25,000 GANG)
+- MasterChef: stored in code
 
-## What's Complete
-- Telegram Bot with 28+ commands and callback inline buttons
-- Dashboard with live stats, bot control, all commands listed
-- DApp speed optimization (images 73% smaller, lazy loading, parallel startup)
-- Hash routing for Telegram deep links
-- Mining Hub with 10 games, VIP, lottery, staking, tournaments
-- Leverage Trading with 8 pairs
-- Deploy Contract + Deploy Farms pages
-- Owner revenue banners on Mining and Trading pages
-- 3 new farm pools (XRP, PEPE, DOGE) with deploy buttons
+## Token Addresses (Cronos Mainnet)
+- XRP: `0xb9Ce0dd29C91E02d4620F57a66700Fc5e41d6D15`
+- PEPE: `0xf868c454784048AF4f857991583E34243c92Ff48`
+- DOGE: `0x1a8E39ae59e5556B56b76fCBA98d22c9ae557396`
+
+## Completed Features
+- Image optimization (22MB→5MB), lazy loading
+- Telegram bot with callback popups for all features
+- Mining Hub (19 games, tap-to-earn, VIP, referrals, lottery, staking, tournaments)
+- Leverage Trading (8 pairs, 100x, live TradingView charts)
+- 3 new farms (XRP/GANG, PEPE/GANG, DOGE/GANG)
+- Dashboard with bot start/stop
+- Deploy Farms + Deploy Contract (completed, banners removed from nav)
+- Owner revenue collection banners
+- Fund Mining Rewards banner on mining page
+- "How to Earn Real $GANG" user guide on mining page
+- Roadmap updated: Phase 7 (DONE), Phase 8 (COMING SOON)
+- Nav scroll indicator (pulsing >> arrows)
+- Fixed: PEPE address, XRP address, owner wallet, bot Python path
+- All token logos from CoinGecko (original/real)
+
+## Backlog
+- P1: Code Quality — refactor telegram_bot.py callback_handler()
+- P1: Fix use-toast.js stale closures
+- P2: Verify owner revenue Web3 transactions
+- P2: Add max payout limits for trading

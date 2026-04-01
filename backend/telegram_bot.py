@@ -219,8 +219,6 @@ def main_keyboard():
         [InlineKeyboardButton("🎰 Lottery", callback_data="menu_lottery"),
          InlineKeyboardButton("🛠 Token Creator", callback_data="menu_create"),
          InlineKeyboardButton("🏪 Marketplace", callback_data="menu_marketplace")],
-        [InlineKeyboardButton("🌱 Deploy Farms", callback_data="menu_deployfarms"),
-         InlineKeyboardButton("📜 Deploy Contract", callback_data="menu_deploy")],
         [InlineKeyboardButton("🌐 Website", url=DEX_LINK),
          InlineKeyboardButton("🐦 Twitter", url=TWITTER)],
     ])
@@ -271,26 +269,29 @@ async def fetch_token_data():
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle /start command"""
     msg = (
-        "🔫 *$GANG - Cronos Gangsters*\n\n"
+        "🔫 *$GANG - Cronos Gangsters*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
         "The Most Gangster DEX on Cronos!\n\n"
         f"📋 *Contract:*\n`{CONTRACT}`\n\n"
-        "⚡ *All Features:*\n"
-        "⛏ Mining Hub — Earn 5 $GANG daily + 19 casino games!\n"
-        "⚡ Leverage Trading — 8 pairs, up to 100x\n"
+        "━━━ *EARN FREE $GANG* ━━━\n\n"
+        "⛏ *Mining Hub* — Earn 5 $GANG daily for FREE!\n"
+        "🎰 *19 Casino Games* — Slots, Crash, Roulette, Poker & more!\n"
+        "🏇 *Racing* — Horse & Car racing!\n"
+        "⚡ *Leverage Trading* — 8 pairs, up to 100x with live charts!\n"
+        "💰 *Reach 100 $GANG → Withdraw REAL tokens!*\n\n"
+        "━━━ *DeFi FEATURES* ━━━\n\n"
         "🌾 Farms — Yield farming with LP\n"
         "🏦 Vaults — Auto-compound pools\n"
         "🔒 Staking — Lock $GANG for APY\n"
-        "🎰 Casino — Slots, Crash, Roulette, Poker & more\n"
-        "🏇 Racing — Horse & Car racing games\n"
+        "🌉 Bridge — Cross-chain transfers\n"
+        "🔐 Token Locker — Lock LP tokens\n\n"
+        "━━━ *MORE* ━━━\n\n"
         "🚀 Launchpad — IDO access\n"
-        "🔐 Token Locker — Lock LP tokens\n"
         "🎯 Sniper Bot — Fast trading\n"
         "🎴 NFTs — 500 unique gangsters\n"
         "👥 Referral — Earn 5% from crew\n"
-        "🌉 Bridge — Cross-chain transfers\n"
         "🛠 Token Creator — Deploy tokens\n"
-        "🏪 Marketplace — Trade NFTs\n"
-        "🌱 Deploy Farms — 1-click farm deployer\n\n"
+        "🏪 Marketplace — Trade NFTs\n\n"
         "🔥 *START MINING NOW!* Tap ⛏ Mining Hub below!\n\n"
         "👇 *Tap any button to explore!*"
     )
@@ -926,25 +927,23 @@ async def marketplace(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def mining(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle /mining command - show mining hub info"""
     msg = (
-        "⛏ *$GANG MINING HUB*\n\n"
-        "🔥 *Earn 5 $GANG every day just by tapping!*\n\n"
-        "*What's inside:*\n"
-        "• Tap to Mine — Claim 5 $GANG daily\n"
-        "• 19 Casino Games (Slots, Crash, Roulette & more)\n"
-        "• Horse & Car Racing\n"
-        "• Lottery & Jackpot\n"
-        "• Staking pools (30/60/90 day locks)\n"
-        "• Tournaments with prize pools\n"
-        "• Mystery Boxes & Scratch Cards\n"
-        "• VIP Tiers (Bronze/Silver/Gold)\n\n"
-        "💰 *Withdraw at 100+ $GANG* (5% burn fee)\n"
-        "👥 *Refer friends — earn 10% bonus!*\n\n"
-        f"[⛏ Start Mining NOW!]({DEX_LINK}/mining.html)"
+        "⛏ *$GANG MINING HUB*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "🔥 *EARN REAL $GANG TOKENS FOR FREE!*\n\n"
+        "━━━ *HOW IT WORKS* ━━━\n\n"
+        "1️⃣ *TAP TO MINE* — Earn 5 $GANG daily for free!\n"
+        "2️⃣ *PLAY & MULTIPLY* — 19 casino games + leverage trading\n"
+        "3️⃣ *REACH 100 $GANG* — Withdraw button unlocks\n"
+        "4️⃣ *GET REAL TOKENS* — Sent to your wallet! (5% burn)\n\n"
+        "🎰 Slots • Crash • Roulette • Blackjack • Racing & more!\n"
+        "👥 Refer friends — earn 10% bonus!\n"
+        "💰 25,000 $GANG in reward pool!\n\n"
+        "👇 *Start mining NOW!*"
     )
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("⛏ Open Mining Hub", url=f"{DEX_LINK}/mining.html")],
+        [InlineKeyboardButton("⛏ START MINING NOW", url=f"{DEX_LINK}/mining.html")],
+        [InlineKeyboardButton("⚡ Leverage Trading", url=f"{DEX_LINK}/trading.html")],
         [InlineKeyboardButton("👥 Referral Link", url=f"{DEX_LINK}/mining.html")],
-        [InlineKeyboardButton("💰 Buy $GANG", url=DEX_LINK)],
     ])
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
 
@@ -952,21 +951,21 @@ async def mining(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def trading(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle /trading command - show leverage trading info"""
     msg = (
-        "⚡ *LEVERAGE TRADING*\n\n"
-        "Trade with up to *100x leverage!*\n\n"
-        "*Available Pairs:*\n"
-        "• BTC/USD | ETH/USD | CRO/USD | SOL/USD\n"
-        "• DOGE/USD | PEPE/USD | XRP/USD | AVAX/USD\n\n"
-        "*Features:*\n"
-        "• Long & Short positions\n"
-        "• Adjustable leverage (2x–100x)\n"
-        "• Real-time PnL tracking\n"
-        "• Close anytime\n\n"
-        "⚠️ *High risk = high reward!*\n\n"
-        f"[⚡ Start Trading]({DEX_LINK}/trading.html)"
+        "⚡ *LEVERAGE TRADING*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "📈 *Trade crypto with up to 100x LEVERAGE!*\n\n"
+        "1️⃣ Mine $GANG from the Mining Hub (free!)\n"
+        "2️⃣ Pick a pair — BTC, ETH, SOL, DOGE, PEPE & more\n"
+        "3️⃣ Go LONG (price up) or SHORT (price down)\n"
+        "4️⃣ Set leverage: 10x, 25x, 50x, or 100x\n"
+        "5️⃣ Close anytime to lock in profits!\n\n"
+        "📊 *Live TradingView charts for every pair!*\n"
+        "💰 0.1% trading fee | ⚠️ High risk = high reward!\n\n"
+        "👇 *Start trading NOW!*"
     )
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("⚡ Start Trading", url=f"{DEX_LINK}/trading.html")],
+        [InlineKeyboardButton("⚡ START TRADING NOW", url=f"{DEX_LINK}/trading.html")],
+        [InlineKeyboardButton("⛏ Mine $GANG First", url=f"{DEX_LINK}/mining.html")],
         [InlineKeyboardButton("📊 Chart", url=DEXSCREENER)],
     ])
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
@@ -1587,50 +1586,73 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "menu_mining":
         msg = (
-            "⛏ *$GANG MINING HUB*\n\n"
-            "🔥 *Earn 5 $GANG every day just by tapping!*\n\n"
-            "*What's inside:*\n"
-            "• Tap to Mine — Claim 5 $GANG daily\n"
-            "• 19 Casino Games (Slots, Crash, Roulette, Dice, Poker & more)\n"
-            "• Horse & Car Racing\n"
-            "• Lottery & Jackpot\n"
-            "• Staking pools (30/60/90 day locks)\n"
-            "• Tournaments with prize pools\n"
-            "• Mystery Boxes & Scratch Cards\n"
-            "• VIP Tiers (Bronze/Silver/Gold)\n\n"
-            "💰 *Withdraw at 100+ $GANG* (5% burn fee)\n"
-            "👥 *Refer friends — earn 10% bonus!*\n\n"
-            "🎰 *Start mining and playing NOW!*"
+            "⛏ *$GANG MINING HUB*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "🔥 *EARN REAL $GANG TOKENS FOR FREE!*\n\n"
+            "━━━ *HOW IT WORKS* ━━━\n\n"
+            "1️⃣ *TAP TO MINE* — Earn 5 $GANG every day just by tapping a button. It's free!\n\n"
+            "2️⃣ *PLAY & MULTIPLY* — Use your mined $GANG in 19 casino games, racing, lottery & leverage trading to grow your balance!\n\n"
+            "3️⃣ *REACH 100 $GANG* — Once your balance hits 100, the WITHDRAW button unlocks\n\n"
+            "4️⃣ *WITHDRAW REAL TOKENS* — Your virtual balance converts to REAL $GANG tokens sent directly to your wallet! (5% burn fee)\n\n"
+            "━━━ *ALL GAMES* ━━━\n\n"
+            "🎰 Slots • Crash • Roulette\n"
+            "🃏 Blackjack • Poker • Baccarat\n"
+            "🎲 Dice • Coin Flip • Hi-Lo\n"
+            "✊ Rock Paper Scissors\n"
+            "🏇 Horse Racing • Car Racing\n"
+            "🎱 Plinko • Mines • Wheel\n"
+            "🎯 Keno • Scratch Cards • Limbo\n\n"
+            "━━━ *BONUSES* ━━━\n\n"
+            "👥 *Referral:* Earn 10% of what your friends mine!\n"
+            "🏆 *VIP Tiers:* Bronze (2x) → Silver (3x) → Gold (5x) mining multiplier\n"
+            "🎫 *Lottery:* Win the jackpot!\n"
+            "💎 *Mystery Boxes:* Rare rewards\n"
+            "⚔️ *Tournaments:* Compete for prize pools\n"
+            "📈 *Staking:* Lock $GANG for bonus yields\n\n"
+            "💰 *25,000 $GANG in the reward pool!*\n\n"
+            "👇 *Start mining NOW!*"
         )
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("⛏ Open Mining Hub", url=f"{DEX_LINK}/mining.html")],
+            [InlineKeyboardButton("⛏ START MINING NOW", url=f"{DEX_LINK}/mining.html")],
             [InlineKeyboardButton("👥 Get Referral Link", url=f"{DEX_LINK}/mining.html")],
+            [InlineKeyboardButton("⚡ Leverage Trading", callback_data="menu_trading")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
 
     elif query.data == "menu_trading":
         msg = (
-            "⚡ *LEVERAGE TRADING*\n\n"
-            "Trade with up to *100x leverage!*\n\n"
-            "*Available Pairs:*\n"
-            "• BTC/USD\n"
-            "• ETH/USD\n"
-            "• CRO/USD\n"
-            "• SOL/USD\n"
-            "• DOGE/USD\n"
-            "• PEPE/USD\n"
-            "• XRP/USD\n"
-            "• AVAX/USD\n\n"
-            "*Features:*\n"
-            "• Long & Short positions\n"
-            "• Adjustable leverage (2x–100x)\n"
-            "• Real-time PnL tracking\n"
-            "• Close anytime\n\n"
-            "⚠️ *High risk = high reward!*"
+            "⚡ *LEVERAGE TRADING*\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "📈 *Trade crypto with up to 100x LEVERAGE!*\n\n"
+            "━━━ *HOW IT WORKS* ━━━\n\n"
+            "1️⃣ *MINE $GANG* — First earn $GANG from the Mining Hub (free daily mining!)\n\n"
+            "2️⃣ *PICK A PAIR* — Choose from 8 major crypto pairs. Each has a LIVE chart with real prices!\n\n"
+            "3️⃣ *GO LONG OR SHORT*\n"
+            "   • LONG = You think the price goes UP 📈\n"
+            "   • SHORT = You think the price goes DOWN 📉\n\n"
+            "4️⃣ *SET YOUR LEVERAGE* — 10x, 25x, 50x, or 100x\n"
+            "   • 10x = Your gains (and losses) are multiplied by 10\n"
+            "   • 100x = MAXIMUM risk & reward!\n\n"
+            "5️⃣ *ENTER YOUR BET* — How much $GANG you want to risk\n\n"
+            "6️⃣ *CLOSE WHEN READY* — Close your position anytime to lock in profits (or cut losses)\n\n"
+            "━━━ *EXAMPLE* ━━━\n\n"
+            "You bet 50 $GANG on BTC LONG at 25x leverage:\n"
+            "• If BTC goes up 4% → You make +50 $GANG profit! (4% × 25 = 100%)\n"
+            "• If BTC goes down 4% → You lose your 50 $GANG (liquidated)\n\n"
+            "━━━ *AVAILABLE PAIRS* ━━━\n\n"
+            "₿ BTC/USD | ⟠ ETH/USD | 🔷 CRO/USD\n"
+            "◎ SOL/USD | 🐕 DOGE/USD | 🐸 PEPE/USD\n"
+            "💲 XRP/USD | 🦊 SHIB/USD\n\n"
+            "📊 *Live TradingView charts for every pair!*\n"
+            "💰 *0.1% trading fee per position*\n\n"
+            "⚠️ *High leverage = high risk. Trade smart!*\n\n"
+            "👇 *Start trading NOW!*"
         )
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("⚡ Start Trading", url=f"{DEX_LINK}/trading.html")],
+            [InlineKeyboardButton("⚡ START TRADING NOW", url=f"{DEX_LINK}/trading.html")],
+            [InlineKeyboardButton("⛏ Mine $GANG First", callback_data="menu_mining")],
+            [InlineKeyboardButton("📊 View Chart", url=DEXSCREENER)],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
