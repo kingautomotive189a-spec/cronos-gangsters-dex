@@ -28,6 +28,9 @@ h1{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;backgro
 .info-box{margin-top:20px;padding:14px;background:rgba(255,255,255,0.03);border-radius:10px;text-align:left;font-size:14px;color:var(--muted);}
 .info-box p{margin-bottom:6px;}
 .back-link{display:block;text-align:center;color:var(--gold);text-decoration:none;font-size:14px;padding:16px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+.reset-btn{margin-top:12px;background:none;border:1px solid rgba(255,0,0,0.3);color:var(--red);padding:10px 20px;border-radius:8px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:13px;}
+.reset-btn:hover{background:rgba(255,0,0,0.1);}
+.warning-box{margin-top:10px;padding:10px;background:rgba(255,0,0,0.05);border:1px solid rgba(255,0,0,0.15);border-radius:8px;font-size:12px;color:#f88;}
 </style>
 </head>
 <body>
@@ -61,11 +64,35 @@ var GANG_TOKEN = "0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF";
 var BYTECODE = "0x608060405234801561001057600080fd5b506040516109ae3803806109ae8339818101604052810190610032919061011c565b336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555080600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050610149565b600080fd5b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b60006100e9826100be565b9050919050565b6100f9816100de565b811461010457600080fd5b50565b600081519050610116816100f0565b92915050565b600060208284031215610132576101316100b9565b5b600061014084828501610107565b91505092915050565b610856806101586000396000f3fe608060405234801561001057600080fd5b50600436106100575760003560e01c80633ccfd60b1461005c5780638da5cb5b14610066578063b69ef8a814610084578063d0679d34146100a2578063fc0c546a146100d2575b600080fd5b6100646100f0565b005b61006e6102dc565b60405161007b9190610543565b60405180910390f35b61008c610300565b6040516100999190610577565b60405180910390f35b6100bc60048036038101906100b791906105ef565b6103a3565b6040516100c9919061064a565b60405180910390f35b6100da6104dc565b6040516100e791906106c4565b60405180910390f35b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161461017e576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016101759061073c565b60405180910390fd5b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663a9059cbb60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff16600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166370a08231306040518263ffffffff1660e01b81526004016102389190610543565b602060405180830381865afa158015610255573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906102799190610771565b6040518363ffffffff1660e01b815260040161029692919061079e565b6020604051808303816000875af11580156102b5573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906102d991906107f3565b50565b60008054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166370a08231306040518263ffffffff1660e01b815260040161035d9190610543565b602060405180830381865afa15801561037a573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061039e9190610771565b905090565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610434576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161042b9061073c565b60405180910390fd5b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663a9059cbb84846040518363ffffffff1660e01b815260040161049192919061079e565b6020604051808303816000875af11580156104b0573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104d491906107f3565b905092915050565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b600061052d82610502565b9050919050565b61053d81610522565b82525050565b60006020820190506105586000830184610534565b92915050565b6000819050919050565b6105718161055e565b82525050565b600060208201905061058c6000830184610568565b92915050565b600080fd5b6105a081610522565b81146105ab57600080fd5b50565b6000813590506105bd81610597565b92915050565b6105cc8161055e565b81146105d757600080fd5b50565b6000813590506105e9816105c3565b92915050565b6000806040838503121561060657610605610592565b5b6000610614858286016105ae565b9250506020610625858286016105da565b9150509250929050565b60008115159050919050565b6106448161062f565b82525050565b600060208201905061065f600083018461063b565b92915050565b6000819050919050565b600061068a61068561068084610502565b610665565b610502565b9050919050565b600061069c8261066f565b9050919050565b60006106ae82610691565b9050919050565b6106be816106a3565b82525050565b60006020820190506106d960008301846106b5565b92915050565b600082825260208201905092915050565b7f4e6f74206f776e65720000000000000000000000000000000000000000000000600082015250565b60006107266009836106df565b9150610731826106f0565b602082019050919050565b6000602082019050818103600083015261075581610719565b9050919050565b60008151905061076b816105c3565b92915050565b60006020828403121561078757610786610592565b5b60006107958482850161075c565b91505092915050565b60006040820190506107b36000830185610534565b6107c06020830184610568565b9392505050565b6107d08161062f565b81146107db57600080fd5b50565b6000815190506107ed816107c7565b92915050565b60006020828403121561080957610808610592565b5b6000610817848285016107de565b9150509291505056fea2646970667358221220a5db94f01ab0957854598186229c3275de66b2a0a569fb3f58517648220f3b8764736f6c63430008130033";
 var ABI = [{"inputs":[{"internalType":"address","name":"_token","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"balance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"send","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"token","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}];
 
+var STORAGE_KEY = 'GANG_REWARDS_CONTRACT';
+
 function setStatus(msg, type) {
   var box = document.getElementById('statusBox');
   box.style.display = 'block';
   box.className = 'status-box ' + (type || 'pending');
   box.textContent = msg;
+}
+
+function showExistingContract(addr) {
+  document.getElementById('deployArea').innerHTML =
+    '<div class="success-card">' +
+      '<div style="font-size:40px">&#9989;</div>' +
+      '<h2>CONTRACT ALREADY DEPLOYED</h2>' +
+      '<p style="color:var(--muted);font-size:13px;margin-bottom:6px">Your Mining Rewards Address:</p>' +
+      '<button class="addr-box" data-testid="deployed-address" onclick="navigator.clipboard.writeText(\'' + addr + '\');this.textContent=\'COPIED!\';var self=this;setTimeout(function(){self.textContent=\'' + addr + '\'},1500)">' + addr + '</button>' +
+      '<div class="next-step">Send $GANG tokens to this address to fund mining rewards.</div>' +
+    '</div>' +
+    '<div class="warning-box">You already have a rewards contract. No need to deploy another one.</div>' +
+    '<button class="reset-btn" data-testid="reset-deploy-btn" onclick="resetDeploy()">DEPLOY A NEW ONE (Advanced)</button>';
+}
+
+function resetDeploy() {
+  if (!confirm('Are you sure? You already have a deployed contract. Only deploy a new one if the old one is lost or broken.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('deployArea').innerHTML =
+    '<button class="deploy-btn" id="deployBtn" onclick="deploy()" data-testid="deploy-contract-btn">DEPLOY NOW</button>';
+  document.getElementById('successArea').style.display = 'none';
+  document.getElementById('statusBox').style.display = 'none';
 }
 
 async function deploy() {
@@ -93,13 +120,16 @@ async function deploy() {
     setStatus('TX sent! Confirming on blockchain...');
     await contract.deployed();
 
+    // Save the address so it doesn't deploy again
+    localStorage.setItem(STORAGE_KEY, contract.address);
+
     document.getElementById('deployArea').style.display = 'none';
     document.getElementById('statusBox').style.display = 'none';
     document.getElementById('successArea').style.display = 'block';
     document.getElementById('successArea').innerHTML =
       '<div class="success-card"><div style="font-size:40px">&#9989;</div><h2>CONTRACT DEPLOYED!</h2>' +
       '<p style="color:var(--muted);font-size:13px;margin-bottom:6px">Address:</p>' +
-      '<button class="addr-box" onclick="navigator.clipboard.writeText(\'' + contract.address + '\');this.textContent=\'COPIED!\';setTimeout(function(){this.textContent=\'' + contract.address + '\'}.bind(this),1500)" data-testid="deployed-address">' + contract.address + '</button>' +
+      '<button class="addr-box" onclick="navigator.clipboard.writeText(\'' + contract.address + '\');this.textContent=\'COPIED!\';var self=this;setTimeout(function(){self.textContent=\'' + contract.address + '\'},1500)" data-testid="deployed-address">' + contract.address + '</button>' +
       '<div class="next-step">Now send $GANG tokens to this address to fund rewards!</div></div>';
   } catch(err) {
     console.error(err);
@@ -109,6 +139,12 @@ async function deploy() {
     setStatus('Error: ' + msg, 'error');
     btn.disabled = false; btn.textContent = 'DEPLOY NOW';
   }
+}
+
+// On load: check if contract already deployed
+var existingAddr = localStorage.getItem(STORAGE_KEY);
+if (existingAddr) {
+  showExistingContract(existingAddr);
 }
 </script>
 </body>
