@@ -5290,6 +5290,51 @@ async function calcFarmAPRs() {
   } catch(e) { console.error("APR calc error:", e); }
   // Re-render farms after APR calculation so they sort by highest APR
   renderFarms();
+  // Also calculate vault APRs from the same MasterChef data
+  await calcVaultAPRsOnChain();
+}
+
+// ── Calculate Vault APRs from MasterChef on-chain data ──
+async function calcVaultAPRsOnChain() {
+  if (!CONTRACTS.CHEF) return;
+  const rp = getReadProvider();
+  if (!rp) return;
+  try {
+    const chef = new ethers.Contract(CONTRACTS.CHEF, CHEF_ABI, rp);
+    const [gangPerSecBN, totalAllocBN] = await Promise.all([
+      chef.gangPerSecond(),
+      chef.totalAllocPoint()
+    ]);
+    const gangPerSec = parseFloat(ethers.formatUnits(gangPerSecBN, 18));
+    const totalAlloc = Number(totalAllocBN);
+    if (totalAlloc === 0 || gangPerSec === 0) return;
+
+    const gangPrice = TOKENS.GANG?.price || 0;
+    const SECONDS_PER_DAY = 86400;
+
+    for (const vault of VAULTS) {
+      const pid = vault.chefPid;
+      if (pid === undefined) continue;
+      try {
+        const poolInfo = await chef.poolInfo(pid);
+        const allocPoint = Number(poolInfo[1]);
+        if (allocPoint === 0) { vault.dailyGang = 0; continue; }
+        // Calculate daily GANG rewards for this vault pool
+        vault.dailyGang = (gangPerSec * allocPoint / totalAlloc) * SECONDS_PER_DAY;
+      } catch(e) {
+        console.error('Vault APR calc error for ' + vault.name + ':', e);
+      }
+
+      // Update APR display element
+      const aprEl = document.getElementById('vault-apr-' + VAULTS.indexOf(vault));
+      if (aprEl) {
+        const apr = calcVaultAPR(vault);
+        aprEl.textContent = apr;
+      }
+    }
+    // Re-render vaults to show updated APRs
+    renderVaults();
+  } catch(e) { console.error('Vault APR on-chain error:', e); }
 }
 
 // ── Fetch 24h volume from DexScreener ──────────────────────
@@ -7376,13 +7421,26 @@ function closeConfirmSwapModal() {
 // Starts ~500% when TVL is low, drops as more people stake
 function calcVaultAPR(vault) {
   const gangPrice = TOKENS.GANG?.price || 0;
-  if (!gangPrice || !vault.dailyGang) return '—';
-  const yearlyGangValue = vault.dailyGang * 365 * gangPrice;
-  // Estimate TVL in USD from totalLP (use LP value estimation)
+  if (!gangPrice) return '—';
+  
+  // Use on-chain allocation if available from calcFarmAPRs data
+  // Otherwise use hardcoded dailyGang estimate
+  const dailyGang = vault.dailyGang || 0;
+  if (dailyGang <= 0) return '—';
+  
+  const yearlyGangValue = dailyGang * 365 * gangPrice;
+  
+  // Estimate TVL in USD from totalLP
   const tvlUSD = vault.totalLP > 0 ? estimateVaultTVL(vault) : 0;
-  if (tvlUSD <= 0) return '—';
-  const apr = (yearlyGangValue / tvlUSD) * 100;
-  if (apr > 9999) return '—';
+  
+  // If no TVL yet, show estimated APR based on a minimum $1 TVL
+  // This way users see potential APR even before anyone stakes
+  const effectiveTVL = tvlUSD > 0 ? tvlUSD : 1;
+  const apr = (yearlyGangValue / effectiveTVL) * 100;
+  
+  if (apr <= 0) return '—';
+  if (apr > 99999) return '99,999%+';
+  if (apr >= 1000) return Math.round(apr).toLocaleString() + '%';
   if (apr >= 100) return Math.round(apr) + '%';
   return apr.toFixed(1) + '%';
 }
