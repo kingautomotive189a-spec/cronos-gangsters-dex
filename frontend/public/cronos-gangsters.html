@@ -1111,6 +1111,17 @@
       </div>
     </div>
 
+    <!-- OWNER: Fix PEPE/GANG Farm (one-click) -->
+    <div id="fixPepePanel" data-testid="fix-pepe-panel" style="display:none;background:linear-gradient(135deg,rgba(255,0,0,0.04),rgba(255,140,0,0.06));border:1px solid rgba(255,140,0,0.4);border-radius:14px;padding:16px 20px;margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#ff8c00;letter-spacing:2px;">FIX PEPE/GANG FARM</div>
+          <div style="font-size:11px;color:var(--muted);">Re-registers PEPE/GANG with the correct LP on MasterChef. One click.</div>
+        </div>
+        <button id="fixPepeBtn" data-testid="fix-pepe-btn" onclick="fixPepeFarm()" style="background:linear-gradient(135deg,#ff8c00,#e67300);color:#000;border:none;padding:12px 24px;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;white-space:nowrap;">FIX PEPE/GANG FARM</button>
+      </div>
+    </div>
+
     <div class="farm-grid" id="farmGrid">
       <!-- Farms injected by JS -->
     </div>
@@ -6053,6 +6064,55 @@ async function addFarmToChef(farmIdx) {
   }
 }
 
+// ── ONE-CLICK FIX: Re-register PEPE/GANG with correct LP ──
+async function fixPepeFarm() {
+  if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+  const btn = document.getElementById('fixPepeBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'FIXING...'; }
+  try {
+    // Step 1: Get correct PEPE/GANG LP from VVS Factory
+    showToast('Finding correct PEPE/GANG LP pair...', 'info');
+    const factory = new ethers.Contract(CONTRACTS.FACTORY, ['function getPair(address,address) view returns(address)'], state.provider);
+    const pepeAddr = CONTRACTS.PEPE;
+    const gangAddr = CONTRACTS.GANG;
+    const newLP = await factory.getPair(pepeAddr, gangAddr);
+    if (!newLP || newLP === '0x0000000000000000000000000000000000000000') {
+      showToast('No PEPE/GANG LP pair found. Create liquidity first on the Liquidity page.', 'error');
+      if (btn) { btn.disabled = false; btn.textContent = 'FIX PEPE/GANG FARM'; }
+      return;
+    }
+    showToast('Found LP: ' + newLP.slice(0,10) + '... Registering on MasterChef...', 'info');
+
+    // Step 2: Register new LP on MasterChef
+    const chef = new ethers.Contract(CONTRACTS.CHEF, [
+      'function addPool(uint256 _allocPoint, address _lpToken) external'
+    ], state.signer);
+    showToast('Confirm in wallet — adding PEPE/GANG to MasterChef...', 'info');
+    const tx = await chef.addPool(150, newLP, { gasLimit: 500000 });
+    showToast('TX sent! Waiting for confirmation...', 'info');
+    await tx.wait();
+
+    // Step 3: Update farm config
+    const pepeFarm = FARMS.find(f => f.name === 'PEPE / GANG');
+    if (pepeFarm) {
+      pepeFarm.lpAddr = newLP;
+      pepeFarm.needsChefAdd = false;
+      pepeFarm._onChain = true;
+      localStorage.setItem('FARM_LP_PEPE_GANG', newLP);
+    }
+
+    showToast('PEPE/GANG farm FIXED and registered on MasterChef!', 'success');
+    try { await autoDiscoverFarmPools(); } catch(e) {}
+    renderFarms();
+    if (btn) { btn.textContent = 'FIXED!'; btn.style.background = '#27ae60'; }
+  } catch(e) {
+    console.error('fixPepeFarm:', e);
+    const msg = (e.reason || e.message || String(e)).slice(0, 120);
+    showToast('Error: ' + msg, 'error');
+    if (btn) { btn.disabled = false; btn.textContent = 'FIX PEPE/GANG FARM'; }
+  }
+}
+
 // ── Farm APR — handled by calcFarmAPRs() ──
 
 function renderFarms() {
@@ -9797,6 +9857,8 @@ function checkOwnerPanels() {
   const vaultPanel = document.getElementById('vaultRewardPanel');
   if (farmPanel) farmPanel.style.display = isOwner ? 'block' : 'none';
   if (vaultPanel) vaultPanel.style.display = isOwner ? 'block' : 'none';
+  const fixPepePanel = document.getElementById('fixPepePanel');
+  if (fixPepePanel) fixPepePanel.style.display = isOwner ? 'block' : 'none';
   if (isOwner) {
     loadRewardBalances();
   }
