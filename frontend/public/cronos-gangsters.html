@@ -6081,20 +6081,16 @@ async function setFarmAllocVVS(allocPoint, btnEl) {
 // Skips pools already at correct allocation, 6s delay between TXs
 let _isRebalancing = false;
 async function rebalanceAllFarms() {
-  if (_isRebalancing) { showToast('Rebalance already running! Wait for it to finish.', 'error'); return; }
+  if (_isRebalancing) { showToast('Already running!', 'error'); return; }
   if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-  
   _isRebalancing = true;
-  const logEl = document.getElementById('rebalanceLog');
-  const btn = document.getElementById('rebalanceBtn');
+  var logEl = document.getElementById('rebalanceLog');
+  var btn = document.getElementById('rebalanceBtn');
   btn.disabled = true;
-  
-  const chef = new ethers.Contract(CONTRACTS.CHEF, [
-    'function setPoolAllocPoint(uint256 _pid, uint256 _allocPoint) external',
-    'function poolInfo(uint256) view returns (address, uint256, uint256, uint256, uint16)'
+  var chef = new ethers.Contract(CONTRACTS.CHEF, [
+    'function setPoolAllocPoint(uint256 _pid, uint256 _allocPoint) external'
   ], state.signer);
-
-  const allPools = [
+  var allPools = [
     { name: "CRO / GANG",            chefPid: 0,  target: 100000 },
     { name: "GANG / USDC",           chefPid: 1,  target: 33333 },
     { name: "GANG Staking",          chefPid: 4,  target: 33333 },
@@ -6109,66 +6105,35 @@ async function rebalanceAllFarms() {
     { name: "GANG / USDT (Vault)",   chefPid: 34, target: 33333 },
     { name: "GANG / FUL (Vault)",    chefPid: 35, target: 33333 },
   ];
-
-  // Step 1: Check which pools need fixing
-  logEl.textContent = 'Checking current allocations on-chain...';
-  const needsFix = [];
-  for (const pool of allPools) {
+  var done = 0;
+  var total = allPools.length;
+  for (var i = 0; i < total; i++) {
+    var pool = allPools[i];
     try {
-      const info = await chef.poolInfo(pool.chefPid);
-      const currentAlloc = info[1].toNumber ? info[1].toNumber() : Number(info[1]);
-      if (currentAlloc === pool.target) {
-        logEl.textContent = pool.name + ' already correct, skipping...';
-      } else {
-        needsFix.push(pool);
-      }
-      await new Promise(r => setTimeout(r, 500));
-    } catch(e) {
-      needsFix.push(pool);
-    }
-  }
-
-  if (needsFix.length === 0) {
-    logEl.textContent = 'All 13 pools already correct! Nothing to do.';
-    btn.textContent = 'ALL POOLS CORRECT';
-    btn.style.background = 'var(--gold)';
-    btn.style.color = '#000';
-    _isRebalancing = false;
-    return;
-  }
-
-  logEl.textContent = needsFix.length + ' pools need updating. Starting...';
-  await new Promise(r => setTimeout(r, 2000));
-
-  // Step 2: Fix each pool with 6s delay between
-  let done = 0;
-  for (const pool of needsFix) {
-    try {
-      logEl.textContent = '(' + (done+1) + '/' + needsFix.length + ') ' + pool.name + ' → ' + pool.target + '... Confirm in wallet';
-      const tx = await chef.setPoolAllocPoint(pool.chefPid, pool.target, { gasLimit: 200000 });
-      logEl.textContent = '(' + (done+1) + '/' + needsFix.length + ') ' + pool.name + ' — waiting for block...';
+      logEl.textContent = '(' + (done+1) + '/' + total + ') ' + pool.name + ' ... Confirm in wallet';
+      var tx = await chef.setPoolAllocPoint(pool.chefPid, pool.target, { gasLimit: 200000 });
+      logEl.textContent = '(' + (done+1) + '/' + total + ') ' + pool.name + ' — waiting for block...';
       await tx.wait();
       done++;
-      logEl.textContent = '(' + done + '/' + needsFix.length + ') ' + pool.name + ' DONE';
-      showToast(pool.name + ' done (' + done + '/' + needsFix.length + ')', 'success');
-      if (done < needsFix.length) {
-        for (let s = 6; s > 0; s--) {
-          logEl.textContent = '(' + done + '/' + needsFix.length + ') Next TX in ' + s + 's...';
-          await new Promise(r => setTimeout(r, 1000));
+      logEl.textContent = '(' + done + '/' + total + ') ' + pool.name + ' DONE';
+      showToast(pool.name + ' done (' + done + '/' + total + ')', 'success');
+      if (done < total) {
+        for (var s = 6; s > 0; s--) {
+          logEl.textContent = '(' + done + '/' + total + ') Next in ' + s + 's...';
+          await new Promise(function(r) { setTimeout(r, 1000); });
         }
       }
     } catch(e) {
-      const msg = (e.reason || e.message || String(e)).slice(0, 150);
+      var msg = (e.reason || e.message || String(e)).slice(0, 150);
       logEl.textContent = 'Error on ' + pool.name + ': ' + msg;
-      showToast('Error - press RETRY to continue', 'error');
+      showToast('Error - press RETRY', 'error');
       btn.disabled = false;
-      btn.textContent = 'RETRY (' + (needsFix.length - done) + ' remaining)';
+      btn.textContent = 'RETRY (' + (total - done) + ' remaining)';
       _isRebalancing = false;
       return;
     }
   }
-
-  logEl.textContent = 'All ' + done + ' pools updated! Rewards are now balanced!';
+  logEl.textContent = 'All ' + done + ' pools done! CRO/GANG=20%, rest=6.67% each.';
   btn.textContent = 'REBALANCE COMPLETE';
   btn.style.background = 'var(--gold)';
   btn.style.color = '#000';
