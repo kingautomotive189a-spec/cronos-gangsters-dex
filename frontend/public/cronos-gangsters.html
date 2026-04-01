@@ -1105,10 +1105,10 @@
     <div id="rebalancePanel" data-testid="rebalance-panel" style="display:none;background:linear-gradient(135deg,rgba(39,174,96,0.06),rgba(212,160,23,0.04));border:1px solid rgba(39,174,96,0.4);border-radius:14px;padding:16px 20px;margin-bottom:16px;">
       <div style="margin-bottom:12px;">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);letter-spacing:2px;">REBALANCE FARM ALLOCATIONS</div>
-        <div style="font-size:11px;color:var(--muted);">CRO/GANG = 20% | All others = 13.3% each. This fixes slow rewards by making your 7 active farms dominant.</div>
+        <div style="font-size:11px;color:var(--muted);">CRO/GANG = 20% | All other 12 pools (6 farms + 6 vaults) = 6.67% each. Fixes slow rewards from your 301M GANG pool.</div>
       </div>
       <div id="rebalanceLog" style="font-size:12px;color:var(--muted);margin-bottom:10px;min-height:18px;"></div>
-      <button id="rebalanceBtn" data-testid="rebalance-btn" onclick="rebalanceAllFarms()" style="background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;width:100%;">REBALANCE ALL FARMS (7 transactions)</button>
+      <button id="rebalanceBtn" data-testid="rebalance-btn" onclick="rebalanceAllFarms()" style="background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;width:100%;">REBALANCE ALL FARMS + VAULTS (13 transactions)</button>
     </div>
 
     <div class="farm-grid" id="farmGrid">
@@ -3798,12 +3798,12 @@ function tImg(sym, size) {
 const FARMS = [
   // ── Working farms first ──
   { pid: 1,  name: "CRO / GANG",   tokens: ["CRO","GANG"],  apy: 0, tvl: "—", multiplier: "20%", lpAddr: "0x00991825a6871353390b6972A6aB450D4206557f", earned: 0, chefPid: 0, _onChain: true },
-  { pid: 2,  name: "GANG / USDC",  tokens: ["GANG","USDC"], apy: 0, tvl: '—', multiplier: "13.3%", lpAddr: "0x1f77938E1109E1Fc8e3dD697B95525303094Cb65", earned: 0, chefPid: 1, _onChain: true },
-  { pid: 3,  name: "GANG Staking", tokens: ["GANG"],         apy: 0, tvl: '—', multiplier: "13.3%", lpAddr: CONTRACTS.GANG, earned: 0, chefPid: 4, _onChain: true },
-  { pid: 0,  name: "GANG / VVS",   tokens: ["GANG","VVS"],  apy: 0, tvl: '—', multiplier: "13.3%", lpAddr: "0xB47121251578f148f15949B7816b3D152EaE4cFF", earned: 0, _onChain: true },
-  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, tvl: '—', multiplier: "13.3%", lpAddr: localStorage.getItem('FARM_LP_PEPE_GANG') || null, earned: 0, needsChefAdd: true },
-  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, tvl: '—', multiplier: "13.3%", lpAddr: localStorage.getItem('FARM_LP_DOGE_GANG') || "0x657f64DDFE52a12AfF9B6fdc64eB778dB076AD52", earned: 0, needsChefAdd: true },
-  { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, tvl: '—', multiplier: "13.3%", lpAddr: localStorage.getItem('FARM_LP_XRP_GANG') || null, earned: 0, needsChefAdd: true },
+  { pid: 2,  name: "GANG / USDC",  tokens: ["GANG","USDC"], apy: 0, tvl: '—', multiplier: "6.67%", lpAddr: "0x1f77938E1109E1Fc8e3dD697B95525303094Cb65", earned: 0, chefPid: 1, _onChain: true },
+  { pid: 3,  name: "GANG Staking", tokens: ["GANG"],         apy: 0, tvl: '—', multiplier: "6.67%", lpAddr: CONTRACTS.GANG, earned: 0, chefPid: 4, _onChain: true },
+  { pid: 0,  name: "GANG / VVS",   tokens: ["GANG","VVS"],  apy: 0, tvl: '—', multiplier: "6.67%", lpAddr: "0xB47121251578f148f15949B7816b3D152EaE4cFF", earned: 0, _onChain: true },
+  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, tvl: '—', multiplier: "6.67%", lpAddr: localStorage.getItem('FARM_LP_PEPE_GANG') || null, earned: 0, needsChefAdd: true },
+  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, tvl: '—', multiplier: "6.67%", lpAddr: localStorage.getItem('FARM_LP_DOGE_GANG') || "0x657f64DDFE52a12AfF9B6fdc64eB778dB076AD52", earned: 0, needsChefAdd: true },
+  { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, tvl: '—', multiplier: "6.67%", lpAddr: localStorage.getItem('FARM_LP_XRP_GANG') || null, earned: 0, needsChefAdd: true },
   // ── Coming soon ──
   { pid: 4,  name: "CRO / USDC",   tokens: ["CRO","USDC"],  apy: 0, tvl: '—', multiplier: "36x", lpAddr: "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6", earned: 0, comingSoon: true },
   { pid: 5,  name: "CRO / WETH",   tokens: ["CRO","WETH"],  apy: 0, tvl: '—', multiplier: "16x", lpAddr: "0xA111C17f8B8303280d3EB01BBcd61000AA7F39F9", earned: 0, comingSoon: true },
@@ -6044,14 +6044,23 @@ async function rebalanceAllFarms() {
   ], state.signer);
 
   // Hardcoded on-chain pool IDs (verified from MasterChef contract)
+  // CRO/GANG = 20%, all other 12 pools (6 farms + 6 vaults) = 6.67% each
   const rebalanceList = [
+    // === FARMS ===
     { name: "CRO / GANG",   chefPid: 0,  allocPoint: 100000 },  // 20%
-    { name: "GANG / USDC",  chefPid: 1,  allocPoint: 66667 },   // 13.3%
-    { name: "GANG Staking", chefPid: 4,  allocPoint: 66667 },   // 13.3%
-    { name: "GANG / VVS",   chefPid: 14, allocPoint: 66667 },   // 13.3%
-    { name: "XRP / GANG",   chefPid: 7,  allocPoint: 66667 },   // 13.3%
-    { name: "PEPE / GANG",  chefPid: 8,  allocPoint: 66667 },   // 13.3%
-    { name: "DOGE / GANG",  chefPid: 9,  allocPoint: 66667 },   // 13.3%
+    { name: "GANG / USDC",  chefPid: 1,  allocPoint: 33333 },   // 6.67%
+    { name: "GANG Staking", chefPid: 4,  allocPoint: 33333 },   // 6.67%
+    { name: "GANG / VVS",   chefPid: 14, allocPoint: 33333 },   // 6.67%
+    { name: "XRP / GANG",   chefPid: 7,  allocPoint: 33333 },   // 6.67%
+    { name: "PEPE / GANG",  chefPid: 8,  allocPoint: 33333 },   // 6.67%
+    { name: "DOGE / GANG",  chefPid: 9,  allocPoint: 33333 },   // 6.67%
+    // === AUTO-COMPOUND VAULTS ===
+    { name: "GANG / WETH (Vault)",  chefPid: 30, allocPoint: 33333 },  // 6.67%
+    { name: "GANG / WBTC (Vault)",  chefPid: 31, allocPoint: 33333 },  // 6.67%
+    { name: "GANG / ATOM (Vault)",  chefPid: 32, allocPoint: 33333 },  // 6.67%
+    { name: "GANG / CROID (Vault)", chefPid: 33, allocPoint: 33333 },  // 6.67%
+    { name: "GANG / USDT (Vault)",  chefPid: 34, allocPoint: 33333 },  // 6.67%
+    { name: "GANG / FUL (Vault)",   chefPid: 35, allocPoint: 33333 },  // 6.67%
   ];
 
   btn.disabled = true;

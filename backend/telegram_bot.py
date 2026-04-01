@@ -35,12 +35,12 @@ CONTRACTS = {
 # Farm data from website
 FARMS = [
     {"name": "CRO / GANG", "tvl": "$1.3K", "allocation": "20%", "pid": 1},
-    {"name": "GANG / USDC", "tvl": "$201", "allocation": "13.3%", "pid": 2},
-    {"name": "GANG Staking", "allocation": "13.3%", "pid": 3},
-    {"name": "GANG / VVS", "allocation": "13.3%", "pid": 0},
-    {"name": "XRP / GANG", "allocation": "13.3%", "pid": 7},
-    {"name": "PEPE / GANG", "allocation": "13.3%", "pid": 8},
-    {"name": "DOGE / GANG", "allocation": "13.3%", "pid": 9},
+    {"name": "GANG / USDC", "tvl": "$201", "allocation": "6.67%", "pid": 2},
+    {"name": "GANG Staking", "allocation": "6.67%", "pid": 3},
+    {"name": "GANG / VVS", "allocation": "6.67%", "pid": 0},
+    {"name": "XRP / GANG", "allocation": "6.67%", "pid": 7},
+    {"name": "PEPE / GANG", "allocation": "6.67%", "pid": 8},
+    {"name": "DOGE / GANG", "allocation": "6.67%", "pid": 9},
 ]
 
 # Staking tiers from website
