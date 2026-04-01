@@ -1,29 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head><style>
-/* Hide ALL deploy/admin banners */
-#deployCorrectVaultBanner,
-#regVaultChefBanner,
-#v1RecoverBanner,
+/* Hide ONLY deploy-contract banners — NOT owner admin panels */
 #deployLaunchpadBanner,
 #deployLockerBanner,
 #deployLotteryBanner,
-#deploySniperBanner,
-#deployVaultLog,
-#contractBanner,
-#deployLotteryStatus,
-[data-testid="deploy-correct-vault"],
-[data-testid="deploy-launchpad-banner"],
-[data-testid="deploy-locker-banner"],
-[data-testid="deploy-lottery-banner"],
-[data-testid="deploy-sniper-banner"],
-[data-testid="reg-vault-chef-banner"],
-[data-testid="v1-recover-banner"],
-[data-testid="deploy-correct-vault-btn"],
-[data-testid="deploy-vault-log"],
-[data-testid="deploy-locker-btn"],
-[data-testid="deploy-lottery-status"],
-[id*="deploy" i] {
+#deploySniperBanner {
   display: none !important;
 }
 </style>
