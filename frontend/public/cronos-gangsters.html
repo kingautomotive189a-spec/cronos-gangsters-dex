@@ -156,7 +156,7 @@
   .liq-slider{width:100%;accent-color:var(--gold);cursor:pointer;}
 
   /* ── FARMS ── */
-  .farm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .farm-grid{display:grid;grid-template-columns:1fr;gap:14px;}
   .farm-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;transition:border-color .2s,box-shadow .2s;}
   .farm-card:hover{border-color:rgba(212,160,23,0.4);box-shadow:0 6px 24px rgba(212,160,23,0.1);}
   .farm-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
@@ -5274,6 +5274,8 @@ async function calcFarmAPRs() {
       if (aprEl) aprEl.textContent = farm.apy > 0 ? farm.apy + '%' : '—';
     }
   } catch(e) { console.error("APR calc error:", e); }
+  // Re-render farms after APR calculation so they sort by highest APR
+  renderFarms();
 }
 
 // ── Fetch 24h volume from DexScreener ──────────────────────
@@ -6098,7 +6100,19 @@ async function fixPepeFarm() {
 
 function renderFarms() {
   const grid = document.getElementById("farmGrid");
-  grid.innerHTML = FARMS.map((farm, idx) => {
+  // Sort: active farms first (by APR desc), then needsChefAdd, then comingSoon
+  const sorted = [...FARMS].map((f,i) => ({...f, _origIdx: i})).sort((a,b) => {
+    // Active on-chain farms first
+    const aActive = !a.comingSoon && !a.needsChefAdd ? 1 : 0;
+    const bActive = !b.comingSoon && !b.needsChefAdd ? 1 : 0;
+    if (aActive !== bActive) return bActive - aActive;
+    // Then needsChefAdd before comingSoon
+    if (a.comingSoon !== b.comingSoon) return a.comingSoon ? 1 : -1;
+    // Within same group, sort by APR descending
+    return (b.apy || 0) - (a.apy || 0);
+  });
+  grid.innerHTML = sorted.map((farm) => {
+    const idx = farm._origIdx;
     const icons = farm.tokens.map(t => {
       const tok = TOKENS[t];
       if (tok?.logo) return `<div class="token-icon" style="background:${tokenColor(t)};padding:0;overflow:hidden"><img src="${tok.logo}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentNode.textContent='${tok?.icon||"?"}'"/></div>`;
