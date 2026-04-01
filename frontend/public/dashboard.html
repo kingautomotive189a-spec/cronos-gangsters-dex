@@ -147,6 +147,29 @@ main{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:24px 16px
     <div class="log-box" id="logBox" data-testid="bot-log-box">Checking bot status...</div>
   </div>
 
+  <!-- Quick Start Guide -->
+  <div class="status-card" style="text-align:left;padding:24px 28px;" data-testid="quickstart-card">
+    <div class="status-title" style="text-align:center;margin-bottom:20px;">HOW TO ACTIVATE THE BOT</div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:flex-start;gap:14px;">
+        <div style="min-width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--green),#1a8a4a);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;flex-shrink:0;">1</div>
+        <div><div style="font-weight:700;color:var(--gold);font-size:15px;margin-bottom:4px;">Start the Bot</div><div style="font-size:13px;color:var(--muted);">Press the green START BOT button above. Wait for the status to turn green (BOT IS RUNNING).</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:14px;">
+        <div style="min-width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--green),#1a8a4a);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;flex-shrink:0;">2</div>
+        <div><div style="font-weight:700;color:var(--gold);font-size:15px;margin-bottom:4px;">Open @CronosGangsters_bot in Telegram</div><div style="font-size:13px;color:var(--muted);">Send <span style="color:var(--gold);font-family:'Space Mono',monospace;">/start</span> in a private chat with the bot. You'll see all feature buttons appear.</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:14px;">
+        <div style="min-width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--green),#1a8a4a);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;flex-shrink:0;">3</div>
+        <div><div style="font-weight:700;color:var(--gold);font-size:15px;margin-bottom:4px;">Tap any Feature Button</div><div style="font-size:13px;color:var(--muted);">Each button opens a detailed popup: Mining Hub, Trading, Farms, Vaults, Staking, NFTs, Referral, Bridge, Launchpad, Lottery, Sniper, Token Creator, Marketplace, and Dashboard. Every feature has its own popup!</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:14px;">
+        <div style="min-width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:14px;color:#000;flex-shrink:0;">!</div>
+        <div><div style="font-weight:700;color:var(--gold);font-size:15px;margin-bottom:4px;">Important: Redeploy = Restart Bot</div><div style="font-size:13px;color:var(--muted);">After every deployment, come here and press START BOT again. The bot process resets on deploy.</div></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Live Token Stats -->
   <div class="section-title"><img src="/gang-logo.png" style="width:22px;height:22px;border-radius:50%;"/> $GANG Live Stats</div>
   <div class="stats-grid" data-testid="live-stats">
@@ -301,6 +324,11 @@ main{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:24px 16px
       <div class="cmd-row"><span class="cmd-name">/shill</span><span class="cmd-desc">Shareable promo message</span></div>
       <div class="cmd-row"><span class="cmd-name">/alert</span><span class="cmd-desc">Set price alerts</span></div>
 
+      <div class="cmd-section">Earn $GANG (NEW!)</div>
+      <div style="display:none"></div>
+      <div class="cmd-row"><span class="cmd-name">/mining</span><span class="cmd-desc">Mining Hub — Tap to earn, 19 casino games, VIP tiers, referral, real token withdrawals</span></div>
+      <div class="cmd-row"><span class="cmd-name">/trading</span><span class="cmd-desc">Leverage Trading — 8 pairs, up to 100x, live TradingView charts, real-time PnL</span></div>
+
       <div class="cmd-section">DeFi Features</div>
       <div style="display:none"></div>
       <div class="cmd-row"><span class="cmd-name">/farms</span><span class="cmd-desc">View yield farms & APRs</span></div>
@@ -335,16 +363,16 @@ main{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:24px 16px
       <div><div class="sec-name">Human Verification</div><div class="sec-desc">Math captcha for new members</div></div>
     </div>
     <div class="sec-card">
-      <span class="sec-icon">🚫</span>
-      <div><div class="sec-name">Anti-Scam Filter</div><div class="sec-desc">Detects scam patterns & suspicious links</div></div>
+      <span class="sec-icon">🔐</span>
+      <div><div class="sec-name">Secure Captcha</div><div class="sec-desc">Cryptographic random generation</div></div>
     </div>
     <div class="sec-card">
       <span class="sec-icon">⚡</span>
-      <div><div class="sec-name">Auto-Ban</div><div class="sec-desc">2 warnings = automatic ban</div></div>
+      <div><div class="sec-name">Auto-Ban</div><div class="sec-desc">3 warnings = automatic ban</div></div>
     </div>
     <div class="sec-card">
-      <span class="sec-icon">🔗</span>
-      <div><div class="sec-name">Link Whitelist</div><div class="sec-desc">Only trusted domains allowed</div></div>
+      <span class="sec-icon">⏰</span>
+      <div><div class="sec-name">Timeout Protection</div><div class="sec-desc">120s verification or auto-kick</div></div>
     </div>
   </div>
 
