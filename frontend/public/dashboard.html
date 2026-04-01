@@ -23,7 +23,7 @@ header{background:rgba(17,17,17,0.97);backdrop-filter:blur(12px);border-bottom:1
 .header-link{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;letter-spacing:0.5px;padding:6px 12px;border-radius:8px;transition:all .2s;border:1px solid transparent;}
 .header-link:hover{color:var(--gold);border-color:var(--border);background:var(--surface2);}
 
-main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:24px 16px;}
+main{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:24px 16px;}
 
 .status-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:24px;text-align:center;}
 .status-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--gold);margin-bottom:16px;}
@@ -47,33 +47,58 @@ main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:24px 16px
 .btn-refresh{background:var(--surface2);border:1px solid var(--border);color:var(--gold);box-shadow:none;}
 .btn-refresh:hover{border-color:var(--gold);background:var(--surface3);}
 
-.log-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:16px;font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);min-height:40px;text-align:left;max-height:120px;overflow-y:auto;}
+.log-box{background:#0d0d0d;border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:16px;font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);min-height:40px;text-align:left;max-height:120px;overflow-y:auto;}
 
-.section-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--gold);margin:28px 0 16px 0;display:flex;align-items:center;gap:10px;}
 
-.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px;}
+.stat-item{background:var(--surface);padding:16px 12px;text-align:center;}
+.stat-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.stat-value{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);letter-spacing:1px;}
+.stat-value.up{color:var(--green);}
+.stat-value.down{color:var(--red);}
+.stat-sub{font-size:10px;color:var(--muted);margin-top:2px;font-family:'Space Mono',monospace;}
+
+/* Features grid */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:8px;}
 .feature-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;transition:border-color .2s,transform .2s;cursor:pointer;text-decoration:none;color:var(--text);display:block;}
 .feature-card:hover{border-color:rgba(212,160,23,0.4);transform:translateY(-3px);box-shadow:0 6px 24px rgba(212,160,23,0.1);}
 .feature-icon{font-size:28px;margin-bottom:10px;display:block;}
 .feature-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--gold);margin-bottom:6px;}
 .feature-desc{font-size:12px;color:var(--muted);line-height:1.5;}
 
-.info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px;}
-.info-item{background:var(--surface);padding:16px;text-align:center;}
-.info-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
-.info-value{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);letter-spacing:1px;}
+/* Commands table */
+.commands-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px;}
+.cmd-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.cmd-row{display:flex;align-items:baseline;gap:8px;padding:8px 12px;border-bottom:1px solid rgba(212,160,23,0.06);}
+.cmd-row:nth-last-child(-n+2){border-bottom:none;}
+.cmd-name{font-family:'Space Mono',monospace;font-size:13px;color:var(--gold);font-weight:700;min-width:110px;}
+.cmd-desc{font-size:12px;color:var(--muted);}
+.cmd-section{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;color:var(--text);padding:12px 12px 4px 12px;grid-column:1/-1;border-top:1px solid var(--border);margin-top:4px;}
+.cmd-section:first-child{border-top:none;margin-top:0;}
 
+/* Contracts */
 .contracts-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px;}
 .contract-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(212,160,23,0.08);font-size:13px;}
 .contract-row:last-child{border-bottom:none;}
-.contract-name{color:var(--gold);font-weight:700;min-width:120px;}
+.contract-name{color:var(--gold);font-weight:700;min-width:110px;}
 .contract-addr{font-family:'Space Mono',monospace;font-size:11px;color:var(--text);word-break:break-all;flex:1;margin-left:12px;}
 .copy-btn{background:rgba(212,160,23,0.12);border:1px solid rgba(212,160,23,0.3);color:var(--gold);border-radius:6px;padding:4px 10px;cursor:pointer;font-size:11px;font-family:'Barlow Condensed',sans-serif;font-weight:700;transition:all .15s;flex-shrink:0;margin-left:8px;}
 .copy-btn:hover{background:rgba(212,160,23,0.25);}
 
+/* Security */
+.security-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
+.sec-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;display:flex;align-items:center;gap:10px;}
+.sec-icon{font-size:20px;}
+.sec-name{font-size:13px;font-weight:700;color:var(--gold);}
+.sec-desc{font-size:11px;color:var(--muted);}
+
 @media(max-width:700px){
   .features-grid{grid-template-columns:1fr 1fr;}
-  .info-grid{grid-template-columns:1fr 1fr;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .cmd-grid{grid-template-columns:1fr;}
+  .security-grid{grid-template-columns:1fr;}
   header{flex-wrap:wrap;gap:8px;}
 }
 @media(max-width:480px){
@@ -115,28 +140,45 @@ main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:24px 16px
     <div class="log-box" id="logBox" data-testid="bot-log-box">Checking bot status...</div>
   </div>
 
-  <!-- Live Stats -->
-  <div class="info-grid" data-testid="live-stats">
-    <div class="info-item">
-      <div class="info-label">$GANG Price</div>
-      <div class="info-value" id="gangPrice" data-testid="gang-price">$—</div>
+  <!-- Live Token Stats -->
+  <div class="section-title"><img src="/gang-logo.png" style="width:22px;height:22px;border-radius:50%;"/> $GANG Live Stats</div>
+  <div class="stats-grid" data-testid="live-stats">
+    <div class="stat-item">
+      <div class="stat-label">$GANG Price</div>
+      <div class="stat-value" id="gangPrice" data-testid="gang-price">Loading...</div>
     </div>
-    <div class="info-item">
-      <div class="info-label">24H Volume</div>
-      <div class="info-value" id="gangVolume" data-testid="gang-volume">$—</div>
+    <div class="stat-item">
+      <div class="stat-label">Price (CRO)</div>
+      <div class="stat-value" id="gangPriceCRO" data-testid="gang-price-cro">—</div>
     </div>
-    <div class="info-item">
-      <div class="info-label">24H Change</div>
-      <div class="info-value" id="gangChange" data-testid="gang-change">—</div>
+    <div class="stat-item">
+      <div class="stat-label">24H Change</div>
+      <div class="stat-value" id="gangChange" data-testid="gang-change">—</div>
     </div>
-    <div class="info-item">
-      <div class="info-label">Liquidity</div>
-      <div class="info-value" id="gangLiquidity" data-testid="gang-liquidity">$—</div>
+    <div class="stat-item">
+      <div class="stat-label">Market Cap</div>
+      <div class="stat-value" id="gangMcap" data-testid="gang-mcap">—</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Liquidity (USD)</div>
+      <div class="stat-value" id="gangLiquidity" data-testid="gang-liquidity">—</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">24H Volume</div>
+      <div class="stat-value" id="gangVolume" data-testid="gang-volume">—</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">24H Buys</div>
+      <div class="stat-value" id="gangBuys" data-testid="gang-buys">—</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">24H Sells</div>
+      <div class="stat-value" id="gangSells" data-testid="gang-sells">—</div>
     </div>
   </div>
 
   <!-- All Features -->
-  <div class="section-title"><img src="/gang-logo.png" style="width:22px;height:22px;border-radius:50%;"/> All Features</div>
+  <div class="section-title">All DApp Features</div>
   <div class="features-grid" data-testid="features-grid">
     <a class="feature-card" href="/cronos-gangsters.html#swap" data-testid="feature-swap">
       <span class="feature-icon">💱</span>
@@ -215,9 +257,73 @@ main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:24px 16px
     </a>
   </div>
 
-  <!-- Contracts -->
+  <!-- Bot Commands -->
+  <div class="section-title">Bot Commands</div>
+  <div class="commands-card" data-testid="commands-card">
+    <div class="cmd-grid">
+      <div class="cmd-section">General</div>
+      <div style="display:none"></div>
+      <div class="cmd-row"><span class="cmd-name">/start</span><span class="cmd-desc">Welcome message & project info</span></div>
+      <div class="cmd-row"><span class="cmd-name">/help</span><span class="cmd-desc">Show all available commands</span></div>
+      <div class="cmd-row"><span class="cmd-name">/price</span><span class="cmd-desc">Current $GANG price with full stats</span></div>
+      <div class="cmd-row"><span class="cmd-name">/stats</span><span class="cmd-desc">Detailed token statistics</span></div>
+      <div class="cmd-row"><span class="cmd-name">/contract</span><span class="cmd-desc">Token contract address</span></div>
+      <div class="cmd-row"><span class="cmd-name">/buy</span><span class="cmd-desc">How to buy $GANG</span></div>
+      <div class="cmd-row"><span class="cmd-name">/website</span><span class="cmd-desc">DEX website link</span></div>
+      <div class="cmd-row"><span class="cmd-name">/socials</span><span class="cmd-desc">Social media links</span></div>
+      <div class="cmd-row"><span class="cmd-name">/shill</span><span class="cmd-desc">Shareable promo message</span></div>
+      <div class="cmd-row"><span class="cmd-name">/alert</span><span class="cmd-desc">Set price alerts</span></div>
+
+      <div class="cmd-section">DeFi Features</div>
+      <div style="display:none"></div>
+      <div class="cmd-row"><span class="cmd-name">/farms</span><span class="cmd-desc">View yield farms & APRs</span></div>
+      <div class="cmd-row"><span class="cmd-name">/vaults</span><span class="cmd-desc">Auto-compound vaults</span></div>
+      <div class="cmd-row"><span class="cmd-name">/staking</span><span class="cmd-desc">Staking vault info & APYs</span></div>
+      <div class="cmd-row"><span class="cmd-name">/launchpad</span><span class="cmd-desc">IDO launchpad info</span></div>
+      <div class="cmd-row"><span class="cmd-name">/locker</span><span class="cmd-desc">LP token locker</span></div>
+      <div class="cmd-row"><span class="cmd-name">/lottery</span><span class="cmd-desc">Play the lottery</span></div>
+      <div class="cmd-row"><span class="cmd-name">/sniper</span><span class="cmd-desc">Sniper bot info</span></div>
+      <div class="cmd-row"><span class="cmd-name">/bridge</span><span class="cmd-desc">Cross-chain bridge</span></div>
+      <div class="cmd-row"><span class="cmd-name">/create</span><span class="cmd-desc">Token creator</span></div>
+      <div class="cmd-row"><span class="cmd-name">/marketplace</span><span class="cmd-desc">NFT marketplace</span></div>
+      <div class="cmd-row"><span class="cmd-name">/nft</span><span class="cmd-desc">NFT collection info & minting</span></div>
+      <div class="cmd-row"><span class="cmd-name">/referral</span><span class="cmd-desc">Referral program (earn 5%)</span></div>
+
+      <div class="cmd-section">Admin Commands</div>
+      <div style="display:none"></div>
+      <div class="cmd-row"><span class="cmd-name">/ban</span><span class="cmd-desc">Ban a user (reply to message)</span></div>
+      <div class="cmd-row"><span class="cmd-name">/unban</span><span class="cmd-desc">Unban a user by ID</span></div>
+      <div class="cmd-row"><span class="cmd-name">/mute</span><span class="cmd-desc">Mute a user (reply to message)</span></div>
+      <div class="cmd-row"><span class="cmd-name">/unmute</span><span class="cmd-desc">Unmute a user</span></div>
+      <div class="cmd-row"><span class="cmd-name">/kick</span><span class="cmd-desc">Kick a user from group</span></div>
+      <div class="cmd-row"><span class="cmd-name">/warn</span><span class="cmd-desc">Warn a user (3 warnings = ban)</span></div>
+    </div>
+  </div>
+
+  <!-- Security Features -->
+  <div class="section-title">Security Features</div>
+  <div class="security-grid" data-testid="security-grid">
+    <div class="sec-card">
+      <span class="sec-icon">🛡</span>
+      <div><div class="sec-name">Human Verification</div><div class="sec-desc">Math captcha for new members</div></div>
+    </div>
+    <div class="sec-card">
+      <span class="sec-icon">🚫</span>
+      <div><div class="sec-name">Anti-Scam Filter</div><div class="sec-desc">Detects scam patterns & suspicious links</div></div>
+    </div>
+    <div class="sec-card">
+      <span class="sec-icon">⚡</span>
+      <div><div class="sec-name">Auto-Ban</div><div class="sec-desc">2 warnings = automatic ban</div></div>
+    </div>
+    <div class="sec-card">
+      <span class="sec-icon">🔗</span>
+      <div><div class="sec-name">Link Whitelist</div><div class="sec-desc">Only trusted domains allowed</div></div>
+    </div>
+  </div>
+
+  <!-- Smart Contracts -->
+  <div class="section-title">Smart Contracts</div>
   <div class="contracts-card" data-testid="contracts-card">
-    <div class="section-title" style="margin-bottom:12px;">Smart Contracts</div>
     <div class="contract-row">
       <span class="contract-name">$GANG Token</span>
       <span class="contract-addr" id="addr-gang">0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF</span>
@@ -253,7 +359,13 @@ const logBox = document.getElementById('logBox');
 
 function log(msg) {
   const time = new Date().toLocaleTimeString();
-  logBox.textContent = `[${time}] ${msg}`;
+  logBox.textContent = '[' + time + '] ' + msg;
+}
+
+function fmtUSD(n) {
+  if (n >= 1e6) return '$' + (n/1e6).toFixed(2) + 'M';
+  if (n >= 1000) return '$' + (n/1000).toFixed(1) + 'K';
+  return '$' + n.toFixed(0);
 }
 
 async function checkStatus() {
@@ -277,13 +389,13 @@ async function checkStatus() {
 }
 
 async function startBot() {
-  const btn = document.getElementById('startBtn');
+  var btn = document.getElementById('startBtn');
   btn.disabled = true;
   btn.textContent = 'STARTING...';
   log('Starting bot...');
   try {
-    const res = await fetch(API + '/bot/start', { method: 'POST' });
-    const data = await res.json();
+    var res = await fetch(API + '/bot/start', { method: 'POST' });
+    var data = await res.json();
     log(data.message || data.detail || 'Bot started!');
     setTimeout(checkStatus, 2000);
   } catch(e) {
@@ -295,13 +407,13 @@ async function startBot() {
 }
 
 async function stopBot() {
-  const btn = document.getElementById('stopBtn');
+  var btn = document.getElementById('stopBtn');
   btn.disabled = true;
   btn.textContent = 'STOPPING...';
   log('Stopping bot...');
   try {
-    const res = await fetch(API + '/bot/stop', { method: 'POST' });
-    const data = await res.json();
+    var res = await fetch(API + '/bot/stop', { method: 'POST' });
+    var data = await res.json();
     log(data.message || data.detail || 'Bot stopped!');
     setTimeout(checkStatus, 2000);
   } catch(e) {
@@ -314,35 +426,49 @@ async function stopBot() {
 
 async function fetchPrice() {
   try {
-    const res = await fetch(API + '/token/price');
-    const data = await res.json();
-    if (data.price) {
-      const p = data.price;
-      document.getElementById('gangPrice').textContent = '$' + (p < 0.01 ? p.toFixed(6) : p.toFixed(4));
+    var res = await fetch(API + '/token/price');
+    var data = await res.json();
+    if (!data.success || !data.data) return;
+    var d = data.data;
+
+    // Price USD
+    var p = parseFloat(d.price_usd);
+    document.getElementById('gangPrice').textContent = p < 0.01 ? '$' + p.toFixed(6) : '$' + p.toFixed(4);
+
+    // Price CRO
+    var pc = parseFloat(d.price_native);
+    document.getElementById('gangPriceCRO').textContent = pc.toFixed(4) + ' CRO';
+
+    // 24H Change
+    var ch = d.change_h24;
+    var chEl = document.getElementById('gangChange');
+    if (ch !== null && ch !== undefined) {
+      chEl.textContent = (ch >= 0 ? '+' : '') + ch.toFixed(2) + '%';
+      chEl.className = 'stat-value ' + (ch >= 0 ? 'up' : 'down');
     }
-    if (data.volume_24h) {
-      const v = data.volume_24h;
-      document.getElementById('gangVolume').textContent = '$' + (v >= 1000 ? (v/1000).toFixed(1)+'K' : v.toFixed(0));
-    }
-    if (data.price_change_24h !== undefined) {
-      const c = data.price_change_24h;
-      const el = document.getElementById('gangChange');
-      el.textContent = (c >= 0 ? '+' : '') + c.toFixed(2) + '%';
-      el.style.color = c >= 0 ? 'var(--green)' : 'var(--red)';
-    }
-    if (data.liquidity) {
-      const l = data.liquidity;
-      document.getElementById('gangLiquidity').textContent = '$' + (l >= 1000 ? (l/1000).toFixed(1)+'K' : l.toFixed(0));
-    }
-  } catch(e) {}
+
+    // Market Cap
+    if (d.market_cap) document.getElementById('gangMcap').textContent = fmtUSD(d.market_cap);
+
+    // Liquidity
+    if (d.liquidity_usd) document.getElementById('gangLiquidity').textContent = fmtUSD(d.liquidity_usd);
+
+    // Volume
+    if (d.volume_h24 !== undefined) document.getElementById('gangVolume').textContent = fmtUSD(d.volume_h24);
+
+    // Buys / Sells
+    if (d.buys_h24 !== undefined) document.getElementById('gangBuys').textContent = d.buys_h24;
+    if (d.sells_h24 !== undefined) document.getElementById('gangSells').textContent = d.sells_h24;
+
+  } catch(e) { console.log('Price fetch error', e); }
 }
 
 function copyAddr(id) {
-  const text = document.getElementById(id).textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = event.target;
+  var text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = event.target;
     btn.textContent = 'COPIED!';
-    setTimeout(() => btn.textContent = 'COPY', 1500);
+    setTimeout(function() { btn.textContent = 'COPY'; }, 1500);
   });
 }
 
