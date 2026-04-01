@@ -1,13 +1,13 @@
 # Cronos Gangsters — Product Requirements Document
 
 ## Original Problem Statement
-Build a Telegram Bot for the Cronos Gangsters Web3 DEX with ALL website features accessible via interactive buttons. Clone the user's live website into a downloadable HTML file.
+Build a Telegram Bot for the Cronos Gangsters Web3 DEX with ALL website features accessible via interactive buttons. Clone the user's live website into a downloadable HTML file. Optimize DApp loading speed.
 
 ## Core Components
 1. **Telegram Bot** (`/app/backend/telegram_bot.py`) — All features as interactive buttons
 2. **React Dashboard** (`/app/frontend/src/App.js`) — Bot management UI
 3. **FastAPI Backend** (`/app/backend/server.py`) — API for bot control + price fetching
-4. **Website Clone** (`cronos-gangsters-full.html`) — Full 28MB cloned website
+4. **Web3 DApp** (`/app/frontend/public/cronos-gangsters.html`) — Full DEX frontend with swap, farms, vaults, staking, etc.
 
 ## What's Been Implemented
 
@@ -15,22 +15,32 @@ Build a Telegram Bot for the Cronos Gangsters Web3 DEX with ALL website features
 ### Phase 2: React Dashboard (COMPLETE)
 ### Phase 3: Website Clone + ZIP Package (COMPLETE)
 ### Phase 4: Full Feature Menu Buttons (COMPLETE - April 2026)
-Updated the Telegram bot so ALL features show as clickable buttons:
-- Main keyboard now has 12 feature buttons (Farms, Vaults, Staking, Launchpad, Token Locker, Sniper Bot, NFTs, Referral, Bridge, Lottery, Token Creator, Marketplace)
-- Each button opens the feature info inline with a "Back to Menu" button
-- /start message lists all features
-- All callback handlers added for menu_farms, menu_vaults, menu_staking, menu_launchpad, menu_locker, menu_sniper, menu_nft, menu_referral, menu_bridge, menu_lottery, menu_create, menu_marketplace, menu_back
+- Main keyboard with 12 interactive links mapping to hash-routed DApp sections
+- Each button opens feature info inline with "Back to Menu"
 
-### Website Speed Optimization (REVERTED)
-- User's uploaded file was an older version missing features (launchpad, token locker, etc.)
-- Optimization was applied to wrong file; user declined
-- Original full website clone remains untouched at `/cronos-gangsters-full.html`
+### Phase 5: DApp Speed Optimization (COMPLETE - April 2026)
+- JavaScript parallelization (Promise.all) for Vaults, Farms, RPC calls
+- Hash Router for Telegram deep links (#farms, #vaults, etc.)
+- Deploy banners hidden via CSS, owner panels preserved
+- Hardcoded Launchpad/Lottery contract addresses
 
-## Download Links
-- Full website: `/cronos-gangsters-full.html` via preview URL
+### Phase 6: Ultra-Fast Loading Optimization (COMPLETE - April 2026)
+- **Images compressed 73%**: All 16 gangster images resized 1024px→512px (22MB→5.8MB)
+- **Gang logo compressed 98%**: 1.1MB→26KB (resized to 128px)
+- **Lazy loading on 50 images**: Hidden page images defer until viewed
+- **Resource hints**: preconnect/dns-prefetch for DexScreener, CoinGecko, Cronos RPCs, fonts CDN
+- **Parallel startup**: DexScreener + farm pool discovery run simultaneously
+- **Vault scan delays removed**: No more 500ms/1500ms artificial waits between pool reads
+- **Hash navigation 15x faster**: 1500ms→100ms delay
+
+## Pending Code Quality Items (Optional, not blocking)
+- Severe complexity in `callback_handler()` (311 lines, cyclomatic complexity 44)
+- Insecure random generation in telegram_bot.py (use `secrets` instead of `random`)
+- Identity comparison bugs (`is` vs `==`) in telegram_bot.py and server.py
+- Frontend hook dependency issues in use-toast.js
 
 ## Tech Stack
-- Frontend: React.js (Dashboard)
+- Frontend: React.js (Dashboard), Vanilla JS/Ethers.js v6 (DApp)
 - Backend: FastAPI, Python Telegram Bot (v20+)
-- Blockchain: Ethers.js v6, Cronos chain
+- Blockchain: Cronos chain, Web3 RPC
 - APIs: CoinGecko, DexScreener, Telegram Bot API

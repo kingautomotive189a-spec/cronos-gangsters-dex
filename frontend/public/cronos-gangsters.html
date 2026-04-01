@@ -29,6 +29,13 @@
 <meta name="apple-mobile-web-app-title" content="GANG DEX" />
 <meta name="apple-mobile-web-app-title" content="Cronos Gangsters" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+<link rel="dns-prefetch" href="https://api.dexscreener.com" />
+<link rel="dns-prefetch" href="https://api.coingecko.com" />
+<link rel="dns-prefetch" href="https://evm.cronos.org" />
+<link rel="dns-prefetch" href="https://cronos-evm.publicnode.com" />
+<link rel="dns-prefetch" href="https://assets.coingecko.com" />
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.9.0/ethers.umd.min.js"></script>
 
@@ -469,8 +476,8 @@
 
 <!-- ── Header ── -->
 
-<img class="corner-mascot left"  src="/img/war_ready.png" alt="" />
-<img class="corner-mascot right" src="/img/the_boss.png" alt="" />
+<img class="corner-mascot left"  src="/img/war_ready.png" loading="lazy" decoding="async" alt="" />
+<img class="corner-mascot right" src="/img/the_boss.png" loading="lazy" decoding="async" alt="" />
 
 <header>
   <a class="logo" href="#">
@@ -542,15 +549,15 @@
   <!-- ── War Room Strip (all pages) ── -->
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
     <div class="gang-img-card">
-      <img src="/img/war_ready.png"   class="gang-side-img" style="height:150px;object-fit:cover;object-position:center 20%;" />
+      <img src="/img/war_ready.png"   class="gang-side-img" loading="lazy" decoding="async" style="height:150px;object-fit:cover;object-position:center 20%;" />
       <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> WAR READY</div>
     </div>
     <div class="gang-img-card">
-      <img src="/img/enforcer.png" class="gang-side-img" style="height:150px;object-fit:cover;object-position:center;" />
+      <img src="/img/enforcer.png" class="gang-side-img" loading="lazy" decoding="async" style="height:150px;object-fit:cover;object-position:center;" />
       <div class="gang-img-caption">💪 HOLD THE LINE</div>
     </div>
     <div class="gang-img-card">
-      <img src="/img/rise_up.png"  class="gang-side-img" style="height:150px;object-fit:cover;object-position:center 10%;" />
+      <img src="/img/rise_up.png"  class="gang-side-img" loading="lazy" decoding="async" style="height:150px;object-fit:cover;object-position:center 10%;" />
       <div class="gang-img-caption">🏆 RISE UP</div>
     </div>
   </div>
@@ -622,30 +629,30 @@
     <!-- Gangster image gallery — Row 1 -->
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
       <div class="gang-img-card">
-        <img src="/img/make_money.png"   class="gang-side-img" style="height:180px;object-position:center top;" />
+        <img src="/img/make_money.png"   class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
         <div class="gang-img-caption">💰 MAKE MONEY</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/the_boss.png"    class="gang-side-img" style="height:180px;object-position:center top;" />
+        <img src="/img/the_boss.png"    class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
         <div class="gang-img-caption">🕶️ THE BOSS</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/the_don.png"     class="gang-side-img" style="height:180px;object-position:center top;" />
+        <img src="/img/the_don.png"     class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
         <div class="gang-img-caption">🎩 THE DON</div>
       </div>
     </div>
     <!-- Row 2 -->
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
       <div class="gang-img-card">
-        <img src="/img/the_family.png"    class="gang-side-img" style="height:160px;object-position:center top;" />
+        <img src="/img/the_family.png"    class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
         <div class="gang-img-caption">🥃 THE FAMILY</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/stay_strapped.png"     class="gang-side-img" style="height:160px;object-position:center top;" />
+        <img src="/img/stay_strapped.png"     class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
         <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> STAY STRAPPED</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/street_style.png"   class="gang-side-img" style="height:160px;object-position:center top;" />
+        <img src="/img/street_style.png"   class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
         <div class="gang-img-caption">🎯 STREET STYLE</div>
       </div>
     </div>
@@ -793,7 +800,7 @@
         <div class="tx-list" id="txList">
 
           <div class="gang-img-card" style="margin-bottom:14px;">
-            <img src="/img/portfolio.png" class="gang-side-img" style="height:130px;object-fit:cover;object-position:center 15%;" />
+            <img src="/img/portfolio.png" class="gang-side-img" loading="lazy" decoding="async" style="height:130px;object-fit:cover;object-position:center 15%;" />
             <div class="gang-img-caption">📋 TRANSACTION HISTORY</div>
           </div>
 
@@ -814,15 +821,15 @@
       <div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:10px;">
           <div class="gang-img-card">
-            <img src="/img/liquidity_pool.png" class="gang-side-img" style="height:150px;object-position:center top;" />
+            <img src="/img/liquidity_pool.png" class="gang-side-img" loading="lazy" decoding="async" style="height:150px;object-position:center top;" />
             <div class="gang-img-caption">🍌 PROVIDE LIQUIDITY</div>
           </div>
           <div class="gang-img-card">
-            <img src="/img/make_money.png" class="gang-side-img" style="height:150px;object-position:center top;" />
+            <img src="/img/make_money.png" class="gang-side-img" loading="lazy" decoding="async" style="height:150px;object-position:center top;" />
             <div class="gang-img-caption">💼 EARN FEES</div>
           </div>
           <div class="gang-img-card">
-            <img src="/img/the_boss.png"     class="gang-side-img" style="height:150px;object-position:center top;" />
+            <img src="/img/the_boss.png"     class="gang-side-img" loading="lazy" decoding="async" style="height:150px;object-position:center top;" />
             <div class="gang-img-caption">🕵️ YOUR POSITIONS</div>
           </div>
         </div>
@@ -983,11 +990,11 @@
         <!-- Gangster images filling dark space -->
         <div style="display:grid;grid-template-rows:1fr 1fr;gap:12px;margin-bottom:16px;">
           <div class="gang-img-card">
-            <img src="/img/the_family.png" class="gang-side-img" style="height:220px;object-fit:cover;object-position:center top;" />
+            <img src="/img/the_family.png" class="gang-side-img" loading="lazy" decoding="async" style="height:220px;object-fit:cover;object-position:center top;" />
             <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> COSA NOSTRA — ADD LIQUIDITY</div>
           </div>
           <div class="gang-img-card">
-            <img src="/img/make_money.png" class="gang-side-img" style="height:220px;object-fit:cover;object-position:center top;" />
+            <img src="/img/make_money.png" class="gang-side-img" loading="lazy" decoding="async" style="height:220px;object-fit:cover;object-position:center top;" />
             <div class="gang-img-caption">💰 STACK THAT GOLD — EARN FEES</div>
           </div>
         </div>
@@ -1009,7 +1016,7 @@
 
         <!-- Gangster poster below top pools -->
         <div class="gang-img-card" style="margin-top:16px;">
-          <img src="/img/the_don.png" class="gang-side-img" style="height:200px;object-fit:cover;object-position:center 30%;" />
+          <img src="/img/the_don.png" class="gang-side-img" loading="lazy" decoding="async" style="height:200px;object-fit:cover;object-position:center 30%;" />
           <div class="gang-img-caption">🏙️ WHO WILL BE NEXT</div>
         </div>
 
@@ -1020,11 +1027,11 @@
     <!-- Liq footer strip -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;">
       <div class="gang-img-card">
-        <img src="/img/liquidity_pool.png" class="gang-side-img" style="height:160px;object-fit:cover;" />
+        <img src="/img/liquidity_pool.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-fit:cover;" />
         <div class="gang-img-caption">⚡ POOL YOUR POWER</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/take_control.png"  class="gang-side-img" style="height:160px;object-fit:cover;object-position:center 10%;" />
+        <img src="/img/take_control.png"  class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-fit:cover;object-position:center 10%;" />
         <div class="gang-img-caption">🎯 TAKE CONTROL</div>
       </div>
     </div>
@@ -1052,19 +1059,19 @@
 
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:22px;">
       <div class="gang-img-card">
-        <img src="/img/vault_stake.png"  class="gang-side-img" style="height:200px;object-position:center top;" />
+        <img src="/img/vault_stake.png"  class="gang-side-img" loading="lazy" decoding="async" style="height:200px;object-position:center top;" />
         <div class="gang-img-caption">STAKE & EARN</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/enforcer.png" class="gang-side-img" style="height:200px;object-position:center top;" />
+        <img src="/img/enforcer.png" class="gang-side-img" loading="lazy" decoding="async" style="height:200px;object-position:center top;" />
         <div class="gang-img-caption">THE ENFORCER</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/rise_up.png" class="gang-side-img" style="height:200px;object-position:center top;" />
+        <img src="/img/rise_up.png" class="gang-side-img" loading="lazy" decoding="async" style="height:200px;object-position:center top;" />
         <div class="gang-img-caption">THE PRESIDENT</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/harvest_farm.png"    class="gang-side-img" style="height:200px;object-position:center top;" />
+        <img src="/img/harvest_farm.png"    class="gang-side-img" loading="lazy" decoding="async" style="height:200px;object-position:center top;" />
         <div class="gang-img-caption">HARVEST REWARDS</div>
       </div>
     </div>
@@ -1164,15 +1171,15 @@
 
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:22px;">
       <div class="gang-img-card">
-        <img src="/img/portfolio.png"   class="gang-side-img" style="height:210px;object-position:center top;" />
+        <img src="/img/portfolio.png"   class="gang-side-img" loading="lazy" decoding="async" style="height:210px;object-position:center top;" />
         <div class="gang-img-caption">💼 YOUR PORTFOLIO</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/defi_rebel.png"    class="gang-side-img" style="height:210px;object-position:center top;" />
+        <img src="/img/defi_rebel.png"    class="gang-side-img" loading="lazy" decoding="async" style="height:210px;object-position:center top;" />
         <div class="gang-img-caption">🐸 DEFI REBEL</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/portfolio.png"     class="gang-side-img" style="height:210px;object-position:center top;" />
+        <img src="/img/portfolio.png"     class="gang-side-img" loading="lazy" decoding="async" style="height:210px;object-position:center top;" />
         <div class="gang-img-caption">📊 YOUR ASSETS</div>
       </div>
     </div>
@@ -1181,7 +1188,7 @@
       <div class="connect-prompt">
 
           <div class="gang-img-card" style="max-width:320px;margin:0 auto 20px;">
-            <img src="/img/take_control.png" class="gang-side-img" style="height:240px;object-fit:cover;object-position:center top;" />
+            <img src="/img/take_control.png" class="gang-side-img" loading="lazy" decoding="async" style="height:240px;object-fit:cover;object-position:center top;" />
             <div class="gang-img-caption">💎 CONNECT & DOMINATE</div>
           </div>
 
@@ -1196,15 +1203,15 @@
       <!-- War room footer -->
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:20px;">
         <div class="gang-img-card">
-          <img src="/img/defi_soldier.png"   class="gang-side-img" style="height:140px;object-fit:cover;object-position:center 20%;" />
+          <img src="/img/defi_soldier.png"   class="gang-side-img" loading="lazy" decoding="async" style="height:140px;object-fit:cover;object-position:center 20%;" />
           <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> DEFI SOLDIER</div>
         </div>
         <div class="gang-img-card">
-          <img src="/img/stay_strapped.png" class="gang-side-img" style="height:140px;object-fit:cover;" />
+          <img src="/img/stay_strapped.png" class="gang-side-img" loading="lazy" decoding="async" style="height:140px;object-fit:cover;" />
           <div class="gang-img-caption">💼 STAY STRAPPED</div>
         </div>
         <div class="gang-img-card">
-          <img src="/img/make_money.png"  class="gang-side-img" style="height:140px;object-fit:cover;object-position:center 10%;" />
+          <img src="/img/make_money.png"  class="gang-side-img" loading="lazy" decoding="async" style="height:140px;object-fit:cover;object-position:center 10%;" />
           <div class="gang-img-caption">🏆 GET GAINS</div>
         </div>
       </div>
@@ -1271,35 +1278,35 @@
     <!-- Token page — full gallery -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
       <div class="gang-img-card">
-        <img src="/img/defi_soldier.png"   class="gang-side-img" style="height:240px;object-position:center top;" />
+        <img src="/img/defi_soldier.png"   class="gang-side-img" loading="lazy" decoding="async" style="height:240px;object-position:center top;" />
         <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> $GANG TOKEN</div>
       </div>
       <div style="display:grid;grid-template-rows:1fr 1fr;gap:12px;">
         <div class="gang-img-card">
-          <img src="/img/war_ready.png" class="gang-side-img" style="height:112px;object-fit:cover;" />
+          <img src="/img/war_ready.png" class="gang-side-img" loading="lazy" decoding="async" style="height:112px;object-fit:cover;" />
           <div class="gang-img-caption">🍌 ARMED & READY</div>
         </div>
         <div class="gang-img-card">
-          <img src="/img/the_boss.png" class="gang-side-img" style="height:112px;object-fit:cover;" />
+          <img src="/img/the_boss.png" class="gang-side-img" loading="lazy" decoding="async" style="height:112px;object-fit:cover;" />
           <div class="gang-img-caption">💰 LOADED UP</div>
         </div>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
       <div class="gang-img-card">
-        <img src="/img/the_boss.png"     class="gang-side-img" style="height:150px;object-position:center top;" />
+        <img src="/img/the_boss.png"     class="gang-side-img" loading="lazy" decoding="async" style="height:150px;object-position:center top;" />
         <div class="gang-img-caption">🕶️ THE BOSS</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/the_don.png"      class="gang-side-img" style="height:150px;object-position:center top;" />
+        <img src="/img/the_don.png"      class="gang-side-img" loading="lazy" decoding="async" style="height:150px;object-position:center top;" />
         <div class="gang-img-caption">🎩 THE DON</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/the_family.png"     class="gang-side-img" style="height:150px;object-position:center top;" />
+        <img src="/img/the_family.png"     class="gang-side-img" loading="lazy" decoding="async" style="height:150px;object-position:center top;" />
         <div class="gang-img-caption">🥃 THE FAMILY</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/the_family.png"  class="gang-side-img" style="height:150px;object-position:center top;" />
+        <img src="/img/the_family.png"  class="gang-side-img" loading="lazy" decoding="async" style="height:150px;object-position:center top;" />
         <div class="gang-img-caption">🔗 STREET BOSS</div>
       </div>
     </div>
@@ -1382,11 +1389,11 @@
     <!-- Mid-page war strip -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
       <div class="gang-img-card">
-        <img src="/img/stay_strapped.png"  class="gang-side-img" style="height:170px;object-fit:cover;object-position:center 10%;" />
+        <img src="/img/stay_strapped.png"  class="gang-side-img" loading="lazy" decoding="async" style="height:170px;object-fit:cover;object-position:center 10%;" />
         <div class="gang-img-caption">🎯 EARN $GANG</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/rise_up.png" class="gang-side-img" style="height:170px;object-fit:cover;" />
+        <img src="/img/rise_up.png" class="gang-side-img" loading="lazy" decoding="async" style="height:170px;object-fit:cover;" />
         <div class="gang-img-caption">💰 STACK SATS</div>
       </div>
     </div>
@@ -1516,7 +1523,7 @@
       <!-- PHASE 1 — DONE -->
       <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:0;margin-bottom:40px;align-items:center;">
         <div class="gang-img-card" style="margin-right:20px;">
-          <img src="/img/street_style.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
+          <img src="/img/street_style.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-fit:cover;object-position:center top;" />
           <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> THE ORIGIN</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;z-index:1;">
@@ -1555,7 +1562,7 @@
           <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--green);letter-spacing:2px;margin-top:6px;text-align:center;">DONE</div>
         </div>
         <div class="gang-img-card" style="margin-left:20px;">
-          <img src="/img/portfolio.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
+          <img src="/img/portfolio.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-fit:cover;object-position:center top;" />
           <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> MAKE THE MOVES</div>
         </div>
       </div>
@@ -1563,7 +1570,7 @@
       <!-- PHASE 3 — DONE -->
       <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:0;margin-bottom:40px;align-items:center;">
         <div class="gang-img-card" style="margin-right:20px;">
-          <img src="/img/harvest_farm.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
+          <img src="/img/harvest_farm.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-fit:cover;object-position:center top;" />
           <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> THE HARVEST</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;z-index:1;">
@@ -1968,15 +1975,15 @@
     <!-- Hero strip -->
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
       <div class="gang-img-card">
-        <img src="/img/enforcer.png" class="gang-side-img" style="height:160px;object-fit:cover;object-position:center top;" />
+        <img src="/img/enforcer.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-fit:cover;object-position:center top;" />
         <div class="gang-img-caption">🔒 LOCK & EARN</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/defi_rebel.png" class="gang-side-img" style="height:160px;object-fit:cover;object-position:center top;" />
+        <img src="/img/defi_rebel.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-fit:cover;object-position:center top;" />
         <div class="gang-img-caption">💰 STACK $GANG</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/take_control.png" class="gang-side-img" style="height:160px;object-fit:cover;object-position:center top;" />
+        <img src="/img/take_control.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-fit:cover;object-position:center top;" />
         <div class="gang-img-caption">👑 THE LONGER THE LOCK</div>
       </div>
     </div>
@@ -2264,15 +2271,15 @@
     <!-- Gangster hero images -->
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
       <div class="gang-img-card">
-        <img src="/img/the_family.png" class="gang-side-img" style="height:160px;object-fit:cover;object-position:center top;" />
+        <img src="/img/the_family.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-fit:cover;object-position:center top;" />
         <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> THE FAMILY</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/rise_up.png" class="gang-side-img" style="height:160px;object-fit:cover;object-position:center top;" />
+        <img src="/img/rise_up.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-fit:cover;object-position:center top;" />
         <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> RISE UP</div>
       </div>
       <div class="gang-img-card">
-        <img src="/img/make_money.png" class="gang-side-img" style="height:160px;object-fit:cover;object-position:center top;" />
+        <img src="/img/make_money.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-fit:cover;object-position:center top;" />
         <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> MAKE MONEY</div>
       </div>
     </div>
@@ -6540,7 +6547,7 @@ function renderPortfolio() {
       <div class="connect-prompt">
 
           <div class="gang-img-card" style="max-width:320px;margin:0 auto 20px;">
-            <img src="/img/take_control.png" class="gang-side-img" style="height:240px;object-fit:cover;object-position:center top;" />
+            <img src="/img/take_control.png" class="gang-side-img" loading="lazy" decoding="async" style="height:240px;object-fit:cover;object-position:center top;" />
             <div class="gang-img-caption">💎 CONNECT & DOMINATE</div>
           </div>
 
@@ -7665,7 +7672,6 @@ async function loadVaultData() {
           }
         }
       } catch(e) {}
-      if (pIdx < totalPools - 1) await new Promise(r => setTimeout(r, 500));
     }
 
     console.log('Auto-matched ' + matched + '/' + VAULTS.length + ' vault pools');
@@ -7685,7 +7691,6 @@ async function loadVaultData() {
     for (let i = 0; i < VAULTS.length; i++) {
       const poolIdx = VAULTS[i].vaultPoolIdx !== undefined ? VAULTS[i].vaultPoolIdx : i;
       if (!VAULTS[i]._onChain) continue;
-      if (i > 0) await new Promise(r => setTimeout(r, 1500));
       try {
         const uData = vaultIface.encodeFunctionData('userInfo', [poolIdx, state.address]);
         const uResult = await rawP.request({ method: 'eth_call', params: [{ to: CONTRACTS.VAULT, data: uData }, 'latest'] });
@@ -13127,12 +13132,10 @@ async function mktWithdrawFees() {
   // Render initial farm view immediately (will update after pool discovery)
   renderFarms();
   renderVaults();
-  // Fetch DexScreener prices FIRST, then discover pools and compute TVL
-  fetchDexScreenerStats().then(() => {
-    autoDiscoverFarmPools().then(() => {
-      renderFarms();
-      fetchFarmTVLs().then(() => calcFarmAPRs());
-    });
+  // Fetch DexScreener prices AND discover pools in parallel for faster load
+  Promise.all([fetchDexScreenerStats(), autoDiscoverFarmPools()]).then(() => {
+    renderFarms();
+    fetchFarmTVLs().then(() => calcFarmAPRs());
   });
 
   // Auto-reconnect wallet on page load
@@ -13172,8 +13175,8 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').c
     var btn = document.querySelector('[data-page="' + page + '"]');
     if (btn) { btn.click(); btn.scrollIntoView({behavior:'smooth',block:'nearest'}); }
   }
-  if (document.readyState === 'complete') { setTimeout(navigateToHash, 1500); }
-  else { window.addEventListener('load', function() { setTimeout(navigateToHash, 1500); }); }
+  if (document.readyState === 'complete') { setTimeout(navigateToHash, 100); }
+  else { window.addEventListener('load', function() { setTimeout(navigateToHash, 100); }); }
   window.addEventListener('hashchange', navigateToHash);
 })();
 </script>
