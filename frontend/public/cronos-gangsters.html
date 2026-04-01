@@ -59,21 +59,14 @@
   body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(212,160,23,0.06) 0%,transparent 70%),radial-gradient(ellipse 50% 30% at 80% 80%,rgba(192,57,43,0.07) 0%,transparent 70%);pointer-events:none;}
 
   /* ── HEADER ── */
-  header{position:sticky;top:0;z-index:100;background:rgba(17,17,17,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 12px;display:flex;align-items:center;height:52px;gap:8px;}
+  header{position:sticky;top:0;z-index:100;background:rgba(17,17,17,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
   .logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
   .logo-icon{width:26px;height:26px;border-radius:50%;overflow:hidden;flex-shrink:0;}
   .logo-text{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;color:var(--gold);line-height:1;}
   .logo-sub{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
-  nav{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex:1;min-width:0;position:relative;}
-  nav::-webkit-scrollbar{display:none;}
+  nav{display:flex;flex-wrap:wrap;gap:2px;flex:1;min-width:0;position:relative;}
   nav button{background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:6px 9px;border-radius:6px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
   nav button:hover{color:var(--text);background:var(--surface2);}
-  .scroll-hint{position:absolute;right:0;top:0;bottom:0;width:50px;background:linear-gradient(90deg,transparent,rgba(10,10,18,0.95));pointer-events:none;display:flex;align-items:center;justify-content:flex-end;z-index:5;}
-  .scroll-arrow{display:flex;flex-direction:column;align-items:center;gap:1px;padding-right:4px;}
-  .scroll-arrow-icon{color:var(--gold);font-size:18px;font-weight:900;animation:bounceRight 1s ease-in-out infinite;text-shadow:0 0 8px rgba(255,215,0,0.6);}
-  .scroll-arrow-text{color:var(--gold);font-size:7px;font-family:'Bebas Neue',sans-serif;letter-spacing:1.5px;animation:fadeInOut 1.5s ease-in-out infinite;white-space:nowrap;}
-  @keyframes bounceRight{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
-  @keyframes fadeInOut{0%,100%{opacity:0.5}50%{opacity:1}}
   nav button.active{color:var(--gold);background:rgba(212,160,23,0.1);border-bottom:2px solid var(--gold);}
   .wallet-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000!important;border:none;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;box-shadow:0 3px 0 #6b4f0a;}
   .wallet-btn:hover{transform:translateY(-1px);box-shadow:0 4px 0 #6b4f0a,0 6px 16px rgba(212,160,23,0.3);}
@@ -363,7 +356,7 @@
   }
   @media(max-width:480px){
     header{flex-wrap:wrap;height:auto;padding:8px 10px;gap:6px;}
-    nav{order:10;flex-basis:100%;padding:4px 0 2px;overflow-x:auto;}
+    nav{order:10;flex-basis:100%;padding:4px 0 2px;}
     nav button{padding:5px 8px;font-size:11px;white-space:nowrap;}
     .wallet-btn{padding:7px 10px;font-size:11px;order:1;}
     .logo-text{font-size:15px;}
@@ -496,7 +489,6 @@
     </div>
   </a>
 
-  <div style="position:relative;flex:1;min-width:0;overflow:hidden;">
   <nav>
     <button class="nav-btn active" data-page="swap">Swap</button>
     <button class="nav-btn" data-page="liquidity">Liquidity</button>
@@ -520,8 +512,6 @@
     <button class="nav-btn" data-testid="nav-trading-btn" onclick="window.location.href='/trading.html'" style="color:#ff8c00;font-weight:800;">Trading</button>
     <button class="nav-btn" data-testid="nav-dashboard-btn" onclick="window.location.href='/dashboard.html'" style="color:#2AABEE;font-weight:800;">Dashboard</button>
   </nav>
-  <div class="scroll-hint" id="scrollHint"><div class="scroll-arrow"><span class="scroll-arrow-icon">&#x276F;</span><span class="scroll-arrow-text">MORE</span></div></div>
-  </div>
 
   <button class="wallet-btn" id="connectBtn">Connect Wallet</button>
   <div style="display:flex;gap:12px;align-items:center;margin-top:8px;">
@@ -537,16 +527,7 @@
   </div>
 </header>
 <script>
-(function(){
-  var nav = document.querySelector('nav');
-  var hint = document.getElementById('scrollHint');
-  if(nav && hint) {
-    nav.addEventListener('scroll', function(){
-      if(nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 10) hint.style.opacity='0';
-      else hint.style.opacity='1';
-    });
-  }
-})();
+// Nav scroll hint removed - all items visible in wrapped layout
 </script>
 
 <main>
