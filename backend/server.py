@@ -265,6 +265,10 @@ async def get_bot_commands():
         {"command": "/socials", "description": "Social media links"},
         {"command": "/shill", "description": "Shareable promo message"},
         {"command": "/alert", "description": "Set price alerts"},
+        {"command": "/farms", "description": "View yield farms & APRs"},
+        {"command": "/staking", "description": "Staking vault info & APYs"},
+        {"command": "/nft", "description": "NFT collection info & minting"},
+        {"command": "/referral", "description": "Referral program (earn 5%)"},
     ]
     admin_commands = [
         {"command": "/ban", "description": "Ban a user (reply to message)"},

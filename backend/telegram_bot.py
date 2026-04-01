@@ -20,6 +20,42 @@ DEXSCREENER = f"https://dexscreener.com/cronos/{CONTRACT}"
 EXPLORER = f"https://explorer.cronos.org/token/{CONTRACT}"
 PRICE_UPDATE_INTERVAL = int(os.environ.get("PRICE_UPDATE_INTERVAL", "300"))  # 5 minutes default
 
+# Contract Addresses from cronosgangsters.com
+CONTRACTS = {
+    "GANG": "0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF",
+    "MASTERCHEF": "0x3713567b8DB60D7127B2614965eef71cE50871Ea",
+    "STAKING": "0x03c3C706F0D2F4754755988A686a70E661e6925F",
+    "REFERRAL": "0xd4791929e86EFE7D770b64B6dEC021dE28E8773a",
+    "NFT": "0x97489dc06aA00b62B52D7eB6E5b51E8c3dd36431",
+    "TREASURY": "0xaA3C5749628610fF410EF9133a4ac4f58e9A52eA",
+}
+
+# Farm data from website
+FARMS = [
+    {"name": "GANG / VVS", "apr": "~500%", "allocation": "10%", "pid": 0},
+    {"name": "CRO / GANG", "apr": "~500%", "tvl": "$1.3K", "allocation": "40%", "pid": 1},
+    {"name": "GANG / USDC", "apr": "~500%", "tvl": "$201", "allocation": "30%", "pid": 2},
+    {"name": "GANG Staking", "apr": "~500%", "allocation": "20%", "pid": 3},
+]
+
+# Staking tiers from website
+STAKING_TIERS = [
+    {"period": "6 Months", "apy": "45%", "multiplier": "1x"},
+    {"period": "1 Year", "apy": "80%", "multiplier": "1.8x"},
+    {"period": "18 Months", "apy": "110%", "multiplier": "2.4x"},
+    {"period": "2 Years", "apy": "150%", "multiplier": "3.3x"},
+    {"period": "3 Years", "apy": "210%", "multiplier": "4.7x"},
+    {"period": "4 Years", "apy": "300%", "multiplier": "MAX"},
+]
+
+# NFT Info
+NFT_INFO = {
+    "total_supply": 500,
+    "mint_price": "50 CRO",
+    "contract": "0x97489dc06aA00b62B52D7eB6E5b51E8c3dd36431",
+    "boost": "+20% Staking Boost",
+}
+
 # Admin user IDs (add your Telegram user IDs here)
 ADMIN_IDS = set(map(int, os.environ.get("ADMIN_IDS", "").split(",") if os.environ.get("ADMIN_IDS") else []))
 
@@ -140,6 +176,10 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "• /shill - Shareable promo message\n"
         "• /stats - Detailed token statistics\n"
         "• /alert - Set price alerts\n"
+        "• /farms - View yield farms & APRs\n"
+        "• /staking - Staking vault info\n"
+        "• /nft - NFT collection info\n"
+        "• /referral - Referral program info\n"
     )
     
     if is_admin:
@@ -372,6 +412,124 @@ async def alert(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=alert_keyboard())
+
+
+async def farms(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /farms command - show yield farming info"""
+    msg = (
+        "🌾 *GANGSTER FARMS*\n\n"
+        "Stake LP tokens to earn $GANG rewards!\n\n"
+    )
+    
+    for farm in FARMS:
+        msg += (
+            f"*{farm['name']}*\n"
+            f"   • APR: {farm['apr']}\n"
+            f"   • Allocation: {farm['allocation']}\n"
+        )
+        if 'tvl' in farm:
+            msg += f"   • TVL: {farm['tvl']}\n"
+        msg += "\n"
+    
+    msg += (
+        f"🔗 *MasterChef Contract:*\n"
+        f"`{CONTRACTS['MASTERCHEF']}`\n\n"
+        f"[🌾 Start Farming]({DEX_LINK})"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🌾 Open Farms", url=DEX_LINK),
+         InlineKeyboardButton("📊 Chart", url=DEXSCREENER)],
+        [InlineKeyboardButton("💰 Buy $GANG First", url=DEX_LINK)],
+    ])
+    
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def staking(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /staking command - show staking vault info"""
+    msg = (
+        "🔒 *$GANG STAKING VAULT*\n\n"
+        "Lock $GANG for boosted rewards!\n"
+        "Longer lock = bigger APY\n\n"
+        "*Staking Tiers:*\n"
+    )
+    
+    for tier in STAKING_TIERS:
+        emoji = "🔥" if tier['multiplier'] == "MAX" else "✓"
+        msg += f"• *{tier['period']}*: {tier['apy']} APY ({tier['multiplier']}) {emoji}\n"
+    
+    msg += (
+        f"\n🎴 *+20% NFT Holder Boost Active!*\n"
+        f"Hold a Gangster NFT for bonus rewards.\n\n"
+        f"⚠️ Early Exit Penalty: *25%* of staked amount\n\n"
+        f"🔗 *Staking Contract:*\n"
+        f"`{CONTRACTS['STAKING']}`"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔒 Stake $GANG", url=DEX_LINK),
+         InlineKeyboardButton("🎴 Get NFT Boost", url=DEX_LINK)],
+        [InlineKeyboardButton("💰 Buy $GANG First", url=DEX_LINK)],
+    ])
+    
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def nft(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /nft command - show NFT collection info"""
+    msg = (
+        "🎴 *CRONOS GANGSTERS NFTs*\n\n"
+        "500 Unique Gangsters on Cronos!\n"
+        "Own One, Join the Family.\n\n"
+        f"💰 *Mint Price:* {NFT_INFO['mint_price']}\n"
+        f"📦 *Total Supply:* {NFT_INFO['total_supply']}\n"
+        f"⚡ *Utility:* {NFT_INFO['boost']}\n\n"
+        "*Rarity Tiers:*\n"
+        "• Legendary: 2.4%\n"
+        "• Epic: 6%\n"
+        "• Rare: 31%\n"
+        "• Uncommon: 7.6%\n"
+        "• Common: 52.8%\n\n"
+        f"🔗 *NFT Contract:*\n"
+        f"`{NFT_INFO['contract']}`"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🎴 Mint NFT", url=f"{DEX_LINK}/mint-nft.html"),
+         InlineKeyboardButton("🖼 View Gallery", url=DEX_LINK)],
+        [InlineKeyboardButton("🔒 Stake with NFT Boost", url=DEX_LINK)],
+    ])
+    
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def referral(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /referral command - show referral program info"""
+    msg = (
+        "👥 *INVITE THE FAMILY*\n\n"
+        "Share your link. Earn *5%* in $GANG\n"
+        "when your crew swaps!\n\n"
+        "*How It Works:*\n"
+        "1️⃣ Connect wallet on cronosgangsters.com\n"
+        "2️⃣ Copy your unique invite link\n"
+        "3️⃣ Share it with friends\n"
+        "4️⃣ Earn 5% of their swap value in $GANG\n"
+        "5️⃣ Claim rewards anytime!\n\n"
+        "🔗 *Referral Contract:*\n"
+        f"`{CONTRACTS['REFERRAL']}`\n\n"
+        f"[🔗 Get Your Referral Link]({DEX_LINK})"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔗 Get Referral Link", url=DEX_LINK)],
+        [InlineKeyboardButton("📢 Share on Telegram", url=f"https://t.me/share/url?url={DEX_LINK}"),
+         InlineKeyboardButton("🐦 Share on X", url=f"https://twitter.com/intent/tweet?text=Join%20Cronos%20Gangsters%20DEX!%20{DEX_LINK}")],
+    ])
+    
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
 
 
 async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -757,6 +915,10 @@ def main():
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("shill", shill))
     app.add_handler(CommandHandler("alert", alert))
+    app.add_handler(CommandHandler("farms", farms))
+    app.add_handler(CommandHandler("staking", staking))
+    app.add_handler(CommandHandler("nft", nft))
+    app.add_handler(CommandHandler("referral", referral))
     
     # Admin commands
     app.add_handler(CommandHandler("ban", ban))
