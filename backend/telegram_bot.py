@@ -202,18 +202,18 @@ def main_keyboard():
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("💰 Buy $GANG", url=site),
          InlineKeyboardButton("📊 Chart", url=DEXSCREENER)],
-        [InlineKeyboardButton("🌾 Farms", url=f"{site}/#farms"),
-         InlineKeyboardButton("🏦 Vaults", url=f"{site}/#vaults"),
-         InlineKeyboardButton("🔒 Staking", url=f"{site}/#staking")],
-        [InlineKeyboardButton("🚀 Launchpad", url=f"{site}/#launchpad"),
-         InlineKeyboardButton("🔐 Token Locker", url=f"{site}/#locker"),
-         InlineKeyboardButton("🎯 Sniper Bot", url=f"{site}/#sniper")],
-        [InlineKeyboardButton("🎴 NFTs", url=f"{site}/#nfts"),
-         InlineKeyboardButton("👥 Referral", url=f"{site}/#referral"),
-         InlineKeyboardButton("🌉 Bridge", url=f"{site}/#bridge")],
-        [InlineKeyboardButton("🎰 Lottery", url=f"{site}/#lottery"),
-         InlineKeyboardButton("🛠 Token Creator", url=f"{site}/#create"),
-         InlineKeyboardButton("🏪 Marketplace", url=f"{site}/#marketplace")],
+        [InlineKeyboardButton("🌾 Farms", url=f"{site}#farms"),
+         InlineKeyboardButton("🏦 Vaults", url=f"{site}#vaults"),
+         InlineKeyboardButton("🔒 Staking", url=f"{site}#staking")],
+        [InlineKeyboardButton("🚀 Launchpad", url=f"{site}#launchpad"),
+         InlineKeyboardButton("🔐 Token Locker", url=f"{site}#locker"),
+         InlineKeyboardButton("🎯 Sniper Bot", url=f"{site}#sniper")],
+        [InlineKeyboardButton("🎴 NFTs", url=f"{site}#nfts"),
+         InlineKeyboardButton("👥 Referral", url=f"{site}#referral"),
+         InlineKeyboardButton("🌉 Bridge", url=f"{site}#bridge")],
+        [InlineKeyboardButton("🎰 Lottery", url=f"{site}#lottery"),
+         InlineKeyboardButton("🛠 Token Creator", url=f"{site}#create"),
+         InlineKeyboardButton("🏪 Marketplace", url=f"{site}#marketplace")],
         [InlineKeyboardButton("🌐 Website", url=site),
          InlineKeyboardButton("🐦 Twitter", url=TWITTER)],
     ])
@@ -580,7 +580,7 @@ async def farms(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🌾 Open Farms", url=f"{DEX_LINK}/#farms"),
+        [InlineKeyboardButton("🌾 Open Farms", url=f"{DEX_LINK}#farms"),
          InlineKeyboardButton("📊 Chart", url=DEXSCREENER)],
         [InlineKeyboardButton("💰 Buy $GANG First", url=DEX_LINK)],
     ])
@@ -610,8 +610,8 @@ async def staking(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🔒 Stake $GANG", url=f"{DEX_LINK}/#staking"),
-         InlineKeyboardButton("🎴 Get NFT Boost", url=f"{DEX_LINK}/#nfts")],
+        [InlineKeyboardButton("🔒 Stake $GANG", url=f"{DEX_LINK}#staking"),
+         InlineKeyboardButton("🎴 Get NFT Boost", url=f"{DEX_LINK}#nfts")],
         [InlineKeyboardButton("💰 Buy $GANG First", url=DEX_LINK)],
     ])
     
@@ -638,9 +638,9 @@ async def nft(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🎴 Mint NFT", url=f"{DEX_LINK}/#nfts"),
-         InlineKeyboardButton("🖼 View Gallery", url=f"{DEX_LINK}/#nfts")],
-        [InlineKeyboardButton("🔒 Stake with NFT Boost", url=f"{DEX_LINK}/#staking")],
+        [InlineKeyboardButton("🎴 Mint NFT", url=f"{DEX_LINK}#nfts"),
+         InlineKeyboardButton("🖼 View Gallery", url=f"{DEX_LINK}#nfts")],
+        [InlineKeyboardButton("🔒 Stake with NFT Boost", url=f"{DEX_LINK}#staking")],
     ])
     
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
@@ -660,11 +660,11 @@ async def referral(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "5️⃣ Claim rewards anytime!\n\n"
         "🔗 *Referral Contract:*\n"
         f"`{CONTRACTS['REFERRAL']}`\n\n"
-        f"[🔗 Get Your Referral Link]({DEX_LINK}/#referral)"
+        f"[🔗 Get Your Referral Link]({DEX_LINK}#referral)"
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🔗 Get Referral Link", url=f"{DEX_LINK}/#referral")],
+        [InlineKeyboardButton("🔗 Get Referral Link", url=f"{DEX_LINK}#referral")],
         [InlineKeyboardButton("📢 Share on Telegram", url=f"https://t.me/share/url?url={DEX_LINK}"),
          InlineKeyboardButton("🐦 Share on X", url=f"https://twitter.com/intent/tweet?text=Join%20Cronos%20Gangsters%20DEX!%20{DEX_LINK}")],
     ])
@@ -698,7 +698,7 @@ async def vaults(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🏦 Open Vaults", url=f"{DEX_LINK}/#vaults"),
+        [InlineKeyboardButton("🏦 Open Vaults", url=f"{DEX_LINK}#vaults"),
          InlineKeyboardButton("📊 Chart", url=DEXSCREENER)],
         [InlineKeyboardButton("💰 Buy $GANG", url=DEX_LINK)],
     ])
@@ -729,8 +729,8 @@ async def launchpad(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🚀 Open Launchpad", url=f"{DEX_LINK}/#launchpad"),
-         InlineKeyboardButton("🔒 Stake $GANG", url=f"{DEX_LINK}/#staking")],
+        [InlineKeyboardButton("🚀 Open Launchpad", url=f"{DEX_LINK}#launchpad"),
+         InlineKeyboardButton("🔒 Stake $GANG", url=f"{DEX_LINK}#staking")],
     ])
     
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
@@ -757,9 +757,9 @@ async def locker(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🔐 Open Locker", url=f"{DEX_LINK}/#locker"),
-         InlineKeyboardButton("🔥 Burn LP", url=f"{DEX_LINK}/#locker")],
-        [InlineKeyboardButton("✅ Verify Lock", url=f"{DEX_LINK}/#locker")],
+        [InlineKeyboardButton("🔐 Open Locker", url=f"{DEX_LINK}#locker"),
+         InlineKeyboardButton("🔥 Burn LP", url=f"{DEX_LINK}#locker")],
+        [InlineKeyboardButton("✅ Verify Lock", url=f"{DEX_LINK}#locker")],
     ])
     
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
@@ -783,8 +783,8 @@ async def lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🎟 Buy Tickets", url=f"{DEX_LINK}/#lottery"),
-         InlineKeyboardButton("🏆 View Pot", url=f"{DEX_LINK}/#lottery")],
+        [InlineKeyboardButton("🎟 Buy Tickets", url=f"{DEX_LINK}#lottery"),
+         InlineKeyboardButton("🏆 View Pot", url=f"{DEX_LINK}#lottery")],
     ])
     
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
@@ -812,9 +812,9 @@ async def sniper(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🎯 Open Sniper", url=f"{DEX_LINK}/#sniper"),
-         InlineKeyboardButton("⚙️ Settings", url=f"{DEX_LINK}/#sniper")],
-        [InlineKeyboardButton("📖 Tutorial", url=f"{DEX_LINK}/#sniper")],
+        [InlineKeyboardButton("🎯 Open Sniper", url=f"{DEX_LINK}#sniper"),
+         InlineKeyboardButton("⚙️ Settings", url=f"{DEX_LINK}#sniper")],
+        [InlineKeyboardButton("📖 Tutorial", url=f"{DEX_LINK}#sniper")],
     ])
     
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
@@ -840,8 +840,8 @@ async def bridge(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🌉 Bridge to Cronos", url=f"{DEX_LINK}/#bridge"),
-         InlineKeyboardButton("🌉 Bridge from Cronos", url=f"{DEX_LINK}/#bridge")],
+        [InlineKeyboardButton("🌉 Bridge to Cronos", url=f"{DEX_LINK}#bridge"),
+         InlineKeyboardButton("🌉 Bridge from Cronos", url=f"{DEX_LINK}#bridge")],
     ])
     
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
@@ -868,9 +868,9 @@ async def create(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🟢 Basic (25 CRO)", url=f"{DEX_LINK}/#create"),
-         InlineKeyboardButton("🟡 Premium (100 CRO)", url=f"{DEX_LINK}/#create")],
-        [InlineKeyboardButton("💎 Diamond (500 CRO)", url=f"{DEX_LINK}/#create")],
+        [InlineKeyboardButton("🟢 Basic (25 CRO)", url=f"{DEX_LINK}#create"),
+         InlineKeyboardButton("🟡 Premium (100 CRO)", url=f"{DEX_LINK}#create")],
+        [InlineKeyboardButton("💎 Diamond (500 CRO)", url=f"{DEX_LINK}#create")],
     ])
     
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
@@ -902,9 +902,9 @@ async def marketplace(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🏪 Browse NFTs", url=f"{DEX_LINK}/#marketplace"),
-         InlineKeyboardButton("📤 Sell NFT", url=f"{DEX_LINK}/#marketplace")],
-        [InlineKeyboardButton("🎴 My NFTs", url=f"{DEX_LINK}/#nfts")],
+        [InlineKeyboardButton("🏪 Browse NFTs", url=f"{DEX_LINK}#marketplace"),
+         InlineKeyboardButton("📤 Sell NFT", url=f"{DEX_LINK}#marketplace")],
+        [InlineKeyboardButton("🎴 My NFTs", url=f"{DEX_LINK}#nfts")],
     ])
     
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
@@ -1344,7 +1344,7 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             msg += "\n"
         msg += f"🔗 *MasterChef:*\n`{CONTRACTS['MASTERCHEF']}`"
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🌾 Open Farms", url=f"{DEX_LINK}/#farms")],
+            [InlineKeyboardButton("🌾 Open Farms", url=f"{DEX_LINK}#farms")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -1355,7 +1355,7 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             msg += f"*{vault['name']}*\n   APY: {vault['apy']} | {vault['strategy']}\n\n"
         msg += "💡 Deposit LP → vault auto-compounds → position grows!"
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🏦 Open Vaults", url=f"{DEX_LINK}/#vaults")],
+            [InlineKeyboardButton("🏦 Open Vaults", url=f"{DEX_LINK}#vaults")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -1367,8 +1367,8 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             msg += f"• *{tier['period']}*: {tier['apy']} APY ({tier['multiplier']}) {emoji}\n"
         msg += f"\n🎴 *+20% NFT Holder Boost!*\n⚠️ Early Exit Penalty: *25%*\n\n🔗 `{CONTRACTS['STAKING']}`"
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔒 Stake $GANG", url=f"{DEX_LINK}/#staking"),
-             InlineKeyboardButton("🎴 NFT Boost", url=f"{DEX_LINK}/#nfts")],
+            [InlineKeyboardButton("🔒 Stake $GANG", url=f"{DEX_LINK}#staking"),
+             InlineKeyboardButton("🎴 NFT Boost", url=f"{DEX_LINK}#nfts")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -1380,7 +1380,7 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             msg += f"{emoji} *{tier['tier']}*: Stake {tier['stake']} → {tier['allocation']} alloc\n"
         msg += "\n💰 *Platform Fee:* 3% of raised funds"
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🚀 Open Launchpad", url=f"{DEX_LINK}/#launchpad")],
+            [InlineKeyboardButton("🚀 Open Launchpad", url=f"{DEX_LINK}#launchpad")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -1400,8 +1400,8 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "✓ Builds investor confidence"
         )
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔐 Open Locker", url=f"{DEX_LINK}/#locker"),
-             InlineKeyboardButton("🔥 Burn LP", url=f"{DEX_LINK}/#locker")],
+            [InlineKeyboardButton("🔐 Open Locker", url=f"{DEX_LINK}#locker"),
+             InlineKeyboardButton("🔥 Burn LP", url=f"{DEX_LINK}#locker")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -1416,7 +1416,7 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"⚠️ *Anti-Rug Protection Active!*"
         )
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🎯 Open Sniper", url=f"{DEX_LINK}/#sniper")],
+            [InlineKeyboardButton("🎯 Open Sniper", url=f"{DEX_LINK}#sniper")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -1432,8 +1432,8 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"🔗 `{NFT_INFO['contract']}`"
         )
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🎴 Mint NFT", url=f"{DEX_LINK}/#nfts"),
-             InlineKeyboardButton("🖼 Gallery", url=f"{DEX_LINK}/#nfts")],
+            [InlineKeyboardButton("🎴 Mint NFT", url=f"{DEX_LINK}#nfts"),
+             InlineKeyboardButton("🖼 Gallery", url=f"{DEX_LINK}#nfts")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -1451,7 +1451,7 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"🔗 `{CONTRACTS['REFERRAL']}`"
         )
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔗 Get Referral Link", url=f"{DEX_LINK}/#referral")],
+            [InlineKeyboardButton("🔗 Get Referral Link", url=f"{DEX_LINK}#referral")],
             [InlineKeyboardButton("📢 Share on Telegram", url=f"https://t.me/share/url?url={DEX_LINK}"),
              InlineKeyboardButton("🐦 Share on X", url=f"https://twitter.com/intent/tweet?text=Join%20Cronos%20Gangsters!%20{DEX_LINK}")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
@@ -1468,7 +1468,7 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"💡 Best rates aggregated automatically"
         )
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🌉 Open Bridge", url=f"{DEX_LINK}/#bridge")],
+            [InlineKeyboardButton("🌉 Open Bridge", url=f"{DEX_LINK}#bridge")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -1483,7 +1483,7 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "🍀 Good luck, gangster!"
         )
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🎟 Buy Tickets", url=f"{DEX_LINK}/#lottery")],
+            [InlineKeyboardButton("🎟 Buy Tickets", url=f"{DEX_LINK}#lottery")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -1500,7 +1500,7 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"   {TOKEN_CREATOR['diamond']['features']}"
         )
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🛠 Create Token", url=f"{DEX_LINK}/#create")],
+            [InlineKeyboardButton("🛠 Create Token", url=f"{DEX_LINK}#create")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -1518,7 +1518,7 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "• Royalties supported"
         )
         kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🏪 Browse NFTs", url=f"{DEX_LINK}/#marketplace")],
+            [InlineKeyboardButton("🏪 Browse NFTs", url=f"{DEX_LINK}#marketplace")],
             [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
         ])
         await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
