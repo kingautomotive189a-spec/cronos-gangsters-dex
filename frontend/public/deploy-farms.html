@@ -93,6 +93,8 @@ const FARMS = [
 var wallet = '';
 var farmStates = FARMS.map(function(f) {
   var lp = localStorage.getItem(f.storageKey) || '';
+  // Treat zero address as invalid/failed creation
+  if (lp && lp.replace(/0x0*/,'') === '') lp = '';
   return { lpAddr: lp, chefAdded: false, loading: false, status: '' };
 });
 
@@ -193,6 +195,11 @@ async function createLPPair(idx) {
     await tx.wait();
 
     var pairAddr = await factory.getPair(farm.addrA, farm.addrB);
+    if (!pairAddr || pairAddr === ethers.constants.AddressZero) {
+      farmStates[idx].status = 'Error: LP pair creation failed — token may not exist on Cronos';
+      farmStates[idx].loading = false;
+      renderFarms(); return;
+    }
     localStorage.setItem(farm.storageKey, pairAddr);
     farmStates[idx].lpAddr = pairAddr;
     farmStates[idx].status = 'LP pair created successfully!';
@@ -239,7 +246,16 @@ async function addToMasterChef(idx) {
   }
 }
 
-// Init
+// Init — clean up any zero-address LP entries from failed creations
+['FARM_LP_XRP_GANG','FARM_LP_PEPE_GANG','FARM_LP_DOGE_GANG'].forEach(function(key) {
+  var val = localStorage.getItem(key);
+  if (val && val.replace(/0x0*/,'') === '') localStorage.removeItem(key);
+});
+farmStates = FARMS.map(function(f) {
+  var lp = localStorage.getItem(f.storageKey) || '';
+  if (lp && lp.replace(/0x0*/,'') === '') lp = '';
+  return { lpAddr: lp, chefAdded: false, loading: false, status: '' };
+});
 renderFarms();
 if (window.ethereum) connectWallet();
 </script>
