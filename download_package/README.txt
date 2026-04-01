@@ -1,53 +1,116 @@
-CRONOS GANGSTERS - TELEGRAM BOT PACKAGE
-=======================================
+===============================================
+CRONOS GANGSTERS - COMPLETE PACKAGE
+===============================================
+Date: April 1, 2026
+Version: FINAL - All features included
 
-FILES INCLUDED:
----------------
+===============================================
+WHAT'S INCLUDED
+===============================================
 
 /backend/
-  - telegram_bot.py    : Main Telegram bot (28 commands + security)
-  - server.py          : FastAPI backend for dashboard
-  - .env               : Environment configuration
-  - requirements.txt   : Python dependencies
+  telegram_bot.py    - Telegram bot (28 commands + security)
+  server.py          - Dashboard API server
+  .env               - Configuration (bot token, contracts, etc.)
+  requirements.txt   - Python dependencies
 
 /frontend/
-  - App.js             : React dashboard
-  - App.css            : Dashboard styles
+  App.js             - React dashboard
+  App.css            - Dashboard styles
+  .env               - Frontend config
 
-cronos-gangsters-full.html : Complete website file (28MB)
+/website/
+  cronos-gangsters-full.html      - Complete website (28MB)
+  cronos-gangsters-no-banners.html - Website with deploy banners removed
 
+===============================================
+TELEGRAM BOT COMMANDS (28 TOTAL)
+===============================================
 
-TELEGRAM BOT COMMANDS (28 total):
----------------------------------
-General (22): /start, /help, /price, /stats, /contract, /alert, /buy, 
-              /website, /socials, /shill, /farms, /vaults, /staking,
-              /launchpad, /locker, /lottery, /sniper, /bridge, /create,
-              /marketplace, /nft, /referral
+GENERAL COMMANDS (22):
+  /start        - Welcome message
+  /help         - Show all commands
+  /price        - $GANG price & stats
+  /stats        - Detailed statistics
+  /contract     - Contract address
+  /alert        - Set price alerts
+  /buy          - How to buy $GANG
+  /website      - DEX website link
+  /socials      - Social media links
+  /shill        - Shareable promo message
+  /farms        - Yield farms & APRs
+  /vaults       - Auto-compound vaults
+  /staking      - Staking vault info
+  /launchpad    - IDO launchpad
+  /locker       - LP token locker
+  /lottery      - Play the lottery
+  /sniper       - Sniper bot info
+  /bridge       - Cross-chain bridge
+  /create       - Token creator
+  /marketplace  - NFT marketplace
+  /nft          - NFT collection
+  /referral     - Referral program (5%)
 
-Admin (6):   /ban, /unban, /mute, /unmute, /kick, /warn
+ADMIN COMMANDS (6):
+  /ban          - Ban user
+  /unban        - Unban by ID
+  /mute         - Mute user
+  /unmute       - Unmute user
+  /kick         - Kick from group
+  /warn         - Warn (3 = ban)
 
-Security:    Human verification (captcha), Anti-scam filter, 
-             Auto-ban scammers, Link whitelist
+SECURITY FEATURES (4):
+  - Human verification (math captcha for new members)
+  - Anti-scam filter (detects scam patterns)
+  - Auto-ban scammers (2 warnings = ban)
+  - Link whitelist (only trusted domains)
 
+===============================================
+CONFIGURATION
+===============================================
 
-CONFIGURATION (.env):
----------------------
-TELEGRAM_BOT_TOKEN=your_bot_token
-CONTRACT_ADDRESS=0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF
-GROUP_ID=-1003284963991
-DEX_LINK=https://cronosgangsters.com
-TWITTER=https://x.com/CronosGangstersDEX
-TELEGRAM_GROUP=https://t.me/+DrWDScTEiLg1ZGQ0
-PRICE_UPDATE_INTERVAL=300
-ADMIN_IDS=your_telegram_user_id
+Bot Token:     8760734535:AAFvtYmVE5FRFeLS8y6_ixT_2bm_YInKH8k
+Contract:      0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF
+Group ID:      -1003284963991
+Website:       https://cronosgangsters.com
+Twitter:       https://x.com/CronosGangstersDEX
+Telegram:      https://t.me/+DrWDScTEiLg1ZGQ0
 
+CONTRACT ADDRESSES:
+  GANG Token:    0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF
+  MasterChef:    0x3713567b8DB60D7127B2614965eef71cE50871Ea
+  Staking:       0x03c3C706F0D2F4754755988A686a70E661e6925F
+  Referral:      0xd4791929e86EFE7D770b64B6dEC021dE28E8773a
+  NFT:           0x97489dc06aA00b62B52D7eB6E5b51E8c3dd36431
+  Treasury:      0xaA3C5749628610fF410EF9133a4ac4f58e9A52eA
 
-TO RUN THE BOT:
----------------
+===============================================
+HOW TO RUN THE BOT
+===============================================
+
 1. Install Python 3.9+
-2. pip install -r requirements.txt
-3. Set your TELEGRAM_BOT_TOKEN in .env
-4. python telegram_bot.py
+2. cd backend
+3. pip install -r requirements.txt
+4. Edit .env with your settings
+5. python telegram_bot.py
 
+===============================================
+HOW TO RUN THE DASHBOARD
+===============================================
 
+1. Install Node.js 18+
+2. cd frontend
+3. npm install (or yarn)
+4. npm start
+
+===============================================
+DEPLOYED CONTRACTS STATUS
+===============================================
+
+Launchpad: ✅ DEPLOYED
+Locker:    ✅ DEPLOYED  
+Lottery:   ❌ NOT DEPLOYED (waitTxRaw bug - fix needed)
+
+===============================================
 GANG OR NOTHING! 🔫
+===============================================
