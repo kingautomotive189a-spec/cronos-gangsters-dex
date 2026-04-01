@@ -5227,7 +5227,7 @@ async function calcFarmAPRs() {
 
       // Update APR display
       const aprEl = document.getElementById("apr-" + farm.pid);
-      if (aprEl) aprEl.textContent = farm.apy > 0 ? farm.apy + '%' : '~500%';
+      if (aprEl) aprEl.textContent = farm.apy > 0 ? farm.apy + '%' : '—';
     }
   } catch(e) { console.error("APR calc error:", e); }
 }
@@ -6097,7 +6097,7 @@ function renderFarms() {
       <div class="farm-stats">
         <div class="farm-stat">
           <div class="farm-stat-label">APR</div>
-          <div class="farm-stat-value green" id="apr-${farm.pid}">${farm.apy > 0 ? farm.apy + '%' : '~500%'}</div>
+          <div class="farm-stat-value green" id="apr-${farm.pid}">${farm.apy > 0 ? farm.apy + '%' : '—'}</div>
         </div>
         <div class="farm-stat">
           <div class="farm-stat-label">TVL</div>
@@ -7148,11 +7148,11 @@ function closeConfirmSwapModal() {
 // Starts ~500% when TVL is low, drops as more people stake
 function calcVaultAPR(vault) {
   const gangPrice = TOKENS.GANG?.price || 0;
-  if (!gangPrice || !vault.dailyGang) return '~500%';
+  if (!gangPrice || !vault.dailyGang) return '—';
   const yearlyGangValue = vault.dailyGang * 365 * gangPrice;
   // Estimate TVL in USD from totalLP (use LP value estimation)
   const tvlUSD = vault.totalLP > 0 ? estimateVaultTVL(vault) : 0;
-  if (tvlUSD <= 0) return '~500%';
+  if (tvlUSD <= 0) return '—';
   const apr = (yearlyGangValue / tvlUSD) * 100;
   if (apr > 9999) return '>9999%';
   if (apr >= 100) return Math.round(apr) + '%';
