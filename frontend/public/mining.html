@@ -130,7 +130,30 @@ h1{text-align:center;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-s
 </div>
 
 <div id="connectArea">
-  <button class="connect-btn" onclick="connectWallet()" data-testid="mining-connect-btn">CONNECT WALLET</button>
+  <!-- How It Works Section -->
+  <div style="background:linear-gradient(135deg,rgba(255,215,0,0.04),rgba(255,140,0,0.03));border:1px solid rgba(255,215,0,0.15);border-radius:14px;padding:18px;margin-bottom:16px;" data-testid="how-it-works">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold);margin-bottom:12px;text-align:center;">HOW TO EARN REAL $GANG</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:flex-start;gap:10px;">
+        <div style="min-width:28px;height:28px;border-radius:50%;background:var(--gold);color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;">1</div>
+        <div><div style="color:#fff;font-weight:700;font-size:14px;">TAP TO MINE</div><div style="color:var(--muted);font-size:12px;">Earn 5 $GANG daily just by tapping. Free to start!</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;">
+        <div style="min-width:28px;height:28px;border-radius:50%;background:var(--gold);color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;">2</div>
+        <div><div style="color:#fff;font-weight:700;font-size:14px;">PLAY & MULTIPLY</div><div style="color:var(--muted);font-size:12px;">Use your balance in 19 casino games, racing, lottery & leverage trading to grow it!</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;">
+        <div style="min-width:28px;height:28px;border-radius:50%;background:var(--gold);color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;">3</div>
+        <div><div style="color:#fff;font-weight:700;font-size:14px;">REACH 100 $GANG</div><div style="color:var(--muted);font-size:12px;">Once your balance hits 100, the WITHDRAW button unlocks.</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;">
+        <div style="min-width:28px;height:28px;border-radius:50%;background:var(--green);color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;">4</div>
+        <div><div style="color:var(--green);font-weight:700;font-size:14px;">WITHDRAW REAL TOKENS</div><div style="color:var(--muted);font-size:12px;">Your virtual $GANG converts to real $GANG tokens sent straight to your wallet! (5% burn fee)</div></div>
+      </div>
+    </div>
+    <div style="margin-top:14px;text-align:center;padding:10px;background:rgba(0,255,136,0.06);border-radius:8px;font-size:13px;color:var(--green);">Virtual $GANG &#8594; Real $GANG tokens at withdrawal</div>
+  </div>
+  <button class="connect-btn" onclick="connectWallet()" data-testid="mining-connect-btn">CONNECT WALLET & START MINING</button>
 </div>
 
 <div id="userArea" style="display:none">
