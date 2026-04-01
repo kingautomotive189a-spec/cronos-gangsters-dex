@@ -59,7 +59,9 @@
   body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(212,160,23,0.06) 0%,transparent 70%),radial-gradient(ellipse 50% 30% at 80% 80%,rgba(192,57,43,0.07) 0%,transparent 70%);pointer-events:none;}
 
   /* ── HEADER ── */
-  header{position:sticky;top:0;z-index:100;background:rgba(17,17,17,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+  header{position:sticky;top:0;z-index:100;background:rgba(17,17,17,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;background-image:url('/img/header-bg.png');background-size:cover;background-position:center center;background-repeat:no-repeat;}
+  header::before{content:'';position:absolute;inset:0;background:rgba(10,10,10,0.72);z-index:0;pointer-events:none;}
+  header>*{position:relative;z-index:1;}
   .logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
   .logo-icon{width:26px;height:26px;border-radius:50%;overflow:hidden;flex-shrink:0;}
   .logo-text{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;color:var(--gold);line-height:1;}
