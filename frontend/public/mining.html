@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>$GANG Mining Hub</title>
 <link rel="icon" type="image/png" href="/gang-logo.png"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
@@ -104,6 +105,18 @@ h1{text-align:center;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-s
     <div class="rev-item"><div class="rev-label">Jackpot Pool</div><div class="rev-val" id="revJackpot">0</div></div>
   </div>
   <button class="rev-btn" onclick="collectRevenue('mining')" data-testid="collect-mining-revenue">COLLECT MINING REVENUE</button>
+</div>
+
+<!-- OWNER: Fund Mining Rewards Contract -->
+<div id="fundMiningBanner" class="revenue-banner" data-testid="fund-mining-banner" style="display:none;background:linear-gradient(135deg,rgba(212,160,23,0.06),rgba(39,174,96,0.04));border:1px solid rgba(212,160,23,0.3);border-radius:14px;padding:16px;margin-bottom:16px;">
+  <div class="rev-title" style="color:var(--gold);">FUND MINING REWARDS</div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Send $GANG tokens to the Mining Rewards contract so users can withdraw their earned tokens.</div>
+  <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Contract: <span style="color:var(--green);font-family:'Space Mono',monospace;font-size:10px;">0xBdAaDDb1cd25758...1c8F</span></div>
+  <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Contract Balance: <strong id="miningContractBal" style="color:var(--gold);">--</strong> $GANG</div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <input type="number" id="fundMiningAmt" data-testid="fund-mining-amt" placeholder="GANG amount" step="any" style="flex:1;background:rgba(255,255,255,0.06);border:1px solid #333;border-radius:8px;padding:12px;color:#fff;font-size:16px;font-family:'Space Mono',monospace;">
+    <button onclick="fundMiningRewards()" data-testid="fund-mining-btn" style="background:linear-gradient(135deg,var(--gold),#b8860b);color:#000;border:none;padding:12px 20px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;white-space:nowrap;">SEND GANG</button>
+  </div>
 </div>
 
 <div class="ad"><span class="ad-tag">AD</span> Your Ad Here - Contact @CronosGangsters</div>
@@ -209,9 +222,11 @@ function updateUI() {
     // Revenue banner for owner
     if(wallet && wallet.toLowerCase() === OWNER_WALLET.toLowerCase()) {
       document.getElementById('revBanner').className = 'revenue-banner show';
+      document.getElementById('fundMiningBanner').style.display = 'block';
       document.getElementById('revHouse').textContent = Math.round(stats.house_earnings || 0);
       document.getElementById('revBurned').textContent = Math.round(stats.total_burned || 0);
       document.getElementById('revUsers').textContent = stats.total_users || 0;
+      checkMiningContractBalance();
     }
   }
   document.getElementById('sJackpot').textContent = Math.round(jackpot);
@@ -274,6 +289,43 @@ function showResult(d) {
 
 async function collectRevenue(type) {
   showToast('Revenue collection requires on-chain withdrawal from contract');
+}
+
+var MINING_REWARDS_ADDR = '0xBdAaDDb1cd25758aa40F38c273C355cA943e1c8F';
+var GANG_TOKEN_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+var ERC20_ABI = ['function transfer(address to, uint256 amount) returns (bool)', 'function balanceOf(address) view returns (uint256)', 'function decimals() view returns (uint8)'];
+
+async function checkMiningContractBalance() {
+  try {
+    var provider = new ethers.providers.Web3Provider(window.ethereum);
+    var token = new ethers.Contract(GANG_TOKEN_ADDR, ERC20_ABI, provider);
+    var dec = await token.decimals();
+    var bal = await token.balanceOf(MINING_REWARDS_ADDR);
+    document.getElementById('miningContractBal').textContent = parseFloat(ethers.utils.formatUnits(bal, dec)).toFixed(2);
+  } catch(e) { document.getElementById('miningContractBal').textContent = '?'; }
+}
+
+async function fundMiningRewards() {
+  var amt = document.getElementById('fundMiningAmt').value;
+  if (!amt || parseFloat(amt) <= 0) { showToast('Enter amount'); return; }
+  if (!window.ethereum) { showToast('Open in wallet browser!'); return; }
+  try {
+    var provider = new ethers.providers.Web3Provider(window.ethereum);
+    var signer = provider.getSigner();
+    var token = new ethers.Contract(GANG_TOKEN_ADDR, ERC20_ABI, signer);
+    var dec = await token.decimals();
+    var amount = ethers.utils.parseUnits(amt, dec);
+    showToast('Confirm transaction in wallet...');
+    var tx = await token.transfer(MINING_REWARDS_ADDR, amount);
+    showToast('TX sent! Waiting for confirmation...');
+    await tx.wait();
+    showToast('Sent ' + amt + ' $GANG to Mining Rewards!');
+    document.getElementById('fundMiningAmt').value = '';
+    checkMiningContractBalance();
+  } catch(e) {
+    if (e.code === 4001) showToast('Transaction rejected');
+    else showToast('Error: ' + (e.reason || e.message || 'Failed').slice(0, 80));
+  }
 }
 
 function renderTabs() {
