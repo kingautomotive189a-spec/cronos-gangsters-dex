@@ -10709,7 +10709,7 @@ async function loadPastWinners(currentRound, iface, rawP) {
 }
 
 function checkLotteryOwner() {
-  const isOwner = state.address && state.address.toLowerCase() === OWNER_WALLET.toLowerCase();
+  const isOwner = state.address && state.address.toLowerCase() === OWNER_ADDR;
   const panel = document.getElementById('lotteryOwnerPanel');
   if (panel) panel.style.display = isOwner ? 'block' : 'none';
   // Load lottery contract balance for fee display
