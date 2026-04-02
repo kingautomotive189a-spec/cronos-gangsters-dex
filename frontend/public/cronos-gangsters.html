@@ -4107,7 +4107,10 @@ async function _connectProvider(rawProvider, walletName) {
     // Load balances immediately using farm.pid, then autoDiscover in background
     await loadBalances();
     renderPortfolio();
+    // Ensure token prices are loaded before calculating TVL/APR
+    await fetchAllTokenPrices();
     fetchFarmTVLs();
+    calcFarmAPRs();
     checkOwnerRevenue();
     // AutoDiscover in background — if chefPid differs from pid, re-query
     autoDiscoverFarmPools().then(async () => {
@@ -4596,7 +4599,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     btn.classList.add("active");
     document.getElementById("page-" + btn.dataset.page).classList.add("active");
-    if (btn.dataset.page === "farms") { renderFarms(); fetchFarmTVLs().then(() => calcFarmAPRs()); }
+    if (btn.dataset.page === "farms") { renderFarms(); fetchAllTokenPrices().then(() => fetchFarmTVLs().then(() => calcFarmAPRs())); }
     if (btn.dataset.page === "vaults") { renderVaults(); loadVaultData(); }
     if (btn.dataset.page === "portfolio") renderPortfolio();
     if (btn.dataset.page === "liquidity") {
@@ -5449,14 +5452,43 @@ async function fetchDexScreenerStats() {
       }
     }
 
-    // ── Update farm TVLs from DexScreener pair liquidity data ──
+    // ── Update farm TVLs and token prices from DexScreener pair liquidity data ──
     for (const dxPair of allPairs) {
       const pairLiq = dxPair.liquidity?.usd;
-      if (!pairLiq || pairLiq <= 0) continue;
       const base = dxPair.baseToken?.address?.toLowerCase();
       const quote = dxPair.quoteToken?.address?.toLowerCase();
       if (!base || !quote) continue;
-      // Match DexScreener pair to a farm
+
+      // Extract quote token price from DexScreener pair data (GANG is base)
+      // This gives us prices for CRO, DOGE, WETH, etc. without CoinGecko
+      if (dxPair.quoteToken?.symbol) {
+        const qSym = dxPair.quoteToken.symbol.toUpperCase();
+        // Map wrapped tokens: WCRO -> CRO, WETH -> WETH
+        const mappedSym = qSym === 'WCRO' ? 'CRO' : qSym;
+        if (TOKENS[mappedSym] && (!TOKENS[mappedSym].price || TOKENS[mappedSym].price === 0)) {
+          // Calculate quote token price: priceUsd / priceNative gives quote price
+          if (dxPair.priceUsd && dxPair.priceNative) {
+            const gangUsd = parseFloat(dxPair.priceUsd);
+            const gangInQuote = parseFloat(dxPair.priceNative);
+            if (gangInQuote > 0 && gangUsd > 0) {
+              TOKENS[mappedSym].price = gangUsd / gangInQuote;
+            }
+          }
+        }
+      }
+      // Also check if base is a non-GANG token
+      if (dxPair.baseToken?.symbol) {
+        const bSym = dxPair.baseToken.symbol.toUpperCase();
+        const mappedBSym = bSym === 'WCRO' ? 'CRO' : bSym;
+        if (mappedBSym !== 'GANG' && TOKENS[mappedBSym] && (!TOKENS[mappedBSym].price || TOKENS[mappedBSym].price === 0)) {
+          if (dxPair.priceUsd) {
+            TOKENS[mappedBSym].price = parseFloat(dxPair.priceUsd);
+          }
+        }
+      }
+
+      // Match DexScreener pair to a farm for TVL
+      if (!pairLiq || pairLiq <= 0) continue;
       for (const farm of FARMS) {
         if (farm.tokens.length < 2) continue;
         const tA = TOKENS[farm.tokens[0]];
