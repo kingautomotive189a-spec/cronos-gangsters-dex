@@ -883,7 +883,7 @@
           <label class="input-label">Token A</label>
           <div class="input-wrap" style="margin-bottom:4px">
             <input class="input-field" id="liqA" type="number" placeholder="0.0" oninput="calcLiqRatio()" style="padding-right:155px" />
-            <select class="token-select" id="liqTokenA" onchange="calcLiqRatio();updateBalanceDisplays();updateLiqPriceCards();updateLiqPickerBtns();if(state.provider)calcLiqRatioOnChain()">
+              <select class="token-select" id="liqTokenA" onchange="liqGuardSameToken('liqTokenA','liqTokenB');calcLiqRatio();updateBalanceDisplays();updateLiqPriceCards();updateLiqPickerBtns();if(state.provider)calcLiqRatioOnChain()">
               <option value="CRO">CRO</option>
               <option value="GANG">GANG</option>
               <option value="USDC">USDC</option>
@@ -918,12 +918,14 @@
             <button class="pct-btn" onclick="setPct('liqA','liqTokenA',100)">100%</button>
           </div>
           <button id="approveTokenABtn" class="btn-secondary" onclick="approveLiqToken('A')" style="display:none;width:100%;margin-bottom:10px;font-size:15px">🔓 APPROVE TOKEN A</button>
-          <div style="text-align:center;color:var(--gold);font-size:22px;margin:4px 0">+</div>
+          <div style="text-align:center;margin:4px 0">
+            <button onclick="swapLiqTokens()" style="background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.3);border-radius:50%;width:40px;height:40px;cursor:pointer;color:var(--gold);font-size:20px;display:inline-flex;align-items:center;justify-content:center;transition:transform 0.2s,background 0.2s" onmouseover="this.style.background='rgba(212,160,23,0.25)';this.style.transform='rotate(180deg)'" onmouseout="this.style.background='rgba(212,160,23,0.1)';this.style.transform='rotate(0)'">↕</button>
+          </div>
 
           <label class="input-label">Token B <span style="color:var(--muted);font-size:11px;font-weight:400">(auto-calculated)</span></label>
           <div class="input-wrap" style="margin-bottom:4px">
             <input class="input-field" id="liqB" type="number" placeholder="0.0" oninput="calcLiqRatioFromB()" style="padding-right:155px" />
-            <select class="token-select" id="liqTokenB" onchange="calcLiqRatio();updateBalanceDisplays();updateLiqPriceCards();updateLiqPickerBtns();if(state.provider)calcLiqRatioOnChain()">
+            <select class="token-select" id="liqTokenB" onchange="liqGuardSameToken('liqTokenB','liqTokenA');calcLiqRatio();updateBalanceDisplays();updateLiqPriceCards();updateLiqPickerBtns();if(state.provider)calcLiqRatioOnChain()">
               <option value="GANG">GANG</option>
               <option value="CRO">CRO</option>
               <option value="USDC">USDC</option>
@@ -5655,6 +5657,42 @@ function switchLiqTab(tab, btn) {
   if (tab === "remove") { setTimeout(() => { updateBalanceDisplays(); calcRemoveLiq(); }, 0); }
 }
 
+function swapLiqTokens() {
+  const selA = document.getElementById("liqTokenA");
+  const selB = document.getElementById("liqTokenB");
+  if (!selA || !selB) return;
+  const tmpA = selA.value;
+  const tmpB = selB.value;
+  selA.value = tmpB;
+  selB.value = tmpA;
+  // Also swap the input amounts
+  const inpA = document.getElementById("liqA");
+  const inpB = document.getElementById("liqB");
+  if (inpA && inpB) {
+    const tmpVal = inpA.value;
+    inpA.value = inpB.value;
+    inpB.value = tmpVal;
+  }
+  calcLiqRatio();
+  updateBalanceDisplays();
+  updateLiqPriceCards();
+  updateLiqPickerBtns();
+  if (state.provider) calcLiqRatioOnChain();
+}
+
+// Prevent same token on both liquidity sides
+function liqGuardSameToken(changedId, otherId) {
+  const changed = document.getElementById(changedId);
+  const other = document.getElementById(otherId);
+  if (!changed || !other) return;
+  if (changed.value === other.value) {
+    // Swap them instead of picking a random token
+    const allOpts = Array.from(other.options).map(o => o.value);
+    const alt = allOpts.find(v => v !== changed.value) || 'CRO';
+    other.value = alt;
+  }
+}
+
 function calcLiqRatio() {
   // Price-based fallback ratio calculation (used when wallet not connected or pool not found)
   const symA = document.getElementById("liqTokenA")?.value || "CRO";
@@ -7209,7 +7247,20 @@ function selectToken(symbol) {
       const otherId = target === 'tokenFrom' ? 'tokenTo' : 'tokenFrom';
       const otherEl = document.getElementById(otherId);
       if (otherEl && otherEl.value === symbol) {
-        // Swap: set other side to what this side was
+        const prevVal = el.value;
+        if (!otherEl.querySelector(`option[value="${prevVal}"]`)) {
+          const opt2 = document.createElement('option');
+          opt2.value = prevVal; opt2.textContent = prevVal;
+          otherEl.appendChild(opt2);
+        }
+        otherEl.value = prevVal;
+      }
+    }
+    // Prevent same token on both sides for liquidity
+    if (target === 'liqTokenA' || target === 'liqTokenB') {
+      const otherId = target === 'liqTokenA' ? 'liqTokenB' : 'liqTokenA';
+      const otherEl = document.getElementById(otherId);
+      if (otherEl && otherEl.value === symbol) {
         const prevVal = el.value;
         if (!otherEl.querySelector(`option[value="${prevVal}"]`)) {
           const opt2 = document.createElement('option');
