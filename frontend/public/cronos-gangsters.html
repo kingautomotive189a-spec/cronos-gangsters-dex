@@ -5304,12 +5304,20 @@ async function calcFarmAPRs() {
         }
       } catch {}
 
-      // Update APR DOM element directly — once set, never change (locked until page reload)
+      // Update APR DOM — show first value, then only update if stable (within 2x of previous)
       const aprEl = document.getElementById("apr-" + farm.pid);
-      if (aprEl) {
-        if (farm.apy > 0 && farm._stableApy === 0) {
+      if (aprEl && farm.apy > 0) {
+        if (farm._stableApy === 0) {
+          // First time — show it
           farm._stableApy = farm.apy;
           aprEl.textContent = farm.apy + '%';
+        } else {
+          // Only update if within 2x of previous (no wild jumps)
+          const ratio = farm.apy / farm._stableApy;
+          if (ratio > 0.5 && ratio < 2) {
+            farm._stableApy = farm.apy;
+            aprEl.textContent = farm.apy + '%';
+          }
         }
       }
     }
@@ -5426,14 +5434,24 @@ async function calcVaultAPRsOnChain() {
         console.error('Vault APR calc error for ' + vault.name + ':', e);
       }
 
-      // Update APR DOM element — once set, never change (locked until page reload)
+      // Update APR DOM — show first value, then only update if stable (within 2x)
       const vidx = VAULTS.indexOf(vault);
       const aprEl = document.getElementById('vault-apr-' + vidx);
       if (aprEl) {
         const newApr = calcVaultAPR(vault);
-        if (newApr && newApr !== '—' && !vault._stableApr) {
-          vault._stableApr = newApr;
-          aprEl.textContent = newApr;
+        const newNum = parseFloat(newApr) || 0;
+        if (newNum > 0) {
+          const prevNum = parseFloat(vault._stableApr) || 0;
+          if (prevNum === 0) {
+            vault._stableApr = newApr;
+            aprEl.textContent = newApr;
+          } else {
+            const ratio = newNum / prevNum;
+            if (ratio > 0.5 && ratio < 2) {
+              vault._stableApr = newApr;
+              aprEl.textContent = newApr;
+            }
+          }
         }
       }
       const tvlEl = document.getElementById('vault-tvl-' + vidx);
