@@ -3776,13 +3776,13 @@ function tImg(sym, size) {
 //         GangstersFactory has been deployed and pairs created.
 const FARMS = [
   // ── Working farms first ──
-  { pid: 1,  name: "CRO / GANG",   tokens: ["CRO","GANG"],  apy: 0, _stableApy: 0, tvl: "—", multiplier: "50%", lpAddr: "0x1f77938E1109E1Fc8e3dD697B95525303094Cb65", earned: 0, chefPid: 0, _onChain: true },
-  { pid: 2,  name: "GANG / USDC",  tokens: ["GANG","USDC"], apy: 0, _stableApy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xd434CC7E9CC50e74926BDe47c70FC8Bc0474A8eC", earned: 0, chefPid: 1, _onChain: true },
-  { pid: 3,  name: "GANG Staking", tokens: ["GANG"],         apy: 0, _stableApy: 0, tvl: '—', multiplier: "4.17%", lpAddr: CONTRACTS.GANG, earned: 0, chefPid: 4, _onChain: true },
-  { pid: 0,  name: "GANG / VVS",   tokens: ["GANG","VVS"],  apy: 0, _stableApy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xB47121251578f148f15949B7816b3D152EaE4cFF", earned: 0, chefPid: 14, _onChain: true },
-  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, _stableApy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xc9eA98736dbC94FAA91AbF9F4aD1eb41e7fb40f4", earned: 0, chefPid: 8, _onChain: true, needsChefAdd: false },
-  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, _stableApy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xF94d1f10028B3271a9D43D0E7eF798e8Df1937bF", earned: 0, chefPid: 9, _onChain: true, needsChefAdd: false },
-  { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, _stableApy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6", earned: 0, chefPid: 7, _onChain: true, needsChefAdd: false },
+  { pid: 1,  name: "CRO / GANG",   tokens: ["CRO","GANG"],  apy: 0, tvl: "—", multiplier: "50%", lpAddr: "0x1f77938E1109E1Fc8e3dD697B95525303094Cb65", earned: 0, chefPid: 0, _onChain: true },
+  { pid: 2,  name: "GANG / USDC",  tokens: ["GANG","USDC"], apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xd434CC7E9CC50e74926BDe47c70FC8Bc0474A8eC", earned: 0, chefPid: 1, _onChain: true },
+  { pid: 3,  name: "GANG Staking", tokens: ["GANG"],         apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: CONTRACTS.GANG, earned: 0, chefPid: 4, _onChain: true },
+  { pid: 0,  name: "GANG / VVS",   tokens: ["GANG","VVS"],  apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xB47121251578f148f15949B7816b3D152EaE4cFF", earned: 0, chefPid: 14, _onChain: true },
+  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xc9eA98736dbC94FAA91AbF9F4aD1eb41e7fb40f4", earned: 0, chefPid: 8, _onChain: true, needsChefAdd: false },
+  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xF94d1f10028B3271a9D43D0E7eF798e8Df1937bF", earned: 0, chefPid: 9, _onChain: true, needsChefAdd: false },
+  { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6", earned: 0, chefPid: 7, _onChain: true, needsChefAdd: false },
   // ── Coming soon ──
   { pid: 4,  name: "CRO / USDC",   tokens: ["CRO","USDC"],  apy: 0, tvl: '—', multiplier: "36x", lpAddr: "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6", earned: 0, comingSoon: true },
   { pid: 5,  name: "CRO / WETH",   tokens: ["CRO","WETH"],  apy: 0, tvl: '—', multiplier: "16x", lpAddr: "0xA111C17f8B8303280d3EB01BBcd61000AA7F39F9", earned: 0, comingSoon: true },
@@ -5110,8 +5110,6 @@ async function fetchPoolRatio(symA, symB) {
 async function fetchFarmTVLs() {
   const rp = getReadProvider();
   if (!rp) return;
-  // Don't calculate TVL until GANG price is confirmed from DexScreener
-  if (!window._gangPriceFromDex) return;
   try {
     const factory = new ethers.Contract(CONTRACTS.FACTORY, FACTORY_ABI, rp);
     let totalTVLUSD = 0;
@@ -5173,10 +5171,7 @@ async function fetchFarmTVLs() {
           continue;
         }
 
-        // LP pair — skip if DexScreener already set TVL (avoid flickering)
-        if (farm._dexTVL) continue;
-
-        // Compute TVL from on-chain data
+        // LP pair — compute TVL from on-chain data
         const pair = new ethers.Contract(lpAddr, PAIR_ABI, rp);
         const lpToken = new ethers.Contract(lpAddr, ERC20_ABI, rp);
 
@@ -5263,15 +5258,12 @@ async function calcFarmAPRs() {
     if (totalAlloc === 0 || gangPerSec === 0) return;
 
     const gangPrice = TOKENS.GANG?.price || 0;
-    // NO PRICE = NO APR. Wait until GANG price is loaded from DexScreener.
     if (gangPrice <= 0) return;
-    if (!window._gangPriceFromDex) return;
     const SECONDS_PER_YEAR = 365.25 * 86400;
 
     for (const farm of FARMS) {
       if (farm.comingSoon) continue;
       if (farm.chefPid === undefined && !farm._onChain) {
-        // Farm not yet discovered on MasterChef — show dash, not fake number
         farm.apy = 0;
         const aprEl = document.getElementById("apr-" + farm.pid);
         if (aprEl) aprEl.textContent = '—';
@@ -5279,15 +5271,6 @@ async function calcFarmAPRs() {
       }
       const pid = farm.chefPid ?? farm.pid;
       try {
-        // Skip APR calculation if token prices aren't loaded yet
-        const allPricesReady = farm.tokens.every(sym => {
-          const tok = TOKENS[sym];
-          if (!tok) return false;
-          if (tok.address === "native") return true; // CRO always has hardcoded price
-          return tok.price > 0;
-        });
-        if (!allPricesReady) continue;
-
         const poolInfo = await chef.poolInfo(pid);
         const allocPoint = Number(poolInfo[1]);
         if (allocPoint === 0) { farm.apy = 0; continue; }
@@ -5297,7 +5280,6 @@ async function calcFarmAPRs() {
         const rewardsUSD = poolGangPerYear * gangPrice;
 
         // APR = annual rewards / TVL * 100
-        // Only use TVL already set by fetchFarmTVLs() or DexScreener — no duplicate calc
         let tvlUSD = farm.tvlUSD || 0;
         if (tvlUSD > 0) {
           farm.apy = Math.round(rewardsUSD / tvlUSD * 100);
@@ -5306,22 +5288,9 @@ async function calcFarmAPRs() {
         }
       } catch {}
 
-      // Update APR DOM — show first value, then only update if stable (within 2x of previous)
+      // Update APR display
       const aprEl = document.getElementById("apr-" + farm.pid);
-      if (aprEl && farm.apy > 0) {
-        if (farm._stableApy === 0) {
-          // First time — show it
-          farm._stableApy = farm.apy;
-          aprEl.textContent = farm.apy + '%';
-        } else {
-          // Only update if within 2x of previous (no wild jumps)
-          const ratio = farm.apy / farm._stableApy;
-          if (ratio > 0.5 && ratio < 2) {
-            farm._stableApy = farm.apy;
-            aprEl.textContent = farm.apy + '%';
-          }
-        }
-      }
+      if (aprEl) aprEl.textContent = farm.apy > 0 ? farm.apy + '%' : '—';
     }
   } catch(e) { console.error("APR calc error:", e); }
 
@@ -5345,22 +5314,12 @@ async function calcVaultAPRsOnChain() {
     if (totalAlloc === 0 || gangPerSec === 0) return;
 
     const gangPrice = TOKENS.GANG?.price || 0;
-    // NO PRICE = NO APR. Wait until GANG price is loaded from DexScreener.
     if (gangPrice <= 0) return;
-    if (!window._gangPriceFromDex) return;
     const SECONDS_PER_DAY = 86400;
 
     for (const vault of VAULTS) {
       const pid = vault.chefPid;
       if (pid === undefined) continue;
-      // Skip if token prices aren't loaded yet
-      const vaultPricesReady = vault.tokens.every(sym => {
-        const tok = TOKENS[sym];
-        if (!tok) return false;
-        if (tok.address === "native") return true;
-        return tok.price > 0;
-      });
-      if (!vaultPricesReady) continue;
       try {
         const poolInfo = await chef.poolInfo(pid);
         const allocPoint = Number(poolInfo[1]);
@@ -5436,25 +5395,12 @@ async function calcVaultAPRsOnChain() {
         console.error('Vault APR calc error for ' + vault.name + ':', e);
       }
 
-      // Update APR DOM — show first value, then only update if stable (within 2x)
+      // Update APR and TVL display
       const vidx = VAULTS.indexOf(vault);
       const aprEl = document.getElementById('vault-apr-' + vidx);
       if (aprEl) {
         const newApr = calcVaultAPR(vault);
-        const newNum = parseFloat(newApr) || 0;
-        if (newNum > 0) {
-          const prevNum = parseFloat(vault._stableApr) || 0;
-          if (prevNum === 0) {
-            vault._stableApr = newApr;
-            aprEl.textContent = newApr;
-          } else {
-            const ratio = newNum / prevNum;
-            if (ratio > 0.5 && ratio < 2) {
-              vault._stableApr = newApr;
-              aprEl.textContent = newApr;
-            }
-          }
-        }
+        aprEl.textContent = newApr;
       }
       const tvlEl = document.getElementById('vault-tvl-' + vidx);
       if (tvlEl) {
@@ -5479,7 +5425,6 @@ async function fetchDexScreenerStats() {
     const priceUsd = parseFloat(pair.priceUsd);
     if (priceUsd > 0) {
       TOKENS.GANG.price = priceUsd;
-      window._gangPriceFromDex = true;
       const gangPriceEl = document.getElementById("statPrice");
       if (gangPriceEl) gangPriceEl.textContent = `$${priceUsd < 0.01 ? priceUsd.toFixed(6) : priceUsd.toFixed(4)}`;
       const gangTokenPriceEl = document.getElementById("gangTokenPrice");
@@ -5563,7 +5508,6 @@ async function fetchDexScreenerStats() {
         const addrB = (tB.address === "native" ? CONTRACTS.WCRO : tB.address).toLowerCase();
         if ((base === addrA && quote === addrB) || (base === addrB && quote === addrA)) {
           farm.tvlUSD = pairLiq;
-          farm._dexTVL = true;
           farm.tvl = _fmtTVL(pairLiq);
           const tvlEl = document.getElementById("tvl-" + farm.pid);
           if (tvlEl) tvlEl.textContent = "$" + farm.tvl;
@@ -5819,9 +5763,9 @@ function renderTopPools() {
       <div style="display:flex;justify-content:space-between;align-items:center">
         <div>
           <div class="position-name">${tImg(symA,18)} ${symA} / ${tImg(symB,18)} ${symB}</div>
-          <div class="position-sub">TVL: ${tvlLabel} · APR: ${(farm._stableApy || farm.apy) > 0 ? (farm._stableApy || farm.apy) + '%' : '—'} · ${farm.multiplier}</div>
+          <div class="position-sub">TVL: ${tvlLabel} · APR: ${farm.apy > 0 ? farm.apy + '%' : '—'} · ${farm.multiplier}</div>
         </div>
-        <div class="position-value" style="color:var(--green)">${(farm._stableApy || farm.apy) > 0 ? '+' + (farm._stableApy || farm.apy) + '% APR' : '—'}</div>
+        <div class="position-value" style="color:var(--green)">${farm.apy > 0 ? '+' + farm.apy + '% APR' : '—'}</div>
       </div>
       <div style="display:flex;gap:8px">
         <button class="btn-secondary" style="flex:1;font-size:13px;color:var(--green);border-color:rgba(39,174,96,0.3)"
@@ -6688,7 +6632,7 @@ function renderFarms() {
       <div class="farm-stats">
         <div class="farm-stat">
           <div class="farm-stat-label">APR</div>
-          <div class="farm-stat-value green" id="apr-${farm.pid}">${farm._stableApy > 0 ? farm._stableApy + '%' : (farm.apy > 0 ? farm.apy + '%' : '—')}</div>
+          <div class="farm-stat-value green" id="apr-${farm.pid}">${farm.apy > 0 ? farm.apy + '%' : '—'}</div>
         </div>
         <div class="farm-stat">
           <div class="farm-stat-label">TVL</div>
