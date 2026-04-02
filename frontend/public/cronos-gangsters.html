@@ -5732,13 +5732,23 @@ async function approveLiqToken(side) {
   const btnId = side === "A" ? "approveTokenABtn" : "approveTokenBBtn";
   const btn   = document.getElementById(btnId);
   const orig  = btn.innerHTML;
-  btn.innerHTML = "⏳ Approving…";
+  btn.innerHTML = "⏳ Checking…";
   btn.disabled  = true;
 
   try {
     if (!CONTRACTS.ROUTER) { showToast("❌ Router contract not configured.", "error"); btn.innerHTML = orig; btn.disabled = false; return; }
-    showToast("⏳ Approving " + sym + " for Router…", "");
+    // Check existing allowance first — skip approve if already sufficient
     const contract = new ethers.Contract(tok.address, ERC20_ABI, state.signer);
+    const existing = await contract.allowance(state.address, CONTRACTS.ROUTER);
+    if (BigInt(existing) >= ethers.parseUnits("1", tok.decimals || 18)) {
+      showToast("✅ " + sym + " already approved!", "success");
+      btn.innerHTML     = "✅ " + sym + " APPROVED";
+      btn.style.color   = "var(--green)";
+      btn.style.borderColor = "var(--green)";
+      btn.dataset.approved = "1";
+      return;
+    }
+    showToast("⏳ Approving " + sym + " for Router…", "");
     const tx = await contract.approve(CONTRACTS.ROUTER, ethers.MaxUint256);
     showToast("⏳ Approval submitted, waiting for confirmation…", "");
     await tx.wait();
@@ -5956,6 +5966,36 @@ function _updateLiqApproveButtons(symA, symB) {
       }
     } else { btnB.style.display = "none"; }
   }
+  // Check on-chain allowance and auto-mark approved if sufficient
+  if (state.signer && CONTRACTS.ROUTER) _checkLiqAllowances(symA, symB);
+}
+
+async function _checkLiqAllowances(symA, symB) {
+  try {
+    const tokA = TOKENS[symA];
+    const tokB = TOKENS[symB];
+    const btnA = document.getElementById("approveTokenABtn");
+    const btnB = document.getElementById("approveTokenBBtn");
+    const minAllowance = ethers.parseUnits("1", 18); // consider approved if allowance >= 1 token
+    if (btnA && tokA && tokA.address !== "native" && !btnA.dataset.approved) {
+      const cA = new ethers.Contract(tokA.address, ERC20_ABI, state.signer);
+      const allowA = await cA.allowance(state.address, CONTRACTS.ROUTER);
+      if (BigInt(allowA) >= BigInt(minAllowance)) {
+        btnA.innerHTML = `✅ ${symA} APPROVED`;
+        btnA.style.color = "var(--green)"; btnA.style.borderColor = "var(--green)";
+        btnA.dataset.approved = "1";
+      }
+    }
+    if (btnB && tokB && tokB.address !== "native" && !btnB.dataset.approved) {
+      const cB = new ethers.Contract(tokB.address, ERC20_ABI, state.signer);
+      const allowB = await cB.allowance(state.address, CONTRACTS.ROUTER);
+      if (BigInt(allowB) >= BigInt(minAllowance)) {
+        btnB.innerHTML = `✅ ${symB} APPROVED`;
+        btnB.style.color = "var(--green)"; btnB.style.borderColor = "var(--green)";
+        btnB.dataset.approved = "1";
+      }
+    }
+  } catch(e) { /* allowance check failed, buttons stay as APPROVE — user can still click */ }
 }
 
 function reviewAddLiquidity() {
@@ -6186,9 +6226,13 @@ async function doRemoveLiquidity() {
     }
   } catch(e) { minA = 0n; minB = 0n; }
 
-    showToast("⏳ Approving LP token for Router…", "");
-    const approveTx = await lpContract.approve(CONTRACTS.ROUTER, lpAmt);
-    await approveTx.wait();
+    showToast("⏳ Checking LP approval…", "");
+    const existingAllowance = await lpContract.allowance(state.address, CONTRACTS.ROUTER);
+    if (BigInt(existingAllowance) < BigInt(lpAmt)) {
+      showToast("⏳ Approving LP token for Router…", "");
+      const approveTx = await lpContract.approve(CONTRACTS.ROUTER, ethers.MaxUint256);
+      await approveTx.wait();
+    }
 
     showToast("⏳ Confirm withdraw in your wallet…", "");
     let tx;
@@ -8457,7 +8501,24 @@ async function approveVaultLP(vid) {
   const btn = document.getElementById('vaultApproveBtn');
   const depositBtn = document.getElementById('vaultDepositBtn');
   if (!btn) return;
-  btn.innerHTML = '&#9203; Approving…'; btn.disabled = true;
+  btn.innerHTML = '&#9203; Checking…'; btn.disabled = true;
+
+  // Check existing allowance first
+  try {
+    const erc20 = new ethers.Contract(vault.lpAddr, ERC20_ABI, state.signer);
+    const existing = await erc20.allowance(state.address, CONTRACTS.VAULT);
+    if (BigInt(existing) >= ethers.parseUnits("1", 18)) {
+      showToast('LP token already approved!', 'success');
+      btn.innerHTML = '&#10003; LP APPROVED';
+      btn.style.color = 'var(--green)'; btn.style.borderColor = 'var(--green)';
+      const stepA = document.getElementById('vaultStep-approve');
+      const stepD = document.getElementById('vaultStep-deposit');
+      if (stepA) { stepA.classList.remove('active'); stepA.classList.add('done'); }
+      if (stepD) stepD.classList.add('active');
+      if (depositBtn) { depositBtn.style.opacity = '1'; depositBtn.style.pointerEvents = 'auto'; }
+      return;
+    }
+  } catch(e) { /* allowance check failed, proceed with approval */ }
 
   const rawProvider = state._rawProvider || window.ethereum;
   const erc20Iface = new ethers.Interface(ERC20_ABI);
@@ -11666,9 +11727,23 @@ async function approveGangForStaking() {
   if (!state.signer || !CONTRACTS.STAKING) { showToast('Connect wallet first', 'error'); return; }
   const btn = document.getElementById('approveGangBtn');
   if (!btn) return;
-  btn.innerHTML = '&#9203; Approving…'; btn.disabled = true;
+  btn.innerHTML = '&#9203; Checking…'; btn.disabled = true;
   try {
     const gangToken = new ethers.Contract(TOKENS.GANG.address, ERC20_ABI, state.signer);
+    // Check existing allowance first
+    const existing = await gangToken.allowance(state.address, CONTRACTS.STAKING);
+    if (BigInt(existing) >= ethers.parseUnits("1", 18)) {
+      showToast('$GANG already approved for staking!', 'success');
+      btn.innerHTML = '&#10003; $GANG APPROVED';
+      btn.style.color = 'var(--green)'; btn.style.borderColor = 'var(--green)';
+      const stepA = document.getElementById('gangStep-approve');
+      const stepS = document.getElementById('gangStep-stake');
+      if (stepA) { stepA.classList.remove('active'); stepA.classList.add('done'); }
+      if (stepS) stepS.classList.add('active');
+      const stakeBtn = document.getElementById('stakeGangBtn');
+      if (stakeBtn) { stakeBtn.style.opacity = '1'; stakeBtn.style.pointerEvents = 'auto'; }
+      return;
+    }
     showToast('Approving $GANG for staking — confirm in wallet…', '');
     const tx = await gangToken.approve(CONTRACTS.STAKING, ethers.MaxUint256);
     showToast('Approval submitted, awaiting confirmation…', '');
@@ -11680,7 +11755,6 @@ async function approveGangForStaking() {
     const stepS = document.getElementById('gangStep-stake');
     if (stepA) { stepA.classList.remove('active'); stepA.classList.add('done'); }
     if (stepS) stepS.classList.add('active');
-    // Enable the stake button
     const stakeBtn = document.getElementById('stakeGangBtn');
     if (stakeBtn) { stakeBtn.style.opacity = '1'; stakeBtn.style.pointerEvents = 'auto'; }
   } catch(e) {
