@@ -1085,30 +1085,7 @@
     </div>
 
     <!-- OWNER: Fund Farm Rewards -->
-    <div id="farmRewardPanel" data-testid="farm-reward-panel" style="display:none;background:linear-gradient(135deg,rgba(212,160,23,0.06),rgba(39,174,96,0.04));border:1px solid rgba(212,160,23,0.3);border-radius:14px;padding:16px 20px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-        <div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">FUND FARM REWARDS</div>
-          <div style="font-size:11px;color:var(--muted);">MasterChef GANG balance: <strong id="farmRewardBal" style="color:var(--green);">—</strong></div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <input class="input-field" id="farmRewardAmt" data-testid="farm-reward-amt" type="number" step="any" placeholder="GANG amount" style="width:160px;">
-          <button class="pct-btn" data-testid="farm-add-rewards-btn" onclick="addFarmRewards()" style="color:var(--gold);border-color:var(--gold);padding:8px 16px;font-weight:700;white-space:nowrap;">ADD REWARDS</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- PEPE/GANG Farm fix completed - button removed -->
-
-    <!-- OWNER: Rebalance Farm Allocations -->
-    <div id="rebalancePanel" data-testid="rebalance-panel" style="display:none;background:linear-gradient(135deg,rgba(39,174,96,0.06),rgba(212,160,23,0.04));border:1px solid rgba(39,174,96,0.4);border-radius:14px;padding:16px 20px;margin-bottom:16px;">
-      <div style="margin-bottom:12px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);letter-spacing:2px;">REBALANCE FARM ALLOCATIONS</div>
-        <div style="font-size:11px;color:var(--muted);">CRO/GANG = 50% | All other 12 pools (6 farms + 6 vaults) = 4.17% each. 13 transactions.</div>
-      </div>
-      <div id="rebalanceLog" style="font-size:12px;color:var(--muted);margin-bottom:10px;min-height:18px;"></div>
-      <button id="rebalanceBtn" data-testid="rebalance-btn" onclick="rebalanceAllFarms()" style="background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;width:100%;">REBALANCE ALL FARMS + VAULTS (13 transactions)</button>
-    </div>
+    <!-- Farm reward and rebalance panels removed (completed) -->
 
     <div class="farm-grid" id="farmGrid">
       <!-- Farms injected by JS -->
@@ -6918,11 +6895,11 @@ function setMax(inputId) {
   }
   if (inputId === "swapFrom") {
     const sym = document.getElementById("tokenFrom")?.value || "CRO";
-    input.value = (state.balances[sym] || 0).toFixed(6);
+    input.value = truncateDecimals(state.balances[sym] || 0, 6);
     calcSwap();
   } else if (inputId === "liqA") {
     const sym = document.getElementById("liqTokenA")?.value || "CRO";
-    input.value = (state.balances[sym] || 0).toFixed(6);
+    input.value = truncateDecimals(state.balances[sym] || 0, 6);
     calcLiqRatio();
   } else if (inputId === "removeLPAmt") {
     const symA = document.getElementById("liqTokenA")?.value || "CRO";
@@ -6931,7 +6908,8 @@ function setMax(inputId) {
     // Use raw BigInt balance to avoid float precision loss
     const rawBal = matchFarm ? state.lpBalancesRaw?.[matchFarm.pid] : null;
     if (rawBal && rawBal > 0n) {
-      input.value = ethers.formatUnits(rawBal, 18);
+      const safe = rawBal > 1n ? rawBal - 1n : rawBal;
+      input.value = ethers.formatUnits(safe, 18);
     } else {
       input.value = "0";
     }
@@ -6939,18 +6917,20 @@ function setMax(inputId) {
   } else if (inputId === "stakeAmt") {
     const { pid, action } = _stakeCtx;
     if (action === "unstake") {
-      // Use raw staked amount to avoid float precision loss
+      // Use raw staked amount, subtract 1 wei to avoid overflow
       const rawStaked = state.stakedAmountsRaw?.[pid];
       if (rawStaked && rawStaked > 0n) {
-        input.value = ethers.formatUnits(rawStaked, 18);
+        const safe = rawStaked > 1n ? rawStaked - 1n : rawStaked;
+        input.value = ethers.formatUnits(safe, 18);
       } else {
         input.value = "0";
       }
     } else {
-      // Use raw LP balance to avoid float precision loss
+      // Use raw LP balance, subtract 1 wei to avoid overflow
       const rawBal = state.lpBalancesRaw?.[pid];
       if (rawBal && rawBal > 0n) {
-        input.value = ethers.formatUnits(rawBal, 18);
+        const safe = rawBal > 1n ? rawBal - 1n : rawBal;
+        input.value = ethers.formatUnits(safe, 18);
       } else {
         input.value = "0";
         showToast("LP balance is still loading or is zero - wait a moment.", "");
