@@ -3776,13 +3776,13 @@ function tImg(sym, size) {
 //         GangstersFactory has been deployed and pairs created.
 const FARMS = [
   // ── Working farms first ──
-  { pid: 1,  name: "CRO / GANG",   tokens: ["CRO","GANG"],  apy: 0, tvl: "—", multiplier: "50%", lpAddr: "0x1f77938E1109E1Fc8e3dD697B95525303094Cb65", earned: 0, chefPid: 0, _onChain: true },
-  { pid: 2,  name: "GANG / USDC",  tokens: ["GANG","USDC"], apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xd434CC7E9CC50e74926BDe47c70FC8Bc0474A8eC", earned: 0, chefPid: 1, _onChain: true },
-  { pid: 3,  name: "GANG Staking", tokens: ["GANG"],         apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: CONTRACTS.GANG, earned: 0, chefPid: 4, _onChain: true },
-  { pid: 0,  name: "GANG / VVS",   tokens: ["GANG","VVS"],  apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xB47121251578f148f15949B7816b3D152EaE4cFF", earned: 0, chefPid: 14, _onChain: true },
-  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xc9eA98736dbC94FAA91AbF9F4aD1eb41e7fb40f4", earned: 0, chefPid: 8, _onChain: true, needsChefAdd: false },
-  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xF94d1f10028B3271a9D43D0E7eF798e8Df1937bF", earned: 0, chefPid: 9, _onChain: true, needsChefAdd: false },
-  { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6", earned: 0, chefPid: 7, _onChain: true, needsChefAdd: false },
+  { pid: 1,  name: "CRO / GANG",   tokens: ["CRO","GANG"],  apy: 0, _stableApy: 0, tvl: "—", multiplier: "50%", lpAddr: "0x1f77938E1109E1Fc8e3dD697B95525303094Cb65", earned: 0, chefPid: 0, _onChain: true },
+  { pid: 2,  name: "GANG / USDC",  tokens: ["GANG","USDC"], apy: 0, _stableApy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xd434CC7E9CC50e74926BDe47c70FC8Bc0474A8eC", earned: 0, chefPid: 1, _onChain: true },
+  { pid: 3,  name: "GANG Staking", tokens: ["GANG"],         apy: 0, _stableApy: 0, tvl: '—', multiplier: "4.17%", lpAddr: CONTRACTS.GANG, earned: 0, chefPid: 4, _onChain: true },
+  { pid: 0,  name: "GANG / VVS",   tokens: ["GANG","VVS"],  apy: 0, _stableApy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xB47121251578f148f15949B7816b3D152EaE4cFF", earned: 0, chefPid: 14, _onChain: true },
+  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, _stableApy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xc9eA98736dbC94FAA91AbF9F4aD1eb41e7fb40f4", earned: 0, chefPid: 8, _onChain: true, needsChefAdd: false },
+  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, _stableApy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xF94d1f10028B3271a9D43D0E7eF798e8Df1937bF", earned: 0, chefPid: 9, _onChain: true, needsChefAdd: false },
+  { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, _stableApy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6", earned: 0, chefPid: 7, _onChain: true, needsChefAdd: false },
   // ── Coming soon ──
   { pid: 4,  name: "CRO / USDC",   tokens: ["CRO","USDC"],  apy: 0, tvl: '—', multiplier: "36x", lpAddr: "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6", earned: 0, comingSoon: true },
   { pid: 5,  name: "CRO / WETH",   tokens: ["CRO","WETH"],  apy: 0, tvl: '—', multiplier: "16x", lpAddr: "0xA111C17f8B8303280d3EB01BBcd61000AA7F39F9", earned: 0, comingSoon: true },
@@ -3800,7 +3800,6 @@ const VAULTS = [
 ];
 
 // ── App State ─────────────────────────────────────────────────
-window._aprPageLoadTime = Date.now();
 let state = {
   provider: null,
   signer: null,
@@ -4130,10 +4129,6 @@ async function _connectProvider(rawProvider, walletName) {
     renderPortfolio();
     // Ensure token prices are loaded before calculating TVL/APR
     await fetchAllTokenPrices();
-    // Reset APR timer — wait 20s for prices to settle after wallet connect
-    window._aprPageLoadTime = Date.now();
-    for (const farm of FARMS) { delete farm._aprLockedUntil; }
-    for (const vault of VAULTS) { delete vault._aprLockedUntil; }
     fetchFarmTVLs();
     calcFarmAPRs();
     checkOwnerRevenue();
@@ -5299,77 +5294,28 @@ async function calcFarmAPRs() {
         const rewardsUSD = poolGangPerYear * gangPrice;
 
         // APR = annual rewards / TVL * 100
+        // Only use TVL already set by fetchFarmTVLs() or DexScreener — no duplicate calc
         let tvlUSD = farm.tvlUSD || 0;
-        // If no TVL from DexScreener or fetchFarmTVLs, calculate from on-chain reserves
-        if (tvlUSD <= 0 && !farm._dexTVL && farm.lpAddr && farm.tokens.length >= 2) {
-          try {
-            const pair = new ethers.Contract(farm.lpAddr, PAIR_ABI, rp);
-            const lpToken2 = new ethers.Contract(farm.lpAddr, ERC20_ABI, rp);
-            const [t0addr, reserves, lpTotalSup] = await Promise.all([pair.token0(), pair.getReserves(), lpToken2.totalSupply()]);
-            const tA = TOKENS[farm.tokens[0]];
-            const tB = TOKENS[farm.tokens[1]];
-            const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
-            const isAtoken0 = t0addr.toLowerCase() === addrA?.toLowerCase();
-            const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
-            const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
-            const valA = resA * (tA?.price || 0);
-            const valB = resB * (tB?.price || 0);
-            let totalPoolUSD2 = 0;
-            if (valA > 0 && valB > 0) {
-              totalPoolUSD2 = valA + valB;
-            } else if (valA > 0) {
-              totalPoolUSD2 = valA * 2;
-            } else if (valB > 0) {
-              totalPoolUSD2 = valB * 2;
-            }
-            // Use total pool TVL, or staked share if available
-            tvlUSD = totalPoolUSD2;
-            if (CONTRACTS.CHEF && totalPoolUSD2 > 0) {
-              try {
-                const stakedInChef = await lpToken2.balanceOf(CONTRACTS.CHEF);
-                if (stakedInChef > 0n && lpTotalSup > 0n) {
-                  const share = parseFloat(ethers.formatUnits(stakedInChef, 18)) / parseFloat(ethers.formatUnits(lpTotalSup, 18));
-                  tvlUSD = totalPoolUSD2 * share;
-                }
-              } catch {}
-            }
-          } catch {}
-        }
         if (tvlUSD > 0) {
-          // Save TVL back to farm — but don't overwrite DexScreener TVL
-          if (!farm._dexTVL) {
-            farm.tvlUSD = tvlUSD;
-            farm.tvl = _fmtTVL(tvlUSD);
-            const tvlEl2 = document.getElementById("tvl-" + farm.pid);
-            if (tvlEl2) tvlEl2.textContent = "$" + farm.tvl;
-          }
           farm.apy = Math.round(rewardsUSD / tvlUSD * 100);
         } else {
           farm.apy = 0;
         }
       } catch {}
 
-      // Update APR display — wait 20s after page load for prices to settle, then lock for 60s
+      // Update APR DOM element directly — no re-render needed
       const aprEl = document.getElementById("apr-" + farm.pid);
-      if (aprEl && farm.apy > 0) {
-        const now = Date.now();
-        const elapsed = now - window._aprPageLoadTime;
-        if (elapsed < 20000) {
-          // Still settling — don't show anything
-        } else if (!farm._aprLockedUntil || now > farm._aprLockedUntil) {
+      if (aprEl) {
+        if (farm.apy > 0) {
           farm._stableApy = farm.apy;
-          farm._aprLockedUntil = now + 60000;
           aprEl.textContent = farm.apy + '%';
+        } else {
+          aprEl.textContent = '—';
         }
       }
     }
   } catch(e) { console.error("APR calc error:", e); }
 
-  // Only re-render farms list once (first time APR is calculated), not every cycle
-  if (!window._farmsRenderedWithAPR) {
-    window._farmsRenderedWithAPR = true;
-    renderFarms();
-  }
   // Also calculate vault APRs from the same MasterChef data
   await calcVaultAPRsOnChain();
 }
@@ -5480,30 +5426,20 @@ async function calcVaultAPRsOnChain() {
         console.error('Vault APR calc error for ' + vault.name + ':', e);
       }
 
-      // Update APR display — wait 20s after page load for prices to settle, then lock for 60s
+      // Update APR DOM element directly — no re-render needed
       const vidx = VAULTS.indexOf(vault);
       const aprEl = document.getElementById('vault-apr-' + vidx);
       if (aprEl) {
-        const now = Date.now();
-        const elapsed = now - window._aprPageLoadTime;
-        if (elapsed < 20000) {
-          // Still settling — don't show anything
-        } else if (!vault._aprLockedUntil || now > vault._aprLockedUntil) {
-          const newApr = calcVaultAPR(vault);
+        const newApr = calcVaultAPR(vault);
+        if (newApr && newApr !== '—') {
           vault._stableApr = newApr;
-          vault._aprLockedUntil = now + 60000;
-          aprEl.textContent = newApr;
         }
+        aprEl.textContent = vault._stableApr || '—';
       }
       const tvlEl = document.getElementById('vault-tvl-' + vidx);
       if (tvlEl) {
         tvlEl.textContent = vault._tvlUSD > 0 ? '$' + _fmtTVL(vault._tvlUSD) : '$0';
       }
-    }
-    // Only re-render vaults once (first time APR is calculated)
-    if (!window._vaultsRenderedWithAPR) {
-      window._vaultsRenderedWithAPR = true;
-      renderVaults();
     }
   } catch(e) { console.error('Vault APR on-chain error:', e); }
 }
