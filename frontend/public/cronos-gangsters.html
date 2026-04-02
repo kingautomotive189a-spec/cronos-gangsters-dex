@@ -5538,7 +5538,7 @@ async function fetchDexScreenerStats() {
           break;
         }
       }
-      // Match DexScreener pair to a vault for TVL (same LP pairs)
+      // Match DexScreener pair to a vault for TVL (fallback only — on-chain calc is authoritative)
       for (const vault of VAULTS) {
         if (vault.tokens.length < 2) continue;
         const vtA = TOKENS[vault.tokens[0]];
@@ -5547,10 +5547,14 @@ async function fetchDexScreenerStats() {
         const vAddrA = (vtA.address === "native" ? CONTRACTS.WCRO : vtA.address).toLowerCase();
         const vAddrB = (vtB.address === "native" ? CONTRACTS.WCRO : vtB.address).toLowerCase();
         if ((base === vAddrA && quote === vAddrB) || (base === vAddrB && quote === vAddrA)) {
-          vault._tvlUSD = pairLiq;
-          const vidx = VAULTS.indexOf(vault);
-          const vTvlEl = document.getElementById("vault-tvl-" + vidx);
-          if (vTvlEl) vTvlEl.textContent = "$" + _fmtTVL(pairLiq);
+          vault._dexPoolTVL = pairLiq;
+          // Only set _tvlUSD from DexScreener if on-chain calc hasn't set it yet
+          if (!vault._tvlUSD || vault._tvlUSD <= 0) {
+            vault._tvlUSD = pairLiq;
+            const vidx = VAULTS.indexOf(vault);
+            const vTvlEl = document.getElementById("vault-tvl-" + vidx);
+            if (vTvlEl) vTvlEl.textContent = "$" + _fmtTVL(pairLiq);
+          }
           break;
         }
       }
@@ -5966,11 +5970,15 @@ function _updateLiqApproveButtons(symA, symB) {
       }
     } else { btnB.style.display = "none"; }
   }
-  // Check on-chain allowance and auto-mark approved if sufficient
+  // Check on-chain allowance and auto-mark approved if sufficient (throttled)
   if (state.signer && CONTRACTS.ROUTER) _checkLiqAllowances(symA, symB);
 }
 
+let _lastAllowanceCheck = 0;
 async function _checkLiqAllowances(symA, symB) {
+  const now = Date.now();
+  if (now - _lastAllowanceCheck < 10000) return; // max once per 10s
+  _lastAllowanceCheck = now;
   try {
     const tokA = TOKENS[symA];
     const tokB = TOKENS[symB];

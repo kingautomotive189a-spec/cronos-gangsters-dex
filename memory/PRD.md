@@ -76,10 +76,11 @@ Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/ca
 - All 6 vaults now show correct USD TVL: GANG/WETH ($5), GANG/WBTC ($55), GANG/ATOM ($2), etc.
 - Fixed approval redundancy: all 5 approval paths now check on-chain allowance before prompting wallet
   - `approveLiqToken()`: checks existing allowance, skips approve if sufficient
-  - `_updateLiqApproveButtons()`: async on-chain allowance check auto-marks buttons as APPROVED
+  - `_updateLiqApproveButtons()`: async on-chain allowance check auto-marks buttons as APPROVED (throttled to 1 check per 10s)
   - `doRemoveLiquidity()`: checks LP allowance + approves MaxUint256 (was approving exact amount each time)
   - `approveVaultLP()`: checks allowance before sending approve tx
   - `approveGangForStaking()`: checks allowance before sending approve tx
+- Fixed vault TVL/APR flickering: DexScreener now only sets vault TVL as fallback (stores to `_dexPoolTVL`), on-chain calc is authoritative and never gets overwritten by DexScreener on subsequent cycles
 
 ## Backlog
 - P2: Add max payout limits for trading
