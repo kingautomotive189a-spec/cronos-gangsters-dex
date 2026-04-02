@@ -1101,6 +1101,25 @@
     <!-- OWNER: Fund Farm Rewards -->
     <!-- Farm reward and rebalance panels removed (completed) -->
 
+    <!-- OWNER: Emission Rate Control (Farms) -->
+    <div id="emissionRatePanelFarms" data-testid="emission-rate-panel-farms" style="display:none;background:linear-gradient(135deg,rgba(212,160,23,0.06),rgba(39,174,96,0.04));border:1px solid rgba(212,160,23,0.3);border-radius:14px;padding:16px 20px;margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">EMISSION RATE</div>
+          <div style="font-size:11px;color:var(--muted);">Current rate: <strong id="currentEmissionRateFarms" style="color:var(--green);">—</strong> GANG/sec</div>
+          <div style="font-size:11px;color:var(--muted);">Daily output: <strong id="dailyEmissionRateFarms" style="color:var(--green);">—</strong> GANG/day</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input class="input-field" id="newEmissionRateFarms" data-testid="new-emission-rate-farms" type="number" step="any" placeholder="GANG per second" style="width:180px;">
+          <button class="pct-btn" data-testid="update-emission-btn-farms" onclick="updateEmissionRate('Farms')" style="color:var(--gold);border-color:var(--gold);padding:8px 16px;font-weight:700;white-space:nowrap;">UPDATE</button>
+        </div>
+      </div>
+      <div id="emissionStatusFarms" style="margin-top:8px;font-size:11px;display:none;"></div>
+      <div style="margin-top:8px;font-size:10px;color:var(--muted);line-height:1.5;">
+        Lower rate = rewards last longer, APR drops slower. Higher rate = faster rewards, APR drops faster when people stake.
+      </div>
+    </div>
+
     <div class="farm-grid" id="farmGrid">
       <!-- Farms injected by JS -->
     </div>
@@ -1164,7 +1183,7 @@
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <input class="input-field" id="newEmissionRate" data-testid="new-emission-rate" type="number" step="any" placeholder="GANG per second" style="width:180px;">
-          <button class="pct-btn" data-testid="update-emission-btn" onclick="updateEmissionRate()" style="color:var(--gold);border-color:var(--gold);padding:8px 16px;font-weight:700;white-space:nowrap;">UPDATE</button>
+          <button class="pct-btn" data-testid="update-emission-btn" onclick="updateEmissionRate('')" style="color:var(--gold);border-color:var(--gold);padding:8px 16px;font-weight:700;white-space:nowrap;">UPDATE</button>
         </div>
       </div>
       <div id="emissionStatus" style="margin-top:8px;font-size:11px;display:none;"></div>
@@ -10270,10 +10289,12 @@ function checkOwnerPanels() {
   const vaultPanel = document.getElementById('vaultRewardPanel');
   const rebalPanel = document.getElementById('rebalancePanel');
   const emissionPanel = document.getElementById('emissionRatePanel');
+  const emissionPanelFarms = document.getElementById('emissionRatePanelFarms');
   if (farmPanel) farmPanel.style.display = isOwner ? 'block' : 'none';
   if (vaultPanel) vaultPanel.style.display = isOwner ? 'block' : 'none';
   if (rebalPanel) rebalPanel.style.display = isOwner ? 'block' : 'none';
   if (emissionPanel) emissionPanel.style.display = isOwner ? 'block' : 'none';
+  if (emissionPanelFarms) emissionPanelFarms.style.display = isOwner ? 'block' : 'none';
   // fixPepePanel removed - PEPE farm already fixed
   if (isOwner) {
     loadRewardBalances();
@@ -10320,22 +10341,28 @@ async function loadEmissionRate() {
     const gangPerSecBN = await chef.gangPerSecond();
     const gangPerSec = parseFloat(ethers.formatUnits(gangPerSecBN, 18));
     const dailyGang = gangPerSec * 86400;
-    const el1 = document.getElementById('currentEmissionRate');
-    const el2 = document.getElementById('dailyEmissionRate');
-    if (el1) el1.textContent = gangPerSec.toFixed(4);
-    if (el2) el2.textContent = dailyGang >= 1000 ? Math.round(dailyGang).toLocaleString() : dailyGang.toFixed(2);
+    const fmtRate = gangPerSec.toFixed(4);
+    const fmtDaily = dailyGang >= 1000 ? Math.round(dailyGang).toLocaleString() : dailyGang.toFixed(2);
+    // Update both panels (Farms + Vaults)
+    for (const suffix of ['', 'Farms']) {
+      const el1 = document.getElementById('currentEmissionRate' + suffix);
+      const el2 = document.getElementById('dailyEmissionRate' + suffix);
+      if (el1) el1.textContent = fmtRate;
+      if (el2) el2.textContent = fmtDaily;
+    }
   } catch(e) {
     console.log('Failed to load emission rate:', e);
   }
 }
 
-async function updateEmissionRate() {
+async function updateEmissionRate(suffix) {
+  suffix = suffix || '';
   if (!state.signer || !CONTRACTS.CHEF) {
     showToast('Connect wallet first', 'error');
     return;
   }
-  const input = document.getElementById('newEmissionRate');
-  const statusEl = document.getElementById('emissionStatus');
+  const input = document.getElementById('newEmissionRate' + suffix);
+  const statusEl = document.getElementById('emissionStatus' + suffix);
   if (!input || !input.value || parseFloat(input.value) < 0) {
     showToast('Enter a valid GANG per second rate', 'error');
     return;
