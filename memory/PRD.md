@@ -49,7 +49,9 @@ Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/ca
 - Code quality refactor — telegram_bot.py dispatch table, secrets module, dead code removed
 - MasterChef rebalance — 13 pools set to 50%/4.17% split
 - Cleanup — removed old debug elements, duplicate HTML files (57MB freed), old zip packages
-- Download package: cronos-gangsters-full-app.zip (12MB)
+- Removed deploy banners: deployCorrectVault, regVaultChef, deployLaunchpad, deployLocker, deployLottery, mktDeployPrompt
+- Kept all owner fee/revenue panels: vaultRewardPanel, launchpadFeeBanner, lockerFeePanel, fundRewardsSection, lotteryOwnerPanel, nftOwnerSection, mktOwnerSection
+- Download package: cronos-gangsters-full-app.zip (updated)
 
 ## Session 2 — April 2, 2026
 - Verified Ethers.js v6.9.0 (not v5) — confirmed `setMax()` BigInt math (`rawBal - 1n`) is correct

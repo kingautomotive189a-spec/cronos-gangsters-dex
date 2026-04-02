@@ -1118,21 +1118,7 @@
       <div style="font-size:11px;color:var(--muted);margin-top:6px">Find it on CronoScan → your wallet → Contract Creation transactions</div>
     </div>
 
-    <!-- FIX VAULT POOLS — add correct MasterChef PIDs to existing vault -->
-    <div id="deployCorrectVaultBanner" data-testid="deploy-correct-vault" style="display:none;background:linear-gradient(135deg,rgba(231,76,60,0.1),rgba(212,160,23,0.08));border:2px solid rgba(212,160,23,0.4);border-radius:16px;padding:20px;margin-bottom:24px;text-align:center;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#e74c3c;letter-spacing:2px;margin-bottom:8px">VAULT NEEDS ONE-TIME FIX</div>
-      <div style="color:var(--muted);font-size:12px;margin-bottom:14px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.5">Adding 6 pools with correct IDs to your vault. 6 MetaMask confirms, about 2 min.</div>
-      <button id="deployCorrectVaultBtn" data-testid="deploy-correct-vault-btn" onclick="fixVaultPools()" style="background:linear-gradient(135deg,var(--gold),#b8860b);border:none;border-radius:12px;padding:14px 36px;font-family:'Bebas Neue',sans-serif;font-size:18px;color:#000;letter-spacing:2px;cursor:pointer;text-shadow:none">FIX VAULT POOLS</button>
-      <div id="deployVaultLog" data-testid="deploy-vault-log" style="text-align:left;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);max-height:180px;overflow-y:auto;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;display:none;line-height:1.7;margin-top:12px"></div>
-    </div>
-
-    <!-- REGISTER VAULT LP TOKENS ON MASTERCHEF — fixes deposits for all vaults except WETH -->
-    <div id="regVaultChefBanner" data-testid="reg-vault-chef-banner" style="display:none;background:linear-gradient(135deg,rgba(231,76,60,0.15),rgba(212,160,23,0.08));border:2px solid rgba(231,76,60,0.5);border-radius:16px;padding:20px;margin-bottom:24px;text-align:center;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#e74c3c;letter-spacing:2px;margin-bottom:8px">VAULT FARMS NOT REGISTERED</div>
-      <div id="regVaultChefInfo" style="color:var(--muted);font-size:12px;margin-bottom:14px;max-width:540px;margin-left:auto;margin-right:auto;line-height:1.6">Some vault LP tokens are missing from the MasterChef. GANG/WETH works because its farm is registered. The others need to be added. One tap, 5 confirms.</div>
-      <button id="regVaultBtn" data-testid="reg-vault-chef-btn" onclick="registerVaultFarmsOnChef()" style="background:linear-gradient(135deg,#e74c3c,#c0392b);border:none;border-radius:12px;padding:14px 36px;font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;letter-spacing:2px;cursor:pointer;text-shadow:none">REGISTER VAULT FARMS ON MASTERCHEF</button>
-      <div id="regVaultLog" data-testid="reg-vault-log" style="text-align:left;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);max-height:220px;overflow-y:auto;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;display:none;line-height:1.7;margin-top:12px"></div>
-    </div>
+    <!-- Owner/deploy banners removed -->
 
     <!-- V1 VAULT RECOVERY -->
     <div id="v1RecoverBanner" data-testid="v1-recover-banner" style="display:none;background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.3);border-radius:12px;padding:14px 20px;margin-bottom:20px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
@@ -1774,13 +1760,7 @@
       </div>
     </div>
 
-    <!-- Deploy Launchpad Banner (owner only) -->
-    <div id="deployLaunchpadBanner" data-testid="deploy-launchpad-banner" style="display:none;max-width:600px;margin:0 auto 24px;background:linear-gradient(135deg,rgba(212,160,23,0.1),rgba(39,174,96,0.05));border:2px solid rgba(212,160,23,0.4);border-radius:16px;padding:20px;text-align:center;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;">DEPLOY LAUNCHPAD CONTRACT</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">One-time setup. Deploy the launchpad smart contract to start hosting IDOs.</div>
-      <button id="deployLaunchpadBtn" data-testid="deploy-launchpad-btn" onclick="deployLaunchpad()" class="btn-primary" style="max-width:300px;margin:0 auto;">DEPLOY LAUNCHPAD</button>
-      <div id="launchpadDeployLog" style="display:none;text-align:left;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);max-height:150px;overflow-y:auto;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;margin-top:12px;line-height:1.7;"></div>
-    </div>
+    <!-- Deploy launchpad banner removed -->
 
     <!-- Create New IDO (owner only) -->
     <div id="createIdoSection" data-testid="create-ido-section" style="display:none;max-width:600px;margin:0 auto 24px;">
@@ -1883,13 +1863,7 @@
       </div>
     </div>
 
-    <!-- Deploy Locker Banner -->
-    <div id="deployLockerBanner" data-testid="deploy-locker-banner" style="display:none;max-width:600px;margin:0 auto 24px;background:linear-gradient(135deg,rgba(212,160,23,0.1),rgba(39,174,96,0.05));border:2px solid rgba(212,160,23,0.4);border-radius:16px;padding:20px;text-align:center;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;">DEPLOY LOCKER CONTRACT</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">One-time setup. Deploy the token locker to start earning lock fees.</div>
-      <button id="deployLockerBtn" data-testid="deploy-locker-btn" onclick="deployLocker()" class="btn-primary" style="max-width:300px;margin:0 auto;">DEPLOY LOCKER</button>
-      <div id="lockerDeployLog" style="display:none;text-align:left;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);max-height:150px;overflow-y:auto;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;margin-top:12px;line-height:1.7;"></div>
-    </div>
+    <!-- Deploy locker banner removed -->
 
     <!-- Lock Tokens Form -->
     <div class="card" style="max-width:600px;margin:0 auto 24px;border-color:rgba(212,160,23,0.4);">
@@ -1972,7 +1946,7 @@
       </div>
     </div>
 
-    <!-- Owner: Collect Fees -->
+    <!-- Locker fee panel -->
     <div id="lockerFeePanel" data-testid="locker-fee-panel" style="display:none;max-width:600px;margin:24px auto 0;">
       <div class="card" style="border-color:rgba(212,160,23,0.5);background:linear-gradient(135deg,rgba(212,160,23,0.08),rgba(39,174,96,0.03));">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
@@ -2175,12 +2149,12 @@
           <button class="btn-primary" id="stakeGangBtn" onclick="doStakeGang()">LOCK & STAKE $GANG</button>
 
           <div id="stakingBannerLocal" style="margin-top:12px;background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.3);border-radius:10px;padding:14px;font-size:12px;color:var(--muted);line-height:1.7;text-align:center;">
-            🔒 <strong style="color:var(--gold);">STAKING CONTRACT DEPLOYING SOON</strong><br>
+            <strong style="color:var(--gold);">STAKING CONTRACT DEPLOYING SOON</strong><br>
             Stakes saved locally on your device until contract goes live.<br>
             Early exit penalty: <strong style="color:var(--red);">25%</strong> of staked amount.
           </div>
           <div id="stakingBannerLive" style="display:none;margin-top:12px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.3);border-radius:10px;padding:14px;font-size:12px;color:var(--muted);line-height:1.7;text-align:center;">
-            ✅ <strong style="color:var(--green);">STAKING CONTRACT LIVE</strong><br>
+            <strong style="color:var(--green);">STAKING CONTRACT LIVE</strong><br>
             Stakes are secured on-chain on Cronos.<br>
             Early exit penalty: <strong style="color:var(--red);">25%</strong> of staked amount.
           </div>
@@ -2556,23 +2530,7 @@
       </div>
     </div>
 
-    <!-- Deploy Lottery Banner (owner only, shown if no contract) -->
-    <div id="deployLotteryBanner" data-testid="deploy-lottery-banner" style="max-width:600px;margin:0 auto 20px;background:linear-gradient(135deg,rgba(212,160,23,0.08),rgba(212,160,23,0.02));border:2px dashed var(--gold);border-radius:14px;padding:20px;text-align:center;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;">DEPLOY LOTTERY CONTRACT</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">One-time setup. Deploys the GANG Lottery smart contract so users can buy tickets.</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:400px;margin:0 auto 14px;">
-        <div>
-          <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">TICKET PRICE (CRO)</div>
-          <input class="input-field" id="lotteryTicketPrice" data-testid="lottery-ticket-price" type="number" value="10" min="1" style="width:100%;box-sizing:border-box;">
-        </div>
-        <div>
-          <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">PLATFORM FEE %</div>
-          <input class="input-field" id="lotteryPlatformFee" data-testid="lottery-platform-fee" type="number" value="10" min="1" max="20" style="width:100%;box-sizing:border-box;">
-        </div>
-      </div>
-      <button data-testid="deploy-lottery-btn" onclick="deployLottery()" class="btn-primary" style="padding:14px 40px;font-size:16px;">DEPLOY LOTTERY</button>
-      <div id="deployLotteryStatus" data-testid="deploy-lottery-status" style="margin-top:10px;font-size:12px;display:none;"></div>
-    </div>
+    <!-- Deploy lottery banner removed -->
 
     <!-- Buy Tickets Card -->
     <div class="card" style="max-width:600px;margin:0 auto 24px;border-color:rgba(212,160,23,0.35);">
@@ -3400,15 +3358,6 @@
           WITHDRAW FEES
         </button>
         <div id="mktWithdrawStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="mkt-withdraw-status"></div>
-      </div>
-    </div>
-
-    <!-- Deploy prompt (shown when marketplace not deployed) -->
-    <div id="mktDeployPrompt" style="display:none;margin-top:20px;" data-testid="mkt-deploy-prompt">
-      <div class="ref-link-box" style="max-width:560px;">
-        <div class="ref-link-label">MARKETPLACE NOT DEPLOYED YET</div>
-        <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">The NFT marketplace contract needs to be deployed first.</p>
-        <a href="/deploy-marketplace.html" target="_blank" class="ref-copy-btn" style="display:inline-block;text-decoration:none;" data-testid="mkt-deploy-link">DEPLOY MARKETPLACE</a>
       </div>
     </div>
 
