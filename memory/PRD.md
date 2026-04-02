@@ -7,7 +7,7 @@ Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/ca
 - Frontend: Vanilla JS/HTML standalone pages in /frontend/public/
 - Backend: FastAPI + python-telegram-bot (v20+)
 - Database: MongoDB (Motor async driver)
-- Blockchain: Cronos mainnet via ethers.js v5
+- Blockchain: Cronos mainnet via ethers.js v6 (6.9.0)
 
 ## Key Files
 - `/frontend/public/cronos-gangsters.html` — Main DApp
@@ -50,6 +50,12 @@ Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/ca
 - MasterChef rebalance — 13 pools set to 50%/4.17% split
 - Cleanup — removed old debug elements, duplicate HTML files (57MB freed), old zip packages
 - Download package: cronos-gangsters-full-app.zip (12MB)
+
+## Session 2 — April 2, 2026
+- Verified Ethers.js v6.9.0 (not v5) — confirmed `setMax()` BigInt math (`rawBal - 1n`) is correct
+- Verified null-safety for removed rebalancePanel/farmRewardPanel elements  
+- Frontend regression sweep: 18/18 tests passed (iteration_3.json)
+- No regressions found in DOM structure, hash navigation, farm sorting, vault APR, nav wrapping
 
 ## Backlog
 - P2: Add max payout limits for trading
