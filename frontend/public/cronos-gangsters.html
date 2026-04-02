@@ -5138,7 +5138,19 @@ async function fetchFarmTVLs() {
         const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
 
         // Total pool value in USD
-        const totalPoolUSD = (resA * (tA?.price || 0)) + (resB * (tB?.price || 0));
+        const valA = resA * (tA?.price || 0);
+        const valB = resB * (tB?.price || 0);
+        // If one side has price 0, double the known side (standard DeFi TVL estimation)
+        let totalPoolUSD;
+        if (valA > 0 && valB > 0) {
+          totalPoolUSD = valA + valB;
+        } else if (valA > 0) {
+          totalPoolUSD = valA * 2;
+        } else if (valB > 0) {
+          totalPoolUSD = valB * 2;
+        } else {
+          totalPoolUSD = 0;
+        }
 
         let tvlUSD = totalPoolUSD;
         // If we got staked balance, compute farm's share only
@@ -5219,13 +5231,20 @@ async function calcFarmAPRs() {
             const isAtoken0 = t0addr.toLowerCase() === addrA?.toLowerCase();
             const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
             const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
-            tvlUSD = (resA * (tA?.price || 0)) + (resB * (tB?.price || 0));
+            const valA = resA * (tA?.price || 0);
+            const valB = resB * (tB?.price || 0);
+            // If one side has price 0, double the known side (standard DeFi TVL estimation)
+            if (valA > 0 && valB > 0) {
+              tvlUSD = valA + valB;
+            } else if (valA > 0) {
+              tvlUSD = valA * 2;
+            } else if (valB > 0) {
+              tvlUSD = valB * 2;
+            }
           } catch {}
         }
         if (tvlUSD > 0) {
           farm.apy = Math.round(rewardsUSD / tvlUSD * 100);
-          // Cap unrealistic APR — show dash if absurdly high
-          if (farm.apy > 10000) farm.apy = 0;
         } else {
           // No TVL = show dash, not a fake number
           farm.apy = 0;
@@ -5289,7 +5308,19 @@ async function calcVaultAPRsOnChain() {
             const isAtoken0 = t0addr.toLowerCase() === addrA?.toLowerCase();
             const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
             const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
-            const totalPoolUSD = (resA * (tA?.price || 0)) + (resB * (tB?.price || 0));
+            const valA = resA * (tA?.price || 0);
+            const valB = resB * (tB?.price || 0);
+            // If one side has price 0, double the known side (standard DeFi TVL estimation)
+            let totalPoolUSD;
+            if (valA > 0 && valB > 0) {
+              totalPoolUSD = valA + valB;
+            } else if (valA > 0) {
+              totalPoolUSD = valA * 2;
+            } else if (valB > 0) {
+              totalPoolUSD = valB * 2;
+            } else {
+              totalPoolUSD = 0;
+            }
 
             // Calculate vault's share: LP staked in MasterChef vs total supply
             let tvlUSD = totalPoolUSD;
@@ -5315,7 +5346,9 @@ async function calcVaultAPRsOnChain() {
               const isA2 = t0addr2.toLowerCase() === addrA2?.toLowerCase();
               const resA2 = parseFloat(ethers.formatUnits(isA2 ? reserves2[0] : reserves2[1], tA2?.decimals || 18));
               const resB2 = parseFloat(ethers.formatUnits(isA2 ? reserves2[1] : reserves2[0], tB2?.decimals || 18));
-              vault._tvlUSD = (resA2 * (tA2?.price || 0)) + (resB2 * (tB2?.price || 0));
+              const vA2 = resA2 * (tA2?.price || 0);
+              const vB2 = resB2 * (tB2?.price || 0);
+              vault._tvlUSD = (vA2 > 0 && vB2 > 0) ? vA2 + vB2 : (vA2 > 0 ? vA2 * 2 : (vB2 > 0 ? vB2 * 2 : 0));
             } catch(e3) {
               vault._tvlUSD = 0;
             }
@@ -5416,6 +5449,43 @@ async function fetchDexScreenerStats() {
   } catch(e) { console.log("DexScreener fetch error:", e); }
 }
 
+// Fetch prices for tokens with price=0 from CoinGecko
+async function fetchAllTokenPrices() {
+  const cgIds = {
+    CRO: 'crypto-com-chain',
+    DOGE: 'dogecoin',
+    SHIB: 'shiba-inu',
+    ATOM: 'cosmos',
+    XRP: 'ripple',
+    PEPE: 'pepe',
+    WETH: 'ethereum',
+    WBTC: 'bitcoin',
+    VVS: 'vvs-finance'
+  };
+  const needPrice = Object.entries(cgIds).filter(([sym]) => !TOKENS[sym]?.price || TOKENS[sym].price === 0);
+  if (needPrice.length === 0) return;
+  const ids = needPrice.map(([, id]) => id).join(',');
+  try {
+    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`);
+    if (!res.ok) return;
+    const data = await res.json();
+    for (const [sym, cgId] of Object.entries(cgIds)) {
+      if (data[cgId]?.usd && TOKENS[sym]) {
+        TOKENS[sym].price = data[cgId].usd;
+      }
+    }
+  } catch(e) {
+    console.log('CoinGecko price fetch error:', e);
+    // Fallback: use known approximate prices if CoinGecko fails
+    const fallbacks = { CRO: 0.095, DOGE: 0.18, SHIB: 0.000014, ATOM: 7.5, XRP: 2.2, PEPE: 0.000012, WETH: 3800, WBTC: 90000, VVS: 0.0000025 };
+    for (const [sym, price] of Object.entries(fallbacks)) {
+      if (TOKENS[sym] && (!TOKENS[sym].price || TOKENS[sym].price === 0)) {
+        TOKENS[sym].price = price;
+      }
+    }
+  }
+}
+
 function _fmtTVL(usd) {
   if (!usd || usd <= 0) return "0";
   if (usd >= 1_000_000) return (usd / 1_000_000).toFixed(2) + "M";
@@ -5478,7 +5548,7 @@ async function fetchLivePrices() {
 
     // Always fetch on-chain GANG price from reserves (fast, own RPC)
     // await fetchGangPriceOnChain(); // Disabled - using DexScreener as source of truth
-    await fetchDexScreenerStats(); // Use DexScreener for accurate GANG price FIRST
+    await Promise.all([fetchAllTokenPrices(), fetchDexScreenerStats()]); // Fetch all prices first
     // Then fetch real TVL for all farms (needs up-to-date prices)
     fetchFarmTVLs().then(() => calcFarmAPRs()); // fire-and-forget, non-blocking
 
@@ -13423,8 +13493,8 @@ async function mktWithdrawFees() {
   // Render initial farm view immediately (will update after pool discovery)
   renderFarms();
   renderVaults();
-  // Fetch DexScreener prices AND discover pools in parallel for faster load
-  Promise.all([fetchDexScreenerStats(), autoDiscoverFarmPools()]).then(() => {
+  // Fetch all token prices, DexScreener stats, AND discover pools in parallel for faster load
+  Promise.all([fetchAllTokenPrices(), fetchDexScreenerStats(), autoDiscoverFarmPools()]).then(() => {
     renderFarms();
     fetchFarmTVLs().then(() => calcFarmAPRs());
   });
