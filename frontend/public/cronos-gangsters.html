@@ -4129,9 +4129,6 @@ async function _connectProvider(rawProvider, walletName) {
     renderPortfolio();
     // Ensure token prices are loaded before calculating TVL/APR
     await fetchAllTokenPrices();
-    // Reset APR calc counters so stabilization kicks in fresh after wallet connect
-    for (const farm of FARMS) { farm._calcCount = 0; farm._prevCalcApy = 0; }
-    for (const vault of VAULTS) { vault._calcCount = 0; vault._prevCalcApr = 0; }
     fetchFarmTVLs();
     calcFarmAPRs();
     checkOwnerRevenue();
@@ -5262,6 +5259,8 @@ async function calcFarmAPRs() {
     if (totalAlloc === 0 || gangPerSec === 0) return;
 
     const gangPrice = TOKENS.GANG?.price || 0;
+    // NO PRICE = NO APR. Wait until GANG price is loaded.
+    if (gangPrice <= 0) return;
     const SECONDS_PER_YEAR = 365.25 * 86400;
 
     for (const farm of FARMS) {
@@ -5275,6 +5274,15 @@ async function calcFarmAPRs() {
       }
       const pid = farm.chefPid ?? farm.pid;
       try {
+        // Skip APR calculation if token prices aren't loaded yet
+        const allPricesReady = farm.tokens.every(sym => {
+          const tok = TOKENS[sym];
+          if (!tok) return false;
+          if (tok.address === "native") return true; // CRO always has hardcoded price
+          return tok.price > 0;
+        });
+        if (!allPricesReady) continue;
+
         const poolInfo = await chef.poolInfo(pid);
         const allocPoint = Number(poolInfo[1]);
         if (allocPoint === 0) { farm.apy = 0; continue; }
@@ -5332,32 +5340,11 @@ async function calcFarmAPRs() {
         }
       } catch {}
 
-      // Update APR display — require 2 consistent calculations before showing
+      // Update APR display — prices are confirmed loaded, show directly
       const aprEl = document.getElementById("apr-" + farm.pid);
-      if (aprEl) {
-        const newApy = farm.apy;
-        farm._calcCount = (farm._calcCount || 0) + 1;
-        if (farm._calcCount <= 1) {
-          // First calculation — store but don't display (likely wild during load)
-          farm._prevCalcApy = newApy;
-          // Keep showing "—" until we have 2+ calcs
-        } else {
-          const prevCalc = farm._prevCalcApy || 0;
-          farm._prevCalcApy = newApy;
-          // Only display if new value is within 3x of previous calc (settled)
-          if (prevCalc > 0 && newApy > 0) {
-            const ratio = newApy / prevCalc;
-            if (ratio > 0.33 && ratio < 3) {
-              farm._stableApy = newApy;
-              aprEl.textContent = newApy + '%';
-            }
-            // else: too big a swing, keep previous displayed value
-          } else if (newApy > 0 && farm._calcCount >= 3) {
-            // After 3 cycles, show whatever we have
-            farm._stableApy = newApy;
-            aprEl.textContent = newApy + '%';
-          }
-        }
+      if (aprEl && farm.apy > 0) {
+        farm._stableApy = farm.apy;
+        aprEl.textContent = farm.apy + '%';
       }
     }
   } catch(e) { console.error("APR calc error:", e); }
@@ -5384,11 +5371,21 @@ async function calcVaultAPRsOnChain() {
     if (totalAlloc === 0 || gangPerSec === 0) return;
 
     const gangPrice = TOKENS.GANG?.price || 0;
+    // NO PRICE = NO APR. Wait until GANG price is loaded.
+    if (gangPrice <= 0) return;
     const SECONDS_PER_DAY = 86400;
 
     for (const vault of VAULTS) {
       const pid = vault.chefPid;
       if (pid === undefined) continue;
+      // Skip if token prices aren't loaded yet
+      const vaultPricesReady = vault.tokens.every(sym => {
+        const tok = TOKENS[sym];
+        if (!tok) return false;
+        if (tok.address === "native") return true;
+        return tok.price > 0;
+      });
+      if (!vaultPricesReady) continue;
       try {
         const poolInfo = await chef.poolInfo(pid);
         const allocPoint = Number(poolInfo[1]);
@@ -5464,29 +5461,13 @@ async function calcVaultAPRsOnChain() {
         console.error('Vault APR calc error for ' + vault.name + ':', e);
       }
 
-      // Update APR display — require 2 consistent calculations before showing
+      // Update APR display — prices confirmed loaded, show directly
       const vidx = VAULTS.indexOf(vault);
       const aprEl = document.getElementById('vault-apr-' + vidx);
       if (aprEl) {
         const newApr = calcVaultAPR(vault);
-        const newNum = parseFloat(newApr) || 0;
-        vault._calcCount = (vault._calcCount || 0) + 1;
-        if (vault._calcCount <= 1) {
-          vault._prevCalcApr = newNum;
-        } else {
-          const prevCalc = vault._prevCalcApr || 0;
-          vault._prevCalcApr = newNum;
-          if (prevCalc > 0 && newNum > 0) {
-            const ratio = newNum / prevCalc;
-            if (ratio > 0.33 && ratio < 3) {
-              vault._stableApr = newApr;
-              aprEl.textContent = newApr;
-            }
-          } else if (newNum > 0 && vault._calcCount >= 3) {
-            vault._stableApr = newApr;
-            aprEl.textContent = newApr;
-          }
-        }
+        vault._stableApr = newApr;
+        aprEl.textContent = newApr;
       }
       const tvlEl = document.getElementById('vault-tvl-' + vidx);
       if (tvlEl) {
