@@ -8088,12 +8088,27 @@ async function _fetchVaultWithdrawInfo(vid) {
       const uData = vaultIface.encodeFunctionData('userInfo', [poolIdx, state.address]);
       const uResult = await rawP.request({ method: 'eth_call', params: [{ to: CONTRACTS.VAULT, data: uData }, 'latest'] });
       const decoded = vaultIface.decodeFunctionResult('userInfo', uResult);
-      const bal = parseFloat(ethers.formatEther(decoded[0] || 0n));
+      const rawShares = decoded[0] || 0n;
+      const bal = parseFloat(ethers.formatEther(rawShares));
 
       const el = document.getElementById('vaultLpBalInfo');
       if (el) el.innerHTML = '<span style="color:var(--gold)">Your shares: ' + bal.toFixed(8) + '</span>';
 
-      const v25 = (bal * 0.25).toFixed(8), v50 = (bal * 0.50).toFixed(8), v75 = (bal * 0.75).toFixed(8), v100 = (bal * 1.00).toFixed(8);
+      // Use raw BigInt math to avoid float precision overflow on withdraw
+      // For 100%, use exact raw shares (the contract accepts your full balance)
+      const raw100 = rawShares;
+      const raw75 = rawShares * 75n / 100n;
+      const raw50 = rawShares * 50n / 100n;
+      const raw25 = rawShares * 25n / 100n;
+
+      const v100 = ethers.formatEther(raw100);
+      const v75 = ethers.formatEther(raw75);
+      const v50 = ethers.formatEther(raw50);
+      const v25 = ethers.formatEther(raw25);
+
+      // Store raw shares for the withdraw function to use directly
+      vault._rawWithdrawShares = rawShares;
+
       const amt = document.getElementById('vaultActionAmt');
       if (amt && amt.value === '0') amt.value = v100;
       const p25 = document.getElementById('vaultPct25'); if (p25) p25.onclick = () => { document.getElementById('vaultActionAmt').value = v25; };
@@ -8260,7 +8275,15 @@ async function executeVaultAction(vid, action) {
       const rawProvider2 = state._rawProvider || window.ethereum;
       showToast('Withdrawing from vault (pool ' + poolIdx + ')... Confirm in wallet', 'info');
       const iface2 = new ethers.Interface(VAULT_V2_ABI);
-      const txData2 = iface2.encodeFunctionData('withdraw', [poolIdx, ethers.parseEther(amt)]);
+      // Use raw BigInt shares to avoid float precision overflow
+      // Compare what user typed vs their stored raw shares
+      let withdrawShares = ethers.parseEther(amt);
+      const rawMax = vault._rawWithdrawShares || 0n;
+      // If user's input matches or exceeds their balance, use exact raw shares
+      if (rawMax > 0n && withdrawShares >= rawMax) {
+        withdrawShares = rawMax;
+      }
+      const txData2 = iface2.encodeFunctionData('withdraw', [poolIdx, withdrawShares]);
       try {
         const txHash2 = await rawProvider2.request({
           method: 'eth_sendTransaction',

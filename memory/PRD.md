@@ -62,6 +62,7 @@ Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/ca
 - Kept all owner fee/revenue panels intact
 - Fixed vault APR: now uses real on-chain LP reserves instead of fake estimate (no more 99,999%+)
 - Fixed swap: prevents selecting same token on both sides (auto-swaps other side)
+- Fixed vault withdraw MAX: uses raw BigInt shares to prevent precision overflow causing "Withdraw REVERTED"
 
 ## Backlog
 - P2: Add max payout limits for trading
