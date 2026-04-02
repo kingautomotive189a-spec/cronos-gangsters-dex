@@ -5261,8 +5261,9 @@ async function calcFarmAPRs() {
     if (totalAlloc === 0 || gangPerSec === 0) return;
 
     const gangPrice = TOKENS.GANG?.price || 0;
-    // NO PRICE = NO APR. Wait until GANG price is loaded.
+    // NO PRICE = NO APR. Wait until GANG price is loaded from DexScreener.
     if (gangPrice <= 0) return;
+    if (!window._gangPriceFromDex) return;
     const SECONDS_PER_YEAR = 365.25 * 86400;
 
     for (const farm of FARMS) {
@@ -5303,14 +5304,12 @@ async function calcFarmAPRs() {
         }
       } catch {}
 
-      // Update APR DOM element directly — no re-render needed
+      // Update APR DOM element directly — once set, never change (locked until page reload)
       const aprEl = document.getElementById("apr-" + farm.pid);
       if (aprEl) {
-        if (farm.apy > 0) {
+        if (farm.apy > 0 && farm._stableApy === 0) {
           farm._stableApy = farm.apy;
           aprEl.textContent = farm.apy + '%';
-        } else {
-          aprEl.textContent = '—';
         }
       }
     }
@@ -5336,8 +5335,9 @@ async function calcVaultAPRsOnChain() {
     if (totalAlloc === 0 || gangPerSec === 0) return;
 
     const gangPrice = TOKENS.GANG?.price || 0;
-    // NO PRICE = NO APR. Wait until GANG price is loaded.
+    // NO PRICE = NO APR. Wait until GANG price is loaded from DexScreener.
     if (gangPrice <= 0) return;
+    if (!window._gangPriceFromDex) return;
     const SECONDS_PER_DAY = 86400;
 
     for (const vault of VAULTS) {
@@ -5426,15 +5426,15 @@ async function calcVaultAPRsOnChain() {
         console.error('Vault APR calc error for ' + vault.name + ':', e);
       }
 
-      // Update APR DOM element directly — no re-render needed
+      // Update APR DOM element — once set, never change (locked until page reload)
       const vidx = VAULTS.indexOf(vault);
       const aprEl = document.getElementById('vault-apr-' + vidx);
       if (aprEl) {
         const newApr = calcVaultAPR(vault);
-        if (newApr && newApr !== '—') {
+        if (newApr && newApr !== '—' && !vault._stableApr) {
           vault._stableApr = newApr;
+          aprEl.textContent = newApr;
         }
-        aprEl.textContent = vault._stableApr || '—';
       }
       const tvlEl = document.getElementById('vault-tvl-' + vidx);
       if (tvlEl) {
@@ -5459,6 +5459,7 @@ async function fetchDexScreenerStats() {
     const priceUsd = parseFloat(pair.priceUsd);
     if (priceUsd > 0) {
       TOKENS.GANG.price = priceUsd;
+      window._gangPriceFromDex = true;
       const gangPriceEl = document.getElementById("statPrice");
       if (gangPriceEl) gangPriceEl.textContent = `$${priceUsd < 0.01 ? priceUsd.toFixed(6) : priceUsd.toFixed(4)}`;
       const gangTokenPriceEl = document.getElementById("gangTokenPrice");
