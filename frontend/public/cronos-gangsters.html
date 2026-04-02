@@ -4851,6 +4851,9 @@ async function doSwap() {
 
   if (!fromAmt || fromAmt <= 0) { showToast("Enter an amount to swap.", "error"); return; }
   if (fromSym === toSym) { showToast("Select two different tokens.", "error"); return; }
+  // Check balance before submitting
+  const fromBal = state.balances[fromSym] || 0;
+  if (fromAmt > fromBal) { showToast("Insufficient " + fromSym + " balance. You have " + fromBal.toFixed(6), "error"); return; }
   if (!requireCronos()) return;
 
   const btn = document.getElementById("swapBtn");
@@ -5572,6 +5575,24 @@ function _fmtTVL(usd) {
   return usd.toFixed(2);
 }
 
+// Check if user has enough balance for liquidity and show warning
+function _checkLiqBalanceWarning(symA, amtA, symB, amtB) {
+  const liqBtn = document.querySelector('#liq-add .btn-primary');
+  if (!liqBtn || !state.address) return;
+  const balA = state.balances[symA] || 0;
+  const balB = state.balances[symB] || 0;
+  if (amtA > balA) {
+    liqBtn.textContent = 'INSUFFICIENT ' + symA + ' BALANCE';
+    liqBtn.disabled = true;
+  } else if (amtB > balB) {
+    liqBtn.textContent = 'INSUFFICIENT ' + symB + ' BALANCE';
+    liqBtn.disabled = true;
+  } else {
+    liqBtn.textContent = '✅ REVIEW ADD LIQUIDITY';
+    liqBtn.disabled = false;
+  }
+}
+
 async function calcLiqRatioOnChain() {
   const symA = document.getElementById("liqTokenA")?.value || "CRO";
   const symB = document.getElementById("liqTokenB")?.value || "GANG";
@@ -5589,6 +5610,8 @@ async function calcLiqRatioOnChain() {
     document.getElementById("liqBUSD").textContent = "~$" + (bVal * priceB).toFixed(2);
     const rateEl = document.getElementById("liqRate");
     if (rateEl) rateEl.textContent = "1 " + symA + " = " + ratio.toFixed(6) + " " + symB + " (live pool)";
+    // Warn if Token B exceeds balance
+    _checkLiqBalanceWarning(symA, aVal, symB, bVal);
   } else {
     calcLiqRatio(); // fallback to price-based
   }
@@ -5895,6 +5918,18 @@ function reviewAddLiquidity() {
   const bAmt = parseFloat(document.getElementById("liqB").value);
   if (!aAmt || !bAmt) { showToast("Enter both token amounts.", "error"); return; }
   if (!requireCronos()) return;
+
+  // Check balances BEFORE submitting — prevents TRANSFER_FROM_FAILED
+  const balA = state.balances[symA] || 0;
+  const balB = state.balances[symB] || 0;
+  if (aAmt > balA) {
+    showToast("Insufficient " + symA + " balance. You have " + balA.toFixed(6) + " but need " + aAmt.toFixed(6), "error");
+    return;
+  }
+  if (bAmt > balB) {
+    showToast("Insufficient " + symB + " balance. You have " + balB.toFixed(6) + " but need " + bAmt.toFixed(6), "error");
+    return;
+  }
 
   const usdA = aAmt * (TOKENS[symA]?.price || 0);
   const usdB = bAmt * (TOKENS[symB]?.price || 0);
