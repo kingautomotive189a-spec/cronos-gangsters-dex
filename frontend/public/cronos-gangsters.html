@@ -5261,18 +5261,52 @@ async function calcVaultAPRsOnChain() {
 
         // Calculate real TVL from LP pair reserves (same method as farms)
         if (vault.lpAddr && vault.tokens.length >= 2) {
+          // Small delay to avoid RPC rate limiting (farms already made many calls)
+          await new Promise(r => setTimeout(r, 300));
           try {
             const pair = new ethers.Contract(vault.lpAddr, PAIR_ABI, rp);
-            const [t0addr, reserves] = await Promise.all([pair.token0(), pair.getReserves()]);
+            const lpToken = new ethers.Contract(vault.lpAddr, ERC20_ABI, rp);
+            const [t0addr, reserves, lpTotalSupply] = await Promise.all([
+              pair.token0(),
+              pair.getReserves(),
+              lpToken.totalSupply()
+            ]);
             const tA = TOKENS[vault.tokens[0]];
             const tB = TOKENS[vault.tokens[1]];
             const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
             const isAtoken0 = t0addr.toLowerCase() === addrA?.toLowerCase();
             const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
             const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
-            vault._tvlUSD = (resA * (tA?.price || 0)) + (resB * (tB?.price || 0));
+            const totalPoolUSD = (resA * (tA?.price || 0)) + (resB * (tB?.price || 0));
+
+            // Calculate vault's share: LP staked in MasterChef vs total supply
+            let tvlUSD = totalPoolUSD;
+            let lpStakedInChef = 0n;
+            try { lpStakedInChef = await lpToken.balanceOf(CONTRACTS.CHEF); } catch {}
+            if (lpStakedInChef > 0n && lpTotalSupply > 0n) {
+              const totalSupplyFloat = parseFloat(ethers.formatUnits(lpTotalSupply, 18));
+              const stakedFloat = parseFloat(ethers.formatUnits(lpStakedInChef, 18));
+              const farmShare = totalSupplyFloat > 0 ? stakedFloat / totalSupplyFloat : 1;
+              tvlUSD = totalPoolUSD * farmShare;
+            }
+            vault._tvlUSD = tvlUSD;
           } catch(e2) {
-            vault._tvlUSD = 0;
+            console.warn('Vault TVL fetch failed for ' + vault.name + ', retrying...', e2.message);
+            // Retry once after delay
+            await new Promise(r => setTimeout(r, 1000));
+            try {
+              const pair2 = new ethers.Contract(vault.lpAddr, PAIR_ABI, rp);
+              const [t0addr2, reserves2] = await Promise.all([pair2.token0(), pair2.getReserves()]);
+              const tA2 = TOKENS[vault.tokens[0]];
+              const tB2 = TOKENS[vault.tokens[1]];
+              const addrA2 = tA2?.address === "native" ? CONTRACTS.WCRO : tA2?.address;
+              const isA2 = t0addr2.toLowerCase() === addrA2?.toLowerCase();
+              const resA2 = parseFloat(ethers.formatUnits(isA2 ? reserves2[0] : reserves2[1], tA2?.decimals || 18));
+              const resB2 = parseFloat(ethers.formatUnits(isA2 ? reserves2[1] : reserves2[0], tB2?.decimals || 18));
+              vault._tvlUSD = (resA2 * (tA2?.price || 0)) + (resB2 * (tB2?.price || 0));
+            } catch(e3) {
+              vault._tvlUSD = 0;
+            }
           }
         }
       } catch(e) {
@@ -7377,7 +7411,7 @@ function calcVaultAPR(vault) {
   const apr = (yearlyGangValue / tvlUSD) * 100;
   
   if (apr <= 0) return '—';
-  if (apr > 50000) return '—'; // Unrealistic, likely bad data
+  if (apr >= 100000) return Math.round(apr / 1000).toLocaleString() + 'k%';
   if (apr >= 1000) return Math.round(apr).toLocaleString() + '%';
   if (apr >= 100) return Math.round(apr) + '%';
   return apr.toFixed(1) + '%';
