@@ -4619,7 +4619,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     btn.classList.add("active");
     document.getElementById("page-" + btn.dataset.page).classList.add("active");
     if (btn.dataset.page === "farms") { renderFarms(); fetchAllTokenPrices().then(() => fetchFarmTVLs().then(() => calcFarmAPRs())); }
-    if (btn.dataset.page === "vaults") { renderVaults(); loadVaultData(); }
+    if (btn.dataset.page === "vaults") { renderVaults(); loadVaultData(); fetchAllTokenPrices().then(() => calcVaultAPRsOnChain()); }
     if (btn.dataset.page === "portfolio") renderPortfolio();
     if (btn.dataset.page === "liquidity") {
       updateBalanceDisplays();
@@ -5426,7 +5426,7 @@ async function calcVaultAPRsOnChain() {
       }
       const tvlEl = document.getElementById('vault-tvl-' + vidx);
       if (tvlEl) {
-        tvlEl.textContent = vault._tvlUSD > 0 ? '$' + _fmtTVL(vault._tvlUSD) : (vault.totalLP > 0 ? vault.totalLP.toFixed(4) + ' LP' : '$0');
+        tvlEl.textContent = vault._tvlUSD > 0 ? '$' + _fmtTVL(vault._tvlUSD) : '$0';
       }
     }
     // Re-render vaults to show updated APRs
@@ -5535,6 +5535,22 @@ async function fetchDexScreenerStats() {
           farm.tvl = _fmtTVL(pairLiq);
           const tvlEl = document.getElementById("tvl-" + farm.pid);
           if (tvlEl) tvlEl.textContent = "$" + farm.tvl;
+          break;
+        }
+      }
+      // Match DexScreener pair to a vault for TVL (same LP pairs)
+      for (const vault of VAULTS) {
+        if (vault.tokens.length < 2) continue;
+        const vtA = TOKENS[vault.tokens[0]];
+        const vtB = TOKENS[vault.tokens[1]];
+        if (!vtA || !vtB) continue;
+        const vAddrA = (vtA.address === "native" ? CONTRACTS.WCRO : vtA.address).toLowerCase();
+        const vAddrB = (vtB.address === "native" ? CONTRACTS.WCRO : vtB.address).toLowerCase();
+        if ((base === vAddrA && quote === vAddrB) || (base === vAddrB && quote === vAddrA)) {
+          vault._tvlUSD = pairLiq;
+          const vidx = VAULTS.indexOf(vault);
+          const vTvlEl = document.getElementById("vault-tvl-" + vidx);
+          if (vTvlEl) vTvlEl.textContent = "$" + _fmtTVL(pairLiq);
           break;
         }
       }
@@ -7761,7 +7777,7 @@ function renderVaults() {
         </div>
         <div class="farm-stat">
           <div class="farm-stat-label">TVL</div>
-          <div class="farm-stat-value" id="vault-tvl-${idx}">${vault._tvlUSD > 0 ? '$' + _fmtTVL(vault._tvlUSD) : (state.address ? (vault.totalLP > 0 ? vault.totalLP.toFixed(4) + ' LP' : '$0') : '—')}</div>
+          <div class="farm-stat-value" id="vault-tvl-${idx}">${vault._tvlUSD > 0 ? '$' + _fmtTVL(vault._tvlUSD) : '$0'}</div>
         </div>
         <div class="farm-stat">
           <div class="farm-stat-label">YOUR LP</div>

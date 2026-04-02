@@ -68,6 +68,13 @@ Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/ca
 - Fixed vault TVL display: now shows USD value instead of LP token count
 - Fixed vault APR: proper TVL denominator prevents insane 362K% numbers
 
+## Session 3 — April 2, 2026
+- Fixed Vault TVL showing "LP" instead of USD — root cause: `calcVaultAPRsOnChain()` not triggered on vault tab, DexScreener TVL only matched farms not vaults
+- Added DexScreener liquidity matching for vaults (same logic as farms, no extra RPC)
+- Added `fetchAllTokenPrices().then(() => calcVaultAPRsOnChain())` trigger when vaults tab opens
+- Removed "LP" fallback from vault TVL template — always shows `$` amounts
+- All 6 vaults now show correct USD TVL: GANG/WETH ($5), GANG/WBTC ($55), GANG/ATOM ($2), etc.
+
 ## Backlog
 - P2: Add max payout limits for trading
 - P3: Fix use-toast.js stale closures (React, low priority)
