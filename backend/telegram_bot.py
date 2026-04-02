@@ -181,6 +181,9 @@ def main_keyboard():
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("💰 Buy $GANG", url=DEX_LINK),
          InlineKeyboardButton("📊 Chart", url=DEXSCREENER)],
+        [InlineKeyboardButton("🔄 Swap", callback_data="menu_swap"),
+         InlineKeyboardButton("💧 Liquidity", callback_data="menu_liquidity"),
+         InlineKeyboardButton("📁 Portfolio", callback_data="menu_portfolio")],
         [InlineKeyboardButton("⛏ Mining Hub", callback_data="menu_mining"),
          InlineKeyboardButton("⚡ Trading", callback_data="menu_trading"),
          InlineKeyboardButton("🤖 Dashboard", callback_data="menu_dashboard")],
@@ -301,6 +304,10 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "• /stats - Detailed token statistics\n"
         "• /contract - Token contract address\n"
         "• /alert - Set price alerts\n\n"
+        "*🔄 DEX Features:*\n"
+        "• /swap - Swap tokens on Cronos\n"
+        "• /liquidity - Provide liquidity & earn fees\n"
+        "• /portfolio - View your portfolio\n\n"
         "*⛏ Mining & Gaming:*\n"
         "• /mining - Mining Hub (earn $GANG daily!)\n"
         "• /trading - Leverage Trading (up to 100x)\n\n"
@@ -945,6 +952,71 @@ async def trading_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
 
 
+async def swap_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /swap command"""
+    msg = (
+        "🔄 *GANGSTER SWAP*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Swap any token on Cronos instantly!\n\n"
+        "*Available Tokens:*\n"
+        "CRO • GANG • USDC • USDT • WBTC\n"
+        "WETH • VVS • SHIB • DOGE • ATOM\n"
+        "DAI • XRP • PEPE • CROID • FUL\n\n"
+        "✓ Best price routing via VVS DEX\n"
+        "✓ Live price quotes\n"
+        "✓ Adjustable slippage\n\n"
+        "💡 Set slippage to 5-12% for $GANG swaps\n\n"
+        "👇 *Start swapping!*"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔄 Open Swap", url=f"{DEX_LINK}#swap")],
+        [InlineKeyboardButton("💰 Buy $GANG", url=DEX_LINK)],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def liquidity_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /liquidity command"""
+    msg = (
+        "💧 *LIQUIDITY POOLS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Provide liquidity and earn trading fees!\n\n"
+        "*How it works:*\n"
+        "1️⃣ Choose a token pair (e.g. CRO + GANG)\n"
+        "2️⃣ Provide equal value of both tokens\n"
+        "3️⃣ Receive LP tokens as proof\n"
+        "4️⃣ Earn trading fees from every swap!\n\n"
+        "*All 15 tokens can be paired together!*\n\n"
+        "🔒 *Liquidity LOCKED until Mar 2027*\n\n"
+        "👇 *Start providing liquidity!*"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("💧 Add Liquidity", url=f"{DEX_LINK}#liquidity")],
+        [InlineKeyboardButton("🌾 Stake LP in Farms", url=f"{DEX_LINK}#farms")],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def portfolio_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /portfolio command"""
+    msg = (
+        "📁 *YOUR PORTFOLIO*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Track all your Cronos Gangsters assets!\n\n"
+        "💰 Token balances\n"
+        "🌾 Active farm positions & pending rewards\n"
+        "🏦 Vault deposits & compound growth\n"
+        "🔒 Staking positions & lock timers\n"
+        "🎴 NFT collection & rarity\n"
+        "👥 Referral earnings\n\n"
+        "👇 *Connect wallet to view!*"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📁 Open Portfolio", url=f"{DEX_LINK}#portfolio")],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
 # ===== CAPTCHA / VERIFICATION =====
 
 def generate_captcha():
@@ -1535,6 +1607,89 @@ async def _cb_menu_dashboard(query, context):
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
 
 
+async def _cb_menu_swap(query, context):
+    msg = (
+        "🔄 *GANGSTER SWAP*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Swap any token on Cronos instantly!\n\n"
+        "*Available Tokens:*\n"
+        "CRO • GANG • USDC • USDT • WBTC\n"
+        "WETH • VVS • SHIB • DOGE • ATOM\n"
+        "DAI • XRP • PEPE • CROID • FUL\n\n"
+        "*Features:*\n"
+        "✓ Best price routing via VVS DEX\n"
+        "✓ Live price quotes\n"
+        "✓ Adjustable slippage tolerance\n"
+        "✓ Real-time token balances\n"
+        "✓ Price impact warnings\n\n"
+        "💡 *Tip:* Set slippage to 5-12% for $GANG swaps\n\n"
+        "👇 *Start swapping!*"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔄 Open Swap", url=f"{DEX_LINK}#swap")],
+        [InlineKeyboardButton("💰 Buy $GANG", url=DEX_LINK)],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_liquidity(query, context):
+    msg = (
+        "💧 *LIQUIDITY POOLS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Provide liquidity and earn trading fees!\n\n"
+        "*How it works:*\n"
+        "1️⃣ Choose a token pair (e.g. CRO + GANG)\n"
+        "2️⃣ Provide equal value of both tokens\n"
+        "3️⃣ Receive LP tokens as proof\n"
+        "4️⃣ Earn trading fees from every swap!\n\n"
+        "*Available Pairs:*\n"
+        "All 15 tokens can be paired together!\n"
+        "CRO • GANG • USDC • USDT • WBTC\n"
+        "WETH • VVS • SHIB • DOGE • ATOM\n"
+        "DAI • XRP • PEPE • CROID • FUL\n\n"
+        "*Bonus:* Stake your LP tokens in Farms\n"
+        "to earn extra $GANG rewards!\n\n"
+        "🔒 *Liquidity is LOCKED until Mar 2027*\n\n"
+        "👇 *Start providing liquidity!*"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("💧 Add Liquidity", url=f"{DEX_LINK}#liquidity")],
+        [InlineKeyboardButton("🌾 Stake LP in Farms", url=f"{DEX_LINK}#farms")],
+        [InlineKeyboardButton("🔐 View LP Lock Proof", callback_data="menu_locker")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_portfolio(query, context):
+    msg = (
+        "📁 *YOUR PORTFOLIO*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Track all your Cronos Gangsters assets!\n\n"
+        "*What you can see:*\n"
+        "💰 Token balances (GANG, CRO, all tokens)\n"
+        "🌾 Active farm positions & pending rewards\n"
+        "🏦 Vault deposits & compound growth\n"
+        "🔒 Staking positions & lock timers\n"
+        "🎴 NFT collection & rarity\n"
+        "👥 Referral earnings\n\n"
+        "*Features:*\n"
+        "✓ Real-time balance updates\n"
+        "✓ Pending GANG rewards across all farms\n"
+        "✓ One-click Harvest All\n"
+        "✓ Total portfolio value in USD\n\n"
+        "👇 *Connect wallet to view your portfolio!*"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📁 Open Portfolio", url=f"{DEX_LINK}#portfolio")],
+        [InlineKeyboardButton("🌾 Farms", callback_data="menu_farms"),
+         InlineKeyboardButton("🏦 Vaults", callback_data="menu_vaults")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
 async def _cb_menu_deployfarms(query, context):
     msg = (
         "🌱 *DEPLOY NEW FARMS*\n\n"
@@ -1582,6 +1737,9 @@ CALLBACK_DISPATCH = {
     "alert_below": _cb_alert_below,
     "clear_alerts": _cb_clear_alerts,
     "menu_back": _cb_menu_back,
+    "menu_swap": _cb_menu_swap,
+    "menu_liquidity": _cb_menu_liquidity,
+    "menu_portfolio": _cb_menu_portfolio,
     "menu_farms": _cb_menu_farms,
     "menu_vaults": _cb_menu_vaults,
     "menu_staking": _cb_menu_staking,
@@ -1938,6 +2096,7 @@ async def on_bot_startup(application: Application):
             "2,830 VVS-LP locked & verified on DX.app\n"
             "✅ NO rug pull possible\n\n"
             "━━━ *MORE* ━━━\n\n"
+            "🔄 Swap | 💧 Liquidity | 📁 Portfolio\n"
             "🚀 Launchpad | 🎯 Sniper | 🎴 NFTs\n"
             "👥 Referral | 🛠 Token Creator | 🏪 Marketplace\n\n"
             "👇 *Tap any button to explore!*"
@@ -1989,6 +2148,9 @@ def main():
     app.add_handler(CommandHandler("marketplace", marketplace))
     app.add_handler(CommandHandler("mining", mining_cmd))
     app.add_handler(CommandHandler("trading", trading_cmd))
+    app.add_handler(CommandHandler("swap", swap_cmd))
+    app.add_handler(CommandHandler("liquidity", liquidity_cmd))
+    app.add_handler(CommandHandler("portfolio", portfolio_cmd))
 
     # Admin commands
     app.add_handler(CommandHandler("ban", ban))
