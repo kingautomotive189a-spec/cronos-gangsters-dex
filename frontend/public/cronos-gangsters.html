@@ -4690,14 +4690,26 @@ async function calcSwap() {
 
       // Try multiple paths to find the best route
       const USDC_ADDR = TOKENS.USDC ? TOKENS.USDC.address : null;
+      const GANG_ADDR = TOKENS.GANG ? TOKENS.GANG.address : null;
       const candidatePaths = [
         [fromAddr, toAddr],                                   // direct
         [fromAddr, CONTRACTS.WCRO, toAddr],                   // via WCRO
       ];
+      // Route via GANG (many tokens only have liquidity paired with GANG)
+      if (GANG_ADDR && fromAddr !== GANG_ADDR && toAddr !== GANG_ADDR) {
+        candidatePaths.push([fromAddr, GANG_ADDR, toAddr]);   // via GANG
+        candidatePaths.push([fromAddr, GANG_ADDR, CONTRACTS.WCRO, toAddr]); // via GANG+WCRO
+        candidatePaths.push([fromAddr, CONTRACTS.WCRO, GANG_ADDR, toAddr]); // via WCRO+GANG
+      }
       if (USDC_ADDR && fromAddr !== USDC_ADDR && toAddr !== USDC_ADDR) {
         candidatePaths.push([fromAddr, USDC_ADDR, toAddr]);   // via USDC
         candidatePaths.push([fromAddr, CONTRACTS.WCRO, USDC_ADDR, toAddr]); // via WCRO+USDC
         candidatePaths.push([fromAddr, USDC_ADDR, CONTRACTS.WCRO, toAddr]); // via USDC+WCRO
+      }
+      // GANG+USDC combos for exotic tokens
+      if (GANG_ADDR && USDC_ADDR && fromAddr !== GANG_ADDR && toAddr !== GANG_ADDR && fromAddr !== USDC_ADDR && toAddr !== USDC_ADDR) {
+        candidatePaths.push([fromAddr, GANG_ADDR, USDC_ADDR, toAddr]); // via GANG+USDC
+        candidatePaths.push([fromAddr, USDC_ADDR, GANG_ADDR, toAddr]); // via USDC+GANG
       }
       // Remove duplicates and paths where fromAddr or toAddr appear in middle
       const uniquePaths = candidatePaths.filter(p => {
