@@ -5327,9 +5327,21 @@ async function calcFarmAPRs() {
         }
       } catch {}
 
-      // Update APR display
+      // Update APR display (with stabilization to prevent flickering during load)
       const aprEl = document.getElementById("apr-" + farm.pid);
-      if (aprEl) aprEl.textContent = farm.apy > 0 ? farm.apy + '%' : '—';
+      if (aprEl) {
+        const newApy = farm.apy;
+        const prevApy = farm._stableApy || 0;
+        const now = Date.now();
+        const lastSet = farm._apySetAt || 0;
+        // Show new APR if: first time, OR settled (within 50% of previous), OR 15s elapsed
+        if (prevApy === 0 || Math.abs(newApy - prevApy) / Math.max(prevApy, 1) < 0.5 || (now - lastSet) > 15000) {
+          farm._stableApy = newApy;
+          farm._apySetAt = now;
+          aprEl.textContent = newApy > 0 ? newApy + '%' : '—';
+        }
+        // Otherwise keep showing previous stable value
+      }
     }
   } catch(e) { console.error("APR calc error:", e); }
   // Re-render farms after APR calculation so they sort by highest APR
@@ -5434,12 +5446,22 @@ async function calcVaultAPRsOnChain() {
         console.error('Vault APR calc error for ' + vault.name + ':', e);
       }
 
-      // Update APR and TVL display elements
+      // Update APR and TVL display elements (with stabilization to prevent flickering)
       const vidx = VAULTS.indexOf(vault);
       const aprEl = document.getElementById('vault-apr-' + vidx);
       if (aprEl) {
-        const apr = calcVaultAPR(vault);
-        aprEl.textContent = apr;
+        const newApr = calcVaultAPR(vault);
+        const prevApr = vault._stableApr || '';
+        const now = Date.now();
+        const lastSet = vault._aprSetAt || 0;
+        // Parse numeric value for comparison
+        const newNum = parseFloat(newApr) || 0;
+        const prevNum = parseFloat(prevApr) || 0;
+        if (prevNum === 0 || Math.abs(newNum - prevNum) / Math.max(prevNum, 1) < 0.5 || (now - lastSet) > 15000) {
+          vault._stableApr = newApr;
+          vault._aprSetAt = now;
+          aprEl.textContent = newApr;
+        }
       }
       const tvlEl = document.getElementById('vault-tvl-' + vidx);
       if (tvlEl) {
@@ -5804,9 +5826,9 @@ function renderTopPools() {
       <div style="display:flex;justify-content:space-between;align-items:center">
         <div>
           <div class="position-name">${tImg(symA,18)} ${symA} / ${tImg(symB,18)} ${symB}</div>
-          <div class="position-sub">TVL: ${tvlLabel} · APR: ${farm.apy > 0 ? farm.apy + '%' : '—'} · ${farm.multiplier}</div>
+          <div class="position-sub">TVL: ${tvlLabel} · APR: ${(farm._stableApy || farm.apy) > 0 ? (farm._stableApy || farm.apy) + '%' : '—'} · ${farm.multiplier}</div>
         </div>
-        <div class="position-value" style="color:var(--green)">${farm.apy > 0 ? '+' + farm.apy + '% APR' : '—'}</div>
+        <div class="position-value" style="color:var(--green)">${(farm._stableApy || farm.apy) > 0 ? '+' + (farm._stableApy || farm.apy) + '% APR' : '—'}</div>
       </div>
       <div style="display:flex;gap:8px">
         <button class="btn-secondary" style="flex:1;font-size:13px;color:var(--green);border-color:rgba(39,174,96,0.3)"
@@ -6673,7 +6695,7 @@ function renderFarms() {
       <div class="farm-stats">
         <div class="farm-stat">
           <div class="farm-stat-label">APR</div>
-          <div class="farm-stat-value green" id="apr-${farm.pid}">${farm.apy > 0 ? farm.apy + '%' : '—'}</div>
+          <div class="farm-stat-value green" id="apr-${farm.pid}">${farm._stableApy > 0 ? farm._stableApy + '%' : (farm.apy > 0 ? farm.apy + '%' : '—')}</div>
         </div>
         <div class="farm-stat">
           <div class="farm-stat-label">TVL</div>
