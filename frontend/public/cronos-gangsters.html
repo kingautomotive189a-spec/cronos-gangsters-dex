@@ -3666,6 +3666,7 @@ const ERC20_ABI = [
   "function approve(address,uint256) returns(bool)",
   "function transfer(address,uint256) returns(bool)",
   "function symbol() view returns(string)",
+  "function totalSupply() view returns(uint256)",
 ];
 
 const FACTORY_ABI = [
@@ -5279,11 +5280,12 @@ async function calcFarmAPRs() {
 
         // APR = annual rewards / TVL * 100
         let tvlUSD = farm.tvlUSD || 0;
-        // If no LP staked in MasterChef yet, estimate using total LP pool value
+        // If no TVL from fetchFarmTVLs, calculate from on-chain reserves
         if (tvlUSD <= 0 && farm.lpAddr && farm.tokens.length >= 2) {
           try {
             const pair = new ethers.Contract(farm.lpAddr, PAIR_ABI, rp);
-            const [t0addr, reserves] = await Promise.all([pair.token0(), pair.getReserves()]);
+            const lpToken2 = new ethers.Contract(farm.lpAddr, ERC20_ABI, rp);
+            const [t0addr, reserves, lpTotalSup] = await Promise.all([pair.token0(), pair.getReserves(), lpToken2.totalSupply()]);
             const tA = TOKENS[farm.tokens[0]];
             const tB = TOKENS[farm.tokens[1]];
             const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
@@ -5292,20 +5294,35 @@ async function calcFarmAPRs() {
             const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
             const valA = resA * (tA?.price || 0);
             const valB = resB * (tB?.price || 0);
-            // If one side has price 0, double the known side (standard DeFi TVL estimation)
+            let totalPoolUSD2 = 0;
             if (valA > 0 && valB > 0) {
-              tvlUSD = valA + valB;
+              totalPoolUSD2 = valA + valB;
             } else if (valA > 0) {
-              tvlUSD = valA * 2;
+              totalPoolUSD2 = valA * 2;
             } else if (valB > 0) {
-              tvlUSD = valB * 2;
+              totalPoolUSD2 = valB * 2;
+            }
+            // Account for staked share in MasterChef
+            tvlUSD = totalPoolUSD2;
+            if (CONTRACTS.CHEF && totalPoolUSD2 > 0) {
+              try {
+                const stakedInChef = await lpToken2.balanceOf(CONTRACTS.CHEF);
+                if (stakedInChef > 0n && lpTotalSup > 0n) {
+                  const share = parseFloat(ethers.formatUnits(stakedInChef, 18)) / parseFloat(ethers.formatUnits(lpTotalSup, 18));
+                  tvlUSD = totalPoolUSD2 * share;
+                }
+              } catch {}
             }
           } catch {}
         }
         if (tvlUSD > 0) {
+          // Save TVL back to farm so display updates (fixes $— issue)
+          farm.tvlUSD = tvlUSD;
+          farm.tvl = _fmtTVL(tvlUSD);
+          const tvlEl2 = document.getElementById("tvl-" + farm.pid);
+          if (tvlEl2) tvlEl2.textContent = "$" + farm.tvl;
           farm.apy = Math.round(rewardsUSD / tvlUSD * 100);
         } else {
-          // No TVL = show dash, not a fake number
           farm.apy = 0;
         }
       } catch {}

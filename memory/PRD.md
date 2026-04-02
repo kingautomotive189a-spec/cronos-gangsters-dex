@@ -81,6 +81,8 @@ Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/ca
   - `approveVaultLP()`: checks allowance before sending approve tx
   - `approveGangForStaking()`: checks allowance before sending approve tx
 - Fixed vault TVL/APR flickering: DexScreener now only sets vault TVL as fallback (stores to `_dexPoolTVL`), on-chain calc is authoritative and never gets overwritten by DexScreener on subsequent cycles
+- **ROOT CAUSE FIX**: `ERC20_ABI` was missing `totalSupply()` function — this caused ALL on-chain TVL calculations to silently fail. Adding it fixed both farm and vault TVL displays.
+- `calcFarmAPRs()` now saves its locally computed TVL back to `farm.tvlUSD` and updates the DOM, so even if `fetchFarmTVLs()` fails, TVL still displays correctly.
 
 ## Backlog
 - P2: Add max payout limits for trading
