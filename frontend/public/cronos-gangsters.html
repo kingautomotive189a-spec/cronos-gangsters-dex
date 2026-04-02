@@ -5347,25 +5347,6 @@ async function calcFarmAPRs() {
     }
   } catch(e) { console.error("APR calc error:", e); }
 
-  // Update TOTAL LIQUIDITY stat from all farms' on-chain TVL
-  let totalOnChainTVL = 0;
-  for (const farm of FARMS) {
-    if (farm.tvlUSD > 0) totalOnChainTVL += farm.tvlUSD;
-  }
-  if (totalOnChainTVL > 0) {
-    const statEl = document.getElementById("statTVL");
-    // Only update if our on-chain total is higher than what DexScreener set
-    // (DexScreener may have set it first; use whichever is more complete)
-    if (statEl) {
-      const current = parseFloat(statEl.textContent.replace(/[$,KMB]/g, '')) || 0;
-      const currentMultiplied = statEl.textContent.includes('K') ? current * 1000 :
-                                statEl.textContent.includes('M') ? current * 1000000 : current;
-      if (totalOnChainTVL > currentMultiplied) {
-        statEl.textContent = "$" + _fmtTVL(totalOnChainTVL);
-      }
-    }
-  }
-
   // Re-render farms after APR calculation so they sort by highest APR
   renderFarms();
   // Also calculate vault APRs from the same MasterChef data
