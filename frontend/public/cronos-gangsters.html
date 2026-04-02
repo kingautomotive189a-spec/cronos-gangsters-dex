@@ -4129,6 +4129,9 @@ async function _connectProvider(rawProvider, walletName) {
     renderPortfolio();
     // Ensure token prices are loaded before calculating TVL/APR
     await fetchAllTokenPrices();
+    // Reset APR calc counters so stabilization kicks in fresh after wallet connect
+    for (const farm of FARMS) { farm._calcCount = 0; farm._prevCalcApy = 0; }
+    for (const vault of VAULTS) { vault._calcCount = 0; vault._prevCalcApr = 0; }
     fetchFarmTVLs();
     calcFarmAPRs();
     checkOwnerRevenue();
@@ -5329,20 +5332,32 @@ async function calcFarmAPRs() {
         }
       } catch {}
 
-      // Update APR display (with stabilization to prevent flickering during load)
+      // Update APR display — require 2 consistent calculations before showing
       const aprEl = document.getElementById("apr-" + farm.pid);
       if (aprEl) {
         const newApy = farm.apy;
-        const prevApy = farm._stableApy || 0;
-        const now = Date.now();
-        const lastSet = farm._apySetAt || 0;
-        // Show new APR if: first time, OR settled (within 50% of previous), OR 15s elapsed
-        if (prevApy === 0 || Math.abs(newApy - prevApy) / Math.max(prevApy, 1) < 0.5 || (now - lastSet) > 15000) {
-          farm._stableApy = newApy;
-          farm._apySetAt = now;
-          aprEl.textContent = newApy > 0 ? newApy + '%' : '—';
+        farm._calcCount = (farm._calcCount || 0) + 1;
+        if (farm._calcCount <= 1) {
+          // First calculation — store but don't display (likely wild during load)
+          farm._prevCalcApy = newApy;
+          // Keep showing "—" until we have 2+ calcs
+        } else {
+          const prevCalc = farm._prevCalcApy || 0;
+          farm._prevCalcApy = newApy;
+          // Only display if new value is within 3x of previous calc (settled)
+          if (prevCalc > 0 && newApy > 0) {
+            const ratio = newApy / prevCalc;
+            if (ratio > 0.33 && ratio < 3) {
+              farm._stableApy = newApy;
+              aprEl.textContent = newApy + '%';
+            }
+            // else: too big a swing, keep previous displayed value
+          } else if (newApy > 0 && farm._calcCount >= 3) {
+            // After 3 cycles, show whatever we have
+            farm._stableApy = newApy;
+            aprEl.textContent = newApy + '%';
+          }
         }
-        // Otherwise keep showing previous stable value
       }
     }
   } catch(e) { console.error("APR calc error:", e); }
@@ -5449,21 +5464,28 @@ async function calcVaultAPRsOnChain() {
         console.error('Vault APR calc error for ' + vault.name + ':', e);
       }
 
-      // Update APR and TVL display elements (with stabilization to prevent flickering)
+      // Update APR display — require 2 consistent calculations before showing
       const vidx = VAULTS.indexOf(vault);
       const aprEl = document.getElementById('vault-apr-' + vidx);
       if (aprEl) {
         const newApr = calcVaultAPR(vault);
-        const prevApr = vault._stableApr || '';
-        const now = Date.now();
-        const lastSet = vault._aprSetAt || 0;
-        // Parse numeric value for comparison
         const newNum = parseFloat(newApr) || 0;
-        const prevNum = parseFloat(prevApr) || 0;
-        if (prevNum === 0 || Math.abs(newNum - prevNum) / Math.max(prevNum, 1) < 0.5 || (now - lastSet) > 15000) {
-          vault._stableApr = newApr;
-          vault._aprSetAt = now;
-          aprEl.textContent = newApr;
+        vault._calcCount = (vault._calcCount || 0) + 1;
+        if (vault._calcCount <= 1) {
+          vault._prevCalcApr = newNum;
+        } else {
+          const prevCalc = vault._prevCalcApr || 0;
+          vault._prevCalcApr = newNum;
+          if (prevCalc > 0 && newNum > 0) {
+            const ratio = newNum / prevCalc;
+            if (ratio > 0.33 && ratio < 3) {
+              vault._stableApr = newApr;
+              aprEl.textContent = newApr;
+            }
+          } else if (newNum > 0 && vault._calcCount >= 3) {
+            vault._stableApr = newApr;
+            aprEl.textContent = newApr;
+          }
         }
       }
       const tvlEl = document.getElementById('vault-tvl-' + vidx);
