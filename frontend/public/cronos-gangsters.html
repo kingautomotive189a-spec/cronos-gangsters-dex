@@ -688,7 +688,7 @@
           <div class="swap-row">
             <input class="swap-input" id="swapFrom" type="number" placeholder="0.0" oninput="calcSwap()" />
             <div style="display:flex;align-items:center;gap:6px;">
-              <select class="token-select" id="tokenFrom" onchange="calcSwap();updateSwapBalances();updateSwapPriceBadges();updateTokenLogos();updatePickerBtns()">
+              <select class="token-select" id="tokenFrom" onchange="swapGuardSameToken('tokenFrom','tokenTo');calcSwap();updateSwapBalances();updateSwapPriceBadges();updateTokenLogos();updatePickerBtns()">
                 <option value="CRO">CRO</option>
                 <option value="GANG">GANG</option>
                 <option value="USDC">USDC</option>
@@ -736,7 +736,7 @@
           <div class="swap-row">
             <input class="swap-input" id="swapTo" type="number" placeholder="0.0" readonly />
             <div style="display:flex;align-items:center;gap:6px;">
-              <select class="token-select" id="tokenTo" onchange="calcSwap();updateSwapBalances();updateSwapPriceBadges();updateTokenLogos();updatePickerBtns()">
+              <select class="token-select" id="tokenTo" onchange="swapGuardSameToken('tokenTo','tokenFrom');calcSwap();updateSwapBalances();updateSwapPriceBadges();updateTokenLogos();updatePickerBtns()">
                 <option value="GANG">GANG</option>
                 <option value="CRO">CRO</option>
                 <option value="USDC">USDC</option>
@@ -4604,6 +4604,19 @@ function getSymbol(sel) {
   return sel.value || sel.options[sel.selectedIndex]?.value || "CRO";
 }
 
+// Prevent same token on both swap sides — auto-swap when user picks duplicate
+function swapGuardSameToken(changedId, otherId) {
+  const changed = document.getElementById(changedId);
+  const other = document.getElementById(otherId);
+  if (!changed || !other) return;
+  if (changed.value === other.value) {
+    // Find a different token to set the other side to
+    const allOpts = Array.from(other.options).map(o => o.value);
+    const alt = allOpts.find(v => v !== changed.value) || 'CRO';
+    other.value = alt;
+  }
+}
+
 async function calcSwap() {
   const fromSel = document.getElementById("tokenFrom");
   const toSel   = document.getElementById("tokenTo");
@@ -5245,6 +5258,23 @@ async function calcVaultAPRsOnChain() {
         if (allocPoint === 0) { vault.dailyGang = 0; continue; }
         // Calculate daily GANG rewards for this vault pool
         vault.dailyGang = (gangPerSec * allocPoint / totalAlloc) * SECONDS_PER_DAY;
+
+        // Calculate real TVL from LP pair reserves (same method as farms)
+        if (vault.lpAddr && vault.tokens.length >= 2) {
+          try {
+            const pair = new ethers.Contract(vault.lpAddr, PAIR_ABI, rp);
+            const [t0addr, reserves] = await Promise.all([pair.token0(), pair.getReserves()]);
+            const tA = TOKENS[vault.tokens[0]];
+            const tB = TOKENS[vault.tokens[1]];
+            const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
+            const isAtoken0 = t0addr.toLowerCase() === addrA?.toLowerCase();
+            const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
+            const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
+            vault._tvlUSD = (resA * (tA?.price || 0)) + (resB * (tB?.price || 0));
+          } catch(e2) {
+            vault._tvlUSD = 0;
+          }
+        }
       } catch(e) {
         console.error('Vault APR calc error for ' + vault.name + ':', e);
       }
@@ -7058,6 +7088,21 @@ function selectToken(symbol) {
       opt.value = symbol; opt.textContent = symbol;
       el.appendChild(opt);
     }
+    // Prevent same token on both sides for swap
+    if (target === 'tokenFrom' || target === 'tokenTo') {
+      const otherId = target === 'tokenFrom' ? 'tokenTo' : 'tokenFrom';
+      const otherEl = document.getElementById(otherId);
+      if (otherEl && otherEl.value === symbol) {
+        // Swap: set other side to what this side was
+        const prevVal = el.value;
+        if (!otherEl.querySelector(`option[value="${prevVal}"]`)) {
+          const opt2 = document.createElement('option');
+          opt2.value = prevVal; opt2.textContent = prevVal;
+          otherEl.appendChild(opt2);
+        }
+        otherEl.value = prevVal;
+      }
+    }
     el.value = symbol;
   }
   closeTokenModal();
@@ -7318,37 +7363,29 @@ function calcVaultAPR(vault) {
   const gangPrice = TOKENS.GANG?.price || 0;
   if (!gangPrice) return '—';
   
-  // Use on-chain allocation if available from calcFarmAPRs data
-  // Otherwise use hardcoded dailyGang estimate
   const dailyGang = vault.dailyGang || 0;
   if (dailyGang <= 0) return '—';
   
   const yearlyGangValue = dailyGang * 365 * gangPrice;
   
-  // Estimate TVL in USD from totalLP
-  const tvlUSD = vault.totalLP > 0 ? estimateVaultTVL(vault) : 0;
+  // Use real TVL from on-chain reserves (set by calcVaultAPRsOnChain)
+  const tvlUSD = vault._tvlUSD || 0;
   
-  // If no TVL yet, show estimated APR based on a minimum $1 TVL
-  // This way users see potential APR even before anyone stakes
-  const effectiveTVL = tvlUSD > 0 ? tvlUSD : 1;
-  const apr = (yearlyGangValue / effectiveTVL) * 100;
+  // If no TVL data, show dash — don't fake it
+  if (tvlUSD <= 0) return '—';
+  
+  const apr = (yearlyGangValue / tvlUSD) * 100;
   
   if (apr <= 0) return '—';
-  if (apr > 99999) return '99,999%+';
+  if (apr > 50000) return '—'; // Unrealistic, likely bad data
   if (apr >= 1000) return Math.round(apr).toLocaleString() + '%';
   if (apr >= 100) return Math.round(apr) + '%';
   return apr.toFixed(1) + '%';
 }
 
 function estimateVaultTVL(vault) {
-  // Rough estimate: LP value = 2 * GANG side value
-  // Each LP has ~equal value on both sides
-  const gangPrice = TOKENS.GANG?.price || 0;
-  if (!gangPrice || vault.totalLP <= 0) return 0;
-  // Use a conservative estimate based on total LP tokens
-  // Each LP token is worth roughly (2 * reserveGang * gangPrice) / totalSupply
-  // For early stage, estimate $1-2 per LP token
-  return vault.totalLP * gangPrice * 100;
+  // Deprecated — use vault._tvlUSD set by calcVaultAPRsOnChain instead
+  return vault._tvlUSD || 0;
 }
 
 function renderVaults() {

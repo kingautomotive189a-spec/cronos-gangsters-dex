@@ -58,6 +58,10 @@ Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/ca
 - Verified null-safety for removed rebalancePanel/farmRewardPanel elements  
 - Frontend regression sweep: 18/18 tests passed (iteration_3.json)
 - No regressions found in DOM structure, hash navigation, farm sorting, vault APR, nav wrapping
+- Removed 6 deploy banners (deployCorrectVault, regVaultChef, deployLaunchpad, deployLocker, deployLottery, mktDeployPrompt)
+- Kept all owner fee/revenue panels intact
+- Fixed vault APR: now uses real on-chain LP reserves instead of fake estimate (no more 99,999%+)
+- Fixed swap: prevents selecting same token on both sides (auto-swaps other side)
 
 ## Backlog
 - P2: Add max payout limits for trading
