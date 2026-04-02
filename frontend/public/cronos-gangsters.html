@@ -3800,6 +3800,7 @@ const VAULTS = [
 ];
 
 // ── App State ─────────────────────────────────────────────────
+window._aprPageLoadTime = Date.now();
 let state = {
   provider: null,
   signer: null,
@@ -4129,6 +4130,10 @@ async function _connectProvider(rawProvider, walletName) {
     renderPortfolio();
     // Ensure token prices are loaded before calculating TVL/APR
     await fetchAllTokenPrices();
+    // Reset APR timer — wait 20s for prices to settle after wallet connect
+    window._aprPageLoadTime = Date.now();
+    for (const farm of FARMS) { delete farm._aprLockedUntil; }
+    for (const vault of VAULTS) { delete vault._aprLockedUntil; }
     fetchFarmTVLs();
     calcFarmAPRs();
     checkOwnerRevenue();
@@ -5344,13 +5349,13 @@ async function calcFarmAPRs() {
         }
       } catch {}
 
-      // Update APR display — skip first 2 calcs (wild), lock third for 60s
+      // Update APR display — wait 20s after page load for prices to settle, then lock for 60s
       const aprEl = document.getElementById("apr-" + farm.pid);
       if (aprEl && farm.apy > 0) {
         const now = Date.now();
-        farm._aprCalcNum = (farm._aprCalcNum || 0) + 1;
-        if (farm._aprCalcNum <= 2) {
-          // First 2 calcs — skip, likely wild during price loading
+        const elapsed = now - window._aprPageLoadTime;
+        if (elapsed < 20000) {
+          // Still settling — don't show anything
         } else if (!farm._aprLockedUntil || now > farm._aprLockedUntil) {
           farm._stableApy = farm.apy;
           farm._aprLockedUntil = now + 60000;
@@ -5475,14 +5480,14 @@ async function calcVaultAPRsOnChain() {
         console.error('Vault APR calc error for ' + vault.name + ':', e);
       }
 
-      // Update APR display — skip first 2 calcs (wild), lock third for 60s
+      // Update APR display — wait 20s after page load for prices to settle, then lock for 60s
       const vidx = VAULTS.indexOf(vault);
       const aprEl = document.getElementById('vault-apr-' + vidx);
       if (aprEl) {
         const now = Date.now();
-        vault._aprCalcNum = (vault._aprCalcNum || 0) + 1;
-        if (vault._aprCalcNum <= 2) {
-          // First 2 calcs — skip, likely wild
+        const elapsed = now - window._aprPageLoadTime;
+        if (elapsed < 20000) {
+          // Still settling — don't show anything
         } else if (!vault._aprLockedUntil || now > vault._aprLockedUntil) {
           const newApr = calcVaultAPR(vault);
           vault._stableApr = newApr;
