@@ -5344,11 +5344,14 @@ async function calcFarmAPRs() {
         }
       } catch {}
 
-      // Update APR display — once set, lock for 60 seconds (no flickering)
+      // Update APR display — skip first calc (wild), lock second calc for 60s
       const aprEl = document.getElementById("apr-" + farm.pid);
       if (aprEl && farm.apy > 0) {
         const now = Date.now();
-        if (!farm._aprLockedUntil || now > farm._aprLockedUntil) {
+        farm._aprCalcNum = (farm._aprCalcNum || 0) + 1;
+        if (farm._aprCalcNum === 1) {
+          // First calc — skip it, likely wild
+        } else if (!farm._aprLockedUntil || now > farm._aprLockedUntil) {
           farm._stableApy = farm.apy;
           farm._aprLockedUntil = now + 60000;
           aprEl.textContent = farm.apy + '%';
@@ -5472,12 +5475,15 @@ async function calcVaultAPRsOnChain() {
         console.error('Vault APR calc error for ' + vault.name + ':', e);
       }
 
-      // Update APR display — once set, lock for 60 seconds (no flickering)
+      // Update APR display — skip first calc (wild), lock second calc for 60s
       const vidx = VAULTS.indexOf(vault);
       const aprEl = document.getElementById('vault-apr-' + vidx);
       if (aprEl) {
         const now = Date.now();
-        if (!vault._aprLockedUntil || now > vault._aprLockedUntil) {
+        vault._aprCalcNum = (vault._aprCalcNum || 0) + 1;
+        if (vault._aprCalcNum === 1) {
+          // First calc — skip it, likely wild
+        } else if (!vault._aprLockedUntil || now > vault._aprLockedUntil) {
           const newApr = calcVaultAPR(vault);
           vault._stableApr = newApr;
           vault._aprLockedUntil = now + 60000;
