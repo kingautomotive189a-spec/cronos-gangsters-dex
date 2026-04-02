@@ -5110,6 +5110,8 @@ async function fetchPoolRatio(symA, symB) {
 async function fetchFarmTVLs() {
   const rp = getReadProvider();
   if (!rp) return;
+  // Don't calculate TVL until GANG price is confirmed from DexScreener
+  if (!window._gangPriceFromDex) return;
   try {
     const factory = new ethers.Contract(CONTRACTS.FACTORY, FACTORY_ABI, rp);
     let totalTVLUSD = 0;
