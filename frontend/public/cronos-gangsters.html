@@ -3740,9 +3740,9 @@ const FARMS = [
   { pid: 2,  name: "GANG / USDC",  tokens: ["GANG","USDC"], apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0x1f77938E1109E1Fc8e3dD697B95525303094Cb65", earned: 0, chefPid: 1, _onChain: true },
   { pid: 3,  name: "GANG Staking", tokens: ["GANG"],         apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: CONTRACTS.GANG, earned: 0, chefPid: 4, _onChain: true },
   { pid: 0,  name: "GANG / VVS",   tokens: ["GANG","VVS"],  apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xB47121251578f148f15949B7816b3D152EaE4cFF", earned: 0, _onChain: true },
-  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: localStorage.getItem('FARM_LP_PEPE_GANG') || null, earned: 0, needsChefAdd: true },
-  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: localStorage.getItem('FARM_LP_DOGE_GANG') || "0x657f64DDFE52a12AfF9B6fdc64eB778dB076AD52", earned: 0, needsChefAdd: true },
-  { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: localStorage.getItem('FARM_LP_XRP_GANG') || null, earned: 0, needsChefAdd: true },
+  { pid: 8,  name: "PEPE / GANG",  tokens: ["PEPE","GANG"], apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: localStorage.getItem('FARM_LP_PEPE_GANG') || null, earned: 0, needsChefAdd: false },
+  { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: localStorage.getItem('FARM_LP_DOGE_GANG') || "0x657f64DDFE52a12AfF9B6fdc64eB778dB076AD52", earned: 0, needsChefAdd: false },
+  { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: localStorage.getItem('FARM_LP_XRP_GANG') || null, earned: 0, needsChefAdd: false },
   // ── Coming soon ──
   { pid: 4,  name: "CRO / USDC",   tokens: ["CRO","USDC"],  apy: 0, tvl: '—', multiplier: "36x", lpAddr: "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6", earned: 0, comingSoon: true },
   { pid: 5,  name: "CRO / WETH",   tokens: ["CRO","WETH"],  apy: 0, tvl: '—', multiplier: "16x", lpAddr: "0xA111C17f8B8303280d3EB01BBcd61000AA7F39F9", earned: 0, comingSoon: true },
@@ -5360,11 +5360,16 @@ async function calcVaultAPRsOnChain() {
         console.error('Vault APR calc error for ' + vault.name + ':', e);
       }
 
-      // Update APR display element
-      const aprEl = document.getElementById('vault-apr-' + VAULTS.indexOf(vault));
+      // Update APR and TVL display elements
+      const vidx = VAULTS.indexOf(vault);
+      const aprEl = document.getElementById('vault-apr-' + vidx);
       if (aprEl) {
         const apr = calcVaultAPR(vault);
         aprEl.textContent = apr;
+      }
+      const tvlEl = document.getElementById('vault-tvl-' + vidx);
+      if (tvlEl) {
+        tvlEl.textContent = vault._tvlUSD > 0 ? '$' + _fmtTVL(vault._tvlUSD) : (vault.totalLP > 0 ? vault.totalLP.toFixed(4) + ' LP' : '$0');
       }
     }
     // Re-render vaults to show updated APRs
@@ -5451,8 +5456,27 @@ async function fetchDexScreenerStats() {
   } catch(e) { console.log("DexScreener fetch error:", e); }
 }
 
-// Fetch prices for tokens with price=0 from CoinGecko
+// Fetch prices for tokens with price=0 via backend proxy (avoids CORS)
 async function fetchAllTokenPrices() {
+  try {
+    // Use backend proxy to avoid CoinGecko CORS issues on production
+    const backendUrl = window.location.origin;
+    const res = await fetch(`${backendUrl}/api/prices`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.prices) {
+        for (const [sym, price] of Object.entries(data.prices)) {
+          if (TOKENS[sym] && (!TOKENS[sym].price || TOKENS[sym].price === 0)) {
+            TOKENS[sym].price = price;
+          }
+        }
+        return;
+      }
+    }
+  } catch(e) {
+    console.log('Backend price proxy failed, trying CoinGecko direct:', e);
+  }
+  // Fallback: try CoinGecko directly (may fail due to CORS)
   const cgIds = {
     CRO: 'crypto-com-chain',
     DOGE: 'dogecoin',
@@ -5464,26 +5488,26 @@ async function fetchAllTokenPrices() {
     WBTC: 'bitcoin',
     VVS: 'vvs-finance'
   };
-  const needPrice = Object.entries(cgIds).filter(([sym]) => !TOKENS[sym]?.price || TOKENS[sym].price === 0);
-  if (needPrice.length === 0) return;
-  const ids = needPrice.map(([, id]) => id).join(',');
+  const ids = Object.values(cgIds).join(',');
   try {
     const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`);
-    if (!res.ok) return;
-    const data = await res.json();
-    for (const [sym, cgId] of Object.entries(cgIds)) {
-      if (data[cgId]?.usd && TOKENS[sym]) {
-        TOKENS[sym].price = data[cgId].usd;
+    if (res.ok) {
+      const data = await res.json();
+      for (const [sym, cgId] of Object.entries(cgIds)) {
+        if (data[cgId]?.usd && TOKENS[sym]) {
+          TOKENS[sym].price = data[cgId].usd;
+        }
       }
+      return;
     }
   } catch(e) {
-    console.log('CoinGecko price fetch error:', e);
-    // Fallback: use known approximate prices if CoinGecko fails
-    const fallbacks = { CRO: 0.095, DOGE: 0.18, SHIB: 0.000014, ATOM: 7.5, XRP: 2.2, PEPE: 0.000012, WETH: 3800, WBTC: 90000, VVS: 0.0000025 };
-    for (const [sym, price] of Object.entries(fallbacks)) {
-      if (TOKENS[sym] && (!TOKENS[sym].price || TOKENS[sym].price === 0)) {
-        TOKENS[sym].price = price;
-      }
+    console.log('CoinGecko direct also failed:', e);
+  }
+  // Last resort: hardcoded fallback prices
+  const fallbacks = { CRO: 0.095, DOGE: 0.18, SHIB: 0.000014, ATOM: 7.5, XRP: 2.2, PEPE: 0.000012, WETH: 3800, WBTC: 90000, VVS: 0.0000025 };
+  for (const [sym, price] of Object.entries(fallbacks)) {
+    if (TOKENS[sym] && (!TOKENS[sym].price || TOKENS[sym].price === 0)) {
+      TOKENS[sym].price = price;
     }
   }
 }
@@ -7619,7 +7643,7 @@ function renderVaults() {
         </div>
         <div class="farm-stat">
           <div class="farm-stat-label">TVL</div>
-          <div class="farm-stat-value" id="vault-tvl-${idx}">${state.address ? (vault.totalLP > 0 ? vault.totalLP.toFixed(4) + ' LP' : '0.0000 LP') : '—'}</div>
+          <div class="farm-stat-value" id="vault-tvl-${idx}">${vault._tvlUSD > 0 ? '$' + _fmtTVL(vault._tvlUSD) : (state.address ? (vault.totalLP > 0 ? vault.totalLP.toFixed(4) + ' LP' : '$0') : '—')}</div>
         </div>
         <div class="farm-stat">
           <div class="farm-stat-label">YOUR LP</div>

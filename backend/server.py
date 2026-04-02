@@ -83,6 +83,40 @@ class TokenData(BaseModel):
 async def root():
     return {"message": "Hello World"}
 
+@api_router.get("/prices")
+async def get_token_prices():
+    """Proxy for CoinGecko prices to avoid CORS on frontend"""
+    cg_ids = "crypto-com-chain,dogecoin,shiba-inu,cosmos,ripple,pepe,ethereum,bitcoin,vvs-finance"
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"https://api.coingecko.com/api/v3/simple/price?ids={cg_ids}&vs_currencies=usd",
+                timeout=aiohttp.ClientTimeout(total=10)
+            ) as resp:
+                if resp.status == 200:
+                    data = await resp.json()
+                    # Map CoinGecko IDs to token symbols
+                    mapping = {
+                        "crypto-com-chain": "CRO",
+                        "dogecoin": "DOGE",
+                        "shiba-inu": "SHIB",
+                        "cosmos": "ATOM",
+                        "ripple": "XRP",
+                        "pepe": "PEPE",
+                        "ethereum": "WETH",
+                        "bitcoin": "WBTC",
+                        "vvs-finance": "VVS"
+                    }
+                    prices = {}
+                    for cg_id, symbol in mapping.items():
+                        if cg_id in data and "usd" in data[cg_id]:
+                            prices[symbol] = data[cg_id]["usd"]
+                    return {"prices": prices}
+    except Exception as e:
+        logging.error(f"CoinGecko price fetch failed: {e}")
+    # Fallback prices
+    return {"prices": {"CRO": 0.095, "DOGE": 0.18, "SHIB": 0.000014, "ATOM": 7.5, "XRP": 2.2, "PEPE": 0.000012, "WETH": 3800, "WBTC": 90000, "VVS": 0.0000025}}
+
 @api_router.get("/contract-code")
 async def get_contract_code():
     """Return the smart contract code as plain text"""

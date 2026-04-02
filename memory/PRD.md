@@ -63,6 +63,10 @@ Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/ca
 - Fixed vault APR: now uses real on-chain LP reserves instead of fake estimate (no more 99,999%+)
 - Fixed swap: prevents selecting same token on both sides (auto-swaps other side)
 - Fixed vault withdraw MAX: uses raw BigInt shares to prevent precision overflow causing "Withdraw REVERTED"
+- Fixed farm TVL: removed stale `needsChefAdd: true` flags on PEPE/GANG, DOGE/GANG, XRP/GANG (was causing $0 TVL)
+- Added `/api/prices` backend proxy for CoinGecko (avoids CORS on production domain)
+- Fixed vault TVL display: now shows USD value instead of LP token count
+- Fixed vault APR: proper TVL denominator prevents insane 362K% numbers
 
 ## Backlog
 - P2: Add max payout limits for trading
