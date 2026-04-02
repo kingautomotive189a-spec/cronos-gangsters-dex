@@ -5213,14 +5213,13 @@ async function fetchFarmTVLs() {
         }
 
         let tvlUSD = totalPoolUSD;
-        // Compute farm's share: only LP staked in MasterChef counts
-        if (lpTotalSupply > 0n) {
+        // If LP is staked in MasterChef, use the staked share for TVL
+        // Otherwise use total pool liquidity (covers locked LP, provided LP, etc.)
+        if (lpStakedInChef > 0n && lpTotalSupply > 0n) {
           const totalSupplyFloat = parseFloat(ethers.formatUnits(lpTotalSupply, 18));
-          const stakedFloat = lpStakedInChef > 0n ? parseFloat(ethers.formatUnits(lpStakedInChef, 18)) : 0;
-          const farmShare = totalSupplyFloat > 0 ? stakedFloat / totalSupplyFloat : 0;
+          const stakedFloat = parseFloat(ethers.formatUnits(lpStakedInChef, 18));
+          const farmShare = totalSupplyFloat > 0 ? stakedFloat / totalSupplyFloat : 1;
           tvlUSD = totalPoolUSD * farmShare;
-        } else {
-          tvlUSD = 0;
         }
 
         farm.tvlUSD = tvlUSD;
@@ -5315,8 +5314,8 @@ async function calcFarmAPRs() {
             } else if (valB > 0) {
               totalPoolUSD2 = valB * 2;
             }
-            // Account for staked share in MasterChef
-            tvlUSD = 0;
+            // Use total pool TVL, or staked share if available
+            tvlUSD = totalPoolUSD2;
             if (CONTRACTS.CHEF && totalPoolUSD2 > 0) {
               try {
                 const stakedInChef = await lpToken2.balanceOf(CONTRACTS.CHEF);
