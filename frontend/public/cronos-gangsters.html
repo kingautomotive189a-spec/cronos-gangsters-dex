@@ -5171,7 +5171,10 @@ async function fetchFarmTVLs() {
           continue;
         }
 
-        // LP pair — compute TVL from on-chain data
+        // LP pair — skip if DexScreener already set TVL (avoid flickering)
+        if (farm._dexTVL) continue;
+
+        // Compute TVL from on-chain data
         const pair = new ethers.Contract(lpAddr, PAIR_ABI, rp);
         const lpToken = new ethers.Contract(lpAddr, ERC20_ABI, rp);
 
@@ -5292,8 +5295,8 @@ async function calcFarmAPRs() {
 
         // APR = annual rewards / TVL * 100
         let tvlUSD = farm.tvlUSD || 0;
-        // If no TVL from fetchFarmTVLs, calculate from on-chain reserves
-        if (tvlUSD <= 0 && farm.lpAddr && farm.tokens.length >= 2) {
+        // If no TVL from DexScreener or fetchFarmTVLs, calculate from on-chain reserves
+        if (tvlUSD <= 0 && !farm._dexTVL && farm.lpAddr && farm.tokens.length >= 2) {
           try {
             const pair = new ethers.Contract(farm.lpAddr, PAIR_ABI, rp);
             const lpToken2 = new ethers.Contract(farm.lpAddr, ERC20_ABI, rp);
@@ -5328,11 +5331,13 @@ async function calcFarmAPRs() {
           } catch {}
         }
         if (tvlUSD > 0) {
-          // Save TVL back to farm so display updates (fixes $— issue)
-          farm.tvlUSD = tvlUSD;
-          farm.tvl = _fmtTVL(tvlUSD);
-          const tvlEl2 = document.getElementById("tvl-" + farm.pid);
-          if (tvlEl2) tvlEl2.textContent = "$" + farm.tvl;
+          // Save TVL back to farm — but don't overwrite DexScreener TVL
+          if (!farm._dexTVL) {
+            farm.tvlUSD = tvlUSD;
+            farm.tvl = _fmtTVL(tvlUSD);
+            const tvlEl2 = document.getElementById("tvl-" + farm.pid);
+            if (tvlEl2) tvlEl2.textContent = "$" + farm.tvl;
+          }
           farm.apy = Math.round(rewardsUSD / tvlUSD * 100);
         } else {
           farm.apy = 0;
@@ -5576,6 +5581,7 @@ async function fetchDexScreenerStats() {
         const addrB = (tB.address === "native" ? CONTRACTS.WCRO : tB.address).toLowerCase();
         if ((base === addrA && quote === addrB) || (base === addrB && quote === addrA)) {
           farm.tvlUSD = pairLiq;
+          farm._dexTVL = true;
           farm.tvl = _fmtTVL(pairLiq);
           const tvlEl = document.getElementById("tvl-" + farm.pid);
           if (tvlEl) tvlEl.textContent = "$" + farm.tvl;
