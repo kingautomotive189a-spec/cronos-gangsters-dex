@@ -5344,17 +5344,24 @@ async function calcFarmAPRs() {
         }
       } catch {}
 
-      // Update APR display — prices are confirmed loaded, show directly
+      // Update APR display — once set, lock for 60 seconds (no flickering)
       const aprEl = document.getElementById("apr-" + farm.pid);
       if (aprEl && farm.apy > 0) {
-        farm._stableApy = farm.apy;
-        aprEl.textContent = farm.apy + '%';
+        const now = Date.now();
+        if (!farm._aprLockedUntil || now > farm._aprLockedUntil) {
+          farm._stableApy = farm.apy;
+          farm._aprLockedUntil = now + 60000;
+          aprEl.textContent = farm.apy + '%';
+        }
       }
     }
   } catch(e) { console.error("APR calc error:", e); }
 
-  // Re-render farms after APR calculation so they sort by highest APR
-  renderFarms();
+  // Only re-render farms list once (first time APR is calculated), not every cycle
+  if (!window._farmsRenderedWithAPR) {
+    window._farmsRenderedWithAPR = true;
+    renderFarms();
+  }
   // Also calculate vault APRs from the same MasterChef data
   await calcVaultAPRsOnChain();
 }
@@ -5465,21 +5472,28 @@ async function calcVaultAPRsOnChain() {
         console.error('Vault APR calc error for ' + vault.name + ':', e);
       }
 
-      // Update APR display — prices confirmed loaded, show directly
+      // Update APR display — once set, lock for 60 seconds (no flickering)
       const vidx = VAULTS.indexOf(vault);
       const aprEl = document.getElementById('vault-apr-' + vidx);
       if (aprEl) {
-        const newApr = calcVaultAPR(vault);
-        vault._stableApr = newApr;
-        aprEl.textContent = newApr;
+        const now = Date.now();
+        if (!vault._aprLockedUntil || now > vault._aprLockedUntil) {
+          const newApr = calcVaultAPR(vault);
+          vault._stableApr = newApr;
+          vault._aprLockedUntil = now + 60000;
+          aprEl.textContent = newApr;
+        }
       }
       const tvlEl = document.getElementById('vault-tvl-' + vidx);
       if (tvlEl) {
         tvlEl.textContent = vault._tvlUSD > 0 ? '$' + _fmtTVL(vault._tvlUSD) : '$0';
       }
     }
-    // Re-render vaults to show updated APRs
-    renderVaults();
+    // Only re-render vaults once (first time APR is calculated)
+    if (!window._vaultsRenderedWithAPR) {
+      window._vaultsRenderedWithAPR = true;
+      renderVaults();
+    }
   } catch(e) { console.error('Vault APR on-chain error:', e); }
 }
 
