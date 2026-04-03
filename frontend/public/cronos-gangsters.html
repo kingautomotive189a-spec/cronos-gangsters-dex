@@ -911,7 +911,8 @@
           <div class="info-row"><span>Rate</span><span class="info-val" id="swapRate">-</span></div>
           <div class="info-row"><span>Price Impact</span><span class="info-val" id="swapImpact">-</span></div>
           <div class="info-row"><span>Min. Received</span><span class="info-val" id="swapMin">-</span></div>
-          <div class="info-row"><span>Fee (0.3%)</span><span class="info-val" id="swapFee">-</span></div>
+          <div class="info-row"><span>DEX Fee (0.3%)</span><span class="info-val" id="swapFee">-</span></div>
+          <div class="info-row" style="border-top:1px solid var(--border);padding-top:5px;"><span style="color:var(--gold);">Platform Fee (0.3%)</span><span class="info-val" id="swapPlatformFee" style="color:var(--gold);">-</span></div>
           <div class="info-row"><span>Route</span><span class="info-val" id="swapRoute">-</span></div>
         </div>
 
@@ -5159,6 +5160,11 @@ async function calcSwap() {
   document.getElementById("swapMin").textContent      = (outAmt * (1 - state.slippage / 100)).toFixed(6) + " " + toSym;
   document.getElementById("swapFee").textContent      = "$" + fee.toFixed(4);
 
+  // Platform fee display (0.3%)
+  const platformFeeAmt = fromAmt * 0.003;
+  const platformFeeUSD = platformFeeAmt * fromPrice;
+  document.getElementById("swapPlatformFee").textContent = platformFeeAmt.toFixed(6) + " " + fromSym + " ($" + platformFeeUSD.toFixed(4) + ")";
+
   // Colour-code price impact like VVS Finance
   const impactEl = document.getElementById("swapImpact");
   impactEl.textContent = impact.toFixed(2) + "%";
@@ -5246,9 +5252,32 @@ async function doSwap() {
     const deadline  = Math.floor(Date.now() / 1000) + 600;
     const router    = new ethers.Contract(CONTRACTS.ROUTER, ROUTER_ABI, state.signer);
 
-    const amtIn  = ethers.parseUnits(String(fromAmt), fromToken.decimals);
+    const PLATFORM_FEE_BPS = 30; // 0.3% = 30 basis points
+    const fullAmtIn = ethers.parseUnits(String(fromAmt), fromToken.decimals);
+    const feeAmount = fullAmtIn * BigInt(PLATFORM_FEE_BPS) / BigInt(10000);
+    const amtIn     = fullAmtIn - feeAmount;
+
+    // Send platform fee to treasury
+    showToast("Sending platform fee to treasury...", "");
+    if (fromSym === "CRO") {
+      // Native CRO fee — send as ETH transfer
+      const feeTx = await state.signer.sendTransaction({
+        to: TREASURY.address,
+        value: feeAmount
+      });
+      await feeTx.wait();
+    } else {
+      // ERC20 fee — approve and transfer
+      const tokenContract = new ethers.Contract(fromToken.address, [
+        "function transfer(address to, uint256 amount) returns (bool)"
+      ], state.signer);
+      await approveToken(fromToken.address, fromToken.address, fullAmtIn);
+      const feeTx = await tokenContract.transfer(TREASURY.address, feeAmount);
+      await feeTx.wait();
+    }
+
     const minOut = ethers.parseUnits(
-      (toAmt * (1 - state.slippage / 100)).toFixed(toToken.decimals),
+      (toAmt * 0.997 * (1 - state.slippage / 100)).toFixed(toToken.decimals),
       toToken.decimals
     );
 
