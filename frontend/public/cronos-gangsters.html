@@ -5147,6 +5147,18 @@ async function fetchFarmTVLs() {
         if (farm.tokens.length === 1) {
           try {
             const tok = TOKENS[farm.tokens[0]];
+            // Ensure token price is available (fetch from DexScreener if needed)
+            let tokPrice = tok.price || 0;
+            if (tokPrice <= 0 && tok.address === CONTRACTS.GANG) {
+              try {
+                const dexRes = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACTS.GANG}`);
+                const dexData = await dexRes.json();
+                if (dexData.pairs && dexData.pairs.length > 0) {
+                  tokPrice = parseFloat(dexData.pairs[0].priceUsd) || 0;
+                  if (tokPrice > 0) tok.price = tokPrice;
+                }
+              } catch {}
+            }
             let stakedAmt = 0;
             if (CONTRACTS.CHEF && (farm.chefPid !== undefined || farm._onChain)) {
               const chef = new ethers.Contract(CONTRACTS.CHEF, CHEF_ABI, rp);
@@ -5154,7 +5166,7 @@ async function fetchFarmTVLs() {
               const pInfo = await chef.poolInfo(pid);
               stakedAmt = parseFloat(ethers.formatUnits(pInfo[4], tok.decimals)); // totalStaked field
             }
-            const tvlUSD = stakedAmt * (tok.price || 0);
+            const tvlUSD = stakedAmt * tokPrice;
             farm.tvlUSD = tvlUSD;
             farm.tvl = _fmtTVL(tvlUSD);
             totalTVLUSD += tvlUSD;
@@ -5252,6 +5264,20 @@ async function calcFarmAPRs() {
   const rp = getReadProvider();
   if (!rp) return;
   try {
+    // Fetch GANG price directly from DexScreener for this calculation (self-contained, no race conditions)
+    let gangPrice = TOKENS.GANG?.price || 0;
+    if (gangPrice <= 0) {
+      try {
+        const dexRes = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACTS.GANG}`);
+        const dexData = await dexRes.json();
+        if (dexData.pairs && dexData.pairs.length > 0) {
+          gangPrice = parseFloat(dexData.pairs[0].priceUsd) || 0;
+          if (gangPrice > 0) TOKENS.GANG.price = gangPrice;
+        }
+      } catch {}
+    }
+    if (gangPrice <= 0) return;
+
     const chef = new ethers.Contract(CONTRACTS.CHEF, CHEF_ABI, rp);
     const [gangPerSecBN, totalAllocBN] = await Promise.all([
       chef.gangPerSecond(),
@@ -5261,8 +5287,6 @@ async function calcFarmAPRs() {
     const totalAlloc = Number(totalAllocBN);
     if (totalAlloc === 0 || gangPerSec === 0) return;
 
-    const gangPrice = TOKENS.GANG?.price || 0;
-    if (gangPrice <= 0) return;
     const SECONDS_PER_YEAR = 365.25 * 86400;
 
     for (const farm of FARMS) {
@@ -5317,7 +5341,17 @@ async function calcVaultAPRsOnChain() {
     const totalAlloc = Number(totalAllocBN);
     if (totalAlloc === 0 || gangPerSec === 0) return;
 
-    const gangPrice = TOKENS.GANG?.price || 0;
+    let gangPrice = TOKENS.GANG?.price || 0;
+    if (gangPrice <= 0) {
+      try {
+        const dexRes = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACTS.GANG}`);
+        const dexData = await dexRes.json();
+        if (dexData.pairs && dexData.pairs.length > 0) {
+          gangPrice = parseFloat(dexData.pairs[0].priceUsd) || 0;
+          if (gangPrice > 0) TOKENS.GANG.price = gangPrice;
+        }
+      } catch {}
+    }
     if (gangPrice <= 0) return;
     const SECONDS_PER_DAY = 86400;
 
