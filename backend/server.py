@@ -19,6 +19,13 @@ from datetime import datetime, timezone
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
+# Configure logging early (before it's used)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
 # Import mining and trading routers
 from mining_api import router as mining_router
 from trading_api import router as trading_router
@@ -372,7 +379,7 @@ async def get_bot_commands():
     security_features = [
         {"feature": "Human Verification", "description": "Math captcha for new members"},
         {"feature": "Anti-Scam Filter", "description": "Detects scam patterns & suspicious links"},
-        {"feature": "Auto-Ban", "description": "2 warnings = automatic ban"},
+        {"feature": "Auto-Ban", "description": "3 warnings = automatic ban"},
         {"feature": "Link Whitelist", "description": "Only trusted domains allowed"},
     ]
     return {"commands": commands, "admin_commands": admin_commands, "security": security_features}
@@ -389,13 +396,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

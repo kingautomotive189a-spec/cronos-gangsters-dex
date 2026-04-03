@@ -3784,7 +3784,7 @@ const FARMS = [
   { pid: 9,  name: "DOGE / GANG",  tokens: ["DOGE","GANG"], apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xF94d1f10028B3271a9D43D0E7eF798e8Df1937bF", earned: 0, chefPid: 9, _onChain: true, needsChefAdd: false },
   { pid: 7,  name: "XRP / GANG",   tokens: ["XRP","GANG"],  apy: 0, tvl: '—', multiplier: "4.17%", lpAddr: "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6", earned: 0, chefPid: 7, _onChain: true, needsChefAdd: false },
   // ── Coming soon ──
-  { pid: 4,  name: "CRO / USDC",   tokens: ["CRO","USDC"],  apy: 0, tvl: '—', multiplier: "36x", lpAddr: "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6", earned: 0, comingSoon: true },
+  { pid: 4,  name: "CRO / USDC",   tokens: ["CRO","USDC"],  apy: 0, tvl: '—', multiplier: "36x", lpAddr: "", earned: 0, comingSoon: true },
   { pid: 5,  name: "CRO / WETH",   tokens: ["CRO","WETH"],  apy: 0, tvl: '—', multiplier: "16x", lpAddr: "0xA111C17f8B8303280d3EB01BBcd61000AA7F39F9", earned: 0, comingSoon: true },
   { pid: 6,  name: "CRO / VVS",    tokens: ["CRO","VVS"],   apy: 0, tvl: '—', multiplier: "14x", lpAddr: "0xbf62c67eA509E86F07c8c69d0286C0636C50270b", earned: 0, comingSoon: true },
 ];
@@ -13850,7 +13850,7 @@ async function mktWithdrawFees() {
 })();
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').catch(()=>{}); }
 </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e5577a4cabceb08',t:'MTc3NTAyNDIxMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>
+<script>
 (function() {
   function navigateToHash() {
     var hash = window.location.hash.replace('#', '');

@@ -30,17 +30,18 @@ CONTRACTS = {
     "REFERRAL": "0xd4791929e86EFE7D770b64B6dEC021dE28E8773a",
     "NFT": "0x97489dc06aA00b62B52D7eB6E5b51E8c3dd36431",
     "TREASURY": "0xaA3C5749628610fF410EF9133a4ac4f58e9A52eA",
+    "LOTTERY": "0xd2c46260C68f643f0428a6205bFbD8177f118f27",
 }
 
-# Farm data from website
+# Farm data from website — TVLs fetched live via fetch_live_farm_data()
 FARMS = [
-    {"name": "CRO / GANG", "tvl": "$1.3K", "allocation": "50%", "pid": 1},
-    {"name": "GANG / USDC", "tvl": "$201", "allocation": "4.17%", "pid": 2},
+    {"name": "CRO / GANG", "allocation": "50%", "pid": 1, "lp": "0x1f77938E1109E1Fc8e3dD697B95525303094Cb65"},
+    {"name": "GANG / USDC", "allocation": "4.17%", "pid": 2, "lp": "0xd434CC7E9CC50e74926BDe47c70FC8Bc0474A8eC"},
     {"name": "GANG Staking", "allocation": "4.17%", "pid": 3},
-    {"name": "GANG / VVS", "allocation": "4.17%", "pid": 0},
-    {"name": "XRP / GANG", "allocation": "4.17%", "pid": 7},
-    {"name": "PEPE / GANG", "allocation": "4.17%", "pid": 8},
-    {"name": "DOGE / GANG", "allocation": "4.17%", "pid": 9},
+    {"name": "GANG / VVS", "allocation": "4.17%", "pid": 0, "lp": "0xB47121251578f148f15949B7816b3D152EaE4cFF"},
+    {"name": "XRP / GANG", "allocation": "4.17%", "pid": 7, "lp": "0xe61Db569E231B3f5530168Aa2C9D50246525b6d6"},
+    {"name": "PEPE / GANG", "allocation": "4.17%", "pid": 8, "lp": "0xc9eA98736dbC94FAA91AbF9F4aD1eb41e7fb40f4"},
+    {"name": "DOGE / GANG", "allocation": "4.17%", "pid": 9, "lp": "0xF94d1f10028B3271a9D43D0E7eF798e8Df1937bF"},
 ]
 
 # Staking tiers from website
@@ -61,14 +62,14 @@ NFT_INFO = {
     "boost": "+20% Staking Boost",
 }
 
-# Vaults Info (Auto-Compound)
+# Vaults Info (Auto-Compound) — APYs fetched live via fetch_live_farm_data()
 VAULTS = [
-    {"name": "GANG / WETH", "apy": "~120%", "strategy": "Auto-compound"},
-    {"name": "GANG / WBTC", "apy": "~95%", "strategy": "Auto-compound"},
-    {"name": "GANG / ATOM", "apy": "~85%", "strategy": "Auto-compound"},
-    {"name": "GANG / CROID", "apy": "~110%", "strategy": "Auto-compound"},
-    {"name": "GANG / USDT", "apy": "~75%", "strategy": "Auto-compound"},
-    {"name": "GANG / FUL", "apy": "~90%", "strategy": "Auto-compound"},
+    {"name": "GANG / WETH", "strategy": "Auto-compound", "lp": "0xE151542505302A225d3f0b503D63c1BD4F1Db92d"},
+    {"name": "GANG / WBTC", "strategy": "Auto-compound", "lp": "0xF19B473A5Cf03d5B7A283C3094094212BDA256b6"},
+    {"name": "GANG / ATOM", "strategy": "Auto-compound", "lp": "0x02492Bce7Efb8Bb194337036f5C9E5a926EeDBff"},
+    {"name": "GANG / CROID", "strategy": "Auto-compound", "lp": "0x32fFBE877f16246D5387601e1CDCddf454dB258b"},
+    {"name": "GANG / USDT", "strategy": "Auto-compound", "lp": "0x3b33fD595B3910deB133612A03f89D686c2E9759"},
+    {"name": "GANG / FUL", "strategy": "Auto-compound", "lp": "0xDaD1Ad44d499838aB1F28abc43988623D9EE031c"},
 ]
 
 # Launchpad Tiers
@@ -89,8 +90,10 @@ TOKEN_CREATOR = {
 # Lottery Info
 LOTTERY_INFO = {
     "ticket_price": "10 CRO",
-    "pool_fee": "10%",
+    "pool_fee": "20% burned + 10% treasury",
     "draw_frequency": "Weekly",
+    "winner_pct": "70%",
+    "contract": "0xd2c46260C68f643f0428a6205bFbD8177f118f27",
 }
 
 # Sniper Bot Info
@@ -172,6 +175,77 @@ def format_change(change):
         return f"{emoji} {c:+.2f}%"
     except (ValueError, TypeError):
         return "N/A"
+
+
+# ===== LIVE APR/TVL DATA =====
+
+_live_farm_cache = {"data": None, "ts": 0}
+
+async def fetch_live_farm_data():
+    """Fetch live GANG price from DexScreener and calculate APRs/TVLs for farms and vaults"""
+    import time
+    now = time.time()
+    if _live_farm_cache["data"] and now - _live_farm_cache["ts"] < 120:
+        return _live_farm_cache["data"]
+
+    result = {"gang_price": 0, "farms": {}, "vaults": {}}
+    try:
+        async with aiohttp.ClientSession() as session:
+            url = f"https://api.dexscreener.com/latest/dex/tokens/{CONTRACT}"
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=15)) as resp:
+                if resp.status != 200:
+                    return result
+                data = await resp.json()
+                pairs = data.get("pairs", [])
+                if not pairs:
+                    return result
+                gang_price = float(pairs[0].get("priceUsd", 0))
+                result["gang_price"] = gang_price
+
+            # MasterChef: ~3 GANG/block, ~5760 blocks/day on Cronos
+            gang_per_day = 3 * 5760
+            total_alloc = 100
+
+            for farm in FARMS:
+                name = farm["name"]
+                alloc_str = farm["allocation"].replace("%", "").replace("x", "")
+                try:
+                    alloc_pct = float(alloc_str)
+                except ValueError:
+                    alloc_pct = 4.17
+                daily_gang = gang_per_day * (alloc_pct / total_alloc)
+                daily_usd = daily_gang * gang_price
+                tvl_usd = 0
+                lp = farm.get("lp")
+                if lp:
+                    for p in pairs:
+                        if p.get("pairAddress", "").lower() == lp.lower():
+                            tvl_usd = float(p.get("liquidity", {}).get("usd", 0))
+                            break
+                apr = (daily_usd * 365 / tvl_usd) * 100 if tvl_usd > 0 and daily_usd > 0 else 0
+                result["farms"][name] = {"apr": apr, "tvl": tvl_usd}
+
+            for vault in VAULTS:
+                name = vault["name"]
+                daily_gang = gang_per_day * (4.17 / total_alloc)
+                daily_usd = daily_gang * gang_price
+                tvl_usd = 0
+                lp = vault.get("lp")
+                if lp:
+                    for p in pairs:
+                        if p.get("pairAddress", "").lower() == lp.lower():
+                            tvl_usd = float(p.get("liquidity", {}).get("usd", 0))
+                            break
+                apr = (daily_usd * 365 / tvl_usd) * 100 if tvl_usd > 0 and daily_usd > 0 else 0
+                apy = ((1 + apr / 100 / 365) ** 365 - 1) * 100 if apr > 0 else 0
+                result["vaults"][name] = {"apr": apr, "apy": apy, "tvl": tvl_usd}
+
+        _live_farm_cache["data"] = result
+        _live_farm_cache["ts"] = now
+    except Exception as e:
+        logger.error(f"Live farm data fetch error: {e}")
+
+    return result
 
 
 # ===== KEYBOARD BUILDERS =====
@@ -557,17 +631,30 @@ async def alert(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def farms(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle /farms command - show yield farming info"""
+    """Handle /farms command - show yield farming info with live APRs"""
+    live = await fetch_live_farm_data()
+    gang_price = live.get("gang_price", 0)
+
     msg = (
         "🌾 *GANGSTER FARMS*\n\n"
         "Stake LP tokens to earn $GANG rewards!\n\n"
     )
 
+    if gang_price > 0:
+        msg += f"💵 *$GANG Price:* ${gang_price:.6f}\n\n"
+
     for farm in FARMS:
-        msg += f"*{farm['name']}*\n   • Allocation: {farm['allocation']}\n"
-        if 'tvl' in farm:
-            msg += f"   • TVL: {farm['tvl']}\n"
-        msg += "\n"
+        name = farm["name"]
+        fd = live.get("farms", {}).get(name, {})
+        apr = fd.get("apr", 0)
+        tvl = fd.get("tvl", 0)
+        msg += f"*{name}*\n"
+        msg += f"   Alloc: {farm['allocation']}"
+        if apr > 0:
+            msg += f" | APR: {apr:,.0f}%"
+        if tvl > 0:
+            msg += f" | TVL: ${tvl:,.0f}"
+        msg += "\n\n"
 
     msg += (
         f"🔗 *MasterChef Contract:*\n"
@@ -669,7 +756,9 @@ async def referral(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def vaults(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle /vaults command"""
+    """Handle /vaults command with live APYs"""
+    live = await fetch_live_farm_data()
+
     msg = (
         "🏦 *AUTO-COMPOUND VAULTS*\n\n"
         "Deposit and let us compound for you!\n"
@@ -677,11 +766,17 @@ async def vaults(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     for vault in VAULTS:
-        msg += (
-            f"*{vault['name']}*\n"
-            f"   • APY: {vault['apy']}\n"
-            f"   • Strategy: {vault['strategy']}\n\n"
-        )
+        name = vault["name"]
+        vd = live.get("vaults", {}).get(name, {})
+        apy = vd.get("apy", 0)
+        tvl = vd.get("tvl", 0)
+        msg += f"*{name}*\n"
+        msg += f"   Strategy: {vault['strategy']}"
+        if apy > 0:
+            msg += f" | APY: {apy:,.0f}%"
+        if tvl > 0:
+            msg += f" | TVL: ${tvl:,.0f}"
+        msg += "\n\n"
 
     msg += (
         "💡 *How it works:*\n"
@@ -766,13 +861,15 @@ async def lottery(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🎰 *GANGSTER LOTTERY*\n\n"
         "Buy tickets. Win the pot!\n\n"
         f"🎟 *Ticket Price:* {LOTTERY_INFO['ticket_price']}\n"
-        f"🏆 *Pool Fee:* {LOTTERY_INFO['pool_fee']} (to platform)\n"
+        f"🏆 *Winner Gets:* {LOTTERY_INFO['winner_pct']} of the pot\n"
+        f"🔥 *Burned:* {LOTTERY_INFO['pool_fee']}\n"
         f"⏰ *Draw:* {LOTTERY_INFO['draw_frequency']}\n\n"
         "*How it works:*\n"
         "1️⃣ Buy lottery tickets (10 CRO each)\n"
         "2️⃣ Each ticket = 1 entry\n"
         "3️⃣ Random winner drawn weekly\n"
-        "4️⃣ Winner takes 90% of the pot!\n\n"
+        "4️⃣ 70% to winner, 20% burned forever, 10% treasury\n\n"
+        f"🔗 *Contract:*\n`{LOTTERY_INFO['contract']}`\n\n"
         "🍀 *Good luck, gangster!*\n\n"
         f"[🎰 Play Lottery]({DEX_LINK})"
     )
@@ -1310,11 +1407,18 @@ async def _cb_menu_back(query, context):
 
 
 async def _cb_menu_farms(query, context):
+    live = await fetch_live_farm_data()
     msg = "🌾 *GANGSTER FARMS*\n\nStake LP tokens to earn $GANG rewards!\n\n"
     for farm in FARMS:
-        msg += f"*{farm['name']}*\n   Alloc: {farm['allocation']}"
-        if 'tvl' in farm:
-            msg += f" | TVL: {farm['tvl']}"
+        name = farm["name"]
+        fd = live.get("farms", {}).get(name, {})
+        apr = fd.get("apr", 0)
+        tvl = fd.get("tvl", 0)
+        msg += f"*{name}*\n   Alloc: {farm['allocation']}"
+        if apr > 0:
+            msg += f" | APR: {apr:,.0f}%"
+        if tvl > 0:
+            msg += f" | TVL: ${tvl:,.0f}"
         msg += "\n\n"
     msg += f"🔗 *MasterChef:*\n`{CONTRACTS['MASTERCHEF']}`"
     kb = InlineKeyboardMarkup([
@@ -1325,9 +1429,19 @@ async def _cb_menu_farms(query, context):
 
 
 async def _cb_menu_vaults(query, context):
+    live = await fetch_live_farm_data()
     msg = "🏦 *AUTO-COMPOUND VAULTS*\n\nDeposit and let us compound for you!\n\n"
     for vault in VAULTS:
-        msg += f"*{vault['name']}*\n   APY: {vault['apy']} | {vault['strategy']}\n\n"
+        name = vault["name"]
+        vd = live.get("vaults", {}).get(name, {})
+        apy = vd.get("apy", 0)
+        tvl = vd.get("tvl", 0)
+        msg += f"*{name}*\n   Strategy: {vault['strategy']}"
+        if apy > 0:
+            msg += f" | APY: {apy:,.0f}%"
+        if tvl > 0:
+            msg += f" | TVL: ${tvl:,.0f}"
+        msg += "\n\n"
     msg += "💡 Deposit LP → vault auto-compounds → position grows!"
     kb = InlineKeyboardMarkup([
         [InlineKeyboardButton("🏦 Open Vaults", url=f"{DEX_LINK}#vaults")],
@@ -1465,9 +1579,11 @@ async def _cb_menu_lottery(query, context):
     msg = (
         "🎰 *GANGSTER LOTTERY*\n\n"
         f"🎟 *Ticket:* {LOTTERY_INFO['ticket_price']}\n"
-        f"🏆 *Pool Fee:* {LOTTERY_INFO['pool_fee']}\n"
+        f"🏆 *Winner Gets:* {LOTTERY_INFO['winner_pct']} of the pot\n"
+        f"🔥 *Burned:* {LOTTERY_INFO['pool_fee']}\n"
         f"⏰ *Draw:* {LOTTERY_INFO['draw_frequency']}\n\n"
-        "Winner takes 90% of the pot!\n"
+        "70% Winner | 20% Burned | 10% Treasury\n\n"
+        f"🔗 `{LOTTERY_INFO['contract']}`\n"
         "🍀 Good luck, gangster!"
     )
     kb = InlineKeyboardMarkup([
@@ -1998,7 +2114,8 @@ async def post_price_update(context: ContextTypes.DEFAULT_TYPE):
                 f"⛏ *Mining Hub* — 5 $GANG daily + 19 games!\n"
                 f"⚡ *Leverage Trading* — 8 pairs, up to 100x!\n"
                 f"💰 Reach 100 $GANG → Withdraw REAL tokens!\n\n"
-                f"🌾 Farms | 🏦 Vaults | 🔒 Staking | 🌉 Bridge\n\n"
+                f"🌾 Farms | 🏦 Vaults | 🔒 Staking | 🌉 Bridge\n"
+                f"🎰 Lottery | 🎴 NFTs | 🏪 Marketplace\n\n"
                 f"🔒 *Liquidity LOCKED until Mar 2027*\n"
                 f"✅ Verified on DX.app — NO rug pull\n\n"
                 f"👇 *Tap any button to explore!*"
@@ -2098,7 +2215,8 @@ async def on_bot_startup(application: Application):
             "━━━ *MORE* ━━━\n\n"
             "🔄 Swap | 💧 Liquidity | 📁 Portfolio\n"
             "🚀 Launchpad | 🎯 Sniper | 🎴 NFTs\n"
-            "👥 Referral | 🛠 Token Creator | 🏪 Marketplace\n\n"
+            "👥 Referral | 🛠 Token Creator | 🏪 Marketplace\n"
+            "🎰 Lottery | 🌉 Bridge\n\n"
             "👇 *Tap any button to explore!*"
         )
 
