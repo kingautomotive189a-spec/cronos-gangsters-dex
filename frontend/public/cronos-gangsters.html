@@ -65,11 +65,18 @@
   .logo-icon{width:26px;height:26px;border-radius:50%;overflow:hidden;flex-shrink:0;}
   .logo-text{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;color:var(--gold);line-height:1;}
   .logo-sub{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
-  nav{display:flex;flex-wrap:wrap;gap:5px;flex:1;min-width:0;position:relative;}
-  nav button{background:linear-gradient(180deg,rgba(60,60,60,0.9) 0%,rgba(30,30,30,0.95) 100%);border:1px solid rgba(255,255,255,0.08);color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:14px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;border-radius:20px;cursor:pointer;transition:all .25s ease;white-space:nowrap;flex-shrink:0;box-shadow:0 2px 4px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.08);text-shadow:0 1px 2px rgba(0,0,0,0.5);position:relative;overflow:hidden;}
-  nav button::before{content:'';position:absolute;top:0;left:10%;right:10%;height:40%;background:linear-gradient(180deg,rgba(255,255,255,0.12) 0%,transparent 100%);border-radius:0 0 50% 50%;pointer-events:none;}
-  nav button:hover{color:#fff;background:linear-gradient(180deg,rgba(80,80,80,0.95) 0%,rgba(45,45,45,0.95) 100%);border-color:rgba(212,160,23,0.3);transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,0.5),0 0 12px rgba(212,160,23,0.15),inset 0 1px 0 rgba(255,255,255,0.12);}
-  nav button.active{color:var(--gold);background:linear-gradient(180deg,rgba(212,160,23,0.25) 0%,rgba(140,100,10,0.2) 100%);border:1px solid rgba(212,160,23,0.5);box-shadow:0 2px 6px rgba(0,0,0,0.4),0 0 15px rgba(212,160,23,0.2),inset 0 1px 0 rgba(255,255,255,0.1);text-shadow:0 0 8px rgba(212,160,23,0.4);}
+  .hamburger-btn{display:flex;flex-direction:column;gap:4px;background:none;border:1px solid rgba(212,160,23,0.3);border-radius:8px;padding:8px 9px;cursor:pointer;transition:all .2s;flex-shrink:0;}
+  .hamburger-btn:hover{border-color:var(--gold);background:rgba(212,160,23,0.08);}
+  .hamburger-btn span{display:block;width:20px;height:2px;background:var(--gold);border-radius:2px;transition:all .3s;}
+  .hamburger-btn.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px);}
+  .hamburger-btn.open span:nth-child(2){opacity:0;}
+  .hamburger-btn.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px);}
+  nav{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,14,14,0.98);backdrop-filter:blur(16px);border-bottom:2px solid rgba(212,160,23,0.3);padding:12px 16px;flex-wrap:wrap;gap:4px 6px;z-index:99;animation:navSlide .25s ease-out;}
+  nav.nav-open{display:flex;}
+  @keyframes navSlide{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+  nav button{background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:15px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;padding:8px 12px;border-radius:0;cursor:pointer;transition:all .2s ease;white-space:nowrap;flex-shrink:0;position:relative;}
+  nav button:hover{color:var(--text);border-bottom-color:rgba(212,160,23,0.5);}
+  nav button.active{color:var(--gold);border-bottom-color:var(--gold);text-shadow:0 0 10px rgba(212,160,23,0.3);}
   .wallet-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000!important;border:none;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;box-shadow:0 3px 0 #6b4f0a;}
   .wallet-btn:hover{transform:translateY(-1px);box-shadow:0 4px 0 #6b4f0a,0 6px 16px rgba(212,160,23,0.3);}
   .wallet-btn.connected{background:var(--surface2)!important;color:var(--gold)!important;border:1px solid var(--border);box-shadow:none;}
@@ -491,7 +498,11 @@
     </div>
   </a>
 
-  <nav>
+  <button class="hamburger-btn" id="hamburgerBtn" data-testid="hamburger-menu-btn" onclick="document.getElementById('mainNav').classList.toggle('nav-open');this.classList.toggle('open');">
+    <span></span><span></span><span></span>
+  </button>
+
+  <nav id="mainNav">
     <button class="nav-btn active" data-page="swap">Swap</button>
     <button class="nav-btn" data-page="liquidity">Liquidity</button>
     <button class="nav-btn" data-page="staking">Stake</button>
@@ -4941,6 +4952,11 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     btn.classList.add("active");
     document.getElementById("page-" + btn.dataset.page).classList.add("active");
+    // Close hamburger menu after selecting a page
+    const mainNav = document.getElementById('mainNav');
+    const hamburger = document.getElementById('hamburgerBtn');
+    if (mainNav) mainNav.classList.remove('nav-open');
+    if (hamburger) hamburger.classList.remove('open');
     if (btn.dataset.page === "farms") { renderFarms(); }
     if (btn.dataset.page === "vaults") { renderVaults(); loadVaultData(); }
     if (btn.dataset.page === "portfolio") renderPortfolio();
