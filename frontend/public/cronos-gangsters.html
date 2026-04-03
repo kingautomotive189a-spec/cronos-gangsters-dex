@@ -483,7 +483,7 @@
 
 <header>
   <a class="logo" href="#">
-    <div class="logo-icon"><img src="/gang-logo.png" style="width:100%;height:100%;object-fit:cover;" alt="GANG"></div>
+    <div class="logo-icon"><img loading="lazy" src="/gang-logo.png" style="width:100%;height:100%;object-fit:cover;" alt="GANG"></div>
     <div>
       <div class="logo-text">CRONOS GANGSTERS</div>
       <div class="logo-sub">NO SUITS. NO BANKS. JUST GANGSTERS.</div>
@@ -499,7 +499,7 @@
     <button class="nav-btn" data-page="vaults" data-testid="nav-vaults-btn">Vaults</button>
     <button class="nav-btn" data-page="portfolio">Portfolio</button>
     <button class="nav-btn" data-page="lottery" data-testid="nav-lottery-btn" style="color:var(--gold);font-weight:800;">Lottery</button>
-    <button class="nav-btn" data-page="token"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> $GANG</button>
+    <button class="nav-btn" data-page="token"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> $GANG</button>
     <button class="nav-btn" data-page="referral" data-testid="nav-referral-btn" style="color:var(--green);font-weight:800;">Invite</button>
     <button class="nav-btn" data-page="nfts" data-testid="nav-nfts-btn">NFTs</button>
     <button class="nav-btn" data-page="market" data-testid="nav-market-btn" style="color:var(--gold);font-weight:800;">Market</button>
@@ -559,7 +559,7 @@
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
     <div class="gang-img-card">
       <img src="/img/war_ready.png"   class="gang-side-img" loading="lazy" decoding="async" style="height:150px;object-fit:cover;object-position:center 20%;" />
-      <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> WAR READY</div>
+      <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> WAR READY</div>
     </div>
     <div class="gang-img-card">
       <img src="/img/enforcer.png" class="gang-side-img" loading="lazy" decoding="async" style="height:150px;object-fit:cover;object-position:center;" />
@@ -585,7 +585,7 @@
     gap: 10px;
   ">
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;">
+      <img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;">
       <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--gold)">$GANG CONTRACT</span>
       <span id="contractAddrDisplay" style="font-family:'Space Mono',monospace;font-size:13px;color:var(--text);word-break:break-all">0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF</span>
     </div>
@@ -658,7 +658,7 @@
       </div>
       <div class="gang-img-card">
         <img src="/img/stay_strapped.png"     class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
-        <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> STAY STRAPPED</div>
+        <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> STAY STRAPPED</div>
       </div>
       <div class="gang-img-card">
         <img src="/img/street_style.png"   class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
@@ -668,7 +668,7 @@
 
     <div class="swap-wrap">
       <div class="card" style="border-color:rgba(212,160,23,0.3);box-shadow:0 0 0 1px rgba(212,160,23,0.05),0 8px 32px rgba(0,0,0,0.4);">
-        <div class="card-title"><img src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> Swap Tokens</div>
+        <div class="card-title"><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> Swap Tokens</div>
 
         <!-- Live Price Ticker -->
         <div class="price-ticker" id="swapPriceTicker">
@@ -706,7 +706,7 @@
                 <option value="FUL">FUL</option>
               </select>
               <button class="token-picker-btn" id="tokenFromPicker" onclick="openTokenModal('tokenFrom')">
-                <img id="fromTokenLogo" src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" onerror="this.style.display='none'" />
+                <img loading="lazy" id="fromTokenLogo" src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" onerror="this.style.display='none'" />
                 <span id="fromTokenSym">CRO</span>
                 <span class="tp-arrow">▼</span>
               </button>
@@ -756,7 +756,7 @@
                 <option value="FUL">FUL</option>
               </select>
               <button class="token-picker-btn" id="tokenToPicker" onclick="openTokenModal('tokenTo')">
-                <img id="toTokenLogo" src="/gang-logo.png" onerror="this.style.display='none'" />
+                <img loading="lazy" id="toTokenLogo" src="/gang-logo.png" onerror="this.style.display='none'" />
                 <span id="toTokenSym">GANG</span>
                 <span class="tp-arrow">▼</span>
               </button>
@@ -790,7 +790,7 @@
           <span class="slip-label">%</span>
         </div>
 
-        <button class="btn-primary" id="swapBtn" onclick="reviewSwap()"><img src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> REVIEW SWAP</button>
+        <button class="btn-primary" id="swapBtn" onclick="reviewSwap()"><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> REVIEW SWAP</button>
 
         <!-- Import Custom Token -->
         <div style="margin-top:16px;background:rgba(212,160,23,0.10);border:1px solid rgba(212,160,23,0.45);border-radius:12px;padding:16px 18px;">
@@ -901,7 +901,7 @@
               <option value="FUL">FUL</option>
             </select>
             <button class="token-picker-btn" id="liqTokenAPicker" onclick="openTokenModal('liqTokenA')" style="position:absolute;right:8px;top:50%;transform:translateY(-50%)">
-              <img id="liqATokenLogo" src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" onerror="this.style.display='none'" />
+              <img loading="lazy" id="liqATokenLogo" src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" onerror="this.style.display='none'" />
               <span id="liqATokenSym">CRO</span>
               <span class="tp-arrow">▼</span>
             </button>
@@ -943,7 +943,7 @@
               <option value="FUL">FUL</option>
             </select>
             <button class="token-picker-btn" id="liqTokenBPicker" onclick="openTokenModal('liqTokenB')" style="position:absolute;right:8px;top:50%;transform:translateY(-50%)">
-              <img id="liqBTokenLogo" src="/gang-logo.png" onerror="this.style.display='none'" />
+              <img loading="lazy" id="liqBTokenLogo" src="/gang-logo.png" onerror="this.style.display='none'" />
               <span id="liqBTokenSym">GANG</span>
               <span class="tp-arrow">▼</span>
             </button>
@@ -1014,7 +1014,7 @@
         <div style="display:grid;grid-template-rows:1fr 1fr;gap:12px;margin-bottom:16px;">
           <div class="gang-img-card">
             <img src="/img/the_family.png" class="gang-side-img" loading="lazy" decoding="async" style="height:220px;object-fit:cover;object-position:center top;" />
-            <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> COSA NOSTRA — ADD LIQUIDITY</div>
+            <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> COSA NOSTRA — ADD LIQUIDITY</div>
           </div>
           <div class="gang-img-card">
             <img src="/img/make_money.png" class="gang-side-img" loading="lazy" decoding="async" style="height:220px;object-fit:cover;object-position:center top;" />
@@ -1239,7 +1239,7 @@
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:20px;">
         <div class="gang-img-card">
           <img src="/img/defi_soldier.png"   class="gang-side-img" loading="lazy" decoding="async" style="height:140px;object-fit:cover;object-position:center 20%;" />
-          <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> DEFI SOLDIER</div>
+          <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> DEFI SOLDIER</div>
         </div>
         <div class="gang-img-card">
           <img src="/img/stay_strapped.png" class="gang-side-img" loading="lazy" decoding="async" style="height:140px;object-fit:cover;" />
@@ -1260,7 +1260,7 @@
 
     <!-- Hero banner -->
     <div class="card" style="text-align:center;padding:36px 24px;margin-bottom:20px;background:linear-gradient(135deg,rgba(212,160,23,0.12) 0%,rgba(192,57,43,0.08) 100%);border-color:rgba(212,160,23,0.35);">
-      <div style="margin-bottom:12px"><img src="/gang-logo.png" style="width:48px;height:48px;border-radius:50%;"></div>
+      <div style="margin-bottom:12px"><img loading="lazy" src="/gang-logo.png" style="width:48px;height:48px;border-radius:50%;"></div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--gold);letter-spacing:4px;line-height:1;">$GANG</div>
       <div style="color:var(--muted);font-size:13px;letter-spacing:2px;text-transform:uppercase;margin:6px 0 20px;">Cronos Gangsters — Native Token</div>
 
@@ -1274,7 +1274,7 @@
                  transition:all .2s;position:relative;overflow:hidden;"
           onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 0 #6b4f0a,0 10px 28px rgba(212,160,23,0.35)'"
           onmouseout="this.style.transform='';this.style.boxShadow='0 4px 0 #6b4f0a,0 6px 18px rgba(0,0,0,0.4)'">
-          <img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> BUY $GANG
+          <img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> BUY $GANG
         </button>
         <button onclick="document.querySelector('[data-page=staking]').click()"
           style="background:linear-gradient(135deg,#1e1e1e,#2a2a2a);color:var(--gold);
@@ -1314,7 +1314,7 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
       <div class="gang-img-card">
         <img src="/img/defi_soldier.png"   class="gang-side-img" loading="lazy" decoding="async" style="height:240px;object-position:center top;" />
-        <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> $GANG TOKEN</div>
+        <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> $GANG TOKEN</div>
       </div>
       <div style="display:grid;grid-template-rows:1fr 1fr;gap:12px;">
         <div class="gang-img-card">
@@ -1559,7 +1559,7 @@
       <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:0;margin-bottom:40px;align-items:center;">
         <div class="gang-img-card" style="margin-right:20px;">
           <img src="/img/street_style.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-fit:cover;object-position:center top;" />
-          <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> THE ORIGIN</div>
+          <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> THE ORIGIN</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;z-index:1;">
           <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--green),#1a8a4a);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(39,174,96,0.5);border:2px solid var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;">1</div>
@@ -1598,7 +1598,7 @@
         </div>
         <div class="gang-img-card" style="margin-left:20px;">
           <img src="/img/portfolio.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-fit:cover;object-position:center top;" />
-          <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> MAKE THE MOVES</div>
+          <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> MAKE THE MOVES</div>
         </div>
       </div>
 
@@ -1606,7 +1606,7 @@
       <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:0;margin-bottom:40px;align-items:center;">
         <div class="gang-img-card" style="margin-right:20px;">
           <img src="/img/harvest_farm.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-fit:cover;object-position:center top;" />
-          <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> THE HARVEST</div>
+          <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> THE HARVEST</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;z-index:1;">
           <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--green),#1a8a4a);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(39,174,96,0.5);border:2px solid var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;">3</div>
@@ -1643,16 +1643,16 @@
           <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--green);letter-spacing:2px;margin-top:6px;text-align:center;">DONE</div>
         </div>
         <div class="gang-img-card" style="margin-left:20px;">
-          <img src="/nft/images/2.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
-          <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> NFTs ARE LIVE</div>
+          <img loading="lazy" src="/nft/images/2.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
+          <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> NFTs ARE LIVE</div>
         </div>
       </div>
 
       <!-- PHASE 5 — DONE -->
       <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:0;margin-bottom:40px;align-items:center;">
         <div class="gang-img-card" style="margin-right:20px;">
-          <img src="/nft/images/4.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
-          <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> GOING GLOBAL</div>
+          <img loading="lazy" src="/nft/images/4.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
+          <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> GOING GLOBAL</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;z-index:1;">
           <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--green),#1a8a4a);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(39,174,96,0.5);border:2px solid var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;">5</div>
@@ -1693,16 +1693,16 @@
           <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--green);letter-spacing:2px;margin-top:6px;text-align:center;">DONE</div>
         </div>
         <div class="gang-img-card" style="margin-left:20px;">
-          <img src="/nft/images/3.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
-          <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> THE EMPIRE</div>
+          <img loading="lazy" src="/nft/images/3.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
+          <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> THE EMPIRE</div>
         </div>
       </div>
 
       <!-- PHASE 7 — DONE -->
       <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:0;margin-bottom:40px;align-items:center;">
         <div class="gang-img-card" style="margin-right:20px;">
-          <img src="/nft/images/5.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
-          <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> THE UNDERWORLD</div>
+          <img loading="lazy" src="/nft/images/5.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
+          <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> THE UNDERWORLD</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;z-index:1;">
           <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--green),#1a8a4a);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(39,174,96,0.5);border:2px solid var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;">7</div>
@@ -1748,8 +1748,8 @@
           <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--gold);letter-spacing:2px;margin-top:6px;text-align:center;">NEXT</div>
         </div>
         <div class="gang-img-card" style="margin-left:20px;opacity:0.75;">
-          <img src="/nft/images/1.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
-          <div class="gang-img-caption"><img src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> WORLD DOMINATION</div>
+          <img loading="lazy" src="/nft/images/1.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
+          <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> WORLD DOMINATION</div>
         </div>
       </div>
 
@@ -1762,7 +1762,7 @@
         The Cronos Gangsters are building the most gangster DeFi ecosystem on Cronos. Swap, Farm, Stake, Collect NFTs, and earn rewards.
       </div>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-        <button class="btn-primary" style="max-width:200px;margin-top:0;" onclick="document.querySelector('[data-page=swap]').click()"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> BUY $GANG</button>
+        <button class="btn-primary" style="max-width:200px;margin-top:0;" onclick="document.querySelector('[data-page=swap]').click()"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> BUY $GANG</button>
         <button class="btn-secondary" style="font-size:16px;" onclick="document.querySelector('[data-page=nfts]').click()">MINT NFTs</button>
         <button class="btn-secondary" style="font-size:16px;" onclick="document.querySelector('[data-page=referral]').click()">INVITE FRIENDS</button>
       </div>
@@ -2049,7 +2049,7 @@
                padding:10px 18px;border-radius:8px;cursor:pointer;transition:all .2s;flex:1;min-width:120px;"
         onmouseover="this.style.background='linear-gradient(135deg,rgba(212,160,23,0.25),rgba(212,160,23,0.12))'"
         onmouseout="this.style.background='linear-gradient(135deg,rgba(212,160,23,0.15),rgba(212,160,23,0.08))'">
-        <img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> BUY $GANG FIRST
+        <img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> BUY $GANG FIRST
       </button>
       <button onclick="document.querySelector('[data-page=farms]').click()"
         style="background:linear-gradient(135deg,rgba(39,174,96,0.1),rgba(39,174,96,0.05));
@@ -2068,7 +2068,7 @@
         <h2 style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;color:var(--gold);">$GANG STAKING VAULT</h2>
         <div style="color:var(--muted);font-size:13px;letter-spacing:1px;">Lock $GANG for boosted rewards — longer lock = bigger cut</div>
         <div id="nftBoostBadge" style="display:none;margin-top:8px;background:linear-gradient(135deg,rgba(39,174,96,0.15),rgba(39,174,96,0.05));border:1px solid rgba(39,174,96,0.4);border-radius:8px;padding:6px 14px;display:inline-flex;align-items:center;gap:8px;font-size:13px;" data-testid="nft-boost-badge">
-          <img src="/gang-logo.png" style="width:16px;height:16px;border-radius:50%;"> <span style="color:var(--green);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">+20% NFT BOOST ACTIVE</span>
+          <img loading="lazy" src="/gang-logo.png" style="width:16px;height:16px;border-radius:50%;"> <span style="color:var(--green);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">+20% NFT BOOST ACTIVE</span>
         </div>
       </div>
       <div style="display:flex;gap:10px;align-items:center;">
@@ -2323,15 +2323,15 @@
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
       <div class="gang-img-card">
         <img src="/img/the_family.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-fit:cover;object-position:center top;" />
-        <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> THE FAMILY</div>
+        <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> THE FAMILY</div>
       </div>
       <div class="gang-img-card">
         <img src="/img/rise_up.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-fit:cover;object-position:center top;" />
-        <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> RISE UP</div>
+        <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> RISE UP</div>
       </div>
       <div class="gang-img-card">
         <img src="/img/make_money.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-fit:cover;object-position:center top;" />
-        <div class="gang-img-caption"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> MAKE MONEY</div>
+        <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> MAKE MONEY</div>
       </div>
     </div>
 
@@ -2352,7 +2352,7 @@
     <!-- Not connected prompt -->
     <div id="refNotConnected" style="display:block;" data-testid="ref-not-connected">
       <div class="connect-prompt" style="max-width:560px;margin:0 auto;">
-        <div class="icon"><img src="/gang-logo.png" style="width:64px;height:64px;border-radius:50%;"></div>
+        <div class="icon"><img loading="lazy" src="/gang-logo.png" style="width:64px;height:64px;border-radius:50%;"></div>
         <h3>CONNECT YOUR WALLET</h3>
         <p style="color:var(--muted);font-size:13px;margin-bottom:16px;">Connect your wallet to generate your unique invite link and start earning referral rewards.</p>
         <button class="btn-primary" style="max-width:240px;margin:0 auto;" onclick="connectWallet()" data-testid="ref-connect-btn">CONNECT WALLET</button>
@@ -2364,7 +2364,7 @@
 
       <!-- Link box — main CTA -->
       <div class="ref-link-box" data-testid="ref-link-box">
-        <div class="ref-link-label"><img src="/gang-logo.png" style="width:20px;height:20px;vertical-align:middle;border-radius:50%;margin-right:6px;"> YOUR INVITE LINK</div>
+        <div class="ref-link-label"><img loading="lazy" src="/gang-logo.png" style="width:20px;height:20px;vertical-align:middle;border-radius:50%;margin-right:6px;"> YOUR INVITE LINK</div>
         <div class="ref-link-url" id="refLinkUrl" data-testid="ref-link-url">—</div>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
           <button class="ref-copy-btn" id="refCopyBtn" onclick="copyReferralLink()" data-testid="ref-copy-btn">
@@ -2420,7 +2420,7 @@
       <!-- Contract info -->
       <div style="max-width:560px;margin:0 auto 24px;">
         <div class="card" style="background:linear-gradient(135deg,rgba(212,160,23,0.06),rgba(0,0,0,0));border-color:rgba(212,160,23,0.25);">
-          <div class="card-title" style="margin-bottom:12px;font-size:15px;"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> REFERRAL CONTRACT</div>
+          <div class="card-title" style="margin-bottom:12px;font-size:15px;"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> REFERRAL CONTRACT</div>
           <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
             <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--surface2);border-radius:8px;border:1px solid rgba(212,160,23,0.1);">
               <span style="color:var(--muted);">Contract</span>
@@ -2444,7 +2444,7 @@
 
       <!-- How it works -->
       <div class="ref-how" data-testid="ref-how-section">
-        <div class="ref-how-title"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;margin-right:6px;"> HOW THE FAMILY EARNS</div>
+        <div class="ref-how-title"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;margin-right:6px;"> HOW THE FAMILY EARNS</div>
         <div class="ref-how-step">
           <div class="ref-how-num">1</div>
           <div class="ref-how-text">Copy your unique invite link above<span>It contains your wallet address as referrer ID</span></div>
@@ -2814,7 +2814,7 @@
 
     <!-- NFT Revenue -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:16px;">
-      <div class="ref-link-label"><img src="/gang-logo.png" style="width:20px;height:20px;vertical-align:middle;border-radius:50%;"> NFT MINT REVENUE</div>
+      <div class="ref-link-label"><img loading="lazy" src="/gang-logo.png" style="width:20px;height:20px;vertical-align:middle;border-radius:50%;"> NFT MINT REVENUE</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">CRO collected from 50 CRO per NFT mint. Withdraw to your wallet anytime.</div>
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
         <span style="font-size:13px;color:var(--muted);">Contract Balance</span>
@@ -3202,7 +3202,7 @@
 
     <!-- Mint CTA -->
     <div class="ref-link-box" style="max-width:480px;" data-testid="nft-mint-cta">
-      <div class="ref-link-label"><img src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> MINT YOUR GANGSTER</div>
+      <div class="ref-link-label"><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> MINT YOUR GANGSTER</div>
 
       <div id="nftNotConnected" data-testid="nft-not-connected">
         <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">Connect your wallet to mint Cronos Gangsters NFTs.</p>
@@ -3223,7 +3223,7 @@
         </div>
 
         <button class="ref-copy-btn" id="nftMintBtn" onclick="mintNftFromDex()" style="width:100%;" data-testid="nft-mint-btn">
-          <img src="/gang-logo.png" style="width:20px;height:20px;vertical-align:middle;border-radius:50%;margin-right:6px;"> MINT NOW
+          <img loading="lazy" src="/gang-logo.png" style="width:20px;height:20px;vertical-align:middle;border-radius:50%;margin-right:6px;"> MINT NOW
         </button>
         <div id="nftMintStatus" style="margin-top:12px;font-size:12px;display:none;" data-testid="nft-mint-status"></div>
       </div>
@@ -3231,7 +3231,7 @@
 
     <!-- Your NFTs -->
     <div id="nftYourSection" style="display:none;margin-top:24px;" data-testid="nft-your-section">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--gold);text-align:center;margin-bottom:16px;"><img src="/gang-logo.png" style="width:20px;height:20px;vertical-align:middle;border-radius:50%;"> YOUR GANGSTERS</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--gold);text-align:center;margin-bottom:16px;"><img loading="lazy" src="/gang-logo.png" style="width:20px;height:20px;vertical-align:middle;border-radius:50%;"> YOUR GANGSTERS</div>
       <div id="nftYourGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;" data-testid="nft-your-grid"></div>
     </div>
 
@@ -3245,7 +3245,7 @@
     <!-- Owner Withdraw Section (only visible to contract owner) -->
     <div id="nftOwnerSection" style="display:none;margin-top:24px;" data-testid="nft-owner-section">
       <div class="ref-link-box" style="max-width:480px;border-color:rgba(39,174,96,0.4);">
-        <div class="ref-link-label" style="color:var(--green);"><img src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> NFT REVENUE (OWNER)</div>
+        <div class="ref-link-label" style="color:var(--green);"><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> NFT REVENUE (OWNER)</div>
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:13px;color:var(--muted);">Contract Balance</span>
           <span id="nftContractBalance" data-testid="nft-contract-balance" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;">0 CRO</span>
@@ -3259,7 +3259,7 @@
 
     <!-- How it works -->
     <div class="ref-how" style="margin-top:24px;" data-testid="nft-how-section">
-      <div class="ref-how-title"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;margin-right:6px;"> NFT COLLECTION INFO</div>
+      <div class="ref-how-title"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;margin-right:6px;"> NFT COLLECTION INFO</div>
       <div class="ref-how-step">
         <div class="ref-how-num">1</div>
         <div class="ref-how-text">500 unique gangster NFTs<span>Each with randomized traits — Rank, Weapon, Accessory, Suit, Special</span></div>
@@ -3357,7 +3357,7 @@
         <div class="card" id="mktListCard" style="display:none;" data-testid="mkt-list-card">
           <div class="card-title">LIST FOR SALE</div>
           <div id="mktSelectedNft" style="display:flex;align-items:center;gap:14px;margin-bottom:14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px;">
-            <img id="mktSelectedImg" style="width:80px;height:80px;border-radius:10px;object-fit:cover;" />
+            <img loading="lazy" id="mktSelectedImg" style="width:80px;height:80px;border-radius:10px;object-fit:cover;" />
             <div>
               <div id="mktSelectedName" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);letter-spacing:1px;"></div>
               <div id="mktSelectedCollection" style="font-size:11px;color:var(--muted);"></div>
@@ -3421,7 +3421,7 @@
 <div class="modal-overlay" id="confirmSwapModal">
   <div class="modal" style="max-width:460px">
     <div class="modal-title">
-      <span><img src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> Confirm Swap</span>
+      <span><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> Confirm Swap</span>
       <button class="modal-close" onclick="closeConfirmSwapModal()">✕</button>
     </div>
 
@@ -3434,7 +3434,7 @@
       </div>
       <div class="confirm-arrow">↓</div>
       <div class="confirm-token-row">
-        <span id="confirmToIcon"><img src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"></span>
+        <span id="confirmToIcon"><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"></span>
         <span class="confirm-token-amt" id="confirmToAmt">0</span>
         <span class="confirm-token-sym" id="confirmToSym">GANG</span>
         <span class="confirm-token-usd" id="confirmToUSD">≈ $0.00</span>
@@ -3468,7 +3468,7 @@
       ⚠️ Output is estimated. You will receive at least <strong id="confirmMinInline" style="color:var(--text)">—</strong> or the transaction will revert.
     </div>
 
-    <button class="btn-primary" id="confirmSwapBtn" onclick="doSwap()"><img src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> CONFIRM SWAP</button>
+    <button class="btn-primary" id="confirmSwapBtn" onclick="doSwap()"><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> CONFIRM SWAP</button>
   </div>
 </div>
 
@@ -3528,7 +3528,7 @@
       <button class="modal-close" onclick="closeHarvestConfirmModal()">✕</button>
     </div>
     <div style="text-align:center;padding:12px 0 20px">
-      <div style="margin-bottom:10px"><img src="/gang-logo.png" style="width:48px;height:48px;border-radius:50%;"></div>
+      <div style="margin-bottom:10px"><img loading="lazy" src="/gang-logo.png" style="width:48px;height:48px;border-radius:50%;"></div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--gold)" id="harvestConfirmAmt">0.0000</div>
       <div style="font-size:16px;color:var(--muted);margin-top:4px">$GANG tokens to claim</div>
     </div>
@@ -3539,7 +3539,7 @@
       </div>
       <div class="confirm-row">
         <span class="confirm-row-label">Reward Token</span>
-        <span class="confirm-row-val"><img src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> $GANG</span>
+        <span class="confirm-row-val"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> $GANG</span>
       </div>
       <div class="confirm-row">
         <span class="confirm-row-label">Est. USD Value</span>
@@ -3768,7 +3768,7 @@ function tImg(sym, size) {
   size = size || 22;
   const t = TOKENS[sym];
   if (!t?.logo) return sym || "?";
-  return `<img src="${t.logo}" style="width:${size}px;height:${size}px;border-radius:50%;vertical-align:middle;object-fit:cover" onerror="this.replaceWith(document.createTextNode('${sym}'))" />`;
+  return `<img loading="lazy" src="${t.logo}" style="width:${size}px;height:${size}px;border-radius:50%;vertical-align:middle;object-fit:cover" onerror="this.replaceWith(document.createTextNode('${sym}'))" />`;
 }
 
 // ── Farm Definitions ──────────────────────────────────────────
@@ -3913,7 +3913,7 @@ function openWalletPickerModal() {
     _eip6963Providers.forEach(({ info, provider }) => {
       sections.push(`
         <button class="wallet-option" onclick="connectEIP6963('${info.uuid}')">
-          <div class="wallet-option-icon">${info.icon ? `<img src="${info.icon}" alt="${info.name}" />` : `<span style="font-size:20px">🔑</span>`}</div>
+          <div class="wallet-option-icon">${info.icon ? `<img loading="lazy" src="${info.icon}" alt="${info.name}" />` : `<span style="font-size:20px">🔑</span>`}</div>
           <div>
             <div class="wallet-option-name">${info.name}</div>
             <div class="wallet-option-sub">${info.rdns || "Browser Extension"}</div>
@@ -4007,7 +4007,7 @@ function openWalletInfoModal() {
   document.getElementById("walletModalTitle").textContent = "Wallet Connected";
   body.innerHTML = `
     <div style="text-align:center;padding:8px 0 20px">
-      <div style="margin-bottom:8px"><img src="/gang-logo.png" style="width:48px;height:48px;border-radius:50%;"></div>
+      <div style="margin-bottom:8px"><img loading="lazy" src="/gang-logo.png" style="width:48px;height:48px;border-radius:50%;"></div>
       <div style="font-family:'Space Mono',monospace;font-size:14px;color:var(--gold);word-break:break-all;margin-bottom:4px">${state.address}</div>
       <div style="font-size:12px;color:var(--muted)">Connected to Cronos Mainnet</div>
     </div>
@@ -5114,122 +5114,103 @@ async function fetchFarmTVLs() {
     const factory = new ethers.Contract(CONTRACTS.FACTORY, FACTORY_ABI, rp);
     let totalTVLUSD = 0;
 
+    // Phase 1: Discover any missing LP addresses
     for (const farm of FARMS) {
-      try {
-        let lpAddr = farm.lpAddr;
-
-        // Auto-discover LP address if not cached
-        if (!lpAddr && farm.tokens.length >= 2) {
-          const tA = TOKENS[farm.tokens[0]];
-          const tB = TOKENS[farm.tokens[1]];
-          const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
-          const addrB = tB?.address === "native" ? CONTRACTS.WCRO : tB?.address;
-          if (addrA && addrB) {
-            try {
-              const found = await factory.getPair(addrA, addrB);
-              if (found && found !== "0x0000000000000000000000000000000000000000") {
-                lpAddr = found;
-                farm.lpAddr = found;
-              }
-            } catch {}
-          }
-        }
-
-        // If farm needs to be added to MasterChef, skip TVL
-        if (farm.needsChefAdd) {
-          farm.tvl = "0";
-          farm.tvlUSD = 0;
-          const tvlEl = document.getElementById("tvl-" + farm.pid);
-          if (tvlEl) tvlEl.textContent = "$0";
-          continue;
-        }
-
-        // Single-token staking pool (GANG staking) — TVL from totalStaked in MasterChef poolInfo
-        if (farm.tokens.length === 1) {
-          try {
-            const tok = TOKENS[farm.tokens[0]];
-            let stakedAmt = 0;
-            if (CONTRACTS.CHEF && (farm.chefPid !== undefined || farm._onChain)) {
-              const chef = new ethers.Contract(CONTRACTS.CHEF, CHEF_ABI, rp);
-              const pid = farm.chefPid ?? farm.pid;
-              const pInfo = await chef.poolInfo(pid);
-              stakedAmt = parseFloat(ethers.formatUnits(pInfo[4], tok.decimals)); // totalStaked field
-            }
-            const tvlUSD = stakedAmt * (tok.price || 0);
-            farm.tvlUSD = tvlUSD;
-            farm.tvl = _fmtTVL(tvlUSD);
-            totalTVLUSD += tvlUSD;
-          } catch {}
-          const tvlEl = document.getElementById("tvl-" + farm.pid);
-          if (tvlEl) tvlEl.textContent = "$" + (farm.tvl || "0");
-          continue;
-        }
-
-        if (!lpAddr || lpAddr === "0x0000000000000000000000000000000000000000") {
-          farm.tvl = "0";
-          farm.tvlUSD = 0;
-          continue;
-        }
-
-        // LP pair — compute TVL from on-chain data
-        const pair = new ethers.Contract(lpAddr, PAIR_ABI, rp);
-        const lpToken = new ethers.Contract(lpAddr, ERC20_ABI, rp);
-
-        // Get LP staked in MasterChef via balanceOf (most reliable method)
-        let lpStakedInChef = 0n;
-        if (CONTRACTS.CHEF) {
-          try { lpStakedInChef = await lpToken.balanceOf(CONTRACTS.CHEF); } catch {}
-        }
-
-        const [token0addr, reserves, lpTotalSupply] = await Promise.all([
-          pair.token0(),
-          pair.getReserves(),
-          lpToken.totalSupply()
-        ]);
-
-        const symA = farm.tokens[0];
-        const symB = farm.tokens[1];
-        const tA   = TOKENS[symA];
-        const tB   = TOKENS[symB];
+      if (!farm.lpAddr && farm.tokens.length >= 2) {
+        const tA = TOKENS[farm.tokens[0]];
+        const tB = TOKENS[farm.tokens[1]];
         const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
-
-        const isAtoken0 = token0addr.toLowerCase() === addrA?.toLowerCase();
-        const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
-        const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
-
-        // Total pool value in USD
-        const valA = resA * (tA?.price || 0);
-        const valB = resB * (tB?.price || 0);
-        let totalPoolUSD;
-        if (valA > 0 && valB > 0) {
-          totalPoolUSD = valA + valB;
-        } else if (valA > 0) {
-          totalPoolUSD = valA * 2;
-        } else if (valB > 0) {
-          totalPoolUSD = valB * 2;
-        } else {
-          totalPoolUSD = 0;
+        const addrB = tB?.address === "native" ? CONTRACTS.WCRO : tB?.address;
+        if (addrA && addrB) {
+          try {
+            const found = await factory.getPair(addrA, addrB);
+            if (found && found !== "0x0000000000000000000000000000000000000000") {
+              farm.lpAddr = found;
+            }
+          } catch {}
         }
-
-        let tvlUSD = totalPoolUSD;
-        if (lpStakedInChef > 0n && lpTotalSupply > 0n) {
-          const totalSupplyFloat = parseFloat(ethers.formatUnits(lpTotalSupply, 18));
-          const stakedFloat = parseFloat(ethers.formatUnits(lpStakedInChef, 18));
-          const farmShare = totalSupplyFloat > 0 ? stakedFloat / totalSupplyFloat : 1;
-          tvlUSD = totalPoolUSD * farmShare;
-        }
-
-        farm.tvlUSD = tvlUSD;
-        farm.tvl    = _fmtTVL(tvlUSD);
-        totalTVLUSD += tvlUSD;
-
-        // Update TVL display in farm card if rendered
-        const tvlEl = document.getElementById("tvl-" + farm.pid);
-        if (tvlEl) tvlEl.textContent = "$" + farm.tvl;
-
-      } catch(e) {
-        // Keep last value on error
       }
+    }
+
+    // Phase 2: Batch all RPC calls for LP farms
+    const lpFarms = FARMS.filter(f => !f.needsChefAdd && f.tokens.length >= 2 && f.lpAddr && f.lpAddr !== "0x0000000000000000000000000000000000000000");
+    const singleFarms = FARMS.filter(f => !f.needsChefAdd && f.tokens.length === 1);
+    const skipFarms = FARMS.filter(f => f.needsChefAdd);
+
+    // Skip farms
+    for (const farm of skipFarms) {
+      farm.tvl = "0"; farm.tvlUSD = 0;
+      const tvlEl = document.getElementById("tvl-" + farm.pid);
+      if (tvlEl) tvlEl.textContent = "$0";
+    }
+
+    // Single-token staking farms (batch poolInfo calls)
+    if (singleFarms.length > 0 && CONTRACTS.CHEF) {
+      const chef = new ethers.Contract(CONTRACTS.CHEF, CHEF_ABI, rp);
+      const singleCalls = singleFarms.map(f => chef.poolInfo(f.chefPid ?? f.pid).catch(() => null));
+      const singleResults = await Promise.all(singleCalls);
+      for (let i = 0; i < singleFarms.length; i++) {
+        const farm = singleFarms[i];
+        const pInfo = singleResults[i];
+        if (pInfo) {
+          const tok = TOKENS[farm.tokens[0]];
+          const stakedAmt = parseFloat(ethers.formatUnits(pInfo[4], tok?.decimals || 18));
+          const tvlUSD = stakedAmt * (tok?.price || 0);
+          farm.tvlUSD = tvlUSD;
+          farm.tvl = _fmtTVL(tvlUSD);
+          totalTVLUSD += tvlUSD;
+        }
+        const tvlEl = document.getElementById("tvl-" + farm.pid);
+        if (tvlEl) tvlEl.textContent = "$" + (farm.tvl || "0");
+      }
+    }
+
+    // LP farms: batch all token0 + reserves + totalSupply + balanceOf calls
+    const lpCalls = lpFarms.map(farm => {
+      const pair = new ethers.Contract(farm.lpAddr, PAIR_ABI, rp);
+      const lpToken = new ethers.Contract(farm.lpAddr, ERC20_ABI, rp);
+      return Promise.all([
+        pair.token0().catch(() => null),
+        pair.getReserves().catch(() => null),
+        lpToken.totalSupply().catch(() => 0n),
+        CONTRACTS.CHEF ? lpToken.balanceOf(CONTRACTS.CHEF).catch(() => 0n) : Promise.resolve(0n)
+      ]).catch(() => null);
+    });
+    const lpResults = await Promise.all(lpCalls);
+
+    for (let i = 0; i < lpFarms.length; i++) {
+      const farm = lpFarms[i];
+      const result = lpResults[i];
+      if (!result || !result[0] || !result[1]) continue;
+
+      const [token0addr, reserves, lpTotalSupply, lpStakedInChef] = result;
+      const symA = farm.tokens[0];
+      const symB = farm.tokens[1];
+      const tA = TOKENS[symA];
+      const tB = TOKENS[symB];
+      const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
+      const isAtoken0 = token0addr.toLowerCase() === addrA?.toLowerCase();
+      const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
+      const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
+
+      const valA = resA * (tA?.price || 0);
+      const valB = resB * (tB?.price || 0);
+      let totalPoolUSD = (valA > 0 && valB > 0) ? valA + valB : (valA > 0 ? valA * 2 : (valB > 0 ? valB * 2 : 0));
+
+      let tvlUSD = totalPoolUSD;
+      if (lpStakedInChef > 0n && lpTotalSupply > 0n) {
+        const totalSupplyFloat = parseFloat(ethers.formatUnits(lpTotalSupply, 18));
+        const stakedFloat = parseFloat(ethers.formatUnits(lpStakedInChef, 18));
+        const farmShare = totalSupplyFloat > 0 ? stakedFloat / totalSupplyFloat : 1;
+        tvlUSD = totalPoolUSD * farmShare;
+      }
+
+      farm.tvlUSD = tvlUSD;
+      farm.tvl = _fmtTVL(tvlUSD);
+      totalTVLUSD += tvlUSD;
+
+      const tvlEl = document.getElementById("tvl-" + farm.pid);
+      if (tvlEl) tvlEl.textContent = "$" + farm.tvl;
     }
 
   } catch(e) { _rotateRpc(); }
@@ -5255,34 +5236,38 @@ async function calcFarmAPRs() {
     if (gangPrice <= 0) return;
     const SECONDS_PER_YEAR = 365.25 * 86400;
 
+    // Batch all poolInfo calls for active farms
+    const activeFarms = FARMS.filter(f => !f.comingSoon && (f.chefPid !== undefined || f._onChain));
+    const poolInfoCalls = activeFarms.map(f => {
+      const pid = f.chefPid ?? f.pid;
+      return chef.poolInfo(pid).catch(() => null);
+    });
+    const poolInfoResults = await Promise.all(poolInfoCalls);
+
+    for (let i = 0; i < activeFarms.length; i++) {
+      const farm = activeFarms[i];
+      const poolInfo = poolInfoResults[i];
+      if (!poolInfo) { farm.apy = 0; continue; }
+
+      const allocPoint = Number(poolInfo[1]);
+      if (allocPoint === 0) { farm.apy = 0; continue; }
+
+      const poolGangPerYear = (gangPerSec * allocPoint / totalAlloc) * SECONDS_PER_YEAR;
+      const rewardsUSD = poolGangPerYear * gangPrice;
+      let tvlUSD = farm.tvlUSD || 0;
+      farm.apy = tvlUSD > 0 ? Math.round(rewardsUSD / tvlUSD * 100) : 0;
+
+      const aprEl = document.getElementById("apr-" + farm.pid);
+      if (aprEl) aprEl.textContent = farm.apy > 0 ? farm.apy + '%' : '—';
+    }
+
+    // Set non-active farms
     for (const farm of FARMS) {
-      if (farm.comingSoon) continue;
-      if (farm.chefPid === undefined && !farm._onChain) {
+      if (farm.comingSoon || (farm.chefPid === undefined && !farm._onChain)) {
         farm.apy = 0;
         const aprEl = document.getElementById("apr-" + farm.pid);
         if (aprEl) aprEl.textContent = '—';
-        continue;
       }
-      const pid = farm.chefPid ?? farm.pid;
-      try {
-        const poolInfo = await chef.poolInfo(pid);
-        const allocPoint = Number(poolInfo[1]);
-        if (allocPoint === 0) { farm.apy = 0; continue; }
-
-        const poolGangPerYear = (gangPerSec * allocPoint / totalAlloc) * SECONDS_PER_YEAR;
-        const rewardsUSD = poolGangPerYear * gangPrice;
-
-        let tvlUSD = farm.tvlUSD || 0;
-        if (tvlUSD > 0) {
-          farm.apy = Math.round(rewardsUSD / tvlUSD * 100);
-        } else {
-          farm.apy = 0;
-        }
-      } catch {}
-
-      // Update APR display
-      const aprEl = document.getElementById("apr-" + farm.pid);
-      if (aprEl) aprEl.textContent = farm.apy > 0 ? farm.apy + '%' : '—';
     }
   } catch(e) { console.error("APR calc error:", e); }
 
@@ -5308,106 +5293,81 @@ async function calcVaultAPRsOnChain() {
     if (gangPrice <= 0) return;
     const SECONDS_PER_DAY = 86400;
 
-    for (const vault of VAULTS) {
-      const pid = vault.chefPid;
-      if (pid === undefined) continue;
-      try {
-        const poolInfo = await chef.poolInfo(pid);
+    // Batch poolInfo calls for all vaults
+    const poolInfoCalls = VAULTS.map(v => v.chefPid !== undefined ? chef.poolInfo(v.chefPid).catch(() => null) : Promise.resolve(null));
+    const poolInfoResults = await Promise.all(poolInfoCalls);
+
+    // Batch TVL calls for all vaults (token0, reserves, totalSupply, balanceOf in parallel)
+    const tvlBatches = VAULTS.map(vault => {
+      if (!vault.lpAddr || vault.tokens.length < 2) return Promise.resolve(null);
+      const pair = new ethers.Contract(vault.lpAddr, PAIR_ABI, rp);
+      const lpToken = new ethers.Contract(vault.lpAddr, ERC20_ABI, rp);
+      return Promise.all([
+        pair.token0().catch(() => null),
+        pair.getReserves().catch(() => null),
+        lpToken.totalSupply().catch(() => 0n),
+        lpToken.balanceOf(CONTRACTS.CHEF).catch(() => 0n)
+      ]).catch(() => null);
+    });
+    const tvlResults = await Promise.all(tvlBatches);
+
+    for (let i = 0; i < VAULTS.length; i++) {
+      const vault = VAULTS[i];
+      const poolInfo = poolInfoResults[i];
+
+      if (poolInfo) {
         const allocPoint = Number(poolInfo[1]);
-        if (allocPoint === 0) { vault.dailyGang = 0; continue; }
-        // Calculate daily GANG rewards for this vault pool
-        vault.dailyGang = (gangPerSec * allocPoint / totalAlloc) * SECONDS_PER_DAY;
+        vault.dailyGang = allocPoint > 0 ? (gangPerSec * allocPoint / totalAlloc) * SECONDS_PER_DAY : 0;
+      }
 
-        // Calculate real TVL from LP pair reserves (same method as farms)
-        if (vault.lpAddr && vault.tokens.length >= 2) {
-          // Small delay to avoid RPC rate limiting (farms already made many calls)
-          await new Promise(r => setTimeout(r, 300));
-          try {
-            const pair = new ethers.Contract(vault.lpAddr, PAIR_ABI, rp);
-            const lpToken = new ethers.Contract(vault.lpAddr, ERC20_ABI, rp);
-            const [t0addr, reserves, lpTotalSupply] = await Promise.all([
-              pair.token0(),
-              pair.getReserves(),
-              lpToken.totalSupply()
-            ]);
-            const tA = TOKENS[vault.tokens[0]];
-            const tB = TOKENS[vault.tokens[1]];
-            const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
-            const isAtoken0 = t0addr.toLowerCase() === addrA?.toLowerCase();
-            const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
-            const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
-            const valA = resA * (tA?.price || 0);
-            const valB = resB * (tB?.price || 0);
-            // If one side has price 0, double the known side (standard DeFi TVL estimation)
-            let totalPoolUSD;
-            if (valA > 0 && valB > 0) {
-              totalPoolUSD = valA + valB;
-            } else if (valA > 0) {
-              totalPoolUSD = valA * 2;
-            } else if (valB > 0) {
-              totalPoolUSD = valB * 2;
-            } else {
-              totalPoolUSD = 0;
-            }
+      // Calculate TVL from batch results
+      const tvlData = tvlResults[i];
+      if (tvlData && tvlData[0] && tvlData[1]) {
+        const [t0addr, reserves, lpTotalSupply, lpStakedInChef] = tvlData;
+        const tA = TOKENS[vault.tokens[0]];
+        const tB = TOKENS[vault.tokens[1]];
+        const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
+        const isAtoken0 = t0addr.toLowerCase() === addrA?.toLowerCase();
+        const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
+        const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
+        const valA = resA * (tA?.price || 0);
+        const valB = resB * (tB?.price || 0);
+        let totalPoolUSD = (valA > 0 && valB > 0) ? valA + valB : (valA > 0 ? valA * 2 : (valB > 0 ? valB * 2 : 0));
 
-            // Calculate vault's share: LP staked in MasterChef vs total supply
-            let tvlUSD = totalPoolUSD;
-            let lpStakedInChef = 0n;
-            try { lpStakedInChef = await lpToken.balanceOf(CONTRACTS.CHEF); } catch {}
-            if (lpStakedInChef > 0n && lpTotalSupply > 0n) {
-              const totalSupplyFloat = parseFloat(ethers.formatUnits(lpTotalSupply, 18));
-              const stakedFloat = parseFloat(ethers.formatUnits(lpStakedInChef, 18));
-              const farmShare = totalSupplyFloat > 0 ? stakedFloat / totalSupplyFloat : 1;
-              tvlUSD = totalPoolUSD * farmShare;
-            }
-            vault._tvlUSD = tvlUSD;
-          } catch(e2) {
-            console.warn('Vault TVL fetch failed for ' + vault.name + ', retrying...', e2.message);
-            // Retry once after delay
-            await new Promise(r => setTimeout(r, 1000));
-            try {
-              const pair2 = new ethers.Contract(vault.lpAddr, PAIR_ABI, rp);
-              const [t0addr2, reserves2] = await Promise.all([pair2.token0(), pair2.getReserves()]);
-              const tA2 = TOKENS[vault.tokens[0]];
-              const tB2 = TOKENS[vault.tokens[1]];
-              const addrA2 = tA2?.address === "native" ? CONTRACTS.WCRO : tA2?.address;
-              const isA2 = t0addr2.toLowerCase() === addrA2?.toLowerCase();
-              const resA2 = parseFloat(ethers.formatUnits(isA2 ? reserves2[0] : reserves2[1], tA2?.decimals || 18));
-              const resB2 = parseFloat(ethers.formatUnits(isA2 ? reserves2[1] : reserves2[0], tB2?.decimals || 18));
-              const vA2 = resA2 * (tA2?.price || 0);
-              const vB2 = resB2 * (tB2?.price || 0);
-              vault._tvlUSD = (vA2 > 0 && vB2 > 0) ? vA2 + vB2 : (vA2 > 0 ? vA2 * 2 : (vB2 > 0 ? vB2 * 2 : 0));
-            } catch(e3) {
-              vault._tvlUSD = 0;
-            }
-          }
+        let tvlUSD = totalPoolUSD;
+        if (lpStakedInChef > 0n && lpTotalSupply > 0n) {
+          const totalSupplyFloat = parseFloat(ethers.formatUnits(lpTotalSupply, 18));
+          const stakedFloat = parseFloat(ethers.formatUnits(lpStakedInChef, 18));
+          const farmShare = totalSupplyFloat > 0 ? stakedFloat / totalSupplyFloat : 1;
+          tvlUSD = totalPoolUSD * farmShare;
         }
-      } catch(e) {
-        console.error('Vault APR calc error for ' + vault.name + ':', e);
+        vault._tvlUSD = tvlUSD;
       }
 
       // Update APR and TVL display
-      const vidx = VAULTS.indexOf(vault);
-      const aprEl = document.getElementById('vault-apr-' + vidx);
-      if (aprEl) {
-        const newApr = calcVaultAPR(vault);
-        aprEl.textContent = newApr;
-      }
-      const tvlEl = document.getElementById('vault-tvl-' + vidx);
-      if (tvlEl) {
-        tvlEl.textContent = vault._tvlUSD > 0 ? '$' + _fmtTVL(vault._tvlUSD) : '$0';
-      }
+      const aprEl = document.getElementById('vault-apr-' + i);
+      if (aprEl) aprEl.textContent = calcVaultAPR(vault);
+      const tvlEl = document.getElementById('vault-tvl-' + i);
+      if (tvlEl) tvlEl.textContent = vault._tvlUSD > 0 ? '$' + _fmtTVL(vault._tvlUSD) : '$0';
     }
   } catch(e) { console.error('Vault APR on-chain error:', e); }
 }
 
 // ── Fetch 24h volume from DexScreener ──────────────────────
+let _dexScreenerCache = { data: null, ts: 0 };
 async function fetchDexScreenerStats() {
   try {
-    // Fetch by token address to get accurate price from DexScreener
-    const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACTS.GANG}`);
-    if (!res.ok) return;
-    const data = await res.json();
+    const now = Date.now();
+    let data;
+    // Cache DexScreener responses for 15s to reduce API calls
+    if (_dexScreenerCache.data && (now - _dexScreenerCache.ts) < 15000) {
+      data = _dexScreenerCache.data;
+    } else {
+      const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACTS.GANG}`);
+      if (!res.ok) return;
+      data = await res.json();
+      _dexScreenerCache = { data, ts: now };
+    }
     const allPairs = data?.pairs || [];
     const pair = allPairs[0];
     if (!pair) return;
@@ -6527,7 +6487,7 @@ function renderFarms() {
     const idx = farm._origIdx;
     const icons = farm.tokens.map(t => {
       const tok = TOKENS[t];
-      if (tok?.logo) return `<div class="token-icon" style="background:${tokenColor(t)};padding:0;overflow:hidden"><img src="${tok.logo}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentNode.textContent='${tok?.icon||"?"}'"/></div>`;
+      if (tok?.logo) return `<div class="token-icon" style="background:${tokenColor(t)};padding:0;overflow:hidden"><img loading="lazy" src="${tok.logo}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentNode.textContent='${tok?.icon||"?"}'"/></div>`;
       return `<div class="token-icon" style="background:${tokenColor(t)}">${tok?.symbol?.charAt(0)||"?"}</div>`;
     }).join("");
 
@@ -6665,7 +6625,7 @@ function renderFarms() {
       </div>
     </div>
     <div class=\"gang-img-card\" style=\"margin-top:10px;\">
-      <img src=\"${(FARM_IMGS[idx % FARM_IMGS.length]).card}\" class=\"gang-side-img\" style=\"height:180px;object-fit:cover;object-position:center top;\" />
+      <img loading="lazy" src=\"${(FARM_IMGS[idx % FARM_IMGS.length]).card}\" class=\"gang-side-img\" style=\"height:180px;object-fit:cover;object-position:center top;\" />
       <div class=\"gang-img-caption\">${farm.name} — STAKE & EARN</div>
     </div>
     `;
@@ -7395,7 +7355,7 @@ function renderTokenOption(tok) {
   const fmtBal = hasBal ? (bal >= 1000 ? bal.toLocaleString('en-US',{maximumFractionDigits:2}) : bal >= 1 ? bal.toFixed(4) : bal.toFixed(6)) : '';
   const usdVal = hasBal && tok.price > 0 ? '$' + (bal * tok.price).toLocaleString('en-US',{maximumFractionDigits:2}) : '';
   const logoSrc = tok.logo || '';
-  const logoImg = logoSrc ? `<img class="token-option-logo" src="${logoSrc}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />` : '';
+  const logoImg = logoSrc ? `<img loading="lazy" class="token-option-logo" src="${logoSrc}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />` : '';
   const logoFallback = `<div class="token-option-logo" style="display:${logoSrc ? 'none' : 'flex'};align-items:center;justify-content:center;font-size:16px;background:var(--surface3);color:var(--gold);font-weight:700">${tok.symbol[0]}</div>`;
 
   return `<div class="token-option" onclick="selectToken('${tok.symbol}')" style="${hasBal ? 'background:rgba(212,160,23,0.04);' : ''}">
@@ -7764,7 +7724,7 @@ function renderVaults() {
   grid.innerHTML = VAULTS.map((vault, idx) => {
     const icons = vault.tokens.map(t => {
       const tok = TOKENS[t];
-      if (tok?.logo) return `<div class="token-icon" style="background:${tokenColor(t)};padding:0;overflow:hidden"><img src="${tok.logo}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentNode.textContent='${tok?.icon||"?"}'"/></div>`;
+      if (tok?.logo) return `<div class="token-icon" style="background:${tokenColor(t)};padding:0;overflow:hidden"><img loading="lazy" src="${tok.logo}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentNode.textContent='${tok?.icon||"?"}'"/></div>`;
       return `<div class="token-icon" style="background:${tokenColor(t)}">${tok?.symbol?.charAt(0)||"?"}</div>`;
     }).join("");
 
@@ -8843,7 +8803,7 @@ async function loadVaultFees() {
     const owner = await vaultContract.owner();
     // Only show fee box if connected wallet is the owner
     if (state.address.toLowerCase() !== owner.toLowerCase()) {
-      document.getElementById('vaultFeeBox').style.display = 'none';
+      { const _el = document.getElementById('vaultFeeBox'); if (_el) _el.style.display = 'none'; }
       return;
     }
     const fees = await vaultContract.pendingFees();
@@ -8852,9 +8812,9 @@ async function loadVaultFees() {
     for (let i = 0; i < fees.lpFees.length; i++) {
       totalLPFees += parseFloat(ethers.formatEther(fees.lpFees[i]));
     }
-    document.getElementById('vaultGangFees').textContent = gangFees.toFixed(4) + ' GANG';
-    document.getElementById('vaultLPFees').textContent = totalLPFees.toFixed(4) + ' LP';
-    document.getElementById('vaultFeeBox').style.display = (gangFees > 0 || totalLPFees > 0) ? 'block' : 'block';
+    { const _el = document.getElementById('vaultGangFees'); if (_el) _el.textContent = gangFees.toFixed(4) + ' GANG'; }
+    { const _el = document.getElementById('vaultLPFees'); if (_el) _el.textContent = totalLPFees.toFixed(4) + ' LP'; }
+    { const _el = document.getElementById('vaultFeeBox'); if (_el) _el.style.display = (gangFees > 0 || totalLPFees > 0) ? 'block' : 'none'; }
   } catch(e) { console.warn('Load vault fees error:', e.message); }
 }
 
@@ -9887,10 +9847,10 @@ const LOCKER_ABI = [
 
 async function loadLockerPage() {
   if (!CONTRACTS.LOCKER) {
-    document.getElementById('deployLockerBanner').style.display = 'block';
+    { const _el = document.getElementById('deployLockerBanner'); if (_el) _el.style.display = 'block'; }
     return;
   }
-  document.getElementById('deployLockerBanner').style.display = 'none';
+  { const _el = document.getElementById('deployLockerBanner'); if (_el) _el.style.display = 'none'; }
 
   const rawP = state._rawProvider || window.ethereum;
   const iface = new ethers.Interface(LOCKER_ABI);
@@ -10291,7 +10251,7 @@ async function deployLocker() {
     localStorage.setItem('GANG_LOCKER_ADDR', addr);
 
     showToast('Locker deployed!', 'success');
-    document.getElementById('deployLockerBanner').style.display = 'none';
+    { const _el = document.getElementById('deployLockerBanner'); if (_el) _el.style.display = 'none'; }
     loadLockerPage();
   } catch(e) {
     addLog('ERROR: ' + e.message);
@@ -10589,7 +10549,7 @@ async function loadLaunchpadPage() {
     document.getElementById('createIdoSection').style.display = 'none';
     return;
   }
-  document.getElementById('deployLaunchpadBanner').style.display = 'none';
+  { const _el = document.getElementById('deployLaunchpadBanner'); if (_el) _el.style.display = 'none'; }
 
   // Show tier info
   if (state.address) {
@@ -10943,7 +10903,7 @@ async function deployLaunchpad() {
     localStorage.setItem('GANG_LAUNCHPAD_ADDR', addr);
 
     showToast('Launchpad deployed!', 'success');
-    document.getElementById('deployLaunchpadBanner').style.display = 'none';
+    { const _el = document.getElementById('deployLaunchpadBanner'); if (_el) _el.style.display = 'none'; }
     loadLaunchpadPage();
   } catch(e) {
     addLog('ERROR: ' + e.message);
@@ -11832,7 +11792,7 @@ function renderUserStakes() {
   }
 
   if (_localStakes.length === 0 && _onChainStakes.length === 0) {
-    el.innerHTML = '<div class="connect-prompt" style="padding:20px;"><div class="icon"><img src="/gang-logo.png" style="width:48px;height:48px;border-radius:50%;"></div><h3>No Stakes Yet</h3><p style="color:var(--muted);font-size:13px;margin-top:8px;">Choose a lock period and stake your $GANG to start earning.</p></div>';
+    el.innerHTML = '<div class="connect-prompt" style="padding:20px;"><div class="icon"><img loading="lazy" src="/gang-logo.png" style="width:48px;height:48px;border-radius:50%;"></div><h3>No Stakes Yet</h3><p style="color:var(--muted);font-size:13px;margin-top:8px;">Choose a lock period and stake your $GANG to start earning.</p></div>';
     return;
   }
 
@@ -11940,7 +11900,7 @@ async function loadOnChainStakes() {
 function renderOnChainStakes(el) {
   const now = Date.now();
   if (_onChainStakes.length === 0) {
-    el.innerHTML = '<div class="connect-prompt" style="padding:20px;"><div class="icon"><img src="/gang-logo.png" style="width:48px;height:48px;border-radius:50%;"></div><h3>No Stakes Yet</h3><p style="color:var(--muted);font-size:13px;margin-top:8px;">Choose a lock period and stake your $GANG to start earning.</p></div>';
+    el.innerHTML = '<div class="connect-prompt" style="padding:20px;"><div class="icon"><img loading="lazy" src="/gang-logo.png" style="width:48px;height:48px;border-radius:50%;"></div><h3>No Stakes Yet</h3><p style="color:var(--muted);font-size:13px;margin-top:8px;">Choose a lock period and stake your $GANG to start earning.</p></div>';
     return;
   }
 
@@ -12568,7 +12528,7 @@ async function loadNftPreviewGallery() {
       const rarity = meta.attributes.find(a => a.trait_type === "Rarity")?.value || "Common";
       const rank = meta.attributes.find(a => a.trait_type === "Rank")?.value || "Soldier";
       html += `<div class="gang-img-card" style="position:relative;">
-        <img src="${meta.image}" class="gang-side-img" style="height:200px;object-fit:cover;" />
+        <img loading="lazy" src="${meta.image}" class="gang-side-img" style="height:200px;object-fit:cover;" />
         <div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);border:1px solid rgba(212,160,23,0.3);border-radius:6px;padding:2px 8px;font-size:10px;color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">${rarity}</div>
         <div class="gang-img-caption">#${id} — ${rank}</div>
       </div>`;
@@ -12619,7 +12579,7 @@ async function loadUserNfts() {
         const rank = meta.attributes.find(a => a.trait_type === "Rank")?.value || "";
         const rarity = meta.attributes.find(a => a.trait_type === "Rarity")?.value || "";
         html += `<div class="gang-img-card" style="position:relative;">
-          <img src="${meta.image}" class="gang-side-img" style="height:180px;object-fit:cover;" />
+          <img loading="lazy" src="${meta.image}" class="gang-side-img" style="height:180px;object-fit:cover;" />
           <div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);border:1px solid rgba(212,160,23,0.3);border-radius:6px;padding:2px 8px;font-size:10px;color:var(--gold);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">${rarity}</div>
           <div class="gang-img-caption">#${tokenId} — ${rank}</div>
         </div>`;
@@ -12668,7 +12628,7 @@ async function mintNftFromDex() {
     showToast("Mint failed: " + msg.slice(0, 100), "error");
     if (statusEl) { statusEl.className = "status-err"; statusEl.textContent = msg.slice(0, 150); }
   } finally {
-    if (btn) { btn.innerHTML = '<img src="/gang-logo.png" style="width:20px;height:20px;vertical-align:middle;border-radius:50%;margin-right:6px;"> MINT NOW'; btn.disabled = false; }
+    if (btn) { btn.innerHTML = '<img loading="lazy" src="/gang-logo.png" style="width:20px;height:20px;vertical-align:middle;border-radius:50%;margin-right:6px;"> MINT NOW'; btn.disabled = false; }
   }
 }
 
@@ -12983,12 +12943,12 @@ function switchMktTab(tab) {
 
 async function initMarketplace() {
   if (!isMktDeployed()) {
-    document.getElementById('mktDeployPrompt').style.display = 'block';
+    { const _el = document.getElementById('mktDeployPrompt'); if (_el) _el.style.display = 'block'; }
     document.getElementById('mktBrowseLoading').style.display = 'none';
     document.getElementById('mktBrowseEmpty').style.display = 'none';
     return;
   }
-  document.getElementById('mktDeployPrompt').style.display = 'none';
+  { const _el = document.getElementById('mktDeployPrompt'); if (_el) _el.style.display = 'none'; }
   await loadMktStats();
   await loadMktListings();
   if (state.address) {
@@ -13468,7 +13428,7 @@ async function loadMktGangstersFallback(container) {
         const meta = await res.json();
         const rarity = meta.attributes?.find(a => a.trait_type === 'Rarity')?.value || '';
         html += '<div class="mkt-own-card" onclick="mktSelectNft(\'' + NFT_CONTRACT_ADDR + '\',' + tokenId + ',\'' + (meta.image || '') + '\',\'' + (meta.name || '#'+tokenId).replace(/'/g,'') + '\',\'Cronos Gangsters\')">' +
-          '<img src="' + meta.image + '" style="width:100%;height:160px;object-fit:cover;" />' +
+          '<img loading="lazy" src="' + meta.image + '" style="width:100%;height:160px;object-fit:cover;" />' +
           '<div class="mkt-own-card-info">' +
             '<div style="font-weight:700;color:var(--text);">#' + tokenId + '</div>' +
             '<div style="color:var(--gold);font-size:10px;">' + rarity + '</div>' +
@@ -13574,7 +13534,7 @@ async function mktScanCollection() {
       } catch(e) {}
 
       html += '<div class="mkt-own-card" data-testid="mkt-scanned-' + tokenId + '" onclick="mktSelectNft(\'' + addr + '\',' + tokenId + ',\'' + imgSrc + '\',\'' + nftName.replace(/'/g, '') + '\',\'' + collectionName.replace(/'/g, '') + '\')">' +
-        (imgSrc ? '<img src="' + imgSrc + '" style="width:100%;height:160px;object-fit:cover;" onerror="this.style.display=\'none\'" />' : '<div style="width:100%;height:160px;display:flex;align-items:center;justify-content:center;font-size:36px;color:var(--muted);background:var(--surface2);">&#x1f5bc;</div>') +
+        (imgSrc ? '<img loading="lazy" src="' + imgSrc + '" style="width:100%;height:160px;object-fit:cover;" onerror="this.style.display=\'none\'" />' : '<div style="width:100%;height:160px;display:flex;align-items:center;justify-content:center;font-size:36px;color:var(--muted);background:var(--surface2);">&#x1f5bc;</div>') +
         '<div class="mkt-own-card-info">' +
           '<div style="font-weight:700;color:var(--text);">' + nftName + '</div>' +
           '<div style="color:var(--muted);font-size:10px;">' + collectionName + '</div>' +
@@ -13733,7 +13693,7 @@ async function loadMktMyListings() {
       } catch(e) {}
       
       html += '<div class="mkt-listing-row" data-testid="mkt-my-' + listingId + '">' +
-        (imgSrc ? '<img class="mkt-listing-img" src="' + imgSrc + '" onerror="this.style.display=\'none\'" />' : '<div class="mkt-listing-img" style="display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--muted);">&#x1f5bc;</div>') +
+        (imgSrc ? '<img loading="lazy" class="mkt-listing-img" src="' + imgSrc + '" onerror="this.style.display=\'none\'" />' : '<div class="mkt-listing-img" style="display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--muted);">&#x1f5bc;</div>') +
         '<div class="mkt-listing-info">' +
           '<div class="mkt-listing-name">' + nftName + '</div>' +
           '<div class="mkt-listing-sub">Token #' + tokenId + '</div>' +
@@ -13825,7 +13785,7 @@ async function mktWithdrawFees() {
   renderVaults();
   // Start the price/TVL/APR refresh cycle
   fetchLivePrices();
-  setInterval(fetchLivePrices, 5000);
+  setInterval(fetchLivePrices, 15000);
   // Discover any new pools in parallel
   autoDiscoverFarmPools();
 

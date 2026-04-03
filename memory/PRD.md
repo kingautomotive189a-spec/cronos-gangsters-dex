@@ -8,23 +8,38 @@ Build a complete Web3 DApp for the $GANG token on Cronos chain with DEX features
 - Backend: FastAPI (`server.py`, `trading_api.py`, `mining_api.py`)
 - Telegram Bot: python-telegram-bot v20+ (`telegram_bot.py`)
 - Smart Contracts: MasterChef, Staking, Lottery (Solidity)
-- No React — the React scaffold exists but is unused
-
-## Completed Features
-- Swap, Liquidity, Farms (7 active + 3 coming soon), Vaults (6 auto-compound), Staking, Bridge, Portfolio
-- Lottery feature (contract at 0xd2c46260...f27, 70/20/10 split)
-- NFT mint/gallery, Marketplace, Token Creator, Launchpad, Sniper Bot, Referral system
-- Mining Hub (19 casino games + daily tap mining)
-- Leverage Trading (8 pairs, up to 100x, max payout 50x cap)
-- Telegram Bot with live APR/TVL from DexScreener, lottery info, captcha verification, buy alerts
 
 ## Session 4 — April 3, 2026
-- Completed Lottery feature: removed duplicate page-lottery HTML, fixed broken JS references
-- Deep dive audit: fixed server.py logger ordering, Cloudflare cruft removal, stale APR/TVL data
-- Telegram bot: live farm APR/TVL via fetch_live_farm_data(), correct lottery split (70/20/10), LOTTERY contract in CONTRACTS dict
-- Fixed Coming Soon farm CRO/USDC using wrong LP address
-- Fixed security features text (3 warnings = ban, not 2)
-- All tests passed: 24/24 backend, 13/13 frontend
+
+### Lottery Feature
+- Removed duplicate page-lottery HTML, fixed broken JS references to deployLotteryBanner
+- Lottery contract at 0xd2c46260...f27 with ABI fully injected
+
+### Max Payout
+- Added MAX_PAYOUT_MULT = 50 cap for paper trading positions
+
+### Deep Dive Audit + Performance Optimization
+**Bugs Fixed:**
+- server.py: logger used before defined (crash on errors), "2 warnings" text (should be 3)
+- Cloudflare challenge script removed (hidden iframe cruft)
+- CRO/USDC Coming Soon farm had wrong LP address (XRP/GANG LP)
+- vaultFeeBox display logic: `'block' : 'block'` → `'block' : 'none'`
+- 11 `Invalid left-hand side in assignment` JS errors (optional chaining on assignment)
+- Telegram bot: stale hardcoded APYs/TVLs, wrong lottery split (90/10 → 70/20/10)
+
+**Performance:**
+- Price refresh interval: 5s → 15s (3x fewer API calls)
+- DexScreener response caching (15s TTL)
+- Farm TVL RPC calls batched with Promise.all (was sequential per-farm)
+- Farm APR poolInfo calls batched with Promise.all
+- Vault TVL: removed 300ms delays + 1s retry delays per vault, batched all RPC
+- All images: loading="lazy" (53 → 119 images)
+
+**Telegram Bot:**
+- Live APR/TVL via fetch_live_farm_data() from DexScreener
+- Correct lottery info (70% winner, 20% burned, 10% treasury)
+- LOTTERY contract address in CONTRACTS dict
+- Lottery mentioned in startup + periodic messages
 
 ## Backlog
-- P2: Verify BuyBot DexScreener polling
+- P2: Verify BuyBot DexScreener polling (buy alert system)
