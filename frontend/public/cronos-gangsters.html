@@ -4568,8 +4568,9 @@ async function updatePositionsSection() {
 
 function setMaxLiqB() {
   const symB = document.getElementById("liqTokenB")?.value || "GANG";
-  const b = state.balances[symB];
+  let b = state.balances[symB];
   if (b !== undefined) {
+    if (symB === "CRO" && b > 0.5) b -= 0.5; // Reserve 0.5 CRO for gas
     document.getElementById("liqB").value = b.toFixed(6);
     calcLiqRatioFromB();
   }
@@ -7203,11 +7204,15 @@ function setMax(inputId) {
   }
   if (inputId === "swapFrom") {
     const sym = document.getElementById("tokenFrom")?.value || "CRO";
-    input.value = truncateDecimals(state.balances[sym] || 0, 6);
+    let bal = state.balances[sym] || 0;
+    if (sym === "CRO" && bal > 0.5) bal -= 0.5; // Reserve 0.5 CRO for gas
+    input.value = truncateDecimals(bal, 6);
     calcSwap();
   } else if (inputId === "liqA") {
     const sym = document.getElementById("liqTokenA")?.value || "CRO";
-    input.value = truncateDecimals(state.balances[sym] || 0, 6);
+    let bal = state.balances[sym] || 0;
+    if (sym === "CRO" && bal > 0.5) bal -= 0.5; // Reserve 0.5 CRO for gas
+    input.value = truncateDecimals(bal, 6);
     calcLiqRatio();
   } else if (inputId === "removeLPAmt") {
     const symA = document.getElementById("liqTokenA")?.value || "CRO";
