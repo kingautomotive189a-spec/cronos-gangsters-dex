@@ -5107,29 +5107,131 @@ async function fetchPoolRatio(symA, symB) {
 
 // ── Fetch real TVL for each farm from on-chain reserves ──────
 async function fetchFarmTVLs() {
-  // TVL for LP farms comes from DexScreener (set in fetchDexScreenerStats)
-  // This function only handles GANG Staking (single-token, not an LP pair)
   const rp = getReadProvider();
   if (!rp) return;
-  for (const farm of FARMS) {
-    if (farm.comingSoon || farm.needsChefAdd) continue;
-    if (farm.tokens.length !== 1) continue; // Only single-token pools
-    try {
-      const tok = TOKENS[farm.tokens[0]];
-      if (!tok || !tok.price) continue;
-      if (CONTRACTS.CHEF && (farm.chefPid !== undefined || farm._onChain)) {
-        const chef = new ethers.Contract(CONTRACTS.CHEF, CHEF_ABI, rp);
-        const pid = farm.chefPid ?? farm.pid;
-        const pInfo = await chef.poolInfo(pid);
-        const stakedAmt = parseFloat(ethers.formatUnits(pInfo[4], tok.decimals));
-        const tvlUSD = stakedAmt * tok.price;
+  try {
+    const factory = new ethers.Contract(CONTRACTS.FACTORY, FACTORY_ABI, rp);
+    let totalTVLUSD = 0;
+
+    for (const farm of FARMS) {
+      try {
+        let lpAddr = farm.lpAddr;
+
+        // Auto-discover LP address if not cached
+        if (!lpAddr && farm.tokens.length >= 2) {
+          const tA = TOKENS[farm.tokens[0]];
+          const tB = TOKENS[farm.tokens[1]];
+          const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
+          const addrB = tB?.address === "native" ? CONTRACTS.WCRO : tB?.address;
+          if (addrA && addrB) {
+            try {
+              const found = await factory.getPair(addrA, addrB);
+              if (found && found !== "0x0000000000000000000000000000000000000000") {
+                lpAddr = found;
+                farm.lpAddr = found;
+              }
+            } catch {}
+          }
+        }
+
+        // If farm needs to be added to MasterChef, skip TVL
+        if (farm.needsChefAdd) {
+          farm.tvl = "0";
+          farm.tvlUSD = 0;
+          const tvlEl = document.getElementById("tvl-" + farm.pid);
+          if (tvlEl) tvlEl.textContent = "$0";
+          continue;
+        }
+
+        // Single-token staking pool (GANG staking) — TVL from totalStaked in MasterChef poolInfo
+        if (farm.tokens.length === 1) {
+          try {
+            const tok = TOKENS[farm.tokens[0]];
+            let stakedAmt = 0;
+            if (CONTRACTS.CHEF && (farm.chefPid !== undefined || farm._onChain)) {
+              const chef = new ethers.Contract(CONTRACTS.CHEF, CHEF_ABI, rp);
+              const pid = farm.chefPid ?? farm.pid;
+              const pInfo = await chef.poolInfo(pid);
+              stakedAmt = parseFloat(ethers.formatUnits(pInfo[4], tok.decimals)); // totalStaked field
+            }
+            const tvlUSD = stakedAmt * (tok.price || 0);
+            farm.tvlUSD = tvlUSD;
+            farm.tvl = _fmtTVL(tvlUSD);
+            totalTVLUSD += tvlUSD;
+          } catch {}
+          const tvlEl = document.getElementById("tvl-" + farm.pid);
+          if (tvlEl) tvlEl.textContent = "$" + (farm.tvl || "0");
+          continue;
+        }
+
+        if (!lpAddr || lpAddr === "0x0000000000000000000000000000000000000000") {
+          farm.tvl = "0";
+          farm.tvlUSD = 0;
+          continue;
+        }
+
+        // LP pair — compute TVL from on-chain data
+        const pair = new ethers.Contract(lpAddr, PAIR_ABI, rp);
+        const lpToken = new ethers.Contract(lpAddr, ERC20_ABI, rp);
+
+        // Get LP staked in MasterChef via balanceOf (most reliable method)
+        let lpStakedInChef = 0n;
+        if (CONTRACTS.CHEF) {
+          try { lpStakedInChef = await lpToken.balanceOf(CONTRACTS.CHEF); } catch {}
+        }
+
+        const [token0addr, reserves, lpTotalSupply] = await Promise.all([
+          pair.token0(),
+          pair.getReserves(),
+          lpToken.totalSupply()
+        ]);
+
+        const symA = farm.tokens[0];
+        const symB = farm.tokens[1];
+        const tA   = TOKENS[symA];
+        const tB   = TOKENS[symB];
+        const addrA = tA?.address === "native" ? CONTRACTS.WCRO : tA?.address;
+
+        const isAtoken0 = token0addr.toLowerCase() === addrA?.toLowerCase();
+        const resA = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[0] : reserves[1], tA?.decimals || 18));
+        const resB = parseFloat(ethers.formatUnits(isAtoken0 ? reserves[1] : reserves[0], tB?.decimals || 18));
+
+        // Total pool value in USD
+        const valA = resA * (tA?.price || 0);
+        const valB = resB * (tB?.price || 0);
+        let totalPoolUSD;
+        if (valA > 0 && valB > 0) {
+          totalPoolUSD = valA + valB;
+        } else if (valA > 0) {
+          totalPoolUSD = valA * 2;
+        } else if (valB > 0) {
+          totalPoolUSD = valB * 2;
+        } else {
+          totalPoolUSD = 0;
+        }
+
+        let tvlUSD = totalPoolUSD;
+        if (lpStakedInChef > 0n && lpTotalSupply > 0n) {
+          const totalSupplyFloat = parseFloat(ethers.formatUnits(lpTotalSupply, 18));
+          const stakedFloat = parseFloat(ethers.formatUnits(lpStakedInChef, 18));
+          const farmShare = totalSupplyFloat > 0 ? stakedFloat / totalSupplyFloat : 1;
+          tvlUSD = totalPoolUSD * farmShare;
+        }
+
         farm.tvlUSD = tvlUSD;
-        farm.tvl = _fmtTVL(tvlUSD);
+        farm.tvl    = _fmtTVL(tvlUSD);
+        totalTVLUSD += tvlUSD;
+
+        // Update TVL display in farm card if rendered
         const tvlEl = document.getElementById("tvl-" + farm.pid);
         if (tvlEl) tvlEl.textContent = "$" + farm.tvl;
+
+      } catch(e) {
+        // Keep last value on error
       }
-    } catch {}
-  }
+    }
+
+  } catch(e) { _rotateRpc(); }
 }
 
 
