@@ -3064,24 +3064,31 @@
       <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,var(--green),transparent);margin:14px auto 0;"></div>
     </div>
 
-    <!-- SWAP PROTOCOL FEE — TOP OF PAGE -->
-    <div data-testid="swap-fee-banner" style="max-width:520px;margin:0 auto 20px;background:linear-gradient(135deg,rgba(212,160,23,0.15),rgba(39,174,96,0.15));border:2px solid var(--gold);border-radius:16px;padding:20px;text-align:center;animation:bannerPulse 2s ease-in-out infinite;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);letter-spacing:3px;margin-bottom:6px;">SWAP PROTOCOL FEE (0.05%)</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Activate once — 0.05% of every swap goes to your treasury forever</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;">
-        <span style="font-size:12px;color:var(--muted);">Status</span>
-        <span id="revFeeToStatus" data-testid="rev-feeto-status" style="font-size:14px;font-weight:700;color:var(--red);">—</span>
+    <!-- SWAP PROTOCOL FEE — TOP OF PAGE — BIG & IMPOSSIBLE TO MISS -->
+    <style>
+      @keyframes bannerPulse { 0%,100% { box-shadow: 0 0 20px rgba(39,174,96,0.3); } 50% { box-shadow: 0 0 50px rgba(39,174,96,0.7), 0 0 80px rgba(212,160,23,0.3); } }
+      @keyframes btnGlow { 0%,100% { box-shadow: 0 0 10px rgba(39,174,96,0.4); transform:scale(1); } 50% { box-shadow: 0 0 30px rgba(39,174,96,0.8), 0 0 60px rgba(39,174,96,0.3); transform:scale(1.02); } }
+      @keyframes arrowBounce { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-6px); } }
+    </style>
+    <div data-testid="swap-fee-banner" style="max-width:520px;margin:0 auto 24px;background:linear-gradient(135deg,rgba(39,174,96,0.2),rgba(212,160,23,0.15));border:3px solid var(--green);border-radius:20px;padding:24px 20px;text-align:center;animation:bannerPulse 2s ease-in-out infinite;">
+      <div style="font-size:40px;animation:arrowBounce 1s ease-in-out infinite;margin-bottom:8px;">&#11015;</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green);letter-spacing:4px;margin-bottom:4px;text-shadow:0 0 20px rgba(39,174,96,0.4);">ACTIVATE YOUR SWAP FEE</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);letter-spacing:2px;margin-bottom:10px;">0.05% OF EVERY SWAP = YOUR MONEY</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.5;">One click. One time. Then 0.05% of EVERY swap on your DEX goes to your wallet <b style="color:var(--green);">FOREVER</b>.</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;">
+        <span style="font-size:13px;color:var(--muted);font-weight:600;">Status</span>
+        <span id="revFeeToStatus" data-testid="rev-feeto-status" style="font-size:16px;font-weight:700;color:var(--red);">NOT ACTIVE</span>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;">
-        <span style="font-size:12px;color:var(--muted);">feeTo Address</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:16px;">
+        <span style="font-size:13px;color:var(--muted);font-weight:600;">feeTo Address</span>
         <span id="revFeeToAddr" data-testid="rev-feeto-addr" style="font-size:11px;color:var(--gold);font-family:monospace;">Checking...</span>
       </div>
-      <button class="ref-copy-btn" id="revSetFeeToBtn" data-testid="rev-setfeeto-btn" onclick="activateSwapProtocolFee()" style="width:100%;background:linear-gradient(135deg,var(--gold),#b8860b);color:#000;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;padding:14px;border-radius:12px;border:none;cursor:pointer;">
-        ACTIVATE 0.05% PROTOCOL FEE
+      <button class="ref-copy-btn" id="revSetFeeToBtn" data-testid="rev-setfeeto-btn" onclick="activateSwapProtocolFee()" style="width:100%;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;padding:20px;border-radius:16px;border:3px solid #27ae60;cursor:pointer;animation:btnGlow 1.5s ease-in-out infinite;text-shadow:0 2px 4px rgba(0,0,0,0.3);">
+        TAP HERE TO ACTIVATE 0.05% FEE
       </button>
-      <div id="revFeeToLog" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-feeto-log"></div>
+      <div style="margin-top:10px;font-size:12px;color:var(--muted);">Connects to Factory contract &mdash; confirm in MetaMask</div>
+      <div id="revFeeToLog" style="margin-top:8px;font-size:13px;display:none;" data-testid="rev-feeto-log"></div>
     </div>
-    <style>@keyframes bannerPulse { 0%,100% { box-shadow: 0 0 15px rgba(212,160,23,0.2); } 50% { box-shadow: 0 0 30px rgba(212,160,23,0.5); } }</style>
 
     <!-- Total Summary -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:20px;">
@@ -13121,7 +13128,7 @@ async function checkOwnerRevenue() {
       if (currentFeeTo === zeroAddr) {
         if (feeToEl) feeToEl.textContent = "Not set";
         if (feeToStatusEl) { feeToStatusEl.textContent = "NOT ACTIVE"; feeToStatusEl.style.color = "var(--red)"; }
-        if (feeToBtn) { feeToBtn.textContent = "ACTIVATE 0.05% PROTOCOL FEE"; feeToBtn.disabled = false; }
+        if (feeToBtn) { feeToBtn.textContent = "TAP HERE TO ACTIVATE 0.05% FEE"; feeToBtn.disabled = false; }
       } else {
         if (feeToEl) feeToEl.textContent = currentFeeTo.slice(0,6) + "..." + currentFeeTo.slice(-4);
         if (feeToStatusEl) { feeToStatusEl.textContent = "ACTIVE"; feeToStatusEl.style.color = "var(--green)"; }
@@ -13153,7 +13160,7 @@ async function activateSwapProtocolFee() {
     showToast("Protocol fee activated!", "success");
   } catch(e) {
     if (logEl) { logEl.style.color = "var(--red)"; logEl.textContent = "Failed: " + (e.reason || e.message || "Transaction rejected"); }
-    if (btn) { btn.textContent = "ACTIVATE 0.05% PROTOCOL FEE"; btn.disabled = false; }
+    if (btn) { btn.textContent = "TAP HERE TO ACTIVATE 0.05% FEE"; btn.disabled = false; }
     showToast("Failed to activate protocol fee", "error");
   }
 }
