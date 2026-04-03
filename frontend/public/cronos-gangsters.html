@@ -5678,14 +5678,10 @@ async function fetchLivePrices() {
       } catch(e) { /* keep stale CoinGecko prices */ }
     }
 
-    // Fetch GANG price from on-chain reserves as backup (fast, own RPC)
-    if (!TOKENS.GANG.price || TOKENS.GANG.price === 0) {
-      await fetchGangPriceOnChain();
-    }
-    await Promise.all([fetchAllTokenPrices(), fetchDexScreenerStats()]); // Fetch all prices + DexScreener first
-    // Then fetch TVL and APR sequentially — AFTER prices are settled
-    await fetchFarmTVLs();
-    await calcFarmAPRs();
+    // Fetch GANG price from DexScreener only — don't use on-chain backup (different price = APR glitch)
+    await Promise.all([fetchAllTokenPrices(), fetchDexScreenerStats()]); // Fetch all prices + DexScreener
+    // TVL and APR are calculated ONCE on initial load, not every cycle (like PancakeSwap)
+    // The 5-second cycle only updates prices, balances, and earned amounts
 
     setPriceStatus(false);
     updateTickerPrices();
@@ -13836,16 +13832,20 @@ async function mktWithdrawFees() {
 
 // ── App startup ───────────────────────────────────────────────
 (function init() {
-  // Kick off live price fetching immediately on page load
-  fetchLivePrices();
-  // Then repeat every 5 seconds
-  setInterval(fetchLivePrices, 5000);
   // Fetch all token prices, DexScreener stats, AND discover pools in parallel for faster load
-  Promise.all([fetchAllTokenPrices(), fetchDexScreenerStats(), autoDiscoverFarmPools()]).then(() => {
+  Promise.all([fetchAllTokenPrices(), fetchDexScreenerStats(), autoDiscoverFarmPools()]).then(async () => {
     renderFarms();
     renderVaults();
-    fetchFarmTVLs().then(() => calcFarmAPRs());
+    // Calculate TVL and APR ONCE after all prices are loaded
+    await fetchFarmTVLs();
+    await calcFarmAPRs();
+    await calcVaultAPRsOnChain();
   });
+  // Start the 5-second price/balance refresh cycle AFTER initial load
+  // This cycle only updates prices, balances, and earned — NOT APR
+  setTimeout(() => {
+    setInterval(fetchLivePrices, 5000);
+  }, 6000);
 
   // Auto-reconnect wallet on page load
   async function tryAutoReconnect() {
