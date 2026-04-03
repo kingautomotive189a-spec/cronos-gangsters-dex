@@ -4149,7 +4149,7 @@ async function _connectProvider(rawProvider, walletName) {
 
     // Re-load balances after 5s to catch any RPC failures on first load
     setTimeout(async () => {
-      try { await loadBalances(); renderFarms(); renderVaults(); loadVaultData(); renderDeployedTokens(); checkOwnerPanels(); } catch {}
+      try { await loadBalances(); loadVaultData(); renderDeployedTokens(); checkOwnerPanels(); } catch {}
     }, 5000);
 
   } catch (e) {
@@ -5172,6 +5172,11 @@ async function fetchFarmTVLs() {
         }
 
         // LP pair — compute TVL from on-chain data
+        // Skip if DexScreener already provided TVL for this farm (it's the authority)
+        if (farm.tvlUSD > 0) {
+          totalTVLUSD += farm.tvlUSD;
+          continue;
+        }
         const pair = new ethers.Contract(lpAddr, PAIR_ABI, rp);
         const lpToken = new ethers.Contract(lpAddr, ERC20_ABI, rp);
 
@@ -5674,11 +5679,14 @@ async function fetchLivePrices() {
       } catch(e) { /* keep stale CoinGecko prices */ }
     }
 
-    // Always fetch on-chain GANG price from reserves (fast, own RPC)
-    // await fetchGangPriceOnChain(); // Disabled - using DexScreener as source of truth
-    await Promise.all([fetchAllTokenPrices(), fetchDexScreenerStats()]); // Fetch all prices first
-    // Then fetch real TVL for all farms (needs up-to-date prices)
-    fetchFarmTVLs().then(() => calcFarmAPRs()); // fire-and-forget, non-blocking
+    // Fetch GANG price from on-chain reserves as backup (fast, own RPC)
+    if (!TOKENS.GANG.price || TOKENS.GANG.price === 0) {
+      await fetchGangPriceOnChain();
+    }
+    await Promise.all([fetchAllTokenPrices(), fetchDexScreenerStats()]); // Fetch all prices + DexScreener first
+    // Then fetch TVL and APR sequentially — AFTER prices are settled
+    await fetchFarmTVLs();
+    await calcFarmAPRs();
 
     setPriceStatus(false);
     updateTickerPrices();
@@ -13833,12 +13841,10 @@ async function mktWithdrawFees() {
   fetchLivePrices();
   // Then repeat every 5 seconds
   setInterval(fetchLivePrices, 5000);
-  // Render initial farm view immediately (will update after pool discovery)
-  renderFarms();
-  renderVaults();
   // Fetch all token prices, DexScreener stats, AND discover pools in parallel for faster load
   Promise.all([fetchAllTokenPrices(), fetchDexScreenerStats(), autoDiscoverFarmPools()]).then(() => {
     renderFarms();
+    renderVaults();
     fetchFarmTVLs().then(() => calcFarmAPRs());
   });
 
