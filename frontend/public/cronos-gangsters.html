@@ -4129,8 +4129,7 @@ async function _connectProvider(rawProvider, walletName) {
     renderPortfolio();
     // Ensure token prices are loaded before calculating TVL/APR
     await fetchAllTokenPrices();
-    fetchFarmTVLs();
-    calcFarmAPRs();
+    // TVL/APR will be updated by the next fetchLivePrices cycle (every 5s)
     checkOwnerRevenue();
     // AutoDiscover in background — if chefPid differs from pid, re-query
     autoDiscoverFarmPools().then(async () => {
@@ -4619,8 +4618,8 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     btn.classList.add("active");
     document.getElementById("page-" + btn.dataset.page).classList.add("active");
-    if (btn.dataset.page === "farms") { renderFarms(); fetchAllTokenPrices().then(() => fetchFarmTVLs().then(() => calcFarmAPRs())); }
-    if (btn.dataset.page === "vaults") { renderVaults(); loadVaultData(); fetchAllTokenPrices().then(() => calcVaultAPRsOnChain()); }
+    if (btn.dataset.page === "farms") { renderFarms(); }
+    if (btn.dataset.page === "vaults") { renderVaults(); loadVaultData(); }
     if (btn.dataset.page === "portfolio") renderPortfolio();
     if (btn.dataset.page === "liquidity") {
       updateBalanceDisplays();
