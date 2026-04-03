@@ -93,6 +93,8 @@ Ultra-fast vanilla JS DApp for Cronos Gangsters DEX with Telegram bot, mining/ca
 - Lottery contract deployed at `0xd2c46260C68f643f0428a6205bFbD8177f118f27` with ABI fully injected
 - Full JS flow: `loadLotteryState()`, `buyLotteryTickets()`, `startLotteryRound()`, `drawLotteryWinner()`, `withdrawLotteryFees()`, `loadPastWinners()`, `checkLotteryOwner()`
 - Updated cronos-gangsters-complete.zip
+- Added max payout limit (50x) for paper trading to prevent unrealistic winnings on leveraged positions
+- Max payout displayed in trade info panel on frontend
 
 ## Backlog
 - P2: Add max payout limits for trading

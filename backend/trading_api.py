@@ -79,6 +79,7 @@ TRADING_PAIRS = {
 TRADING_FEE = 0.001  # 0.1% per trade
 LEVERAGE_OPTIONS = [10, 25, 50, 100]
 MIN_POSITION = 5  # Minimum 5 $GANG
+MAX_PAYOUT_MULT = 50  # Max payout = 50x the original position size
 
 class OpenPositionRequest(BaseModel):
     wallet_address: str
@@ -319,8 +320,9 @@ async def close_position(request: ClosePositionRequest):
     fee = abs(close_value) * TRADING_FEE
     final_pnl = pnl - fee
     
-    # Final amount to return
-    return_amount = max(0, amount + final_pnl)
+    # Final amount to return (capped at MAX_PAYOUT_MULT x original position)
+    max_payout = amount * MAX_PAYOUT_MULT
+    return_amount = min(max(0, amount + final_pnl), max_payout)
     
     # Update balance
     await update_user_balance(wallet, return_amount)

@@ -208,7 +208,8 @@ function updatePanel() {
   document.getElementById('tradeInfo').innerHTML =
     '<div class="info-row"><span>Position Size</span><span>'+(amt*leverage).toFixed(2)+' $GANG</span></div>'+
     '<div class="info-row"><span>Fee (0.1%)</span><span>'+(amt*0.001).toFixed(4)+' $GANG</span></div>'+
-    '<div class="info-row"><span>Liquidation</span><span style="color:var(--red)">'+(direction==='long'?'-':'+')+(100/leverage).toFixed(1)+'%</span></div>';
+    '<div class="info-row"><span>Liquidation</span><span style="color:var(--red)">'+(direction==='long'?'-':'+')+(100/leverage).toFixed(1)+'%</span></div>'+
+    '<div class="info-row"><span>Max Payout</span><span style="color:var(--gold)">'+(amt*50).toFixed(2)+' $GANG (50x)</span></div>';
   document.getElementById('openBtn').textContent = 'OPEN '+leverage+'x '+direction.toUpperCase();
   document.getElementById('openBtn').style.background = direction==='long'?'linear-gradient(90deg,var(--green),#00a843)':'linear-gradient(90deg,var(--red),#c00)';
 }
