@@ -4213,8 +4213,7 @@ async function _connectProvider(rawProvider, walletName) {
     if (parseInt(chainHex, 16) !== CRONOS_CHAIN_ID) {
       showToast("⏳ Switching to Cronos Mainnet…", "");
       await switchToCronos(rawProvider);
-      // Small delay to let wallet update
-      await new Promise(r => setTimeout(r, 800));
+      await new Promise(r => setTimeout(r, 300));
     }
 
     state.provider = new ethers.BrowserProvider(rawProvider, { chainId: CRONOS_CHAIN_ID, name: "cronos" });
@@ -4245,14 +4244,23 @@ async function _connectProvider(rawProvider, walletName) {
     try { localStorage.setItem('gang_wallet_connected', '1'); } catch {}
 
     updateWalletUI();
-    // Load balances immediately using farm.pid, then autoDiscover in background
-    await loadBalances();
+    showToast(`${walletName} connected! Welcome to Cronos Gangsters.`, "success");
+
+    // Critical: load balances + prices in parallel (fastest possible)
+    await Promise.all([
+      loadBalances(),
+      fetchAllTokenPrices()
+    ]);
     renderPortfolio();
-    // Ensure token prices are loaded before calculating TVL/APR
-    await fetchAllTokenPrices();
-    // TVL/APR will be updated by the next fetchLivePrices cycle (every 5s)
+
+    // Non-critical: fire and forget in background
     checkOwnerRevenue();
-    // AutoDiscover in background — if chefPid differs from pid, re-query
+    tryRegisterReferral();
+    updateReferralUI();
+    updateNftUI();
+    checkOwnerPanels();
+
+    // Background: auto-discover farm pools + reload if needed
     autoDiscoverFarmPools().then(async () => {
       let needsReload = false;
       for (const farm of FARMS) {
@@ -4260,17 +4268,11 @@ async function _connectProvider(rawProvider, walletName) {
       }
       if (needsReload) { await loadBalances(); renderFarms(); }
     }).catch(() => {});
-    // Register referral if user arrived via invite link
-    tryRegisterReferral();
-    updateReferralUI();
-    updateNftUI();
-    checkOwnerPanels();
-    showToast(`${walletName} connected! Welcome to Cronos Gangsters.`, "success");
 
-    // Re-load balances after 5s to catch any RPC failures on first load
+    // Deferred refresh: catch any RPC failures from first load
     setTimeout(async () => {
       try { await loadBalances(); renderFarms(); renderVaults(); loadVaultData(); renderDeployedTokens(); checkOwnerPanels(); } catch {}
-    }, 5000);
+    }, 8000);
 
   } catch (e) {
     const msg = e?.message || String(e);
