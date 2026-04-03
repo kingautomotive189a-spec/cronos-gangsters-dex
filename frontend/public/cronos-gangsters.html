@@ -506,6 +506,8 @@
     <button class="nav-btn" data-page="create" data-testid="nav-create-btn" style="color:var(--green);font-weight:800;">Create Token</button>
     <button class="nav-btn" data-page="revenue" data-testid="nav-revenue-btn" id="revenueNavBtn" style="display:none;color:var(--green);font-weight:800;">Revenue</button>
     <button class="nav-btn" data-page="roadmap">Roadmap</button>
+    <button class="nav-btn" data-page="contracts" data-testid="nav-contracts-btn">Contracts</button>
+    <button class="nav-btn" data-page="faq" data-testid="nav-faq-btn">FAQ</button>
     <button class="nav-btn" data-page="launchpad" data-testid="nav-launchpad-btn" style="color:var(--gold);font-weight:800;">Launchpad</button>
     <button class="nav-btn" data-page="locker" data-testid="nav-locker-btn">Locker</button>
     <button class="nav-btn" data-page="lottery" data-testid="nav-lottery-btn">Lottery</button>
@@ -1222,6 +1224,22 @@
     <!-- OWNER: Fund Farm Rewards -->
     <!-- Farm reward and rebalance panels removed (completed) -->
 
+    <!-- Public: Live Emission Rate -->
+    <div data-testid="emission-info-public" style="background:rgba(212,160,23,0.06);border:1px solid rgba(212,160,23,0.15);border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:11px;color:var(--muted);letter-spacing:1px;">EMISSION RATE:</span>
+        <span id="publicEmissionRate" data-testid="public-emission-rate" style="font-family:'Space Mono',monospace;font-size:13px;color:var(--green);font-weight:700;">Loading...</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:11px;color:var(--muted);letter-spacing:1px;">DAILY OUTPUT:</span>
+        <span id="publicDailyOutput" data-testid="public-daily-output" style="font-family:'Space Mono',monospace;font-size:13px;color:var(--gold);font-weight:700;">—</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:11px;color:var(--muted);letter-spacing:1px;">CHEF BALANCE:</span>
+        <span id="publicChefBalance" data-testid="public-chef-balance" style="font-family:'Space Mono',monospace;font-size:13px;color:var(--text);font-weight:700;">—</span>
+      </div>
+    </div>
+
     <!-- OWNER: Emission Rate Control (Farms) -->
     <div id="emissionRatePanelFarms" data-testid="emission-rate-panel-farms" style="display:none;background:linear-gradient(135deg,rgba(212,160,23,0.06),rgba(39,174,96,0.04));border:1px solid rgba(212,160,23,0.3);border-radius:14px;padding:16px 20px;margin-bottom:16px;">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
@@ -1889,6 +1907,158 @@
       </div>
     </div>
 
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       CONTRACTS PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-contracts" data-testid="page-contracts">
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--gold);letter-spacing:6px;line-height:1;text-shadow:0 0 30px rgba(212,160,23,0.4);">VERIFIED CONTRACTS</div>
+      <div style="color:var(--muted);font-size:14px;letter-spacing:3px;text-transform:uppercase;margin-top:8px;">100% On-Chain — Fully Transparent</div>
+      <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px auto 0;"></div>
+    </div>
+
+    <div style="display:grid;gap:12px;max-width:700px;margin:0 auto;">
+      <div class="card" style="padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">$GANG TOKEN</div>
+            <div style="font-size:11px;color:var(--muted);word-break:break-all;margin-top:4px;">0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF</div>
+          </div>
+          <a href="https://cronoscan.com/token/0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF" target="_blank" style="color:var(--gold);font-size:12px;text-decoration:none;border:1px solid var(--gold);padding:6px 14px;border-radius:8px;white-space:nowrap;">View on CronoScan</a>
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">MASTERCHEF (FARMS)</div>
+            <div style="font-size:11px;color:var(--muted);word-break:break-all;margin-top:4px;">0x3713567b8DB60D7127B2614965eef71cE50871Ea</div>
+          </div>
+          <a href="https://cronoscan.com/address/0x3713567b8DB60D7127B2614965eef71cE50871Ea" target="_blank" style="color:var(--gold);font-size:12px;text-decoration:none;border:1px solid var(--gold);padding:6px 14px;border-radius:8px;white-space:nowrap;">View on CronoScan</a>
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">STAKING (NFT BOOST)</div>
+            <div style="font-size:11px;color:var(--muted);word-break:break-all;margin-top:4px;">0x03c3C706F0D2F4754755988A686a70E661e6925F</div>
+          </div>
+          <a href="https://cronoscan.com/address/0x03c3C706F0D2F4754755988A686a70E661e6925F" target="_blank" style="color:var(--gold);font-size:12px;text-decoration:none;border:1px solid var(--gold);padding:6px 14px;border-radius:8px;white-space:nowrap;">View on CronoScan</a>
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">REFERRAL SYSTEM</div>
+            <div style="font-size:11px;color:var(--muted);word-break:break-all;margin-top:4px;">0xd4791929e86EFE7D770b64B6dEC021dE28E8773a</div>
+          </div>
+          <a href="https://cronoscan.com/address/0xd4791929e86EFE7D770b64B6dEC021dE28E8773a" target="_blank" style="color:var(--gold);font-size:12px;text-decoration:none;border:1px solid var(--gold);padding:6px 14px;border-radius:8px;white-space:nowrap;">View on CronoScan</a>
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">GANGSTER LOTTERY</div>
+            <div style="font-size:11px;color:var(--muted);word-break:break-all;margin-top:4px;">0xd2c46260C68f643f0428a6205bFbD8177f118f27</div>
+          </div>
+          <a href="https://cronoscan.com/address/0xd2c46260C68f643f0428a6205bFbD8177f118f27" target="_blank" style="color:var(--gold);font-size:12px;text-decoration:none;border:1px solid var(--gold);padding:6px 14px;border-radius:8px;white-space:nowrap;">View on CronoScan</a>
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">AUTO-COMPOUND VAULT</div>
+            <div style="font-size:11px;color:var(--muted);word-break:break-all;margin-top:4px;">0x652c336d1b445509843ea93a7f5605c0a6e48313</div>
+          </div>
+          <a href="https://cronoscan.com/address/0x652c336d1b445509843ea93a7f5605c0a6e48313" target="_blank" style="color:var(--gold);font-size:12px;text-decoration:none;border:1px solid var(--gold);padding:6px 14px;border-radius:8px;white-space:nowrap;">View on CronoScan</a>
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">GANGSTER NFTs</div>
+            <div style="font-size:11px;color:var(--muted);word-break:break-all;margin-top:4px;">0x97489dc06aA00b62B52D7eB6E5b51E8c3dd36431</div>
+          </div>
+          <a href="https://cronoscan.com/address/0x97489dc06aA00b62B52D7eB6E5b51E8c3dd36431" target="_blank" style="color:var(--gold);font-size:12px;text-decoration:none;border:1px solid var(--gold);padding:6px 14px;border-radius:8px;white-space:nowrap;">View on CronoScan</a>
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">TREASURY</div>
+            <div style="font-size:11px;color:var(--muted);word-break:break-all;margin-top:4px;">0xaA3C5749628610fF410EF9133a4ac4f58e9A52eA</div>
+          </div>
+          <a href="https://cronoscan.com/address/0xaA3C5749628610fF410EF9133a4ac4f58e9A52eA" target="_blank" style="color:var(--gold);font-size:12px;text-decoration:none;border:1px solid var(--gold);padding:6px 14px;border-radius:8px;white-space:nowrap;">View on CronoScan</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Links -->
+    <div style="text-align:center;margin-top:32px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+      <a href="https://t.me/+DrWDScTEiLg1ZGQ0" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:rgba(42,171,238,0.1);border:1px solid rgba(42,171,238,0.3);color:#2AABEE;padding:10px 20px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:700;transition:all .2s;" onmouseover="this.style.background='rgba(42,171,238,0.2)'" onmouseout="this.style.background='rgba(42,171,238,0.1)'">Telegram</a>
+      <a href="https://x.com/AhmadOm93837106" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:rgba(29,161,242,0.1);border:1px solid rgba(29,161,242,0.3);color:#1DA1F2;padding:10px 20px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:700;transition:all .2s;" onmouseover="this.style.background='rgba(29,161,242,0.2)'" onmouseout="this.style.background='rgba(29,161,242,0.1)'">Twitter / X</a>
+      <a href="https://dexscreener.com/cronos/0x1f77938e1109e1fc8e3dd697b95525303094cb65" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.3);color:var(--gold);padding:10px 20px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:700;transition:all .2s;" onmouseover="this.style.background='rgba(212,160,23,0.2)'" onmouseout="this.style.background='rgba(212,160,23,0.1)'">DexScreener</a>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       FAQ PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-faq" data-testid="page-faq">
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--gold);letter-spacing:6px;line-height:1;text-shadow:0 0 30px rgba(212,160,23,0.4);">FAQ</div>
+      <div style="color:var(--muted);font-size:14px;letter-spacing:3px;text-transform:uppercase;margin-top:8px;">Common Questions Answered</div>
+      <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px auto 0;"></div>
+    </div>
+
+    <div style="max-width:700px;margin:0 auto;display:grid;gap:12px;">
+
+      <div class="card" style="padding:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">IS THIS SAFE? CAN YOU RUG?</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;">All contracts are deployed on Cronos and can be verified on CronoScan. The MasterChef contract controls farm emissions — ownership actions are transparent and trackable on-chain. 300 million $GANG is locked in the MasterChef for farm rewards. No hidden mint functions. Check our <span style="color:var(--gold);cursor:pointer;" onclick="showPage('contracts')">Contracts page</span> to verify everything yourself.</div>
+      </div>
+
+      <div class="card" style="padding:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">HOW DO THE FARMS WORK?</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;">Stake your LP tokens (e.g., CRO/GANG) in the MasterChef contract to earn $GANG rewards. The emission rate determines how much $GANG is distributed per second across all farms. Each farm has an allocation that determines its share of the total emissions. APRs are calculated live from on-chain data.</div>
+      </div>
+
+      <div class="card" style="padding:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">WHAT ARE THE VAULTS?</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;">Auto-compound vaults automatically harvest your farm rewards and reinvest them into more LP tokens. This compounds your returns without you having to manually harvest and restake. Higher APY than manual farming.</div>
+      </div>
+
+      <div class="card" style="padding:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">HOW DOES THE LOTTERY WORK?</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;">Buy tickets with CRO. Each ticket = 1 chance to win. When the round ends, a winner is drawn. 70% of the pot goes to the winner, 20% is burned forever (reducing $GANG supply), and 10% goes to the treasury. Weekly draws.</div>
+      </div>
+
+      <div class="card" style="padding:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">HOW DO REFERRALS WORK?</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;">Share your referral link. When someone stakes through your link, you earn 5% of their farming rewards automatically via the on-chain referral contract. No limits on referrals. Rewards are claimable anytime.</div>
+      </div>
+
+      <div class="card" style="padding:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">WHERE ARE THE FEES?</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;">Swaps: 0.3% (standard DEX fee, goes to LP providers). NFT Marketplace: 2.5% per sale. Token Creator: tier-based CRO fee. LP Locker: 1 CRO per lock. Launchpad: 3% of IDO sale. All fees are transparent and verifiable on-chain.</div>
+      </div>
+
+      <div class="card" style="padding:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:1px;margin-bottom:8px;">WHAT WALLET DO I NEED?</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;">Any wallet that supports Cronos chain — MetaMask, Trust Wallet, Crypto.com DeFi Wallet, Rabby, or OKX Wallet. Make sure you're connected to Cronos network (Chain ID 25). The app will auto-prompt you to switch if needed.</div>
+      </div>
+
+    </div>
   </div>
 
 
@@ -5354,6 +5524,20 @@ async function calcFarmAPRs() {
     const gangPerSec = parseFloat(ethers.formatUnits(gangPerSecBN, 18));
     const totalAlloc = Number(totalAllocBN);
     if (totalAlloc === 0 || gangPerSec === 0) return;
+
+    // Update public emission info
+    const dailyGang = gangPerSec * 86400;
+    const pubRate = document.getElementById('publicEmissionRate');
+    if (pubRate) pubRate.textContent = gangPerSec.toFixed(4) + ' GANG/sec';
+    const pubDaily = document.getElementById('publicDailyOutput');
+    if (pubDaily) pubDaily.textContent = Math.round(dailyGang).toLocaleString() + ' GANG/day';
+    try {
+      const gangToken = new ethers.Contract(CONTRACTS.GANG, ERC20_ABI, rp);
+      const chefBal = await gangToken.balanceOf(CONTRACTS.CHEF);
+      const chefBalFmt = parseFloat(ethers.formatUnits(chefBal, 18));
+      const pubChef = document.getElementById('publicChefBalance');
+      if (pubChef) pubChef.textContent = chefBalFmt >= 1000000 ? (chefBalFmt / 1000000).toFixed(1) + 'M GANG' : Math.round(chefBalFmt).toLocaleString() + ' GANG';
+    } catch {}
 
     const gangPrice = TOKENS.GANG?.price || 0;
     if (gangPrice <= 0) return;

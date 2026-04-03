@@ -273,6 +273,8 @@ def main_keyboard():
         [InlineKeyboardButton("🎰 Lottery", callback_data="menu_lottery"),
          InlineKeyboardButton("🛠 Token Creator", callback_data="menu_create"),
          InlineKeyboardButton("🏪 Marketplace", callback_data="menu_marketplace")],
+        [InlineKeyboardButton("📜 Contracts", callback_data="menu_contracts"),
+         InlineKeyboardButton("❓ FAQ", callback_data="menu_faq")],
         [InlineKeyboardButton("🌐 Website", url=DEX_LINK),
          InlineKeyboardButton("🐦 Twitter", url=TWITTER)],
     ])
@@ -404,6 +406,8 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "• /website - DEX website\n"
         "• /socials - Social media links\n"
         "• /shill - Shareable promo\n"
+        "• /contracts - All verified contract addresses\n"
+        "• /faq - Common questions answered\n"
     )
 
     if is_user_admin:
@@ -1112,6 +1116,63 @@ async def portfolio_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("📁 Open Portfolio", url=f"{DEX_LINK}#portfolio")],
     ])
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard)
+
+
+async def contracts_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /contracts command - show all verified contract addresses"""
+    msg = (
+        "📜 *VERIFIED CONTRACTS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "All contracts deployed on Cronos. Verify on CronoScan.\n\n"
+        f"💰 *$GANG Token:*\n`{CONTRACTS['GANG']}`\n"
+        f"[View on CronoScan](https://cronoscan.com/token/{CONTRACTS['GANG']})\n\n"
+        f"🌾 *MasterChef (Farms):*\n`{CONTRACTS['MASTERCHEF']}`\n"
+        f"[View on CronoScan](https://cronoscan.com/address/{CONTRACTS['MASTERCHEF']})\n\n"
+        f"🔒 *Staking (NFT Boost):*\n`{CONTRACTS['STAKING']}`\n"
+        f"[View on CronoScan](https://cronoscan.com/address/{CONTRACTS['STAKING']})\n\n"
+        f"👥 *Referral System:*\n`{CONTRACTS['REFERRAL']}`\n"
+        f"[View on CronoScan](https://cronoscan.com/address/{CONTRACTS['REFERRAL']})\n\n"
+        f"🎰 *Lottery:*\n`{CONTRACTS['LOTTERY']}`\n"
+        f"[View on CronoScan](https://cronoscan.com/address/{CONTRACTS['LOTTERY']})\n\n"
+        f"🎴 *Gangster NFTs:*\n`{CONTRACTS['NFT']}`\n"
+        f"[View on CronoScan](https://cronoscan.com/address/{CONTRACTS['NFT']})\n\n"
+        f"🏦 *Treasury:*\n`{CONTRACTS['TREASURY']}`\n"
+        f"[View on CronoScan](https://cronoscan.com/address/{CONTRACTS['TREASURY']})\n\n"
+        "✅ *All on-chain. All transparent. No hidden functions.*"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📜 Contracts Page", url=f"{DEX_LINK}#contracts"),
+         InlineKeyboardButton("📊 DexScreener", url=DEXSCREENER)],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+async def faq_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /faq command"""
+    msg = (
+        "❓ *FAQ — COMMON QUESTIONS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "*Is this safe? Can you rug?*\n"
+        "All contracts are on Cronos and verifiable on CronoScan. "
+        "300M $GANG is locked in the MasterChef for farm rewards. "
+        "No hidden mint functions. Use /contracts to verify.\n\n"
+        "*How do the farms work?*\n"
+        "Stake LP tokens to earn $GANG. The emission rate sets how much $GANG is "
+        "distributed per second. APRs are calculated live from on-chain data.\n\n"
+        "*How does the lottery work?*\n"
+        "Buy tickets with CRO. 70% to winner, 20% burned forever, 10% treasury. Weekly draws.\n\n"
+        "*How do referrals work?*\n"
+        "Share your link. When someone stakes, you earn 5% of their rewards automatically.\n\n"
+        "*What wallet do I need?*\n"
+        "MetaMask, Trust Wallet, Crypto.com DeFi Wallet, Rabby, or OKX. "
+        "Must be on Cronos network (Chain ID 25).\n\n"
+        f"[📖 Full FAQ]({DEX_LINK}#faq)"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📖 Full FAQ", url=f"{DEX_LINK}#faq"),
+         InlineKeyboardButton("📜 Contracts", url=f"{DEX_LINK}#contracts")],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
 
 
 # ===== CAPTCHA / VERIFICATION =====
@@ -1845,6 +1906,41 @@ async def _cb_menu_deploy(query, context):
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
 
 
+async def _cb_menu_contracts(query, context):
+    msg = (
+        "📜 *VERIFIED CONTRACTS*\n\n"
+        f"💰 *$GANG:* `{CONTRACTS['GANG']}`\n"
+        f"🌾 *MasterChef:* `{CONTRACTS['MASTERCHEF']}`\n"
+        f"🔒 *Staking:* `{CONTRACTS['STAKING']}`\n"
+        f"👥 *Referral:* `{CONTRACTS['REFERRAL']}`\n"
+        f"🎰 *Lottery:* `{CONTRACTS['LOTTERY']}`\n"
+        f"🎴 *NFTs:* `{CONTRACTS['NFT']}`\n"
+        f"🏦 *Treasury:* `{CONTRACTS['TREASURY']}`\n\n"
+        "✅ All on-chain. All transparent."
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📜 Full Contracts Page", url=f"{DEX_LINK}#contracts")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_faq(query, context):
+    msg = (
+        "❓ *FAQ*\n\n"
+        "*Safe?* All contracts verifiable on CronoScan. 300M $GANG locked for rewards.\n\n"
+        "*Farms?* Stake LP → earn $GANG. Live APRs from on-chain data.\n\n"
+        "*Lottery?* 70% winner, 20% burned, 10% treasury.\n\n"
+        "*Referrals?* Share link → earn 5% of friend's rewards.\n\n"
+        "*Wallet?* MetaMask, Trust, Crypto.com, Rabby, OKX. Cronos chain."
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📖 Full FAQ", url=f"{DEX_LINK}#faq")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
 # Dispatch table for callback queries
 CALLBACK_DISPATCH = {
     "refresh_price": _cb_refresh_price,
@@ -1873,6 +1969,8 @@ CALLBACK_DISPATCH = {
     "menu_dashboard": _cb_menu_dashboard,
     "menu_deployfarms": _cb_menu_deployfarms,
     "menu_deploy": _cb_menu_deploy,
+    "menu_contracts": _cb_menu_contracts,
+    "menu_faq": _cb_menu_faq,
 }
 
 
@@ -2269,6 +2367,8 @@ def main():
     app.add_handler(CommandHandler("swap", swap_cmd))
     app.add_handler(CommandHandler("liquidity", liquidity_cmd))
     app.add_handler(CommandHandler("portfolio", portfolio_cmd))
+    app.add_handler(CommandHandler("contracts", contracts_cmd))
+    app.add_handler(CommandHandler("faq", faq_cmd))
 
     # Admin commands
     app.add_handler(CommandHandler("ban", ban))
