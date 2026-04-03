@@ -4148,7 +4148,7 @@ async function _connectProvider(rawProvider, walletName) {
 
     // Re-load balances after 5s to catch any RPC failures on first load
     setTimeout(async () => {
-      try { await loadBalances(); loadVaultData(); renderDeployedTokens(); checkOwnerPanels(); } catch {}
+      try { await loadBalances(); renderFarms(); renderVaults(); loadVaultData(); renderDeployedTokens(); checkOwnerPanels(); } catch {}
     }, 5000);
 
   } catch (e) {
@@ -5147,18 +5147,6 @@ async function fetchFarmTVLs() {
         if (farm.tokens.length === 1) {
           try {
             const tok = TOKENS[farm.tokens[0]];
-            // Ensure token price is available (fetch from DexScreener if needed)
-            let tokPrice = tok.price || 0;
-            if (tokPrice <= 0 && tok.address === CONTRACTS.GANG) {
-              try {
-                const dexRes = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACTS.GANG}`);
-                const dexData = await dexRes.json();
-                if (dexData.pairs && dexData.pairs.length > 0) {
-                  tokPrice = parseFloat(dexData.pairs[0].priceUsd) || 0;
-                  if (tokPrice > 0) tok.price = tokPrice;
-                }
-              } catch {}
-            }
             let stakedAmt = 0;
             if (CONTRACTS.CHEF && (farm.chefPid !== undefined || farm._onChain)) {
               const chef = new ethers.Contract(CONTRACTS.CHEF, CHEF_ABI, rp);
@@ -5166,7 +5154,7 @@ async function fetchFarmTVLs() {
               const pInfo = await chef.poolInfo(pid);
               stakedAmt = parseFloat(ethers.formatUnits(pInfo[4], tok.decimals)); // totalStaked field
             }
-            const tvlUSD = stakedAmt * tokPrice;
+            const tvlUSD = stakedAmt * (tok.price || 0);
             farm.tvlUSD = tvlUSD;
             farm.tvl = _fmtTVL(tvlUSD);
             totalTVLUSD += tvlUSD;
@@ -5183,11 +5171,6 @@ async function fetchFarmTVLs() {
         }
 
         // LP pair — compute TVL from on-chain data
-        // Skip if DexScreener already provided TVL for this farm (it's the authority)
-        if (farm.tvlUSD > 0) {
-          totalTVLUSD += farm.tvlUSD;
-          continue;
-        }
         const pair = new ethers.Contract(lpAddr, PAIR_ABI, rp);
         const lpToken = new ethers.Contract(lpAddr, ERC20_ABI, rp);
 
@@ -5216,7 +5199,6 @@ async function fetchFarmTVLs() {
         // Total pool value in USD
         const valA = resA * (tA?.price || 0);
         const valB = resB * (tB?.price || 0);
-        // If one side has price 0, double the known side (standard DeFi TVL estimation)
         let totalPoolUSD;
         if (valA > 0 && valB > 0) {
           totalPoolUSD = valA + valB;
@@ -5229,8 +5211,6 @@ async function fetchFarmTVLs() {
         }
 
         let tvlUSD = totalPoolUSD;
-        // If LP is staked in MasterChef, use the staked share for TVL
-        // Otherwise use total pool liquidity (covers locked LP, provided LP, etc.)
         if (lpStakedInChef > 0n && lpTotalSupply > 0n) {
           const totalSupplyFloat = parseFloat(ethers.formatUnits(lpTotalSupply, 18));
           const stakedFloat = parseFloat(ethers.formatUnits(lpStakedInChef, 18));
@@ -5251,9 +5231,6 @@ async function fetchFarmTVLs() {
       }
     }
 
-    // Farm TVLs are shown per-card, not in the stats bar
-    // Stats bar TVL comes from DexScreener only (to avoid flickering)
-
   } catch(e) { _rotateRpc(); }
 }
 
@@ -5264,20 +5241,6 @@ async function calcFarmAPRs() {
   const rp = getReadProvider();
   if (!rp) return;
   try {
-    // Fetch GANG price directly from DexScreener for this calculation (self-contained, no race conditions)
-    let gangPrice = TOKENS.GANG?.price || 0;
-    if (gangPrice <= 0) {
-      try {
-        const dexRes = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACTS.GANG}`);
-        const dexData = await dexRes.json();
-        if (dexData.pairs && dexData.pairs.length > 0) {
-          gangPrice = parseFloat(dexData.pairs[0].priceUsd) || 0;
-          if (gangPrice > 0) TOKENS.GANG.price = gangPrice;
-        }
-      } catch {}
-    }
-    if (gangPrice <= 0) return;
-
     const chef = new ethers.Contract(CONTRACTS.CHEF, CHEF_ABI, rp);
     const [gangPerSecBN, totalAllocBN] = await Promise.all([
       chef.gangPerSecond(),
@@ -5287,6 +5250,8 @@ async function calcFarmAPRs() {
     const totalAlloc = Number(totalAllocBN);
     if (totalAlloc === 0 || gangPerSec === 0) return;
 
+    const gangPrice = TOKENS.GANG?.price || 0;
+    if (gangPrice <= 0) return;
     const SECONDS_PER_YEAR = 365.25 * 86400;
 
     for (const farm of FARMS) {
@@ -5303,11 +5268,9 @@ async function calcFarmAPRs() {
         const allocPoint = Number(poolInfo[1]);
         if (allocPoint === 0) { farm.apy = 0; continue; }
 
-        // Annual GANG rewards for this pool in USD
         const poolGangPerYear = (gangPerSec * allocPoint / totalAlloc) * SECONDS_PER_YEAR;
         const rewardsUSD = poolGangPerYear * gangPrice;
 
-        // APR = annual rewards / TVL * 100
         let tvlUSD = farm.tvlUSD || 0;
         if (tvlUSD > 0) {
           farm.apy = Math.round(rewardsUSD / tvlUSD * 100);
@@ -5322,7 +5285,6 @@ async function calcFarmAPRs() {
     }
   } catch(e) { console.error("APR calc error:", e); }
 
-  // Also calculate vault APRs from the same MasterChef data
   await calcVaultAPRsOnChain();
 }
 
@@ -5341,17 +5303,7 @@ async function calcVaultAPRsOnChain() {
     const totalAlloc = Number(totalAllocBN);
     if (totalAlloc === 0 || gangPerSec === 0) return;
 
-    let gangPrice = TOKENS.GANG?.price || 0;
-    if (gangPrice <= 0) {
-      try {
-        const dexRes = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACTS.GANG}`);
-        const dexData = await dexRes.json();
-        if (dexData.pairs && dexData.pairs.length > 0) {
-          gangPrice = parseFloat(dexData.pairs[0].priceUsd) || 0;
-          if (gangPrice > 0) TOKENS.GANG.price = gangPrice;
-        }
-      } catch {}
-    }
+    const gangPrice = TOKENS.GANG?.price || 0;
     if (gangPrice <= 0) return;
     const SECONDS_PER_DAY = 86400;
 
@@ -5712,10 +5664,10 @@ async function fetchLivePrices() {
       } catch(e) { /* keep stale CoinGecko prices */ }
     }
 
-    // Fetch GANG price from DexScreener only — don't use on-chain backup (different price = APR glitch)
-    await Promise.all([fetchAllTokenPrices(), fetchDexScreenerStats()]); // Fetch all prices + DexScreener
-    // TVL and APR are calculated ONCE on initial load, not every cycle (like PancakeSwap)
-    // The 5-second cycle only updates prices, balances, and earned amounts
+    await Promise.all([fetchAllTokenPrices(), fetchDexScreenerStats()]);
+    // Recalculate TVL and APR every cycle with latest prices
+    await fetchFarmTVLs();
+    await calcFarmAPRs();
 
     setPriceStatus(false);
     updateTickerPrices();
@@ -13866,20 +13818,14 @@ async function mktWithdrawFees() {
 
 // ── App startup ───────────────────────────────────────────────
 (function init() {
-  // Fetch all token prices, DexScreener stats, AND discover pools in parallel for faster load
-  Promise.all([fetchAllTokenPrices(), fetchDexScreenerStats(), autoDiscoverFarmPools()]).then(async () => {
-    renderFarms();
-    renderVaults();
-    // Calculate TVL and APR ONCE after all prices are loaded
-    await fetchFarmTVLs();
-    await calcFarmAPRs();
-    await calcVaultAPRsOnChain();
-  });
-  // Start the 5-second price/balance refresh cycle AFTER initial load
-  // This cycle only updates prices, balances, and earned — NOT APR
-  setTimeout(() => {
-    setInterval(fetchLivePrices, 5000);
-  }, 6000);
+  // Render initial views
+  renderFarms();
+  renderVaults();
+  // Start the price/TVL/APR refresh cycle
+  fetchLivePrices();
+  setInterval(fetchLivePrices, 5000);
+  // Discover any new pools in parallel
+  autoDiscoverFarmPools();
 
   // Auto-reconnect wallet on page load
   async function tryAutoReconnect() {
