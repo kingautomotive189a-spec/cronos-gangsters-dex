@@ -65,10 +65,11 @@
   .logo-icon{width:26px;height:26px;border-radius:50%;overflow:hidden;flex-shrink:0;}
   .logo-text{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;color:var(--gold);line-height:1;}
   .logo-sub{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
-  nav{display:flex;flex-wrap:wrap;gap:2px;flex:1;min-width:0;position:relative;}
-  nav button{background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:6px 9px;border-radius:6px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
-  nav button:hover{color:var(--text);background:var(--surface2);}
-  nav button.active{color:var(--gold);background:rgba(212,160,23,0.1);border-bottom:2px solid var(--gold);}
+  nav{display:flex;flex-wrap:wrap;gap:5px;flex:1;min-width:0;position:relative;}
+  nav button{background:linear-gradient(180deg,rgba(60,60,60,0.9) 0%,rgba(30,30,30,0.95) 100%);border:1px solid rgba(255,255,255,0.08);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:7px 12px;border-radius:20px;cursor:pointer;transition:all .25s ease;white-space:nowrap;flex-shrink:0;box-shadow:0 2px 4px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.08);text-shadow:0 1px 2px rgba(0,0,0,0.5);position:relative;overflow:hidden;}
+  nav button::before{content:'';position:absolute;top:0;left:10%;right:10%;height:40%;background:linear-gradient(180deg,rgba(255,255,255,0.12) 0%,transparent 100%);border-radius:0 0 50% 50%;pointer-events:none;}
+  nav button:hover{color:#fff;background:linear-gradient(180deg,rgba(80,80,80,0.95) 0%,rgba(45,45,45,0.95) 100%);border-color:rgba(212,160,23,0.3);transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,0.5),0 0 12px rgba(212,160,23,0.15),inset 0 1px 0 rgba(255,255,255,0.12);}
+  nav button.active{color:var(--gold);background:linear-gradient(180deg,rgba(212,160,23,0.25) 0%,rgba(140,100,10,0.2) 100%);border:1px solid rgba(212,160,23,0.5);box-shadow:0 2px 6px rgba(0,0,0,0.4),0 0 15px rgba(212,160,23,0.2),inset 0 1px 0 rgba(255,255,255,0.1);text-shadow:0 0 8px rgba(212,160,23,0.4);}
   .wallet-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000!important;border:none;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;padding:8px 12px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;box-shadow:0 3px 0 #6b4f0a;}
   .wallet-btn:hover{transform:translateY(-1px);box-shadow:0 4px 0 #6b4f0a,0 6px 16px rgba(212,160,23,0.3);}
   .wallet-btn.connected{background:var(--surface2)!important;color:var(--gold)!important;border:1px solid var(--border);box-shadow:none;}
