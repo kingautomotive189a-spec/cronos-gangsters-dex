@@ -3064,6 +3064,25 @@
       <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,var(--green),transparent);margin:14px auto 0;"></div>
     </div>
 
+    <!-- SWAP PROTOCOL FEE — TOP OF PAGE -->
+    <div data-testid="swap-fee-banner" style="max-width:520px;margin:0 auto 20px;background:linear-gradient(135deg,rgba(212,160,23,0.15),rgba(39,174,96,0.15));border:2px solid var(--gold);border-radius:16px;padding:20px;text-align:center;animation:bannerPulse 2s ease-in-out infinite;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);letter-spacing:3px;margin-bottom:6px;">SWAP PROTOCOL FEE (0.05%)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Activate once — 0.05% of every swap goes to your treasury forever</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:8px;">
+        <span style="font-size:12px;color:var(--muted);">Status</span>
+        <span id="revFeeToStatus" data-testid="rev-feeto-status" style="font-size:14px;font-weight:700;color:var(--red);">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;">
+        <span style="font-size:12px;color:var(--muted);">feeTo Address</span>
+        <span id="revFeeToAddr" data-testid="rev-feeto-addr" style="font-size:11px;color:var(--gold);font-family:monospace;">Checking...</span>
+      </div>
+      <button class="ref-copy-btn" id="revSetFeeToBtn" data-testid="rev-setfeeto-btn" onclick="activateSwapProtocolFee()" style="width:100%;background:linear-gradient(135deg,var(--gold),#b8860b);color:#000;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;padding:14px;border-radius:12px;border:none;cursor:pointer;">
+        ACTIVATE 0.05% PROTOCOL FEE
+      </button>
+      <div id="revFeeToLog" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-feeto-log"></div>
+    </div>
+    <style>@keyframes bannerPulse { 0%,100% { box-shadow: 0 0 15px rgba(212,160,23,0.2); } 50% { box-shadow: 0 0 30px rgba(212,160,23,0.5); } }</style>
+
     <!-- Total Summary -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:20px;">
       <div class="ref-link-label" style="color:var(--green);">TOTAL REVENUE SUMMARY</div>
@@ -3196,24 +3215,6 @@
     </div>
 
     <!-- Swap Protocol Fee (0.05%) -->
-    <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:var(--green);">SWAP PROTOCOL FEE (0.05%)</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Every swap has a 0.3% fee — 0.25% goes to LP providers, 0.05% can go to your treasury. You need to activate this once by calling <b>setFeeTo</b> on the Factory contract.</div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <span style="font-size:13px;color:var(--muted);">Current feeTo</span>
-          <span id="revFeeToAddr" data-testid="rev-feeto-addr" style="font-size:11px;color:var(--gold);font-family:monospace;word-break:break-all;">Checking...</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-size:13px;color:var(--muted);">Status</span>
-          <span id="revFeeToStatus" data-testid="rev-feeto-status" style="font-size:13px;font-weight:700;color:var(--red);">—</span>
-        </div>
-      </div>
-      <button class="ref-copy-btn" id="revSetFeeToBtn" data-testid="rev-setfeeto-btn" onclick="activateSwapProtocolFee()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">
-        ACTIVATE 0.05% PROTOCOL FEE
-      </button>
-      <div id="revFeeToLog" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-feeto-log"></div>
-    </div>
 
     <!-- Fund Rewards (Quick Access) -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(212,160,23,0.4);margin-bottom:16px;">
