@@ -3195,6 +3195,26 @@
       </button>
     </div>
 
+    <!-- Swap Protocol Fee (0.05%) -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:var(--green);">SWAP PROTOCOL FEE (0.05%)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Every swap has a 0.3% fee — 0.25% goes to LP providers, 0.05% can go to your treasury. You need to activate this once by calling <b>setFeeTo</b> on the Factory contract.</div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:13px;color:var(--muted);">Current feeTo</span>
+          <span id="revFeeToAddr" data-testid="rev-feeto-addr" style="font-size:11px;color:var(--gold);font-family:monospace;word-break:break-all;">Checking...</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:13px;color:var(--muted);">Status</span>
+          <span id="revFeeToStatus" data-testid="rev-feeto-status" style="font-size:13px;font-weight:700;color:var(--red);">—</span>
+        </div>
+      </div>
+      <button class="ref-copy-btn" id="revSetFeeToBtn" data-testid="rev-setfeeto-btn" onclick="activateSwapProtocolFee()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">
+        ACTIVATE 0.05% PROTOCOL FEE
+      </button>
+      <div id="revFeeToLog" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-feeto-log"></div>
+    </div>
+
     <!-- Fund Rewards (Quick Access) -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(212,160,23,0.4);margin-bottom:16px;">
       <div class="ref-link-label" style="color:var(--gold);">FUND REWARDS</div>
@@ -13089,7 +13109,52 @@ async function checkOwnerRevenue() {
       } catch(e) {}
     }
 
+    // Check Factory feeTo status
+    try {
+      const factory = new ethers.Contract(CONTRACTS.FACTORY, FACTORY_ABI, provider);
+      const currentFeeTo = await factory.feeTo();
+      const feeToEl = document.getElementById("revFeeToAddr");
+      const feeToStatusEl = document.getElementById("revFeeToStatus");
+      const feeToBtn = document.getElementById("revSetFeeToBtn");
+      const zeroAddr = "0x0000000000000000000000000000000000000000";
+      if (currentFeeTo === zeroAddr) {
+        if (feeToEl) feeToEl.textContent = "Not set";
+        if (feeToStatusEl) { feeToStatusEl.textContent = "NOT ACTIVE"; feeToStatusEl.style.color = "var(--red)"; }
+        if (feeToBtn) { feeToBtn.textContent = "ACTIVATE 0.05% PROTOCOL FEE"; feeToBtn.disabled = false; }
+      } else {
+        if (feeToEl) feeToEl.textContent = currentFeeTo.slice(0,6) + "..." + currentFeeTo.slice(-4);
+        if (feeToStatusEl) { feeToStatusEl.textContent = "ACTIVE"; feeToStatusEl.style.color = "var(--green)"; }
+        if (feeToBtn) { feeToBtn.textContent = "ALREADY ACTIVE"; feeToBtn.disabled = true; feeToBtn.style.opacity = "0.5"; }
+      }
+    } catch(e) {}
+
   } catch(e) { console.warn("checkOwnerRevenue:", e); }
+}
+
+async function activateSwapProtocolFee() {
+  if (!state.signer || !requireCronos()) return;
+  const btn = document.getElementById("revSetFeeToBtn");
+  const logEl = document.getElementById("revFeeToLog");
+  try {
+    if (btn) { btn.textContent = "CONFIRMING..."; btn.disabled = true; }
+    if (logEl) { logEl.style.display = "block"; logEl.style.color = "var(--gold)"; logEl.textContent = "Confirm setFeeTo in your wallet..."; }
+    const FACTORY_WRITE_ABI = ["function setFeeTo(address) external"];
+    const factory = new ethers.Contract(CONTRACTS.FACTORY, FACTORY_WRITE_ABI, state.signer);
+    const tx = await factory.setFeeTo(CONTRACTS.TREASURY);
+    if (logEl) { logEl.textContent = "Transaction sent... waiting for confirmation"; }
+    await tx.wait();
+    if (logEl) { logEl.style.color = "var(--green)"; logEl.textContent = "Protocol fee activated! 0.05% of every swap now goes to your treasury."; }
+    if (btn) { btn.textContent = "ALREADY ACTIVE"; btn.disabled = true; btn.style.opacity = "0.5"; }
+    const feeToStatusEl = document.getElementById("revFeeToStatus");
+    if (feeToStatusEl) { feeToStatusEl.textContent = "ACTIVE"; feeToStatusEl.style.color = "var(--green)"; }
+    const feeToEl = document.getElementById("revFeeToAddr");
+    if (feeToEl) feeToEl.textContent = CONTRACTS.TREASURY.slice(0,6) + "..." + CONTRACTS.TREASURY.slice(-4);
+    showToast("Protocol fee activated!", "success");
+  } catch(e) {
+    if (logEl) { logEl.style.color = "var(--red)"; logEl.textContent = "Failed: " + (e.reason || e.message || "Transaction rejected"); }
+    if (btn) { btn.textContent = "ACTIVATE 0.05% PROTOCOL FEE"; btn.disabled = false; }
+    showToast("Failed to activate protocol fee", "error");
+  }
 }
 
 async function revWithdrawNft() {
