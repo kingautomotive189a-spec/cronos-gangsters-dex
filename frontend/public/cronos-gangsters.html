@@ -4,7 +4,6 @@
 /* Hide ONLY deploy-contract banners — NOT owner admin panels */
 #deployLaunchpadBanner,
 #deployLockerBanner,
-#deployLotteryBanner,
 #deploySniperBanner {
   display: none !important;
 }
@@ -1537,101 +1536,6 @@
 
   </div>
 
-
-  <!-- ══════════════════════════════════════
-       LOTTERY PAGE
-  ══════════════════════════════════════ -->
-  <div class="page" id="page-lottery" data-testid="page-lottery">
-    <div style="text-align:center;margin-bottom:32px;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--gold);letter-spacing:6px;line-height:1;text-shadow:0 0 30px rgba(212,160,23,0.4);">GANG LOTTERY</div>
-      <div style="color:var(--muted);font-size:14px;letter-spacing:3px;text-transform:uppercase;margin-top:8px;">Buy Tickets — Win Big — 20% Burned Forever</div>
-      <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px auto 0;"></div>
-    </div>
-
-    <!-- Deploy Lottery (Owner only) -->
-    <div id="lotteryDeploySection" data-testid="lottery-deploy-section" style="display:none;margin-bottom:24px;">
-      <div class="card" style="border:1px solid var(--gold);padding:20px;text-align:center;">
-        <div style="color:var(--gold);font-size:18px;font-weight:700;margin-bottom:12px;">Deploy Lottery Contract</div>
-        <p style="color:var(--muted);font-size:13px;margin-bottom:16px;">Deploy the GANG Lottery smart contract to Cronos. You must be the owner.</p>
-        <button class="btn-primary" data-testid="deploy-lottery-btn" onclick="deployLotteryContract()" style="background:var(--gold);color:#000;font-weight:700;">DEPLOY LOTTERY</button>
-      </div>
-    </div>
-
-    <!-- Lottery Not Deployed Message -->
-    <div id="lotteryNotDeployed" data-testid="lottery-not-deployed" style="display:none;text-align:center;padding:40px;">
-      <div style="font-size:48px;margin-bottom:16px;">🎰</div>
-      <div style="color:var(--muted);font-size:16px;">Lottery contract not deployed yet.</div>
-    </div>
-
-    <!-- Main Lottery UI -->
-    <div id="lotteryMain" data-testid="lottery-main" style="display:none;">
-      <!-- Current Round Card -->
-      <div class="card" style="padding:24px;margin-bottom:20px;border:1px solid var(--gold);">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-          <div>
-            <div style="color:var(--gold);font-size:13px;letter-spacing:2px;text-transform:uppercase;">Round</div>
-            <div style="font-size:28px;font-weight:700;color:var(--text);" id="lotteryRoundNum" data-testid="lottery-round-num">—</div>
-          </div>
-          <div style="text-align:right;">
-            <div style="color:var(--gold);font-size:13px;letter-spacing:2px;text-transform:uppercase;">Time Remaining</div>
-            <div style="font-size:28px;font-weight:700;color:var(--green);" id="lotteryCountdown" data-testid="lottery-countdown">—</div>
-          </div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;">
-          <div style="text-align:center;padding:16px;background:rgba(212,160,23,0.08);border-radius:12px;">
-            <div style="color:var(--muted);font-size:12px;letter-spacing:1px;">PRIZE POOL</div>
-            <div style="font-size:22px;font-weight:700;color:var(--gold);" id="lotteryPrizePool" data-testid="lottery-prize-pool">0 GANG</div>
-          </div>
-          <div style="text-align:center;padding:16px;background:rgba(212,160,23,0.08);border-radius:12px;">
-            <div style="color:var(--muted);font-size:12px;letter-spacing:1px;">TICKETS SOLD</div>
-            <div style="font-size:22px;font-weight:700;color:var(--text);" id="lotteryTicketsSold" data-testid="lottery-tickets-sold">0</div>
-          </div>
-          <div style="text-align:center;padding:16px;background:rgba(212,160,23,0.08);border-radius:12px;">
-            <div style="color:var(--muted);font-size:12px;letter-spacing:1px;">YOUR TICKETS</div>
-            <div style="font-size:22px;font-weight:700;color:var(--green);" id="lotteryYourTickets" data-testid="lottery-your-tickets">0</div>
-          </div>
-        </div>
-
-        <!-- Prize Split Info -->
-        <div style="display:flex;justify-content:center;gap:24px;margin-bottom:20px;font-size:12px;color:var(--muted);">
-          <span>70% Winner</span>
-          <span>20% Burned</span>
-          <span>10% Treasury</span>
-        </div>
-
-        <!-- Buy Tickets -->
-        <div style="display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;">
-          <div style="position:relative;">
-            <input type="number" id="lotteryTicketCount" data-testid="lottery-ticket-count" value="1" min="1" max="50" style="width:80px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:16px;text-align:center;">
-          </div>
-          <button class="btn-primary" data-testid="lottery-buy-btn" onclick="buyLotteryTickets()" style="background:var(--gold);color:#000;font-weight:700;padding:10px 24px;">
-            BUY TICKETS
-          </button>
-          <div style="color:var(--muted);font-size:13px;" id="lotteryTicketCost" data-testid="lottery-ticket-cost">Cost: 10,000 GANG</div>
-        </div>
-
-        <!-- Ticket Price Info -->
-        <div style="text-align:center;margin-top:12px;color:var(--muted);font-size:12px;">
-          Max <span id="lotteryMaxTickets">50</span> tickets per user per round
-        </div>
-      </div>
-
-      <!-- Draw Winner (Owner only) -->
-      <div id="lotteryDrawSection" data-testid="lottery-draw-section" style="display:none;margin-bottom:20px;">
-        <div class="card" style="padding:20px;border:1px solid var(--green);text-align:center;">
-          <div style="color:var(--green);font-size:16px;font-weight:700;margin-bottom:12px;">Round Ended — Draw Winner</div>
-          <button class="btn-primary" data-testid="lottery-draw-btn" onclick="drawLotteryWinner()" style="background:var(--green);color:#000;font-weight:700;">DRAW WINNER</button>
-        </div>
-      </div>
-
-      <!-- Past Rounds -->
-      <div class="card" style="padding:20px;">
-        <div style="color:var(--gold);font-size:16px;font-weight:700;margin-bottom:16px;letter-spacing:1px;">PAST ROUNDS</div>
-        <div id="lotteryHistory" data-testid="lottery-history" style="color:var(--muted);font-size:14px;">No past rounds yet.</div>
-      </div>
-    </div>
-  </div>
 
   <!-- ══════════════════════════════════════
        ROADMAP PAGE
@@ -11343,7 +11247,6 @@ async function deployLottery() {
     statusEl.style.color = 'var(--green)';
     statusEl.innerHTML = 'Lottery deployed at <a href="https://explorer.cronos.org/address/' + addr + '" target="_blank" style="color:var(--green)">' + addr.slice(0, 10) + '...</a>';
     showToast('Lottery deployed!', 'success');
-    document.getElementById('deployLotteryBanner').style.display = 'none';
     loadLotteryState();
   } catch(e) {
     statusEl.style.color = 'var(--red)';
@@ -11361,10 +11264,9 @@ async function deployLottery() {
 // Load current lottery state
 async function loadLotteryState() {
   if (!CONTRACTS.LOTTERY) {
-    document.getElementById('deployLotteryBanner').style.display = 'block';
+    console.warn('Lottery contract not configured');
     return;
   }
-  document.getElementById('deployLotteryBanner').style.display = 'none';
   
   const rawP = state._rawProvider || window.ethereum;
   if (!rawP) return;
@@ -11609,7 +11511,6 @@ async function withdrawLotteryFees() {
 }
 
 // Load lottery on page switch
-const _origShowPageLottery = typeof showPage === 'function' ? showPage : null;
 
 
 
