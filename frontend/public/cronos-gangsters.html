@@ -3816,6 +3816,18 @@ function toggleNavMenu() {
       <div class="ref-link-label" style="color:var(--green);">TOTAL REVENUE SUMMARY</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:12px;">
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">SWAP</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;">0.3%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">FUTURES</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ff8c00;letter-spacing:1px;">0.3%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">TRADING</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);letter-spacing:1px;">0.3%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
           <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">NFT MINTS</div>
           <div id="revNftBal" data-testid="rev-nft-balance" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;">--</div>
         </div>
@@ -3826,6 +3838,10 @@ function toggleNavMenu() {
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
           <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">REFERRAL</div>
           <div id="revRefBal" data-testid="rev-ref-balance" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);letter-spacing:1px;">--</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">VAULTS</div>
+          <div data-testid="rev-vaults-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;">PERF</div>
         </div>
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
           <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">CREATOR</div>
@@ -3943,6 +3959,59 @@ function toggleNavMenu() {
     </div>
 
     <!-- Swap Protocol Fee (0.3%) -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:var(--green);">SWAP FEES (0.3%)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% of every swap goes to your treasury wallet. Fees accumulate in the DEX router and are sent to your treasury on each trade.</div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:var(--muted);">Treasury Balance</span>
+        <span id="revSwapFeeBal" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;" data-testid="rev-swap-fee-bal">-- GANG</span>
+      </div>
+      <div style="font-size:11px;color:var(--green);text-align:center;">Swap fees are sent to your treasury wallet automatically on every trade</div>
+    </div>
+
+    <!-- GANG FUTURES Fees (0.3% open + 0.3% close) -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(255,140,0,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#ff8c00;">FUTURES FEES (0.3% OPEN + 0.3% CLOSE)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on opening and closing every futures position. Fees go directly into the liquidity pool — withdraw your profit from the Futures page Owner Panel.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(255,140,0,0.3);border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">GANG POOL PROFIT</div>
+          <div id="revFuturesGangProfit" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);" data-testid="rev-futures-gang-profit">-- GANG</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(0,45,116,0.3);border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">CRO POOL PROFIT</div>
+          <div id="revFuturesCroProfit" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);" data-testid="rev-futures-cro-profit">-- CRO</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="navigateTo('futures')" style="width:100%;background:linear-gradient(135deg,#ff8c00,#cc7000);" data-testid="rev-futures-goto-btn">
+        GO TO FUTURES → WITHDRAW PROFIT
+      </button>
+    </div>
+
+    <!-- Leverage Trading Fees (0.3%) -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(232,184,48,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:var(--gold);">LEVERAGE TRADING FEES (0.3%)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every leverage trade in the Mining Hub. Fees stay in the house pool and increase your profit margin.</div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:var(--muted);">Status</span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:1px;">FEES RETAINED IN HOUSE POOL</span>
+      </div>
+      <div style="font-size:11px;color:var(--green);margin-top:8px;text-align:center;">Trading fees accumulate in the house pool — your edge as the house</div>
+    </div>
+
+    <!-- Vault Performance Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:var(--green);">VAULT PERFORMANCE FEES</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Performance fee collected on auto-compound harvests. Collect accumulated GANG fees from the vault contract.</div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:13px;color:var(--muted);">Pending Fees</span>
+        <span id="revVaultFees" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;" data-testid="rev-vault-fees">-- GANG</span>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectVaultFees()" id="revVaultFeeBtn" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);" data-testid="rev-vault-collect-btn">
+        COLLECT VAULT FEES
+      </button>
+      <div id="revVaultFeeStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-vault-fee-status"></div>
+    </div>
 
     <!-- Fund Rewards (Quick Access) -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(212,160,23,0.4);margin-bottom:16px;">
@@ -3980,11 +4049,15 @@ function toggleNavMenu() {
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;">HOW YOU EARN</div>
         <div style="font-size:12px;color:var(--muted);line-height:1.8;text-align:left;">
+          <b style="color:#ff8c00;">Swap Fees:</b> 0.3% of every swap &rarr; sent to your treasury automatically<br>
+          <b style="color:#ff8c00;">GANG FUTURES:</b> 0.3% open + 0.3% close fee &rarr; stays in pool, withdraw profit from Futures page<br>
+          <b style="color:#ff8c00;">Leverage Trading:</b> 0.3% per trade &rarr; retained in house pool as your edge<br>
+          <b style="color:var(--green);">Vault Performance:</b> Performance fee on auto-compounds &rarr; collect from Revenue page<br>
           <b style="color:var(--green);">NFT Mints:</b> 50 CRO per mint &rarr; withdraw anytime<br>
           <b style="color:var(--green);">Staking Penalties:</b> 25% of early exits &rarr; sent to your wallet automatically<br>
           <b style="color:var(--green);">Referral Pool:</b> GANG tokens for referral rewards &rarr; emergency withdraw if needed<br>
           <b style="color:var(--green);">Marketplace Fees:</b> 2.5% of every NFT sale &rarr; collect anytime<br>
-          <b style="color:var(--green);">Token Creator:</b> 25 CRO (Basic) or 100 CRO (Premium) per token &rarr; sent to your wallet instantly<br>
+          <b style="color:var(--green);">Token Creator:</b> 25-500 CRO per token &rarr; sent to your wallet instantly<br>
           <b style="color:var(--gold);">Launchpad:</b> 3% of every IDO sale &rarr; auto-collected when you finalize<br>
           <b style="color:var(--gold);">LP Locker:</b> 1 CRO per lock &rarr; collect anytime from Locker or Revenue page<br>
           <b style="color:var(--gold);">Lottery:</b> 10% of every pot &rarr; collect after drawing winner<br>
@@ -14029,6 +14102,41 @@ async function checkOwnerRevenue() {
       }
     } catch(e) {}
 
+    // Load GANG FUTURES pool profits
+    try {
+      const saved = JSON.parse(localStorage.getItem('gangFuturesState') || '{}');
+      const poolBal = saved.poolBalance || 0;
+      const deposited = saved.ownerDeposited || 0;
+      const gangProfit = poolBal - deposited;
+      const poolCro = saved.poolBalanceCRO || 0;
+      const depositedCro = saved.ownerDepositedCRO || 0;
+      const croProfit = poolCro - depositedCro;
+      const elGang = document.getElementById("revFuturesGangProfit");
+      const elCro = document.getElementById("revFuturesCroProfit");
+      if (elGang) elGang.textContent = (gangProfit > 0 ? gangProfit.toFixed(2) : "0") + " GANG";
+      if (elCro) elCro.textContent = (croProfit > 0 ? croProfit.toFixed(2) : "0") + " CRO";
+    } catch(e) {}
+
+    // Load Swap fee balance (treasury GANG balance)
+    try {
+      const gangContract = new ethers.Contract(CONTRACTS.GANG, ["function balanceOf(address) view returns (uint256)"], provider);
+      const gangBal = await gangContract.balanceOf(CONTRACTS.TREASURY);
+      const gangAmt = parseFloat(ethers.formatUnits(gangBal, 18));
+      const elSwap = document.getElementById("revSwapFeeBal");
+      if (elSwap) elSwap.textContent = gangAmt.toFixed(2) + " GANG";
+    } catch(e) {}
+
+    // Load Vault performance fees
+    try {
+      if (typeof CONTRACTS.VAULT_V2 !== 'undefined' && CONTRACTS.VAULT_V2) {
+        const vault = new ethers.Contract(CONTRACTS.VAULT_V2, VAULT_V2_ABI, provider);
+        const fees = await vault.pendingFees();
+        const gangFees = parseFloat(ethers.formatUnits(fees.gangFees, 18));
+        const elVault = document.getElementById("revVaultFees");
+        if (elVault) elVault.textContent = gangFees.toFixed(4) + " GANG";
+      }
+    } catch(e) { console.warn('Load vault fees:', e.message); }
+
   } catch(e) { console.warn("checkOwnerRevenue:", e); }
 }
 
@@ -14057,6 +14165,29 @@ async function activateSwapProtocolFee() {
     showToast("Failed to activate protocol fee", "error");
   }
 }
+
+async function revCollectVaultFees() {
+  if (!state.signer || !requireCronos()) return;
+  const btn = document.getElementById("revVaultFeeBtn");
+  const statusEl = document.getElementById("revVaultFeeStatus");
+  if (btn) { btn.textContent = "COLLECTING..."; btn.disabled = true; }
+  if (statusEl) { statusEl.style.display = "block"; statusEl.style.color = "var(--gold)"; statusEl.textContent = "Confirm in your wallet..."; }
+  try {
+    const vault = new ethers.Contract(CONTRACTS.VAULT_V2, VAULT_V2_ABI, state.signer);
+    const tx = await vault.collectFees();
+    if (statusEl) statusEl.textContent = "Transaction sent... waiting for confirmation";
+    await tx.wait();
+    if (statusEl) { statusEl.style.color = "var(--green)"; statusEl.textContent = "Vault fees collected successfully!"; }
+    if (btn) { btn.textContent = "COLLECT VAULT FEES"; btn.disabled = false; }
+    showToast("Vault performance fees collected!", "success");
+    checkOwnerRevenue();
+  } catch(e) {
+    if (statusEl) { statusEl.style.color = "var(--red)"; statusEl.textContent = "Failed: " + (e.reason || e.message || "Transaction rejected"); }
+    if (btn) { btn.textContent = "COLLECT VAULT FEES"; btn.disabled = false; }
+    showToast("Failed to collect vault fees", "error");
+  }
+}
+
 
 async function revWithdrawNft() {
   if (!state.signer || !requireCronos()) return;
