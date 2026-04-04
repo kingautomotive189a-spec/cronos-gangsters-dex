@@ -525,6 +525,7 @@
     <button class="nav-btn" data-page="lottery" data-testid="nav-lottery-btn">Lottery</button>
     <button class="nav-btn" data-page="sniper" data-testid="nav-sniper-btn">Sniper</button>
     <button class="nav-btn" data-page="leaderboard" data-testid="nav-leaderboard-btn" style="color:#ff6b35;font-weight:800;">Leaderboard</button>
+    <button class="nav-btn" data-page="tracker" data-testid="nav-tracker-btn" style="color:#00d4ff;font-weight:800;">Gang Tracker</button>
     <button class="nav-btn" data-testid="nav-mining-btn" onclick="window.location.href='/mining.html'" style="color:#ffd700;font-weight:800;">Mining</button>
     <button class="nav-btn" data-testid="nav-trading-btn" onclick="window.location.href='/trading.html'" style="color:#ff8c00;font-weight:800;">Trading</button>
     <button class="nav-btn" data-testid="nav-dashboard-btn" id="dashboardNavBtn" onclick="window.location.href='/dashboard.html'" style="display:none;color:#2AABEE;font-weight:800;">Dashboard</button>
@@ -3200,6 +3201,86 @@
       <div id="leaderboardTable" data-testid="leaderboard-table">
         <div style="color:var(--muted);font-size:14px;text-align:center;padding:16px;">Connect wallet to view leaderboard</div>
       </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       GANG TRACKER PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-tracker" data-testid="page-tracker">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#00d4ff;line-height:1;text-shadow:0 0 30px rgba(0,212,255,0.3);">GANG TRACKER</div>
+      <div style="font-size:13px;color:var(--muted);letter-spacing:1px;margin-top:6px;">See all your assets, staked positions &amp; LP across Cronos</div>
+      <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,#00d4ff,transparent);margin:14px auto 0;"></div>
+    </div>
+
+    <!-- Wallet Input -->
+    <div class="card" style="margin-bottom:16px;border-color:rgba(0,212,255,0.3);">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;">ENTER WALLET ADDRESS</div>
+      <div style="display:flex;gap:8px;">
+        <input class="swap-input" id="trackerWalletInput" data-testid="tracker-wallet-input" type="text" placeholder="0x..." style="flex:1;font-size:13px;font-family:monospace;" />
+        <button data-testid="tracker-scan-btn" onclick="scanWallet()" style="padding:10px 20px;border-radius:10px;border:none;background:linear-gradient(135deg,#00d4ff,#0099cc);color:#000;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;white-space:nowrap;">SCAN</button>
+      </div>
+      <div style="margin-top:8px;text-align:center;">
+        <button data-testid="tracker-use-mine-btn" onclick="useMyWallet()" style="background:none;border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-size:12px;padding:6px 16px;border-radius:8px;cursor:pointer;">USE MY CONNECTED WALLET</button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="trackerLoading" data-testid="tracker-loading" style="display:none;text-align:center;padding:30px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#00d4ff;letter-spacing:2px;">SCANNING BLOCKCHAIN...</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px;">Reading on-chain positions</div>
+    </div>
+
+    <!-- Results -->
+    <div id="trackerResults" data-testid="tracker-results" style="display:none;">
+      
+      <!-- Total Portfolio Value -->
+      <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg,rgba(0,212,255,0.08),rgba(39,174,96,0.04));border-color:rgba(0,212,255,0.4);text-align:center;">
+        <div style="font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:4px;">TOTAL PORTFOLIO VALUE</div>
+        <div id="trackerTotalValue" data-testid="tracker-total-value" style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#00d4ff;letter-spacing:3px;text-shadow:0 0 20px rgba(0,212,255,0.3);">$0.00</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">
+          Wallet: <span id="trackerWalletDisplay" style="font-family:monospace;color:var(--gold);">—</span>
+        </div>
+      </div>
+
+      <!-- Token Balances -->
+      <div class="card" style="margin-bottom:16px;border-color:rgba(0,212,255,0.2);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#00d4ff;letter-spacing:2px;margin-bottom:12px;">TOKEN BALANCES</div>
+        <div id="trackerTokens" data-testid="tracker-tokens"></div>
+      </div>
+
+      <!-- Staked in Farms -->
+      <div class="card" style="margin-bottom:16px;border-color:rgba(39,174,96,0.3);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);letter-spacing:2px;margin-bottom:12px;">STAKED IN FARMS</div>
+        <div id="trackerFarms" data-testid="tracker-farms"></div>
+      </div>
+
+      <!-- Staked GANG -->
+      <div class="card" style="margin-bottom:16px;border-color:rgba(212,160,23,0.3);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:12px;">STAKED GANG</div>
+        <div id="trackerStaking" data-testid="tracker-staking"></div>
+      </div>
+
+      <!-- Liquidity Positions -->
+      <div class="card" style="margin-bottom:16px;border-color:rgba(155,89,182,0.3);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#9b59b6;letter-spacing:2px;margin-bottom:12px;">LIQUIDITY POSITIONS</div>
+        <div id="trackerLiquidity" data-testid="tracker-liquidity"></div>
+      </div>
+
+      <!-- Vault Deposits -->
+      <div class="card" style="margin-bottom:16px;border-color:rgba(52,152,219,0.3);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#3498db;letter-spacing:2px;margin-bottom:12px;">VAULT DEPOSITS</div>
+        <div id="trackerVaults" data-testid="tracker-vaults"></div>
+      </div>
+
+      <!-- NFTs -->
+      <div class="card" style="margin-bottom:16px;border-color:rgba(231,76,60,0.3);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#e74c3c;letter-spacing:2px;margin-bottom:12px;">NFT HOLDINGS</div>
+        <div id="trackerNFTs" data-testid="tracker-nfts"></div>
+      </div>
+
     </div>
   </div>
 
@@ -14492,6 +14573,249 @@ async function mktWithdrawFees() {
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').catch(()=>{}); }
 
 // ══════════════════════════════════════════════════════════════
+// FEATURE: GANG TRACKER — FULL WALLET SCANNER
+// ══════════════════════════════════════════════════════════════
+function useMyWallet() {
+  if (!state.address) { showToast('Connect your wallet first', 'error'); return; }
+  document.getElementById('trackerWalletInput').value = state.address;
+  scanWallet();
+}
+
+async function scanWallet() {
+  const input = document.getElementById('trackerWalletInput');
+  const addr = input?.value?.trim();
+  if (!addr || !addr.startsWith('0x') || addr.length !== 42) {
+    showToast('Enter a valid wallet address (0x...)', 'error'); return;
+  }
+
+  const loading = document.getElementById('trackerLoading');
+  const results = document.getElementById('trackerResults');
+  loading.style.display = 'block';
+  results.style.display = 'none';
+
+  try {
+    const rp = getReadProvider() || new ethers.JsonRpcProvider('https://evm.cronos.org');
+    const shortAddr = addr.slice(0,8) + '...' + addr.slice(-6);
+    document.getElementById('trackerWalletDisplay').textContent = shortAddr;
+
+    let totalUSD = 0;
+
+    // ── 1. TOKEN BALANCES ──
+    const tokenHTML = [];
+    const croBal = await rp.getBalance(addr);
+    const croAmt = parseFloat(ethers.formatEther(croBal));
+    const croPrice = TOKENS.CRO?.price || 0;
+    const croUSD = croAmt * croPrice;
+    totalUSD += croUSD;
+    if (croAmt > 0.001) {
+      tokenHTML.push(trackerRow('CRO', croAmt, croUSD, 'var(--text)'));
+    }
+
+    const erc20ABI = ['function balanceOf(address) view returns (uint256)', 'function decimals() view returns (uint8)'];
+    for (const [sym, tok] of Object.entries(TOKENS)) {
+      if (sym === 'CRO' || !tok.address || tok.address === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') continue;
+      try {
+        const c = new ethers.Contract(tok.address, erc20ABI, rp);
+        const bal = await c.balanceOf(addr);
+        const amt = parseFloat(ethers.formatUnits(bal, tok.decimals || 18));
+        if (amt > 0.0001) {
+          const usd = amt * (tok.price || 0);
+          totalUSD += usd;
+          tokenHTML.push(trackerRow(sym, amt, usd, 'var(--text)'));
+        }
+      } catch {}
+    }
+    document.getElementById('trackerTokens').innerHTML = tokenHTML.length
+      ? tokenHTML.join('')
+      : '<div style="color:var(--muted);text-align:center;padding:12px;">No tokens found</div>';
+
+    // ── 2. STAKED IN FARMS ──
+    const farmHTML = [];
+    if (CONTRACTS.CHEF) {
+      try {
+        const chef = new ethers.Contract(CONTRACTS.CHEF, CHEF_ABI, rp);
+        for (let i = 0; i < FARMS.length; i++) {
+          try {
+            const userInfo = await chef.userInfo(FARMS[i].pid, addr);
+            const stakedBN = userInfo[0] || userInfo.amount;
+            const staked = parseFloat(ethers.formatUnits(stakedBN, 18));
+            if (staked > 0.0001) {
+              const pending = await chef.pendingGang(FARMS[i].pid, addr).catch(() => BigInt(0));
+              const pendingAmt = parseFloat(ethers.formatUnits(pending, 18));
+              const gangPrice = TOKENS.GANG?.price || 0;
+              const pendingUSD = pendingAmt * gangPrice;
+              totalUSD += pendingUSD;
+              farmHTML.push(`
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;">
+                  <div>
+                    <div style="font-size:14px;color:var(--text);font-weight:600;">${FARMS[i].name}</div>
+                    <div style="font-size:11px;color:var(--muted);">${staked.toFixed(6)} LP staked</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:14px;color:var(--green);font-weight:700;">${pendingAmt.toFixed(4)} GANG</div>
+                    <div style="font-size:11px;color:var(--muted);">$${pendingUSD.toFixed(4)} pending</div>
+                  </div>
+                </div>`);
+            }
+          } catch {}
+        }
+      } catch {}
+    }
+    document.getElementById('trackerFarms').innerHTML = farmHTML.length
+      ? farmHTML.join('')
+      : '<div style="color:var(--muted);text-align:center;padding:12px;">No farm positions</div>';
+
+    // ── 3. STAKED GANG ──
+    const stakeHTML = [];
+    if (CONTRACTS.STAKING) {
+      try {
+        const stakingABI = ['function userStakeCount(address) view returns (uint256)', 'function userStakes(address,uint256) view returns (uint256 amount, uint256 since, uint256 lockEnd, bool claimed)'];
+        const staking = new ethers.Contract(CONTRACTS.STAKING, stakingABI, rp);
+        const count = await staking.userStakeCount(addr).catch(() => BigInt(0));
+        const n = Number(count);
+        for (let i = 0; i < Math.min(n, 20); i++) {
+          try {
+            const s = await staking.userStakes(addr, i);
+            const amt = parseFloat(ethers.formatUnits(s.amount || s[0], 18));
+            if (amt > 0 && !(s.claimed || s[3])) {
+              const gangPrice = TOKENS.GANG?.price || 0;
+              const usd = amt * gangPrice;
+              totalUSD += usd;
+              const lockEnd = Number(s.lockEnd || s[2]) * 1000;
+              const locked = lockEnd > Date.now();
+              stakeHTML.push(`
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;">
+                  <div>
+                    <div style="font-size:14px;color:var(--text);font-weight:600;">${amt.toFixed(2)} GANG</div>
+                    <div style="font-size:11px;color:var(--muted);">$${usd.toFixed(4)}</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:12px;color:${locked ? 'var(--red)' : 'var(--green)'};">${locked ? 'LOCKED' : 'UNLOCKED'}</div>
+                    ${locked ? '<div style="font-size:10px;color:var(--muted);">Until ' + new Date(lockEnd).toLocaleDateString() + '</div>' : ''}
+                  </div>
+                </div>`);
+            }
+          } catch {}
+        }
+      } catch {}
+    }
+    document.getElementById('trackerStaking').innerHTML = stakeHTML.length
+      ? stakeHTML.join('')
+      : '<div style="color:var(--muted);text-align:center;padding:12px;">No staked GANG</div>';
+
+    // ── 4. LIQUIDITY POSITIONS ──
+    const liqHTML = [];
+    const lpABI = ['function balanceOf(address) view returns (uint256)', 'function totalSupply() view returns (uint256)', 'function getReserves() view returns (uint112,uint112,uint32)'];
+    for (const farm of FARMS) {
+      if (!farm.lpAddr) continue;
+      try {
+        const lp = new ethers.Contract(farm.lpAddr, lpABI, rp);
+        const bal = await lp.balanceOf(addr);
+        const amt = parseFloat(ethers.formatUnits(bal, 18));
+        if (amt > 0.0001) {
+          const [totalSupply, reserves] = await Promise.all([lp.totalSupply(), lp.getReserves()]);
+          const share = parseFloat(ethers.formatUnits(bal, 18)) / parseFloat(ethers.formatUnits(totalSupply, 18));
+          const r0 = parseFloat(ethers.formatUnits(reserves[0], 18));
+          const r1 = parseFloat(ethers.formatUnits(reserves[1], 18));
+          liqHTML.push(`
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;">
+              <div>
+                <div style="font-size:14px;color:var(--text);font-weight:600;">${farm.name}</div>
+                <div style="font-size:11px;color:var(--muted);">${amt.toFixed(6)} LP tokens</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:11px;color:#9b59b6;">${(share * 100).toFixed(4)}% of pool</div>
+              </div>
+            </div>`);
+        }
+      } catch {}
+    }
+    document.getElementById('trackerLiquidity').innerHTML = liqHTML.length
+      ? liqHTML.join('')
+      : '<div style="color:var(--muted);text-align:center;padding:12px;">No liquidity positions</div>';
+
+    // ── 5. VAULT DEPOSITS ──
+    const vaultHTML = [];
+    if (typeof VAULTS !== 'undefined') {
+      for (let i = 0; i < VAULTS.length; i++) {
+        const v = VAULTS[i];
+        if (!v.address) continue;
+        try {
+          const vaultABI = ['function balanceOf(address) view returns (uint256)'];
+          const vault = new ethers.Contract(v.address, vaultABI, rp);
+          const bal = await vault.balanceOf(addr);
+          const amt = parseFloat(ethers.formatUnits(bal, 18));
+          if (amt > 0.0001) {
+            vaultHTML.push(`
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;">
+                <div>
+                  <div style="font-size:14px;color:var(--text);font-weight:600;">${v.name || 'Vault #' + i}</div>
+                  <div style="font-size:11px;color:var(--muted);">${amt.toFixed(6)} shares</div>
+                </div>
+                <div style="font-size:12px;color:#3498db;">Auto-compounding</div>
+              </div>`);
+          }
+        } catch {}
+      }
+    }
+    document.getElementById('trackerVaults').innerHTML = vaultHTML.length
+      ? vaultHTML.join('')
+      : '<div style="color:var(--muted);text-align:center;padding:12px;">No vault deposits</div>';
+
+    // ── 6. NFTs ──
+    const nftHTML = [];
+    if (CONTRACTS.NFT) {
+      try {
+        const nftABI = ['function balanceOf(address) view returns (uint256)'];
+        const nft = new ethers.Contract(CONTRACTS.NFT, nftABI, rp);
+        const nftBal = await nft.balanceOf(addr);
+        const nftCount = Number(nftBal);
+        if (nftCount > 0) {
+          nftHTML.push(`
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;">
+              <div>
+                <div style="font-size:14px;color:var(--text);font-weight:600;">Gangster NFTs</div>
+                <div style="font-size:11px;color:var(--muted);">ERC-721 Collection</div>
+              </div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#e74c3c;">${nftCount}</div>
+            </div>`);
+        }
+      } catch {}
+    }
+    document.getElementById('trackerNFTs').innerHTML = nftHTML.length
+      ? nftHTML.join('')
+      : '<div style="color:var(--muted);text-align:center;padding:12px;">No NFTs found</div>';
+
+    // ── Update total ──
+    document.getElementById('trackerTotalValue').textContent = '$' + totalUSD.toFixed(2);
+
+    loading.style.display = 'none';
+    results.style.display = 'block';
+
+    if (typeof addPoints === 'function') addPoints(3, 'Wallet scan');
+
+  } catch (e) {
+    console.error('Tracker error:', e);
+    loading.style.display = 'none';
+    showToast('Error scanning wallet: ' + (e.message || '').slice(0, 60), 'error');
+  }
+}
+
+function trackerRow(sym, amt, usd, color) {
+  const fmtAmt = amt >= 1e9 ? (amt/1e9).toFixed(2)+'B' : amt >= 1e6 ? (amt/1e6).toFixed(2)+'M' : amt >= 1000 ? (amt/1000).toFixed(1)+'K' : amt.toFixed(4);
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="font-size:14px;color:${color};font-weight:600;">${sym}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:14px;color:var(--text);font-weight:600;">${fmtAmt}</div>
+        <div style="font-size:11px;color:var(--muted);">$${usd.toFixed(2)}</div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════
 // FEATURE: SWAP / LIMIT ORDER TOGGLE
 // ══════════════════════════════════════════════════════════════
 function switchSwapMode(mode) {
@@ -14854,7 +15178,7 @@ setTimeout(loadBurnTracker, 3000);
       'launchpad':'launchpad','locker':'locker','lottery':'lottery','sniper':'sniper',
       'nfts':'nfts','referral':'referral','create':'create','marketplace':'market',
       'market':'market','swap':'swap','liquidity':'liquidity','portfolio':'portfolio',
-      'token':'token','roadmap':'roadmap','leaderboard':'leaderboard'
+      'token':'token','roadmap':'roadmap','leaderboard':'leaderboard','tracker':'tracker'
     };
     var page = pageMap[hash] || hash;
     var btn = document.querySelector('[data-page="' + page + '"]');
