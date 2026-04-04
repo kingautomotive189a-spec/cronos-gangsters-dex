@@ -1528,19 +1528,77 @@ function toggleNavMenu() {
       </div>
     </div>
 
-    <!-- GANG Live Chart -->
+    <!-- GANG Live Chart with Coin Selector -->
     <div class="card" style="padding:0;margin-bottom:20px;overflow:hidden;border-color:rgba(212,160,23,0.3);">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <img loading="lazy" src="/gang-logo.png" style="width:24px;height:24px;border-radius:50%;">
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);letter-spacing:2px;">$GANG LIVE CHART</span>
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <img id="chartCoinLogo" loading="lazy" src="/gang-logo.png" style="width:24px;height:24px;border-radius:50%;">
+            <span id="chartCoinName" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);letter-spacing:2px;">$GANG LIVE CHART</span>
+          </div>
+          <a id="chartFullLink" href="https://dexscreener.com/cronos/0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF" target="_blank" rel="noopener" style="font-size:11px;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:4px 10px;border-radius:6px;transition:all .2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">Full Chart</a>
         </div>
-        <a href="https://dexscreener.com/cronos/0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF" target="_blank" rel="noopener" style="font-size:11px;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:4px 10px;border-radius:6px;transition:all .2s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">Full Chart</a>
+        <div style="display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;" id="chartCoinBar">
+          <button class="chart-coin-btn active" data-coin="GANG" onclick="switchTokenChart('GANG')"><img src="/gang-logo.png" style="width:16px;height:16px;border-radius:50%;">GANG</button>
+          <button class="chart-coin-btn" data-coin="BTC" onclick="switchTokenChart('BTC')"><img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" style="width:16px;height:16px;border-radius:50%;">BTC</button>
+          <button class="chart-coin-btn" data-coin="ETH" onclick="switchTokenChart('ETH')"><img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" style="width:16px;height:16px;border-radius:50%;">ETH</button>
+          <button class="chart-coin-btn" data-coin="SOL" onclick="switchTokenChart('SOL')"><img src="https://assets.coingecko.com/coins/images/4128/small/solana.png" style="width:16px;height:16px;border-radius:50%;">SOL</button>
+          <button class="chart-coin-btn" data-coin="CRO" onclick="switchTokenChart('CRO')"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:16px;height:16px;border-radius:50%;">CRO</button>
+          <button class="chart-coin-btn" data-coin="BNB" onclick="switchTokenChart('BNB')"><img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" style="width:16px;height:16px;border-radius:50%;">BNB</button>
+          <button class="chart-coin-btn" data-coin="XRP" onclick="switchTokenChart('XRP')"><img src="https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png" style="width:16px;height:16px;border-radius:50%;">XRP</button>
+          <button class="chart-coin-btn" data-coin="DOGE" onclick="switchTokenChart('DOGE')"><img src="https://assets.coingecko.com/coins/images/5/small/dogecoin.png" style="width:16px;height:16px;border-radius:50%;">DOGE</button>
+          <button class="chart-coin-btn" data-coin="ADA" onclick="switchTokenChart('ADA')"><img src="https://assets.coingecko.com/coins/images/975/small/cardano.png" style="width:16px;height:16px;border-radius:50%;">ADA</button>
+          <button class="chart-coin-btn" data-coin="AVAX" onclick="switchTokenChart('AVAX')"><img src="https://assets.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png" style="width:16px;height:16px;border-radius:50%;">AVAX</button>
+          <button class="chart-coin-btn" data-coin="LINK" onclick="switchTokenChart('LINK')"><img src="https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png" style="width:16px;height:16px;border-radius:50%;">LINK</button>
+          <button class="chart-coin-btn" data-coin="MATIC" onclick="switchTokenChart('MATIC')"><img src="https://assets.coingecko.com/coins/images/4713/small/polygon.png" style="width:16px;height:16px;border-radius:50%;">MATIC</button>
+        </div>
+        <style>
+          .chart-coin-btn{display:inline-flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:5px 10px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:all .2s;}
+          .chart-coin-btn:hover{color:var(--text);border-color:rgba(212,160,23,0.4);}
+          .chart-coin-btn.active{background:var(--gold);color:#000;border-color:var(--gold);}
+          .chart-coin-btn.active img{filter:brightness(0);}
+        </style>
       </div>
       <div id="gangChartContainer" style="height:420px;background:#0a0a0a;">
         <iframe id="gangChartFrame" src="https://dexscreener.com/cronos/0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF?embed=1&theme=dark&trades=0&info=0" style="width:100%;height:100%;border:none;" loading="lazy" allowfullscreen></iframe>
       </div>
     </div>
+    <script>
+    const TOKEN_CHART_MAP = {
+      GANG: { name: '$GANG', logo: '/gang-logo.png', src: 'https://dexscreener.com/cronos/0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF?embed=1&theme=dark&trades=0&info=0', link: 'https://dexscreener.com/cronos/0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF' },
+      BTC: { name: 'BITCOIN', logo: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png', tv: 'BINANCE:BTCUSDT', link: 'https://www.tradingview.com/symbols/BTCUSDT/' },
+      ETH: { name: 'ETHEREUM', logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png', tv: 'BINANCE:ETHUSDT', link: 'https://www.tradingview.com/symbols/ETHUSDT/' },
+      SOL: { name: 'SOLANA', logo: 'https://assets.coingecko.com/coins/images/4128/small/solana.png', tv: 'BINANCE:SOLUSDT', link: 'https://www.tradingview.com/symbols/SOLUSDT/' },
+      CRO: { name: 'CRONOS', logo: 'https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png', tv: 'CRYPTO:CROUSD', link: 'https://www.tradingview.com/symbols/CROUSD/' },
+      BNB: { name: 'BNB', logo: 'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png', tv: 'BINANCE:BNBUSDT', link: 'https://www.tradingview.com/symbols/BNBUSDT/' },
+      XRP: { name: 'XRP', logo: 'https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png', tv: 'BINANCE:XRPUSDT', link: 'https://www.tradingview.com/symbols/XRPUSDT/' },
+      DOGE: { name: 'DOGECOIN', logo: 'https://assets.coingecko.com/coins/images/5/small/dogecoin.png', tv: 'BINANCE:DOGEUSDT', link: 'https://www.tradingview.com/symbols/DOGEUSDT/' },
+      ADA: { name: 'CARDANO', logo: 'https://assets.coingecko.com/coins/images/975/small/cardano.png', tv: 'BINANCE:ADAUSDT', link: 'https://www.tradingview.com/symbols/ADAUSDT/' },
+      AVAX: { name: 'AVALANCHE', logo: 'https://assets.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png', tv: 'BINANCE:AVAXUSDT', link: 'https://www.tradingview.com/symbols/AVAXUSDT/' },
+      LINK: { name: 'CHAINLINK', logo: 'https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png', tv: 'BINANCE:LINKUSDT', link: 'https://www.tradingview.com/symbols/LINKUSDT/' },
+      MATIC: { name: 'POLYGON', logo: 'https://assets.coingecko.com/coins/images/4713/small/polygon.png', tv: 'BINANCE:MATICUSDT', link: 'https://www.tradingview.com/symbols/MATICUSDT/' }
+    };
+    function switchTokenChart(coin) {
+      const c = TOKEN_CHART_MAP[coin];
+      if (!c) return;
+      document.querySelectorAll('.chart-coin-btn').forEach(b => b.classList.toggle('active', b.dataset.coin === coin));
+      document.getElementById('chartCoinLogo').src = c.logo;
+      document.getElementById('chartCoinName').textContent = c.name + ' LIVE CHART';
+      document.getElementById('chartFullLink').href = c.link;
+      const container = document.getElementById('gangChartContainer');
+      if (c.src) {
+        container.innerHTML = '<iframe src="' + c.src + '" style="width:100%;height:100%;border:none;" loading="lazy" allowfullscreen></iframe>';
+      } else {
+        container.innerHTML = '<div class="tradingview-widget-container" style="width:100%;height:100%;"><div class="tradingview-widget-container__widget" style="width:100%;height:100%;"></div></div>';
+        const s = document.createElement('script');
+        s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+        s.type = 'text/javascript';
+        s.async = true;
+        s.innerHTML = JSON.stringify({autosize:true,symbol:c.tv,interval:'15',timezone:'Etc/UTC',theme:'dark',style:'1',locale:'en',backgroundColor:'rgba(10,10,10,1)',gridColor:'rgba(255,255,255,0.04)',hide_top_toolbar:false,hide_legend:false,allow_symbol_change:false,save_image:false,calendar:false,support_host:'https://www.tradingview.com'});
+        container.querySelector('.tradingview-widget-container').appendChild(s);
+      }
+    }
+    </script>
 
 
     <!-- Token page — full gallery -->
