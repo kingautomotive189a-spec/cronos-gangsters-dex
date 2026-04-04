@@ -8,6 +8,7 @@ import aiohttp
 import asyncio
 import subprocess
 import signal
+import sys
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional, Dict, Any
@@ -17,6 +18,17 @@ from datetime import datetime, timezone
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
+
+# Configure logging early (before it's used)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# Import mining and trading routers
+from mining_api import router as mining_router
+from trading_api import router as trading_router
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
@@ -77,6 +89,82 @@ class TokenData(BaseModel):
 @api_router.get("/")
 async def root():
     return {"message": "Hello World"}
+
+@api_router.get("/prices")
+async def get_token_prices():
+    """Proxy for CoinGecko prices to avoid CORS on frontend"""
+    cg_ids = "crypto-com-chain,dogecoin,shiba-inu,cosmos,ripple,pepe,ethereum,bitcoin,vvs-finance"
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"https://api.coingecko.com/api/v3/simple/price?ids={cg_ids}&vs_currencies=usd",
+                timeout=aiohttp.ClientTimeout(total=10)
+            ) as resp:
+                if resp.status == 200:
+                    data = await resp.json()
+                    # Map CoinGecko IDs to token symbols
+                    mapping = {
+                        "crypto-com-chain": "CRO",
+                        "dogecoin": "DOGE",
+                        "shiba-inu": "SHIB",
+                        "cosmos": "ATOM",
+                        "ripple": "XRP",
+                        "pepe": "PEPE",
+                        "ethereum": "WETH",
+                        "bitcoin": "WBTC",
+                        "vvs-finance": "VVS"
+                    }
+                    prices = {}
+                    for cg_id, symbol in mapping.items():
+                        if cg_id in data and "usd" in data[cg_id]:
+                            prices[symbol] = data[cg_id]["usd"]
+                    return {"prices": prices}
+    except Exception as e:
+        logging.error(f"CoinGecko price fetch failed: {e}")
+    # Fallback prices
+    return {"prices": {"CRO": 0.095, "DOGE": 0.18, "SHIB": 0.000014, "ATOM": 7.5, "XRP": 2.2, "PEPE": 0.000012, "WETH": 3800, "WBTC": 90000, "VVS": 0.0000025}}
+
+@api_router.get("/contract-code")
+async def get_contract_code():
+    """Return the smart contract code as plain text"""
+    code = """// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+interface IERC20 {
+    function transfer(address to, uint256 amount) external returns (bool);
+    function balanceOf(address account) external view returns (uint256);
+}
+
+contract GANGRewards {
+    address public owner;
+    IERC20 public token;
+    
+    constructor(address _token) {
+        owner = msg.sender;
+        token = IERC20(_token);
+    }
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
+    }
+    
+    function sendReward(address to, uint256 amount) external onlyOwner returns (bool) {
+        return token.transfer(to, amount);
+    }
+    
+    function getBalance() external view returns (uint256) {
+        return token.balanceOf(address(this));
+    }
+    
+    function withdrawAll() external onlyOwner {
+        uint256 balance = token.balanceOf(address(this));
+        require(balance > 0, "No tokens");
+        token.transfer(owner, balance);
+    }
+}"""
+    from fastapi.responses import PlainTextResponse
+    return PlainTextResponse(code)
 
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
@@ -173,6 +261,8 @@ async def record_price():
                         "market_cap": p.get("fdv"),
                     }
                     await db.price_history.insert_one(record)
+                    # Remove _id from response (MongoDB ObjectId is not JSON serializable)
+                    record.pop("_id", None)
                     return {"success": True, "data": record}
                 return {"success": False, "error": "No pairs found"}
     except Exception as e:
@@ -199,7 +289,10 @@ async def get_bot_config():
 async def get_bot_status():
     """Check if bot process is running"""
     global bot_process
-    is_running = bot_process is not None and bot_process.poll() is None
+    if bot_process is not None and bot_process.poll() is not None:
+        # Process has exited — clean up stale reference
+        bot_process = None
+    is_running = bot_process is not None
     return {
         "running": is_running,
         "pid": bot_process.pid if is_running else None
@@ -210,26 +303,38 @@ async def start_bot():
     """Start the Telegram bot in background"""
     global bot_process
     
+    # Clean up stale process reference
+    if bot_process is not None and bot_process.poll() is not None:
+        bot_process = None
+    
     # Check if already running
-    if bot_process is not None and bot_process.poll() is None:
+    if bot_process is not None:
         return {"success": False, "message": "Bot is already running", "pid": bot_process.pid}
+    
+    # Kill any leftover telegram_bot.py processes before starting fresh
+    try:
+        result = subprocess.run(["pkill", "-f", "telegram_bot.py"], capture_output=True)
+        await asyncio.sleep(1)
+    except Exception:
+        pass
     
     try:
         bot_script = ROOT_DIR / "telegram_bot.py"
         bot_process = subprocess.Popen(
-            ["/root/.venv/bin/python", str(bot_script)],
+            [sys.executable, str(bot_script)],
             cwd=str(ROOT_DIR),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             start_new_session=True
         )
-        await asyncio.sleep(2)  # Give it time to start
+        await asyncio.sleep(3)  # Give it time to start
         
         if bot_process.poll() is None:
             return {"success": True, "message": "Bot started", "pid": bot_process.pid}
         else:
             stderr = bot_process.stderr.read().decode() if bot_process.stderr else ""
-            return {"success": False, "message": f"Bot failed to start: {stderr}"}
+            bot_process = None
+            return {"success": False, "message": f"Bot failed to start: {stderr[:500]}"}
     except Exception as e:
         logger.error(f"Error starting bot: {e}")
         return {"success": False, "message": str(e)}
@@ -239,17 +344,41 @@ async def stop_bot():
     """Stop the Telegram bot"""
     global bot_process
     
-    if bot_process is None or bot_process.poll() is not None:
-        return {"success": False, "message": "Bot is not running"}
+    # Clean up stale process
+    if bot_process is not None and bot_process.poll() is not None:
+        bot_process = None
+        return {"success": True, "message": "Bot was already stopped"}
+    
+    if bot_process is None:
+        # Try to kill any orphaned telegram_bot.py processes
+        try:
+            subprocess.run(["pkill", "-f", "telegram_bot.py"], capture_output=True)
+        except Exception:
+            pass
+        return {"success": True, "message": "Bot stopped"}
     
     try:
+        # First try SIGTERM
         os.killpg(os.getpgid(bot_process.pid), signal.SIGTERM)
-        bot_process.wait(timeout=5)
+        try:
+            bot_process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            # Force kill if SIGTERM didn't work
+            os.killpg(os.getpgid(bot_process.pid), signal.SIGKILL)
+            bot_process.wait(timeout=3)
         bot_process = None
+        # Also clean up any orphans
+        subprocess.run(["pkill", "-f", "telegram_bot.py"], capture_output=True)
         return {"success": True, "message": "Bot stopped"}
     except Exception as e:
         logger.error(f"Error stopping bot: {e}")
-        return {"success": False, "message": str(e)}
+        # Force cleanup
+        try:
+            subprocess.run(["pkill", "-9", "-f", "telegram_bot.py"], capture_output=True)
+        except Exception:
+            pass
+        bot_process = None
+        return {"success": True, "message": "Bot force stopped"}
 
 @api_router.get("/bot/commands")
 async def get_bot_commands():
@@ -289,13 +418,75 @@ async def get_bot_commands():
     security_features = [
         {"feature": "Human Verification", "description": "Math captcha for new members"},
         {"feature": "Anti-Scam Filter", "description": "Detects scam patterns & suspicious links"},
-        {"feature": "Auto-Ban", "description": "2 warnings = automatic ban"},
+        {"feature": "Auto-Ban", "description": "3 warnings = automatic ban"},
         {"feature": "Link Whitelist", "description": "Only trusted domains allowed"},
     ]
     return {"commands": commands, "admin_commands": admin_commands, "security": security_features}
 
+import time as _time
+
+# Yahoo Finance price proxy for stocks/indices/commodities
+_yahoo_cache = {}
+_yahoo_cache_ts = 0
+
+YAHOO_SYMBOL_MAP = {
+    # Stocks
+    'AAPL': 'AAPL', 'TSLA': 'TSLA', 'NVDA': 'NVDA', 'MSFT': 'MSFT',
+    'AMZN': 'AMZN', 'GOOGL': 'GOOGL', 'META': 'META', 'AMD': 'AMD',
+    'NFLX': 'NFLX', 'COIN': 'COIN', 'DIS': 'DIS', 'PYPL': 'PYPL',
+    'BA': 'BA', 'JPM': 'JPM',
+    # Indices
+    'NAS100': '^NDX', 'SP500': '^GSPC', 'DJI': '^DJI',
+    # Commodities
+    'GOLD': 'GC=F', 'SILVER': 'SI=F', 'OIL': 'CL=F', 'NATGAS': 'NG=F',
+    # Crypto (Yahoo Finance tickers)
+    'BTC': 'BTC-USD', 'ETH': 'ETH-USD', 'BNB': 'BNB-USD', 'CRO': 'CRO-USD',
+    'SOL': 'SOL-USD', 'XRP': 'XRP-USD', 'DOGE': 'DOGE-USD', 'ADA': 'ADA-USD',
+    'AVAX': 'AVAX-USD', 'LINK': 'LINK-USD', 'ARB': 'ARB11841-USD', 'MATIC': 'MATIC-USD'
+}
+
+@api_router.get("/futures/prices")
+async def get_futures_prices(symbols: str = ""):
+    global _yahoo_cache, _yahoo_cache_ts
+    now = _time.time()
+    requested = [s.strip() for s in symbols.split(',') if s.strip()]
+    if not requested:
+        return {"prices": {}}
+    
+    # Return cache if fresh (30s)
+    if now - _yahoo_cache_ts < 30 and all(s in _yahoo_cache for s in requested):
+        return {"prices": {s: _yahoo_cache[s] for s in requested if s in _yahoo_cache}}
+    
+    results = {}
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    }
+    async with aiohttp.ClientSession() as session:
+        for sym in requested:
+            yahoo_sym = YAHOO_SYMBOL_MAP.get(sym, sym)
+            try:
+                url = f"https://query2.finance.yahoo.com/v8/finance/chart/{yahoo_sym}?interval=1d&range=1d"
+                async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=8)) as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        meta = data.get("chart", {}).get("result", [{}])[0].get("meta", {})
+                        price = meta.get("regularMarketPrice", 0)
+                        prev = meta.get("chartPreviousClose", price)
+                        change = ((price - prev) / prev * 100) if prev and prev > 0 else 0
+                        if price and price > 0:
+                            results[sym] = {"price": round(price, 4), "change": round(change, 2)}
+                            _yahoo_cache[sym] = results[sym]
+            except Exception as e:
+                logger.warning(f"Yahoo price fetch failed for {sym} ({yahoo_sym}): {e}")
+    
+    if results:
+        _yahoo_cache_ts = now
+    return {"prices": results}
+
 # Include the router in the main app
 app.include_router(api_router)
+app.include_router(mining_router, prefix="/api")
+app.include_router(trading_router, prefix="/api")
 
 app.add_middleware(
     CORSMiddleware,
@@ -305,12 +496,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

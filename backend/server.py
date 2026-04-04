@@ -423,6 +423,66 @@ async def get_bot_commands():
     ]
     return {"commands": commands, "admin_commands": admin_commands, "security": security_features}
 
+import time as _time
+
+# Yahoo Finance price proxy for stocks/indices/commodities
+_yahoo_cache = {}
+_yahoo_cache_ts = 0
+
+YAHOO_SYMBOL_MAP = {
+    # Stocks
+    'AAPL': 'AAPL', 'TSLA': 'TSLA', 'NVDA': 'NVDA', 'MSFT': 'MSFT',
+    'AMZN': 'AMZN', 'GOOGL': 'GOOGL', 'META': 'META', 'AMD': 'AMD',
+    'NFLX': 'NFLX', 'COIN': 'COIN', 'DIS': 'DIS', 'PYPL': 'PYPL',
+    'BA': 'BA', 'JPM': 'JPM',
+    # Indices
+    'NAS100': '^NDX', 'SP500': '^GSPC', 'DJI': '^DJI',
+    # Commodities
+    'GOLD': 'GC=F', 'SILVER': 'SI=F', 'OIL': 'CL=F', 'NATGAS': 'NG=F',
+    # Crypto (Yahoo Finance tickers)
+    'BTC': 'BTC-USD', 'ETH': 'ETH-USD', 'BNB': 'BNB-USD', 'CRO': 'CRO-USD',
+    'SOL': 'SOL-USD', 'XRP': 'XRP-USD', 'DOGE': 'DOGE-USD', 'ADA': 'ADA-USD',
+    'AVAX': 'AVAX-USD', 'LINK': 'LINK-USD', 'ARB': 'ARB11841-USD', 'MATIC': 'MATIC-USD'
+}
+
+@api_router.get("/futures/prices")
+async def get_futures_prices(symbols: str = ""):
+    global _yahoo_cache, _yahoo_cache_ts
+    now = _time.time()
+    requested = [s.strip() for s in symbols.split(',') if s.strip()]
+    if not requested:
+        return {"prices": {}}
+    
+    # Return cache if fresh (30s)
+    if now - _yahoo_cache_ts < 30 and all(s in _yahoo_cache for s in requested):
+        return {"prices": {s: _yahoo_cache[s] for s in requested if s in _yahoo_cache}}
+    
+    results = {}
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    }
+    async with aiohttp.ClientSession() as session:
+        for sym in requested:
+            yahoo_sym = YAHOO_SYMBOL_MAP.get(sym, sym)
+            try:
+                url = f"https://query2.finance.yahoo.com/v8/finance/chart/{yahoo_sym}?interval=1d&range=1d"
+                async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=8)) as resp:
+                    if resp.status == 200:
+                        data = await resp.json()
+                        meta = data.get("chart", {}).get("result", [{}])[0].get("meta", {})
+                        price = meta.get("regularMarketPrice", 0)
+                        prev = meta.get("chartPreviousClose", price)
+                        change = ((price - prev) / prev * 100) if prev and prev > 0 else 0
+                        if price and price > 0:
+                            results[sym] = {"price": round(price, 4), "change": round(change, 2)}
+                            _yahoo_cache[sym] = results[sym]
+            except Exception as e:
+                logger.warning(f"Yahoo price fetch failed for {sym} ({yahoo_sym}): {e}")
+    
+    if results:
+        _yahoo_cache_ts = now
+    return {"prices": results}
+
 # Include the router in the main app
 app.include_router(api_router)
 app.include_router(mining_router, prefix="/api")
@@ -435,6 +495,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
