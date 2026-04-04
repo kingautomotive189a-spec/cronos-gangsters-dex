@@ -3569,7 +3569,7 @@ function toggleNavMenu() {
       </div>
 
       <!-- Open Position Button -->
-      <div style="font-size:11px;color:var(--gold);text-align:center;margin-bottom:8px;">Trading fee: 0.1% open + 0.1% close</div>
+      <div style="font-size:11px;color:var(--gold);text-align:center;margin-bottom:8px;">Trading fee: 0.3% open + 0.3% close</div>
       <button id="futuresOpenBtn" data-testid="futures-open-btn" onclick="openFuturesPosition()" style="width:100%;padding:16px;border-radius:12px;border:none;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;cursor:pointer;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;transition:all .2s;">
         OPEN LONG POSITION
       </button>
@@ -3655,8 +3655,8 @@ function toggleNavMenu() {
         <div style="background:rgba(255,140,0,0.08);border:1px solid rgba(255,140,0,0.25);border-radius:10px;padding:14px;">
           <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:#ff8c00;letter-spacing:1px;margin-bottom:6px;">FEES & LIMITS</div>
           <div style="font-size:12px;color:var(--text);line-height:1.6;">
-            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Opening Fee</span><span>0.1%</span></div>
-            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Closing Fee</span><span>0.1%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Opening Fee</span><span>0.3%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Closing Fee</span><span>0.3%</span></div>
             <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Max Leverage</span><span>50x</span></div>
             <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Max Payout</span><span>50x margin</span></div>
             <div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--muted);">Liquidation</span><span>When losses exceed margin</span></div>
@@ -15256,7 +15256,7 @@ function openFuturesPosition() {
   };
 
   // Opening fee: 0.1% goes to pool
-  const openingFee = amt * 0.001;
+  const openingFee = amt * 0.003;
   position.amount = amt - openingFee;
   futuresState.poolBalance += openingFee;
 
@@ -15286,7 +15286,7 @@ function closeFuturesPosition(id) {
   const finalPnl = Math.max(pnlGang, -pos.amount);
 
   // Closing fee: 0.1% of position amount goes to pool
-  const closingFee = pos.amount * 0.001;
+  const closingFee = pos.amount * 0.003;
   const netPnl = finalPnl - closingFee;
 
   // Update pool: pool pays winners, collects from losers + fees
