@@ -14711,7 +14711,7 @@ async function scanWallet() {
                 </div>
                 <div style="text-align:right;">
                   <div style="font-size:14px;color:var(--green);font-weight:700;">${pendingAmt.toFixed(4)} VVS</div>
-                  <div style="font-size:11px;color:var(--muted);">pending</div>
+                  <a href="https://vvs.finance/farms" target="_blank" style="display:inline-block;margin-top:4px;font-size:10px;color:#00d4ff;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:6px;padding:3px 10px;text-decoration:none;">MANAGE ON VVS</a>
                 </div>
               </div>`);
           }
@@ -14724,6 +14724,46 @@ async function scanWallet() {
         <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--muted);letter-spacing:1px;margin:12px 0 6px;border-top:1px solid var(--border);padding-top:10px;">VVS FINANCE</div>
         ${vvsFarmHTML.join('')}`; 
     }
+
+    // ── 2C. FERRO PROTOCOL ──
+    try {
+      const FERRO_POOL = '0xE1A2a81C4Ad7A547422d22B8Ef7bE2409f062CE3';
+      const ferroABI = ['function balanceOf(address) view returns (uint256)'];
+      const ferro = new ethers.Contract(FERRO_POOL, ferroABI, rp);
+      const ferroBal = await ferro.balanceOf(addr);
+      const ferroAmt = parseFloat(ethers.formatUnits(ferroBal, 18));
+      if (ferroAmt > 0.0001) {
+        document.getElementById('trackerFarms').innerHTML += `
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--muted);letter-spacing:1px;margin:12px 0 6px;border-top:1px solid var(--border);padding-top:10px;">FERRO PROTOCOL</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;">
+            <div>
+              <div style="font-size:14px;color:var(--text);font-weight:600;">Ferro Pool</div>
+              <div style="font-size:11px;color:var(--muted);">${ferroAmt.toFixed(6)} LP</div>
+            </div>
+            <a href="https://ferroprotocol.com/#/pool" target="_blank" style="font-size:10px;color:#00d4ff;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:6px;padding:3px 10px;text-decoration:none;">MANAGE ON FERRO</a>
+          </div>`;
+      }
+    } catch {}
+
+    // ── 2D. TECTONIC LENDING ──
+    try {
+      const TONIC_TCROI = '0xeAdf7c01DA7E93FdB5f16B0aa9ee85f978e89E95';
+      const tonicABI = ['function balanceOf(address) view returns (uint256)'];
+      const tonic = new ethers.Contract(TONIC_TCROI, tonicABI, rp);
+      const tonicBal = await tonic.balanceOf(addr);
+      const tonicAmt = parseFloat(ethers.formatUnits(tonicBal, 8));
+      if (tonicAmt > 0.0001) {
+        document.getElementById('trackerFarms').innerHTML += `
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--muted);letter-spacing:1px;margin:12px 0 6px;border-top:1px solid var(--border);padding-top:10px;">TECTONIC LENDING</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;">
+            <div>
+              <div style="font-size:14px;color:var(--text);font-weight:600;">Tectonic Supply</div>
+              <div style="font-size:11px;color:var(--muted);">${tonicAmt.toFixed(4)} tCRO</div>
+            </div>
+            <a href="https://app.tectonic.finance/markets" target="_blank" style="font-size:10px;color:#00d4ff;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:6px;padding:3px 10px;text-decoration:none;">MANAGE ON TECTONIC</a>
+          </div>`;
+      }
+    } catch {}
 
     // ── 3. STAKED GANG ──
     const stakeHTML = [];
