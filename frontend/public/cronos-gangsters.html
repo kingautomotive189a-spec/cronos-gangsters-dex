@@ -3348,19 +3348,47 @@
     </div>
 
     <!-- Token Pair Selector -->
-    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;" id="futuresPairBar">
-      <button class="futures-pair active" data-pair="BTC" onclick="selectFuturesPair('BTC')" style="background:#ff8c00;color:#000;border:none;padding:8px 16px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;white-space:nowrap;">BTC/USD</button>
-      <button class="futures-pair" data-pair="ETH" onclick="selectFuturesPair('ETH')">ETH/USD</button>
-      <button class="futures-pair" data-pair="BNB" onclick="selectFuturesPair('BNB')">BNB/USD</button>
-      <button class="futures-pair" data-pair="CRO" onclick="selectFuturesPair('CRO')">CRO/USD</button>
-      <button class="futures-pair" data-pair="SOL" onclick="selectFuturesPair('SOL')">SOL/USD</button>
-      <button class="futures-pair" data-pair="XRP" onclick="selectFuturesPair('XRP')">XRP/USD</button>
-      <button class="futures-pair" data-pair="DOGE" onclick="selectFuturesPair('DOGE')">DOGE/USD</button>
-      <button class="futures-pair" data-pair="ADA" onclick="selectFuturesPair('ADA')">ADA/USD</button>
-      <button class="futures-pair" data-pair="AVAX" onclick="selectFuturesPair('AVAX')">AVAX/USD</button>
-      <button class="futures-pair" data-pair="LINK" onclick="selectFuturesPair('LINK')">LINK/USD</button>
-      <button class="futures-pair" data-pair="ARB" onclick="selectFuturesPair('ARB')">ARB/USD</button>
-      <button class="futures-pair" data-pair="MATIC" onclick="selectFuturesPair('MATIC')">MATIC/USD</button>
+    <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">CRYPTO</div>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px;" id="futuresPairBar">
+      <button class="futures-pair active" data-pair="BTC" onclick="selectFuturesPair('BTC')">BTC</button>
+      <button class="futures-pair" data-pair="ETH" onclick="selectFuturesPair('ETH')">ETH</button>
+      <button class="futures-pair" data-pair="BNB" onclick="selectFuturesPair('BNB')">BNB</button>
+      <button class="futures-pair" data-pair="CRO" onclick="selectFuturesPair('CRO')">CRO</button>
+      <button class="futures-pair" data-pair="SOL" onclick="selectFuturesPair('SOL')">SOL</button>
+      <button class="futures-pair" data-pair="XRP" onclick="selectFuturesPair('XRP')">XRP</button>
+      <button class="futures-pair" data-pair="DOGE" onclick="selectFuturesPair('DOGE')">DOGE</button>
+      <button class="futures-pair" data-pair="ADA" onclick="selectFuturesPair('ADA')">ADA</button>
+      <button class="futures-pair" data-pair="AVAX" onclick="selectFuturesPair('AVAX')">AVAX</button>
+      <button class="futures-pair" data-pair="LINK" onclick="selectFuturesPair('LINK')">LINK</button>
+      <button class="futures-pair" data-pair="ARB" onclick="selectFuturesPair('ARB')">ARB</button>
+      <button class="futures-pair" data-pair="MATIC" onclick="selectFuturesPair('MATIC')">MATIC</button>
+    </div>
+    <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">STOCKS</div>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px;">
+      <button class="futures-pair" data-pair="AAPL" onclick="selectFuturesPair('AAPL')">AAPL</button>
+      <button class="futures-pair" data-pair="TSLA" onclick="selectFuturesPair('TSLA')">TSLA</button>
+      <button class="futures-pair" data-pair="NVDA" onclick="selectFuturesPair('NVDA')">NVDA</button>
+      <button class="futures-pair" data-pair="MSFT" onclick="selectFuturesPair('MSFT')">MSFT</button>
+      <button class="futures-pair" data-pair="AMZN" onclick="selectFuturesPair('AMZN')">AMZN</button>
+      <button class="futures-pair" data-pair="GOOGL" onclick="selectFuturesPair('GOOGL')">GOOGL</button>
+      <button class="futures-pair" data-pair="META" onclick="selectFuturesPair('META')">META</button>
+      <button class="futures-pair" data-pair="AMD" onclick="selectFuturesPair('AMD')">AMD</button>
+      <button class="futures-pair" data-pair="NFLX" onclick="selectFuturesPair('NFLX')">NFLX</button>
+      <button class="futures-pair" data-pair="COIN" onclick="selectFuturesPair('COIN')">COIN</button>
+      <button class="futures-pair" data-pair="DIS" onclick="selectFuturesPair('DIS')">DIS</button>
+      <button class="futures-pair" data-pair="PYPL" onclick="selectFuturesPair('PYPL')">PYPL</button>
+      <button class="futures-pair" data-pair="BA" onclick="selectFuturesPair('BA')">BA</button>
+      <button class="futures-pair" data-pair="JPM" onclick="selectFuturesPair('JPM')">JPM</button>
+    </div>
+    <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">INDICES &amp; COMMODITIES</div>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;">
+      <button class="futures-pair" data-pair="NAS100" onclick="selectFuturesPair('NAS100')">NASDAQ 100</button>
+      <button class="futures-pair" data-pair="SP500" onclick="selectFuturesPair('SP500')">S&amp;P 500</button>
+      <button class="futures-pair" data-pair="DJI" onclick="selectFuturesPair('DJI')">DOW JONES</button>
+      <button class="futures-pair" data-pair="GOLD" onclick="selectFuturesPair('GOLD')">GOLD</button>
+      <button class="futures-pair" data-pair="SILVER" onclick="selectFuturesPair('SILVER')">SILVER</button>
+      <button class="futures-pair" data-pair="OIL" onclick="selectFuturesPair('OIL')">OIL</button>
+      <button class="futures-pair" data-pair="NATGAS" onclick="selectFuturesPair('NATGAS')">NAT GAS</button>
     </div>
     <style>
       .futures-pair{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:all .2s;}
@@ -14776,18 +14804,42 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').c
 // FEATURE: GANG FUTURES — LEVERAGE TRADING
 // ══════════════════════════════════════════════════════════════
 const FUTURES_PAIRS = {
-  BTC: { symbol: 'BTCUSDT', name: 'BTC/USD', coingecko: 'bitcoin' },
-  ETH: { symbol: 'ETHUSDT', name: 'ETH/USD', coingecko: 'ethereum' },
-  BNB: { symbol: 'BNBUSDT', name: 'BNB/USD', coingecko: 'binancecoin' },
-  CRO: { symbol: 'CROUSDT', name: 'CRO/USD', coingecko: 'crypto-com-chain' },
-  SOL: { symbol: 'SOLUSDT', name: 'SOL/USD', coingecko: 'solana' },
-  XRP: { symbol: 'XRPUSDT', name: 'XRP/USD', coingecko: 'ripple' },
-  DOGE: { symbol: 'DOGEUSDT', name: 'DOGE/USD', coingecko: 'dogecoin' },
-  ADA: { symbol: 'ADAUSDT', name: 'ADA/USD', coingecko: 'cardano' },
-  AVAX: { symbol: 'AVAXUSDT', name: 'AVAX/USD', coingecko: 'avalanche-2' },
-  LINK: { symbol: 'LINKUSDT', name: 'LINK/USD', coingecko: 'chainlink' },
-  ARB: { symbol: 'ARBUSDT', name: 'ARB/USD', coingecko: 'arbitrum' },
-  MATIC: { symbol: 'MATICUSDT', name: 'MATIC/USD', coingecko: 'matic-network' }
+  // Crypto
+  BTC: { symbol: 'BTCUSDT', tv: 'BINANCE:BTCUSDT', name: 'BTC/USD', type: 'crypto' },
+  ETH: { symbol: 'ETHUSDT', tv: 'BINANCE:ETHUSDT', name: 'ETH/USD', type: 'crypto' },
+  BNB: { symbol: 'BNBUSDT', tv: 'BINANCE:BNBUSDT', name: 'BNB/USD', type: 'crypto' },
+  CRO: { symbol: 'CROUSDT', tv: 'CRYPTO:CROUSD', name: 'CRO/USD', type: 'crypto' },
+  SOL: { symbol: 'SOLUSDT', tv: 'BINANCE:SOLUSDT', name: 'SOL/USD', type: 'crypto' },
+  XRP: { symbol: 'XRPUSDT', tv: 'BINANCE:XRPUSDT', name: 'XRP/USD', type: 'crypto' },
+  DOGE: { symbol: 'DOGEUSDT', tv: 'BINANCE:DOGEUSDT', name: 'DOGE/USD', type: 'crypto' },
+  ADA: { symbol: 'ADAUSDT', tv: 'BINANCE:ADAUSDT', name: 'ADA/USD', type: 'crypto' },
+  AVAX: { symbol: 'AVAXUSDT', tv: 'BINANCE:AVAXUSDT', name: 'AVAX/USD', type: 'crypto' },
+  LINK: { symbol: 'LINKUSDT', tv: 'BINANCE:LINKUSDT', name: 'LINK/USD', type: 'crypto' },
+  ARB: { symbol: 'ARBUSDT', tv: 'BINANCE:ARBUSDT', name: 'ARB/USD', type: 'crypto' },
+  MATIC: { symbol: 'MATICUSDT', tv: 'BINANCE:MATICUSDT', name: 'MATIC/USD', type: 'crypto' },
+  // Stocks
+  AAPL: { symbol: 'AAPL', tv: 'NASDAQ:AAPL', name: 'APPLE', type: 'stock' },
+  TSLA: { symbol: 'TSLA', tv: 'NASDAQ:TSLA', name: 'TESLA', type: 'stock' },
+  NVDA: { symbol: 'NVDA', tv: 'NASDAQ:NVDA', name: 'NVIDIA', type: 'stock' },
+  MSFT: { symbol: 'MSFT', tv: 'NASDAQ:MSFT', name: 'MICROSOFT', type: 'stock' },
+  AMZN: { symbol: 'AMZN', tv: 'NASDAQ:AMZN', name: 'AMAZON', type: 'stock' },
+  GOOGL: { symbol: 'GOOGL', tv: 'NASDAQ:GOOGL', name: 'GOOGLE', type: 'stock' },
+  META: { symbol: 'META', tv: 'NASDAQ:META', name: 'META', type: 'stock' },
+  AMD: { symbol: 'AMD', tv: 'NASDAQ:AMD', name: 'AMD', type: 'stock' },
+  NFLX: { symbol: 'NFLX', tv: 'NASDAQ:NFLX', name: 'NETFLIX', type: 'stock' },
+  COIN: { symbol: 'COIN', tv: 'NASDAQ:COIN', name: 'COINBASE', type: 'stock' },
+  DIS: { symbol: 'DIS', tv: 'NYSE:DIS', name: 'DISNEY', type: 'stock' },
+  PYPL: { symbol: 'PYPL', tv: 'NASDAQ:PYPL', name: 'PAYPAL', type: 'stock' },
+  BA: { symbol: 'BA', tv: 'NYSE:BA', name: 'BOEING', type: 'stock' },
+  JPM: { symbol: 'JPM', tv: 'NYSE:JPM', name: 'JP MORGAN', type: 'stock' },
+  // Indices & Commodities
+  NAS100: { symbol: 'NAS100', tv: 'PEPPERSTONE:NAS100', name: 'NASDAQ 100', type: 'index' },
+  SP500: { symbol: 'SP500', tv: 'PEPPERSTONE:US500', name: 'S&P 500', type: 'index' },
+  DJI: { symbol: 'DJI', tv: 'TVC:DJI', name: 'DOW JONES', type: 'index' },
+  GOLD: { symbol: 'GOLD', tv: 'TVC:GOLD', name: 'GOLD', type: 'commodity' },
+  SILVER: { symbol: 'SILVER', tv: 'TVC:SILVER', name: 'SILVER', type: 'commodity' },
+  OIL: { symbol: 'OIL', tv: 'TVC:USOIL', name: 'CRUDE OIL', type: 'commodity' },
+  NATGAS: { symbol: 'NATGAS', tv: 'TVC:NATGAS', name: 'NATURAL GAS', type: 'commodity' }
 };
 
 let futuresState = {
