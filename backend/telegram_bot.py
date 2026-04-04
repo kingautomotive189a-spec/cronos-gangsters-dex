@@ -132,7 +132,7 @@ FUTURES_INFO = {
         "Indices": ["NAS100", "SP500", "DJI"],
         "Commodities": ["GOLD", "SILVER", "OIL", "NATGAS"],
     },
-    "leverage": ["2x", "5x", "10x", "25x", "50x", "100x"],
+    "leverage": ["5x", "10x", "15x", "20x"],
     "fee": "0.3%",
     "currencies": ["GANG", "CRO"],
 }
@@ -374,7 +374,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "━━━ *NEW — PHASE 8* ━━━\n\n"
         "📈 *GANG FUTURES* — 33 tradeable pairs!\n"
         "   Crypto, Stocks, Indices & Commodities\n"
-        "   Up to 100x leverage | 0.3% fees\n"
+        "   Up to 20x leverage | 0.3% fees\n"
         "   Trade with GANG or CRO!\n\n"
         "🔍 *GANG TRACKER* — Multi-chain wallet scanner\n"
         "   Scan any wallet across 5 chains!\n\n"
@@ -412,7 +412,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = (
         "📖 *Cronos Gangsters Bot Commands*\n\n"
         "*🆕 Phase 8 — NEW:*\n"
-        "• /futures - GANG FUTURES (33 pairs, 100x leverage)\n"
+        "• /futures - GANG FUTURES (33 pairs, 20x leverage)\n"
         "• /tracker - GANG TRACKER (multi-chain scanner)\n"
         "• /roadmap - Project roadmap & phases\n\n"
         "*💰 Token & Price:*\n"
@@ -426,7 +426,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "• /portfolio - View your portfolio\n\n"
         "*⛏ Mining & Gaming:*\n"
         "• /mining - Mining Hub (earn $GANG daily!)\n"
-        "• /trading - Leverage Trading (up to 100x)\n\n"
+        "• /trading - Leverage Trading (up to 20x)\n\n"
         "*🌾 DeFi Features:*\n"
         "• /farms - Yield farms & APRs\n"
         "• /vaults - Auto-compound vaults\n"
@@ -626,7 +626,7 @@ async def shill(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = (
         f"🔫 *$GANG - Cronos Gangsters*\n\n"
         f"The most gangster DEX on Cronos!{price_line}\n\n"
-        "📈 GANG FUTURES — 33 pairs, 100x leverage!\n"
+        "📈 GANG FUTURES — 33 pairs, 20x leverage!\n"
         "   Crypto + Stocks + Indices + Commodities!\n"
         "🔍 GANG TRACKER — Multi-chain wallet scanner!\n"
         "⛏ Mine 5 $GANG daily + 19 Casino Games!\n"
@@ -1081,11 +1081,11 @@ async def trading_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = (
         "⚡ *LEVERAGE TRADING*\n"
         "━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "📈 *Trade crypto with up to 100x LEVERAGE!*\n\n"
+        "📈 *Trade crypto with up to 20x LEVERAGE!*\n\n"
         "1️⃣ Mine $GANG from the Mining Hub (free!)\n"
         "2️⃣ Pick a pair — BTC, ETH, SOL, DOGE, PEPE & more\n"
         "3️⃣ Go LONG (price up) or SHORT (price down)\n"
-        "4️⃣ Set leverage: 10x, 25x, 50x, or 100x\n"
+        "4️⃣ Set leverage: 5x, 10x, 15x, or 20x\n"
         "5️⃣ Close anytime to lock in profits!\n\n"
         "📊 *Live TradingView charts for every pair!*\n"
         "💰 0.3% trading fee | All fees standardized\n\n"
@@ -1226,7 +1226,7 @@ async def futures_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = (
         "📈 *GANG FUTURES*\n"
         "━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "Trade 33 pairs with up to 100x leverage!\n"
+        "Trade 33 pairs with up to 20x leverage!\n"
         "Crypto, Stocks, Indices & Commodities.\n\n"
         "━━━ *TRADEABLE PAIRS* ━━━\n\n"
         "💎 *Crypto (12):*\n"
@@ -1242,7 +1242,7 @@ async def futures_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "━━━ *HOW IT WORKS* ━━━\n\n"
         "1️⃣ Choose a pair (e.g. TSLA, GOLD, BTC)\n"
         "2️⃣ Pick LONG or SHORT\n"
-        "3️⃣ Set leverage: 2x to 100x\n"
+        "3️⃣ Set leverage: 5x to 20x\n"
         "4️⃣ Choose currency: *GANG* or *CRO*\n"
         "5️⃣ Open position & watch live chart\n"
         "6️⃣ Close anytime to take profit!\n\n"
@@ -1322,7 +1322,7 @@ async def roadmap_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Auto-Compound Vaults, Sniper Bot, LP Locker\n\n"
         "✅ *Phase 8 — COMPLETED* 🔥\n"
         "━━━━━━━━━━━━━━━━━━━━━\n"
-        "📈 GANG FUTURES — 33 pairs, 100x leverage\n"
+        "📈 GANG FUTURES — 33 pairs, 20x leverage\n"
         "   Crypto + Stocks + Indices + Commodities\n"
         "   Dual currency: GANG & CRO pools\n"
         "🔍 GANG TRACKER — Multi-chain wallet scanner\n"
@@ -1902,22 +1902,22 @@ async def _cb_menu_trading(query, context):
     msg = (
         "⚡ *LEVERAGE TRADING*\n"
         "━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "📈 *Trade crypto with up to 100x LEVERAGE!*\n\n"
+        "📈 *Trade crypto with up to 20x LEVERAGE!*\n\n"
         "━━━ *HOW IT WORKS* ━━━\n\n"
         "1️⃣ *MINE $GANG* — First earn $GANG from the Mining Hub (free daily mining!)\n\n"
         "2️⃣ *PICK A PAIR* — Choose from 8 major crypto pairs. Each has a LIVE chart with real prices!\n\n"
         "3️⃣ *GO LONG OR SHORT*\n"
         "   • LONG = You think the price goes UP 📈\n"
         "   • SHORT = You think the price goes DOWN 📉\n\n"
-        "4️⃣ *SET YOUR LEVERAGE* — 10x, 25x, 50x, or 100x\n"
+        "4️⃣ *SET YOUR LEVERAGE* — 5x, 10x, 15x, or 20x\n"
         "   • 10x = Your gains (and losses) are multiplied by 10\n"
-        "   • 100x = MAXIMUM risk & reward!\n\n"
+        "   • 20x = MAXIMUM risk & reward!\n\n"
         "5️⃣ *ENTER YOUR BET* — How much $GANG you want to risk\n\n"
         "6️⃣ *CLOSE WHEN READY* — Close your position anytime to lock in profits (or cut losses)\n\n"
         "━━━ *EXAMPLE* ━━━\n\n"
-        "You bet 50 $GANG on BTC LONG at 25x leverage:\n"
-        "• If BTC goes up 4% → You make +50 $GANG profit! (4% × 25 = 100%)\n"
-        "• If BTC goes down 4% → You lose your 50 $GANG (liquidated)\n\n"
+        "You bet 50 $GANG on BTC LONG at 20x leverage:\n"
+        "• If BTC goes up 5% → You make +50 $GANG profit! (5% x 20 = 100%)\n"
+        "• If BTC goes down 5% → You lose your 50 $GANG (liquidated)\n\n"
         "━━━ *AVAILABLE PAIRS* ━━━\n\n"
         "₿ BTC/USD | ⟠ ETH/USD | 🔷 CRO/USD\n"
         "◎ SOL/USD | 🐕 DOGE/USD | 🐸 PEPE/USD\n"
@@ -2104,7 +2104,7 @@ async def _cb_menu_faq(query, context):
         "*Referrals?* Share link → earn 5% of friend's rewards.\n\n"
         "*Wallet?* MetaMask, Trust, Crypto.com, Rabby, OKX. Cronos chain.\n\n"
         "*Fees?* All platform fees are exactly 0.3% (Swap, Futures, LP).\n\n"
-        "*GANG FUTURES?* 33 pairs (Crypto, Stocks, Indices, Commodities). Up to 100x leverage. Trade with GANG or CRO."
+        "*GANG FUTURES?* 33 pairs (Crypto, Stocks, Indices, Commodities). Up to 20x leverage. Trade with GANG or CRO."
     )
     kb = InlineKeyboardMarkup([
         [InlineKeyboardButton("📖 Full FAQ", url=f"{DEX_LINK}#faq")],
@@ -2118,7 +2118,7 @@ async def _cb_menu_futures(query, context):
     msg = (
         "📈 *GANG FUTURES*\n"
         "━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "Trade 33 pairs with up to 100x leverage!\n\n"
+        "Trade 33 pairs with up to 20x leverage!\n\n"
         "💎 *Crypto:* BTC, ETH, BNB, CRO, SOL, XRP,\n"
         "DOGE, ADA, AVAX, LINK, ARB, MATIC\n\n"
         "📊 *Stocks:* AAPL, TSLA, NVDA, MSFT, AMZN,\n"
@@ -2127,7 +2127,7 @@ async def _cb_menu_futures(query, context):
         "🛢 *Commodities:* GOLD, SILVER, OIL, NATGAS\n\n"
         "💰 *Dual Currency:* Trade with GANG or CRO!\n"
         "📊 Live charts | 0.3% fees\n"
-        "⚡ Leverage: 2x, 5x, 10x, 25x, 50x, 100x"
+        "⚡ Leverage: 5x, 10x, 15x, 20x"
     )
     kb = InlineKeyboardMarkup([
         [InlineKeyboardButton("📈 Open GANG FUTURES", url=f"{DEX_LINK}#futures")],
@@ -2462,7 +2462,7 @@ async def post_price_update(context: ContextTypes.DEFAULT_TYPE):
                 f"💎 *MCap:* {format_number(market_cap)}\n"
                 f"💧 *Liquidity:* {format_number(liquidity)}\n\n"
                 f"━━━ *PHASE 8 LIVE* ━━━\n\n"
-                f"📈 *GANG FUTURES* — 33 pairs, up to 100x!\n"
+                f"📈 *GANG FUTURES* — 33 pairs, up to 20x!\n"
                 f"   Crypto + Stocks + Indices + Commodities\n"
                 f"   Trade with GANG or CRO | 0.3% fees\n\n"
                 f"🔍 *GANG TRACKER* — Multi-chain scanner\n"
@@ -2556,7 +2556,7 @@ async def on_bot_startup(application: Application):
             "The Cronos Gangsters Bot is online!\n\n"
             f"📋 *Contract:*\n`{CONTRACT}`\n\n"
             "━━━ *PHASE 8 IS HERE* ━━━\n\n"
-            "📈 *GANG FUTURES* — 33 pairs, up to 100x!\n"
+            "📈 *GANG FUTURES* — 33 pairs, up to 20x!\n"
             "   Crypto + Stocks + Indices + Commodities\n"
             "   Trade with GANG or CRO!\n\n"
             "🔍 *GANG TRACKER* — Multi-chain wallet scanner\n"

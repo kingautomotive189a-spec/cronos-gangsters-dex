@@ -386,7 +386,7 @@ async def get_bot_commands():
     commands = [
         {"command": "/start", "description": "Welcome message & project info"},
         {"command": "/help", "description": "Show all available commands"},
-        {"command": "/futures", "description": "GANG FUTURES — 33 pairs, 100x leverage"},
+        {"command": "/futures", "description": "GANG FUTURES — 33 pairs, up to 20x leverage"},
         {"command": "/tracker", "description": "GANG TRACKER — Multi-chain wallet scanner"},
         {"command": "/roadmap", "description": "Project roadmap & phases"},
         {"command": "/price", "description": "Current $GANG price with full stats"},
@@ -413,7 +413,7 @@ async def get_bot_commands():
         {"command": "/liquidity", "description": "Provide liquidity & earn fees"},
         {"command": "/portfolio", "description": "View your portfolio"},
         {"command": "/mining", "description": "Mining Hub — earn $GANG daily"},
-        {"command": "/trading", "description": "Leverage Trading (up to 100x)"},
+        {"command": "/trading", "description": "Leverage Trading (up to 20x)"},
         {"command": "/contracts", "description": "All verified contract addresses"},
         {"command": "/faq", "description": "Common questions answered"},
     ]

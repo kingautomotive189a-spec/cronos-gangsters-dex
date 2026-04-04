@@ -2104,7 +2104,7 @@ function toggleNavMenu() {
           <div style="display:flex;flex-direction:column;gap:8px;">
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Mining Hub — Tap to Earn $GANG daily</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> 19 Casino Games (Slots, Crash, Roulette, Poker & more)</div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Leverage Trading (8 pairs, up to 100x)</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Leverage Trading (8 pairs, up to 20x)</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Horse & Car Racing Games</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Deploy Farms (XRP, PEPE, DOGE)</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Bot Dashboard with Start/Stop controls</div>
@@ -2125,7 +2125,7 @@ function toggleNavMenu() {
           <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--green);margin-bottom:6px;">PHASE 8 — COMPLETE</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">GANG FUTURES &amp; BEYOND</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> GANG FUTURES — Leverage Trading (up to 50x)</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> GANG FUTURES — Leverage Trading (up to 20x)</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> 12 Crypto Pairs (BTC, ETH, SOL, CRO, BNB & more)</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> 14 Stock Pairs (AAPL, TSLA, NVDA, MSFT, AMZN, GOOGL, META & more)</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> 7 Indices &amp; Commodities (NASDAQ 100, S&amp;P 500, Gold, Silver, Oil)</div>
@@ -3641,11 +3641,10 @@ function toggleNavMenu() {
       <div style="margin-bottom:14px;">
         <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">LEVERAGE</div>
         <div style="display:flex;gap:4px;" id="futuresLevBar">
-          <button class="lev-btn active" data-lev="2" onclick="setFuturesLev(2)">2x</button>
-          <button class="lev-btn" data-lev="5" onclick="setFuturesLev(5)">5x</button>
+          <button class="lev-btn active" data-lev="5" onclick="setFuturesLev(5)">5x</button>
           <button class="lev-btn" data-lev="10" onclick="setFuturesLev(10)">10x</button>
+          <button class="lev-btn" data-lev="15" onclick="setFuturesLev(15)">15x</button>
           <button class="lev-btn" data-lev="20" onclick="setFuturesLev(20)">20x</button>
-          <button class="lev-btn" data-lev="50" onclick="setFuturesLev(50)">50x</button>
         </div>
         <style>.lev-btn{flex:1;padding:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;cursor:pointer;transition:all .2s;}.lev-btn.active{background:#ff8c00;color:#000;border-color:#ff8c00;}.lev-btn:hover{border-color:rgba(255,140,0,0.5);}</style>
       </div>
@@ -3771,7 +3770,7 @@ function toggleNavMenu() {
 
         <div class="faq-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
           <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">3. SET YOUR LEVERAGE</div>
-          <div style="font-size:13px;color:var(--text);line-height:1.5;">Choose from 2x to 50x leverage. Higher leverage = bigger profits but also bigger risk. At 10x, a 1% price move gives you a 10% gain (or loss). <span style="color:var(--red);">Be careful with high leverage!</span></div>
+          <div style="font-size:13px;color:var(--text);line-height:1.5;">Choose from 5x to 20x leverage. Higher leverage = bigger profits but also bigger risk. At 10x, a 1% price move gives you a 10% gain (or loss). <span style="color:var(--red);">Be careful with high leverage!</span></div>
         </div>
 
         <div class="faq-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
@@ -3789,8 +3788,8 @@ function toggleNavMenu() {
           <div style="font-size:12px;color:var(--text);line-height:1.6;">
             <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Opening Fee</span><span>0.3%</span></div>
             <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Closing Fee</span><span>0.3%</span></div>
-            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Max Leverage</span><span>50x</span></div>
-            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Max Payout</span><span>50x margin</span></div>
+            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Max Leverage</span><span>20x</span></div>
+            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Max Payout</span><span>20x margin</span></div>
             <div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--muted);">Liquidation</span><span>When losses exceed margin</span></div>
           </div>
         </div>
@@ -15131,7 +15130,7 @@ const FUTURES_PAIRS = {
 let futuresState = {
   pair: 'BTC',
   side: 'long',
-  leverage: 2,
+  leverage: 5,
   currency: 'GANG',
   prices: {},
   positions: [],
