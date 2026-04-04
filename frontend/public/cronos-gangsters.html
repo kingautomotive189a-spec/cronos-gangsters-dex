@@ -570,44 +570,7 @@
   </div>
 
 
-  <!-- ── OWNER TREASURY BANNER (only shows for owner wallet) ── -->
-  <div id="treasuryBanner" style="display:none;margin-bottom:20px;background:linear-gradient(135deg,rgba(212,160,23,0.12),rgba(39,174,96,0.06));border:2px solid rgba(212,160,23,0.5);border-radius:16px;padding:18px 20px;">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-      <div style="font-size:22px;">💰</div>
-      <div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);letter-spacing:2px;">OWNER TREASURY</div>
-        <div style="font-size:11px;color:var(--muted);">Your platform fees — swap, NFT &amp; marketplace</div>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
-      <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(212,160,23,0.2);border-radius:10px;padding:12px;text-align:center;">
-        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">TREASURY CRO</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);" id="treasuryCROBal">—</div>
-        <div style="font-size:10px;color:var(--muted);" id="treasuryCROUSD">$—</div>
-      </div>
-      <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(212,160,23,0.2);border-radius:10px;padding:12px;text-align:center;">
-        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">TREASURY GANG</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);" id="treasuryGANGBal">—</div>
-        <div style="font-size:10px;color:var(--muted);" id="treasuryGANGUSD">$—</div>
-      </div>
-      <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(212,160,23,0.2);border-radius:10px;padding:12px;text-align:center;">
-        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">NFT CONTRACT</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);" id="treasuryNFTBal">—</div>
-        <div style="font-size:10px;color:var(--muted);" id="treasuryNFTUSD">$—</div>
-      </div>
-      <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(212,160,23,0.2);border-radius:10px;padding:12px;text-align:center;">
-        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">TOTAL VALUE</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);" id="treasuryTotalUSD">$—</div>
-        <div style="font-size:10px;color:var(--muted);">all sources</div>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button onclick="withdrawTreasuryCRO()" style="flex:1;min-width:140px;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--gold),#b8860b);color:#000;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;">WITHDRAW CRO FEES</button>
-      <button onclick="withdrawTreasuryGANG()" style="flex:1;min-width:140px;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;">WITHDRAW GANG FEES</button>
-      <button onclick="document.querySelector('[data-page=revenue]').click()" style="flex:1;min-width:140px;padding:12px;border-radius:10px;border:1px solid rgba(212,160,23,0.4);background:transparent;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;">VIEW ALL REVENUE</button>
-    </div>
-    <div id="treasuryStatus" style="margin-top:8px;font-size:11px;color:var(--green);min-height:14px;text-align:center;"></div>
-  </div>
+  <!-- Owner treasury banner removed — fees collected via Revenue page -->
 
   <!-- ── War Room Strip (all pages) ── -->
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
