@@ -3543,15 +3543,24 @@ function toggleNavMenu() {
         <style>.lev-btn{flex:1;padding:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;cursor:pointer;transition:all .2s;}.lev-btn.active{background:#ff8c00;color:#000;border-color:#ff8c00;}.lev-btn:hover{border-color:rgba(255,140,0,0.5);}</style>
       </div>
 
+      <!-- Currency Toggle -->
+      <div style="margin-bottom:14px;">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">TRADE WITH</div>
+        <div style="display:flex;gap:0;background:var(--surface2);border-radius:10px;padding:3px;border:1px solid var(--border);">
+          <button id="futuresCurrGang" data-testid="futures-curr-gang" onclick="setFuturesCurrency('GANG')" style="flex:1;padding:10px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;transition:all .2s;background:#ff8c00;color:#000;display:flex;align-items:center;justify-content:center;gap:6px;"><img src="/gang-logo.png" style="width:18px;height:18px;border-radius:50%;">GANG</button>
+          <button id="futuresCurrCro" data-testid="futures-curr-cro" onclick="setFuturesCurrency('CRO')" style="flex:1;padding:10px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px;"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:18px;height:18px;border-radius:50%;">CRO</button>
+        </div>
+      </div>
+
       <!-- Amount -->
       <div style="margin-bottom:14px;">
-        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">AMOUNT (GANG)</div>
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">AMOUNT (<span id="futuresCurrLabel">GANG</span>)</div>
         <div style="display:flex;gap:6px;">
-          <input class="swap-input" id="futuresAmount" data-testid="futures-amount" type="number" step="any" placeholder="Enter GANG amount" style="flex:1;" />
-          <button onclick="document.getElementById('futuresAmount').value = (state.balances?.GANG || 0).toFixed(2)" style="background:var(--surface2);border:1px solid var(--border);color:var(--gold);border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;">MAX</button>
+          <input class="swap-input" id="futuresAmount" data-testid="futures-amount" type="number" step="any" placeholder="Enter amount" style="flex:1;" />
+          <button onclick="document.getElementById('futuresAmount').value = ((futuresState.currency === 'CRO' ? (state.balances?.CRO || 0) : (state.balances?.GANG || 0))).toFixed(2)" style="background:var(--surface2);border:1px solid var(--border);color:var(--gold);border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;">MAX</button>
         </div>
         <div style="display:flex;justify-content:space-between;margin-top:6px;">
-          <span style="font-size:11px;color:var(--muted);">Position size: <span id="futuresPosSize" style="color:var(--gold);">0 GANG</span></span>
+          <span style="font-size:11px;color:var(--muted);">Position size: <span id="futuresPosSize" style="color:var(--gold);">0</span></span>
           <span style="font-size:11px;color:var(--muted);">Liq. price: <span id="futuresLiqPrice" style="color:var(--red);">$—</span></span>
         </div>
       </div>
@@ -3595,28 +3604,44 @@ function toggleNavMenu() {
     <div id="futuresOwnerPanel" data-testid="futures-owner-panel" style="display:none;">
       <div class="card" style="border-color:rgba(39,174,96,0.4);background:linear-gradient(135deg,rgba(39,174,96,0.05),rgba(255,140,0,0.03));">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);letter-spacing:2px;margin-bottom:12px;">OWNER POOL CONTROLS</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
-            <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">POOL GANG</div>
-            <div id="futuresOwnerPool" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0</div>
+
+        <!-- GANG Pool -->
+        <div style="background:var(--surface2);border:1px solid rgba(255,140,0,0.3);border-radius:10px;padding:14px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="/gang-logo.png" style="width:18px;height:18px;border-radius:50%;"><span style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:#ff8c00;letter-spacing:1px;">GANG POOL</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL BAL</div>
+              <div id="futuresOwnerPoolGang" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);">0</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">PROFIT</div>
+              <div id="futuresOwnerProfitGang" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);">0</div>
+            </div>
           </div>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
-            <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">YOUR PROFIT</div>
-            <div id="futuresOwnerProfit" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);">0</div>
+          <div style="display:flex;gap:6px;margin-bottom:6px;">
+            <input class="swap-input" id="futuresDepositAmtGang" type="number" step="any" placeholder="GANG amount" style="flex:1;" />
+            <button onclick="futuresOwnerDeposit('GANG')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">DEPOSIT</button>
+            <button onclick="futuresOwnerWithdraw('GANG')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--gold);color:#000;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">WITHDRAW</button>
           </div>
         </div>
-        <div style="margin-bottom:10px;">
-          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">DEPOSIT GANG TO POOL</div>
-          <div style="display:flex;gap:6px;">
-            <input class="swap-input" id="futuresDepositAmt" type="number" step="any" placeholder="Amount" style="flex:1;" />
-            <button onclick="futuresOwnerDeposit()" style="padding:10px 20px;border-radius:10px;border:none;background:var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:14px;cursor:pointer;">DEPOSIT</button>
+
+        <!-- CRO Pool -->
+        <div style="background:var(--surface2);border:1px solid rgba(0,45,116,0.4);border-radius:10px;padding:14px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:18px;height:18px;border-radius:50%;"><span style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:#002d74;letter-spacing:1px;">CRO POOL</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL BAL</div>
+              <div id="futuresOwnerPoolCro" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);">0</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">PROFIT</div>
+              <div id="futuresOwnerProfitCro" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);">0</div>
+            </div>
           </div>
-        </div>
-        <div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">WITHDRAW GANG FROM POOL</div>
-          <div style="display:flex;gap:6px;">
-            <input class="swap-input" id="futuresWithdrawAmt" type="number" step="any" placeholder="Amount" style="flex:1;" />
-            <button onclick="futuresOwnerWithdraw()" style="padding:10px 20px;border-radius:10px;border:none;background:var(--gold);color:#000;font-family:'Bebas Neue',sans-serif;font-size:14px;cursor:pointer;">WITHDRAW</button>
+          <div style="display:flex;gap:6px;margin-bottom:6px;">
+            <input class="swap-input" id="futuresDepositAmtCro" type="number" step="any" placeholder="CRO amount" style="flex:1;" />
+            <button onclick="futuresOwnerDeposit('CRO')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">DEPOSIT</button>
+            <button onclick="futuresOwnerWithdraw('CRO')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--gold);color:#000;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">WITHDRAW</button>
           </div>
         </div>
       </div>
@@ -15001,11 +15026,14 @@ let futuresState = {
   pair: 'BTC',
   side: 'long',
   leverage: 2,
+  currency: 'GANG',
   prices: {},
   positions: [],
   history: [],
   poolBalance: 0,
-  ownerDeposited: 0
+  ownerDeposited: 0,
+  poolBalanceCRO: 0,
+  ownerDepositedCRO: 0
 };
 
 // Load saved state
@@ -15015,6 +15043,9 @@ try {
   if (saved.history) futuresState.history = saved.history;
   if (saved.poolBalance) futuresState.poolBalance = saved.poolBalance;
   if (saved.ownerDeposited) futuresState.ownerDeposited = saved.ownerDeposited;
+  if (saved.poolBalanceCRO) futuresState.poolBalanceCRO = saved.poolBalanceCRO;
+  if (saved.ownerDepositedCRO) futuresState.ownerDepositedCRO = saved.ownerDepositedCRO;
+  if (saved.currency) futuresState.currency = saved.currency;
 } catch {}
 
 function saveFuturesState() {
@@ -15022,8 +15053,30 @@ function saveFuturesState() {
     positions: futuresState.positions,
     history: futuresState.history,
     poolBalance: futuresState.poolBalance,
-    ownerDeposited: futuresState.ownerDeposited
+    ownerDeposited: futuresState.ownerDeposited,
+    poolBalanceCRO: futuresState.poolBalanceCRO,
+    ownerDepositedCRO: futuresState.ownerDepositedCRO,
+    currency: futuresState.currency
   }));
+}
+
+function setFuturesCurrency(curr) {
+  futuresState.currency = curr;
+  const gangBtn = document.getElementById('futuresCurrGang');
+  const croBtn = document.getElementById('futuresCurrCro');
+  const label = document.getElementById('futuresCurrLabel');
+  if (curr === 'GANG') {
+    gangBtn.style.background = '#ff8c00'; gangBtn.style.color = '#000';
+    croBtn.style.background = 'transparent'; croBtn.style.color = 'var(--muted)';
+  } else {
+    croBtn.style.background = '#002d74'; croBtn.style.color = '#fff';
+    gangBtn.style.background = 'transparent'; gangBtn.style.color = 'var(--muted)';
+  }
+  if (label) label.textContent = curr;
+  document.getElementById('futuresAmount').placeholder = 'Enter ' + curr + ' amount';
+  updateFuturesPosInfo();
+  updateFuturesPool();
+  saveFuturesState();
 }
 
 function selectFuturesPair(pair) {
@@ -15217,8 +15270,9 @@ async function updateFuturesPrice() {
 function updateFuturesPosInfo() {
   const amt = parseFloat(document.getElementById('futuresAmount')?.value) || 0;
   const lev = futuresState.leverage;
+  const curr = futuresState.currency;
   const price = futuresState.prices[futuresState.pair] || 0;
-  document.getElementById('futuresPosSize').textContent = (amt * lev).toFixed(2) + ' GANG';
+  document.getElementById('futuresPosSize').textContent = (amt * lev).toFixed(2) + ' ' + curr;
   if (price > 0 && amt > 0) {
     const liqMove = 1 / lev;
     const liqPrice = futuresState.side === 'long' ? price * (1 - liqMove) : price * (1 + liqMove);
@@ -15231,10 +15285,12 @@ document.getElementById('futuresAmount')?.addEventListener('input', updateFuture
 function openFuturesPosition() {
   if (!state.address) { showToast('Connect wallet first', 'error'); return; }
   const amt = parseFloat(document.getElementById('futuresAmount')?.value);
-  if (!amt || amt <= 0) { showToast('Enter GANG amount', 'error'); return; }
-  const gangBal = state.balances?.GANG || 0;
-  if (amt > gangBal) { showToast('Insufficient GANG balance', 'error'); return; }
-  if (futuresState.poolBalance < amt * futuresState.leverage) { showToast('Insufficient pool liquidity', 'error'); return; }
+  if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
+  const curr = futuresState.currency;
+  const bal = curr === 'CRO' ? (state.balances?.CRO || 0) : (state.balances?.GANG || 0);
+  if (amt > bal) { showToast('Insufficient ' + curr + ' balance', 'error'); return; }
+  const pool = curr === 'CRO' ? futuresState.poolBalanceCRO : futuresState.poolBalance;
+  if (pool < amt * futuresState.leverage) { showToast('Insufficient ' + curr + ' pool liquidity', 'error'); return; }
 
   const price = futuresState.prices[futuresState.pair];
   if (!price) { showToast('Price not loaded yet', 'error'); return; }
@@ -15248,6 +15304,7 @@ function openFuturesPosition() {
     pair: futuresState.pair,
     side: futuresState.side,
     leverage: futuresState.leverage,
+    currency: curr,
     amount: amt,
     entryPrice: price,
     tp: tp || null,
@@ -15258,7 +15315,11 @@ function openFuturesPosition() {
   // Opening fee: 0.3% goes to pool
   const openingFee = amt * 0.003;
   position.amount = amt - openingFee;
-  futuresState.poolBalance += openingFee;
+  if (curr === 'CRO') {
+    futuresState.poolBalanceCRO += openingFee;
+  } else {
+    futuresState.poolBalance += openingFee;
+  }
 
   futuresState.positions.push(position);
   saveFuturesState();
@@ -15267,7 +15328,7 @@ function openFuturesPosition() {
   document.getElementById('futuresTP').value = '';
   document.getElementById('futuresSL').value = '';
 
-  showToast(`Opened ${futuresState.side.toUpperCase()} ${futuresState.pair}/USD ${futuresState.leverage}x — ${position.amount.toFixed(2)} GANG (fee: ${openingFee.toFixed(2)})`, 'success');
+  showToast(`Opened ${futuresState.side.toUpperCase()} ${futuresState.pair}/USD ${futuresState.leverage}x — ${position.amount.toFixed(2)} ${curr} (fee: ${openingFee.toFixed(2)})`, 'success');
   if (typeof addPoints === 'function') addPoints(10, 'Futures trade');
   updateFuturesPositions();
   updateFuturesPool();
@@ -15277,20 +15338,25 @@ function closeFuturesPosition(id) {
   const idx = futuresState.positions.findIndex(p => p.id === id);
   if (idx === -1) return;
   const pos = futuresState.positions[idx];
+  const curr = pos.currency || 'GANG';
   const currentPrice = futuresState.prices[pos.pair] || pos.entryPrice;
   const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
   const pnlPct = pos.side === 'long' ? priceDiff * pos.leverage : -priceDiff * pos.leverage;
-  const pnlGang = pos.amount * pnlPct;
+  const pnlAmt = pos.amount * pnlPct;
 
   // Cap loss at position amount (liquidation)
-  const finalPnl = Math.max(pnlGang, -pos.amount);
+  const finalPnl = Math.max(pnlAmt, -pos.amount);
 
   // Closing fee: 0.3% of position amount goes to pool
   const closingFee = pos.amount * 0.003;
   const netPnl = finalPnl - closingFee;
 
   // Update pool: pool pays winners, collects from losers + fees
-  futuresState.poolBalance -= netPnl;
+  if (curr === 'CRO') {
+    futuresState.poolBalanceCRO -= netPnl;
+  } else {
+    futuresState.poolBalance -= netPnl;
+  }
 
   futuresState.history.unshift({
     ...pos,
@@ -15305,7 +15371,7 @@ function closeFuturesPosition(id) {
   saveFuturesState();
 
   const emoji = netPnl >= 0 ? 'WIN' : 'LOSS';
-  showToast(`${emoji} — Closed ${pos.pair} ${pos.side.toUpperCase()} — ${netPnl >= 0 ? '+' : ''}${netPnl.toFixed(2)} GANG (fee: ${closingFee.toFixed(2)})`, netPnl >= 0 ? 'success' : 'error');
+  showToast(`${emoji} — Closed ${pos.pair} ${pos.side.toUpperCase()} — ${netPnl >= 0 ? '+' : ''}${netPnl.toFixed(2)} ${curr} (fee: ${closingFee.toFixed(2)})`, netPnl >= 0 ? 'success' : 'error');
   updateFuturesPositions();
   renderFuturesHistory();
   updateFuturesPool();
@@ -15324,6 +15390,7 @@ function updateFuturesPositions() {
     const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
     const pnlPct = pos.side === 'long' ? priceDiff * pos.leverage : -priceDiff * pos.leverage;
     const pnlGang = pos.amount * pnlPct;
+    const curr = pos.currency || 'GANG';
     const color = pnlGang >= 0 ? 'var(--green)' : 'var(--red)';
     const arrow = pnlGang >= 0 ? '&#9650;' : '&#9660;';
     const sideColor = pos.side === 'long' ? '#27ae60' : '#e74c3c';
@@ -15349,14 +15416,14 @@ function updateFuturesPositions() {
           <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:${sideColor}22;color:${sideColor};font-weight:700;">${pos.side.toUpperCase()} ${pos.leverage}x</span>
         </div>
         <div style="text-align:right;">
-          <div style="font-size:16px;color:${color};font-weight:700;">${arrow} ${pnlGang >= 0 ? '+' : ''}${pnlGang.toFixed(2)} GANG</div>
+          <div style="font-size:16px;color:${color};font-weight:700;">${arrow} ${pnlGang >= 0 ? '+' : ''}${pnlGang.toFixed(2)} ${curr}</div>
           <div style="font-size:11px;color:${color};">${pnlPct >= 0 ? '+' : ''}${(pnlPct * 100).toFixed(2)}%</div>
         </div>
       </div>
       <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:10px;">
         <span>Entry: $${pos.entryPrice.toLocaleString(undefined,{maximumFractionDigits:pos.entryPrice>100?2:6})}</span>
         <span>Now: $${currentPrice.toLocaleString(undefined,{maximumFractionDigits:currentPrice>100?2:6})}</span>
-        <span>Size: ${pos.amount} GANG</span>
+        <span>Size: ${pos.amount.toFixed(2)} ${curr}</span>
       </div>
       <button onclick="closeFuturesPosition(${pos.id})" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--red);background:rgba(231,76,60,0.1);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;cursor:pointer;">CLOSE POSITION</button>
     </div>`;
@@ -15381,7 +15448,7 @@ function renderFuturesHistory() {
         <span style="font-size:10px;padding:2px 6px;border-radius:4px;background:${sideColor}22;color:${sideColor};margin-left:4px;">${h.side.toUpperCase()} ${h.leverage}x</span>
       </div>
       <div style="text-align:right;">
-        <div style="font-size:13px;color:${color};font-weight:700;">${h.pnl >= 0 ? '+' : ''}${h.pnl.toFixed(2)} GANG</div>
+        <div style="font-size:13px;color:${color};font-weight:700;">${h.pnl >= 0 ? '+' : ''}${h.pnl.toFixed(2)} ${h.currency || 'GANG'}</div>
         <div style="font-size:10px;color:var(--muted);">${new Date(h.closedAt).toLocaleDateString()}</div>
       </div>
     </div>`;
@@ -15390,20 +15457,36 @@ function renderFuturesHistory() {
 
 function updateFuturesPool() {
   const pool = document.getElementById('futuresPoolBalance');
-  const ownerPool = document.getElementById('futuresOwnerPool');
-  const ownerProfit = document.getElementById('futuresOwnerProfit');
   const yourBal = document.getElementById('futuresYourBalance');
+  const curr = futuresState.currency;
   
-  const poolAmt = futuresState.poolBalance;
-  const fmtPool = poolAmt >= 1e6 ? (poolAmt/1e6).toFixed(2)+'M' : poolAmt >= 1e3 ? (poolAmt/1e3).toFixed(1)+'K' : poolAmt.toFixed(2);
-  if (pool) pool.textContent = fmtPool + ' GANG';
-  if (ownerPool) ownerPool.textContent = fmtPool;
-  if (ownerProfit) {
-    const profit = poolAmt - futuresState.ownerDeposited;
-    ownerProfit.textContent = (profit >= 0 ? '+' : '') + profit.toFixed(2);
-    ownerProfit.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
+  const gangPool = futuresState.poolBalance;
+  const croPool = futuresState.poolBalanceCRO;
+  const activePool = curr === 'CRO' ? croPool : gangPool;
+  const fmtPool = activePool >= 1e6 ? (activePool/1e6).toFixed(2)+'M' : activePool >= 1e3 ? (activePool/1e3).toFixed(1)+'K' : activePool.toFixed(2);
+  if (pool) pool.textContent = fmtPool + ' ' + curr;
+
+  // Owner panel - GANG
+  const gangPoolEl = document.getElementById('futuresOwnerPoolGang');
+  const gangProfitEl = document.getElementById('futuresOwnerProfitGang');
+  if (gangPoolEl) gangPoolEl.textContent = gangPool.toFixed(2);
+  if (gangProfitEl) {
+    const profit = gangPool - futuresState.ownerDeposited;
+    gangProfitEl.textContent = (profit >= 0 ? '+' : '') + profit.toFixed(2);
+    gangProfitEl.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
   }
-  if (yourBal) yourBal.textContent = (state.balances?.GANG || 0).toFixed(2) + ' GANG';
+
+  // Owner panel - CRO
+  const croPoolEl = document.getElementById('futuresOwnerPoolCro');
+  const croProfitEl = document.getElementById('futuresOwnerProfitCro');
+  if (croPoolEl) croPoolEl.textContent = croPool.toFixed(2);
+  if (croProfitEl) {
+    const profit = croPool - futuresState.ownerDepositedCRO;
+    croProfitEl.textContent = (profit >= 0 ? '+' : '') + profit.toFixed(2);
+    croProfitEl.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
+  }
+
+  if (yourBal) yourBal.textContent = (curr === 'CRO' ? (state.balances?.CRO || 0) : (state.balances?.GANG || 0)).toFixed(2) + ' ' + curr;
 
   // Show owner panel
   const ownerPanel = document.getElementById('futuresOwnerPanel');
@@ -15413,26 +15496,39 @@ function updateFuturesPool() {
   }
 }
 
-function futuresOwnerDeposit() {
-  const amt = parseFloat(document.getElementById('futuresDepositAmt')?.value);
+function futuresOwnerDeposit(curr) {
+  const inputId = curr === 'CRO' ? 'futuresDepositAmtCro' : 'futuresDepositAmtGang';
+  const amt = parseFloat(document.getElementById(inputId)?.value);
   if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
-  futuresState.poolBalance += amt;
-  futuresState.ownerDeposited += amt;
+  if (curr === 'CRO') {
+    futuresState.poolBalanceCRO += amt;
+    futuresState.ownerDepositedCRO += amt;
+  } else {
+    futuresState.poolBalance += amt;
+    futuresState.ownerDeposited += amt;
+  }
   saveFuturesState();
-  document.getElementById('futuresDepositAmt').value = '';
-  showToast('Deposited ' + amt + ' GANG to pool', 'success');
+  document.getElementById(inputId).value = '';
+  showToast('Deposited ' + amt.toFixed(2) + ' ' + curr + ' to pool', 'success');
   updateFuturesPool();
 }
 
-function futuresOwnerWithdraw() {
-  const amt = parseFloat(document.getElementById('futuresWithdrawAmt')?.value);
+function futuresOwnerWithdraw(curr) {
+  const inputId = curr === 'CRO' ? 'futuresDepositAmtCro' : 'futuresDepositAmtGang';
+  const amt = parseFloat(document.getElementById(inputId)?.value);
   if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
-  if (amt > futuresState.poolBalance) { showToast('Not enough in pool', 'error'); return; }
-  futuresState.poolBalance -= amt;
-  futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt);
+  const pool = curr === 'CRO' ? futuresState.poolBalanceCRO : futuresState.poolBalance;
+  if (amt > pool) { showToast('Not enough ' + curr + ' in pool', 'error'); return; }
+  if (curr === 'CRO') {
+    futuresState.poolBalanceCRO -= amt;
+    futuresState.ownerDepositedCRO = Math.max(0, futuresState.ownerDepositedCRO - amt);
+  } else {
+    futuresState.poolBalance -= amt;
+    futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt);
+  }
   saveFuturesState();
-  document.getElementById('futuresWithdrawAmt').value = '';
-  showToast('Withdrawn ' + amt + ' GANG from pool', 'success');
+  document.getElementById(inputId).value = '';
+  showToast('Withdrawn ' + amt.toFixed(2) + ' ' + curr + ' from pool', 'success');
   updateFuturesPool();
 }
 
