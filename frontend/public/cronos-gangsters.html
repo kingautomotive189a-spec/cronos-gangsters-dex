@@ -3429,6 +3429,7 @@
       </div>
 
       <!-- Open Position Button -->
+      <div style="font-size:11px;color:var(--gold);text-align:center;margin-bottom:8px;">Trading fee: 0.1% open + 0.1% close</div>
       <button id="futuresOpenBtn" data-testid="futures-open-btn" onclick="openFuturesPosition()" style="width:100%;padding:16px;border-radius:12px;border:none;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;cursor:pointer;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;transition:all .2s;">
         OPEN LONG POSITION
       </button>
@@ -14950,6 +14951,11 @@ function openFuturesPosition() {
     openedAt: new Date().toISOString()
   };
 
+  // Opening fee: 0.1% goes to pool
+  const openingFee = amt * 0.001;
+  position.amount = amt - openingFee;
+  futuresState.poolBalance += openingFee;
+
   futuresState.positions.push(position);
   saveFuturesState();
 
@@ -14957,7 +14963,7 @@ function openFuturesPosition() {
   document.getElementById('futuresTP').value = '';
   document.getElementById('futuresSL').value = '';
 
-  showToast(`Opened ${futuresState.side.toUpperCase()} ${futuresState.pair}/USD ${futuresState.leverage}x — ${amt} GANG`, 'success');
+  showToast(`Opened ${futuresState.side.toUpperCase()} ${futuresState.pair}/USD ${futuresState.leverage}x — ${position.amount.toFixed(2)} GANG (fee: ${openingFee.toFixed(2)})`, 'success');
   if (typeof addPoints === 'function') addPoints(10, 'Futures trade');
   updateFuturesPositions();
   updateFuturesPool();
@@ -14975,22 +14981,27 @@ function closeFuturesPosition(id) {
   // Cap loss at position amount (liquidation)
   const finalPnl = Math.max(pnlGang, -pos.amount);
 
-  // Update pool: pool pays winners, collects from losers
-  futuresState.poolBalance -= finalPnl;
+  // Closing fee: 0.1% of position amount goes to pool
+  const closingFee = pos.amount * 0.001;
+  const netPnl = finalPnl - closingFee;
+
+  // Update pool: pool pays winners, collects from losers + fees
+  futuresState.poolBalance -= netPnl;
 
   futuresState.history.unshift({
     ...pos,
     closePrice: currentPrice,
-    pnl: finalPnl,
+    pnl: netPnl,
     pnlPct: pnlPct * 100,
+    fee: closingFee,
     closedAt: new Date().toISOString()
   });
 
   futuresState.positions.splice(idx, 1);
   saveFuturesState();
 
-  const emoji = finalPnl >= 0 ? '' : '';
-  showToast(`${emoji} Closed ${pos.pair} ${pos.side.toUpperCase()} — ${finalPnl >= 0 ? '+' : ''}${finalPnl.toFixed(2)} GANG`, finalPnl >= 0 ? 'success' : 'error');
+  const emoji = netPnl >= 0 ? '' : '';
+  showToast(`${emoji} Closed ${pos.pair} ${pos.side.toUpperCase()} — ${netPnl >= 0 ? '+' : ''}${netPnl.toFixed(2)} GANG (fee: ${closingFee.toFixed(2)})`, netPnl >= 0 ? 'success' : 'error');
   updateFuturesPositions();
   renderFuturesHistory();
   updateFuturesPool();
