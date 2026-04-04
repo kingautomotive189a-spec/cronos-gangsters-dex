@@ -683,7 +683,8 @@ async def farms(update: Update, context: ContextTypes.DEFAULT_TYPE):
     gang_price = live.get("gang_price", 0)
 
     msg = (
-        "🌾 *GANGSTER FARMS*\n\n"
+        "🌾 *GANGSTER FARMS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
         "Stake LP tokens to earn $GANG rewards!\n\n"
     )
 
@@ -695,18 +696,18 @@ async def farms(update: Update, context: ContextTypes.DEFAULT_TYPE):
         fd = live.get("farms", {}).get(name, {})
         apr = fd.get("apr", 0)
         tvl = fd.get("tvl", 0)
-        msg += f"*{name}*\n"
-        msg += f"   Alloc: {farm['allocation']}"
-        if apr > 0:
-            msg += f" | APR: {apr:,.0f}%"
-        if tvl > 0:
-            msg += f" | TVL: ${tvl:,.0f}"
-        msg += "\n\n"
+        apr_str = f"*{apr:,.0f}%*" if apr > 0 else "—"
+        tvl_str = f"${tvl:,.0f}" if tvl > 0 else "—"
+        fire = "🔥" if apr > 500 else "✅"
+        msg += f"{fire} *{name}*\n"
+        msg += f"   APR: {apr_str} | TVL: {tvl_str} | Alloc: {farm['allocation']}\n\n"
 
     msg += (
+        "━━━━━━━━━━━━━━━━━━━━━\n"
+        "💡 *How:* Add LP on DEX → Stake in Farms → Earn $GANG!\n"
+        "💰 *All fees: 0.3%*\n\n"
         f"🔗 *MasterChef Contract:*\n"
-        f"`{CONTRACTS['MASTERCHEF']}`\n\n"
-        f"[🌾 Start Farming]({DEX_LINK})"
+        f"`{CONTRACTS['MASTERCHEF']}`"
     )
 
     keyboard = InlineKeyboardMarkup([
@@ -807,30 +808,32 @@ async def vaults(update: Update, context: ContextTypes.DEFAULT_TYPE):
     live = await fetch_live_farm_data()
 
     msg = (
-        "🏦 *AUTO-COMPOUND VAULTS*\n\n"
-        "Deposit and let us compound for you!\n"
-        "No manual harvesting needed.\n\n"
+        "🏦 *AUTO-COMPOUND VAULTS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Deposit LP → We auto-compound → You earn more!\n"
+        "No manual harvesting. Set and forget.\n\n"
     )
 
     for vault in VAULTS:
         name = vault["name"]
         vd = live.get("vaults", {}).get(name, {})
+        apr = vd.get("apr", 0)
         apy = vd.get("apy", 0)
         tvl = vd.get("tvl", 0)
-        msg += f"*{name}*\n"
-        msg += f"   Strategy: {vault['strategy']}"
-        if apy > 0:
-            msg += f" | APY: {apy:,.0f}%"
-        if tvl > 0:
-            msg += f" | TVL: ${tvl:,.0f}"
-        msg += "\n\n"
+        apy_str = f"*{apy:,.0f}%*" if apy > 0 else "—"
+        apr_str = f"{apr:,.0f}%" if apr > 0 else "—"
+        tvl_str = f"${tvl:,.0f}" if tvl > 0 else "—"
+        fire = "🔥" if apy > 500 else "✅"
+        msg += f"{fire} *{name}*\n"
+        msg += f"   APY: {apy_str} (APR: {apr_str}) | TVL: {tvl_str}\n\n"
 
     msg += (
-        "💡 *How it works:*\n"
-        "1. Deposit LP tokens\n"
-        "2. Vault auto-compounds rewards\n"
-        "3. Watch your position grow!\n\n"
-        f"[🏦 Open Vaults]({DEX_LINK})"
+        "━━━━━━━━━━━━━━━━━━━━━\n"
+        "💡 *Auto-compound = higher returns!*\n"
+        "Rewards are harvested and re-deposited\n"
+        "automatically, compounding your yield 24/7.\n\n"
+        "APY > APR because of compounding!\n"
+        "💰 *All fees: 0.3%*"
     )
 
     keyboard = InlineKeyboardMarkup([
@@ -1636,19 +1639,20 @@ async def _cb_menu_back(query, context):
 
 async def _cb_menu_farms(query, context):
     live = await fetch_live_farm_data()
-    msg = "🌾 *GANGSTER FARMS*\n\nStake LP tokens to earn $GANG rewards!\n\n"
+    gang_price = live.get("gang_price", 0)
+    msg = "🌾 *GANGSTER FARMS*\n━━━━━━━━━━━━━━━━━━━━━\n\n"
+    if gang_price > 0:
+        msg += f"💵 $GANG: ${gang_price:.6f}\n\n"
     for farm in FARMS:
         name = farm["name"]
         fd = live.get("farms", {}).get(name, {})
         apr = fd.get("apr", 0)
         tvl = fd.get("tvl", 0)
-        msg += f"*{name}*\n   Alloc: {farm['allocation']}"
-        if apr > 0:
-            msg += f" | APR: {apr:,.0f}%"
-        if tvl > 0:
-            msg += f" | TVL: ${tvl:,.0f}"
-        msg += "\n\n"
-    msg += f"🔗 *MasterChef:*\n`{CONTRACTS['MASTERCHEF']}`"
+        fire = "🔥" if apr > 500 else "✅"
+        apr_s = f"*{apr:,.0f}%*" if apr > 0 else "—"
+        tvl_s = f"${tvl:,.0f}" if tvl > 0 else "—"
+        msg += f"{fire} *{name}*\n   APR: {apr_s} | TVL: {tvl_s}\n\n"
+    msg += "💰 All fees: 0.3%"
     kb = InlineKeyboardMarkup([
         [InlineKeyboardButton("🌾 Open Farms", url=f"{DEX_LINK}#farms")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
@@ -1658,19 +1662,18 @@ async def _cb_menu_farms(query, context):
 
 async def _cb_menu_vaults(query, context):
     live = await fetch_live_farm_data()
-    msg = "🏦 *AUTO-COMPOUND VAULTS*\n\nDeposit and let us compound for you!\n\n"
+    msg = "🏦 *AUTO-COMPOUND VAULTS*\n━━━━━━━━━━━━━━━━━━━━━\n\n"
+    msg += "Deposit LP → Auto-compound → Earn more!\n\n"
     for vault in VAULTS:
         name = vault["name"]
         vd = live.get("vaults", {}).get(name, {})
         apy = vd.get("apy", 0)
         tvl = vd.get("tvl", 0)
-        msg += f"*{name}*\n   Strategy: {vault['strategy']}"
-        if apy > 0:
-            msg += f" | APY: {apy:,.0f}%"
-        if tvl > 0:
-            msg += f" | TVL: ${tvl:,.0f}"
-        msg += "\n\n"
-    msg += "💡 Deposit LP → vault auto-compounds → position grows!"
+        fire = "🔥" if apy > 500 else "✅"
+        apy_s = f"*{apy:,.0f}%*" if apy > 0 else "—"
+        tvl_s = f"${tvl:,.0f}" if tvl > 0 else "—"
+        msg += f"{fire} *{name}*\n   APY: {apy_s} | TVL: {tvl_s}\n\n"
+    msg += "💡 Auto-compound = APY > APR!\n💰 All fees: 0.3%"
     kb = InlineKeyboardMarkup([
         [InlineKeyboardButton("🏦 Open Vaults", url=f"{DEX_LINK}#vaults")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
