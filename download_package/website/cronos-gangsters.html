@@ -3348,62 +3348,74 @@
     </div>
 
     <!-- Token Pair Selector -->
-    <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">CRYPTO</div>
-    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px;" id="futuresPairBar">
-      <button class="futures-pair active" data-pair="BTC" onclick="selectFuturesPair('BTC')">BTC</button>
-      <button class="futures-pair" data-pair="ETH" onclick="selectFuturesPair('ETH')">ETH</button>
-      <button class="futures-pair" data-pair="BNB" onclick="selectFuturesPair('BNB')">BNB</button>
-      <button class="futures-pair" data-pair="CRO" onclick="selectFuturesPair('CRO')">CRO</button>
-      <button class="futures-pair" data-pair="SOL" onclick="selectFuturesPair('SOL')">SOL</button>
-      <button class="futures-pair" data-pair="XRP" onclick="selectFuturesPair('XRP')">XRP</button>
-      <button class="futures-pair" data-pair="DOGE" onclick="selectFuturesPair('DOGE')">DOGE</button>
-      <button class="futures-pair" data-pair="ADA" onclick="selectFuturesPair('ADA')">ADA</button>
-      <button class="futures-pair" data-pair="AVAX" onclick="selectFuturesPair('AVAX')">AVAX</button>
-      <button class="futures-pair" data-pair="LINK" onclick="selectFuturesPair('LINK')">LINK</button>
-      <button class="futures-pair" data-pair="ARB" onclick="selectFuturesPair('ARB')">ARB</button>
-      <button class="futures-pair" data-pair="MATIC" onclick="selectFuturesPair('MATIC')">MATIC</button>
+    <div style="font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;font-size:14px;">CRYPTO</div>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none;" id="futuresPairBar">
+      <button class="futures-pair active" data-pair="BTC" onclick="selectFuturesPair('BTC')"><img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" class="fp-logo" onerror="this.style.display='none'"/>BTC</button>
+      <button class="futures-pair" data-pair="ETH" onclick="selectFuturesPair('ETH')"><img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" class="fp-logo" onerror="this.style.display='none'"/>ETH</button>
+      <button class="futures-pair" data-pair="BNB" onclick="selectFuturesPair('BNB')"><img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" class="fp-logo" onerror="this.style.display='none'"/>BNB</button>
+      <button class="futures-pair" data-pair="CRO" onclick="selectFuturesPair('CRO')"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" class="fp-logo" onerror="this.style.display='none'"/>CRO</button>
+      <button class="futures-pair" data-pair="SOL" onclick="selectFuturesPair('SOL')"><img src="https://assets.coingecko.com/coins/images/4128/small/solana.png" class="fp-logo" onerror="this.style.display='none'"/>SOL</button>
+      <button class="futures-pair" data-pair="XRP" onclick="selectFuturesPair('XRP')"><img src="https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png" class="fp-logo" onerror="this.style.display='none'"/>XRP</button>
+      <button class="futures-pair" data-pair="DOGE" onclick="selectFuturesPair('DOGE')"><img src="https://assets.coingecko.com/coins/images/5/small/dogecoin.png" class="fp-logo" onerror="this.style.display='none'"/>DOGE</button>
+      <button class="futures-pair" data-pair="ADA" onclick="selectFuturesPair('ADA')"><img src="https://assets.coingecko.com/coins/images/975/small/cardano.png" class="fp-logo" onerror="this.style.display='none'"/>ADA</button>
+      <button class="futures-pair" data-pair="AVAX" onclick="selectFuturesPair('AVAX')"><img src="https://assets.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png" class="fp-logo" onerror="this.style.display='none'"/>AVAX</button>
+      <button class="futures-pair" data-pair="LINK" onclick="selectFuturesPair('LINK')"><img src="https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png" class="fp-logo" onerror="this.style.display='none'"/>LINK</button>
+      <button class="futures-pair" data-pair="ARB" onclick="selectFuturesPair('ARB')"><img src="https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg" class="fp-logo" onerror="this.style.display='none'"/>ARB</button>
+      <button class="futures-pair" data-pair="MATIC" onclick="selectFuturesPair('MATIC')"><img src="https://assets.coingecko.com/coins/images/4713/small/polygon.png" class="fp-logo" onerror="this.style.display='none'"/>MATIC</button>
     </div>
-    <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">STOCKS</div>
-    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:8px;">
-      <button class="futures-pair" data-pair="AAPL" onclick="selectFuturesPair('AAPL')">AAPL</button>
-      <button class="futures-pair" data-pair="TSLA" onclick="selectFuturesPair('TSLA')">TSLA</button>
-      <button class="futures-pair" data-pair="NVDA" onclick="selectFuturesPair('NVDA')">NVDA</button>
-      <button class="futures-pair" data-pair="MSFT" onclick="selectFuturesPair('MSFT')">MSFT</button>
-      <button class="futures-pair" data-pair="AMZN" onclick="selectFuturesPair('AMZN')">AMZN</button>
-      <button class="futures-pair" data-pair="GOOGL" onclick="selectFuturesPair('GOOGL')">GOOGL</button>
-      <button class="futures-pair" data-pair="META" onclick="selectFuturesPair('META')">META</button>
-      <button class="futures-pair" data-pair="AMD" onclick="selectFuturesPair('AMD')">AMD</button>
-      <button class="futures-pair" data-pair="NFLX" onclick="selectFuturesPair('NFLX')">NFLX</button>
-      <button class="futures-pair" data-pair="COIN" onclick="selectFuturesPair('COIN')">COIN</button>
-      <button class="futures-pair" data-pair="DIS" onclick="selectFuturesPair('DIS')">DIS</button>
-      <button class="futures-pair" data-pair="PYPL" onclick="selectFuturesPair('PYPL')">PYPL</button>
-      <button class="futures-pair" data-pair="BA" onclick="selectFuturesPair('BA')">BA</button>
-      <button class="futures-pair" data-pair="JPM" onclick="selectFuturesPair('JPM')">JPM</button>
+    <div style="font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;font-size:14px;">STOCKS</div>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none;">
+      <button class="futures-pair" data-pair="AAPL" onclick="selectFuturesPair('AAPL')"><img src="https://s3-symbol-logo.tradingview.com/apple--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#a2aaad>A</span>'"/>AAPL</button>
+      <button class="futures-pair" data-pair="TSLA" onclick="selectFuturesPair('TSLA')"><img src="https://s3-symbol-logo.tradingview.com/tesla--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#cc0000>T</span>'"/>TSLA</button>
+      <button class="futures-pair" data-pair="NVDA" onclick="selectFuturesPair('NVDA')"><img src="https://s3-symbol-logo.tradingview.com/nvidia--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#76b900>N</span>'"/>NVDA</button>
+      <button class="futures-pair" data-pair="MSFT" onclick="selectFuturesPair('MSFT')"><img src="https://s3-symbol-logo.tradingview.com/microsoft--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#00a4ef>M</span>'"/>MSFT</button>
+      <button class="futures-pair" data-pair="AMZN" onclick="selectFuturesPair('AMZN')"><img src="https://s3-symbol-logo.tradingview.com/amazon--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#ff9900>A</span>'"/>AMZN</button>
+      <button class="futures-pair" data-pair="GOOGL" onclick="selectFuturesPair('GOOGL')"><img src="https://s3-symbol-logo.tradingview.com/alphabet--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#4285f4>G</span>'"/>GOOGL</button>
+      <button class="futures-pair" data-pair="META" onclick="selectFuturesPair('META')"><img src="https://s3-symbol-logo.tradingview.com/meta-platforms--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0668e1>M</span>'"/>META</button>
+      <button class="futures-pair" data-pair="AMD" onclick="selectFuturesPair('AMD')"><img src="https://s3-symbol-logo.tradingview.com/advanced-micro-devices--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#ed1c24>A</span>'"/>AMD</button>
+      <button class="futures-pair" data-pair="NFLX" onclick="selectFuturesPair('NFLX')"><img src="https://s3-symbol-logo.tradingview.com/netflix--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#e50914>N</span>'"/>NFLX</button>
+      <button class="futures-pair" data-pair="COIN" onclick="selectFuturesPair('COIN')"><img src="https://s3-symbol-logo.tradingview.com/coinbase--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0052ff>C</span>'"/>COIN</button>
+      <button class="futures-pair" data-pair="DIS" onclick="selectFuturesPair('DIS')"><img src="https://s3-symbol-logo.tradingview.com/walt-disney--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#113ccf>D</span>'"/>DIS</button>
+      <button class="futures-pair" data-pair="PYPL" onclick="selectFuturesPair('PYPL')"><img src="https://s3-symbol-logo.tradingview.com/paypal--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#003087>P</span>'"/>PYPL</button>
+      <button class="futures-pair" data-pair="BA" onclick="selectFuturesPair('BA')"><img src="https://s3-symbol-logo.tradingview.com/boeing--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0033a0>B</span>'"/>BA</button>
+      <button class="futures-pair" data-pair="JPM" onclick="selectFuturesPair('JPM')"><img src="https://s3-symbol-logo.tradingview.com/jpmorgan-chase--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0b6eaa>JP</span>'"/>JPM</button>
     </div>
-    <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">INDICES &amp; COMMODITIES</div>
-    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;">
-      <button class="futures-pair" data-pair="NAS100" onclick="selectFuturesPair('NAS100')">NASDAQ 100</button>
-      <button class="futures-pair" data-pair="SP500" onclick="selectFuturesPair('SP500')">S&amp;P 500</button>
-      <button class="futures-pair" data-pair="DJI" onclick="selectFuturesPair('DJI')">DOW JONES</button>
-      <button class="futures-pair" data-pair="GOLD" onclick="selectFuturesPair('GOLD')">GOLD</button>
-      <button class="futures-pair" data-pair="SILVER" onclick="selectFuturesPair('SILVER')">SILVER</button>
-      <button class="futures-pair" data-pair="OIL" onclick="selectFuturesPair('OIL')">OIL</button>
-      <button class="futures-pair" data-pair="NATGAS" onclick="selectFuturesPair('NATGAS')">NAT GAS</button>
+    <div style="font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;font-size:14px;">INDICES &amp; COMMODITIES</div>
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;scrollbar-width:none;">
+      <button class="futures-pair" data-pair="NAS100" onclick="selectFuturesPair('NAS100')"><img src="https://s3-symbol-logo.tradingview.com/country/US--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0096d6>NDX</span>'"/>NASDAQ 100</button>
+      <button class="futures-pair" data-pair="SP500" onclick="selectFuturesPair('SP500')"><img src="https://s3-symbol-logo.tradingview.com/country/US--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#ef3e42>500</span>'"/>S&amp;P 500</button>
+      <button class="futures-pair" data-pair="DJI" onclick="selectFuturesPair('DJI')"><img src="https://s3-symbol-logo.tradingview.com/country/US--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#1d6fa5>DJI</span>'"/>DOW JONES</button>
+      <button class="futures-pair" data-pair="GOLD" onclick="selectFuturesPair('GOLD')"><img src="https://s3-symbol-logo.tradingview.com/gold--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#ffd700;color:#000>AU</span>'"/>GOLD</button>
+      <button class="futures-pair" data-pair="SILVER" onclick="selectFuturesPair('SILVER')"><img src="https://s3-symbol-logo.tradingview.com/silver--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#c0c0c0;color:#000>AG</span>'"/>SILVER</button>
+      <button class="futures-pair" data-pair="OIL" onclick="selectFuturesPair('OIL')"><img src="https://s3-symbol-logo.tradingview.com/crude-oil--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#2d2d2d>OIL</span>'"/>CRUDE OIL</button>
+      <button class="futures-pair" data-pair="NATGAS" onclick="selectFuturesPair('NATGAS')"><img src="https://s3-symbol-logo.tradingview.com/natural-gas--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#4caf50>GAS</span>'"/>NAT GAS</button>
     </div>
     <style>
-      .futures-pair{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:all .2s;}
-      .futures-pair:hover{color:var(--text);border-color:rgba(255,140,0,0.4);}
+      .futures-pair{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:all .2s;}
+      .futures-pair:hover{color:var(--text);border-color:rgba(255,140,0,0.5);background:rgba(255,140,0,0.08);}
       .futures-pair.active{background:#ff8c00 !important;color:#000 !important;border-color:#ff8c00 !important;}
+      .futures-pair.active .fp-logo{filter:brightness(0);}
+      .futures-pair.active .fp-badge{opacity:0.8;}
+      .fp-logo{width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0;}
+      .fp-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:8px;font-weight:700;color:#fff;flex-shrink:0;letter-spacing:0;}
     </style>
 
     <!-- Price + Chart -->
     <div class="card" style="margin-bottom:14px;padding:0;overflow:hidden;border-color:rgba(255,140,0,0.2);">
       <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);">
-        <div>
-          <span id="futuresPairName" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff8c00;letter-spacing:2px;">BTC/USD</span>
-          <span id="futuresPairPrice" data-testid="futures-pair-price" style="font-family:'Space Mono',monospace;font-size:18px;color:var(--green);margin-left:12px;">$—</span>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div id="futuresPairLogo" style="width:32px;height:32px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#f7931a;flex-shrink:0;">
+            <img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'"/>
+          </div>
+          <div>
+            <span id="futuresPairName" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff8c00;letter-spacing:2px;">BTC/USD</span>
+            <span id="futuresPairType" style="font-size:10px;color:var(--muted);margin-left:8px;letter-spacing:1px;background:rgba(255,140,0,0.1);padding:2px 6px;border-radius:4px;">CRYPTO</span>
+          </div>
         </div>
-        <div id="futuresPairChange" style="font-size:14px;font-weight:700;color:var(--green);">—</div>
+        <div style="text-align:right;">
+          <div id="futuresPairPrice" data-testid="futures-pair-price" style="font-family:'Space Mono',monospace;font-size:18px;color:var(--green);">$—</div>
+          <div id="futuresPairChange" style="font-size:13px;font-weight:700;color:var(--green);">—</div>
+        </div>
       </div>
       <div id="futuresChart" style="height:300px;background:#0a0a0a;">
         <div id="tradingview_chart" style="width:100%;height:100%;"></div>
@@ -3505,6 +3517,49 @@
           <div style="display:flex;gap:6px;">
             <input class="swap-input" id="futuresWithdrawAmt" type="number" step="any" placeholder="Amount" style="flex:1;" />
             <button onclick="futuresOwnerWithdraw()" style="padding:10px 20px;border-radius:10px;border:none;background:var(--gold);color:#000;font-family:'Bebas Neue',sans-serif;font-size:14px;cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Trade FAQ -->
+    <div class="card" style="margin-top:14px;border-color:rgba(255,140,0,0.15);background:linear-gradient(135deg,rgba(255,140,0,0.03),transparent);">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#ff8c00;letter-spacing:2px;margin-bottom:16px;text-align:center;">HOW TO TRADE LEVERAGE</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+
+        <div class="faq-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">1. SELECT YOUR PAIR</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.5;">Choose from Crypto (BTC, ETH, SOL...), Stocks (AAPL, TSLA, NVDA...), or Commodities (Gold, Silver, Oil). Each pair shows a live TradingView chart and real-time price.</div>
+        </div>
+
+        <div class="faq-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">2. CHOOSE LONG OR SHORT</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.5;"><span style="color:var(--green);font-weight:700;">LONG</span> = You profit when the price goes UP. <span style="color:var(--red);font-weight:700;">SHORT</span> = You profit when the price goes DOWN. Pick based on your market prediction.</div>
+        </div>
+
+        <div class="faq-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">3. SET YOUR LEVERAGE</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.5;">Choose from 2x to 50x leverage. Higher leverage = bigger profits but also bigger risk. At 10x, a 1% price move gives you a 10% gain (or loss). <span style="color:var(--red);">Be careful with high leverage!</span></div>
+        </div>
+
+        <div class="faq-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">4. ENTER YOUR AMOUNT</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.5;">Enter how many GANG tokens to use as margin. Your position size will be Amount x Leverage. You can set optional Take Profit and Stop Loss prices to auto-close.</div>
+        </div>
+
+        <div class="faq-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">5. OPEN & MANAGE POSITION</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.5;">Hit the Open button to enter your trade. Your position appears below with live P&L tracking. Close anytime to take profit or cut losses. Payouts are in $GANG tokens from the liquidity pool.</div>
+        </div>
+
+        <div style="background:rgba(255,140,0,0.08);border:1px solid rgba(255,140,0,0.25);border-radius:10px;padding:14px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:#ff8c00;letter-spacing:1px;margin-bottom:6px;">FEES & LIMITS</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.6;">
+            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Opening Fee</span><span>0.1%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Closing Fee</span><span>0.1%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Max Leverage</span><span>50x</span></div>
+            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Max Payout</span><span>50x margin</span></div>
+            <div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--muted);">Liquidation</span><span>When losses exceed margin</span></div>
           </div>
         </div>
       </div>
@@ -14805,41 +14860,41 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').c
 // ══════════════════════════════════════════════════════════════
 const FUTURES_PAIRS = {
   // Crypto
-  BTC: { symbol: 'BTCUSDT', tv: 'BINANCE:BTCUSDT', name: 'BTC/USD', type: 'crypto', yahoo: 'BTC' },
-  ETH: { symbol: 'ETHUSDT', tv: 'BINANCE:ETHUSDT', name: 'ETH/USD', type: 'crypto', yahoo: 'ETH' },
-  BNB: { symbol: 'BNBUSDT', tv: 'BINANCE:BNBUSDT', name: 'BNB/USD', type: 'crypto', yahoo: 'BNB' },
-  CRO: { symbol: 'CROUSDT', tv: 'CRYPTO:CROUSD', name: 'CRO/USD', type: 'crypto', yahoo: 'CRO' },
-  SOL: { symbol: 'SOLUSDT', tv: 'BINANCE:SOLUSDT', name: 'SOL/USD', type: 'crypto', yahoo: 'SOL' },
-  XRP: { symbol: 'XRPUSDT', tv: 'BINANCE:XRPUSDT', name: 'XRP/USD', type: 'crypto', yahoo: 'XRP' },
-  DOGE: { symbol: 'DOGEUSDT', tv: 'BINANCE:DOGEUSDT', name: 'DOGE/USD', type: 'crypto', yahoo: 'DOGE' },
-  ADA: { symbol: 'ADAUSDT', tv: 'BINANCE:ADAUSDT', name: 'ADA/USD', type: 'crypto', yahoo: 'ADA' },
-  AVAX: { symbol: 'AVAXUSDT', tv: 'BINANCE:AVAXUSDT', name: 'AVAX/USD', type: 'crypto', yahoo: 'AVAX' },
-  LINK: { symbol: 'LINKUSDT', tv: 'BINANCE:LINKUSDT', name: 'LINK/USD', type: 'crypto', yahoo: 'LINK' },
-  ARB: { symbol: 'ARBUSDT', tv: 'BINANCE:ARBUSDT', name: 'ARB/USD', type: 'crypto', yahoo: 'ARB' },
-  MATIC: { symbol: 'MATICUSDT', tv: 'BINANCE:MATICUSDT', name: 'MATIC/USD', type: 'crypto', yahoo: 'MATIC' },
+  BTC: { symbol: 'BTCUSDT', tv: 'BINANCE:BTCUSDT', name: 'BTC/USD', type: 'crypto', yahoo: 'BTC', logo: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png', color: '#f7931a' },
+  ETH: { symbol: 'ETHUSDT', tv: 'BINANCE:ETHUSDT', name: 'ETH/USD', type: 'crypto', yahoo: 'ETH', logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png', color: '#627eea' },
+  BNB: { symbol: 'BNBUSDT', tv: 'BINANCE:BNBUSDT', name: 'BNB/USD', type: 'crypto', yahoo: 'BNB', logo: 'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png', color: '#f3ba2f' },
+  CRO: { symbol: 'CROUSDT', tv: 'CRYPTO:CROUSD', name: 'CRO/USD', type: 'crypto', yahoo: 'CRO', logo: 'https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png', color: '#002d74' },
+  SOL: { symbol: 'SOLUSDT', tv: 'BINANCE:SOLUSDT', name: 'SOL/USD', type: 'crypto', yahoo: 'SOL', logo: 'https://assets.coingecko.com/coins/images/4128/small/solana.png', color: '#9945ff' },
+  XRP: { symbol: 'XRPUSDT', tv: 'BINANCE:XRPUSDT', name: 'XRP/USD', type: 'crypto', yahoo: 'XRP', logo: 'https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png', color: '#23292f' },
+  DOGE: { symbol: 'DOGEUSDT', tv: 'BINANCE:DOGEUSDT', name: 'DOGE/USD', type: 'crypto', yahoo: 'DOGE', logo: 'https://assets.coingecko.com/coins/images/5/small/dogecoin.png', color: '#c3a634' },
+  ADA: { symbol: 'ADAUSDT', tv: 'BINANCE:ADAUSDT', name: 'ADA/USD', type: 'crypto', yahoo: 'ADA', logo: 'https://assets.coingecko.com/coins/images/975/small/cardano.png', color: '#0033ad' },
+  AVAX: { symbol: 'AVAXUSDT', tv: 'BINANCE:AVAXUSDT', name: 'AVAX/USD', type: 'crypto', yahoo: 'AVAX', logo: 'https://assets.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png', color: '#e84142' },
+  LINK: { symbol: 'LINKUSDT', tv: 'BINANCE:LINKUSDT', name: 'LINK/USD', type: 'crypto', yahoo: 'LINK', logo: 'https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png', color: '#2a5ada' },
+  ARB: { symbol: 'ARBUSDT', tv: 'BINANCE:ARBUSDT', name: 'ARB/USD', type: 'crypto', yahoo: 'ARB', logo: 'https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg', color: '#28a0f0' },
+  MATIC: { symbol: 'MATICUSDT', tv: 'BINANCE:MATICUSDT', name: 'MATIC/USD', type: 'crypto', yahoo: 'MATIC', logo: 'https://assets.coingecko.com/coins/images/4713/small/polygon.png', color: '#8247e5' },
   // Stocks
-  AAPL: { symbol: 'AAPL', tv: 'NASDAQ:AAPL', name: 'APPLE', type: 'stock', yahoo: 'AAPL' },
-  TSLA: { symbol: 'TSLA', tv: 'NASDAQ:TSLA', name: 'TESLA', type: 'stock', yahoo: 'TSLA' },
-  NVDA: { symbol: 'NVDA', tv: 'NASDAQ:NVDA', name: 'NVIDIA', type: 'stock', yahoo: 'NVDA' },
-  MSFT: { symbol: 'MSFT', tv: 'NASDAQ:MSFT', name: 'MICROSOFT', type: 'stock', yahoo: 'MSFT' },
-  AMZN: { symbol: 'AMZN', tv: 'NASDAQ:AMZN', name: 'AMAZON', type: 'stock', yahoo: 'AMZN' },
-  GOOGL: { symbol: 'GOOGL', tv: 'NASDAQ:GOOGL', name: 'GOOGLE', type: 'stock', yahoo: 'GOOGL' },
-  META: { symbol: 'META', tv: 'NASDAQ:META', name: 'META', type: 'stock', yahoo: 'META' },
-  AMD: { symbol: 'AMD', tv: 'NASDAQ:AMD', name: 'AMD', type: 'stock', yahoo: 'AMD' },
-  NFLX: { symbol: 'NFLX', tv: 'NASDAQ:NFLX', name: 'NETFLIX', type: 'stock', yahoo: 'NFLX' },
-  COIN: { symbol: 'COIN', tv: 'NASDAQ:COIN', name: 'COINBASE', type: 'stock', yahoo: 'COIN' },
-  DIS: { symbol: 'DIS', tv: 'NYSE:DIS', name: 'DISNEY', type: 'stock', yahoo: 'DIS' },
-  PYPL: { symbol: 'PYPL', tv: 'NASDAQ:PYPL', name: 'PAYPAL', type: 'stock', yahoo: 'PYPL' },
-  BA: { symbol: 'BA', tv: 'NYSE:BA', name: 'BOEING', type: 'stock', yahoo: 'BA' },
-  JPM: { symbol: 'JPM', tv: 'NYSE:JPM', name: 'JP MORGAN', type: 'stock', yahoo: 'JPM' },
+  AAPL: { symbol: 'AAPL', tv: 'NASDAQ:AAPL', name: 'APPLE', type: 'stock', yahoo: 'AAPL', logo: 'https://s3-symbol-logo.tradingview.com/apple--big.svg', color: '#a2aaad' },
+  TSLA: { symbol: 'TSLA', tv: 'NASDAQ:TSLA', name: 'TESLA', type: 'stock', yahoo: 'TSLA', logo: 'https://s3-symbol-logo.tradingview.com/tesla--big.svg', color: '#cc0000' },
+  NVDA: { symbol: 'NVDA', tv: 'NASDAQ:NVDA', name: 'NVIDIA', type: 'stock', yahoo: 'NVDA', logo: 'https://s3-symbol-logo.tradingview.com/nvidia--big.svg', color: '#76b900' },
+  MSFT: { symbol: 'MSFT', tv: 'NASDAQ:MSFT', name: 'MICROSOFT', type: 'stock', yahoo: 'MSFT', logo: 'https://s3-symbol-logo.tradingview.com/microsoft--big.svg', color: '#00a4ef' },
+  AMZN: { symbol: 'AMZN', tv: 'NASDAQ:AMZN', name: 'AMAZON', type: 'stock', yahoo: 'AMZN', logo: 'https://s3-symbol-logo.tradingview.com/amazon--big.svg', color: '#ff9900' },
+  GOOGL: { symbol: 'GOOGL', tv: 'NASDAQ:GOOGL', name: 'GOOGLE', type: 'stock', yahoo: 'GOOGL', logo: 'https://s3-symbol-logo.tradingview.com/alphabet--big.svg', color: '#4285f4' },
+  META: { symbol: 'META', tv: 'NASDAQ:META', name: 'META', type: 'stock', yahoo: 'META', logo: 'https://s3-symbol-logo.tradingview.com/meta-platforms--big.svg', color: '#0668e1' },
+  AMD: { symbol: 'AMD', tv: 'NASDAQ:AMD', name: 'AMD', type: 'stock', yahoo: 'AMD', logo: 'https://s3-symbol-logo.tradingview.com/advanced-micro-devices--big.svg', color: '#ed1c24' },
+  NFLX: { symbol: 'NFLX', tv: 'NASDAQ:NFLX', name: 'NETFLIX', type: 'stock', yahoo: 'NFLX', logo: 'https://s3-symbol-logo.tradingview.com/netflix--big.svg', color: '#e50914' },
+  COIN: { symbol: 'COIN', tv: 'NASDAQ:COIN', name: 'COINBASE', type: 'stock', yahoo: 'COIN', logo: 'https://s3-symbol-logo.tradingview.com/coinbase--big.svg', color: '#0052ff' },
+  DIS: { symbol: 'DIS', tv: 'NYSE:DIS', name: 'DISNEY', type: 'stock', yahoo: 'DIS', logo: 'https://s3-symbol-logo.tradingview.com/walt-disney--big.svg', color: '#113ccf' },
+  PYPL: { symbol: 'PYPL', tv: 'NASDAQ:PYPL', name: 'PAYPAL', type: 'stock', yahoo: 'PYPL', logo: 'https://s3-symbol-logo.tradingview.com/paypal--big.svg', color: '#003087' },
+  BA: { symbol: 'BA', tv: 'NYSE:BA', name: 'BOEING', type: 'stock', yahoo: 'BA', logo: 'https://s3-symbol-logo.tradingview.com/boeing--big.svg', color: '#0033a0' },
+  JPM: { symbol: 'JPM', tv: 'NYSE:JPM', name: 'JP MORGAN', type: 'stock', yahoo: 'JPM', logo: 'https://s3-symbol-logo.tradingview.com/jpmorgan-chase--big.svg', color: '#0b6eaa' },
   // Indices & Commodities
-  NAS100: { symbol: 'NAS100', tv: 'PEPPERSTONE:NAS100', name: 'NASDAQ 100', type: 'index', yahoo: 'NAS100' },
-  SP500: { symbol: 'SP500', tv: 'PEPPERSTONE:US500', name: 'S&P 500', type: 'index', yahoo: 'SP500' },
-  DJI: { symbol: 'DJI', tv: 'TVC:DJI', name: 'DOW JONES', type: 'index', yahoo: 'DJI' },
-  GOLD: { symbol: 'GOLD', tv: 'TVC:GOLD', name: 'GOLD', type: 'commodity', yahoo: 'GOLD' },
-  SILVER: { symbol: 'SILVER', tv: 'TVC:SILVER', name: 'SILVER', type: 'commodity', yahoo: 'SILVER' },
-  OIL: { symbol: 'OIL', tv: 'TVC:USOIL', name: 'CRUDE OIL', type: 'commodity', yahoo: 'OIL' },
-  NATGAS: { symbol: 'NATGAS', tv: 'TVC:NATGAS', name: 'NATURAL GAS', type: 'commodity', yahoo: 'NATGAS' }
+  NAS100: { symbol: 'NAS100', tv: 'PEPPERSTONE:NAS100', name: 'NASDAQ 100', type: 'index', yahoo: 'NAS100', logo: 'https://s3-symbol-logo.tradingview.com/country/US--big.svg', color: '#0096d6', badge: 'NDX' },
+  SP500: { symbol: 'SP500', tv: 'PEPPERSTONE:US500', name: 'S&P 500', type: 'index', yahoo: 'SP500', logo: 'https://s3-symbol-logo.tradingview.com/country/US--big.svg', color: '#ef3e42', badge: '500' },
+  DJI: { symbol: 'DJI', tv: 'TVC:DJI', name: 'DOW JONES', type: 'index', yahoo: 'DJI', logo: 'https://s3-symbol-logo.tradingview.com/country/US--big.svg', color: '#1d6fa5', badge: 'DJI' },
+  GOLD: { symbol: 'GOLD', tv: 'TVC:GOLD', name: 'GOLD', type: 'commodity', yahoo: 'GOLD', logo: 'https://s3-symbol-logo.tradingview.com/gold--big.svg', color: '#ffd700', badge: 'AU' },
+  SILVER: { symbol: 'SILVER', tv: 'TVC:SILVER', name: 'SILVER', type: 'commodity', yahoo: 'SILVER', logo: 'https://s3-symbol-logo.tradingview.com/silver--big.svg', color: '#c0c0c0', badge: 'AG' },
+  OIL: { symbol: 'OIL', tv: 'TVC:USOIL', name: 'CRUDE OIL', type: 'commodity', yahoo: 'OIL', logo: 'https://s3-symbol-logo.tradingview.com/crude-oil--big.svg', color: '#2d2d2d', badge: 'OIL' },
+  NATGAS: { symbol: 'NATGAS', tv: 'TVC:NATGAS', name: 'NATURAL GAS', type: 'commodity', yahoo: 'NATGAS', logo: 'https://s3-symbol-logo.tradingview.com/natural-gas--big.svg', color: '#4caf50', badge: 'GAS' }
 };
 
 let futuresState = {
@@ -14878,6 +14933,19 @@ function selectFuturesPair(pair) {
   });
   const p = FUTURES_PAIRS[pair];
   document.getElementById('futuresPairName').textContent = p.name;
+  // Update logo in header
+  const logoContainer = document.getElementById('futuresPairLogo');
+  if (logoContainer) {
+    logoContainer.style.background = p.color || '#ff8c00';
+    if (p.logo) {
+      logoContainer.innerHTML = '<img src="' + p.logo + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML=\'<span style=font-size:12px;font-weight:700;color:#fff>' + (p.badge || pair.charAt(0)) + '</span>\'" />';
+    } else {
+      logoContainer.innerHTML = '<span style="font-size:12px;font-weight:700;color:' + (p.color === '#ffd700' || p.color === '#c0c0c0' ? '#000' : '#fff') + ';">' + (p.badge || pair) + '</span>';
+    }
+  }
+  // Update type badge
+  const typeEl = document.getElementById('futuresPairType');
+  if (typeEl) typeEl.textContent = p.type.toUpperCase();
   loadFuturesChart(pair);
   updateFuturesPrice();
 }
