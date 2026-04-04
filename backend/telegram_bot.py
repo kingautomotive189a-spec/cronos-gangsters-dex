@@ -288,9 +288,9 @@ def main_keyboard():
          InlineKeyboardButton("📁 Portfolio", callback_data="menu_portfolio")],
         [InlineKeyboardButton("📈 GANG FUTURES", callback_data="menu_futures"),
          InlineKeyboardButton("🔍 GANG TRACKER", callback_data="menu_tracker")],
-        [InlineKeyboardButton("⛏ Mining Hub", callback_data="menu_mining"),
-         InlineKeyboardButton("⚡ Trading", callback_data="menu_trading"),
-         InlineKeyboardButton("🤖 Dashboard", callback_data="menu_dashboard")],
+        [InlineKeyboardButton("🏦 Lend & Borrow", callback_data="menu_lending"),
+         InlineKeyboardButton("⛏ Mining Hub", callback_data="menu_mining"),
+         InlineKeyboardButton("⚡ Trading", callback_data="menu_trading")],
         [InlineKeyboardButton("🌾 Farms", callback_data="menu_farms"),
          InlineKeyboardButton("🏦 Vaults", callback_data="menu_vaults"),
          InlineKeyboardButton("🔒 Staking", callback_data="menu_staking")],
@@ -414,6 +414,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "*🆕 Phase 8 — NEW:*\n"
         "• /futures - GANG FUTURES (33 pairs, 20x leverage)\n"
         "• /tracker - GANG TRACKER (multi-chain scanner)\n"
+        "• /lending - Lend & Borrow (earn interest)\n"
         "• /roadmap - Project roadmap & phases\n\n"
         "*💰 Token & Price:*\n"
         "• /price - Current $GANG price & stats\n"
@@ -1347,6 +1348,42 @@ async def roadmap_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
 
+
+async def lending_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /lending command"""
+    msg = (
+        "🏦 *GANG LENDING & BORROWING*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Lend crypto to earn interest.\n"
+        "Borrow against your collateral.\n\n"
+        "━━━ *LENDING POOLS* ━━━\n\n"
+        "💎 *CRO* — ~4.2% APY Supply\n"
+        "🔫 *GANG* — ~8.5% APY Supply\n"
+        "💵 *USDC* — ~3.8% APY Supply\n"
+        "⟠ *WETH* — ~2.1% APY Supply\n\n"
+        "━━━ *HOW IT WORKS* ━━━\n\n"
+        "1️⃣ *Supply* tokens to earn interest\n"
+        "   Your deposits earn APY automatically\n\n"
+        "2️⃣ *Borrow* against collateral (75% LTV)\n"
+        "   Deposit $100 → borrow up to $75\n\n"
+        "3️⃣ *Repay* anytime, no lock period\n"
+        "   Your collateral unlocks on repayment\n\n"
+        "━━━ *FEES* ━━━\n\n"
+        "Origination: *0.3%* per loan\n"
+        "Interest rates: *Variable* (2-15% APR)\n"
+        "Liquidation penalty: *5%*\n\n"
+        "⚠️ Keep health factor above 1.0 to avoid liquidation!\n\n"
+        f"[🏦 Open Lending]({DEX_LINK})"
+    )
+
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🏦 Open Lending", url=f"{DEX_LINK}#lending")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
 def generate_captcha():
     """Generate a simple math captcha using cryptographic randomness"""
     a = secrets.randbelow(10) + 1
@@ -2174,6 +2211,7 @@ async def _cb_menu_roadmap(query, context):
         "✅ *Phase 8 — COMPLETED* 🔥\n"
         "   GANG FUTURES (33 pairs)\n"
         "   GANG TRACKER (multi-chain)\n"
+        "   GANG LENDING (earn interest)\n"
         "   DexScreener Live Chart\n"
         "   Dual currency (GANG + CRO)\n"
         "   0.3% standardized fees\n"
@@ -2185,7 +2223,31 @@ async def _cb_menu_roadmap(query, context):
     kb = InlineKeyboardMarkup([
         [InlineKeyboardButton("🌐 Visit Website", url=DEX_LINK)],
         [InlineKeyboardButton("📈 Futures", callback_data="menu_futures"),
+         InlineKeyboardButton("🏦 Lending", callback_data="menu_lending"),
          InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_lending(query, context):
+    """Callback handler for Lending menu"""
+    msg = (
+        "🏦 *GANG LENDING & BORROWING*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Lend crypto. Earn interest. Borrow against collateral.\n\n"
+        "💎 *CRO* — ~4.2% APY\n"
+        "🔫 *GANG* — ~8.5% APY\n"
+        "💵 *USDC* — ~3.8% APY\n"
+        "⟠ *WETH* — ~2.1% APY\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• 20% of all interest payments\n"
+        "• 0.3% origination fee per loan\n"
+        "• 5% liquidation penalty\n\n"
+        "No lock period. Repay anytime."
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🏦 Open Lending", url=f"{DEX_LINK}#lending")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -2224,6 +2286,7 @@ CALLBACK_DISPATCH = {
     "menu_futures": _cb_menu_futures,
     "menu_tracker": _cb_menu_tracker,
     "menu_roadmap": _cb_menu_roadmap,
+    "menu_lending": _cb_menu_lending,
 }
 
 
@@ -2635,6 +2698,7 @@ def main():
     app.add_handler(CommandHandler("futures", futures_cmd))
     app.add_handler(CommandHandler("tracker", tracker_cmd))
     app.add_handler(CommandHandler("roadmap", roadmap_cmd))
+    app.add_handler(CommandHandler("lending", lending_cmd))
 
     # Admin commands
     app.add_handler(CommandHandler("ban", ban))

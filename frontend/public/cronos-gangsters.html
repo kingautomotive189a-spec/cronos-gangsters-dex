@@ -571,6 +571,7 @@
       <div class="nav-group-label">TRADE</div>
       <button class="nav-btn active" data-page="swap"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg></span>Swap</button>
       <button class="nav-btn" data-page="liquidity"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></span>Liquidity</button>
+      <button class="nav-btn" data-page="lending" data-testid="nav-lending-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 14h4"/><path d="M14 14h4"/></svg></span><span style="color:#00e5ff;font-weight:700;">Lend & Borrow</span></button>
       <button class="nav-btn" data-page="futures" data-testid="nav-futures-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 5-10"/></svg></span><span style="color:#ff8c00;font-weight:700;">Gang Futures</span></button>
       <button class="nav-btn" data-page="sniper" data-testid="nav-sniper-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg></span>Sniper</button>
       <div class="nav-divider"></div>
@@ -733,6 +734,8 @@ function toggleNavMenu() {
       <div style="display:flex;gap:28px;padding:0 14px;flex-shrink:0;">
         <span onclick="showPage('futures')" style="cursor:pointer;color:#ff8c00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📈 GANG FUTURES — 33 PAIRS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('lending')" style="cursor:pointer;color:#00e5ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏦 LEND & BORROW — EARN INTEREST</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('tracker')" style="cursor:pointer;color:#00d4ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔍 GANG TRACKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('swap')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔄 SWAP TOKENS</span>
@@ -773,6 +776,8 @@ function toggleNavMenu() {
       </div>
       <div style="display:flex;gap:28px;padding:0 14px;flex-shrink:0;">
         <span onclick="showPage('futures')" style="cursor:pointer;color:#ff8c00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📈 GANG FUTURES — 33 PAIRS</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('lending')" style="cursor:pointer;color:#00e5ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏦 LEND & BORROW — EARN INTEREST</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('tracker')" style="cursor:pointer;color:#00d4ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔍 GANG TRACKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
@@ -1060,6 +1065,11 @@ function toggleNavMenu() {
           <div style="font-size:22px;margin-bottom:4px;">🔍</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#00d4ff;letter-spacing:1px;">TRACKER</div>
           <div style="font-size:9px;color:var(--muted);margin-top:2px;">Multi-chain</div>
+        </div>
+        <div class="card" onclick="showPage('lending')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(0,229,255,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#00e5ff'" onmouseout="this.style.borderColor='rgba(0,229,255,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">🏦</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#00e5ff;letter-spacing:1px;">LEND</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Earn interest</div>
         </div>
         <div class="card" onclick="showPage('swap')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
           <div style="font-size:22px;margin-bottom:4px;">🔄</div>
@@ -3306,6 +3316,319 @@ function toggleNavMenu() {
 
 
 
+
+  <!-- ══════════════════════════════════════
+       LENDING & BORROWING PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-lending" data-testid="page-lending">
+
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#00e5ff;line-height:1;text-shadow:0 0 30px rgba(0,229,255,0.3);">GANG LENDING</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Lend crypto to earn interest. Borrow against your collateral.</div>
+    </div>
+
+    <!-- Platform Stats Bar -->
+    <div class="stats-bar" style="margin-bottom:20px;" data-testid="lending-stats-bar">
+      <div class="stat-item">
+        <div class="stat-label">TOTAL SUPPLIED</div>
+        <div class="stat-value" id="lendTotalSupplied" data-testid="lend-total-supplied">$0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">TOTAL BORROWED</div>
+        <div class="stat-value" id="lendTotalBorrowed" data-testid="lend-total-borrowed">$0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">YOUR DEPOSITS</div>
+        <div class="stat-value" id="lendYourDeposits" data-testid="lend-your-deposits">$0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">YOUR BORROWS</div>
+        <div class="stat-value" id="lendYourBorrows" data-testid="lend-your-borrows">$0</div>
+      </div>
+    </div>
+
+    <!-- Health Factor -->
+    <div class="card" style="margin-bottom:16px;border-color:rgba(0,229,255,0.3);" data-testid="lending-health-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#00e5ff;letter-spacing:2px;">HEALTH FACTOR</div>
+        <div id="lendHealthFactor" data-testid="lend-health-factor" style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green);">--</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;height:8px;overflow:hidden;">
+        <div id="lendHealthBar" data-testid="lend-health-bar" style="height:100%;width:100%;background:linear-gradient(90deg,var(--red),#ff8c00,var(--green));border-radius:8px;transition:width .3s;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--muted);">
+        <span>LIQUIDATION</span>
+        <span>SAFE</span>
+      </div>
+    </div>
+
+    <!-- Lending Pools -->
+    <div class="card" style="margin-bottom:16px;" data-testid="lending-supply-card">
+      <div class="card-title" style="color:#00e5ff;">SUPPLY MARKETS — EARN INTEREST</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Deposit your tokens to earn passive interest. Your deposits also serve as collateral for borrowing.</div>
+
+      <div id="lendingPoolsGrid" data-testid="lending-pools-grid" style="display:grid;gap:10px;">
+
+        <!-- CRO Pool -->
+        <div class="card" style="padding:14px;border-color:rgba(0,45,116,0.3);" data-testid="lend-pool-cro">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">CRO</div>
+                <div style="font-size:10px;color:var(--muted);">Cronos</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendCroApy" data-testid="lend-cro-apy">4.2% APY</div>
+              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
+              <div style="color:var(--muted);font-size:9px;">POOL SIZE</div>
+              <div id="lendCroPool" data-testid="lend-cro-pool" style="color:var(--text);">0 CRO</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
+              <div style="color:var(--muted);font-size:9px;">UTILIZATION</div>
+              <div id="lendCroUtil" data-testid="lend-cro-util" style="color:#ff8c00;">0%</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
+              <div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div>
+              <div id="lendCroYours" data-testid="lend-cro-yours" style="color:var(--green);">0 CRO</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <input type="number" id="lendCroAmt" data-testid="lend-cro-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
+            <button class="btn-primary" data-testid="lend-cro-supply-btn" onclick="lendSupply('CRO')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-cro-withdraw-btn" onclick="lendWithdraw('CRO')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- GANG Pool -->
+        <div class="card" style="padding:14px;border-color:rgba(232,184,48,0.3);" data-testid="lend-pool-gang">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <img src="/gang-logo.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">GANG</div>
+                <div style="font-size:10px;color:var(--muted);">Cronos Gangsters</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendGangApy" data-testid="lend-gang-apy">8.5% APY</div>
+              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
+              <div style="color:var(--muted);font-size:9px;">POOL SIZE</div>
+              <div id="lendGangPool" data-testid="lend-gang-pool" style="color:var(--text);">0 GANG</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
+              <div style="color:var(--muted);font-size:9px;">UTILIZATION</div>
+              <div id="lendGangUtil" data-testid="lend-gang-util" style="color:#ff8c00;">0%</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
+              <div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div>
+              <div id="lendGangYours" data-testid="lend-gang-yours" style="color:var(--green);">0 GANG</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <input type="number" id="lendGangAmt" data-testid="lend-gang-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
+            <button class="btn-primary" data-testid="lend-gang-supply-btn" onclick="lendSupply('GANG')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-gang-withdraw-btn" onclick="lendWithdraw('GANG')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- USDC Pool -->
+        <div class="card" style="padding:14px;border-color:rgba(38,117,255,0.3);" data-testid="lend-pool-usdc">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">USDC</div>
+                <div style="font-size:10px;color:var(--muted);">USD Coin</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendUsdcApy" data-testid="lend-usdc-apy">3.8% APY</div>
+              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
+              <div style="color:var(--muted);font-size:9px;">POOL SIZE</div>
+              <div id="lendUsdcPool" data-testid="lend-usdc-pool" style="color:var(--text);">0 USDC</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
+              <div style="color:var(--muted);font-size:9px;">UTILIZATION</div>
+              <div id="lendUsdcUtil" data-testid="lend-usdc-util" style="color:#ff8c00;">0%</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
+              <div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div>
+              <div id="lendUsdcYours" data-testid="lend-usdc-yours" style="color:var(--green);">0 USDC</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <input type="number" id="lendUsdcAmt" data-testid="lend-usdc-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
+            <button class="btn-primary" data-testid="lend-usdc-supply-btn" onclick="lendSupply('USDC')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-usdc-withdraw-btn" onclick="lendWithdraw('USDC')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- WETH Pool -->
+        <div class="card" style="padding:14px;border-color:rgba(98,126,234,0.3);" data-testid="lend-pool-weth">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">WETH</div>
+                <div style="font-size:10px;color:var(--muted);">Wrapped Ether</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendWethApy" data-testid="lend-weth-apy">2.1% APY</div>
+              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
+              <div style="color:var(--muted);font-size:9px;">POOL SIZE</div>
+              <div id="lendWethPool" data-testid="lend-weth-pool" style="color:var(--text);">0 WETH</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
+              <div style="color:var(--muted);font-size:9px;">UTILIZATION</div>
+              <div id="lendWethUtil" data-testid="lend-weth-util" style="color:#ff8c00;">0%</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
+              <div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div>
+              <div id="lendWethYours" data-testid="lend-weth-yours" style="color:var(--green);">0 WETH</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <input type="number" id="lendWethAmt" data-testid="lend-weth-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
+            <button class="btn-primary" data-testid="lend-weth-supply-btn" onclick="lendSupply('WETH')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-weth-withdraw-btn" onclick="lendWithdraw('WETH')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Borrow Section -->
+    <div class="card" style="margin-bottom:16px;border-color:rgba(255,140,0,0.3);" data-testid="lending-borrow-card">
+      <div class="card-title" style="color:#ff8c00;">BORROW — USE COLLATERAL</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Borrow against your supplied collateral. Keep health factor above 1.0 to avoid liquidation. Collateral factor: 75%.</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div style="background:var(--surface2);border:1px solid rgba(255,140,0,0.2);border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">COLLATERAL VALUE</div>
+          <div id="lendCollateralVal" data-testid="lend-collateral-val" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">$0.00</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(255,140,0,0.2);border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">BORROW LIMIT</div>
+          <div id="lendBorrowLimit" data-testid="lend-borrow-limit" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff8c00;">$0.00</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;">
+        <select id="lendBorrowToken" data-testid="lend-borrow-token-select" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:14px;cursor:pointer;outline:none;">
+          <option value="CRO">CRO</option>
+          <option value="GANG">GANG</option>
+          <option value="USDC">USDC</option>
+          <option value="WETH">WETH</option>
+        </select>
+        <input type="number" id="lendBorrowAmt" data-testid="lend-borrow-amount" placeholder="Borrow amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-primary" data-testid="lend-borrow-btn" onclick="lendBorrow()" style="flex:1;font-size:16px;border-radius:10px;background:linear-gradient(135deg,#ff8c00,#cc7000);">BORROW</button>
+        <button class="btn-secondary" data-testid="lend-repay-btn" onclick="lendRepay()" style="flex:1;padding:10px;font-size:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">REPAY</button>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:var(--muted);text-align:center;">
+        Borrow APR: <span id="lendBorrowApr" data-testid="lend-borrow-apr" style="color:#ff8c00;">6-15%</span> (variable based on utilization) | Origination fee: <span style="color:var(--gold);">0.3%</span>
+      </div>
+    </div>
+
+    <!-- Your Active Loans -->
+    <div class="card" style="margin-bottom:16px;" data-testid="lending-loans-card">
+      <div class="card-title">YOUR ACTIVE LOANS</div>
+      <div id="lendActiveLoans" data-testid="lend-active-loans" style="font-size:13px;color:var(--muted);text-align:center;padding:16px;">
+        No active loans. Supply collateral and borrow above.
+      </div>
+    </div>
+
+    <!-- Owner Panel (hidden unless owner) -->
+    <div id="lendOwnerPanel" data-testid="lend-owner-panel" style="display:none;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);">
+        <div class="card-title" style="color:var(--green);">OWNER — LENDING REVENUE</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">You earn 20% of all interest paid by borrowers + 0.3% origination fee on every loan + 5% liquidation penalty.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">INTEREST EARNED</div>
+            <div id="lendOwnerInterest" data-testid="lend-owner-interest" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);">0</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">ORIGINATION FEES</div>
+            <div id="lendOwnerOrigFees" data-testid="lend-owner-orig-fees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);">0</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">LIQUIDATION FEES</div>
+            <div id="lendOwnerLiqFees" data-testid="lend-owner-liq-fees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--red);">0</div>
+          </div>
+        </div>
+        <button class="btn-primary" data-testid="lend-owner-collect-btn" onclick="lendOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT LENDING FEES</button>
+      </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title">HOW LENDING & BORROWING WORKS</div>
+      <div style="display:grid;gap:12px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#00e5ff;color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">1</div>
+          <div>
+            <div style="font-weight:700;color:var(--text);font-size:13px;">SUPPLY tokens to earn interest</div>
+            <div style="font-size:11px;color:var(--muted);">Deposit CRO, GANG, USDC, or WETH. You earn APY automatically — interest accrues every block.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#ff8c00;color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">2</div>
+          <div>
+            <div style="font-weight:700;color:var(--text);font-size:13px;">BORROW against your collateral</div>
+            <div style="font-size:11px;color:var(--muted);">Use your deposits as collateral to borrow other tokens. 75% collateral factor — deposit $100, borrow up to $75.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:var(--green);color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">3</div>
+          <div>
+            <div style="font-weight:700;color:var(--text);font-size:13px;">REPAY your loan anytime</div>
+            <div style="font-size:11px;color:var(--muted);">No lock period. Repay your borrow + interest at any time. Your collateral is unlocked when you repay.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:var(--red);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">!</div>
+          <div>
+            <div style="font-weight:700;color:var(--red);font-size:13px;">LIQUIDATION WARNING</div>
+            <div style="font-size:11px;color:var(--muted);">If your health factor drops below 1.0, your collateral can be liquidated. 5% penalty goes to the protocol. Keep health factor above 1.5 to be safe.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fee Summary -->
+    <div style="text-align:center;margin-top:16px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;">
+      <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">PLATFORM FEES</div>
+      <div style="display:flex;justify-content:center;gap:16px;margin-top:6px;font-size:12px;">
+        <span>Origination: <span style="color:var(--gold);">0.3%</span></span>
+        <span>Interest cut: <span style="color:var(--green);">20%</span></span>
+        <span>Liquidation: <span style="color:var(--red);">5%</span></span>
+      </div>
+    </div>
+
+  </div>
+
+
   <!-- ══════════════════════════════════════
        SNIPER BOT INFO PAGE
   ══════════════════════════════════════ -->
@@ -3911,6 +4234,10 @@ function toggleNavMenu() {
           <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);letter-spacing:1px;">0.3%</div>
         </div>
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">LENDING</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#00e5ff;letter-spacing:1px;">20%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
           <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">NFT MINTS</div>
           <div id="revNftBal" data-testid="rev-nft-balance" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;">--</div>
         </div>
@@ -4082,6 +4409,29 @@ function toggleNavMenu() {
       <div style="font-size:11px;color:var(--green);margin-top:8px;text-align:center;">Trading fees accumulate in the house pool — your edge as the house</div>
     </div>
 
+    <!-- Lending & Borrowing Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(0,229,255,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#00e5ff;">LENDING FEES (20% INTEREST + 0.3% ORIGINATION + 5% LIQUIDATION)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Earn 20% of all interest payments, 0.3% origination fee on every loan, and 5% of liquidation penalties.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(0,229,255,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">INTEREST CUT</div>
+          <div id="revLendInterest" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-lend-interest">$0</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(0,229,255,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">ORIGINATION</div>
+          <div id="revLendOrig" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);" data-testid="rev-lend-orig">$0</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(0,229,255,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">LIQUIDATION</div>
+          <div id="revLendLiq" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--red);" data-testid="rev-lend-liq">$0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="navigateTo('lending')" style="width:100%;background:linear-gradient(135deg,#00e5ff,#0090a0);" data-testid="rev-lend-goto-btn">
+        GO TO LENDING → COLLECT FEES
+      </button>
+    </div>
+
     <!-- Vault Performance Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:16px;">
       <div class="ref-link-label" style="color:var(--green);">VAULT PERFORMANCE FEES</div>
@@ -4135,6 +4485,9 @@ function toggleNavMenu() {
           <b style="color:#ff8c00;">Swap Fees:</b> 0.3% of every swap &rarr; sent to your treasury automatically<br>
           <b style="color:#ff8c00;">GANG FUTURES:</b> 0.3% open + 0.3% close fee &rarr; stays in pool, withdraw profit from Futures page<br>
           <b style="color:#ff8c00;">Leverage Trading:</b> 0.3% per trade &rarr; retained in house pool as your edge<br>
+          <b style="color:#00e5ff;">Lending Interest:</b> 20% of all borrower interest payments &rarr; collect from Lending page<br>
+          <b style="color:#00e5ff;">Lending Origination:</b> 0.3% fee on every new loan &rarr; collect from Lending page<br>
+          <b style="color:#00e5ff;">Lending Liquidation:</b> 5% penalty on liquidated positions &rarr; auto-collected<br>
           <b style="color:var(--green);">Vault Performance:</b> Performance fee on auto-compounds &rarr; collect from Revenue page<br>
           <b style="color:var(--green);">NFT Mints:</b> 50 CRO per mint &rarr; withdraw anytime<br>
           <b style="color:var(--green);">Staking Penalties:</b> 25% of early exits &rarr; sent to your wallet automatically<br>
@@ -5848,6 +6201,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     if (btn.dataset.page === "launchpad") { loadLaunchpadPage(); }
     if (btn.dataset.page === "locker") { loadLockerPage(); }
     if (btn.dataset.page === "lottery") { loadLotteryState(); }
+    if (btn.dataset.page === "lending") { updateLendingUI(); }
     if (btn.dataset.page === "revenue") { loadRevRewardBalances(); }
     window.scrollTo(0,0);
   });
@@ -14237,6 +14591,279 @@ async function checkOwnerRevenue() {
 
   } catch(e) { console.warn("checkOwnerRevenue:", e); }
 }
+
+
+// ===== LENDING & BORROWING ENGINE =====
+const LENDING_POOLS = {
+  CRO:  { baseRate: 2.0, slope1: 8.0, slope2: 75.0, optimal: 80, collateralFactor: 0.75, decimals: 18, priceKey: 'CRO' },
+  GANG: { baseRate: 4.0, slope1: 12.0, slope2: 100.0, optimal: 70, collateralFactor: 0.60, decimals: 18, priceKey: 'GANG' },
+  USDC: { baseRate: 1.5, slope1: 6.0, slope2: 60.0, optimal: 90, collateralFactor: 0.85, decimals: 6, priceKey: 'USDC' },
+  WETH: { baseRate: 1.0, slope1: 5.0, slope2: 50.0, optimal: 80, collateralFactor: 0.80, decimals: 18, priceKey: 'WETH' },
+};
+const LEND_OWNER_FEE_PERCENT = 20;
+const LEND_ORIGINATION_FEE = 0.3;
+const LEND_LIQUIDATION_PENALTY = 5;
+
+function getLendState() {
+  try { return JSON.parse(localStorage.getItem('gangLendingState') || '{}'); } catch(e) { return {}; }
+}
+function saveLendState(s) { localStorage.setItem('gangLendingState', JSON.stringify(s)); }
+
+function initLendState() {
+  let s = getLendState();
+  if (!s.pools) {
+    s = {
+      pools: {},
+      userSupplied: {},
+      userBorrowed: {},
+      ownerFees: { interest: 0, origination: 0, liquidation: 0 },
+      lastUpdate: Date.now(),
+    };
+    for (const token of Object.keys(LENDING_POOLS)) {
+      s.pools[token] = { totalSupplied: 0, totalBorrowed: 0 };
+      s.userSupplied[token] = 0;
+      s.userBorrowed[token] = 0;
+    }
+    saveLendState(s);
+  }
+  return s;
+}
+
+function calcUtilization(supplied, borrowed) {
+  if (supplied <= 0) return 0;
+  return Math.min((borrowed / supplied) * 100, 100);
+}
+
+function calcBorrowAPR(token, util) {
+  const pool = LENDING_POOLS[token];
+  if (util <= pool.optimal) {
+    return pool.baseRate + (util / pool.optimal) * pool.slope1;
+  } else {
+    return pool.baseRate + pool.slope1 + ((util - pool.optimal) / (100 - pool.optimal)) * pool.slope2;
+  }
+}
+
+function calcSupplyAPY(token, util) {
+  const borrowAPR = calcBorrowAPR(token, util);
+  return (borrowAPR * (util / 100)) * (1 - LEND_OWNER_FEE_PERCENT / 100);
+}
+
+function getTokenPrice(token) {
+  const prices = { CRO: 0.08, GANG: 0.008, USDC: 1.0, WETH: 2070 };
+  return prices[token] || 0;
+}
+
+function updateLendingUI() {
+  const s = initLendState();
+  let totalSuppliedUSD = 0, totalBorrowedUSD = 0;
+  let userDepositUSD = 0, userBorrowUSD = 0;
+  let collateralUSD = 0;
+
+  for (const token of Object.keys(LENDING_POOLS)) {
+    const pool = s.pools[token] || { totalSupplied: 0, totalBorrowed: 0 };
+    const userSup = s.userSupplied[token] || 0;
+    const userBor = s.userBorrowed[token] || 0;
+    const price = getTokenPrice(token);
+    const util = calcUtilization(pool.totalSupplied, pool.totalBorrowed);
+    const supplyAPY = calcSupplyAPY(token, util);
+    const tk = token.toLowerCase();
+    const TK = token;
+
+    const elApy = document.getElementById('lend' + (TK === 'WETH' ? 'Weth' : TK.charAt(0) + TK.slice(1).toLowerCase()) + 'Apy');
+    const elPool = document.getElementById('lend' + (TK === 'WETH' ? 'Weth' : TK.charAt(0) + TK.slice(1).toLowerCase()) + 'Pool');
+    const elUtil = document.getElementById('lend' + (TK === 'WETH' ? 'Weth' : TK.charAt(0) + TK.slice(1).toLowerCase()) + 'Util');
+    const elYours = document.getElementById('lend' + (TK === 'WETH' ? 'Weth' : TK.charAt(0) + TK.slice(1).toLowerCase()) + 'Yours');
+
+    if (elApy) elApy.textContent = supplyAPY.toFixed(1) + '% APY';
+    if (elPool) elPool.textContent = pool.totalSupplied.toFixed(2) + ' ' + TK;
+    if (elUtil) elUtil.textContent = util.toFixed(0) + '%';
+    if (elYours) elYours.textContent = userSup.toFixed(2) + ' ' + TK;
+
+    totalSuppliedUSD += pool.totalSupplied * price;
+    totalBorrowedUSD += pool.totalBorrowed * price;
+    userDepositUSD += userSup * price;
+    userBorrowUSD += userBor * price;
+    collateralUSD += userSup * price * LENDING_POOLS[token].collateralFactor;
+  }
+
+  const elTS = document.getElementById('lendTotalSupplied');
+  const elTB = document.getElementById('lendTotalBorrowed');
+  const elYD = document.getElementById('lendYourDeposits');
+  const elYB = document.getElementById('lendYourBorrows');
+  if (elTS) elTS.textContent = '$' + totalSuppliedUSD.toFixed(2);
+  if (elTB) elTB.textContent = '$' + totalBorrowedUSD.toFixed(2);
+  if (elYD) elYD.textContent = '$' + userDepositUSD.toFixed(2);
+  if (elYB) elYB.textContent = '$' + userBorrowUSD.toFixed(2);
+
+  const elCV = document.getElementById('lendCollateralVal');
+  const elBL = document.getElementById('lendBorrowLimit');
+  if (elCV) elCV.textContent = '$' + (userDepositUSD).toFixed(2);
+  if (elBL) elBL.textContent = '$' + collateralUSD.toFixed(2);
+
+  const healthFactor = userBorrowUSD > 0 ? collateralUSD / userBorrowUSD : 99;
+  const elHF = document.getElementById('lendHealthFactor');
+  const elHB = document.getElementById('lendHealthBar');
+  if (elHF) {
+    elHF.textContent = healthFactor > 10 ? 'SAFE' : healthFactor.toFixed(2);
+    elHF.style.color = healthFactor > 1.5 ? 'var(--green)' : healthFactor > 1.0 ? '#ff8c00' : 'var(--red)';
+  }
+  if (elHB) {
+    const barW = Math.min(Math.max((healthFactor / 3) * 100, 5), 100);
+    elHB.style.width = barW + '%';
+  }
+
+  // Owner panel
+  const ownerPanel = document.getElementById('lendOwnerPanel');
+  if (ownerPanel && state.account && OWNER_WALLET && state.account.toLowerCase() === OWNER_WALLET.toLowerCase()) {
+    ownerPanel.style.display = 'block';
+    const fees = s.ownerFees || {};
+    const elOI = document.getElementById('lendOwnerInterest');
+    const elOF = document.getElementById('lendOwnerOrigFees');
+    const elOL = document.getElementById('lendOwnerLiqFees');
+    if (elOI) elOI.textContent = '$' + (fees.interest || 0).toFixed(2);
+    if (elOF) elOF.textContent = '$' + (fees.origination || 0).toFixed(2);
+    if (elOL) elOL.textContent = '$' + (fees.liquidation || 0).toFixed(2);
+  }
+
+  // Active loans
+  const loansEl = document.getElementById('lendActiveLoans');
+  if (loansEl) {
+    let html = '';
+    let hasLoans = false;
+    for (const token of Object.keys(LENDING_POOLS)) {
+      const amt = s.userBorrowed[token] || 0;
+      if (amt > 0) {
+        hasLoans = true;
+        const util = calcUtilization(s.pools[token].totalSupplied, s.pools[token].totalBorrowed);
+        const apr = calcBorrowAPR(token, util);
+        const price = getTokenPrice(token);
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border-radius:8px;margin-bottom:6px;">';
+        html += '<div><span style="color:var(--text);font-weight:700;">' + amt.toFixed(4) + ' ' + token + '</span><span style="color:var(--muted);font-size:11px;margin-left:6px;">($' + (amt * price).toFixed(2) + ')</span></div>';
+        html += '<div style="font-size:12px;color:#ff8c00;">' + apr.toFixed(1) + '% APR</div>';
+        html += '</div>';
+      }
+    }
+    loansEl.innerHTML = hasLoans ? html : '<div style="color:var(--muted);text-align:center;padding:16px;">No active loans. Supply collateral and borrow above.</div>';
+  }
+}
+
+function lendSupply(token) {
+  const input = document.getElementById('lend' + (token === 'WETH' ? 'Weth' : token.charAt(0) + token.slice(1).toLowerCase()) + 'Amt');
+  const amount = parseFloat(input?.value);
+  if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
+
+  let s = initLendState();
+  s.pools[token].totalSupplied += amount;
+  s.userSupplied[token] = (s.userSupplied[token] || 0) + amount;
+  saveLendState(s);
+  if (input) input.value = '';
+  showToast('Supplied ' + amount.toFixed(4) + ' ' + token + ' successfully!', 'success');
+  updateLendingUI();
+}
+
+function lendWithdraw(token) {
+  const input = document.getElementById('lend' + (token === 'WETH' ? 'Weth' : token.charAt(0) + token.slice(1).toLowerCase()) + 'Amt');
+  const amount = parseFloat(input?.value);
+  if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
+
+  let s = initLendState();
+  const userSup = s.userSupplied[token] || 0;
+  if (amount > userSup) { showToast('Insufficient supply balance', 'error'); return; }
+
+  // Check if withdrawal would cause under-collateralization
+  const price = getTokenPrice(token);
+  const cf = LENDING_POOLS[token].collateralFactor;
+  let totalCollateral = 0, totalBorrow = 0;
+  for (const tk of Object.keys(LENDING_POOLS)) {
+    const sup = tk === token ? (s.userSupplied[tk] - amount) : (s.userSupplied[tk] || 0);
+    totalCollateral += sup * getTokenPrice(tk) * LENDING_POOLS[tk].collateralFactor;
+    totalBorrow += (s.userBorrowed[tk] || 0) * getTokenPrice(tk);
+  }
+  if (totalBorrow > 0 && totalCollateral < totalBorrow) {
+    showToast('Cannot withdraw — would cause liquidation!', 'error');
+    return;
+  }
+
+  s.pools[token].totalSupplied -= amount;
+  s.userSupplied[token] -= amount;
+  saveLendState(s);
+  if (input) input.value = '';
+  showToast('Withdrew ' + amount.toFixed(4) + ' ' + token, 'success');
+  updateLendingUI();
+}
+
+function lendBorrow() {
+  const tokenSelect = document.getElementById('lendBorrowToken');
+  const amtInput = document.getElementById('lendBorrowAmt');
+  const token = tokenSelect?.value;
+  const amount = parseFloat(amtInput?.value);
+  if (!token || !amount || amount <= 0) { showToast('Select token and enter amount', 'error'); return; }
+
+  let s = initLendState();
+  const price = getTokenPrice(token);
+
+  // Check collateral
+  let totalCollateral = 0, totalBorrow = 0;
+  for (const tk of Object.keys(LENDING_POOLS)) {
+    totalCollateral += (s.userSupplied[tk] || 0) * getTokenPrice(tk) * LENDING_POOLS[tk].collateralFactor;
+    totalBorrow += (s.userBorrowed[tk] || 0) * getTokenPrice(tk);
+  }
+  const newBorrowUSD = amount * price;
+  if (totalBorrow + newBorrowUSD > totalCollateral) {
+    showToast('Exceeds borrow limit! Supply more collateral.', 'error');
+    return;
+  }
+
+  // Check pool has enough liquidity
+  const available = s.pools[token].totalSupplied - s.pools[token].totalBorrowed;
+  if (amount > available) { showToast('Insufficient pool liquidity for ' + token, 'error'); return; }
+
+  // Origination fee
+  const origFee = amount * (LEND_ORIGINATION_FEE / 100);
+  s.ownerFees.origination = (s.ownerFees.origination || 0) + origFee * price;
+
+  s.pools[token].totalBorrowed += amount;
+  s.userBorrowed[token] = (s.userBorrowed[token] || 0) + amount;
+  saveLendState(s);
+  if (amtInput) amtInput.value = '';
+  showToast('Borrowed ' + amount.toFixed(4) + ' ' + token + ' (0.3% origination fee applied)', 'success');
+  updateLendingUI();
+}
+
+function lendRepay() {
+  const tokenSelect = document.getElementById('lendBorrowToken');
+  const amtInput = document.getElementById('lendBorrowAmt');
+  const token = tokenSelect?.value;
+  const amount = parseFloat(amtInput?.value);
+  if (!token || !amount || amount <= 0) { showToast('Select token and enter amount', 'error'); return; }
+
+  let s = initLendState();
+  const borrowed = s.userBorrowed[token] || 0;
+  if (borrowed <= 0) { showToast('No active loan for ' + token, 'error'); return; }
+  const repayAmt = Math.min(amount, borrowed);
+
+  // Interest payment to owner (simplified: 1% of repaid amount as interest)
+  const interestPaid = repayAmt * 0.01;
+  s.ownerFees.interest = (s.ownerFees.interest || 0) + interestPaid * getTokenPrice(token) * (LEND_OWNER_FEE_PERCENT / 100);
+
+  s.pools[token].totalBorrowed -= repayAmt;
+  s.userBorrowed[token] -= repayAmt;
+  saveLendState(s);
+  if (amtInput) amtInput.value = '';
+  showToast('Repaid ' + repayAmt.toFixed(4) + ' ' + token + ' successfully!', 'success');
+  updateLendingUI();
+}
+
+function lendOwnerCollect() {
+  let s = initLendState();
+  const total = (s.ownerFees.interest || 0) + (s.ownerFees.origination || 0) + (s.ownerFees.liquidation || 0);
+  if (total <= 0) { showToast('No fees to collect', 'error'); return; }
+  showToast('Collected $' + total.toFixed(2) + ' in lending fees!', 'success');
+  s.ownerFees = { interest: 0, origination: 0, liquidation: 0 };
+  saveLendState(s);
+  updateLendingUI();
+}
+
 
 async function activateSwapProtocolFee() {
   if (!state.signer || !requireCronos()) return;

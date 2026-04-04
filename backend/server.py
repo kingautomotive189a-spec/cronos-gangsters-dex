@@ -388,6 +388,7 @@ async def get_bot_commands():
         {"command": "/help", "description": "Show all available commands"},
         {"command": "/futures", "description": "GANG FUTURES — 33 pairs, up to 20x leverage"},
         {"command": "/tracker", "description": "GANG TRACKER — Multi-chain wallet scanner"},
+        {"command": "/lending", "description": "Lend & Borrow — Earn interest on crypto"},
         {"command": "/roadmap", "description": "Project roadmap & phases"},
         {"command": "/price", "description": "Current $GANG price with full stats"},
         {"command": "/stats", "description": "Detailed token statistics"},
