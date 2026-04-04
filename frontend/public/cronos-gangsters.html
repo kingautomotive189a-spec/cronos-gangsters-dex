@@ -10941,16 +10941,28 @@ async function updateEmissionRate(suffix) {
         from: state.address,
         to: CONTRACTS.CHEF,
         data: txData,
-        gas: '0x30D40'
+        gas: '0x493E0'
       }]
     });
 
-    if (statusEl) { statusEl.style.color = 'var(--green)'; statusEl.textContent = 'Emission rate updated! Refreshing...'; }
-    showToast('Emission rate updated successfully!', 'success');
+    if (statusEl) { statusEl.style.color = 'var(--gold)'; statusEl.textContent = 'Transaction sent! Waiting for confirmation...'; }
+    
+    // Wait for the transaction to be mined
+    const provider = state.provider || new ethers.JsonRpcProvider('https://evm.cronos.org');
+    const receipt = await provider.waitForTransaction(txHash, 1, 60000);
+    
+    if (receipt && receipt.status === 1) {
+      if (statusEl) { statusEl.style.color = 'var(--green)'; statusEl.textContent = 'Emission rate updated to ' + newRate + ' GANG/sec! Refreshing...'; }
+      showToast('Emission rate updated to ' + newRate + ' GANG/sec!', 'success');
+    } else {
+      if (statusEl) { statusEl.style.color = 'var(--red)'; statusEl.textContent = 'Transaction failed on-chain. Check CronoScan.'; }
+      showToast('Transaction failed on-chain', 'error');
+      return;
+    }
     input.value = '';
 
-    // Wait for confirmation and refresh
-    setTimeout(() => loadEmissionRate(), 5000);
+    // Refresh emission rate display
+    await loadEmissionRate();
   } catch(e) {
     const msg = e?.message || e?.toString() || 'Transaction failed';
     if (statusEl) { statusEl.style.color = 'var(--red)'; statusEl.textContent = msg.substring(0, 100); }
