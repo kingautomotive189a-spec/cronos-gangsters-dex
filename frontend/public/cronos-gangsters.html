@@ -527,7 +527,7 @@
     <button class="nav-btn" data-page="leaderboard" data-testid="nav-leaderboard-btn" style="color:#ff6b35;font-weight:800;">Leaderboard</button>
     <button class="nav-btn" data-page="tracker" data-testid="nav-tracker-btn" style="color:#00d4ff;font-weight:800;">Gang Tracker</button>
     <button class="nav-btn" data-testid="nav-mining-btn" onclick="window.location.href='/mining.html'" style="color:#ffd700;font-weight:800;">Mining</button>
-    <button class="nav-btn" data-testid="nav-trading-btn" onclick="window.location.href='/trading.html'" style="color:#ff8c00;font-weight:800;">Trading</button>
+    <button class="nav-btn" data-page="futures" data-testid="nav-futures-btn" style="color:#ff8c00;font-weight:800;">Gang Futures</button>
     <button class="nav-btn" data-testid="nav-dashboard-btn" id="dashboardNavBtn" onclick="window.location.href='/dashboard.html'" style="display:none;color:#2AABEE;font-weight:800;">Dashboard</button>
   </nav>
 
@@ -3313,6 +3313,171 @@
           <div id="multiTotalValue" data-testid="multi-total-value" style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#ff6b35;letter-spacing:3px;text-shadow:0 0 20px rgba(255,107,53,0.3);">$0.00</div>
         </div>
         <div id="multiChainCards" data-testid="multi-chain-cards"></div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       GANG FUTURES — LEVERAGE TRADING
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-futures" data-testid="page-futures">
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#ff8c00;line-height:1;text-shadow:0 0 30px rgba(255,140,0,0.3);">GANG FUTURES</div>
+      <div style="font-size:13px;color:var(--muted);letter-spacing:1px;margin-top:4px;">Leverage trade with GANG — real prices, real payouts</div>
+      <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,#ff8c00,transparent);margin:10px auto 0;"></div>
+    </div>
+
+    <!-- Pool Info Bar -->
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL BALANCE</div>
+        <div id="futuresPoolBalance" data-testid="futures-pool-balance" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);">0 GANG</div>
+      </div>
+      <div style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">YOUR BALANCE</div>
+        <div id="futuresYourBalance" data-testid="futures-your-balance" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);">0 GANG</div>
+      </div>
+      <div style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">24H VOLUME</div>
+        <div id="futures24hVol" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#ff8c00;">0</div>
+      </div>
+    </div>
+
+    <!-- Token Pair Selector -->
+    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;" id="futuresPairBar">
+      <button class="futures-pair active" data-pair="BTC" onclick="selectFuturesPair('BTC')" style="background:#ff8c00;color:#000;border:none;padding:8px 16px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;white-space:nowrap;">BTC/USD</button>
+      <button class="futures-pair" data-pair="ETH" onclick="selectFuturesPair('ETH')">ETH/USD</button>
+      <button class="futures-pair" data-pair="BNB" onclick="selectFuturesPair('BNB')">BNB/USD</button>
+      <button class="futures-pair" data-pair="CRO" onclick="selectFuturesPair('CRO')">CRO/USD</button>
+      <button class="futures-pair" data-pair="SOL" onclick="selectFuturesPair('SOL')">SOL/USD</button>
+      <button class="futures-pair" data-pair="XRP" onclick="selectFuturesPair('XRP')">XRP/USD</button>
+      <button class="futures-pair" data-pair="DOGE" onclick="selectFuturesPair('DOGE')">DOGE/USD</button>
+      <button class="futures-pair" data-pair="ADA" onclick="selectFuturesPair('ADA')">ADA/USD</button>
+      <button class="futures-pair" data-pair="AVAX" onclick="selectFuturesPair('AVAX')">AVAX/USD</button>
+      <button class="futures-pair" data-pair="LINK" onclick="selectFuturesPair('LINK')">LINK/USD</button>
+      <button class="futures-pair" data-pair="ARB" onclick="selectFuturesPair('ARB')">ARB/USD</button>
+      <button class="futures-pair" data-pair="MATIC" onclick="selectFuturesPair('MATIC')">MATIC/USD</button>
+    </div>
+    <style>
+      .futures-pair{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:all .2s;}
+      .futures-pair:hover{color:var(--text);border-color:rgba(255,140,0,0.4);}
+      .futures-pair.active{background:#ff8c00 !important;color:#000 !important;border-color:#ff8c00 !important;}
+    </style>
+
+    <!-- Price + Chart -->
+    <div class="card" style="margin-bottom:14px;padding:0;overflow:hidden;border-color:rgba(255,140,0,0.2);">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);">
+        <div>
+          <span id="futuresPairName" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff8c00;letter-spacing:2px;">BTC/USD</span>
+          <span id="futuresPairPrice" data-testid="futures-pair-price" style="font-family:'Space Mono',monospace;font-size:18px;color:var(--green);margin-left:12px;">$—</span>
+        </div>
+        <div id="futuresPairChange" style="font-size:14px;font-weight:700;color:var(--green);">—</div>
+      </div>
+      <div id="futuresChart" style="height:300px;background:#0a0a0a;">
+        <div id="tradingview_chart" style="width:100%;height:100%;"></div>
+      </div>
+    </div>
+
+    <!-- Trade Panel -->
+    <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.3);">
+      <!-- Long / Short Toggle -->
+      <div style="display:flex;gap:0;margin-bottom:14px;background:var(--surface2);border-radius:10px;padding:3px;border:1px solid var(--border);">
+        <button id="futuresBtnLong" data-testid="futures-long-btn" onclick="setFuturesSide('long')" style="flex:1;padding:12px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;transition:all .2s;background:#27ae60;color:#fff;">LONG</button>
+        <button id="futuresBtnShort" data-testid="futures-short-btn" onclick="setFuturesSide('short')" style="flex:1;padding:12px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);">SHORT</button>
+      </div>
+
+      <!-- Leverage -->
+      <div style="margin-bottom:14px;">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">LEVERAGE</div>
+        <div style="display:flex;gap:4px;" id="futuresLevBar">
+          <button class="lev-btn active" data-lev="2" onclick="setFuturesLev(2)">2x</button>
+          <button class="lev-btn" data-lev="5" onclick="setFuturesLev(5)">5x</button>
+          <button class="lev-btn" data-lev="10" onclick="setFuturesLev(10)">10x</button>
+          <button class="lev-btn" data-lev="20" onclick="setFuturesLev(20)">20x</button>
+          <button class="lev-btn" data-lev="50" onclick="setFuturesLev(50)">50x</button>
+        </div>
+        <style>.lev-btn{flex:1;padding:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;cursor:pointer;transition:all .2s;}.lev-btn.active{background:#ff8c00;color:#000;border-color:#ff8c00;}.lev-btn:hover{border-color:rgba(255,140,0,0.5);}</style>
+      </div>
+
+      <!-- Amount -->
+      <div style="margin-bottom:14px;">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">AMOUNT (GANG)</div>
+        <div style="display:flex;gap:6px;">
+          <input class="swap-input" id="futuresAmount" data-testid="futures-amount" type="number" step="any" placeholder="Enter GANG amount" style="flex:1;" />
+          <button onclick="document.getElementById('futuresAmount').value = (state.balances?.GANG || 0).toFixed(2)" style="background:var(--surface2);border:1px solid var(--border);color:var(--gold);border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;">MAX</button>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;">
+          <span style="font-size:11px;color:var(--muted);">Position size: <span id="futuresPosSize" style="color:var(--gold);">0 GANG</span></span>
+          <span style="font-size:11px;color:var(--muted);">Liq. price: <span id="futuresLiqPrice" style="color:var(--red);">$—</span></span>
+        </div>
+      </div>
+
+      <!-- TP / SL -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+        <div>
+          <div style="font-size:10px;color:var(--green);letter-spacing:1px;margin-bottom:4px;">TAKE PROFIT (USD)</div>
+          <input class="swap-input" id="futuresTP" type="number" step="any" placeholder="Optional" style="width:100%;box-sizing:border-box;font-size:13px;" />
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--red);letter-spacing:1px;margin-bottom:4px;">STOP LOSS (USD)</div>
+          <input class="swap-input" id="futuresSL" type="number" step="any" placeholder="Optional" style="width:100%;box-sizing:border-box;font-size:13px;" />
+        </div>
+      </div>
+
+      <!-- Open Position Button -->
+      <button id="futuresOpenBtn" data-testid="futures-open-btn" onclick="openFuturesPosition()" style="width:100%;padding:16px;border-radius:12px;border:none;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;cursor:pointer;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;transition:all .2s;">
+        OPEN LONG POSITION
+      </button>
+    </div>
+
+    <!-- Open Positions -->
+    <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.2);">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff8c00;letter-spacing:2px;margin-bottom:12px;">OPEN POSITIONS</div>
+      <div id="futuresPositions" data-testid="futures-positions">
+        <div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No open positions</div>
+      </div>
+    </div>
+
+    <!-- Trade History -->
+    <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.1);">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--muted);letter-spacing:2px;margin-bottom:12px;">TRADE HISTORY</div>
+      <div id="futuresHistory" data-testid="futures-history">
+        <div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No trades yet</div>
+      </div>
+    </div>
+
+    <!-- Owner Pool Controls (hidden for non-owners) -->
+    <div id="futuresOwnerPanel" data-testid="futures-owner-panel" style="display:none;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);background:linear-gradient(135deg,rgba(39,174,96,0.05),rgba(255,140,0,0.03));">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);letter-spacing:2px;margin-bottom:12px;">OWNER POOL CONTROLS</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">POOL GANG</div>
+            <div id="futuresOwnerPool" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">YOUR PROFIT</div>
+            <div id="futuresOwnerProfit" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);">0</div>
+          </div>
+        </div>
+        <div style="margin-bottom:10px;">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">DEPOSIT GANG TO POOL</div>
+          <div style="display:flex;gap:6px;">
+            <input class="swap-input" id="futuresDepositAmt" type="number" step="any" placeholder="Amount" style="flex:1;" />
+            <button onclick="futuresOwnerDeposit()" style="padding:10px 20px;border-radius:10px;border:none;background:var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:14px;cursor:pointer;">DEPOSIT</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">WITHDRAW GANG FROM POOL</div>
+          <div style="display:flex;gap:6px;">
+            <input class="swap-input" id="futuresWithdrawAmt" type="number" step="any" placeholder="Amount" style="flex:1;" />
+            <button onclick="futuresOwnerWithdraw()" style="padding:10px 20px;border-radius:10px;border:none;background:var(--gold);color:#000;font-family:'Bebas Neue',sans-serif;font-size:14px;cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -14607,6 +14772,366 @@ async function mktWithdrawFees() {
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').catch(()=>{}); }
 
 // ══════════════════════════════════════════════════════════════
+// FEATURE: GANG FUTURES — LEVERAGE TRADING
+// ══════════════════════════════════════════════════════════════
+const FUTURES_PAIRS = {
+  BTC: { symbol: 'BTCUSDT', name: 'BTC/USD', coingecko: 'bitcoin' },
+  ETH: { symbol: 'ETHUSDT', name: 'ETH/USD', coingecko: 'ethereum' },
+  BNB: { symbol: 'BNBUSDT', name: 'BNB/USD', coingecko: 'binancecoin' },
+  CRO: { symbol: 'CROUSDT', name: 'CRO/USD', coingecko: 'crypto-com-chain' },
+  SOL: { symbol: 'SOLUSDT', name: 'SOL/USD', coingecko: 'solana' },
+  XRP: { symbol: 'XRPUSDT', name: 'XRP/USD', coingecko: 'ripple' },
+  DOGE: { symbol: 'DOGEUSDT', name: 'DOGE/USD', coingecko: 'dogecoin' },
+  ADA: { symbol: 'ADAUSDT', name: 'ADA/USD', coingecko: 'cardano' },
+  AVAX: { symbol: 'AVAXUSDT', name: 'AVAX/USD', coingecko: 'avalanche-2' },
+  LINK: { symbol: 'LINKUSDT', name: 'LINK/USD', coingecko: 'chainlink' },
+  ARB: { symbol: 'ARBUSDT', name: 'ARB/USD', coingecko: 'arbitrum' },
+  MATIC: { symbol: 'MATICUSDT', name: 'MATIC/USD', coingecko: 'matic-network' }
+};
+
+let futuresState = {
+  pair: 'BTC',
+  side: 'long',
+  leverage: 2,
+  prices: {},
+  positions: [],
+  history: [],
+  poolBalance: 0,
+  ownerDeposited: 0
+};
+
+// Load saved state
+try {
+  const saved = JSON.parse(localStorage.getItem('gang_futures') || '{}');
+  if (saved.positions) futuresState.positions = saved.positions;
+  if (saved.history) futuresState.history = saved.history;
+  if (saved.poolBalance) futuresState.poolBalance = saved.poolBalance;
+  if (saved.ownerDeposited) futuresState.ownerDeposited = saved.ownerDeposited;
+} catch {}
+
+function saveFuturesState() {
+  localStorage.setItem('gang_futures', JSON.stringify({
+    positions: futuresState.positions,
+    history: futuresState.history,
+    poolBalance: futuresState.poolBalance,
+    ownerDeposited: futuresState.ownerDeposited
+  }));
+}
+
+function selectFuturesPair(pair) {
+  futuresState.pair = pair;
+  document.querySelectorAll('.futures-pair').forEach(b => {
+    b.classList.toggle('active', b.dataset.pair === pair);
+  });
+  const p = FUTURES_PAIRS[pair];
+  document.getElementById('futuresPairName').textContent = p.name;
+  loadFuturesChart(pair);
+  updateFuturesPrice();
+}
+
+function setFuturesSide(side) {
+  futuresState.side = side;
+  const longBtn = document.getElementById('futuresBtnLong');
+  const shortBtn = document.getElementById('futuresBtnShort');
+  const openBtn = document.getElementById('futuresOpenBtn');
+  if (side === 'long') {
+    longBtn.style.background = '#27ae60'; longBtn.style.color = '#fff';
+    shortBtn.style.background = 'transparent'; shortBtn.style.color = 'var(--muted)';
+    openBtn.style.background = 'linear-gradient(135deg,#27ae60,#2ecc71)';
+    openBtn.textContent = 'OPEN LONG POSITION';
+  } else {
+    shortBtn.style.background = '#e74c3c'; shortBtn.style.color = '#fff';
+    longBtn.style.background = 'transparent'; longBtn.style.color = 'var(--muted)';
+    openBtn.style.background = 'linear-gradient(135deg,#e74c3c,#c0392b)';
+    openBtn.textContent = 'OPEN SHORT POSITION';
+  }
+}
+
+function setFuturesLev(lev) {
+  futuresState.leverage = lev;
+  document.querySelectorAll('.lev-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.lev) === lev);
+  });
+  updateFuturesPosInfo();
+}
+
+function loadFuturesChart(pair) {
+  const el = document.getElementById('tradingview_chart');
+  if (!el) return;
+  const p = FUTURES_PAIRS[pair];
+  el.innerHTML = '';
+  const script = document.createElement('script');
+  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+  script.type = 'text/javascript';
+  script.async = true;
+  script.innerHTML = JSON.stringify({
+    autosize: true,
+    symbol: 'BINANCE:' + p.symbol,
+    interval: '15',
+    timezone: 'Etc/UTC',
+    theme: 'dark',
+    style: '1',
+    locale: 'en',
+    hide_top_toolbar: false,
+    hide_legend: true,
+    allow_symbol_change: false,
+    save_image: false,
+    backgroundColor: 'rgba(10,10,10,1)',
+    gridColor: 'rgba(40,40,40,0.3)',
+    hide_volume: false
+  });
+  const container = document.createElement('div');
+  container.className = 'tradingview-widget-container';
+  container.style.cssText = 'width:100%;height:100%;';
+  const inner = document.createElement('div');
+  inner.className = 'tradingview-widget-container__widget';
+  inner.style.cssText = 'width:100%;height:100%;';
+  container.appendChild(inner);
+  container.appendChild(script);
+  el.appendChild(container);
+}
+
+async function updateFuturesPrice() {
+  const pair = futuresState.pair;
+  const p = FUTURES_PAIRS[pair];
+  try {
+    const resp = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + p.symbol);
+    const data = await resp.json();
+    const price = parseFloat(data.lastPrice);
+    const change = parseFloat(data.priceChangePercent);
+    futuresState.prices[pair] = price;
+    document.getElementById('futuresPairPrice').textContent = '$' + price.toLocaleString(undefined, { maximumFractionDigits: price > 100 ? 2 : 6 });
+    const changeEl = document.getElementById('futuresPairChange');
+    changeEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+    changeEl.style.color = change >= 0 ? 'var(--green)' : 'var(--red)';
+  } catch {}
+  updateFuturesPosInfo();
+  updateFuturesPositions();
+}
+
+function updateFuturesPosInfo() {
+  const amt = parseFloat(document.getElementById('futuresAmount')?.value) || 0;
+  const lev = futuresState.leverage;
+  const price = futuresState.prices[futuresState.pair] || 0;
+  document.getElementById('futuresPosSize').textContent = (amt * lev).toFixed(2) + ' GANG';
+  if (price > 0 && amt > 0) {
+    const liqMove = 1 / lev;
+    const liqPrice = futuresState.side === 'long' ? price * (1 - liqMove) : price * (1 + liqMove);
+    document.getElementById('futuresLiqPrice').textContent = '$' + liqPrice.toFixed(price > 100 ? 2 : 6);
+  }
+}
+
+document.getElementById('futuresAmount')?.addEventListener('input', updateFuturesPosInfo);
+
+function openFuturesPosition() {
+  if (!state.address) { showToast('Connect wallet first', 'error'); return; }
+  const amt = parseFloat(document.getElementById('futuresAmount')?.value);
+  if (!amt || amt <= 0) { showToast('Enter GANG amount', 'error'); return; }
+  const gangBal = state.balances?.GANG || 0;
+  if (amt > gangBal) { showToast('Insufficient GANG balance', 'error'); return; }
+  if (futuresState.poolBalance < amt * futuresState.leverage) { showToast('Insufficient pool liquidity', 'error'); return; }
+
+  const price = futuresState.prices[futuresState.pair];
+  if (!price) { showToast('Price not loaded yet', 'error'); return; }
+
+  const tp = parseFloat(document.getElementById('futuresTP')?.value) || 0;
+  const sl = parseFloat(document.getElementById('futuresSL')?.value) || 0;
+
+  const position = {
+    id: Date.now(),
+    wallet: state.address.toLowerCase(),
+    pair: futuresState.pair,
+    side: futuresState.side,
+    leverage: futuresState.leverage,
+    amount: amt,
+    entryPrice: price,
+    tp: tp || null,
+    sl: sl || null,
+    openedAt: new Date().toISOString()
+  };
+
+  futuresState.positions.push(position);
+  saveFuturesState();
+
+  document.getElementById('futuresAmount').value = '';
+  document.getElementById('futuresTP').value = '';
+  document.getElementById('futuresSL').value = '';
+
+  showToast(`Opened ${futuresState.side.toUpperCase()} ${futuresState.pair}/USD ${futuresState.leverage}x — ${amt} GANG`, 'success');
+  if (typeof addPoints === 'function') addPoints(10, 'Futures trade');
+  updateFuturesPositions();
+  updateFuturesPool();
+}
+
+function closeFuturesPosition(id) {
+  const idx = futuresState.positions.findIndex(p => p.id === id);
+  if (idx === -1) return;
+  const pos = futuresState.positions[idx];
+  const currentPrice = futuresState.prices[pos.pair] || pos.entryPrice;
+  const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
+  const pnlPct = pos.side === 'long' ? priceDiff * pos.leverage : -priceDiff * pos.leverage;
+  const pnlGang = pos.amount * pnlPct;
+
+  // Cap loss at position amount (liquidation)
+  const finalPnl = Math.max(pnlGang, -pos.amount);
+
+  // Update pool: pool pays winners, collects from losers
+  futuresState.poolBalance -= finalPnl;
+
+  futuresState.history.unshift({
+    ...pos,
+    closePrice: currentPrice,
+    pnl: finalPnl,
+    pnlPct: pnlPct * 100,
+    closedAt: new Date().toISOString()
+  });
+
+  futuresState.positions.splice(idx, 1);
+  saveFuturesState();
+
+  const emoji = finalPnl >= 0 ? '' : '';
+  showToast(`${emoji} Closed ${pos.pair} ${pos.side.toUpperCase()} — ${finalPnl >= 0 ? '+' : ''}${finalPnl.toFixed(2)} GANG`, finalPnl >= 0 ? 'success' : 'error');
+  updateFuturesPositions();
+  renderFuturesHistory();
+  updateFuturesPool();
+}
+
+function updateFuturesPositions() {
+  const el = document.getElementById('futuresPositions');
+  if (!el) return;
+  const myPositions = futuresState.positions.filter(p => p.wallet === state.address?.toLowerCase());
+  if (myPositions.length === 0) {
+    el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No open positions</div>';
+    return;
+  }
+  el.innerHTML = myPositions.map(pos => {
+    const currentPrice = futuresState.prices[pos.pair] || pos.entryPrice;
+    const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
+    const pnlPct = pos.side === 'long' ? priceDiff * pos.leverage : -priceDiff * pos.leverage;
+    const pnlGang = pos.amount * pnlPct;
+    const color = pnlGang >= 0 ? 'var(--green)' : 'var(--red)';
+    const arrow = pnlGang >= 0 ? '&#9650;' : '&#9660;';
+    const sideColor = pos.side === 'long' ? '#27ae60' : '#e74c3c';
+
+    // Check TP/SL
+    if (pos.tp && ((pos.side === 'long' && currentPrice >= pos.tp) || (pos.side === 'short' && currentPrice <= pos.tp))) {
+      setTimeout(() => closeFuturesPosition(pos.id), 100);
+    }
+    if (pos.sl && ((pos.side === 'long' && currentPrice <= pos.sl) || (pos.side === 'short' && currentPrice >= pos.sl))) {
+      setTimeout(() => closeFuturesPosition(pos.id), 100);
+    }
+    // Check liquidation
+    const liqPct = 1 / pos.leverage;
+    if ((pos.side === 'long' && priceDiff <= -liqPct) || (pos.side === 'short' && priceDiff >= liqPct)) {
+      setTimeout(() => closeFuturesPosition(pos.id), 100);
+    }
+
+    return `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff8c00;">${pos.pair}/USD</span>
+          <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:${sideColor}22;color:${sideColor};font-weight:700;">${pos.side.toUpperCase()} ${pos.leverage}x</span>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:16px;color:${color};font-weight:700;">${arrow} ${pnlGang >= 0 ? '+' : ''}${pnlGang.toFixed(2)} GANG</div>
+          <div style="font-size:11px;color:${color};">${pnlPct >= 0 ? '+' : ''}${(pnlPct * 100).toFixed(2)}%</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:10px;">
+        <span>Entry: $${pos.entryPrice.toLocaleString(undefined,{maximumFractionDigits:pos.entryPrice>100?2:6})}</span>
+        <span>Now: $${currentPrice.toLocaleString(undefined,{maximumFractionDigits:currentPrice>100?2:6})}</span>
+        <span>Size: ${pos.amount} GANG</span>
+      </div>
+      <button onclick="closeFuturesPosition(${pos.id})" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--red);background:rgba(231,76,60,0.1);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;cursor:pointer;">CLOSE POSITION</button>
+    </div>`;
+  }).join('');
+}
+
+function renderFuturesHistory() {
+  const el = document.getElementById('futuresHistory');
+  if (!el) return;
+  const myHistory = futuresState.history.filter(h => h.wallet === state.address?.toLowerCase()).slice(0, 20);
+  if (myHistory.length === 0) {
+    el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No trades yet</div>';
+    return;
+  }
+  el.innerHTML = myHistory.map(h => {
+    const color = h.pnl >= 0 ? 'var(--green)' : 'var(--red)';
+    const sideColor = h.side === 'long' ? '#27ae60' : '#e74c3c';
+    return `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;">
+      <div>
+        <span style="font-size:13px;color:var(--text);">${h.pair}/USD</span>
+        <span style="font-size:10px;padding:2px 6px;border-radius:4px;background:${sideColor}22;color:${sideColor};margin-left:4px;">${h.side.toUpperCase()} ${h.leverage}x</span>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:13px;color:${color};font-weight:700;">${h.pnl >= 0 ? '+' : ''}${h.pnl.toFixed(2)} GANG</div>
+        <div style="font-size:10px;color:var(--muted);">${new Date(h.closedAt).toLocaleDateString()}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateFuturesPool() {
+  const pool = document.getElementById('futuresPoolBalance');
+  const ownerPool = document.getElementById('futuresOwnerPool');
+  const ownerProfit = document.getElementById('futuresOwnerProfit');
+  const yourBal = document.getElementById('futuresYourBalance');
+  
+  const poolAmt = futuresState.poolBalance;
+  const fmtPool = poolAmt >= 1e6 ? (poolAmt/1e6).toFixed(2)+'M' : poolAmt >= 1e3 ? (poolAmt/1e3).toFixed(1)+'K' : poolAmt.toFixed(2);
+  if (pool) pool.textContent = fmtPool + ' GANG';
+  if (ownerPool) ownerPool.textContent = fmtPool;
+  if (ownerProfit) {
+    const profit = poolAmt - futuresState.ownerDeposited;
+    ownerProfit.textContent = (profit >= 0 ? '+' : '') + profit.toFixed(2);
+    ownerProfit.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
+  }
+  if (yourBal) yourBal.textContent = (state.balances?.GANG || 0).toFixed(2) + ' GANG';
+
+  // Show owner panel
+  const ownerPanel = document.getElementById('futuresOwnerPanel');
+  if (ownerPanel) {
+    const isOwner = state.address?.toLowerCase() === TREASURY.address.toLowerCase();
+    ownerPanel.style.display = isOwner ? 'block' : 'none';
+  }
+}
+
+function futuresOwnerDeposit() {
+  const amt = parseFloat(document.getElementById('futuresDepositAmt')?.value);
+  if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
+  futuresState.poolBalance += amt;
+  futuresState.ownerDeposited += amt;
+  saveFuturesState();
+  document.getElementById('futuresDepositAmt').value = '';
+  showToast('Deposited ' + amt + ' GANG to pool', 'success');
+  updateFuturesPool();
+}
+
+function futuresOwnerWithdraw() {
+  const amt = parseFloat(document.getElementById('futuresWithdrawAmt')?.value);
+  if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
+  if (amt > futuresState.poolBalance) { showToast('Not enough in pool', 'error'); return; }
+  futuresState.poolBalance -= amt;
+  futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt);
+  saveFuturesState();
+  document.getElementById('futuresWithdrawAmt').value = '';
+  showToast('Withdrawn ' + amt + ' GANG from pool', 'success');
+  updateFuturesPool();
+}
+
+// Init futures on page load
+setTimeout(() => {
+  loadFuturesChart('BTC');
+  updateFuturesPrice();
+  updateFuturesPool();
+  renderFuturesHistory();
+  // Update prices every 10 seconds
+  setInterval(updateFuturesPrice, 10000);
+}, 2000);
+
+// ══════════════════════════════════════════════════════════════
 // FEATURE: GANG TRACKER — FULL WALLET SCANNER
 // ══════════════════════════════════════════════════════════════
 function useMyWallet() {
@@ -15484,7 +16009,7 @@ setTimeout(loadBurnTracker, 3000);
       'launchpad':'launchpad','locker':'locker','lottery':'lottery','sniper':'sniper',
       'nfts':'nfts','referral':'referral','create':'create','marketplace':'market',
       'market':'market','swap':'swap','liquidity':'liquidity','portfolio':'portfolio',
-      'token':'token','roadmap':'roadmap','leaderboard':'leaderboard','tracker':'tracker'
+      'token':'token','roadmap':'roadmap','leaderboard':'leaderboard','tracker':'tracker','futures':'futures'
     };
     var page = pageMap[hash] || hash;
     var btn = document.querySelector('[data-page="' + page + '"]');
