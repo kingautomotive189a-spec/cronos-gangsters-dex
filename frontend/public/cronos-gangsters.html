@@ -524,6 +524,7 @@
     <button class="nav-btn" data-page="locker" data-testid="nav-locker-btn">Locker</button>
     <button class="nav-btn" data-page="lottery" data-testid="nav-lottery-btn">Lottery</button>
     <button class="nav-btn" data-page="sniper" data-testid="nav-sniper-btn">Sniper</button>
+    <button class="nav-btn" data-page="leaderboard" data-testid="nav-leaderboard-btn" style="color:#ff6b35;font-weight:800;">Leaderboard</button>
     <button class="nav-btn" data-testid="nav-mining-btn" onclick="window.location.href='/mining.html'" style="color:#ffd700;font-weight:800;">Mining</button>
     <button class="nav-btn" data-testid="nav-trading-btn" onclick="window.location.href='/trading.html'" style="color:#ff8c00;font-weight:800;">Trading</button>
     <button class="nav-btn" data-testid="nav-dashboard-btn" id="dashboardNavBtn" onclick="window.location.href='/dashboard.html'" style="display:none;color:#2AABEE;font-weight:800;">Dashboard</button>
@@ -844,6 +845,12 @@
       <div class="card" style="border-color:rgba(212,160,23,0.3);box-shadow:0 0 0 1px rgba(212,160,23,0.05),0 8px 32px rgba(0,0,0,0.4);">
         <div class="card-title"><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> Swap Tokens</div>
 
+        <!-- Swap / Limit Toggle -->
+        <div data-testid="swap-limit-tabs" style="display:flex;gap:0;margin-bottom:14px;background:var(--surface2);border-radius:10px;padding:3px;border:1px solid var(--border);">
+          <button id="tabSwap" data-testid="tab-swap" onclick="switchSwapMode('swap')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .2s;background:var(--gold);color:#000;">SWAP</button>
+          <button id="tabLimit" data-testid="tab-limit" onclick="switchSwapMode('limit')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);">LIMIT ORDER</button>
+        </div>
+
         <!-- Live Price Ticker -->
         <div class="price-ticker" id="swapPriceTicker">
           <span style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;flex-shrink:0">Live Prices</span>
@@ -966,6 +973,35 @@
         </div>
 
         <button class="btn-primary" id="swapBtn" onclick="reviewSwap()"><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> REVIEW SWAP</button>
+
+        <!-- LIMIT ORDER PANEL (hidden by default) -->
+        <div id="limitOrderPanel" data-testid="limit-order-panel" style="display:none;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px;">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">TARGET PRICE (USD)</div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input class="swap-input" id="limitTargetPrice" data-testid="limit-target-price" type="number" step="any" placeholder="e.g. 0.0001" style="flex:1;" />
+              <span style="font-size:12px;color:var(--muted);">USD per <span id="limitFromSym">CRO</span></span>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:6px;">Current: <span id="limitCurrentPrice" style="color:var(--green);">$—</span></div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px;">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">AMOUNT TO SELL</div>
+            <input class="swap-input" id="limitAmount" data-testid="limit-amount" type="number" step="any" placeholder="0.0" style="width:100%;box-sizing:border-box;" />
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Balance: <span id="limitBalance">—</span></div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px;">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">YOU RECEIVE (est.)</div>
+            <div id="limitReceiveEst" data-testid="limit-receive-est" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">—</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Buy token: <span id="limitToSym">GANG</span></div>
+          </div>
+          <div style="font-size:11px;color:var(--gold);margin-bottom:10px;text-align:center;">0.3% platform fee applies when order executes</div>
+          <button class="btn-primary" id="limitOrderBtn" data-testid="place-limit-order-btn" onclick="placeLimitOrder()" style="background:linear-gradient(135deg,#ff6b35,#e55a2b);">PLACE LIMIT ORDER</button>
+          
+          <div style="margin-top:16px;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;">OPEN ORDERS</div>
+            <div id="limitOrdersList" data-testid="limit-orders-list" style="font-size:13px;color:var(--muted);">No open orders</div>
+          </div>
+        </div>
 
         <!-- Import Custom Token -->
         <div style="margin-top:16px;background:rgba(212,160,23,0.10);border:1px solid rgba(212,160,23,0.45);border-radius:12px;padding:16px 18px;">
@@ -1573,6 +1609,42 @@
         <div style="color:var(--muted);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;">24H Volume</div>
         <div style="font-size:1.4rem;font-weight:700;color:var(--gold);font-family:'Space Mono',monospace;" id="gangVolume24h">$—</div>
         <div style="color:var(--muted);font-size:11px;margin-top:4px;" id="gangPriceChange24h">—</div>
+      </div>
+    </div>
+
+    <!-- BURN TRACKER -->
+    <div class="card" style="padding:24px;margin-bottom:20px;background:linear-gradient(135deg,rgba(192,57,43,0.08),rgba(231,76,60,0.04));border-color:rgba(192,57,43,0.3);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <div style="font-size:28px;">&#128293;</div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--red);letter-spacing:3px;">BURN TRACKER</div>
+          <div style="font-size:11px;color:var(--muted);">GANG tokens permanently removed from circulation</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">TOTAL BURNED</div>
+          <div id="burnTrackerTotal" data-testid="burn-tracker-total" style="font-family:'Space Mono',monospace;font-size:22px;color:var(--red);font-weight:700;">Loading...</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">GANG tokens</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">BURN VALUE</div>
+          <div id="burnTrackerUSD" data-testid="burn-tracker-usd" style="font-family:'Space Mono',monospace;font-size:22px;color:var(--gold);font-weight:700;">$—</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">at current price</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">% OF SUPPLY BURNED</div>
+          <div id="burnTrackerPct" data-testid="burn-tracker-pct" style="font-family:'Space Mono',monospace;font-size:22px;color:#e74c3c;font-weight:700;">—%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">CIRCULATING SUPPLY</div>
+          <div id="burnTrackerCirc" data-testid="burn-tracker-circ" style="font-family:'Space Mono',monospace;font-size:22px;color:var(--green);font-weight:700;">—</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;text-align:center;">
+        <a href="https://explorer.cronos.org/address/0x000000000000000000000000000000000000dEaD" target="_blank" style="font-size:11px;color:var(--muted);text-decoration:none;" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">View burn address on Explorer &#8594;</a>
       </div>
     </div>
 
@@ -3102,6 +3174,70 @@
       <div style="font-size:11px;color:var(--muted);margin-top:10px;">Your private key is stored securely. Only you can access your trading wallet.</div>
     </div>
 
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       LEADERBOARD PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-leaderboard" data-testid="page-leaderboard">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#ff6b35;line-height:1;text-shadow:0 0 30px rgba(255,107,53,0.3);">LEADERBOARD</div>
+      <div style="font-size:13px;color:var(--muted);letter-spacing:1px;margin-top:6px;">Trade, stake, farm — earn points. Top gangsters win rewards.</div>
+      <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,#ff6b35,transparent);margin:14px auto 0;"></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+      <div class="card" style="text-align:center;border-color:rgba(255,107,53,0.3);">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">YOUR POINTS</div>
+        <div id="myPoints" data-testid="my-points" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#ff6b35;letter-spacing:2px;">0</div>
+      </div>
+      <div class="card" style="text-align:center;border-color:rgba(212,160,23,0.3);">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">YOUR RANK</div>
+        <div id="myRank" data-testid="my-rank" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--gold);letter-spacing:2px;">#—</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;border-color:rgba(255,107,53,0.2);">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff6b35;letter-spacing:2px;margin-bottom:12px;">HOW TO EARN POINTS</div>
+      <div style="display:grid;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border-radius:8px;">
+          <span style="font-size:13px;color:var(--text);">Swap tokens</span>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);">+10 pts</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border-radius:8px;">
+          <span style="font-size:13px;color:var(--text);">Add liquidity</span>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);">+25 pts</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border-radius:8px;">
+          <span style="font-size:13px;color:var(--text);">Stake GANG</span>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);">+20 pts</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border-radius:8px;">
+          <span style="font-size:13px;color:var(--text);">Farm deposit</span>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);">+15 pts</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border-radius:8px;">
+          <span style="font-size:13px;color:var(--text);">Mint NFT</span>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);">+50 pts</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border-radius:8px;">
+          <span style="font-size:13px;color:var(--text);">Buy lottery ticket</span>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);">+5 pts</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border-radius:8px;">
+          <span style="font-size:13px;color:var(--text);">Daily login</span>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);">+3 pts</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:rgba(212,160,23,0.3);">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:12px;">TOP GANGSTERS</div>
+      <div id="leaderboardTable" data-testid="leaderboard-table">
+        <div style="color:var(--muted);font-size:14px;text-align:center;padding:16px;">Connect wallet to view leaderboard</div>
+      </div>
+    </div>
   </div>
 
 
@@ -5327,7 +5463,8 @@ async function doSwap() {
     showToast("⏳ Swap submitted! Waiting for confirmation…", "");
     const receipt = await tx.wait();
     addTx("Swap", `${fromAmt} ${fromSym} → ${toAmt.toFixed(4)} ${toSym}`, receipt.hash, "ok");
-    showToast(`✅ Swapped ${fromAmt} ${fromSym} for ~${toAmt.toFixed(4)} ${toSym}!`, "success");
+    showToast(`Swapped ${fromAmt} ${fromSym} for ~${toAmt.toFixed(4)} ${toSym}!`, "success");
+    if (typeof addPoints === 'function') addPoints(10, 'Swap');
     await loadBalances();
     document.getElementById("swapFrom").value = "";
     document.getElementById("swapTo").value   = "";
@@ -6478,7 +6615,8 @@ async function doAddLiquidity() {
     showToast("⏳ Transaction submitted, awaiting confirmation…", "");
     const receipt = await tx.wait();
     addTx("Add LP", `${aAmt} ${symA} + ${bAmt.toFixed(4)} ${symB}`, receipt.hash, "ok");
-    showToast("✅ Liquidity added successfully!", "success");
+    showToast("Liquidity added successfully!", "success");
+    if (typeof addPoints === 'function') addPoints(25, 'Add liquidity');
     document.getElementById("liqA").value = "";
     document.getElementById("liqB").value = "";
     await loadBalances();
@@ -7402,6 +7540,7 @@ async function confirmStake() {
       showToast("Stake submitted, awaiting confirmation...", "");
       await tx.wait();
       addTx("Stake", displayAmt + " LP in " + farm.name, tx.hash, "ok");
+      if (typeof addPoints === 'function') addPoints(15, 'Farm deposit');
       showToast("Staked " + displayAmt + " LP - now earning $GANG!", "success");
     } else {
       showToast("Confirm unstake in your wallet...", "");
@@ -12161,6 +12300,7 @@ async function doStakeGang() {
     updateBalanceDisplays();
     showToast('✅ $GANG locked for ' + lock.label + ' at ' + lock.apy + '% APY! (Contract deploying soon)', 'success');
     addTx('Stake GANG', amt.toFixed(4) + ' GANG · ' + lock.label, '—pending—', 'ok');
+    if (typeof addPoints === 'function') addPoints(20, 'Stake GANG');
   }
 
   document.getElementById('stakeGangAmt').value = '';
@@ -13023,6 +13163,7 @@ async function mintNftFromDex() {
     if (statusEl) statusEl.textContent = "Transaction submitted! Waiting for confirmation...";
     const receipt = await tx.wait();
     showToast(`Minted ${nftQty} Gangster NFT${nftQty > 1 ? 's' : ''}!`, "success");
+    if (typeof addPoints === 'function') addPoints(50, 'Mint NFT');
     if (statusEl) { statusEl.className = "status-ok"; statusEl.innerHTML = `Minted! <a href="https://explorer.cronos.org/tx/${receipt.hash}" target="_blank" style="color:var(--green)">View on Explorer</a>`; }
     await loadNftStats();
   } catch(e) {
@@ -14374,6 +14515,359 @@ async function mktWithdrawFees() {
   }
 })();
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').catch(()=>{}); }
+
+// ══════════════════════════════════════════════════════════════
+// FEATURE: SWAP / LIMIT ORDER TOGGLE
+// ══════════════════════════════════════════════════════════════
+function switchSwapMode(mode) {
+  const swapPanel = document.getElementById('swapBtn')?.parentElement;
+  const limitPanel = document.getElementById('limitOrderPanel');
+  const tabSwap = document.getElementById('tabSwap');
+  const tabLimit = document.getElementById('tabLimit');
+  if (!limitPanel || !tabSwap || !tabLimit) return;
+
+  // Toggle regular swap elements visibility
+  const swapElements = ['swapFrom','swapTo','swapInfo','slippageRow'].map(id => document.getElementById(id));
+  const swapBoxes = document.querySelectorAll('.swap-box, .swap-divider, .pct-row');
+  const swapBtn = document.getElementById('swapBtn');
+
+  if (mode === 'limit') {
+    tabSwap.style.background = 'transparent'; tabSwap.style.color = 'var(--muted)';
+    tabLimit.style.background = '#ff6b35'; tabLimit.style.color = '#000';
+    limitPanel.style.display = 'block';
+    if (swapBtn) swapBtn.style.display = 'none';
+    swapBoxes.forEach(el => { if (el) el.style.display = 'none'; });
+    swapElements.forEach(el => { if (el) el.style.display = 'none'; });
+    document.querySelectorAll('.swap-box').forEach(el => el.style.display = 'none');
+    document.querySelector('.swap-divider')?.style && (document.querySelector('.swap-divider').style.display = 'none');
+    updateLimitOrderUI();
+  } else {
+    tabSwap.style.background = 'var(--gold)'; tabSwap.style.color = '#000';
+    tabLimit.style.background = 'transparent'; tabLimit.style.color = 'var(--muted)';
+    limitPanel.style.display = 'none';
+    if (swapBtn) swapBtn.style.display = '';
+    document.querySelectorAll('.swap-box').forEach(el => el.style.display = '');
+    document.querySelector('.swap-divider')?.style && (document.querySelector('.swap-divider').style.display = '');
+    swapElements.forEach(el => { if (el) el.style.display = ''; });
+  }
+}
+
+function updateLimitOrderUI() {
+  const fromSym = document.getElementById('tokenFrom')?.value || 'CRO';
+  const toSym = document.getElementById('tokenTo')?.value || 'GANG';
+  const fromPrice = TOKENS[fromSym]?.price || 0;
+  document.getElementById('limitFromSym').textContent = fromSym;
+  document.getElementById('limitToSym').textContent = toSym;
+  document.getElementById('limitCurrentPrice').textContent = '$' + fromPrice.toFixed(6);
+  document.getElementById('limitBalance').textContent = (state.balances[fromSym] || 0).toFixed(4) + ' ' + fromSym;
+  renderLimitOrders();
+
+  // Estimate receive
+  const targetPrice = parseFloat(document.getElementById('limitTargetPrice')?.value) || 0;
+  const amount = parseFloat(document.getElementById('limitAmount')?.value) || 0;
+  const toPrice = TOKENS[toSym]?.price || 0;
+  if (targetPrice > 0 && amount > 0 && toPrice > 0) {
+    const usdValue = amount * targetPrice * 0.997; // after 0.3% fee
+    const receiveEst = usdValue / toPrice;
+    document.getElementById('limitReceiveEst').textContent = receiveEst.toFixed(4) + ' ' + toSym;
+  }
+}
+
+// Limit order input listeners
+document.getElementById('limitTargetPrice')?.addEventListener('input', updateLimitOrderUI);
+document.getElementById('limitAmount')?.addEventListener('input', updateLimitOrderUI);
+
+function getLimitOrders() {
+  try { return JSON.parse(localStorage.getItem('gang_limit_orders') || '[]'); } catch { return []; }
+}
+function saveLimitOrders(orders) {
+  localStorage.setItem('gang_limit_orders', JSON.stringify(orders));
+}
+
+function placeLimitOrder() {
+  if (!state.address) { showToast('Connect wallet first', 'error'); return; }
+  const fromSym = document.getElementById('tokenFrom')?.value || 'CRO';
+  const toSym = document.getElementById('tokenTo')?.value || 'GANG';
+  const targetPrice = parseFloat(document.getElementById('limitTargetPrice')?.value);
+  const amount = parseFloat(document.getElementById('limitAmount')?.value);
+  if (!targetPrice || targetPrice <= 0) { showToast('Enter a target price', 'error'); return; }
+  if (!amount || amount <= 0) { showToast('Enter an amount', 'error'); return; }
+  if (amount > (state.balances[fromSym] || 0)) { showToast('Insufficient ' + fromSym + ' balance', 'error'); return; }
+
+  const orders = getLimitOrders();
+  orders.push({
+    id: Date.now(),
+    wallet: state.address,
+    fromSym, toSym, targetPrice, amount,
+    createdAt: new Date().toISOString(),
+    status: 'open'
+  });
+  saveLimitOrders(orders);
+  showToast('Limit order placed! Will execute when ' + fromSym + ' hits $' + targetPrice, 'success');
+  document.getElementById('limitTargetPrice').value = '';
+  document.getElementById('limitAmount').value = '';
+  renderLimitOrders();
+  addPoints(5);
+}
+
+function cancelLimitOrder(id) {
+  const orders = getLimitOrders().filter(o => o.id !== id);
+  saveLimitOrders(orders);
+  showToast('Order cancelled', '');
+  renderLimitOrders();
+}
+
+function renderLimitOrders() {
+  const el = document.getElementById('limitOrdersList');
+  if (!el) return;
+  const orders = getLimitOrders().filter(o => o.wallet === state.address && o.status === 'open');
+  if (orders.length === 0) {
+    el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:12px;">No open orders</div>';
+    return;
+  }
+  el.innerHTML = orders.map(o => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
+      <div>
+        <div style="font-size:13px;color:var(--text);">${o.amount} ${o.fromSym} &#8594; ${o.toSym}</div>
+        <div style="font-size:11px;color:var(--muted);">@ $${o.targetPrice}</div>
+      </div>
+      <button onclick="cancelLimitOrder(${o.id})" style="background:rgba(192,57,43,0.15);border:1px solid var(--red);color:var(--red);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">CANCEL</button>
+    </div>
+  `).join('');
+}
+
+// Check limit orders periodically
+setInterval(function checkLimitOrders() {
+  const orders = getLimitOrders();
+  let changed = false;
+  orders.forEach(o => {
+    if (o.status !== 'open') return;
+    const currentPrice = TOKENS[o.fromSym]?.price || 0;
+    if (currentPrice > 0 && currentPrice >= o.targetPrice) {
+      o.status = 'triggered';
+      changed = true;
+      showToast('Limit order triggered: ' + o.amount + ' ' + o.fromSym + ' @ $' + o.targetPrice + '. Open Swap to execute!', 'success');
+    }
+  });
+  if (changed) { saveLimitOrders(orders); renderLimitOrders(); }
+}, 30000);
+
+// ══════════════════════════════════════════════════════════════
+// FEATURE: LEADERBOARD + POINTS SYSTEM
+// ══════════════════════════════════════════════════════════════
+function getPointsData() {
+  try { return JSON.parse(localStorage.getItem('gang_points') || '{}'); } catch { return {}; }
+}
+function savePointsData(data) {
+  localStorage.setItem('gang_points', JSON.stringify(data));
+}
+
+function addPoints(amount, action) {
+  if (!state.address) return;
+  const data = getPointsData();
+  const addr = state.address.toLowerCase();
+  if (!data[addr]) data[addr] = { points: 0, actions: [], dailyLogin: null };
+  data[addr].points += amount;
+  if (action) data[addr].actions.push({ action, points: amount, ts: Date.now() });
+  savePointsData(data);
+  updatePointsDisplay();
+}
+
+function checkDailyLogin() {
+  if (!state.address) return;
+  const data = getPointsData();
+  const addr = state.address.toLowerCase();
+  if (!data[addr]) data[addr] = { points: 0, actions: [], dailyLogin: null };
+  const today = new Date().toISOString().split('T')[0];
+  if (data[addr].dailyLogin !== today) {
+    data[addr].dailyLogin = today;
+    data[addr].points += 3;
+    data[addr].actions.push({ action: 'Daily login', points: 3, ts: Date.now() });
+    savePointsData(data);
+    showToast('+3 points for daily login!', 'success');
+  }
+  updatePointsDisplay();
+}
+
+function updatePointsDisplay() {
+  const data = getPointsData();
+  const addr = state.address?.toLowerCase();
+  const myPoints = addr && data[addr] ? data[addr].points : 0;
+  const el = document.getElementById('myPoints');
+  if (el) el.textContent = myPoints.toLocaleString();
+
+  // Calculate rank
+  const sorted = Object.entries(data).sort((a, b) => b[1].points - a[1].points);
+  const rankIdx = sorted.findIndex(([a]) => a === addr);
+  const rankEl = document.getElementById('myRank');
+  if (rankEl) rankEl.textContent = rankIdx >= 0 ? '#' + (rankIdx + 1) : '#—';
+
+  // Render leaderboard table
+  const tableEl = document.getElementById('leaderboardTable');
+  if (!tableEl) return;
+  if (sorted.length === 0) {
+    tableEl.innerHTML = '<div style="color:var(--muted);font-size:14px;text-align:center;padding:16px;">No activity yet. Start swapping to earn points!</div>';
+    return;
+  }
+  const top20 = sorted.slice(0, 20);
+  tableEl.innerHTML = top20.map(([wallet, d], i) => {
+    const medal = i === 0 ? '&#129351;' : i === 1 ? '&#129352;' : i === 2 ? '&#129353;' : '';
+    const isMe = wallet === addr;
+    const bg = isMe ? 'rgba(255,107,53,0.1)' : 'transparent';
+    const border = isMe ? '1px solid rgba(255,107,53,0.3)' : '1px solid var(--border)';
+    return `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:${bg};border:${border};border-radius:8px;margin-bottom:4px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:${i < 3 ? 'var(--gold)' : 'var(--muted)'};min-width:30px;">${medal || '#' + (i + 1)}</span>
+        <span style="font-size:13px;color:${isMe ? '#ff6b35' : 'var(--text)'};font-family:monospace;">${wallet.slice(0,6)}...${wallet.slice(-4)}</span>
+        ${isMe ? '<span style="font-size:10px;color:#ff6b35;background:rgba(255,107,53,0.15);padding:2px 6px;border-radius:4px;">YOU</span>' : ''}
+      </div>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);">${d.points.toLocaleString()} PTS</span>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════════
+// FEATURE: TOKEN BURN TRACKER
+// ══════════════════════════════════════════════════════════════
+async function loadBurnTracker() {
+  try {
+    const gangAddr = TOKENS.GANG?.address || '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+    const deadAddr = '0x000000000000000000000000000000000000dEaD';
+    const zeroAddr = '0x0000000000000000000000000000000000000000';
+    const erc20 = new ethers.Interface(['function balanceOf(address) view returns (uint256)', 'function totalSupply() view returns (uint256)']);
+
+    const provider = state.provider || new ethers.JsonRpcProvider('https://evm.cronos.org');
+    const gangContract = new ethers.Contract(gangAddr, erc20, provider);
+
+    const [deadBal, zeroBal, totalSupply] = await Promise.all([
+      gangContract.balanceOf(deadAddr),
+      gangContract.balanceOf(zeroAddr).catch(() => BigInt(0)),
+      gangContract.totalSupply()
+    ]);
+
+    const totalBurned = deadBal + zeroBal;
+    const burnedFloat = parseFloat(ethers.formatUnits(totalBurned, 18));
+    const supplyFloat = parseFloat(ethers.formatUnits(totalSupply, 18));
+    const circulating = supplyFloat - burnedFloat;
+    const burnPct = supplyFloat > 0 ? (burnedFloat / supplyFloat * 100) : 0;
+    const gangPrice = TOKENS.GANG?.price || 0;
+
+    const fmt = (n) => n >= 1e9 ? (n/1e9).toFixed(2) + 'B' : n >= 1e6 ? (n/1e6).toFixed(2) + 'M' : n >= 1e3 ? (n/1e3).toFixed(1) + 'K' : n.toFixed(2);
+
+    const el = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+    el('burnTrackerTotal', fmt(burnedFloat));
+    el('burnTrackerUSD', '$' + fmt(burnedFloat * gangPrice));
+    el('burnTrackerPct', burnPct.toFixed(2) + '%');
+    el('burnTrackerCirc', fmt(circulating));
+  } catch (e) {
+    console.error('Burn tracker error:', e);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// FEATURE: PORTFOLIO P&L TRACKER
+// ══════════════════════════════════════════════════════════════
+function getEntryPrices() {
+  try { return JSON.parse(localStorage.getItem('gang_entry_prices') || '{}'); } catch { return {}; }
+}
+function saveEntryPrices(data) {
+  localStorage.setItem('gang_entry_prices', JSON.stringify(data));
+}
+
+function recordEntryPrice(sym, price) {
+  if (!state.address || !price || price <= 0) return;
+  const data = getEntryPrices();
+  const key = state.address.toLowerCase() + '_' + sym;
+  if (!data[key]) {
+    data[key] = { price, ts: Date.now() };
+    saveEntryPrices(data);
+  }
+}
+
+// Patch the original renderPortfolio to include P&L
+const _origRenderPortfolio = window.renderPortfolio;
+window.renderPortfolio = function renderPortfolioWithPnL() {
+  if (typeof _origRenderPortfolio === 'function') _origRenderPortfolio();
+
+  if (!state.address) return;
+  const el = document.getElementById('portfolioContent');
+  if (!el) return;
+
+  // Record current prices as entry prices if not set
+  Object.entries(TOKENS).forEach(([sym, tok]) => {
+    if (tok.price > 0 && (state.balances[sym] || 0) > 0) {
+      recordEntryPrice(sym, tok.price);
+    }
+  });
+
+  // Add P&L section
+  const entryData = getEntryPrices();
+  let pnlHTML = '';
+  let totalPnL = 0;
+  let hasPnL = false;
+
+  Object.entries(TOKENS).forEach(([sym, tok]) => {
+    const bal = state.balances[sym] || 0;
+    if (bal <= 0) return;
+    const key = state.address.toLowerCase() + '_' + sym;
+    const entry = entryData[key];
+    if (!entry) return;
+
+    const entryPrice = entry.price;
+    const currentPrice = tok.price || 0;
+    if (entryPrice <= 0 || currentPrice <= 0) return;
+
+    const pnlPct = ((currentPrice - entryPrice) / entryPrice * 100);
+    const pnlUSD = (currentPrice - entryPrice) * bal;
+    totalPnL += pnlUSD;
+    hasPnL = true;
+
+    const color = pnlPct >= 0 ? 'var(--green)' : 'var(--red)';
+    const arrow = pnlPct >= 0 ? '&#9650;' : '&#9660;';
+
+    pnlHTML += `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="font-size:18px">${tImg(tok.symbol, 20)}</div>
+        <div>
+          <div style="font-size:13px;color:var(--text);font-weight:600;">${sym}</div>
+          <div style="font-size:10px;color:var(--muted);">Entry: $${entryPrice.toFixed(6)}</div>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:14px;color:${color};font-weight:700;">${arrow} ${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(2)}%</div>
+        <div style="font-size:11px;color:${color};">${pnlUSD >= 0 ? '+' : ''}$${pnlUSD.toFixed(4)}</div>
+      </div>
+    </div>`;
+  });
+
+  if (hasPnL) {
+    const totalColor = totalPnL >= 0 ? 'var(--green)' : 'var(--red)';
+    const totalArrow = totalPnL >= 0 ? '&#9650;' : '&#9660;';
+    const pnlCard = `
+    <div class="card" style="margin-top:16px;border-color:${totalPnL >= 0 ? 'rgba(39,174,96,0.3)' : 'rgba(192,57,43,0.3)'};">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div class="card-title" style="margin:0;">&#128200; Profit / Loss</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${totalColor};">${totalArrow} ${totalPnL >= 0 ? '+' : ''}$${totalPnL.toFixed(4)}</div>
+      </div>
+      ${pnlHTML}
+      <div style="font-size:10px;color:var(--muted);margin-top:8px;text-align:center;">P&L tracked since first wallet connection. Entry prices saved locally.</div>
+    </div>`;
+    el.insertAdjacentHTML('beforeend', pnlCard);
+  }
+};
+
+// Hook into wallet connection to trigger daily login + burn tracker
+const _origUpdateWalletUI = window.updateWalletUI;
+window.updateWalletUI = function() {
+  if (typeof _origUpdateWalletUI === 'function') _origUpdateWalletUI();
+  checkDailyLogin();
+  loadBurnTracker();
+};
+
+// Load burn tracker on page load
+setTimeout(loadBurnTracker, 3000);
 </script>
 <script>
 (function() {
@@ -14385,7 +14879,7 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').c
       'launchpad':'launchpad','locker':'locker','lottery':'lottery','sniper':'sniper',
       'nfts':'nfts','referral':'referral','create':'create','marketplace':'market',
       'market':'market','swap':'swap','liquidity':'liquidity','portfolio':'portfolio',
-      'token':'token','roadmap':'roadmap'
+      'token':'token','roadmap':'roadmap','leaderboard':'leaderboard'
     };
     var page = pageMap[hash] || hash;
     var btn = document.querySelector('[data-page="' + page + '"]');
