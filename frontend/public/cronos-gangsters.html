@@ -381,6 +381,7 @@
     .farm-name{font-size:16px;}
     .tab-btn{font-size:13px;padding:7px;}
     .swap-wrap{max-width:100%;}
+    [data-testid="feature-grid"]{grid-template-columns:repeat(3,1fr)!important;}
     iframe{max-width:100%!important;border-radius:10px!important;}
   }
   @media(max-width:480px){
@@ -728,48 +729,72 @@ function toggleNavMenu() {
 
   <!-- ═══ PROMO BANNER ═══ -->
   <div data-testid="promo-banner" style="overflow:hidden;background:linear-gradient(90deg,rgba(212,160,23,0.12),rgba(212,160,23,0.25),rgba(212,160,23,0.12));border-top:1px solid rgba(212,160,23,0.3);border-bottom:1px solid rgba(212,160,23,0.3);padding:10px 0;margin-bottom:0;">
-    <div style="display:flex;animation:bannerScroll 20s linear infinite;width:max-content;">
+    <div style="display:flex;animation:bannerScroll 30s linear infinite;width:max-content;">
       <div style="display:flex;gap:28px;padding:0 14px;flex-shrink:0;">
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔄 SWAP TOKENS</span>
+        <span onclick="showPage('futures')" style="cursor:pointer;color:#ff8c00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📈 GANG FUTURES — 33 PAIRS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🌾 YIELD FARMS LIVE</span>
+        <span onclick="showPage('tracker')" style="cursor:pointer;color:#00d4ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔍 GANG TRACKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏦 AUTO-COMPOUND VAULTS</span>
+        <span onclick="showPage('swap')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔄 SWAP TOKENS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🎰 LOTTERY — WIN BIG</span>
+        <span onclick="showPage('farms')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🌾 YIELD FARMS LIVE</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🎴 MINT GANGSTER NFTs</span>
+        <span onclick="showPage('vaults')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏦 AUTO-COMPOUND VAULTS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🚀 LAUNCHPAD IDOs</span>
+        <span onclick="showPage('staking')" style="cursor:pointer;color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔒 STAKE $GANG — UP TO 300% APY</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">👥 INVITE FRIENDS — EARN 5%</span>
+        <span onclick="showPage('lottery')" style="cursor:pointer;color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🎰 LOTTERY — WIN BIG</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🌉 BRIDGE CROSS-CHAIN</span>
+        <span onclick="showPage('nfts')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🎴 MINT GANGSTER NFTs</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🛠 CREATE YOUR OWN TOKEN</span>
+        <span onclick="showPage('launchpad')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🚀 LAUNCHPAD IDOs</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔒 STAKE $GANG — EARN REWARDS</span>
+        <span onclick="showPage('referral')" style="cursor:pointer;color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">👥 INVITE FRIENDS — EARN 5%</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('bridge')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🌉 BRIDGE CROSS-CHAIN</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('create')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🛠 CREATE YOUR OWN TOKEN</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('sniper')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🎯 SNIPER BOT</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('market')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏪 NFT MARKETPLACE</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('locker')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔐 LP LOCKER</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('portfolio')" style="cursor:pointer;color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📁 PORTFOLIO TRACKER</span>
       </div>
       <div style="display:flex;gap:28px;padding:0 14px;flex-shrink:0;">
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔄 SWAP TOKENS</span>
+        <span onclick="showPage('futures')" style="cursor:pointer;color:#ff8c00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📈 GANG FUTURES — 33 PAIRS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🌾 YIELD FARMS LIVE</span>
+        <span onclick="showPage('tracker')" style="cursor:pointer;color:#00d4ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔍 GANG TRACKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏦 AUTO-COMPOUND VAULTS</span>
+        <span onclick="showPage('swap')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔄 SWAP TOKENS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🎰 LOTTERY — WIN BIG</span>
+        <span onclick="showPage('farms')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🌾 YIELD FARMS LIVE</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🎴 MINT GANGSTER NFTs</span>
+        <span onclick="showPage('vaults')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏦 AUTO-COMPOUND VAULTS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🚀 LAUNCHPAD IDOs</span>
+        <span onclick="showPage('staking')" style="cursor:pointer;color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔒 STAKE $GANG — UP TO 300% APY</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">👥 INVITE FRIENDS — EARN 5%</span>
+        <span onclick="showPage('lottery')" style="cursor:pointer;color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🎰 LOTTERY — WIN BIG</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🌉 BRIDGE CROSS-CHAIN</span>
+        <span onclick="showPage('nfts')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🎴 MINT GANGSTER NFTs</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🛠 CREATE YOUR OWN TOKEN</span>
+        <span onclick="showPage('launchpad')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🚀 LAUNCHPAD IDOs</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span style="color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔒 STAKE $GANG — EARN REWARDS</span>
+        <span onclick="showPage('referral')" style="cursor:pointer;color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">👥 INVITE FRIENDS — EARN 5%</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('bridge')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🌉 BRIDGE CROSS-CHAIN</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('create')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🛠 CREATE YOUR OWN TOKEN</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('sniper')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🎯 SNIPER BOT</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('market')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏪 NFT MARKETPLACE</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('locker')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔐 LP LOCKER</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('portfolio')" style="cursor:pointer;color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📁 PORTFOLIO TRACKER</span>
       </div>
     </div>
   </div>
@@ -782,112 +807,7 @@ function toggleNavMenu() {
   ══════════════════════════════════════ -->
   <div class="page active" id="page-swap">
 
-    <!-- Hero tagline -->
-    <div style="text-align:center;margin-bottom:16px;padding:16px 12px 8px;">
-      <div style="font-size:20px;font-weight:800;color:#d4a017;letter-spacing:1px;">WELCOME TO THE FAMILY</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:4px;letter-spacing:0.5px;">Stack your $GANG or get left behind. We don't play nice — we play DeFi.</div>
-    </div>
-    <!-- Gangster image gallery — Row 1 -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
-      <div class="gang-img-card">
-        <img src="/img/make_money.png"   class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
-        <div class="gang-img-caption">💰 MAKE MONEY</div>
-      </div>
-      <div class="gang-img-card">
-        <img src="/img/the_boss.png"    class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
-        <div class="gang-img-caption">🕶️ THE BOSS</div>
-      </div>
-      <div class="gang-img-card">
-        <img src="/img/the_don.png"     class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
-        <div class="gang-img-caption">🎩 THE DON</div>
-      </div>
-    </div>
-    <!-- Row 2 -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
-      <div class="gang-img-card">
-        <img src="/img/the_family.png"    class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
-        <div class="gang-img-caption">🥃 THE FAMILY</div>
-      </div>
-      <div class="gang-img-card">
-        <img src="/img/stay_strapped.png"     class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
-        <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;vertical-align:middle;border-radius:50%;"> STAY STRAPPED</div>
-      </div>
-      <div class="gang-img-card">
-        <img src="/img/street_style.png"   class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
-        <div class="gang-img-caption">🎯 STREET STYLE</div>
-      </div>
-    </div>
-
-    <!-- ── FEATURES SHOWCASE ── -->
-    <div style="max-width:700px;margin:0 auto 28px;padding:0 8px;">
-      <div style="text-align:center;margin-bottom:16px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);letter-spacing:3px;">EVERYTHING YOU NEED</div>
-        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">One platform. No limits.</div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;" data-testid="feature-grid">
-        <div class="card" onclick="showPage('swap')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(212,160,23,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-          <div style="font-size:22px;margin-bottom:4px;">🔄</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">SWAP</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Trade tokens</div>
-        </div>
-        <div class="card" onclick="showPage('farms')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(212,160,23,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-          <div style="font-size:22px;margin-bottom:4px;">🌾</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">FARMS</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Earn $GANG</div>
-        </div>
-        <div class="card" onclick="showPage('vaults')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(212,160,23,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-          <div style="font-size:22px;margin-bottom:4px;">🏦</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">VAULTS</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Auto-compound</div>
-        </div>
-        <div class="card" onclick="showPage('staking')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(212,160,23,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-          <div style="font-size:22px;margin-bottom:4px;">🔒</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">STAKE</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Lock & earn</div>
-        </div>
-        <div class="card" onclick="showPage('lottery')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(212,160,23,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-          <div style="font-size:22px;margin-bottom:4px;">🎰</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">LOTTERY</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Win big</div>
-        </div>
-        <div class="card" onclick="showPage('nfts')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(212,160,23,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-          <div style="font-size:22px;margin-bottom:4px;">🎴</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">NFTs</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Mint & collect</div>
-        </div>
-        <div class="card" onclick="showPage('market')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(212,160,23,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-          <div style="font-size:22px;margin-bottom:4px;">🏪</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">MARKET</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Buy & sell NFTs</div>
-        </div>
-        <div class="card" onclick="showPage('bridge')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(212,160,23,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-          <div style="font-size:22px;margin-bottom:4px;">🌉</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">BRIDGE</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Cross-chain</div>
-        </div>
-        <div class="card" onclick="showPage('liquidity')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(212,160,23,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-          <div style="font-size:22px;margin-bottom:4px;">💧</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">LIQUIDITY</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Add & earn fees</div>
-        </div>
-        <div class="card" onclick="showPage('create')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(212,160,23,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-          <div style="font-size:22px;margin-bottom:4px;">🛠</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">CREATE</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Launch tokens</div>
-        </div>
-        <div class="card" onclick="showPage('launchpad')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(212,160,23,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-          <div style="font-size:22px;margin-bottom:4px;">🚀</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">LAUNCHPAD</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">IDO sales</div>
-        </div>
-        <div class="card" onclick="showPage('referral')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(212,160,23,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-          <div style="font-size:22px;margin-bottom:4px;">👥</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">INVITE</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Earn referrals</div>
-        </div>
-      </div>
-    </div>
-
+    <!-- ── SWAP BOX FIRST ── -->
     <div class="swap-wrap">
       <div class="card" style="border-color:rgba(212,160,23,0.3);box-shadow:0 0 0 1px rgba(212,160,23,0.05),0 8px 32px rgba(0,0,0,0.4);">
         <div class="card-title"><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> Swap Tokens</div>
@@ -1081,6 +1001,131 @@ function toggleNavMenu() {
         </div>
       </div>
     </div>
+
+    <!-- ── WELCOME & GANGSTER GALLERY ── -->
+    <div style="text-align:center;margin:28px 0 16px;padding:0 12px;">
+      <div style="font-size:20px;font-weight:800;color:var(--gold);letter-spacing:1px;">WELCOME TO THE FAMILY</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px;letter-spacing:0.5px;">Stack your $GANG or get left behind. We don't play nice — we play DeFi.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="gang-img-card" onclick="showPage('futures')" style="cursor:pointer;">
+        <img src="/img/make_money.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
+        <div class="gang-img-caption">📈 GANG FUTURES</div>
+      </div>
+      <div class="gang-img-card" onclick="showPage('tracker')" style="cursor:pointer;">
+        <img src="/img/the_boss.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
+        <div class="gang-img-caption">🔍 GANG TRACKER</div>
+      </div>
+      <div class="gang-img-card" onclick="showPage('farms')" style="cursor:pointer;">
+        <img src="/img/the_don.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
+        <div class="gang-img-caption">🌾 YIELD FARMS</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
+      <div class="gang-img-card" onclick="showPage('vaults')" style="cursor:pointer;">
+        <img src="/img/the_family.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
+        <div class="gang-img-caption">🏦 AUTO VAULTS</div>
+      </div>
+      <div class="gang-img-card" onclick="showPage('staking')" style="cursor:pointer;">
+        <img src="/img/stay_strapped.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
+        <div class="gang-img-caption">🔒 STAKING</div>
+      </div>
+      <div class="gang-img-card" onclick="showPage('lottery')" style="cursor:pointer;">
+        <img src="/img/street_style.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
+        <div class="gang-img-caption">🎰 LOTTERY</div>
+      </div>
+    </div>
+
+    <!-- ── FEATURES GRID ── -->
+    <div style="max-width:700px;margin:0 auto 28px;padding:0 8px;">
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);letter-spacing:3px;">EVERYTHING YOU NEED</div>
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">One platform. No limits. All fees 0.3%</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" data-testid="feature-grid">
+        <div class="card" onclick="showPage('futures')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(255,140,0,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#ff8c00'" onmouseout="this.style.borderColor='rgba(255,140,0,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">📈</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#ff8c00;letter-spacing:1px;">FUTURES</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">33 pairs, 20x</div>
+        </div>
+        <div class="card" onclick="showPage('tracker')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(0,212,255,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#00d4ff'" onmouseout="this.style.borderColor='rgba(0,212,255,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">🔍</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#00d4ff;letter-spacing:1px;">TRACKER</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Multi-chain</div>
+        </div>
+        <div class="card" onclick="showPage('swap')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🔄</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">SWAP</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Trade tokens</div>
+        </div>
+        <div class="card" onclick="showPage('farms')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🌾</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">FARMS</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Earn $GANG</div>
+        </div>
+        <div class="card" onclick="showPage('vaults')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🏦</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">VAULTS</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Auto-compound</div>
+        </div>
+        <div class="card" onclick="showPage('staking')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🔒</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">STAKE</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Up to 300% APY</div>
+        </div>
+        <div class="card" onclick="showPage('lottery')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🎰</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">LOTTERY</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Win big</div>
+        </div>
+        <div class="card" onclick="showPage('nfts')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🎴</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">NFTs</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Mint & collect</div>
+        </div>
+        <div class="card" onclick="showPage('market')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🏪</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">MARKET</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">NFT Marketplace</div>
+        </div>
+        <div class="card" onclick="showPage('bridge')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🌉</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">BRIDGE</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Cross-chain</div>
+        </div>
+        <div class="card" onclick="showPage('liquidity')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">💧</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">LIQUIDITY</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Add & earn fees</div>
+        </div>
+        <div class="card" onclick="showPage('create')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🛠</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">CREATE</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Launch tokens</div>
+        </div>
+        <div class="card" onclick="showPage('launchpad')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🚀</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">LAUNCHPAD</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">IDO sales</div>
+        </div>
+        <div class="card" onclick="showPage('referral')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(0,255,136,0.2);transition:all .2s;" onmouseover="this.style.borderColor='#00ff88'" onmouseout="this.style.borderColor='rgba(0,255,136,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">👥</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#00ff88;letter-spacing:1px;">INVITE</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Earn 5% referrals</div>
+        </div>
+        <div class="card" onclick="showPage('sniper')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🎯</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">SNIPER</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Fast trading</div>
+        </div>
+        <div class="card" onclick="showPage('portfolio')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">📁</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">PORTFOLIO</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Track holdings</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ══════════════════════════════════════
@@ -5769,6 +5814,21 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     window.scrollTo(0,0);
   });
 });
+
+// Global showPage function — used by feature boxes, ticker, and gangster cards
+function showPage(pageName) {
+  const navBtn = document.querySelector('.nav-btn[data-page="' + pageName + '"]');
+  if (navBtn) {
+    navBtn.click();
+  } else {
+    // Fallback: directly switch pages
+    document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    const pageEl = document.getElementById("page-" + pageName);
+    if (pageEl) pageEl.classList.add("active");
+    window.scrollTo(0,0);
+  }
+}
 
 // Deep-link: open specific tab from URL hash (e.g. #farms, #vaults, #staking)
 (function handleDeepLink() {
