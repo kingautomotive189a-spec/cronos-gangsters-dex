@@ -14600,7 +14600,7 @@ async function scanWallet() {
 
     let totalUSD = 0;
 
-    // ── 1. TOKEN BALANCES ──
+    // ── 1. TOKEN BALANCES (scan ALL tokens via Cronos Explorer API) ──
     const tokenHTML = [];
     const croBal = await rp.getBalance(addr);
     const croAmt = parseFloat(ethers.formatEther(croBal));
@@ -14608,22 +14608,45 @@ async function scanWallet() {
     const croUSD = croAmt * croPrice;
     totalUSD += croUSD;
     if (croAmt > 0.001) {
-      tokenHTML.push(trackerRow('CRO', croAmt, croUSD, 'var(--text)'));
+      tokenHTML.push(trackerRow('CRO', croAmt, croUSD, '#00d4ff'));
     }
 
-    const erc20ABI = ['function balanceOf(address) view returns (uint256)', 'function decimals() view returns (uint8)'];
-    for (const [sym, tok] of Object.entries(TOKENS)) {
-      if (sym === 'CRO' || !tok.address || tok.address === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') continue;
-      try {
-        const c = new ethers.Contract(tok.address, erc20ABI, rp);
-        const bal = await c.balanceOf(addr);
-        const amt = parseFloat(ethers.formatUnits(bal, tok.decimals || 18));
-        if (amt > 0.0001) {
-          const usd = amt * (tok.price || 0);
+    // Fetch ALL tokens from Cronos Explorer API
+    try {
+      const tokenListURL = 'https://cronos.org/explorer/api?module=account&action=tokenlist&address=' + addr;
+      const resp = await fetch(tokenListURL);
+      const data = await resp.json();
+      if (data.result && Array.isArray(data.result)) {
+        for (const tok of data.result) {
+          if (tok.type !== 'ERC-20' && tok.type !== 'ERC20') continue;
+          const decimals = parseInt(tok.decimals) || 18;
+          const bal = parseFloat(tok.balance) / Math.pow(10, decimals);
+          if (bal < 0.0001) continue;
+          const sym = tok.symbol || tok.name || 'Unknown';
+          // Check if we have a price from our token list
+          const knownToken = TOKENS[sym] || Object.values(TOKENS).find(t => t.address?.toLowerCase() === tok.contractAddress?.toLowerCase());
+          const price = knownToken?.price || 0;
+          const usd = bal * price;
           totalUSD += usd;
-          tokenHTML.push(trackerRow(sym, amt, usd, 'var(--text)'));
+          tokenHTML.push(trackerRow(sym, bal, usd, price > 0 ? 'var(--text)' : 'var(--muted)'));
         }
-      } catch {}
+      }
+    } catch(apiErr) {
+      // Fallback: scan known tokens only
+      const erc20ABI = ['function balanceOf(address) view returns (uint256)'];
+      for (const [sym, tok] of Object.entries(TOKENS)) {
+        if (sym === 'CRO' || !tok.address || tok.address === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE') continue;
+        try {
+          const c = new ethers.Contract(tok.address, erc20ABI, rp);
+          const bal = await c.balanceOf(addr);
+          const amt = parseFloat(ethers.formatUnits(bal, tok.decimals || 18));
+          if (amt > 0.0001) {
+            const usd = amt * (tok.price || 0);
+            totalUSD += usd;
+            tokenHTML.push(trackerRow(sym, amt, usd, 'var(--text)'));
+          }
+        } catch {}
+      }
     }
     document.getElementById('trackerTokens').innerHTML = tokenHTML.length
       ? tokenHTML.join('')
@@ -14663,7 +14686,44 @@ async function scanWallet() {
     }
     document.getElementById('trackerFarms').innerHTML = farmHTML.length
       ? farmHTML.join('')
-      : '<div style="color:var(--muted);text-align:center;padding:12px;">No farm positions</div>';
+      : '<div style="color:var(--muted);text-align:center;padding:12px;">No farm positions on GANG DEX</div>';
+
+    // ── 2B. VVS FINANCE FARMS ──
+    const vvsFarmHTML = [];
+    try {
+      const VVS_CHEF = '0xDccd6455AE04b03d785F12196B492b18129564bc';
+      const vvsChefABI = ['function poolLength() view returns (uint256)', 'function userInfo(uint256,address) view returns (uint256 amount, uint256 rewardDebt)', 'function pendingVVS(uint256,address) view returns (uint256)', 'function poolInfo(uint256) view returns (address lpToken, uint256 allocPoint, uint256 lastRewardBlock, uint256 accVVSPerShare)'];
+      const vvsChef = new ethers.Contract(VVS_CHEF, vvsChefABI, rp);
+      const poolLen = await vvsChef.poolLength().catch(() => BigInt(0));
+      const numPools = Math.min(Number(poolLen), 15);
+      for (let pid = 0; pid < numPools; pid++) {
+        try {
+          const userInfo = await vvsChef.userInfo(pid, addr);
+          const staked = parseFloat(ethers.formatUnits(userInfo[0], 18));
+          if (staked > 0.0001) {
+            const pending = await vvsChef.pendingVVS(pid, addr).catch(() => BigInt(0));
+            const pendingAmt = parseFloat(ethers.formatUnits(pending, 18));
+            vvsFarmHTML.push(`
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;">
+                <div>
+                  <div style="font-size:14px;color:var(--text);font-weight:600;">VVS Pool #${pid}</div>
+                  <div style="font-size:11px;color:var(--muted);">${staked.toFixed(6)} LP staked</div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:14px;color:var(--green);font-weight:700;">${pendingAmt.toFixed(4)} VVS</div>
+                  <div style="font-size:11px;color:var(--muted);">pending</div>
+                </div>
+              </div>`);
+          }
+        } catch {}
+      }
+    } catch {}
+
+    if (vvsFarmHTML.length > 0) {
+      document.getElementById('trackerFarms').innerHTML += `
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--muted);letter-spacing:1px;margin:12px 0 6px;border-top:1px solid var(--border);padding-top:10px;">VVS FINANCE</div>
+        ${vvsFarmHTML.join('')}`; 
+    }
 
     // ── 3. STAKED GANG ──
     const stakeHTML = [];
