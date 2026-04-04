@@ -569,6 +569,45 @@
   </div>
 
 
+  <!-- ── OWNER TREASURY BANNER (only shows for owner wallet) ── -->
+  <div id="treasuryBanner" style="display:none;margin-bottom:20px;background:linear-gradient(135deg,rgba(212,160,23,0.12),rgba(39,174,96,0.06));border:2px solid rgba(212,160,23,0.5);border-radius:16px;padding:18px 20px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <div style="font-size:22px;">💰</div>
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);letter-spacing:2px;">OWNER TREASURY</div>
+        <div style="font-size:11px;color:var(--muted);">Your platform fees — swap, NFT &amp; marketplace</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+      <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(212,160,23,0.2);border-radius:10px;padding:12px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">TREASURY CRO</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);" id="treasuryCROBal">—</div>
+        <div style="font-size:10px;color:var(--muted);" id="treasuryCROUSD">$—</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(212,160,23,0.2);border-radius:10px;padding:12px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">TREASURY GANG</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);" id="treasuryGANGBal">—</div>
+        <div style="font-size:10px;color:var(--muted);" id="treasuryGANGUSD">$—</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(212,160,23,0.2);border-radius:10px;padding:12px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">NFT CONTRACT</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);" id="treasuryNFTBal">—</div>
+        <div style="font-size:10px;color:var(--muted);" id="treasuryNFTUSD">$—</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(212,160,23,0.2);border-radius:10px;padding:12px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">TOTAL VALUE</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);" id="treasuryTotalUSD">$—</div>
+        <div style="font-size:10px;color:var(--muted);">all sources</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button onclick="withdrawTreasuryCRO()" style="flex:1;min-width:140px;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--gold),#b8860b);color:#000;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;">WITHDRAW CRO FEES</button>
+      <button onclick="withdrawTreasuryGANG()" style="flex:1;min-width:140px;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;">WITHDRAW GANG FEES</button>
+      <button onclick="document.querySelector('[data-page=revenue]').click()" style="flex:1;min-width:140px;padding:12px;border-radius:10px;border:1px solid rgba(212,160,23,0.4);background:transparent;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;">VIEW ALL REVENUE</button>
+    </div>
+    <div id="treasuryStatus" style="margin-top:8px;font-size:11px;color:var(--green);min-height:14px;text-align:center;"></div>
+  </div>
+
   <!-- ── War Room Strip (all pages) ── -->
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
     <div class="gang-img-card">
@@ -4466,6 +4505,7 @@ async function _connectProvider(rawProvider, walletName) {
 
     // Non-critical: fire and forget in background
     checkOwnerRevenue();
+    loadTreasuryBanner();
     tryRegisterReferral();
     updateReferralUI();
     updateNftUI();
@@ -5267,11 +5307,10 @@ async function doSwap() {
       });
       await feeTx.wait();
     } else {
-      // ERC20 fee — approve and transfer
+      // ERC20 fee — transfer fee directly to treasury (no approval needed for transfer from own wallet)
       const tokenContract = new ethers.Contract(fromToken.address, [
         "function transfer(address to, uint256 amount) returns (bool)"
       ], state.signer);
-      await approveToken(fromToken.address, fromToken.address, fullAmtIn);
       const feeTx = await tokenContract.transfer(TREASURY.address, feeAmount);
       await feeTx.wait();
     }
@@ -13060,6 +13099,120 @@ async function withdrawNftRevenue() {
 // ══════════════════════════════════════════
 
 const NFT_CONTRACT_FOR_REV = "0x97489dc06aA00b62B52D7eB6E5b51E8c3dd36431";
+const TREASURY_OWNER = "0xaA3C5749628610fF410EF9133a4ac4f58e9A52eA";
+
+// ── Treasury Banner: show only to owner wallet ────────────────
+async function loadTreasuryBanner() {
+  if (!state.address) return;
+  // Only show for owner/treasury wallet
+  if (state.address.toLowerCase() !== TREASURY_OWNER.toLowerCase()) return;
+
+  const banner = document.getElementById("treasuryBanner");
+  if (banner) banner.style.display = "block";
+
+  try {
+    const provider = getReadProvider();
+
+    // CRO balance of treasury
+    const croBal = await provider.getBalance(TREASURY_OWNER);
+    const croAmt = parseFloat(ethers.formatEther(croBal));
+    const croPrice = TOKENS.CRO?.price || 0;
+    const croUSD = croAmt * croPrice;
+
+    const croEl = document.getElementById("treasuryCROBal");
+    const croUSDEl = document.getElementById("treasuryCROUSD");
+    if (croEl) croEl.textContent = croAmt.toFixed(4) + " CRO";
+    if (croUSDEl) croUSDEl.textContent = "$" + croUSD.toFixed(2);
+
+    // GANG balance of treasury
+    const gangContract = new ethers.Contract(CONTRACTS.GANG, [
+      "function balanceOf(address) view returns (uint256)"
+    ], provider);
+    const gangBal = await gangContract.balanceOf(TREASURY_OWNER);
+    const gangAmt = parseFloat(ethers.formatUnits(gangBal, 18));
+    const gangPrice = TOKENS.GANG?.price || 0;
+    const gangUSD = gangAmt * gangPrice;
+
+    const gangEl = document.getElementById("treasuryGANGBal");
+    const gangUSDEl = document.getElementById("treasuryGANGUSD");
+    if (gangEl) gangEl.textContent = gangAmt.toFixed(2) + " GANG";
+    if (gangUSDEl) gangUSDEl.textContent = "$" + gangUSD.toFixed(2);
+
+    // NFT contract CRO balance (mint fees sit here)
+    const nftBal = await provider.getBalance(NFT_CONTRACT_FOR_REV);
+    const nftAmt = parseFloat(ethers.formatEther(nftBal));
+    const nftUSD = nftAmt * croPrice;
+
+    const nftEl = document.getElementById("treasuryNFTBal");
+    const nftUSDEl = document.getElementById("treasuryNFTUSD");
+    if (nftEl) nftEl.textContent = nftAmt.toFixed(4) + " CRO";
+    if (nftUSDEl) nftUSDEl.textContent = "$" + nftUSD.toFixed(2);
+
+    // Total
+    const totalUSD = croUSD + gangUSD + nftUSD;
+    const totalEl = document.getElementById("treasuryTotalUSD");
+    if (totalEl) totalEl.textContent = "$" + totalUSD.toFixed(2);
+
+  } catch(e) { console.warn("Treasury banner load error:", e); }
+}
+
+async function withdrawTreasuryCRO() {
+  if (!state.signer) { showToast("Connect your wallet first", "error"); return; }
+  if (state.address.toLowerCase() !== TREASURY_OWNER.toLowerCase()) {
+    showToast("Only the treasury wallet can withdraw", "error"); return;
+  }
+  const statusEl = document.getElementById("treasuryStatus");
+  try {
+    const provider = getReadProvider();
+    const croBal = await provider.getBalance(TREASURY_OWNER);
+    const croAmt = parseFloat(ethers.formatEther(croBal));
+    if (croAmt < 0.01) { showToast("No CRO fees to withdraw yet", ""); return; }
+    // Keep 0.005 CRO for gas
+    const sendAmt = croBal - ethers.parseEther("0.005");
+    if (statusEl) statusEl.textContent = "Confirm in your wallet...";
+    const tx = await state.signer.sendTransaction({
+      to: TREASURY_OWNER,
+      value: sendAmt
+    });
+    if (statusEl) statusEl.textContent = "Waiting for confirmation...";
+    await tx.wait();
+    showToast("✅ CRO fees withdrawn to treasury!", "success");
+    if (statusEl) statusEl.textContent = "✅ Withdrawn successfully!";
+    await loadTreasuryBanner();
+  } catch(e) {
+    const msg = e?.reason || e?.message || "Withdrawal failed";
+    showToast("❌ " + msg.slice(0,80), "error");
+    if (statusEl) statusEl.textContent = "";
+  }
+}
+
+async function withdrawTreasuryGANG() {
+  if (!state.signer) { showToast("Connect your wallet first", "error"); return; }
+  if (state.address.toLowerCase() !== TREASURY_OWNER.toLowerCase()) {
+    showToast("Only the treasury wallet can withdraw", "error"); return;
+  }
+  const statusEl = document.getElementById("treasuryStatus");
+  try {
+    const gangContract = new ethers.Contract(CONTRACTS.GANG, [
+      "function balanceOf(address) view returns (uint256)",
+      "function transfer(address to, uint256 amount) returns (bool)"
+    ], state.signer);
+    const gangBal = await gangContract.balanceOf(TREASURY_OWNER);
+    const gangAmt = parseFloat(ethers.formatUnits(gangBal, 18));
+    if (gangAmt < 0.01) { showToast("No GANG fees to withdraw yet", ""); return; }
+    if (statusEl) statusEl.textContent = "Confirm in your wallet...";
+    const tx = await gangContract.transfer(TREASURY_OWNER, gangBal);
+    if (statusEl) statusEl.textContent = "Waiting for confirmation...";
+    await tx.wait();
+    showToast("✅ GANG fees withdrawn to treasury!", "success");
+    if (statusEl) statusEl.textContent = "✅ Withdrawn successfully!";
+    await loadTreasuryBanner();
+  } catch(e) {
+    const msg = e?.reason || e?.message || "Withdrawal failed";
+    showToast("❌ " + msg.slice(0,80), "error");
+    if (statusEl) statusEl.textContent = "";
+  }
+}
 
 async function checkOwnerRevenue() {
   if (!state.address) return;
@@ -14212,6 +14365,8 @@ async function mktWithdrawFees() {
   // Start the price/TVL/APR refresh cycle
   fetchLivePrices();
   setInterval(fetchLivePrices, 15000);
+  // Refresh treasury banner every 30s if owner is connected
+  setInterval(() => { if (state.address) loadTreasuryBanner(); }, 30000);
   // Discover any new pools in parallel
   autoDiscoverFarmPools();
 
