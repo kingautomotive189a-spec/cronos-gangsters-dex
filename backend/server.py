@@ -289,7 +289,10 @@ async def get_bot_config():
 async def get_bot_status():
     """Check if bot process is running"""
     global bot_process
-    is_running = bot_process is not None and bot_process.poll() is None
+    if bot_process is not None and bot_process.poll() is not None:
+        # Process has exited — clean up stale reference
+        bot_process = None
+    is_running = bot_process is not None
     return {
         "running": is_running,
         "pid": bot_process.pid if is_running else None
@@ -300,9 +303,20 @@ async def start_bot():
     """Start the Telegram bot in background"""
     global bot_process
     
+    # Clean up stale process reference
+    if bot_process is not None and bot_process.poll() is not None:
+        bot_process = None
+    
     # Check if already running
-    if bot_process is not None and bot_process.poll() is None:
+    if bot_process is not None:
         return {"success": False, "message": "Bot is already running", "pid": bot_process.pid}
+    
+    # Kill any leftover telegram_bot.py processes before starting fresh
+    try:
+        result = subprocess.run(["pkill", "-f", "telegram_bot.py"], capture_output=True)
+        await asyncio.sleep(1)
+    except Exception:
+        pass
     
     try:
         bot_script = ROOT_DIR / "telegram_bot.py"
@@ -313,13 +327,14 @@ async def start_bot():
             stderr=subprocess.PIPE,
             start_new_session=True
         )
-        await asyncio.sleep(2)  # Give it time to start
+        await asyncio.sleep(3)  # Give it time to start
         
         if bot_process.poll() is None:
             return {"success": True, "message": "Bot started", "pid": bot_process.pid}
         else:
             stderr = bot_process.stderr.read().decode() if bot_process.stderr else ""
-            return {"success": False, "message": f"Bot failed to start: {stderr}"}
+            bot_process = None
+            return {"success": False, "message": f"Bot failed to start: {stderr[:500]}"}
     except Exception as e:
         logger.error(f"Error starting bot: {e}")
         return {"success": False, "message": str(e)}
@@ -329,17 +344,41 @@ async def stop_bot():
     """Stop the Telegram bot"""
     global bot_process
     
-    if bot_process is None or bot_process.poll() is not None:
-        return {"success": False, "message": "Bot is not running"}
+    # Clean up stale process
+    if bot_process is not None and bot_process.poll() is not None:
+        bot_process = None
+        return {"success": True, "message": "Bot was already stopped"}
+    
+    if bot_process is None:
+        # Try to kill any orphaned telegram_bot.py processes
+        try:
+            subprocess.run(["pkill", "-f", "telegram_bot.py"], capture_output=True)
+        except Exception:
+            pass
+        return {"success": True, "message": "Bot stopped"}
     
     try:
+        # First try SIGTERM
         os.killpg(os.getpgid(bot_process.pid), signal.SIGTERM)
-        bot_process.wait(timeout=5)
+        try:
+            bot_process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            # Force kill if SIGTERM didn't work
+            os.killpg(os.getpgid(bot_process.pid), signal.SIGKILL)
+            bot_process.wait(timeout=3)
         bot_process = None
+        # Also clean up any orphans
+        subprocess.run(["pkill", "-f", "telegram_bot.py"], capture_output=True)
         return {"success": True, "message": "Bot stopped"}
     except Exception as e:
         logger.error(f"Error stopping bot: {e}")
-        return {"success": False, "message": str(e)}
+        # Force cleanup
+        try:
+            subprocess.run(["pkill", "-9", "-f", "telegram_bot.py"], capture_output=True)
+        except Exception:
+            pass
+        bot_process = None
+        return {"success": True, "message": "Bot force stopped"}
 
 @api_router.get("/bot/commands")
 async def get_bot_commands():

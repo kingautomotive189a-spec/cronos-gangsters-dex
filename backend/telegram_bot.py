@@ -4,6 +4,8 @@ import aiohttp
 import os
 import secrets
 import re
+import signal
+import sys
 from datetime import datetime, timezone
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ChatPermissions
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ContextTypes
@@ -2395,6 +2397,13 @@ def main():
     job_queue.run_repeating(check_new_buys, interval=120, first=30)
 
     logger.info("Bot started successfully!")
+
+    # Handle graceful shutdown on SIGTERM
+    def handle_sigterm(signum, frame):
+        logger.info("Received SIGTERM, shutting down bot...")
+        sys.exit(0)
+    signal.signal(signal.SIGTERM, handle_sigterm)
+
     app.run_polling(drop_pending_updates=True)
 
 
