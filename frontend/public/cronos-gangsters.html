@@ -14952,8 +14952,43 @@ function trackerRow(sym, amt, usd, color) {
 // ══════════════════════════════════════════════════════════════
 // FEATURE: MULTI-CHAIN TRACKER (Ankr API — free, no key)
 // ══════════════════════════════════════════════════════════════
-const CHAIN_NAMES = { eth: 'Ethereum', bsc: 'BNB Chain', polygon: 'Polygon', arbitrum: 'Arbitrum', avalanche: 'Avalanche', fantom: 'Fantom', optimism: 'Optimism', base: 'Base', linea: 'Linea', scroll: 'Scroll' };
-const CHAIN_COLORS = { eth: '#627EEA', bsc: '#F3BA2F', polygon: '#8247E5', arbitrum: '#28A0F0', avalanche: '#E84142', fantom: '#1969FF', optimism: '#FF0420', base: '#0052FF', linea: '#61DFFF', scroll: '#FFBE98' };
+const CHAIN_NAMES = { eth: 'Ethereum', bsc: 'BNB Chain', polygon: 'Polygon', arbitrum: 'Arbitrum', avalanche: 'Avalanche', fantom: 'Fantom', optimism: 'Optimism', base: 'Base' };
+const CHAIN_COLORS = { eth: '#627EEA', bsc: '#F3BA2F', polygon: '#8247E5', arbitrum: '#28A0F0', avalanche: '#E84142', fantom: '#1969FF', optimism: '#FF0420', base: '#0052FF' };
+const CHAIN_RPCS = {
+  eth: { rpc: 'https://eth.llamarpc.com', native: 'ETH', nativePrice: 0, decimals: 18, tokens: [
+    { sym: 'USDT', addr: '0xdAC17F958D2ee523a2206206994597C13D831ec7', dec: 6 },
+    { sym: 'USDC', addr: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', dec: 6 },
+    { sym: 'WBTC', addr: '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', dec: 8 },
+    { sym: 'DAI', addr: '0x6B175474E89094C44Da98b954EedeAC495271d0F', dec: 18 },
+    { sym: 'LINK', addr: '0x514910771AF9Ca656af840dff83E8264EcF986CA', dec: 18 },
+    { sym: 'SHIB', addr: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE', dec: 18 },
+    { sym: 'PEPE', addr: '0x6982508145454Ce325dDbE47a25d4ec3d2311933', dec: 18 }
+  ]},
+  bsc: { rpc: 'https://bsc-dataseed.binance.org', native: 'BNB', nativePrice: 0, decimals: 18, tokens: [
+    { sym: 'USDT', addr: '0x55d398326f99059fF775485246999027B3197955', dec: 18 },
+    { sym: 'USDC', addr: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', dec: 18 },
+    { sym: 'BUSD', addr: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', dec: 18 },
+    { sym: 'CAKE', addr: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82', dec: 18 }
+  ]},
+  polygon: { rpc: 'https://polygon-rpc.com', native: 'MATIC', nativePrice: 0, decimals: 18, tokens: [
+    { sym: 'USDT', addr: '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', dec: 6 },
+    { sym: 'USDC', addr: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359', dec: 6 },
+    { sym: 'WBTC', addr: '0x1BFD67037B42Cf73acF2047067bd4F2C47D9BfD6', dec: 8 },
+    { sym: 'WETH', addr: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', dec: 18 }
+  ]},
+  arbitrum: { rpc: 'https://arb1.arbitrum.io/rpc', native: 'ETH', nativePrice: 0, decimals: 18, tokens: [
+    { sym: 'USDT', addr: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9', dec: 6 },
+    { sym: 'USDC', addr: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831', dec: 6 },
+    { sym: 'ARB', addr: '0x912CE59144191C1204E64559FE8253a0e49E6548', dec: 18 }
+  ]},
+  avalanche: { rpc: 'https://api.avax.network/ext/bc/C/rpc', native: 'AVAX', nativePrice: 0, decimals: 18, tokens: [
+    { sym: 'USDT', addr: '0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7', dec: 6 },
+    { sym: 'USDC', addr: '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E', dec: 6 }
+  ]},
+  base: { rpc: 'https://mainnet.base.org', native: 'ETH', nativePrice: 0, decimals: 18, tokens: [
+    { sym: 'USDC', addr: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', dec: 6 }
+  ]}
+};
 
 function useMyWalletMulti() {
   if (!state.address) { showToast('Connect your wallet first', 'error'); return; }
@@ -14971,41 +15006,61 @@ async function scanMultiChain() {
   document.getElementById('multiResults').style.display = 'none';
 
   try {
-    const resp = await fetch('https://rpc.ankr.com/multichain', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'ankr_getAccountBalance',
-        params: {
-          blockchain: ['eth', 'bsc', 'polygon', 'arbitrum', 'avalanche', 'fantom', 'optimism', 'base'],
-          walletAddress: addr,
-          onlyWhitelisted: true,
-          pageSize: 100
-        },
-        id: 1
-      })
-    });
-    const data = await resp.json();
-    const assets = data?.result?.assets || [];
+    // Fetch native token prices from DexScreener
+    try {
+      const priceResp = await fetch('https://api.dexscreener.com/latest/dex/tokens/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2,0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c,0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270,0x82aF49447D8a07e3bd95BD0d56f35241523fBab1,0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7');
+      const priceData = await priceResp.json();
+      const pairs = priceData?.pairs || [];
+      for (const p of pairs) {
+        const sym = p.baseToken?.symbol;
+        if (sym === 'WETH') { CHAIN_RPCS.eth.nativePrice = parseFloat(p.priceUsd || 0); CHAIN_RPCS.arbitrum.nativePrice = parseFloat(p.priceUsd || 0); CHAIN_RPCS.base.nativePrice = parseFloat(p.priceUsd || 0); }
+        if (sym === 'WBNB') CHAIN_RPCS.bsc.nativePrice = parseFloat(p.priceUsd || 0);
+        if (sym === 'WMATIC' || sym === 'WPOL') CHAIN_RPCS.polygon.nativePrice = parseFloat(p.priceUsd || 0);
+        if (sym === 'WAVAX') CHAIN_RPCS.avalanche.nativePrice = parseFloat(p.priceUsd || 0);
+      }
+    } catch {}
 
-    // Group by chain
+    const erc20BalABI = ['function balanceOf(address) view returns (uint256)'];
     const chainGroups = {};
     let grandTotal = 0;
 
-    for (const tok of assets) {
-      const chain = tok.blockchain || 'unknown';
-      if (!chainGroups[chain]) chainGroups[chain] = [];
-      const bal = parseFloat(tok.balance || '0');
-      const usd = parseFloat(tok.balanceUsd || '0');
-      grandTotal += usd;
-      if (bal > 0.0001) {
-        chainGroups[chain].push({
-          symbol: tok.tokenSymbol || tok.tokenName || '???',
-          balance: bal,
-          usd: usd,
-          logo: tok.thumbnail || ''
-        });
+    // Scan each chain in parallel
+    const chainPromises = Object.entries(CHAIN_RPCS).map(async ([chain, cfg]) => {
+      const tokens = [];
+      try {
+        const provider = new ethers.JsonRpcProvider(cfg.rpc);
+        
+        // Native balance
+        const nativeBal = await provider.getBalance(addr).catch(() => BigInt(0));
+        const nativeAmt = parseFloat(ethers.formatUnits(nativeBal, cfg.decimals));
+        if (nativeAmt > 0.0001) {
+          const usd = nativeAmt * (cfg.nativePrice || 0);
+          tokens.push({ symbol: cfg.native, balance: nativeAmt, usd, logo: '' });
+        }
+
+        // ERC20 tokens
+        for (const tok of cfg.tokens) {
+          try {
+            const c = new ethers.Contract(tok.addr, erc20BalABI, provider);
+            const bal = await c.balanceOf(addr);
+            const amt = parseFloat(ethers.formatUnits(bal, tok.dec));
+            if (amt > 0.0001) {
+              const isStable = ['USDT','USDC','BUSD','DAI'].includes(tok.sym);
+              const usd = isStable ? amt : 0;
+              tokens.push({ symbol: tok.sym, balance: amt, usd, logo: '' });
+            }
+          } catch {}
+        }
+      } catch {}
+      return { chain, tokens };
+    });
+
+    const results = await Promise.all(chainPromises);
+    
+    for (const { chain, tokens } of results) {
+      if (tokens.length > 0) {
+        chainGroups[chain] = tokens;
+        grandTotal += tokens.reduce((s, t) => s + t.usd, 0);
       }
     }
 
