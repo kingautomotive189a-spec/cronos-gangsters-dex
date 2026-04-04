@@ -1741,7 +1741,7 @@ function toggleNavMenu() {
         </div>
         <div style="background:rgba(212,160,23,0.08);border-radius:10px;padding:14px;border:1px solid rgba(212,160,23,0.3);text-align:center;">
           <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Treasury Gets</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold);">0.05%</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--gold);">0.3%</div>
           <div style="font-size:11px;color:var(--muted);margin-top:4px;">Protocol fee</div>
         </div>
       </div>
@@ -3870,7 +3870,7 @@ function toggleNavMenu() {
       </button>
     </div>
 
-    <!-- Swap Protocol Fee (0.05%) -->
+    <!-- Swap Protocol Fee (0.3%) -->
 
     <!-- Fund Rewards (Quick Access) -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(212,160,23,0.4);margin-bottom:16px;">
@@ -4598,11 +4598,10 @@ const CONTRACTS = {
 const TREASURY = {
   address: "0xaA3C5749628610fF410EF9133a4ac4f58e9A52eA",
   // Fee breakdown (of the total 0.3% swap fee):
-  //   0.25% → LP providers (liquidity rewards)
-  //   0.05% → Treasury (protocol fee → your wallet)
+  //   0.3% → Treasury (protocol fee → your wallet)
   swapFeeTotal:    0.30, // % charged on every swap
-  lpFee:           0.25, // % that goes to liquidity providers
-  protocolFee:     0.05, // % that goes to treasury wallet
+  lpFee:           0.30, // % that goes to liquidity providers
+  protocolFee:     0.30, // % that goes to treasury wallet
   // Liquidity fee: 0.3% of deposit value on add liquidity
   liquidityFee:    0.30,
 };
@@ -13950,7 +13949,7 @@ async function checkOwnerRevenue() {
       if (currentFeeTo === zeroAddr) {
         if (feeToEl) feeToEl.textContent = "Not set";
         if (feeToStatusEl) { feeToStatusEl.textContent = "NOT ACTIVE"; feeToStatusEl.style.color = "var(--red)"; }
-        if (feeToBtn) { feeToBtn.textContent = "TAP HERE TO ACTIVATE 0.05% FEE"; feeToBtn.disabled = false; }
+        if (feeToBtn) { feeToBtn.textContent = "TAP HERE TO ACTIVATE 0.3% FEE"; feeToBtn.disabled = false; }
       } else {
         if (feeToEl) feeToEl.textContent = currentFeeTo.slice(0,6) + "..." + currentFeeTo.slice(-4);
         if (feeToStatusEl) { feeToStatusEl.textContent = "ACTIVE"; feeToStatusEl.style.color = "var(--green)"; }
@@ -13973,7 +13972,7 @@ async function activateSwapProtocolFee() {
     const tx = await factory.setFeeTo(CONTRACTS.TREASURY);
     if (logEl) { logEl.textContent = "Transaction sent... waiting for confirmation"; }
     await tx.wait();
-    if (logEl) { logEl.style.color = "var(--green)"; logEl.textContent = "Protocol fee activated! 0.05% of every swap now goes to your treasury."; }
+    if (logEl) { logEl.style.color = "var(--green)"; logEl.textContent = "Protocol fee activated! 0.3% of every swap now goes to your treasury."; }
     if (btn) { btn.textContent = "ALREADY ACTIVE"; btn.disabled = true; btn.style.opacity = "0.5"; }
     const feeToStatusEl = document.getElementById("revFeeToStatus");
     if (feeToStatusEl) { feeToStatusEl.textContent = "ACTIVE"; feeToStatusEl.style.color = "var(--green)"; }
@@ -13982,7 +13981,7 @@ async function activateSwapProtocolFee() {
     showToast("Protocol fee activated!", "success");
   } catch(e) {
     if (logEl) { logEl.style.color = "var(--red)"; logEl.textContent = "Failed: " + (e.reason || e.message || "Transaction rejected"); }
-    if (btn) { btn.textContent = "TAP HERE TO ACTIVATE 0.05% FEE"; btn.disabled = false; }
+    if (btn) { btn.textContent = "TAP HERE TO ACTIVATE 0.3% FEE"; btn.disabled = false; }
     showToast("Failed to activate protocol fee", "error");
   }
 }
