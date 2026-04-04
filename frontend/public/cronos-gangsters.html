@@ -3282,6 +3282,40 @@
       </div>
 
     </div>
+
+    <!-- ── MULTI-CHAIN SECTION ── -->
+    <div style="margin-top:30px;">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;color:#ff6b35;line-height:1;text-shadow:0 0 30px rgba(255,107,53,0.3);">MULTI-CHAIN TRACKER</div>
+        <div style="font-size:13px;color:var(--muted);letter-spacing:1px;margin-top:6px;">See your tokens across Ethereum, BSC, Polygon, Arbitrum &amp; more</div>
+        <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,#ff6b35,transparent);margin:14px auto 0;"></div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;border-color:rgba(255,107,53,0.3);">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;">WALLET ADDRESS</div>
+        <div style="display:flex;gap:8px;">
+          <input class="swap-input" id="multiWalletInput" data-testid="multi-wallet-input" type="text" placeholder="0x..." style="flex:1;font-size:13px;font-family:monospace;" />
+          <button data-testid="multi-scan-btn" onclick="scanMultiChain()" style="padding:10px 20px;border-radius:10px;border:none;background:linear-gradient(135deg,#ff6b35,#e55a2b);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;white-space:nowrap;">SCAN ALL</button>
+        </div>
+        <div style="margin-top:8px;text-align:center;">
+          <button data-testid="multi-use-mine-btn" onclick="useMyWalletMulti()" style="background:none;border:1px solid rgba(255,107,53,0.3);color:#ff6b35;font-size:12px;padding:6px 16px;border-radius:8px;cursor:pointer;">USE MY CONNECTED WALLET</button>
+        </div>
+      </div>
+
+      <div id="multiLoading" style="display:none;text-align:center;padding:30px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#ff6b35;letter-spacing:2px;">SCANNING ALL CHAINS...</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px;">Ethereum, BSC, Polygon, Arbitrum, Avalanche, Fantom, Optimism, Base...</div>
+      </div>
+
+      <div id="multiResults" data-testid="multi-results" style="display:none;">
+        <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg,rgba(255,107,53,0.08),rgba(212,160,23,0.04));border-color:rgba(255,107,53,0.4);text-align:center;">
+          <div style="font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:4px;">MULTI-CHAIN TOTAL</div>
+          <div id="multiTotalValue" data-testid="multi-total-value" style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#ff6b35;letter-spacing:3px;text-shadow:0 0 20px rgba(255,107,53,0.3);">$0.00</div>
+        </div>
+        <div id="multiChainCards" data-testid="multi-chain-cards"></div>
+      </div>
+    </div>
+
   </div>
 
 
@@ -14913,6 +14947,123 @@ function trackerRow(sym, amt, usd, color) {
         <div style="font-size:11px;color:var(--muted);">$${usd.toFixed(2)}</div>
       </div>
     </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+// FEATURE: MULTI-CHAIN TRACKER (Ankr API — free, no key)
+// ══════════════════════════════════════════════════════════════
+const CHAIN_NAMES = { eth: 'Ethereum', bsc: 'BNB Chain', polygon: 'Polygon', arbitrum: 'Arbitrum', avalanche: 'Avalanche', fantom: 'Fantom', optimism: 'Optimism', base: 'Base', linea: 'Linea', scroll: 'Scroll' };
+const CHAIN_COLORS = { eth: '#627EEA', bsc: '#F3BA2F', polygon: '#8247E5', arbitrum: '#28A0F0', avalanche: '#E84142', fantom: '#1969FF', optimism: '#FF0420', base: '#0052FF', linea: '#61DFFF', scroll: '#FFBE98' };
+
+function useMyWalletMulti() {
+  if (!state.address) { showToast('Connect your wallet first', 'error'); return; }
+  document.getElementById('multiWalletInput').value = state.address;
+  scanMultiChain();
+}
+
+async function scanMultiChain() {
+  const addr = document.getElementById('multiWalletInput')?.value?.trim();
+  if (!addr || !addr.startsWith('0x') || addr.length !== 42) {
+    showToast('Enter a valid wallet address', 'error'); return;
+  }
+
+  document.getElementById('multiLoading').style.display = 'block';
+  document.getElementById('multiResults').style.display = 'none';
+
+  try {
+    const resp = await fetch('https://rpc.ankr.com/multichain', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'ankr_getAccountBalance',
+        params: {
+          blockchain: ['eth', 'bsc', 'polygon', 'arbitrum', 'avalanche', 'fantom', 'optimism', 'base'],
+          walletAddress: addr,
+          onlyWhitelisted: true,
+          pageSize: 100
+        },
+        id: 1
+      })
+    });
+    const data = await resp.json();
+    const assets = data?.result?.assets || [];
+
+    // Group by chain
+    const chainGroups = {};
+    let grandTotal = 0;
+
+    for (const tok of assets) {
+      const chain = tok.blockchain || 'unknown';
+      if (!chainGroups[chain]) chainGroups[chain] = [];
+      const bal = parseFloat(tok.balance || '0');
+      const usd = parseFloat(tok.balanceUsd || '0');
+      grandTotal += usd;
+      if (bal > 0.0001) {
+        chainGroups[chain].push({
+          symbol: tok.tokenSymbol || tok.tokenName || '???',
+          balance: bal,
+          usd: usd,
+          logo: tok.thumbnail || ''
+        });
+      }
+    }
+
+    document.getElementById('multiTotalValue').textContent = '$' + grandTotal.toFixed(2);
+
+    // Render chain cards
+    const cardsEl = document.getElementById('multiChainCards');
+    let cardsHTML = '';
+
+    for (const [chain, tokens] of Object.entries(chainGroups)) {
+      const chainName = CHAIN_NAMES[chain] || chain.toUpperCase();
+      const chainColor = CHAIN_COLORS[chain] || '#888';
+      const chainTotal = tokens.reduce((s, t) => s + t.usd, 0);
+
+      // Sort by USD value descending
+      tokens.sort((a, b) => b.usd - a.usd);
+
+      let tokensHTML = tokens.map(t => {
+        const fmtBal = t.balance >= 1e9 ? (t.balance/1e9).toFixed(2)+'B' : t.balance >= 1e6 ? (t.balance/1e6).toFixed(2)+'M' : t.balance >= 1000 ? (t.balance/1000).toFixed(1)+'K' : t.balance.toFixed(4);
+        return `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:3px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              ${t.logo ? '<img src="'+t.logo+'" style="width:20px;height:20px;border-radius:50%;" onerror="this.style.display=\'none\'" />' : ''}
+              <span style="font-size:13px;color:var(--text);font-weight:600;">${t.symbol}</span>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:13px;color:var(--text);">${fmtBal}</div>
+              <div style="font-size:11px;color:var(--muted);">$${t.usd.toFixed(2)}</div>
+            </div>
+          </div>`;
+      }).join('');
+
+      cardsHTML += `
+        <div class="card" style="margin-bottom:12px;border-color:${chainColor}30;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div style="width:12px;height:12px;border-radius:50%;background:${chainColor};"></div>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:${chainColor};letter-spacing:2px;">${chainName}</span>
+            </div>
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);">$${chainTotal.toFixed(2)}</span>
+          </div>
+          ${tokensHTML}
+        </div>`;
+    }
+
+    if (Object.keys(chainGroups).length === 0) {
+      cardsHTML = '<div style="color:var(--muted);text-align:center;padding:20px;">No tokens found across chains</div>';
+    }
+
+    cardsEl.innerHTML = cardsHTML;
+    document.getElementById('multiLoading').style.display = 'none';
+    document.getElementById('multiResults').style.display = 'block';
+
+  } catch (e) {
+    console.error('Multi-chain scan error:', e);
+    document.getElementById('multiLoading').style.display = 'none';
+    showToast('Error scanning chains: ' + (e.message || '').slice(0, 60), 'error');
+  }
 }
 
 // ══════════════════════════════════════════════════════════════
