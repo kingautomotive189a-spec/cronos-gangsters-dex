@@ -386,6 +386,9 @@ async def get_bot_commands():
     commands = [
         {"command": "/start", "description": "Welcome message & project info"},
         {"command": "/help", "description": "Show all available commands"},
+        {"command": "/futures", "description": "GANG FUTURES — 33 pairs, 100x leverage"},
+        {"command": "/tracker", "description": "GANG TRACKER — Multi-chain wallet scanner"},
+        {"command": "/roadmap", "description": "Project roadmap & phases"},
         {"command": "/price", "description": "Current $GANG price with full stats"},
         {"command": "/stats", "description": "Detailed token statistics"},
         {"command": "/contract", "description": "Token contract address"},
@@ -406,6 +409,13 @@ async def get_bot_commands():
         {"command": "/marketplace", "description": "NFT marketplace"},
         {"command": "/nft", "description": "NFT collection info & minting"},
         {"command": "/referral", "description": "Referral program (earn 5%)"},
+        {"command": "/swap", "description": "Swap tokens on Cronos"},
+        {"command": "/liquidity", "description": "Provide liquidity & earn fees"},
+        {"command": "/portfolio", "description": "View your portfolio"},
+        {"command": "/mining", "description": "Mining Hub — earn $GANG daily"},
+        {"command": "/trading", "description": "Leverage Trading (up to 100x)"},
+        {"command": "/contracts", "description": "All verified contract addresses"},
+        {"command": "/faq", "description": "Common questions answered"},
     ]
     admin_commands = [
         {"command": "/ban", "description": "Ban a user (reply to message)"},
