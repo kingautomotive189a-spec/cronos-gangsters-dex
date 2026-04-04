@@ -762,6 +762,14 @@ function toggleNavMenu() {
         <span onclick="showPage('locker')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔐 LP LOCKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('portfolio')" style="cursor:pointer;color:#00ff88;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📁 PORTFOLIO TRACKER</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('leaderboard')" style="cursor:pointer;color:#ff6b35;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏆 LEADERBOARD</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('roadmap')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🗺 ROADMAP</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('token')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">💎 $GANG TOKEN</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('faq')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">❓ FAQ</span>
       </div>
       <div style="display:flex;gap:28px;padding:0 14px;flex-shrink:0;">
         <span onclick="showPage('futures')" style="cursor:pointer;color:#ff8c00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📈 GANG FUTURES — 33 PAIRS</span>
@@ -1122,6 +1130,36 @@ function toggleNavMenu() {
           <div style="font-size:22px;margin-bottom:4px;">📁</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">PORTFOLIO</div>
           <div style="font-size:9px;color:var(--muted);margin-top:2px;">Track holdings</div>
+        </div>
+        <div class="card" onclick="showPage('leaderboard')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(255,107,53,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#ff6b35'" onmouseout="this.style.borderColor='rgba(255,107,53,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">🏆</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#ff6b35;letter-spacing:1px;">LEADERBOARD</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Top traders</div>
+        </div>
+        <div class="card" onclick="showPage('locker')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🔐</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">LP LOCKER</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Lock LP tokens</div>
+        </div>
+        <div class="card" onclick="showPage('roadmap')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">🗺</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">ROADMAP</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Our journey</div>
+        </div>
+        <div class="card" onclick="showPage('token')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">💎</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">$GANG</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Token info</div>
+        </div>
+        <div class="card" onclick="showPage('faq')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">❓</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">FAQ</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Questions</div>
+        </div>
+        <div class="card" onclick="showPage('contracts')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
+          <div style="font-size:22px;margin-bottom:4px;">📜</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">CONTRACTS</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Verified</div>
         </div>
       </div>
     </div>
