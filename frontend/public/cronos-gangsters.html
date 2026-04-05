@@ -737,6 +737,8 @@ function toggleNavMenu() {
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('lending')" style="cursor:pointer;color:#00e5ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏦 LEND & BORROW — EARN INTEREST</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('predict')" style="cursor:pointer;color:#a855f7;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔮 PREDICTION MARKETS — BET & WIN</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('tracker')" style="cursor:pointer;color:#00d4ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔍 GANG TRACKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('swap')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔄 SWAP TOKENS</span>
@@ -779,6 +781,8 @@ function toggleNavMenu() {
         <span onclick="showPage('futures')" style="cursor:pointer;color:#ff8c00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📈 GANG FUTURES — 33 PAIRS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('lending')" style="cursor:pointer;color:#00e5ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏦 LEND & BORROW — EARN INTEREST</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('predict')" style="cursor:pointer;color:#a855f7;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔮 PREDICTION MARKETS — BET & WIN</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('tracker')" style="cursor:pointer;color:#00d4ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔍 GANG TRACKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
@@ -1071,6 +1075,11 @@ function toggleNavMenu() {
           <div style="font-size:22px;margin-bottom:4px;">🏦</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#00e5ff;letter-spacing:1px;">LEND</div>
           <div style="font-size:9px;color:var(--muted);margin-top:2px;">Earn interest</div>
+        </div>
+        <div class="card" onclick="showPage('predict')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(168,85,247,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#a855f7'" onmouseout="this.style.borderColor='rgba(168,85,247,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">🔮</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#a855f7;letter-spacing:1px;">PREDICT</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Bet & win</div>
         </div>
         <div class="card" onclick="showPage('swap')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
           <div style="font-size:22px;margin-bottom:4px;">🔄</div>
@@ -4520,6 +4529,10 @@ function toggleNavMenu() {
           <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#00e5ff;letter-spacing:1px;">20%</div>
         </div>
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">PREDICTIONS</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#a855f7;letter-spacing:1px;">5%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
           <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">NFT MINTS</div>
           <div id="revNftBal" data-testid="rev-nft-balance" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;">--</div>
         </div>
@@ -4714,6 +4727,26 @@ function toggleNavMenu() {
       </button>
     </div>
 
+    <!-- Prediction Markets Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(168,85,247,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#a855f7;">PREDICTION MARKET FEES (5% OF EACH POT)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">You earn 5% of every prediction market pot when it resolves. Collect accumulated fees anytime.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(168,85,247,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">ACCUMULATED FEES</div>
+          <div id="revPredFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-pred-fees">0 CRO</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(168,85,247,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">MARKETS RESOLVED</div>
+          <div id="revPredResolved" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#a855f7;" data-testid="rev-pred-resolved">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectPredFees()" style="width:100%;background:linear-gradient(135deg,#a855f7,#7c3aed);" data-testid="rev-pred-collect-btn">
+        COLLECT PREDICTION FEES
+      </button>
+      <div id="revPredStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-pred-status"></div>
+    </div>
+
     <!-- Vault Performance Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:16px;">
       <div class="ref-link-label" style="color:var(--green);">VAULT PERFORMANCE FEES</div>
@@ -4770,6 +4803,7 @@ function toggleNavMenu() {
           <b style="color:#00e5ff;">Lending Interest:</b> 20% of all borrower interest payments &rarr; collect from Lending page<br>
           <b style="color:#00e5ff;">Lending Origination:</b> 0.3% fee on every new loan &rarr; collect from Lending page<br>
           <b style="color:#00e5ff;">Lending Liquidation:</b> 5% penalty on liquidated positions &rarr; auto-collected<br>
+          <b style="color:#a855f7;">Prediction Markets:</b> 5% of every resolved pot &rarr; collect from Revenue page or Predictions page<br>
           <b style="color:var(--green);">Vault Performance:</b> Performance fee on auto-compounds &rarr; collect from Revenue page<br>
           <b style="color:var(--green);">NFT Mints:</b> 50 CRO per mint &rarr; withdraw anytime<br>
           <b style="color:var(--green);">Staking Penalties:</b> 25% of early exits &rarr; sent to your wallet automatically<br>
@@ -6484,6 +6518,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     if (btn.dataset.page === "locker") { loadLockerPage(); }
     if (btn.dataset.page === "lottery") { loadLotteryState(); }
     if (btn.dataset.page === "lending") { updateLendingUI(); }
+    if (btn.dataset.page === "predict") { renderPredMarkets(); }
     if (btn.dataset.page === "revenue") { loadRevRewardBalances(); }
     window.scrollTo(0,0);
   });
@@ -12363,6 +12398,8 @@ async function loadRevRewardBalances() {
     const el2 = document.getElementById('revVaultBal');
     if (el2) el2.textContent = b2 >= 1e6 ? (b2/1e6).toFixed(1)+'M' : b2.toLocaleString(undefined, {maximumFractionDigits:0});
   } catch(e) {}
+  // Update prediction fees on Revenue page
+  try { updateRevPredFees(); } catch(e) {}
 }
 
 async function _fundContract(contractAddr, inputId, label) {
@@ -15373,6 +15410,24 @@ function predOwnerCollect() {
   s.ownerFees = 0;
   savePredState(s);
   renderPredMarkets();
+  updateRevPredFees();
+}
+
+function revCollectPredFees() {
+  let s = initPredState();
+  if ((s.ownerFees || 0) <= 0) { showToast('No prediction fees to collect', 'error'); return; }
+  showToast('Collected ' + s.ownerFees.toFixed(2) + ' CRO in prediction fees!', 'success');
+  s.ownerFees = 0;
+  savePredState(s);
+  updateRevPredFees();
+}
+
+function updateRevPredFees() {
+  const s = getPredState();
+  const elFees = document.getElementById('revPredFees');
+  const elResolved = document.getElementById('revPredResolved');
+  if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
+  if (elResolved) elResolved.textContent = s.resolvedCount || 0;
 }
 
 

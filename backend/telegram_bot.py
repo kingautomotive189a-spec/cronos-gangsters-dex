@@ -289,7 +289,8 @@ def main_keyboard():
         [InlineKeyboardButton("📈 GANG FUTURES", callback_data="menu_futures"),
          InlineKeyboardButton("🔍 GANG TRACKER", callback_data="menu_tracker")],
         [InlineKeyboardButton("🏦 Lend & Borrow", callback_data="menu_lending"),
-         InlineKeyboardButton("⛏ Mining Hub", callback_data="menu_mining"),
+         InlineKeyboardButton("🔮 Predictions", callback_data="menu_predictions")],
+        [InlineKeyboardButton("⛏ Mining Hub", callback_data="menu_mining"),
          InlineKeyboardButton("⚡ Trading", callback_data="menu_trading")],
         [InlineKeyboardButton("🌾 Farms", callback_data="menu_farms"),
          InlineKeyboardButton("🏦 Vaults", callback_data="menu_vaults"),
@@ -1384,6 +1385,37 @@ async def lending_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
 
 
+async def predictions_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /predictions command"""
+    msg = (
+        "🔮 *GANG PREDICTION MARKETS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Predict outcomes. Win big.\n\n"
+        "━━━ *CATEGORIES* ━━━\n\n"
+        "💰 *Crypto* — BTC, ETH, CRO price targets\n"
+        "📈 *Stocks* — TSLA, NVDA, AAPL earnings\n"
+        "⚽ *Sports* — Champions League, NBA, NFL\n"
+        "🏛 *Politics* — Elections, policy outcomes\n"
+        "🎲 *Custom* — Create your own market!\n\n"
+        "━━━ *HOW IT WORKS* ━━━\n\n"
+        "1️⃣ Pick a prediction market\n"
+        "2️⃣ Bet CRO on YES or NO\n"
+        "3️⃣ Odds adjust in real-time\n"
+        "4️⃣ Winners split the pot!\n\n"
+        "━━━ *FEES* ━━━\n\n"
+        "Platform fee: *5%* of resolved pots\n"
+        "Owner collects fees on every resolution\n\n"
+        f"[🔮 Open Predictions]({DEX_LINK}#predict)"
+    )
+
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔮 Open Predictions", url=f"{DEX_LINK}#predict")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
 def generate_captcha():
     """Generate a simple math captcha using cryptographic randomness"""
     a = secrets.randbelow(10) + 1
@@ -2212,11 +2244,13 @@ async def _cb_menu_roadmap(query, context):
         "   GANG FUTURES (33 pairs)\n"
         "   GANG TRACKER (multi-chain)\n"
         "   GANG LENDING (earn interest)\n"
+        "   PREDICTION MARKETS (bet & win)\n"
         "   DexScreener Live Chart\n"
         "   Dual currency (GANG + CRO)\n"
         "   0.3% standardized fees\n"
         "   Auto-compound Vaults\n\n"
         "🔜 *Phase 9 — Coming Soon*\n"
+        "   Copy Trading, Revenue Staking,\n"
         "   Limit Orders, Mobile App,\n"
         "   DAO Governance, Cross-chain Futures"
     )
@@ -2224,7 +2258,8 @@ async def _cb_menu_roadmap(query, context):
         [InlineKeyboardButton("🌐 Visit Website", url=DEX_LINK)],
         [InlineKeyboardButton("📈 Futures", callback_data="menu_futures"),
          InlineKeyboardButton("🏦 Lending", callback_data="menu_lending"),
-         InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
+         InlineKeyboardButton("🔮 Predictions", callback_data="menu_predictions")],
+        [InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -2248,6 +2283,29 @@ async def _cb_menu_lending(query, context):
     )
     kb = InlineKeyboardMarkup([
         [InlineKeyboardButton("🏦 Open Lending", url=f"{DEX_LINK}#lending")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_predictions(query, context):
+    """Callback handler for Predictions menu"""
+    msg = (
+        "🔮 *GANG PREDICTION MARKETS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Predict outcomes. Win big.\n\n"
+        "💰 *Crypto* — BTC, ETH, CRO targets\n"
+        "📈 *Stocks* — TSLA, NVDA, AAPL\n"
+        "⚽ *Sports* — UCL, NBA, NFL\n"
+        "🏛 *Politics* — Elections & more\n"
+        "🎲 *Custom* — Create your own!\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• 5% of every resolved pot\n"
+        "• Collect anytime from Revenue page\n\n"
+        "Anyone can create a market. You earn on every resolution."
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔮 Open Predictions", url=f"{DEX_LINK}#predict")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -2287,6 +2345,7 @@ CALLBACK_DISPATCH = {
     "menu_tracker": _cb_menu_tracker,
     "menu_roadmap": _cb_menu_roadmap,
     "menu_lending": _cb_menu_lending,
+    "menu_predictions": _cb_menu_predictions,
 }
 
 
@@ -2699,6 +2758,7 @@ def main():
     app.add_handler(CommandHandler("tracker", tracker_cmd))
     app.add_handler(CommandHandler("roadmap", roadmap_cmd))
     app.add_handler(CommandHandler("lending", lending_cmd))
+    app.add_handler(CommandHandler("predictions", predictions_cmd))
 
     # Admin commands
     app.add_handler(CommandHandler("ban", ban))

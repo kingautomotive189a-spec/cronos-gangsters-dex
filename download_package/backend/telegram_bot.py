@@ -123,6 +123,32 @@ MARKETPLACE_INFO = {
     "features": ["Buy/Sell NFTs", "Auto-detect Collections", "Cronos NFTs"],
 }
 
+# GANG FUTURES Info (Phase 8)
+FUTURES_INFO = {
+    "pairs": 33,
+    "categories": {
+        "Crypto": ["BTC", "ETH", "BNB", "CRO", "SOL", "XRP", "DOGE", "ADA", "AVAX", "LINK", "ARB", "MATIC"],
+        "Stocks": ["AAPL", "TSLA", "NVDA", "MSFT", "AMZN", "GOOGL", "META", "AMD", "NFLX", "COIN", "DIS", "PYPL", "BA", "JPM"],
+        "Indices": ["NAS100", "SP500", "DJI"],
+        "Commodities": ["GOLD", "SILVER", "OIL", "NATGAS"],
+    },
+    "leverage": ["5x", "10x", "15x", "20x"],
+    "fee": "0.3%",
+    "currencies": ["GANG", "CRO"],
+}
+
+# GANG TRACKER Info (Phase 8)
+TRACKER_INFO = {
+    "features": [
+        "Multi-chain wallet scanner",
+        "Token holdings & values",
+        "Transaction history",
+        "NFT detection",
+        "DeFi positions",
+    ],
+    "chains": ["Cronos", "Ethereum", "BSC", "Polygon", "Arbitrum"],
+}
+
 # Admin user IDs
 ADMIN_IDS = set(map(int, os.environ.get("ADMIN_IDS", "").split(",") if os.environ.get("ADMIN_IDS") else []))
 
@@ -260,9 +286,12 @@ def main_keyboard():
         [InlineKeyboardButton("🔄 Swap", callback_data="menu_swap"),
          InlineKeyboardButton("💧 Liquidity", callback_data="menu_liquidity"),
          InlineKeyboardButton("📁 Portfolio", callback_data="menu_portfolio")],
+        [InlineKeyboardButton("📈 GANG FUTURES", callback_data="menu_futures"),
+         InlineKeyboardButton("🔍 GANG TRACKER", callback_data="menu_tracker")],
+        [InlineKeyboardButton("🏦 Lend & Borrow", callback_data="menu_lending"),
+         InlineKeyboardButton("🔮 Predictions", callback_data="menu_predictions")],
         [InlineKeyboardButton("⛏ Mining Hub", callback_data="menu_mining"),
-         InlineKeyboardButton("⚡ Trading", callback_data="menu_trading"),
-         InlineKeyboardButton("🤖 Dashboard", callback_data="menu_dashboard")],
+         InlineKeyboardButton("⚡ Trading", callback_data="menu_trading")],
         [InlineKeyboardButton("🌾 Farms", callback_data="menu_farms"),
          InlineKeyboardButton("🏦 Vaults", callback_data="menu_vaults"),
          InlineKeyboardButton("🔒 Staking", callback_data="menu_staking")],
@@ -276,6 +305,7 @@ def main_keyboard():
          InlineKeyboardButton("🛠 Token Creator", callback_data="menu_create"),
          InlineKeyboardButton("🏪 Marketplace", callback_data="menu_marketplace")],
         [InlineKeyboardButton("📜 Contracts", callback_data="menu_contracts"),
+         InlineKeyboardButton("🗺 Roadmap", callback_data="menu_roadmap"),
          InlineKeyboardButton("❓ FAQ", callback_data="menu_faq")],
         [InlineKeyboardButton("🌐 Website", url=DEX_LINK),
          InlineKeyboardButton("🐦 Twitter", url=TWITTER)],
@@ -342,30 +372,35 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "━━━━━━━━━━━━━━━━━━━━━\n\n"
         "The Most Gangster DEX on Cronos!\n\n"
         f"📋 *Contract:*\n`{CONTRACT}`\n\n"
+        "━━━ *NEW — PHASE 8* ━━━\n\n"
+        "📈 *GANG FUTURES* — 33 tradeable pairs!\n"
+        "   Crypto, Stocks, Indices & Commodities\n"
+        "   Up to 20x leverage | 0.3% fees\n"
+        "   Trade with GANG or CRO!\n\n"
+        "🔍 *GANG TRACKER* — Multi-chain wallet scanner\n"
+        "   Scan any wallet across 5 chains!\n\n"
+        "📊 *DexScreener Live Chart* — Multi-coin selector\n"
+        "   BTC, ETH, SOL, CRO, GANG & more!\n\n"
         "━━━ *EARN FREE $GANG* ━━━\n\n"
         "⛏ *Mining Hub* — Earn 5 $GANG daily for FREE!\n"
         "🎰 *19 Casino Games* — Slots, Crash, Roulette, Poker & more!\n"
         "🏇 *Racing* — Horse & Car racing!\n"
-        "⚡ *Leverage Trading* — 8 pairs, up to 100x with live charts!\n"
-        "💰 *Reach 100 $GANG → Withdraw REAL tokens!*\n\n"
+        "💰 *Reach 100 $GANG then Withdraw REAL tokens!*\n\n"
         "━━━ *DeFi FEATURES* ━━━\n\n"
-        "🌾 Farms — Yield farming with LP\n"
-        "🏦 Vaults — Auto-compound pools\n"
-        "🔒 Staking — Lock $GANG for APY\n"
-        "🌉 Bridge — Cross-chain transfers\n"
-        "🔐 Token Locker — Lock LP tokens\n\n"
+        "🌾 Farms — Yield farming with LP (live APRs)\n"
+        "🏦 Vaults — Auto-compound pools (auto-harvest)\n"
+        "🔒 Staking — Lock $GANG up to 300% APY\n"
+        "🌉 Bridge — Cross-chain via LI.FI\n"
+        "🔐 LP Locker — Lock LP tokens\n\n"
         "━━━ *SECURITY* ━━━\n\n"
         "🔒 *Liquidity LOCKED until Mar 2027*\n"
-        "2,830 VVS-LP locked on DX.app\n"
-        "✅ Verified — NO rug pull possible\n\n"
+        "2,830 VVS-LP locked & verified on DX.app\n"
+        "✅ NO rug pull possible\n\n"
         "━━━ *MORE* ━━━\n\n"
-        "🚀 Launchpad — IDO access\n"
-        "🎯 Sniper Bot — Fast trading\n"
-        "🎴 NFTs — 500 unique gangsters\n"
-        "👥 Referral — Earn 5% from crew\n"
-        "🛠 Token Creator — Deploy tokens\n"
-        "🏪 Marketplace — Trade NFTs\n\n"
-        "🔥 *START MINING NOW!* Tap ⛏ Mining Hub below!\n\n"
+        "🚀 Launchpad | 🎯 Sniper Bot | 🎴 NFTs\n"
+        "👥 Referral (5%) | 🛠 Token Creator\n"
+        "🏪 Marketplace | 🎰 Lottery\n\n"
+        "🔥 *All platform fees: 0.3%*\n\n"
         "👇 *Tap any button to explore!*"
     )
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=main_keyboard())
@@ -377,6 +412,11 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     msg = (
         "📖 *Cronos Gangsters Bot Commands*\n\n"
+        "*🆕 Phase 8 — NEW:*\n"
+        "• /futures - GANG FUTURES (33 pairs, 20x leverage)\n"
+        "• /tracker - GANG TRACKER (multi-chain scanner)\n"
+        "• /lending - Lend & Borrow (earn interest)\n"
+        "• /roadmap - Project roadmap & phases\n\n"
         "*💰 Token & Price:*\n"
         "• /price - Current $GANG price & stats\n"
         "• /stats - Detailed token statistics\n"
@@ -388,7 +428,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "• /portfolio - View your portfolio\n\n"
         "*⛏ Mining & Gaming:*\n"
         "• /mining - Mining Hub (earn $GANG daily!)\n"
-        "• /trading - Leverage Trading (up to 100x)\n\n"
+        "• /trading - Leverage Trading (up to 20x)\n\n"
         "*🌾 DeFi Features:*\n"
         "• /farms - Yield farms & APRs\n"
         "• /vaults - Auto-compound vaults\n"
@@ -588,11 +628,14 @@ async def shill(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = (
         f"🔫 *$GANG - Cronos Gangsters*\n\n"
         f"The most gangster DEX on Cronos!{price_line}\n\n"
+        "📈 GANG FUTURES — 33 pairs, 20x leverage!\n"
+        "   Crypto + Stocks + Indices + Commodities!\n"
+        "🔍 GANG TRACKER — Multi-chain wallet scanner!\n"
         "⛏ Mine 5 $GANG daily + 19 Casino Games!\n"
-        "⚡ Leverage Trading up to 100x!\n"
-        "🌾 Farm | 🏦 Vault | 🔒 Stake | 🌉 Bridge\n\n"
+        "🌾 Farm | 🏦 Auto-Compound | 🔒 Stake | 🌉 Bridge\n"
+        "💰 All fees: 0.3% | Trade with GANG or CRO!\n\n"
         f"📋 Contract:\n`{CONTRACT}`\n\n"
-        "Join the gang! The streets are ours. 🤝\n\n"
+        "Join the gang! The streets are ours.\n\n"
         f"🌐 Website: {DEX_LINK}\n"
         f"📊 Chart: {DEXSCREENER}\n"
         f"💬 Telegram: {TELEGRAM_GROUP}"
@@ -642,7 +685,8 @@ async def farms(update: Update, context: ContextTypes.DEFAULT_TYPE):
     gang_price = live.get("gang_price", 0)
 
     msg = (
-        "🌾 *GANGSTER FARMS*\n\n"
+        "🌾 *GANGSTER FARMS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
         "Stake LP tokens to earn $GANG rewards!\n\n"
     )
 
@@ -654,18 +698,18 @@ async def farms(update: Update, context: ContextTypes.DEFAULT_TYPE):
         fd = live.get("farms", {}).get(name, {})
         apr = fd.get("apr", 0)
         tvl = fd.get("tvl", 0)
-        msg += f"*{name}*\n"
-        msg += f"   Alloc: {farm['allocation']}"
-        if apr > 0:
-            msg += f" | APR: {apr:,.0f}%"
-        if tvl > 0:
-            msg += f" | TVL: ${tvl:,.0f}"
-        msg += "\n\n"
+        apr_str = f"*{apr:,.0f}%*" if apr > 0 else "—"
+        tvl_str = f"${tvl:,.0f}" if tvl > 0 else "—"
+        fire = "🔥" if apr > 500 else "✅"
+        msg += f"{fire} *{name}*\n"
+        msg += f"   APR: {apr_str} | TVL: {tvl_str} | Alloc: {farm['allocation']}\n\n"
 
     msg += (
+        "━━━━━━━━━━━━━━━━━━━━━\n"
+        "💡 *How:* Add LP on DEX → Stake in Farms → Earn $GANG!\n"
+        "💰 *All fees: 0.3%*\n\n"
         f"🔗 *MasterChef Contract:*\n"
-        f"`{CONTRACTS['MASTERCHEF']}`\n\n"
-        f"[🌾 Start Farming]({DEX_LINK})"
+        f"`{CONTRACTS['MASTERCHEF']}`"
     )
 
     keyboard = InlineKeyboardMarkup([
@@ -766,30 +810,32 @@ async def vaults(update: Update, context: ContextTypes.DEFAULT_TYPE):
     live = await fetch_live_farm_data()
 
     msg = (
-        "🏦 *AUTO-COMPOUND VAULTS*\n\n"
-        "Deposit and let us compound for you!\n"
-        "No manual harvesting needed.\n\n"
+        "🏦 *AUTO-COMPOUND VAULTS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Deposit LP → We auto-compound → You earn more!\n"
+        "No manual harvesting. Set and forget.\n\n"
     )
 
     for vault in VAULTS:
         name = vault["name"]
         vd = live.get("vaults", {}).get(name, {})
+        apr = vd.get("apr", 0)
         apy = vd.get("apy", 0)
         tvl = vd.get("tvl", 0)
-        msg += f"*{name}*\n"
-        msg += f"   Strategy: {vault['strategy']}"
-        if apy > 0:
-            msg += f" | APY: {apy:,.0f}%"
-        if tvl > 0:
-            msg += f" | TVL: ${tvl:,.0f}"
-        msg += "\n\n"
+        apy_str = f"*{apy:,.0f}%*" if apy > 0 else "—"
+        apr_str = f"{apr:,.0f}%" if apr > 0 else "—"
+        tvl_str = f"${tvl:,.0f}" if tvl > 0 else "—"
+        fire = "🔥" if apy > 500 else "✅"
+        msg += f"{fire} *{name}*\n"
+        msg += f"   APY: {apy_str} (APR: {apr_str}) | TVL: {tvl_str}\n\n"
 
     msg += (
-        "💡 *How it works:*\n"
-        "1. Deposit LP tokens\n"
-        "2. Vault auto-compounds rewards\n"
-        "3. Watch your position grow!\n\n"
-        f"[🏦 Open Vaults]({DEX_LINK})"
+        "━━━━━━━━━━━━━━━━━━━━━\n"
+        "💡 *Auto-compound = higher returns!*\n"
+        "Rewards are harvested and re-deposited\n"
+        "automatically, compounding your yield 24/7.\n\n"
+        "APY > APR because of compounding!\n"
+        "💰 *All fees: 0.3%*"
     )
 
     keyboard = InlineKeyboardMarkup([
@@ -1037,14 +1083,14 @@ async def trading_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = (
         "⚡ *LEVERAGE TRADING*\n"
         "━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "📈 *Trade crypto with up to 100x LEVERAGE!*\n\n"
+        "📈 *Trade crypto with up to 20x LEVERAGE!*\n\n"
         "1️⃣ Mine $GANG from the Mining Hub (free!)\n"
         "2️⃣ Pick a pair — BTC, ETH, SOL, DOGE, PEPE & more\n"
         "3️⃣ Go LONG (price up) or SHORT (price down)\n"
-        "4️⃣ Set leverage: 10x, 25x, 50x, or 100x\n"
+        "4️⃣ Set leverage: 5x, 10x, 15x, or 20x\n"
         "5️⃣ Close anytime to lock in profits!\n\n"
         "📊 *Live TradingView charts for every pair!*\n"
-        "💰 0.1% trading fee | ⚠️ High risk = high reward!\n\n"
+        "💰 0.3% trading fee | All fees standardized\n\n"
         "👇 *Start trading NOW!*"
     )
     keyboard = InlineKeyboardMarkup([
@@ -1177,7 +1223,198 @@ async def faq_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
 
 
-# ===== CAPTCHA / VERIFICATION =====
+async def futures_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /futures command — GANG FUTURES info"""
+    msg = (
+        "📈 *GANG FUTURES*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Trade 33 pairs with up to 20x leverage!\n"
+        "Crypto, Stocks, Indices & Commodities.\n\n"
+        "━━━ *TRADEABLE PAIRS* ━━━\n\n"
+        "💎 *Crypto (12):*\n"
+        "BTC, ETH, BNB, CRO, SOL, XRP,\n"
+        "DOGE, ADA, AVAX, LINK, ARB, MATIC\n\n"
+        "📊 *Stocks (14):*\n"
+        "AAPL, TSLA, NVDA, MSFT, AMZN, GOOGL,\n"
+        "META, AMD, NFLX, COIN, DIS, PYPL, BA, JPM\n\n"
+        "📉 *Indices (3):*\n"
+        "NASDAQ 100, S&P 500, Dow Jones\n\n"
+        "🛢 *Commodities (4):*\n"
+        "GOLD, SILVER, OIL, NATURAL GAS\n\n"
+        "━━━ *HOW IT WORKS* ━━━\n\n"
+        "1️⃣ Choose a pair (e.g. TSLA, GOLD, BTC)\n"
+        "2️⃣ Pick LONG or SHORT\n"
+        "3️⃣ Set leverage: 5x to 20x\n"
+        "4️⃣ Choose currency: *GANG* or *CRO*\n"
+        "5️⃣ Open position & watch live chart\n"
+        "6️⃣ Close anytime to take profit!\n\n"
+        "━━━ *FEES* ━━━\n\n"
+        "Open: *0.3%* | Close: *0.3%*\n"
+        "All fees standardized across the platform.\n\n"
+        "━━━ *DUAL CURRENCY* ━━━\n\n"
+        "Trade with *$GANG* or *$CRO*!\n"
+        "Owner manages separate liquidity pools\n"
+        "for each currency.\n\n"
+        "📊 *Live price charts via Yahoo Finance*\n"
+        "📈 *Real-time P&L tracking*\n\n"
+        f"[📈 Open GANG FUTURES]({DEX_LINK})"
+    )
+
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📈 Open GANG FUTURES", url=f"{DEX_LINK}#futures")],
+        [InlineKeyboardButton("📊 DexScreener Chart", url=DEXSCREENER)],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+async def tracker_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /tracker command — GANG TRACKER info"""
+    msg = (
+        "🔍 *GANG TRACKER*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Scan ANY wallet across multiple chains!\n\n"
+        "━━━ *SUPPORTED CHAINS* ━━━\n\n"
+        "⛓ Cronos | Ethereum | BSC\n"
+        "Polygon | Arbitrum\n\n"
+        "━━━ *WHAT YOU CAN SEE* ━━━\n\n"
+        "💰 *Token Holdings* — All tokens with USD values\n"
+        "📜 *Transaction History* — Recent txns with details\n"
+        "🎴 *NFT Detection* — NFTs held by the wallet\n"
+        "📊 *DeFi Positions* — Active LP & staking\n"
+        "🔗 *Multi-chain* — One search, all chains\n\n"
+        "━━━ *HOW TO USE* ━━━\n\n"
+        "1️⃣ Go to GANG TRACKER page\n"
+        "2️⃣ Paste any wallet address (0x...)\n"
+        "3️⃣ Select chain or scan all\n"
+        "4️⃣ View complete portfolio breakdown!\n\n"
+        "🔒 *Read-only — No wallet connection needed*\n"
+        "Free to use. No limits. No fees.\n\n"
+        f"[🔍 Open GANG TRACKER]({DEX_LINK})"
+    )
+
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔍 Open GANG TRACKER", url=f"{DEX_LINK}#tracker")],
+        [InlineKeyboardButton("📊 DexScreener Chart", url=DEXSCREENER)],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+async def roadmap_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /roadmap command"""
+    msg = (
+        "🗺 *CRONOS GANGSTERS ROADMAP*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "✅ *Phase 1 — Token Launch*\n"
+        "Contract deployed, LP locked, CronoScan verified\n\n"
+        "✅ *Phase 2 — DEX Launch*\n"
+        "Swap, Liquidity, Portfolio, 15 tokens\n\n"
+        "✅ *Phase 3 — DeFi Suite*\n"
+        "Farms, Staking (45-300% APY), NFTs (500 gangsters)\n\n"
+        "✅ *Phase 4 — Ecosystem*\n"
+        "Launchpad, Token Creator, Bridge (LI.FI)\n\n"
+        "✅ *Phase 5 — Gaming*\n"
+        "Mining Hub, 19 Casino Games, Leverage Trading\n\n"
+        "✅ *Phase 6 — Community*\n"
+        "Telegram Bot, Buy Alerts, Referral System\n\n"
+        "✅ *Phase 7 — Advanced DeFi*\n"
+        "Auto-Compound Vaults, Sniper Bot, LP Locker\n\n"
+        "✅ *Phase 8 — COMPLETED* 🔥\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n"
+        "📈 GANG FUTURES — 33 pairs, 20x leverage\n"
+        "   Crypto + Stocks + Indices + Commodities\n"
+        "   Dual currency: GANG & CRO pools\n"
+        "🔍 GANG TRACKER — Multi-chain wallet scanner\n"
+        "📊 DexScreener Live Chart — Multi-coin selector\n"
+        "💰 All platform fees standardized to 0.3%\n"
+        "🏦 Auto-compound Vaults with live APYs\n"
+        "🍔 Redesigned navigation with icons\n\n"
+        "🔜 *Phase 9 — Coming Soon*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n"
+        "Limit Orders, Advanced Charts,\n"
+        "Mobile App, DAO Governance,\n"
+        "Cross-chain Futures\n\n"
+        "🔥 *Building the most complete DEX on Cronos!*"
+    )
+
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🌐 Visit Website", url=DEX_LINK)],
+        [InlineKeyboardButton("📈 GANG FUTURES", callback_data="menu_futures"),
+         InlineKeyboardButton("🔍 GANG TRACKER", callback_data="menu_tracker")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+async def lending_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /lending command"""
+    msg = (
+        "🏦 *GANG LENDING & BORROWING*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Lend crypto to earn interest.\n"
+        "Borrow against your collateral.\n\n"
+        "━━━ *LENDING POOLS* ━━━\n\n"
+        "💎 *CRO* — ~4.2% APY Supply\n"
+        "🔫 *GANG* — ~8.5% APY Supply\n"
+        "💵 *USDC* — ~3.8% APY Supply\n"
+        "⟠ *WETH* — ~2.1% APY Supply\n\n"
+        "━━━ *HOW IT WORKS* ━━━\n\n"
+        "1️⃣ *Supply* tokens to earn interest\n"
+        "   Your deposits earn APY automatically\n\n"
+        "2️⃣ *Borrow* against collateral (75% LTV)\n"
+        "   Deposit $100 → borrow up to $75\n\n"
+        "3️⃣ *Repay* anytime, no lock period\n"
+        "   Your collateral unlocks on repayment\n\n"
+        "━━━ *FEES* ━━━\n\n"
+        "Origination: *0.3%* per loan\n"
+        "Interest rates: *Variable* (2-15% APR)\n"
+        "Liquidation penalty: *5%*\n\n"
+        "⚠️ Keep health factor above 1.0 to avoid liquidation!\n\n"
+        f"[🏦 Open Lending]({DEX_LINK})"
+    )
+
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🏦 Open Lending", url=f"{DEX_LINK}#lending")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+async def predictions_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /predictions command"""
+    msg = (
+        "🔮 *GANG PREDICTION MARKETS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Predict outcomes. Win big.\n\n"
+        "━━━ *CATEGORIES* ━━━\n\n"
+        "💰 *Crypto* — BTC, ETH, CRO price targets\n"
+        "📈 *Stocks* — TSLA, NVDA, AAPL earnings\n"
+        "⚽ *Sports* — Champions League, NBA, NFL\n"
+        "🏛 *Politics* — Elections, policy outcomes\n"
+        "🎲 *Custom* — Create your own market!\n\n"
+        "━━━ *HOW IT WORKS* ━━━\n\n"
+        "1️⃣ Pick a prediction market\n"
+        "2️⃣ Bet CRO on YES or NO\n"
+        "3️⃣ Odds adjust in real-time\n"
+        "4️⃣ Winners split the pot!\n\n"
+        "━━━ *FEES* ━━━\n\n"
+        "Platform fee: *5%* of resolved pots\n"
+        "Owner collects fees on every resolution\n\n"
+        f"[🔮 Open Predictions]({DEX_LINK}#predict)"
+    )
+
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔮 Open Predictions", url=f"{DEX_LINK}#predict")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
 
 def generate_captcha():
     """Generate a simple math captcha using cryptographic randomness"""
@@ -1471,19 +1708,20 @@ async def _cb_menu_back(query, context):
 
 async def _cb_menu_farms(query, context):
     live = await fetch_live_farm_data()
-    msg = "🌾 *GANGSTER FARMS*\n\nStake LP tokens to earn $GANG rewards!\n\n"
+    gang_price = live.get("gang_price", 0)
+    msg = "🌾 *GANGSTER FARMS*\n━━━━━━━━━━━━━━━━━━━━━\n\n"
+    if gang_price > 0:
+        msg += f"💵 $GANG: ${gang_price:.6f}\n\n"
     for farm in FARMS:
         name = farm["name"]
         fd = live.get("farms", {}).get(name, {})
         apr = fd.get("apr", 0)
         tvl = fd.get("tvl", 0)
-        msg += f"*{name}*\n   Alloc: {farm['allocation']}"
-        if apr > 0:
-            msg += f" | APR: {apr:,.0f}%"
-        if tvl > 0:
-            msg += f" | TVL: ${tvl:,.0f}"
-        msg += "\n\n"
-    msg += f"🔗 *MasterChef:*\n`{CONTRACTS['MASTERCHEF']}`"
+        fire = "🔥" if apr > 500 else "✅"
+        apr_s = f"*{apr:,.0f}%*" if apr > 0 else "—"
+        tvl_s = f"${tvl:,.0f}" if tvl > 0 else "—"
+        msg += f"{fire} *{name}*\n   APR: {apr_s} | TVL: {tvl_s}\n\n"
+    msg += "💰 All fees: 0.3%"
     kb = InlineKeyboardMarkup([
         [InlineKeyboardButton("🌾 Open Farms", url=f"{DEX_LINK}#farms")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
@@ -1493,19 +1731,18 @@ async def _cb_menu_farms(query, context):
 
 async def _cb_menu_vaults(query, context):
     live = await fetch_live_farm_data()
-    msg = "🏦 *AUTO-COMPOUND VAULTS*\n\nDeposit and let us compound for you!\n\n"
+    msg = "🏦 *AUTO-COMPOUND VAULTS*\n━━━━━━━━━━━━━━━━━━━━━\n\n"
+    msg += "Deposit LP → Auto-compound → Earn more!\n\n"
     for vault in VAULTS:
         name = vault["name"]
         vd = live.get("vaults", {}).get(name, {})
         apy = vd.get("apy", 0)
         tvl = vd.get("tvl", 0)
-        msg += f"*{name}*\n   Strategy: {vault['strategy']}"
-        if apy > 0:
-            msg += f" | APY: {apy:,.0f}%"
-        if tvl > 0:
-            msg += f" | TVL: ${tvl:,.0f}"
-        msg += "\n\n"
-    msg += "💡 Deposit LP → vault auto-compounds → position grows!"
+        fire = "🔥" if apy > 500 else "✅"
+        apy_s = f"*{apy:,.0f}%*" if apy > 0 else "—"
+        tvl_s = f"${tvl:,.0f}" if tvl > 0 else "—"
+        msg += f"{fire} *{name}*\n   APY: {apy_s} | TVL: {tvl_s}\n\n"
+    msg += "💡 Auto-compound = APY > APR!\n💰 All fees: 0.3%"
     kb = InlineKeyboardMarkup([
         [InlineKeyboardButton("🏦 Open Vaults", url=f"{DEX_LINK}#vaults")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
@@ -1734,28 +1971,28 @@ async def _cb_menu_trading(query, context):
     msg = (
         "⚡ *LEVERAGE TRADING*\n"
         "━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "📈 *Trade crypto with up to 100x LEVERAGE!*\n\n"
+        "📈 *Trade crypto with up to 20x LEVERAGE!*\n\n"
         "━━━ *HOW IT WORKS* ━━━\n\n"
         "1️⃣ *MINE $GANG* — First earn $GANG from the Mining Hub (free daily mining!)\n\n"
         "2️⃣ *PICK A PAIR* — Choose from 8 major crypto pairs. Each has a LIVE chart with real prices!\n\n"
         "3️⃣ *GO LONG OR SHORT*\n"
         "   • LONG = You think the price goes UP 📈\n"
         "   • SHORT = You think the price goes DOWN 📉\n\n"
-        "4️⃣ *SET YOUR LEVERAGE* — 10x, 25x, 50x, or 100x\n"
+        "4️⃣ *SET YOUR LEVERAGE* — 5x, 10x, 15x, or 20x\n"
         "   • 10x = Your gains (and losses) are multiplied by 10\n"
-        "   • 100x = MAXIMUM risk & reward!\n\n"
+        "   • 20x = MAXIMUM risk & reward!\n\n"
         "5️⃣ *ENTER YOUR BET* — How much $GANG you want to risk\n\n"
         "6️⃣ *CLOSE WHEN READY* — Close your position anytime to lock in profits (or cut losses)\n\n"
         "━━━ *EXAMPLE* ━━━\n\n"
-        "You bet 50 $GANG on BTC LONG at 25x leverage:\n"
-        "• If BTC goes up 4% → You make +50 $GANG profit! (4% × 25 = 100%)\n"
-        "• If BTC goes down 4% → You lose your 50 $GANG (liquidated)\n\n"
+        "You bet 50 $GANG on BTC LONG at 20x leverage:\n"
+        "• If BTC goes up 5% → You make +50 $GANG profit! (5% x 20 = 100%)\n"
+        "• If BTC goes down 5% → You lose your 50 $GANG (liquidated)\n\n"
         "━━━ *AVAILABLE PAIRS* ━━━\n\n"
         "₿ BTC/USD | ⟠ ETH/USD | 🔷 CRO/USD\n"
         "◎ SOL/USD | 🐕 DOGE/USD | 🐸 PEPE/USD\n"
         "💲 XRP/USD | 🦊 SHIB/USD\n\n"
         "📊 *Live TradingView charts for every pair!*\n"
-        "💰 *0.1% trading fee per position*\n\n"
+        "💰 *0.3% trading fee per position*\n\n"
         "⚠️ *High leverage = high risk. Trade smart!*\n\n"
         "👇 *Start trading NOW!*"
     )
@@ -1934,10 +2171,141 @@ async def _cb_menu_faq(query, context):
         "*Farms?* Stake LP → earn $GANG. Live APRs from on-chain data.\n\n"
         "*Lottery?* 70% winner, 20% burned, 10% treasury.\n\n"
         "*Referrals?* Share link → earn 5% of friend's rewards.\n\n"
-        "*Wallet?* MetaMask, Trust, Crypto.com, Rabby, OKX. Cronos chain."
+        "*Wallet?* MetaMask, Trust, Crypto.com, Rabby, OKX. Cronos chain.\n\n"
+        "*Fees?* All platform fees are exactly 0.3% (Swap, Futures, LP).\n\n"
+        "*GANG FUTURES?* 33 pairs (Crypto, Stocks, Indices, Commodities). Up to 20x leverage. Trade with GANG or CRO."
     )
     kb = InlineKeyboardMarkup([
         [InlineKeyboardButton("📖 Full FAQ", url=f"{DEX_LINK}#faq")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_futures(query, context):
+    """Callback handler for GANG FUTURES menu"""
+    msg = (
+        "📈 *GANG FUTURES*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Trade 33 pairs with up to 20x leverage!\n\n"
+        "💎 *Crypto:* BTC, ETH, BNB, CRO, SOL, XRP,\n"
+        "DOGE, ADA, AVAX, LINK, ARB, MATIC\n\n"
+        "📊 *Stocks:* AAPL, TSLA, NVDA, MSFT, AMZN,\n"
+        "GOOGL, META, AMD, NFLX, COIN & more\n\n"
+        "📉 *Indices:* NASDAQ, S&P 500, Dow Jones\n\n"
+        "🛢 *Commodities:* GOLD, SILVER, OIL, NATGAS\n\n"
+        "💰 *Dual Currency:* Trade with GANG or CRO!\n"
+        "📊 Live charts | 0.3% fees\n"
+        "⚡ Leverage: 5x, 10x, 15x, 20x"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📈 Open GANG FUTURES", url=f"{DEX_LINK}#futures")],
+        [InlineKeyboardButton("📊 DexScreener Chart", url=DEXSCREENER)],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_tracker(query, context):
+    """Callback handler for GANG TRACKER menu"""
+    msg = (
+        "🔍 *GANG TRACKER*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Scan any wallet across multiple chains!\n\n"
+        "⛓ *Chains:* Cronos, Ethereum, BSC,\n"
+        "Polygon, Arbitrum\n\n"
+        "💰 Token holdings & USD values\n"
+        "📜 Transaction history\n"
+        "🎴 NFT detection\n"
+        "📊 DeFi positions\n\n"
+        "🔒 Read-only — no wallet connection needed\n"
+        "Free to use. No limits."
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔍 Open GANG TRACKER", url=f"{DEX_LINK}#tracker")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_roadmap(query, context):
+    """Callback handler for Roadmap menu"""
+    msg = (
+        "🗺 *ROADMAP*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "✅ Phase 1 — Token Launch\n"
+        "✅ Phase 2 — DEX Launch\n"
+        "✅ Phase 3 — DeFi Suite\n"
+        "✅ Phase 4 — Ecosystem\n"
+        "✅ Phase 5 — Gaming\n"
+        "✅ Phase 6 — Community\n"
+        "✅ Phase 7 — Advanced DeFi\n"
+        "✅ *Phase 8 — COMPLETED* 🔥\n"
+        "   GANG FUTURES (33 pairs)\n"
+        "   GANG TRACKER (multi-chain)\n"
+        "   GANG LENDING (earn interest)\n"
+        "   PREDICTION MARKETS (bet & win)\n"
+        "   DexScreener Live Chart\n"
+        "   Dual currency (GANG + CRO)\n"
+        "   0.3% standardized fees\n"
+        "   Auto-compound Vaults\n\n"
+        "🔜 *Phase 9 — Coming Soon*\n"
+        "   Copy Trading, Revenue Staking,\n"
+        "   Limit Orders, Mobile App,\n"
+        "   DAO Governance, Cross-chain Futures"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🌐 Visit Website", url=DEX_LINK)],
+        [InlineKeyboardButton("📈 Futures", callback_data="menu_futures"),
+         InlineKeyboardButton("🏦 Lending", callback_data="menu_lending"),
+         InlineKeyboardButton("🔮 Predictions", callback_data="menu_predictions")],
+        [InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_lending(query, context):
+    """Callback handler for Lending menu"""
+    msg = (
+        "🏦 *GANG LENDING & BORROWING*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Lend crypto. Earn interest. Borrow against collateral.\n\n"
+        "💎 *CRO* — ~4.2% APY\n"
+        "🔫 *GANG* — ~8.5% APY\n"
+        "💵 *USDC* — ~3.8% APY\n"
+        "⟠ *WETH* — ~2.1% APY\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• 20% of all interest payments\n"
+        "• 0.3% origination fee per loan\n"
+        "• 5% liquidation penalty\n\n"
+        "No lock period. Repay anytime."
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🏦 Open Lending", url=f"{DEX_LINK}#lending")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_predictions(query, context):
+    """Callback handler for Predictions menu"""
+    msg = (
+        "🔮 *GANG PREDICTION MARKETS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Predict outcomes. Win big.\n\n"
+        "💰 *Crypto* — BTC, ETH, CRO targets\n"
+        "📈 *Stocks* — TSLA, NVDA, AAPL\n"
+        "⚽ *Sports* — UCL, NBA, NFL\n"
+        "🏛 *Politics* — Elections & more\n"
+        "🎲 *Custom* — Create your own!\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• 5% of every resolved pot\n"
+        "• Collect anytime from Revenue page\n\n"
+        "Anyone can create a market. You earn on every resolution."
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔮 Open Predictions", url=f"{DEX_LINK}#predict")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -1973,6 +2341,11 @@ CALLBACK_DISPATCH = {
     "menu_deploy": _cb_menu_deploy,
     "menu_contracts": _cb_menu_contracts,
     "menu_faq": _cb_menu_faq,
+    "menu_futures": _cb_menu_futures,
+    "menu_tracker": _cb_menu_tracker,
+    "menu_roadmap": _cb_menu_roadmap,
+    "menu_lending": _cb_menu_lending,
+    "menu_predictions": _cb_menu_predictions,
 }
 
 
@@ -2210,11 +2583,17 @@ async def post_price_update(context: ContextTypes.DEFAULT_TYPE):
                 f"📊 *Volume:* {format_number(volume_h24)}\n"
                 f"💎 *MCap:* {format_number(market_cap)}\n"
                 f"💧 *Liquidity:* {format_number(liquidity)}\n\n"
+                f"━━━ *PHASE 8 LIVE* ━━━\n\n"
+                f"📈 *GANG FUTURES* — 33 pairs, up to 20x!\n"
+                f"   Crypto + Stocks + Indices + Commodities\n"
+                f"   Trade with GANG or CRO | 0.3% fees\n\n"
+                f"🔍 *GANG TRACKER* — Multi-chain scanner\n"
+                f"📊 *DexScreener Chart* — Multi-coin live\n\n"
                 f"━━━ *EARN FREE $GANG* ━━━\n\n"
                 f"⛏ *Mining Hub* — 5 $GANG daily + 19 games!\n"
-                f"⚡ *Leverage Trading* — 8 pairs, up to 100x!\n"
-                f"💰 Reach 100 $GANG → Withdraw REAL tokens!\n\n"
-                f"🌾 Farms | 🏦 Vaults | 🔒 Staking | 🌉 Bridge\n"
+                f"💰 Reach 100 $GANG then Withdraw REAL tokens!\n\n"
+                f"🌾 Farms | 🏦 Auto-Compound Vaults\n"
+                f"🔒 Staking (up to 300% APY) | 🌉 Bridge\n"
                 f"🎰 Lottery | 🎴 NFTs | 🏪 Marketplace\n\n"
                 f"🔒 *Liquidity LOCKED until Mar 2027*\n"
                 f"✅ Verified on DX.app — NO rug pull\n\n"
@@ -2298,16 +2677,20 @@ async def on_bot_startup(application: Application):
             "━━━━━━━━━━━━━━━━━━━━━\n\n"
             "The Cronos Gangsters Bot is online!\n\n"
             f"📋 *Contract:*\n`{CONTRACT}`\n\n"
+            "━━━ *PHASE 8 IS HERE* ━━━\n\n"
+            "📈 *GANG FUTURES* — 33 pairs, up to 20x!\n"
+            "   Crypto + Stocks + Indices + Commodities\n"
+            "   Trade with GANG or CRO!\n\n"
+            "🔍 *GANG TRACKER* — Multi-chain wallet scanner\n"
+            "📊 *DexScreener Live Chart* — Multi-coin selector\n"
+            "💰 *All fees: 0.3%*\n\n"
             "━━━ *EARN FREE $GANG* ━━━\n\n"
             "⛏ *Mining Hub* — Earn 5 $GANG daily for FREE!\n"
             "🎰 *19 Casino Games* — Slots, Crash, Roulette & more!\n"
-            "⚡ *Leverage Trading* — 8 pairs, up to 100x!\n"
-            "💰 *Reach 100 $GANG → Withdraw REAL tokens!*\n\n"
-            "━━━ *DeFi FEATURES* ━━━\n\n"
-            "🌾 Farms — Yield farming with LP\n"
-            "🏦 Vaults — Auto-compound pools\n"
-            "🔒 Staking — Lock $GANG for APY\n"
-            "🌉 Bridge — Cross-chain transfers\n\n"
+            "💰 *Reach 100 $GANG then Withdraw REAL tokens!*\n\n"
+            "━━━ *DeFi* ━━━\n\n"
+            "🌾 Farms (live APRs) | 🏦 Auto-compound Vaults\n"
+            "🔒 Staking (up to 300% APY) | 🌉 Bridge\n\n"
             "━━━ *SECURITY* ━━━\n\n"
             "🔒 *Liquidity LOCKED until Mar 2027*\n"
             "2,830 VVS-LP locked & verified on DX.app\n"
@@ -2371,6 +2754,11 @@ def main():
     app.add_handler(CommandHandler("portfolio", portfolio_cmd))
     app.add_handler(CommandHandler("contracts", contracts_cmd))
     app.add_handler(CommandHandler("faq", faq_cmd))
+    app.add_handler(CommandHandler("futures", futures_cmd))
+    app.add_handler(CommandHandler("tracker", tracker_cmd))
+    app.add_handler(CommandHandler("roadmap", roadmap_cmd))
+    app.add_handler(CommandHandler("lending", lending_cmd))
+    app.add_handler(CommandHandler("predictions", predictions_cmd))
 
     # Admin commands
     app.add_handler(CommandHandler("ban", ban))
