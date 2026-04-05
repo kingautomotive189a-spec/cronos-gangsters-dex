@@ -6496,7 +6496,13 @@ function toggleNavMenu() {
 
     <!-- Signal Summary Banner -->
     <div id="signalSummaryBanner" data-testid="signal-summary" style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:20px;margin-bottom:16px;text-align:center;">
-      <div style="font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">OVERALL SIGNAL</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px;">
+        <img id="sigTokenLogo" src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" style="width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);" loading="lazy">
+        <div>
+          <div id="sigTokenName" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">BITCOIN (BTC)</div>
+          <div style="font-size:10px;color:var(--muted);letter-spacing:2px;">OVERALL SIGNAL</div>
+        </div>
+      </div>
       <div id="signalOverallLabel" style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;color:#27ae60;">LOADING...</div>
       <div id="signalOverallDesc" style="font-size:12px;color:var(--muted);margin-top:4px;">Calculating indicators from live market data...</div>
     </div>
@@ -20835,33 +20841,73 @@ function simulateFuturesTick() {
       _futuresLastApiPrice[pair] = basePrice;
     }
 
+    // ─── REALISTIC MICRO-TREND ENGINE ───
+    // Each pair has its own micro-trend that lasts 8-25 ticks before reversing
+    if (!window._sigTrends) window._sigTrends = {};
+    if (!window._sigTrends[pair]) {
+      window._sigTrends[pair] = {
+        dir: Math.random() > 0.4 ? 1 : -1,     // trend direction (slight bullish bias)
+        strength: 0.3 + Math.random() * 0.7,     // how strong the trend is (0.3-1.0)
+        remaining: Math.floor(8 + Math.random() * 17), // ticks left in this trend
+        volatility: 0,                            // current volatility state
+        prevMove: 0,                              // previous move for smoothing
+      };
+    }
+    const trend = window._sigTrends[pair];
+
     // Determine volatility based on asset type
     const fp = FUTURES_PAIRS[pair];
     const assetType = fp ? fp.type : 'crypto';
-    let maxSwing;
-    if (assetType === 'crypto') {
-      maxSwing = 0.0015; // ±0.15% per tick for crypto
-    } else if (assetType === 'commodity') {
-      maxSwing = 0.0008; // ±0.08% for commodities
-    } else {
-      maxSwing = 0.001; // ±0.1% for stocks/indices
+    let baseVol;
+    if (assetType === 'crypto') baseVol = 0.0012;
+    else if (assetType === 'commodity') baseVol = 0.0006;
+    else baseVol = 0.0008;
+
+    // Add occasional volatility spikes (simulates news events)
+    if (Math.random() < 0.03) trend.volatility = 1.5 + Math.random() * 2;
+    else trend.volatility = Math.max(0, trend.volatility * 0.85);
+    const currentVol = baseVol * (1 + trend.volatility);
+
+    // Core move: trend component + noise component + mean-reversion
+    const trendComponent = trend.dir * trend.strength * currentVol * 0.6;
+    const noiseComponent = (Math.random() - 0.5) * currentVol * 0.8;
+    const smoothing = trend.prevMove * 0.25; // momentum from previous tick
+    let rawMove = trendComponent + noiseComponent + smoothing;
+
+    // Clamp individual tick moves
+    rawMove = Math.max(-currentVol * 1.5, Math.min(currentVol * 1.5, rawMove));
+    trend.prevMove = rawMove;
+
+    // Apply move to price
+    const anchor = _futuresLastApiPrice[pair] || basePrice;
+    let newPrice = basePrice * (1 + rawMove);
+
+    // Mean reversion: gently pull back toward anchor price
+    const drift = (newPrice - anchor) / anchor;
+    const maxDrift = 0.006; // ±0.6% max from real price
+    if (Math.abs(drift) > maxDrift * 0.7) {
+      const pullback = drift > 0 ? -0.0002 : 0.0002;
+      newPrice = newPrice * (1 + pullback);
+    }
+    if (newPrice > anchor * (1 + maxDrift)) newPrice = anchor * (1 + maxDrift * 0.95);
+    if (newPrice < anchor * (1 - maxDrift)) newPrice = anchor * (1 - maxDrift * 0.95);
+
+    // Countdown the trend and create new one when done
+    trend.remaining--;
+    if (trend.remaining <= 0) {
+      // Higher chance of reversing if we've drifted far
+      const driftFromAnchor = (newPrice - anchor) / anchor;
+      const reverseChance = 0.4 + Math.abs(driftFromAnchor) * 10;
+      if (Math.random() < reverseChance) {
+        trend.dir = -trend.dir;
+      } else if (Math.random() < 0.15) {
+        trend.dir = Math.random() > 0.4 ? 1 : -1; // fresh random direction
+      }
+      trend.strength = 0.3 + Math.random() * 0.7;
+      trend.remaining = Math.floor(8 + Math.random() * 17);
     }
 
-    // Momentum: strong tendency to move upward (bullish feel)
-    if (!_futuresTickDirection[pair]) _futuresTickDirection[pair] = 1;
-    const momentum = _futuresTickDirection[pair] * 0.35;
-    const random = (Math.random() - 0.35) * 2; // strong bullish bias — moves up more often
-    const move = (random + momentum) * maxSwing;
-
-    // Clamp: don't drift more than 0.8% from real API price (wider range for upside)
-    const anchor = _futuresLastApiPrice[pair] || basePrice;
-    let newPrice = basePrice * (1 + move);
-    const maxDriftUp = anchor * 0.008;
-    const maxDriftDown = anchor * 0.004;
-    if (newPrice > anchor + maxDriftUp) newPrice = anchor + maxDriftUp * 0.95;
-    if (newPrice < anchor - maxDriftDown) newPrice = anchor - maxDriftDown * 0.95;
-
-    // Track direction for momentum
+    // Track direction for display purposes
     _futuresTickDirection[pair] = newPrice > basePrice ? 1 : newPrice < basePrice ? -1 : 0;
 
     // Update the price
@@ -20879,7 +20925,6 @@ function simulateFuturesTick() {
         const newText = '$' + viewedPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: viewedPrice > 100 ? 2 : 6 });
         if (oldText !== newText) {
           priceEl.textContent = newText;
-          const oldVal = parseFloat(oldText.replace(/[$,]/g, '')) || 0;
           priceEl.style.transition = 'color 0.3s';
           priceEl.style.color = 'var(--green)';
           setTimeout(() => { priceEl.style.color = ''; }, 600);
@@ -22030,6 +22075,11 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
         btn.style.color = i === idx ? 'var(--gold)' : 'var(--text)';
       }
     });
+    // Update selected token logo and name in summary
+    const logoEl = document.getElementById('sigTokenLogo');
+    const nameEl = document.getElementById('sigTokenName');
+    if (logoEl) logoEl.src = _sigSelectedToken.logo;
+    if (nameEl) nameEl.textContent = _sigSelectedToken.name.toUpperCase() + ' (' + _sigSelectedToken.sym + ')';
     fetchSignalData();
   };
 
@@ -22140,11 +22190,14 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     return { label: 'NEUTRAL', color: '#757575', desc: '' };
   }
 
-  function renderIndicatorRow(name, value, signal) {
+  function renderIndicatorRow(name, value, signal, tokenLogo) {
     return `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border-radius:10px;padding:10px 14px;">
-      <div style="flex:1;">
-        <div style="font-weight:700;font-size:13px;color:var(--text);">${name}</div>
-        <div style="font-size:10px;color:var(--muted);">${signal.desc}</div>
+      <div style="display:flex;align-items:center;gap:10px;flex:1;">
+        <img src="${tokenLogo}" style="width:20px;height:20px;border-radius:50%;opacity:0.7;" loading="lazy" onerror="this.style.display='none'">
+        <div>
+          <div style="font-weight:700;font-size:13px;color:var(--text);">${name}</div>
+          <div style="font-size:10px;color:var(--muted);">${signal.desc}</div>
+        </div>
       </div>
       <div style="font-size:12px;color:var(--muted);margin-right:12px;">${value}</div>
       <div style="font-weight:900;font-size:12px;color:${signal.color};min-width:60px;text-align:right;">${signal.label}</div>
@@ -22227,9 +22280,9 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       ];
 
       const indGrid = document.getElementById('signalIndicatorsGrid');
-      if (indGrid) indGrid.innerHTML = indicators.map(i => renderIndicatorRow(i.name, i.val, i.sig)).join('');
+      if (indGrid) indGrid.innerHTML = indicators.map(i => renderIndicatorRow(i.name, i.val, i.sig, t.logo)).join('');
       const maGrid = document.getElementById('signalMAGrid');
-      if (maGrid) maGrid.innerHTML = maRows.map(i => renderIndicatorRow(i.name, i.val, i.sig)).join('');
+      if (maGrid) maGrid.innerHTML = maRows.map(i => renderIndicatorRow(i.name, i.val, i.sig, t.logo)).join('');
 
       // Overall signal calculation
       const allSignals = [...indicators.map(i => i.sig.label), ...maRows.map(i => i.sig.label)];

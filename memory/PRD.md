@@ -29,7 +29,8 @@ Core DeFi, Advanced DeFi, World Domination (6 features), Dynamic Copy Trading, A
 - **Token Logos in Dropdowns**: Converted DEX Aggregator (FROM/TO) and Flash Loans token selects from plain `<select>` to custom dropdowns with original token logos (CRO, USDC, WETH, GANG, WCRO, VVS, TONIC, ATOM)
 - **WCRO added** to TOKEN_LOGOS registry
 - **KYC & Audit Page**: Full "Security & Trust" page with GoPlus Security automated audit results (18 checks all passing), DEX listings, verification links (GoPlus, De.Fi, TokenSniffer, Cronoscan), contract details, and KYC "In Progress" status
-- **Trading Signals Page**: NEW full page with REAL data from CoinGecko API — RSI, MACD, Stochastic, Williams %R, CCI, plus 8 Moving Averages (SMA/EMA). Signal strength gauge, overall BUY/SELL recommendation, auto-refreshes every 60s. 12 tokens: BTC, ETH, CRO, SOL, BNB, XRP, ADA, DOGE, DOT, LINK, AVAX, MATIC
+- **Trading Signals Page**: NEW full page with REAL data from CoinGecko API — RSI, MACD, Stochastic, Williams %R, CCI, plus 8 Moving Averages (SMA/EMA). Token logos on every indicator row. Signal strength gauge, overall BUY/SELL recommendation, auto-refreshes every 60s. 12 tokens: BTC, ETH, CRO, SOL, BNB, XRP, ADA, DOGE, DOT, LINK, AVAX, MATIC
+- **Leverage Trading Realistic Simulation Engine**: Replaced random bouncing with micro-trend system — each pair has 8-25 tick trends with proper momentum, smoothing, volatility spikes (simulating news events), mean reversion toward anchor price. Much more natural-looking price movement.
 - **Backend CoinGecko Proxy**: Added `/api/coingecko/price` and `/api/coingecko/chart` endpoints with 30s cache to avoid CORS and rate limits
 - **Telegram Bot `/security` command**: Shows all 18 GoPlus checks, KYC status, contract info, and verification links with inline buttons
 - **Telegram Bot menu**: Added "KYC & Audit" button to main inline keyboard menu
