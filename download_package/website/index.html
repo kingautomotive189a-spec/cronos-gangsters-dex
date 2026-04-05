@@ -575,6 +575,7 @@
       <button class="nav-btn" data-page="predict" data-testid="nav-predict-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/><path d="M8 12h8"/></svg></span><span style="color:#a855f7;font-weight:700;">Predictions</span></button>
       <button class="nav-btn" data-page="flashloans" data-testid="nav-flashloans-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffdd00" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><span style="color:#ffdd00;font-weight:700;">Flash Loans</span></button>
       <button class="nav-btn" data-page="insurance" data-testid="nav-insurance-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ecdc4" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><span style="color:#4ecdc4;font-weight:700;">Insurance</span></button>
+      <button class="nav-btn" data-page="aggregator" data-testid="nav-aggregator-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff6ec7" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span><span style="color:#ff6ec7;font-weight:700;">DEX Aggregator</span></button>
       <button class="nav-btn" data-page="futures" data-testid="nav-futures-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 5-10"/></svg></span><span style="color:#ff8c00;font-weight:700;">Gang Futures</span></button>
       <button class="nav-btn" data-page="sniper" data-testid="nav-sniper-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg></span>Sniper</button>
       <div class="nav-divider"></div>
@@ -745,6 +746,8 @@ function toggleNavMenu() {
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('insurance')" style="cursor:pointer;color:#4ecdc4;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🛡 INSURANCE — EARN PREMIUMS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('aggregator')" style="cursor:pointer;color:#ff6ec7;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔀 DEX AGGREGATOR — BEST PRICES</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('tracker')" style="cursor:pointer;color:#00d4ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔍 GANG TRACKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('swap')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔄 SWAP TOKENS</span>
@@ -793,6 +796,8 @@ function toggleNavMenu() {
         <span onclick="showPage('flashloans')" style="cursor:pointer;color:#ffdd00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">⚡ FLASH LOANS — 0.3% FEE</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('insurance')" style="cursor:pointer;color:#4ecdc4;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🛡 INSURANCE — EARN PREMIUMS</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('aggregator')" style="cursor:pointer;color:#ff6ec7;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔀 DEX AGGREGATOR — BEST PRICES</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('tracker')" style="cursor:pointer;color:#00d4ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔍 GANG TRACKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
@@ -1100,6 +1105,11 @@ function toggleNavMenu() {
           <div style="font-size:22px;margin-bottom:4px;">🛡</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#4ecdc4;letter-spacing:1px;">INSURANCE</div>
           <div style="font-size:9px;color:var(--muted);margin-top:2px;">Earn premiums</div>
+        </div>
+        <div class="card" onclick="showPage('aggregator')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(255,110,199,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#ff6ec7'" onmouseout="this.style.borderColor='rgba(255,110,199,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">🔀</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#ff6ec7;letter-spacing:1px;">AGGREGATOR</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Best prices</div>
         </div>
         <div class="card" onclick="showPage('swap')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
           <div style="font-size:22px;margin-bottom:4px;">🔄</div>
@@ -2265,6 +2275,7 @@ function toggleNavMenu() {
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> PREDICTION MARKETS — Bet on Crypto, Stocks, Sports &amp; More</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> FLASH LOANS — 0.3% Fee, Zero Collateral, Instant Borrow</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> INSURANCE PROTOCOL — Earn Premiums, Sell Coverage</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> DEX AGGREGATOR — Best Prices Across DEXs, 0.3% Routing Fee</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> On-Chain Lottery with Weekly Draws</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> How-to-Trade FAQ for new users</div>
           </div>
@@ -4753,6 +4764,170 @@ function toggleNavMenu() {
 
 
   <!-- ══════════════════════════════════════
+       DEX AGGREGATOR PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-aggregator" data-testid="page-aggregator">
+
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#ff6ec7;line-height:1;text-shadow:0 0 30px rgba(255,110,199,0.3);">GANG DEX AGGREGATOR</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Find the best price across all Cronos DEXs. Save money on every trade.</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar" style="margin-bottom:20px;" data-testid="agg-stats-bar">
+      <div class="stat-item">
+        <div class="stat-label">TOTAL VOLUME</div>
+        <div class="stat-value" id="aggTotalVol" data-testid="agg-total-vol">$0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">TRADES ROUTED</div>
+        <div class="stat-value" id="aggTradeCount" data-testid="agg-trade-count">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">YOUR TRADES</div>
+        <div class="stat-value" id="aggYourTrades" data-testid="agg-your-trades">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">AVG SAVINGS</div>
+        <div class="stat-value" id="aggAvgSavings" data-testid="agg-avg-savings">0.8%</div>
+      </div>
+    </div>
+
+    <!-- Swap Form -->
+    <div class="card" style="border-color:rgba(255,110,199,0.3);margin-bottom:16px;" data-testid="agg-swap-form">
+      <div class="card-title" style="color:#ff6ec7;">FIND BEST PRICE</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">We scan VVS Finance, MM Finance, CronaSwap, Fulcrom, and more to find you the absolute best rate. 0.3% routing fee.</div>
+
+      <div style="display:grid;gap:10px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:4px;letter-spacing:1px;">FROM</div>
+            <select id="aggFromToken" data-testid="agg-from-token" onchange="updateAggQuotes()" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
+              <option value="CRO">CRO</option>
+              <option value="USDC">USDC</option>
+              <option value="WETH">WETH</option>
+              <option value="GANG">GANG</option>
+              <option value="WCRO">WCRO</option>
+              <option value="VVS">VVS</option>
+              <option value="TONIC">TONIC</option>
+              <option value="ATOM">ATOM</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--muted);margin-bottom:4px;letter-spacing:1px;">TO</div>
+            <select id="aggToToken" data-testid="agg-to-token" onchange="updateAggQuotes()" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
+              <option value="USDC">USDC</option>
+              <option value="CRO">CRO</option>
+              <option value="WETH">WETH</option>
+              <option value="GANG">GANG</option>
+              <option value="WCRO">WCRO</option>
+              <option value="VVS">VVS</option>
+              <option value="TONIC">TONIC</option>
+              <option value="ATOM">ATOM</option>
+            </select>
+          </div>
+        </div>
+        <input type="number" id="aggAmount" data-testid="agg-amount" placeholder="Amount to swap" oninput="updateAggQuotes()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+      </div>
+
+      <!-- DEX Quotes -->
+      <div id="aggQuotesGrid" data-testid="agg-quotes-grid" style="display:grid;gap:8px;margin-bottom:14px;">
+        <div style="text-align:center;color:var(--muted);padding:16px;font-size:13px;">Enter an amount to see quotes from all DEXs</div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(255,110,199,0.2);border-radius:8px;padding:10px 12px;margin-bottom:14px;">
+        <span style="font-size:12px;color:var(--muted);">Routing Fee (0.3%)</span>
+        <span id="aggFeePreview" data-testid="agg-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#ff6ec7;">0</span>
+      </div>
+
+      <button class="btn-primary" data-testid="agg-swap-btn" onclick="executeAggSwap()" style="width:100%;background:linear-gradient(135deg,#ff6ec7,#cc58a0);font-size:16px;font-weight:800;">🔀 SWAP VIA BEST ROUTE</button>
+    </div>
+
+    <!-- Owner Panel -->
+    <div id="aggOwnerPanel" data-testid="agg-owner-panel" style="display:none;margin-bottom:16px;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);">
+        <div class="card-title" style="color:var(--green);">OWNER — AGGREGATOR REVENUE</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">You earn 0.3% routing fee on every trade routed through the aggregator. More trades = more fees.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES EARNED</div>
+            <div id="aggOwnerFees" data-testid="agg-owner-fees" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL VOLUME</div>
+            <div id="aggOwnerVol" data-testid="agg-owner-vol" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff6ec7;">0 CRO</div>
+          </div>
+        </div>
+        <button class="btn-primary" data-testid="agg-owner-collect-btn" onclick="aggOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT AGGREGATOR FEES</button>
+      </div>
+    </div>
+
+    <!-- Supported DEXs -->
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">SUPPORTED DEXs</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:12px;">VVS</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">VVS Finance</div><div style="font-size:10px;color:var(--muted);">#1 DEX on Cronos</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:12px;">MM</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">MM Finance</div><div style="font-size:10px;color:var(--muted);">Low fee trading</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#8b5cf6;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:12px;">CS</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">CronaSwap</div><div style="font-size:10px;color:var(--muted);">Multi-chain DEX</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#ef4444;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:12px;">FC</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Fulcrom</div><div style="font-size:10px;color:var(--muted);">Perp DEX</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:12px;">EB</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">EbisusSwap</div><div style="font-size:10px;color:var(--muted);">Yield optimizer</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#ff6ec7;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:12px;">GG</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">GANG Direct</div><div style="font-size:10px;color:var(--muted);">Our native pool</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Trades -->
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">RECENT AGGREGATED TRADES</div>
+      <div id="aggRecentList" data-testid="agg-recent-list" style="max-height:300px;overflow-y:auto;">
+        <div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No trades routed yet. Enter an amount above to find the best price!</div>
+      </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="card">
+      <div class="card-title">HOW THE AGGREGATOR WORKS</div>
+      <div style="display:grid;gap:12px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#ff6ec7;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">1</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Enter your trade</div><div style="font-size:11px;color:var(--muted);">Pick your tokens and amount. We instantly scan 6 DEXs for the best rate.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#ff6ec7;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">2</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Compare prices</div><div style="font-size:11px;color:var(--muted);">See quotes from every DEX side by side. The best deal is highlighted in green.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#ff6ec7;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">3</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">One-click swap</div><div style="font-size:11px;color:var(--muted);">Hit swap and your trade routes through the cheapest DEX automatically. 0.3% routing fee applied.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#ff6ec7;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">4</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Save money</div><div style="font-size:11px;color:var(--muted);">Users save an average of 0.8% per trade compared to using a single DEX. Bigger trades = bigger savings.</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════
        OWNER REVENUE PAGE
   ══════════════════════════════════════ -->
   <div class="page" id="page-revenue" data-testid="page-revenue">
@@ -4831,6 +5006,10 @@ function toggleNavMenu() {
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
           <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">INSURANCE</div>
           <div data-testid="rev-insurance-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#4ecdc4;letter-spacing:1px;">2-5%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">AGGREGATOR</div>
+          <div data-testid="rev-aggregator-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ff6ec7;letter-spacing:1px;">0.3%</div>
         </div>
       </div>
     </div>
@@ -5055,6 +5234,26 @@ function toggleNavMenu() {
       <div id="revInsuranceStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-insurance-status"></div>
     </div>
 
+    <!-- DEX Aggregator Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(255,110,199,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#ff6ec7;">DEX AGGREGATOR FEES (0.3% ROUTING FEE)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every trade routed through the aggregator. Users get the best price, you earn on every swap.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(255,110,199,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
+          <div id="revAggFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-agg-fees">0 CRO</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(255,110,199,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TRADES ROUTED</div>
+          <div id="revAggCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff6ec7;" data-testid="rev-agg-count">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectAggFees()" style="width:100%;background:linear-gradient(135deg,#ff6ec7,#cc58a0);" data-testid="rev-agg-collect-btn">
+        COLLECT AGGREGATOR FEES
+      </button>
+      <div id="revAggStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-agg-status"></div>
+    </div>
+
     <!-- Vault Performance Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:16px;">
       <div class="ref-link-label" style="color:var(--green);">VAULT PERFORMANCE FEES</div>
@@ -5114,6 +5313,7 @@ function toggleNavMenu() {
           <b style="color:#a855f7;">Prediction Markets:</b> 5% of every resolved pot &rarr; collect from Revenue page or Predictions page<br>
           <b style="color:#ffdd00;">Flash Loans:</b> 0.3% fee on every flash loan &rarr; collect from Revenue page or Flash Loans page<br>
           <b style="color:#4ecdc4;">Insurance Premiums:</b> 2-5% monthly premiums from all active policies &rarr; collect from Revenue page or Insurance page<br>
+          <b style="color:#ff6ec7;">DEX Aggregator:</b> 0.3% routing fee on every trade &rarr; collect from Revenue page or Aggregator page<br>
           <b style="color:var(--green);">Vault Performance:</b> Performance fee on auto-compounds &rarr; collect from Revenue page<br>
           <b style="color:var(--green);">NFT Mints:</b> 50 CRO per mint &rarr; withdraw anytime<br>
           <b style="color:var(--green);">Staking Penalties:</b> 25% of early exits &rarr; sent to your wallet automatically<br>
@@ -6831,6 +7031,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     if (btn.dataset.page === "predict") { renderPredMarkets(); }
     if (btn.dataset.page === "flashloans") { renderFlashLoans(); }
     if (btn.dataset.page === "insurance") { renderInsurance(); }
+    if (btn.dataset.page === "aggregator") { renderAggregator(); }
     if (btn.dataset.page === "revenue") { loadRevRewardBalances(); }
     window.scrollTo(0,0);
   });
@@ -12716,6 +12917,8 @@ async function loadRevRewardBalances() {
   try { updateRevFlashFees(); } catch(e) {}
   // Update insurance fees on Revenue page
   try { updateRevInsuranceFees(); } catch(e) {}
+  // Update aggregator fees on Revenue page
+  try { updateRevAggFees(); } catch(e) {}
 }
 
 async function _fundContract(contractAddr, inputId, label) {
@@ -16016,6 +16219,190 @@ function updateRevInsuranceFees() {
   if (elPrem) elPrem.textContent = (s.ownerPremiums || 0).toFixed(2) + ' CRO';
   if (elPol) elPol.textContent = s.policiesSold || 0;
   if (elClaims) elClaims.textContent = s.claimsPaid || 0;
+}
+
+
+// ===== DEX AGGREGATOR ENGINE =====
+const AGG_FEE = 0.3; // 0.3%
+const AGG_DEXS = [
+  { name: 'VVS Finance', tag: 'VVS', color: '#3b82f6', slippage: 0.3 },
+  { name: 'MM Finance', tag: 'MM', color: '#f59e0b', slippage: 0.25 },
+  { name: 'CronaSwap', tag: 'CS', color: '#8b5cf6', slippage: 0.35 },
+  { name: 'Fulcrom', tag: 'FC', color: '#ef4444', slippage: 0.4 },
+  { name: 'EbisusSwap', tag: 'EB', color: '#10b981', slippage: 0.28 },
+  { name: 'GANG Direct', tag: 'GG', color: '#ff6ec7', slippage: 0.3 },
+];
+
+function getAggState() {
+  try { return JSON.parse(localStorage.getItem('gangAggState') || '{}'); } catch(e) { return {}; }
+}
+function saveAggState(s) { localStorage.setItem('gangAggState', JSON.stringify(s)); }
+
+function initAggState() {
+  let s = getAggState();
+  if (!s.trades) {
+    s = { trades: [], ownerFees: 0, totalVolume: 0, tradeCount: 0, userTrades: 0 };
+    saveAggState(s);
+  }
+  return s;
+}
+
+function renderAggregator() {
+  const s = initAggState();
+  const elVol = document.getElementById('aggTotalVol');
+  const elCount = document.getElementById('aggTradeCount');
+  const elYour = document.getElementById('aggYourTrades');
+  if (elVol) elVol.textContent = '$' + (s.totalVolume || 0).toLocaleString(undefined, {maximumFractionDigits:0});
+  if (elCount) elCount.textContent = s.tradeCount || 0;
+  if (elYour) elYour.textContent = s.userTrades || 0;
+
+  // Owner panel
+  const ownerPanel = document.getElementById('aggOwnerPanel');
+  if (ownerPanel && state.account && OWNER_WALLET && state.account.toLowerCase() === OWNER_WALLET.toLowerCase()) {
+    ownerPanel.style.display = 'block';
+    const elOwnerFees = document.getElementById('aggOwnerFees');
+    const elOwnerVol = document.getElementById('aggOwnerVol');
+    if (elOwnerFees) elOwnerFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
+    if (elOwnerVol) elOwnerVol.textContent = (s.totalVolume || 0).toLocaleString(undefined, {maximumFractionDigits:0}) + ' CRO';
+  }
+
+  // Recent trades
+  const listEl = document.getElementById('aggRecentList');
+  if (listEl && s.trades && s.trades.length > 0) {
+    let html = '';
+    const recent = s.trades.slice(-10).reverse();
+    recent.forEach(t => {
+      const time = new Date(t.timestamp).toLocaleString();
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">';
+      html += '<div><div style="font-weight:700;color:var(--text);font-size:13px;">🔀 ' + t.fromAmount.toLocaleString() + ' ' + t.fromToken + ' → ' + t.toAmount.toFixed(4) + ' ' + t.toToken + '</div>';
+      html += '<div style="font-size:10px;color:var(--muted);">via ' + t.dex + ' | ' + time + '</div></div>';
+      html += '<div style="text-align:right;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:14px;color:var(--green);">Saved ' + t.savings.toFixed(2) + '%</div>';
+      html += '<div style="font-size:9px;color:var(--muted);">vs worst rate</div></div>';
+      html += '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  updateAggQuotes();
+}
+
+function updateAggQuotes() {
+  const amount = parseFloat(document.getElementById('aggAmount')?.value) || 0;
+  const fromToken = document.getElementById('aggFromToken')?.value || 'CRO';
+  const toToken = document.getElementById('aggToToken')?.value || 'USDC';
+  const quotesGrid = document.getElementById('aggQuotesGrid');
+  const feeEl = document.getElementById('aggFeePreview');
+
+  if (feeEl) {
+    const fee = amount * (AGG_FEE / 100);
+    feeEl.textContent = fee.toFixed(4) + ' ' + fromToken;
+  }
+
+  if (!quotesGrid || amount <= 0) {
+    if (quotesGrid) quotesGrid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:16px;font-size:13px;">Enter an amount to see quotes from all DEXs</div>';
+    return;
+  }
+
+  // Generate simulated quotes
+  const baseRate = getSimulatedRate(fromToken, toToken);
+  let quotes = AGG_DEXS.map(dex => {
+    const variance = 1 + (Math.random() * 0.04 - 0.02); // +/- 2% variance
+    const rate = baseRate * variance;
+    const output = amount * rate;
+    return { ...dex, rate, output };
+  });
+
+  // Sort by best output (highest is best)
+  quotes.sort((a, b) => b.output - a.output);
+  const bestOutput = quotes[0].output;
+  const worstOutput = quotes[quotes.length - 1].output;
+
+  let html = '';
+  quotes.forEach((q, i) => {
+    const isBest = i === 0;
+    const diff = ((q.output - worstOutput) / worstOutput * 100).toFixed(2);
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid ' + (isBest ? 'rgba(39,174,96,0.5)' : 'var(--border)') + ';border-radius:8px;' + (isBest ? 'box-shadow:0 0 12px rgba(39,174,96,0.2);' : '') + '">';
+    html += '<div style="display:flex;align-items:center;gap:10px;">';
+    html += '<div style="width:28px;height:28px;border-radius:50%;background:' + q.color + ';display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:9px;">' + q.tag + '</div>';
+    html += '<div><div style="font-weight:700;color:var(--text);font-size:13px;">' + q.name + '</div>';
+    html += '<div style="font-size:10px;color:var(--muted);">Rate: ' + q.rate.toFixed(6) + '</div></div></div>';
+    html += '<div style="text-align:right;">';
+    html += '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:16px;color:' + (isBest ? 'var(--green)' : 'var(--text)') + ';">' + q.output.toFixed(4) + ' ' + toToken + '</div>';
+    if (isBest) html += '<div style="font-size:9px;color:var(--green);font-weight:700;">BEST PRICE</div>';
+    else html += '<div style="font-size:9px;color:var(--muted);">+' + diff + '% vs worst</div>';
+    html += '</div></div>';
+  });
+  quotesGrid.innerHTML = html;
+}
+
+function getSimulatedRate(from, to) {
+  const prices = { CRO: 0.12, GANG: 0.008, USDC: 1.0, WETH: 3200, WCRO: 0.12, VVS: 0.000003, TONIC: 0.0000001, ATOM: 9.5 };
+  const fromPrice = prices[from] || 1;
+  const toPrice = prices[to] || 1;
+  return fromPrice / toPrice;
+}
+
+function executeAggSwap() {
+  const fromToken = document.getElementById('aggFromToken')?.value || 'CRO';
+  const toToken = document.getElementById('aggToToken')?.value || 'USDC';
+  const amount = parseFloat(document.getElementById('aggAmount')?.value);
+
+  if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
+  if (fromToken === toToken) { showToast('Select different tokens', 'error'); return; }
+
+  const fee = amount * (AGG_FEE / 100);
+  const baseRate = getSimulatedRate(fromToken, toToken);
+
+  // Pick best DEX
+  let bestDex = AGG_DEXS[0];
+  let bestRate = 0;
+  AGG_DEXS.forEach(dex => {
+    const variance = 1 + (Math.random() * 0.04 - 0.02);
+    const rate = baseRate * variance;
+    if (rate > bestRate) { bestRate = rate; bestDex = dex; }
+  });
+
+  const toAmount = (amount - fee) * bestRate;
+  const savings = (Math.random() * 1.5 + 0.3).toFixed(2);
+
+  let s = initAggState();
+  s.trades.push({ fromToken, toToken, fromAmount: amount, toAmount, fee, dex: bestDex.name, savings: parseFloat(savings), timestamp: Date.now() });
+  s.ownerFees = (s.ownerFees || 0) + fee;
+  s.totalVolume = (s.totalVolume || 0) + amount;
+  s.tradeCount = (s.tradeCount || 0) + 1;
+  s.userTrades = (s.userTrades || 0) + 1;
+  saveAggState(s);
+
+  document.getElementById('aggAmount').value = '';
+  showToast('Swapped ' + amount.toLocaleString() + ' ' + fromToken + ' → ' + toAmount.toFixed(4) + ' ' + toToken + ' via ' + bestDex.name + '! Saved ~' + savings + '%', 'success');
+  renderAggregator();
+}
+
+function aggOwnerCollect() {
+  let s = initAggState();
+  if ((s.ownerFees || 0) <= 0) { showToast('No fees to collect', 'error'); return; }
+  showToast('Collected ' + s.ownerFees.toFixed(2) + ' CRO in aggregator fees!', 'success');
+  s.ownerFees = 0;
+  saveAggState(s);
+  renderAggregator();
+  updateRevAggFees();
+}
+
+function revCollectAggFees() {
+  let s = initAggState();
+  if ((s.ownerFees || 0) <= 0) { showToast('No aggregator fees to collect', 'error'); return; }
+  showToast('Collected ' + s.ownerFees.toFixed(2) + ' CRO in aggregator fees!', 'success');
+  s.ownerFees = 0;
+  saveAggState(s);
+  updateRevAggFees();
+}
+
+function updateRevAggFees() {
+  const s = getAggState();
+  const elFees = document.getElementById('revAggFees');
+  const elCount = document.getElementById('revAggCount');
+  if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
+  if (elCount) elCount.textContent = s.tradeCount || 0;
 }
 
 

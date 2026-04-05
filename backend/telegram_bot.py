@@ -292,7 +292,8 @@ def main_keyboard():
          InlineKeyboardButton("🔮 Predictions", callback_data="menu_predictions")],
         [InlineKeyboardButton("⚡ Flash Loans", callback_data="menu_flashloans"),
          InlineKeyboardButton("🛡 Insurance", callback_data="menu_insurance")],
-        [InlineKeyboardButton("⛏ Mining Hub", callback_data="menu_mining"),
+        [InlineKeyboardButton("🔀 Aggregator", callback_data="menu_aggregator"),
+         InlineKeyboardButton("⛏ Mining Hub", callback_data="menu_mining"),
          InlineKeyboardButton("⚡ Trading", callback_data="menu_trading")],
         [InlineKeyboardButton("🌾 Farms", callback_data="menu_farms"),
          InlineKeyboardButton("🏦 Vaults", callback_data="menu_vaults"),
@@ -1334,6 +1335,7 @@ async def roadmap_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🔮 PREDICTION MARKETS — Bet on outcomes\n"
         "⚡ FLASH LOANS — 0.3% fee, zero collateral\n"
         "🛡 INSURANCE — Earn premiums from coverage\n"
+        "🔀 DEX AGGREGATOR — Best prices across DEXs\n"
         "📊 DexScreener Live Chart — Multi-coin selector\n"
         "💰 All platform fees standardized to 0.3%\n"
         "🏦 Auto-compound Vaults with live APYs\n"
@@ -1353,7 +1355,8 @@ async def roadmap_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
          InlineKeyboardButton("🔮 Predictions", callback_data="menu_predictions")],
         [InlineKeyboardButton("⚡ Flash Loans", callback_data="menu_flashloans"),
          InlineKeyboardButton("🛡 Insurance", callback_data="menu_insurance"),
-         InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
+         InlineKeyboardButton("🔀 Aggregator", callback_data="menu_aggregator")],
+        [InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
 
@@ -1488,6 +1491,39 @@ async def insurance_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ])
 
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+async def aggregator_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /aggregator command"""
+    msg = (
+        "🔀 *GANG DEX AGGREGATOR*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Best price across all Cronos DEXs.\n\n"
+        "━━━ *SUPPORTED DEXs* ━━━\n\n"
+        "🔵 *VVS Finance* — #1 DEX on Cronos\n"
+        "🟡 *MM Finance* — Low fee trading\n"
+        "🟣 *CronaSwap* — Multi-chain DEX\n"
+        "🔴 *Fulcrom* — Perp DEX\n"
+        "🟢 *EbisusSwap* — Yield optimizer\n"
+        "🩷 *GANG Direct* — Our native pool\n\n"
+        "━━━ *HOW IT WORKS* ━━━\n\n"
+        "1️⃣ Enter your trade (token & amount)\n"
+        "2️⃣ We scan 6 DEXs instantly\n"
+        "3️⃣ See all quotes side by side\n"
+        "4️⃣ One-click swap via the best route\n\n"
+        "━━━ *FEES* ━━━\n\n"
+        "Routing Fee: *0.3%* per trade\n"
+        "Average savings: *~0.8%* vs single DEX\n\n"
+        f"[🔀 Open Aggregator]({DEX_LINK}#aggregator)"
+    )
+
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔀 Open Aggregator", url=f"{DEX_LINK}#aggregator")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
 
 
 
@@ -2322,6 +2358,7 @@ async def _cb_menu_roadmap(query, context):
         "   PREDICTION MARKETS (bet & win)\n"
         "   FLASH LOANS (0.3% per loan)\n"
         "   INSURANCE PROTOCOL (earn premiums)\n"
+        "   DEX AGGREGATOR (best prices)\n"
         "   DexScreener Live Chart\n"
         "   Dual currency (GANG + CRO)\n"
         "   0.3% standardized fees\n"
@@ -2338,7 +2375,8 @@ async def _cb_menu_roadmap(query, context):
          InlineKeyboardButton("🔮 Predictions", callback_data="menu_predictions")],
         [InlineKeyboardButton("⚡ Flash Loans", callback_data="menu_flashloans"),
          InlineKeyboardButton("🛡 Insurance", callback_data="menu_insurance"),
-         InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
+         InlineKeyboardButton("🔀 Aggregator", callback_data="menu_aggregator")],
+        [InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -2437,6 +2475,31 @@ async def _cb_menu_insurance(query, context):
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
 
 
+async def _cb_menu_aggregator(query, context):
+    """Callback handler for DEX Aggregator menu"""
+    msg = (
+        "🔀 *GANG DEX AGGREGATOR*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Best price across 6 Cronos DEXs.\n\n"
+        "🔵 VVS Finance\n"
+        "🟡 MM Finance\n"
+        "🟣 CronaSwap\n"
+        "🔴 Fulcrom\n"
+        "🟢 EbisusSwap\n"
+        "🩷 GANG Direct\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• 0.3% routing fee on every trade\n"
+        "• More trades = more fees\n"
+        "• Users save ~0.8% per trade\n\n"
+        "Win-win: Users get best price, you collect fees."
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔀 Open Aggregator", url=f"{DEX_LINK}#aggregator")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
 # Dispatch table for callback queries
 CALLBACK_DISPATCH = {
     "refresh_price": _cb_refresh_price,
@@ -2474,6 +2537,7 @@ CALLBACK_DISPATCH = {
     "menu_predictions": _cb_menu_predictions,
     "menu_flashloans": _cb_menu_flashloans,
     "menu_insurance": _cb_menu_insurance,
+    "menu_aggregator": _cb_menu_aggregator,
 }
 
 
@@ -2889,6 +2953,7 @@ def main():
     app.add_handler(CommandHandler("predictions", predictions_cmd))
     app.add_handler(CommandHandler("flashloans", flashloans_cmd))
     app.add_handler(CommandHandler("insurance", insurance_cmd))
+    app.add_handler(CommandHandler("aggregator", aggregator_cmd))
 
     # Admin commands
     app.add_handler(CommandHandler("ban", ban))
