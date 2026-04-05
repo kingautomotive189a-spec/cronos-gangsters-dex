@@ -670,6 +670,11 @@
       <button class="nav-btn" data-page="revstaking" data-testid="nav-revstaking-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>Revenue Staking<span class="nav-desc">Earn fees</span></button>
       <button class="nav-btn" data-page="lending" data-testid="nav-lending-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 14h4"/><path d="M14 14h4"/></svg></span>Lend & Borrow</button>
       <button class="nav-btn" data-page="lottery" data-testid="nav-lottery-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="12" y1="4" x2="12" y2="20"/></svg></span>Lottery</button>
+      <button class="nav-btn" data-page="checkin" data-testid="nav-checkin-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M9 16l2 2 4-4"/></svg></span>Daily Check-in<span class="nav-desc">Streaks</span></button>
+      <button class="nav-btn" data-page="viptiers" data-testid="nav-viptiers-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>VIP Tiers<span class="nav-desc">GANG Holder</span></button>
+      <button class="nav-btn" data-page="squad" data-testid="nav-squad-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Squad Farming<span class="nav-desc">Crew Boost</span></button>
+      <button class="nav-btn" data-page="bonds" data-testid="nav-bonds-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>POL Bonds<span class="nav-desc">Discounted GANG</span></button>
+      <button class="nav-btn" data-page="compete" data-testid="nav-compete-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>Competitions<span class="nav-desc">Win Prizes</span></button>
       <div class="nav-divider"></div>
 
       <div class="nav-group-label">MARKETS</div>
@@ -3195,6 +3200,87 @@ function toggleNavMenu() {
       </div>
 
     </div>
+
+    <!-- ═══════ NFT STAKING SECTION ═══════ -->
+    <div style="margin-top:32px;" id="nftStakingSection" data-testid="nft-staking-section">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+        <div style="flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(212,160,23,0.25));"></div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:var(--gold);white-space:nowrap;">NFT STAKING</div>
+        <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(212,160,23,0.25),transparent);"></div>
+      </div>
+      <div class="stats-bar" style="margin-bottom:20px;">
+        <div class="stat-item"><div class="stat-label">NFTs STAKED</div><div class="stat-value" id="nftTotalStaked" style="color:var(--gold);" data-testid="nft-total-staked">247</div></div>
+        <div class="stat-item"><div class="stat-label">YOUR STAKED</div><div class="stat-value" id="nftYourStaked" style="color:var(--green);" data-testid="nft-your-staked">0</div></div>
+        <div class="stat-item"><div class="stat-label">REWARD / NFT / DAY</div><div class="stat-value" style="color:var(--gold);">1 GANG</div></div>
+        <div class="stat-item"><div class="stat-label">YOUR PENDING</div><div class="stat-value" id="nftPendingRewards" style="color:var(--green);" data-testid="nft-pending">0 GANG</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div>
+          <div class="card" style="border-color:rgba(212,160,23,0.35);margin-bottom:16px;">
+            <div class="card-title" style="margin-bottom:4px;">STAKE YOUR NFT</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Stake any Cronos Gangsters NFT. Each earns <strong style="color:var(--gold);">1 GANG per day</strong>. 0.3% fee on claim.</div>
+            <div style="display:flex;gap:8px;margin-bottom:10px;">
+              <input type="number" id="nftStakeTokenId" data-testid="nft-stake-input" placeholder="Token ID (e.g. 42)" min="1" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'">
+              <button onclick="nftStakeAction()" data-testid="nft-stake-btn" style="background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;border-radius:8px;padding:10px 18px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;">STAKE NFT</button>
+            </div>
+          </div>
+          <div class="card" style="border-color:rgba(212,160,23,0.2);">
+            <div class="card-title" style="margin-bottom:12px;">RARITY MULTIPLIERS</div>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--muted);">
+              <div style="display:flex;justify-content:space-between;"><span>Common</span><span style="color:var(--text);">1x — 1 GANG/day</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#4fc3f7;">Rare</span><span style="color:#4fc3f7;">1.5x — 1.5 GANG/day</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#ce93d8;">Epic</span><span style="color:#ce93d8;">2x — 2 GANG/day</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:var(--gold);">Legendary</span><span style="color:var(--gold);">3x — 3 GANG/day</span></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:16px;border-color:rgba(39,174,96,0.35);">
+            <div class="card-title" style="color:var(--green);">PENDING NFT REWARDS</div>
+            <div style="text-align:center;padding:16px 0;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--green);letter-spacing:2px;line-height:1;" id="nftClaimableDisplay" data-testid="nft-claimable">0.0000</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px;">$GANG earned from NFT staking</div>
+            </div>
+            <button onclick="nftClaimRewards()" data-testid="nft-claim-btn" style="width:100%;padding:14px;border-radius:10px;background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;">CLAIM GANG REWARDS</button>
+          </div>
+          <div class="card" style="border-color:rgba(212,160,23,0.2);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+              <div class="card-title" style="margin-bottom:0;">YOUR STAKED NFTS</div>
+              <div style="font-size:11px;color:var(--muted);" id="nftStakedCount">0 staked</div>
+            </div>
+            <div id="nftStakedGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;min-height:80px;">
+              <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:12px;">No NFTs staked yet. Stake to earn GANG daily.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ AUTO-BUYBACK & BURN TRACKER ═══════ -->
+    <div style="margin-top:32px;" id="buybackBurnSection" data-testid="buyback-section">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+        <div style="flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(231,76,60,0.25));"></div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:#e53935;white-space:nowrap;">AUTO-BUYBACK & BURN</div>
+        <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(231,76,60,0.25),transparent);"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div style="background:var(--surface);border:1px solid rgba(231,76,60,0.3);border-radius:14px;padding:18px;text-align:center;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">TOTAL GANG BURNED</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e53935;margin-top:6px;" id="buybackGangTotal" data-testid="buyback-total">4,238,105</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid rgba(231,76,60,0.3);border-radius:14px;padding:18px;text-align:center;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">CRO SPENT ON BUYBACK</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);margin-top:6px;" id="buybackCROSpent" data-testid="buyback-cro">12,714</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid rgba(231,76,60,0.3);border-radius:14px;padding:18px;text-align:center;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">BURN RATE</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#ff9800;margin-top:6px;">10%</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">of all platform fees</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;text-align:center;font-size:11px;color:var(--muted);">10% of every swap, leverage, lending, and staking fee is used to buy GANG from the market and burn it forever — reducing supply and increasing scarcity.</div>
+    </div>
+
   </div>
 
   <!-- ══════════════════════════════════════
@@ -6480,6 +6566,222 @@ function toggleNavMenu() {
       </div>
     </div>
 
+  </div>
+
+
+
+  <!-- ═══════════════════════════════════════════ DAILY CHECK-IN PAGE ═══════════════════════════════════════════ -->
+  <div class="page" id="page-checkin" data-testid="page-checkin">
+    <div class="ref-hero" style="margin-bottom:20px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:var(--gold);line-height:1;">DAILY CHECK-IN</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px;">Check in every day to earn $GANG. Build streaks for bonus rewards!</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">CURRENT STREAK</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--gold);margin-top:6px;" id="checkinStreak" data-testid="checkin-streak">0</div>
+        <div style="font-size:10px;color:var(--muted);">days</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">TOTAL EARNED</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--green);margin-top:6px;" id="checkinTotalEarned" data-testid="checkin-earned">0</div>
+        <div style="font-size:10px;color:var(--muted);">$GANG</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">BEST STREAK</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#ff9800;margin-top:6px;" id="checkinBestStreak" data-testid="checkin-best">0</div>
+        <div style="font-size:10px;color:var(--muted);">days</div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.25);border-radius:16px;padding:24px;text-align:center;margin-bottom:20px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);margin-bottom:12px;">THIS WEEK</div>
+      <div id="checkinWeekGrid" data-testid="checkin-week" style="display:flex;justify-content:center;gap:8px;margin-bottom:20px;"></div>
+      <button onclick="doCheckin()" id="checkinBtn" data-testid="checkin-btn" style="padding:16px 48px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;cursor:pointer;transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">CHECK IN NOW</button>
+      <div id="checkinStatus" data-testid="checkin-status" style="font-size:12px;color:var(--muted);margin-top:8px;"></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">STREAK BONUSES</div>
+      <div style="display:grid;gap:6px;">
+        <div style="display:flex;justify-content:space-between;background:var(--surface2);border-radius:8px;padding:10px 14px;"><span style="color:var(--text);font-size:12px;">Days 1-6</span><span style="color:var(--green);font-weight:700;font-size:12px;">+10 GANG/day</span></div>
+        <div style="display:flex;justify-content:space-between;background:var(--surface2);border-radius:8px;padding:10px 14px;"><span style="color:#4fc3f7;font-size:12px;">Day 7 (Weekly)</span><span style="color:#4fc3f7;font-weight:700;font-size:12px;">+100 GANG bonus!</span></div>
+        <div style="display:flex;justify-content:space-between;background:var(--surface2);border-radius:8px;padding:10px 14px;"><span style="color:#ce93d8;font-size:12px;">14-Day Streak</span><span style="color:#ce93d8;font-weight:700;font-size:12px;">+500 GANG bonus!</span></div>
+        <div style="display:flex;justify-content:space-between;background:var(--surface2);border-radius:8px;padding:10px 14px;"><span style="color:var(--gold);font-size:12px;">30-Day Streak</span><span style="color:var(--gold);font-weight:700;font-size:12px;">+2,000 GANG bonus!</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ VIP TIERS PAGE ═══════════════════════════════════════════ -->
+  <div class="page" id="page-viptiers" data-testid="page-viptiers">
+    <div class="ref-hero" style="margin-bottom:20px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:var(--gold);line-height:1;">VIP TIERS</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px;">Hold $GANG to unlock exclusive perks, fee discounts, and rewards</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:20px;text-align:center;margin-bottom:20px;">
+      <div style="font-size:10px;color:var(--muted);letter-spacing:2px;">YOUR TIER</div>
+      <div id="vipCurrentTier" data-testid="vip-tier" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--muted);margin-top:6px;">CONNECT WALLET</div>
+      <div id="vipGangBalance" data-testid="vip-balance" style="font-size:13px;color:var(--muted);margin-top:4px;">—</div>
+    </div>
+    <div style="display:grid;gap:12px;" id="vipTiersGrid" data-testid="vip-tiers-grid">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;align-items:center;gap:16px;">
+        <div style="width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,#78909c,#546e7a);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff;">B</div>
+        <div style="flex:1;"><div style="font-weight:700;color:var(--text);">BRONZE</div><div style="font-size:10px;color:var(--muted);">Hold 10,000+ GANG</div></div>
+        <div style="text-align:right;font-size:11px;color:var(--muted);">5% fee discount<br>Early access alerts</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid rgba(192,192,192,0.3);border-radius:14px;padding:18px;display:flex;align-items:center;gap:16px;">
+        <div style="width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,#bdbdbd,#9e9e9e);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff;">S</div>
+        <div style="flex:1;"><div style="font-weight:700;color:var(--text);">SILVER</div><div style="font-size:10px;color:var(--muted);">Hold 100,000+ GANG</div></div>
+        <div style="text-align:right;font-size:11px;color:var(--muted);">10% fee discount<br>Priority support<br>2x check-in rewards</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.4);border-radius:14px;padding:18px;display:flex;align-items:center;gap:16px;">
+        <div style="width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#000;">G</div>
+        <div style="flex:1;"><div style="font-weight:700;color:var(--gold);">GOLD</div><div style="font-size:10px;color:var(--muted);">Hold 1,000,000+ GANG</div></div>
+        <div style="text-align:right;font-size:11px;color:var(--gold);">20% fee discount<br>Exclusive NFT drops<br>3x check-in rewards<br>DAO voting power 2x</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid rgba(156,39,176,0.4);border-radius:14px;padding:18px;display:flex;align-items:center;gap:16px;">
+        <div style="width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,#ab47bc,#7b1fa2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff;">D</div>
+        <div style="flex:1;"><div style="font-weight:700;color:#ce93d8;">DIAMOND</div><div style="font-size:10px;color:var(--muted);">Hold 10,000,000+ GANG</div></div>
+        <div style="text-align:right;font-size:11px;color:#ce93d8;">50% fee discount<br>Revenue share access<br>5x check-in rewards<br>OG Gangster badge</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ SQUAD FARMING PAGE ═══════════════════════════════════════════ -->
+  <div class="page" id="page-squad" data-testid="page-squad">
+    <div class="ref-hero" style="margin-bottom:20px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:var(--gold);line-height:1;">SQUAD FARMING</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px;">Form a crew and farm together. Bigger squads = bigger APY boosts!</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">ACTIVE SQUADS</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);margin-top:6px;" id="squadActiveCount" data-testid="squad-count">12</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">TOTAL MEMBERS</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green);margin-top:6px;" id="squadTotalMembers" data-testid="squad-members">89</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">YOUR SQUAD</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:#ff9800;margin-top:6px;" id="squadYourSquad" data-testid="squad-yours">—</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div class="card" style="border-color:rgba(212,160,23,0.35);">
+        <div class="card-title">CREATE A SQUAD</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Name your crew and invite friends. 0.3% fee on squad rewards.</div>
+        <input type="text" id="squadNameInput" data-testid="squad-name-input" placeholder="Squad Name (e.g. CRO Kings)" maxlength="24" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;margin-bottom:10px;box-sizing:border-box;">
+        <button onclick="createSquad()" data-testid="squad-create-btn" style="width:100%;padding:14px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;">CREATE SQUAD</button>
+      </div>
+      <div class="card" style="border-color:rgba(39,174,96,0.35);">
+        <div class="card-title" style="color:var(--green);">JOIN A SQUAD</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Enter a squad code to join an existing crew and boost together.</div>
+        <input type="text" id="squadJoinCode" data-testid="squad-join-input" placeholder="Squad Code" maxlength="8" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;margin-bottom:10px;box-sizing:border-box;">
+        <button onclick="joinSquad()" data-testid="squad-join-btn" style="width:100%;padding:14px;border-radius:10px;background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;">JOIN SQUAD</button>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">APY BOOST TABLE</div>
+      <div style="display:grid;gap:6px;">
+        <div style="display:flex;justify-content:space-between;background:var(--surface2);border-radius:8px;padding:10px 14px;"><span style="color:var(--text);font-size:12px;">2-3 Members</span><span style="color:var(--green);font-weight:700;font-size:12px;">+5% APY Boost</span></div>
+        <div style="display:flex;justify-content:space-between;background:var(--surface2);border-radius:8px;padding:10px 14px;"><span style="color:#4fc3f7;font-size:12px;">4-6 Members</span><span style="color:#4fc3f7;font-weight:700;font-size:12px;">+10% APY Boost</span></div>
+        <div style="display:flex;justify-content:space-between;background:var(--surface2);border-radius:8px;padding:10px 14px;"><span style="color:#ce93d8;font-size:12px;">7-9 Members</span><span style="color:#ce93d8;font-weight:700;font-size:12px;">+20% APY Boost</span></div>
+        <div style="display:flex;justify-content:space-between;background:var(--surface2);border-radius:8px;padding:10px 14px;"><span style="color:var(--gold);font-size:12px;">10+ Members</span><span style="color:var(--gold);font-weight:700;font-size:12px;">+30% APY Boost</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ POL BONDS PAGE ═══════════════════════════════════════════ -->
+  <div class="page" id="page-bonds" data-testid="page-bonds">
+    <div class="ref-hero" style="margin-bottom:20px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:var(--gold);line-height:1;">POL BONDS</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px;">Protocol-Owned Liquidity — Buy $GANG at a discount using LP tokens. 5-day vesting.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">TOTAL BONDED</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);margin-top:6px;" data-testid="bonds-total">$142,500</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">GANG DISTRIBUTED</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green);margin-top:6px;" data-testid="bonds-distributed">47,500,000</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">CURRENT DISCOUNT</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#4fc3f7;margin-top:6px;" data-testid="bonds-discount">8%</div>
+      </div>
+    </div>
+    <div style="display:grid;gap:12px;margin-bottom:20px;" id="bondsGrid" data-testid="bonds-grid">
+      <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.25);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;">
+        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" style="width:40px;height:40px;border-radius:50%;" loading="lazy">
+        <div style="flex:1;"><div style="font-weight:700;color:var(--text);">CRO-GANG LP Bond</div><div style="font-size:10px;color:var(--muted);">Deposit CRO-GANG LP tokens for discounted GANG</div></div>
+        <div style="text-align:right;"><div style="font-weight:700;color:#4fc3f7;">8% Discount</div><div style="font-size:10px;color:var(--muted);">5-day vesting</div></div>
+        <button onclick="buyBond('CRO-GANG')" data-testid="bond-cro-gang-btn" style="padding:10px 20px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;">BOND</button>
+      </div>
+      <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.25);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;">
+        <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png" style="width:40px;height:40px;border-radius:50%;" loading="lazy">
+        <div style="flex:1;"><div style="font-weight:700;color:var(--text);">USDC-GANG LP Bond</div><div style="font-size:10px;color:var(--muted);">Deposit USDC-GANG LP tokens for discounted GANG</div></div>
+        <div style="text-align:right;"><div style="font-weight:700;color:#4fc3f7;">6% Discount</div><div style="font-size:10px;color:var(--muted);">5-day vesting</div></div>
+        <button onclick="buyBond('USDC-GANG')" data-testid="bond-usdc-gang-btn" style="padding:10px 20px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;">BOND</button>
+      </div>
+      <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.25);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;">
+        <img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" style="width:40px;height:40px;border-radius:50%;" loading="lazy">
+        <div style="flex:1;"><div style="font-weight:700;color:var(--text);">WETH-GANG LP Bond</div><div style="font-size:10px;color:var(--muted);">Deposit WETH-GANG LP tokens for discounted GANG</div></div>
+        <div style="text-align:right;"><div style="font-weight:700;color:#4fc3f7;">10% Discount</div><div style="font-size:10px;color:var(--muted);">5-day vesting</div></div>
+        <button onclick="buyBond('WETH-GANG')" data-testid="bond-weth-gang-btn" style="padding:10px 20px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;">BOND</button>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:11px;color:var(--muted);">When you bond LP tokens, you receive $GANG at a discount. Your GANG vests over 5 days. 0.3% fee on bond purchase.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ TRADING COMPETITIONS PAGE ═══════════════════════════════════════════ -->
+  <div class="page" id="page-compete" data-testid="page-compete">
+    <div class="ref-hero" style="margin-bottom:20px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:var(--gold);line-height:1;">TRADING COMPETITIONS</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px;">Weekly competitions — Top traders win massive $GANG prizes. 0.3% entry fee.</div>
+    </div>
+    <div style="background:linear-gradient(135deg,rgba(212,160,23,0.12),rgba(212,160,23,0.03));border:1px solid rgba(212,160,23,0.35);border-radius:16px;padding:24px;margin-bottom:20px;text-align:center;" data-testid="compete-active">
+      <div style="font-size:10px;color:var(--muted);letter-spacing:2px;">CURRENT COMPETITION</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);margin-top:6px;" id="compTitle" data-testid="comp-title">WEEKLY LEVERAGE SHOWDOWN</div>
+      <div style="display:flex;justify-content:center;gap:24px;margin-top:14px;">
+        <div><div style="font-size:10px;color:var(--muted);">PRIZE POOL</div><div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);">500,000 GANG</div></div>
+        <div><div style="font-size:10px;color:var(--muted);">PARTICIPANTS</div><div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--text);" id="compParticipants">47</div></div>
+        <div><div style="font-size:10px;color:var(--muted);">ENDS IN</div><div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ff9800;" id="compTimeLeft">3d 14h</div></div>
+      </div>
+      <button onclick="enterCompetition()" data-testid="comp-enter-btn" style="margin-top:16px;padding:14px 48px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;">ENTER COMPETITION — 100 GANG</button>
+    </div>
+    <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:20px;margin-bottom:20px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">LEADERBOARD — TOP TRADERS</div>
+      <div style="display:grid;gap:6px;" id="compLeaderboard" data-testid="comp-leaderboard">
+        <div style="display:flex;align-items:center;gap:12px;background:rgba(212,160,23,0.08);border-radius:10px;padding:10px 14px;">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:900;color:#000;font-size:12px;">1</div>
+          <div style="flex:1;font-size:12px;color:var(--text);">0x7a3d...8f2c</div>
+          <div style="font-weight:700;color:var(--green);font-size:12px;">+2,450% PnL</div>
+          <div style="font-size:11px;color:var(--gold);">250,000 GANG</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:rgba(192,192,192,0.08);border-radius:10px;padding:10px 14px;">
+          <div style="width:28px;height:28px;border-radius:50%;background:#bdbdbd;display:flex;align-items:center;justify-content:center;font-weight:900;color:#000;font-size:12px;">2</div>
+          <div style="flex:1;font-size:12px;color:var(--text);">0x2b5f...c41a</div>
+          <div style="font-weight:700;color:var(--green);font-size:12px;">+1,820% PnL</div>
+          <div style="font-size:11px;color:var(--muted);">150,000 GANG</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;background:rgba(205,127,50,0.08);border-radius:10px;padding:10px 14px;">
+          <div style="width:28px;height:28px;border-radius:50%;background:#cd7f32;display:flex;align-items:center;justify-content:center;font-weight:900;color:#000;font-size:12px;">3</div>
+          <div style="flex:1;font-size:12px;color:var(--text);">0x9e1c...d73b</div>
+          <div style="font-weight:700;color:var(--green);font-size:12px;">+945% PnL</div>
+          <div style="font-size:11px;color:var(--muted);">100,000 GANG</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">PRIZE DISTRIBUTION</div>
+      <div style="display:grid;gap:6px;">
+        <div style="display:flex;justify-content:space-between;background:rgba(212,160,23,0.08);border-radius:8px;padding:10px 14px;"><span style="color:var(--gold);font-size:12px;font-weight:700;">1st Place</span><span style="color:var(--gold);font-weight:700;font-size:12px;">50% of prize pool</span></div>
+        <div style="display:flex;justify-content:space-between;background:rgba(192,192,192,0.05);border-radius:8px;padding:10px 14px;"><span style="color:#bdbdbd;font-size:12px;font-weight:700;">2nd Place</span><span style="color:var(--text);font-weight:700;font-size:12px;">30% of prize pool</span></div>
+        <div style="display:flex;justify-content:space-between;background:rgba(205,127,50,0.05);border-radius:8px;padding:10px 14px;"><span style="color:#cd7f32;font-size:12px;font-weight:700;">3rd Place</span><span style="color:var(--text);font-weight:700;font-size:12px;">20% of prize pool</span></div>
+      </div>
+    </div>
   </div>
 
 
