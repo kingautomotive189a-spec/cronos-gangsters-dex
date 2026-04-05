@@ -19946,7 +19946,8 @@ function _doCloseFuturesPosition(id) {
 function updateFuturesPositions() {
   const el = document.getElementById('futuresPositions');
   if (!el) return;
-  const myPositions = futuresState.positions.filter(p => p.wallet === state.address?.toLowerCase());
+  const myWallet = (state.address || 'demo').toLowerCase();
+  const myPositions = futuresState.positions.filter(p => p.wallet === myWallet);
   if (myPositions.length === 0) {
     el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No open positions</div>';
     return;
@@ -19999,7 +20000,8 @@ function updateFuturesPositions() {
 function renderFuturesHistory() {
   const el = document.getElementById('futuresHistory');
   if (!el) return;
-  const myHistory = futuresState.history.filter(h => h.wallet === state.address?.toLowerCase()).slice(0, 20);
+  const historyWallet = (state.address || 'demo').toLowerCase();
+  const myHistory = futuresState.history.filter(h => h.wallet === historyWallet).slice(0, 20);
   if (myHistory.length === 0) {
     el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No trades yet</div>';
     return;
