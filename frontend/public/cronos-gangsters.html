@@ -5073,38 +5073,40 @@ function toggleNavMenu() {
   <div class="page" id="page-copytrade" data-testid="page-copytrade">
     <div style="text-align:center;margin-bottom:24px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#e91e63;line-height:1;text-shadow:0 0 30px rgba(233,30,99,0.3);">GANG COPY TRADING</div>
-      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Follow top traders. Auto-copy their trades. Earn while they trade.</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Copy winning Futures trades from top-performing traders. 0.3% copy fee.</div>
     </div>
     <div class="stats-bar" style="margin-bottom:20px;" data-testid="copytrade-stats-bar">
-      <div class="stat-item"><div class="stat-label">TOP TRADERS</div><div class="stat-value" id="ctTraderCount" data-testid="ct-trader-count">12</div></div>
-      <div class="stat-item"><div class="stat-label">TOTAL COPIED</div><div class="stat-value" id="ctTotalCopied" data-testid="ct-total-copied">$0</div></div>
+      <div class="stat-item"><div class="stat-label">ACTIVE TRADERS</div><div class="stat-value" id="ctTraderCount" data-testid="ct-trader-count">0</div></div>
+      <div class="stat-item"><div class="stat-label">TOTAL COPIED</div><div class="stat-value" id="ctTotalCopied" data-testid="ct-total-copied">0</div></div>
       <div class="stat-item"><div class="stat-label">YOUR COPIES</div><div class="stat-value" id="ctYourCopies" data-testid="ct-your-copies">0</div></div>
       <div class="stat-item"><div class="stat-label">COPY FEE</div><div class="stat-value" style="color:#e91e63;">0.3%</div></div>
     </div>
+
     <div class="card" style="border-color:rgba(233,30,99,0.3);margin-bottom:16px;" data-testid="ct-leaders-card">
-      <div class="card-title" style="color:#e91e63;">TOP TRADERS TO FOLLOW</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Select a top trader and copy their trades automatically. 0.3% fee per copied trade.</div>
-      <div id="ctLeadersGrid" data-testid="ct-leaders-grid" style="display:grid;gap:10px;"></div>
+      <div class="card-title" style="color:#e91e63;">TOP FUTURES TRADERS</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Real Futures positions from GANG Leverage Trading. Click COPY to mirror their trade with your own funds. 0.3% copy fee applied.</div>
+      <div id="ctLeadersGrid" data-testid="ct-leaders-grid" style="display:grid;gap:10px;">
+        <div style="text-align:center;color:var(--muted);padding:30px;font-size:13px;">
+          <div style="font-size:32px;margin-bottom:10px;opacity:0.3;">📊</div>
+          <div>No Futures trades yet.</div>
+          <div style="margin-top:6px;"><a href="#futures" onclick="showPage('futures')" style="color:#e91e63;text-decoration:underline;cursor:pointer;">Open a Futures position</a> and it will appear here for others to copy.</div>
+        </div>
+      </div>
     </div>
+
     <div class="card" style="border-color:rgba(233,30,99,0.3);margin-bottom:16px;" data-testid="ct-copy-form">
-      <div class="card-title" style="color:#e91e63;">COPY A TRADE</div>
+      <div class="card-title" style="color:#e91e63;">MANUAL COPY — ENTER YOUR AMOUNT</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Select a trader's Futures position above, then set how much you want to allocate. The same pair, direction, and leverage will be copied.</div>
+      <div id="ctSelectedTrade" data-testid="ct-selected-trade" style="background:var(--surface2);border:1px solid rgba(233,30,99,0.2);border-radius:10px;padding:12px;margin-bottom:12px;display:none;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">SELECTED TRADE</div>
+        <div id="ctSelectedInfo" style="font-size:13px;color:var(--text);font-weight:700;"></div>
+      </div>
       <div style="display:grid;gap:10px;margin-bottom:14px;">
-        <select id="ctSelectTrader" data-testid="ct-select-trader" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
-          <option value="GangWhale">GangWhale — 342% ROI</option>
-          <option value="CroKing">CroKing — 289% ROI</option>
-          <option value="DefiSage">DefiSage — 234% ROI</option>
-          <option value="AlphaHunter">AlphaHunter — 198% ROI</option>
-          <option value="MoonShot">MoonShot — 176% ROI</option>
-          <option value="CryptoGangster">CryptoGangster — 156% ROI</option>
-        </select>
-        <select id="ctToken" data-testid="ct-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
-          <option value="CRO">CRO</option><option value="GANG">GANG</option><option value="USDC">USDC</option><option value="WETH">WETH</option>
-        </select>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <span style="font-size:11px;color:var(--muted);">Balance: <span id="ctAvailBal" data-testid="ct-avail-bal" style="color:var(--gold);font-weight:700;">0 CRO</span></span>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:11px;color:var(--muted);">Your Balance: <span id="ctAvailBal" data-testid="ct-avail-bal" style="color:var(--gold);font-weight:700;">0</span></span>
         </div>
         <div style="position:relative;">
-          <input type="number" id="ctAmount" data-testid="ct-amount" placeholder="Amount to copy-trade (CRO)" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
+          <input type="number" id="ctAmount" data-testid="ct-amount" placeholder="Your amount (same currency as original trade)" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
           <button onclick="ctSetMax()" data-testid="ct-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#e91e63,#c2185b);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(233,30,99,0.2);border-radius:8px;padding:10px 12px;">
@@ -5112,8 +5114,9 @@ function toggleNavMenu() {
           <span id="ctFeePreview" data-testid="ct-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#e91e63;">0</span>
         </div>
       </div>
-      <button class="btn-primary" data-testid="ct-copy-btn" onclick="executeCopyTrade()" style="width:100%;background:linear-gradient(135deg,#e91e63,#c2185b);font-size:16px;font-weight:800;">👥 COPY TRADE NOW</button>
+      <button class="btn-primary" data-testid="ct-copy-btn" onclick="executeCopyTrade()" style="width:100%;background:linear-gradient(135deg,#e91e63,#c2185b);font-size:16px;font-weight:800;">👥 COPY THIS TRADE</button>
     </div>
+
     <div id="ctOwnerPanel" data-testid="ct-owner-panel" style="display:none;margin-bottom:16px;">
       <div class="card" style="border-color:rgba(39,174,96,0.4);">
         <div class="card-title" style="color:var(--green);">OWNER — COPY TRADING REVENUE</div>
@@ -5131,19 +5134,21 @@ function toggleNavMenu() {
         <button class="btn-primary" data-testid="ct-owner-collect-btn" onclick="ctOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT COPY TRADING FEES</button>
       </div>
     </div>
+
     <div class="card" style="margin-bottom:16px;">
       <div class="card-title">YOUR COPY HISTORY</div>
       <div id="ctHistoryList" data-testid="ct-history-list" style="max-height:300px;overflow-y:auto;">
-        <div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No copies yet. Select a trader above to start copying.</div>
+        <div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No copies yet. Select a winning Futures trade above to start copying.</div>
       </div>
     </div>
+
     <div class="card">
       <div class="card-title">HOW COPY TRADING WORKS</div>
       <div style="display:grid;gap:12px;">
-        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">1</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Browse top traders</div><div style="font-size:11px;color:var(--muted);">See ROI, win rate, and trade history of the best traders on the platform.</div></div></div>
-        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">2</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Set your amount</div><div style="font-size:11px;color:var(--muted);">Choose how much to allocate per copy trade. Minimum 10 CRO.</div></div></div>
-        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">3</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Auto-copy</div><div style="font-size:11px;color:var(--muted);">Trades are copied automatically. 0.3% fee per trade. Stop anytime.</div></div></div>
-        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">4</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Profit together</div><div style="font-size:11px;color:var(--muted);">When the trader profits, you profit. Track everything in your copy history.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">1</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Traders open Futures positions</div><div style="font-size:11px;color:var(--muted);">When someone opens a LONG or SHORT on GANG Futures, their position appears here automatically.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">2</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Browse winning traders</div><div style="font-size:11px;color:var(--muted);">See their pair, leverage, direction, and live PnL. Winners are ranked at the top.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">3</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Click COPY and set your amount</div><div style="font-size:11px;color:var(--muted);">Same pair, same direction, same leverage — just with your funds. 0.3% copy fee.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">4</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Profit when they profit</div><div style="font-size:11px;color:var(--muted);">Your copied position follows the same market. Close anytime from the Futures page.</div></div></div>
       </div>
     </div>
   </div>
@@ -17494,16 +17499,10 @@ function updateRevAggFees() {
 }
 
 // ═══════════════════════════════════════════
-//  COPY TRADING LOGIC
+//  COPY TRADING LOGIC — Linked to Futures
 // ═══════════════════════════════════════════
-const CT_LEADERS = [
-  { name: 'GangWhale', roi: 342, winRate: 78, trades: 1240, avatar: '#e91e63' },
-  { name: 'CroKing', roi: 289, winRate: 72, trades: 890, avatar: '#ff5722' },
-  { name: 'DefiSage', roi: 234, winRate: 81, trades: 560, avatar: '#9c27b0' },
-  { name: 'AlphaHunter', roi: 198, winRate: 69, trades: 320, avatar: '#2196f3' },
-  { name: 'MoonShot', roi: 176, winRate: 65, trades: 710, avatar: '#ff9800' },
-  { name: 'CryptoGangster', roi: 156, winRate: 61, trades: 480, avatar: '#4caf50' },
-];
+let _ctSelectedPosition = null;
+
 function getCTState() { try { return JSON.parse(localStorage.getItem('gangCopyTradeState') || '{}'); } catch(e) { return {}; } }
 function saveCTState(s) { localStorage.setItem('gangCopyTradeState', JSON.stringify(s)); }
 function initCTState() {
@@ -17511,39 +17510,117 @@ function initCTState() {
   if (!s.copies) { s = { copies: [], ownerFees: 0, totalCopied: 0, copyCount: 0 }; saveCTState(s); }
   return s;
 }
+
 function renderCTLeaders() {
   const grid = document.getElementById('ctLeadersGrid');
   if (!grid) return;
-  grid.innerHTML = CT_LEADERS.map(l => `
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px;">
-      <div style="width:40px;height:40px;border-radius:50%;background:${l.avatar};display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:14px;">${l.name[0]}</div>
-      <div style="flex:1;">
-        <div style="font-weight:700;font-size:13px;color:var(--text);">${l.name}</div>
-        <div style="font-size:11px;color:var(--muted);">${l.trades} trades | ${l.winRate}% win rate</div>
+
+  // Pull real positions from Futures state
+  const allPositions = futuresState.positions || [];
+  const openPositions = allPositions.filter(p => p.status === 'open');
+
+  if (openPositions.length === 0) {
+    grid.innerHTML = `<div style="text-align:center;color:var(--muted);padding:30px;font-size:13px;">
+      <div style="font-size:32px;margin-bottom:10px;opacity:0.3;">📊</div>
+      <div>No Futures trades yet.</div>
+      <div style="margin-top:6px;"><a href="#futures" onclick="showPage('futures')" style="color:#e91e63;text-decoration:underline;cursor:pointer;">Open a Futures position</a> and it will appear here for others to copy.</div>
+    </div>`;
+    return;
+  }
+
+  // Sort by PnL (winners first)
+  const sorted = openPositions.map(p => {
+    const curPrice = futuresState.prices[p.pair] || p.entryPrice;
+    const pnlPct = p.side === 'LONG'
+      ? ((curPrice - p.entryPrice) / p.entryPrice * 100 * p.leverage)
+      : ((p.entryPrice - curPrice) / p.entryPrice * 100 * p.leverage);
+    const pnl = p.amount * (pnlPct / 100);
+    return { ...p, curPrice, pnlPct, pnl };
+  }).sort((a, b) => b.pnlPct - a.pnlPct);
+
+  grid.innerHTML = sorted.map((p, i) => {
+    const wallet = p.wallet || 'unknown';
+    const shortWallet = wallet.length > 10 ? wallet.substring(0, 6) + '...' + wallet.substring(wallet.length - 4) : wallet;
+    const dirColor = p.side === 'LONG' ? 'var(--green)' : '#e53935';
+    const pnlColor = p.pnl >= 0 ? 'var(--green)' : '#e53935';
+    const pnlSign = p.pnl >= 0 ? '+' : '';
+    const avatarColors = ['#e91e63','#9c27b0','#2196f3','#ff9800','#4caf50','#00bcd4','#ff5722','#795548'];
+    const avatarColor = avatarColors[i % avatarColors.length];
+    return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px;transition:all .2s;cursor:pointer;" onmouseover="this.style.borderColor='#e91e63'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="width:42px;height:42px;border-radius:50%;background:${avatarColor};display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:14px;flex-shrink:0;">${shortWallet[0].toUpperCase()}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:700;font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${shortWallet}</div>
+        <div style="display:flex;gap:6px;align-items:center;margin-top:2px;">
+          <span style="background:${dirColor};color:#fff;font-size:9px;font-weight:800;padding:2px 6px;border-radius:3px;letter-spacing:1px;">${p.side}</span>
+          <span style="font-size:11px;color:var(--muted);">${p.pair} ${p.leverage}x</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px;">${p.currency || 'GANG'} | Size: ${p.amount.toFixed(1)} | Entry: $${p.entryPrice.toLocaleString()}</div>
       </div>
-      <div style="text-align:right;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);">+${l.roi}%</div>
-        <div style="font-size:9px;color:var(--muted);">ROI</div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:${pnlColor};">${pnlSign}${p.pnlPct.toFixed(1)}%</div>
+        <div style="font-size:10px;color:${pnlColor};">${pnlSign}${p.pnl.toFixed(2)} ${p.currency || 'GANG'}</div>
       </div>
-    </div>
-  `).join('');
+      <button onclick="event.stopPropagation();selectCopyTrade(${i})" data-testid="ct-copy-${i}" style="background:linear-gradient(135deg,#e91e63,#c2185b);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;flex-shrink:0;transition:all .2s;" onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='none'">COPY</button>
+    </div>`;
+  }).join('');
+
+  // Update trader count stat
+  const elCount = document.getElementById('ctTraderCount');
+  if (elCount) elCount.textContent = sorted.length;
 }
+
+function selectCopyTrade(idx) {
+  const allPositions = (futuresState.positions || []).filter(p => p.status === 'open');
+  const sorted = allPositions.map(p => {
+    const curPrice = futuresState.prices[p.pair] || p.entryPrice;
+    const pnlPct = p.side === 'LONG'
+      ? ((curPrice - p.entryPrice) / p.entryPrice * 100 * p.leverage)
+      : ((p.entryPrice - curPrice) / p.entryPrice * 100 * p.leverage);
+    return { ...p, curPrice, pnlPct };
+  }).sort((a, b) => b.pnlPct - a.pnlPct);
+
+  if (!sorted[idx]) return;
+  _ctSelectedPosition = sorted[idx];
+
+  const sel = document.getElementById('ctSelectedTrade');
+  const info = document.getElementById('ctSelectedInfo');
+  if (sel) sel.style.display = 'block';
+  if (info) info.innerHTML = `<span style="color:${_ctSelectedPosition.side==='LONG'?'var(--green)':'#e53935'}">${_ctSelectedPosition.side}</span> ${_ctSelectedPosition.pair} ${_ctSelectedPosition.leverage}x — Entry: $${_ctSelectedPosition.entryPrice.toLocaleString()} (${_ctSelectedPosition.currency || 'GANG'})`;
+
+  // Update balance display
+  const curr = _ctSelectedPosition.currency || 'GANG';
+  const el = document.getElementById('ctAvailBal');
+  if (el) el.textContent = _getBal(curr).toLocaleString() + ' ' + curr;
+
+  // Scroll to the copy form
+  document.getElementById('ctSelectedTrade')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  showToast(`Selected: ${_ctSelectedPosition.side} ${_ctSelectedPosition.pair} ${_ctSelectedPosition.leverage}x — Enter your amount below`, 'success');
+}
+
 function renderCTHistory() {
   const s = initCTState(), el = document.getElementById('ctHistoryList');
   if (!el) return;
-  if (!s.copies || s.copies.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No copies yet. Select a trader above to start copying.</div>'; return; }
+  if (!s.copies || s.copies.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No copies yet. Select a winning Futures trade above to start copying.</div>'; return; }
   el.innerHTML = s.copies.slice().reverse().map(c => `
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
-      <div><span style="font-weight:700;color:#e91e63;">${c.trader}</span> <span style="color:var(--muted);font-size:11px;">${c.token}</span></div>
-      <div style="text-align:right;"><div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--text);">${c.amount} CRO</div><div style="font-size:9px;color:var(--muted);">Fee: ${c.fee.toFixed(4)} CRO</div></div>
+      <div>
+        <span style="font-weight:700;color:${c.side==='LONG'?'var(--green)':'#e53935'}">${c.side}</span>
+        <span style="color:var(--text);font-weight:600;margin-left:4px;">${c.pair}</span>
+        <span style="color:var(--muted);font-size:11px;margin-left:4px;">${c.leverage}x</span>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--text);">${c.amount} ${c.currency || 'GANG'}</div>
+        <div style="font-size:9px;color:var(--muted);">Fee: ${c.fee.toFixed(4)} | Copied from ${(c.trader || '').substring(0,8)}...</div>
+      </div>
     </div>
   `).join('');
 }
+
 function updateCTStats() {
   const s = initCTState();
   const elTotal = document.getElementById('ctTotalCopied');
   const elCount = document.getElementById('ctYourCopies');
-  if (elTotal) elTotal.textContent = '$' + (s.totalCopied || 0).toFixed(2);
+  if (elTotal) elTotal.textContent = s.copyCount || 0;
   if (elCount) elCount.textContent = s.copies ? s.copies.length : 0;
   const isOwner = state.connectedAddress && CONTRACTS.TREASURY && state.connectedAddress.toLowerCase() === CONTRACTS.TREASURY.toLowerCase();
   const ownerPanel = document.getElementById('ctOwnerPanel');
@@ -17555,25 +17632,58 @@ function updateCTStats() {
     if (elOCount) elOCount.textContent = s.copyCount || 0;
   }
 }
+
 function executeCopyTrade() {
-  const trader = document.getElementById('ctSelectTrader').value;
-  const token = document.getElementById('ctToken').value;
+  if (!_ctSelectedPosition) { showToast('Select a Futures trade to copy first', 'error'); return; }
   const amount = parseFloat(document.getElementById('ctAmount').value);
-  if (!amount || amount < 10) { showToast('Minimum copy trade is 10 CRO', 'error'); return; }
+  if (!amount || amount < 10) { showToast('Minimum copy trade is 10', 'error'); return; }
   const fee = amount * 0.003;
+  const p = _ctSelectedPosition;
+  const wallet = p.wallet || 'unknown';
+  const shortWallet = wallet.length > 10 ? wallet.substring(0, 6) + '...' + wallet.substring(wallet.length - 4) : wallet;
+
   showTxConfirm({
-    title: 'Copy Trade',
+    title: 'Copy Futures Trade',
     iconHtml: '<div style="font-size:48px;">👥</div>',
-    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Trader:</span><span style="color:#e91e63;font-weight:700;">${trader}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Token:</span><span>${token}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Amount:</span><span>${amount} CRO</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Copy Fee (0.3%):</span><span style="color:#e91e63;">${fee.toFixed(4)} CRO</span></div></div>`,
+    detailsHtml: `<div style="text-align:left;font-size:13px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Copying from:</span><span style="color:#e91e63;font-weight:700;">${shortWallet}</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Position:</span><span style="color:${p.side==='LONG'?'var(--green)':'#e53935'};font-weight:700;">${p.side} ${p.pair} ${p.leverage}x</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Entry Price:</span><span>$${p.entryPrice.toLocaleString()}</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Your Amount:</span><span>${amount} ${p.currency || 'GANG'}</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Copy Fee (0.3%):</span><span style="color:#e91e63;">${fee.toFixed(4)} ${p.currency || 'GANG'}</span></div>
+    </div>`,
     onConfirm: () => {
+      // Open a real Futures position as the copy
+      const openingFee = amount * 0.003;
+      const posAmount = amount - openingFee;
+      futuresState.positions.push({
+        pair: p.pair,
+        side: p.side,
+        leverage: p.leverage,
+        amount: posAmount,
+        entryPrice: futuresState.prices[p.pair] || p.entryPrice,
+        currency: p.currency || 'GANG',
+        wallet: (state.address || 'demo').toLowerCase(),
+        openedAt: new Date().toISOString(),
+        status: 'open',
+        isCopy: true,
+        copiedFrom: wallet
+      });
+      saveFuturesState();
+      renderFuturesPositions();
+
+      // Record copy trade
       const s = initCTState();
-      s.copies.push({ trader, token, amount, fee, time: Date.now() });
+      s.copies.push({ trader: wallet, pair: p.pair, side: p.side, leverage: p.leverage, amount, fee, currency: p.currency || 'GANG', time: Date.now() });
       s.ownerFees = (s.ownerFees || 0) + fee;
       s.totalCopied = (s.totalCopied || 0) + amount;
       s.copyCount = (s.copyCount || 0) + 1;
       saveCTState(s);
-      renderCTHistory(); updateCTStats(); updateRevCopyFees();
-      showToast(`Copied ${trader}'s trade: ${amount} CRO on ${token}`, 'success');
+      renderCTHistory(); updateCTStats(); updateRevCopyFees(); renderCTLeaders();
+      _ctSelectedPosition = null;
+      document.getElementById('ctSelectedTrade').style.display = 'none';
+      document.getElementById('ctAmount').value = '';
+      showToast(`Copied ${p.side} ${p.pair} ${p.leverage}x — ${posAmount.toFixed(2)} ${p.currency || 'GANG'} position opened!`, 'success');
     }
   });
 }
