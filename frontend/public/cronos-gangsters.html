@@ -19796,14 +19796,9 @@ function updateFuturesPosInfo() {
 document.getElementById('futuresAmount')?.addEventListener('input', updateFuturesPosInfo);
 
 function openFuturesPosition() {
-  if (!state.address) { showToast('Connect wallet first', 'error'); return; }
   const amt = parseFloat(document.getElementById('futuresAmount')?.value);
   if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
   const curr = futuresState.currency;
-  const bal = curr === 'CRO' ? (state.balances?.CRO || 0) : (state.balances?.GANG || 0);
-  if (amt > bal) { showToast('Insufficient ' + curr + ' balance', 'error'); return; }
-  const pool = curr === 'CRO' ? futuresState.poolBalanceCRO : futuresState.poolBalance;
-  if (pool < amt * futuresState.leverage) { showToast('Insufficient ' + curr + ' pool liquidity', 'error'); return; }
 
   const price = futuresState.prices[futuresState.pair];
   if (!price) { showToast('Price not loaded yet', 'error'); return; }
@@ -19838,7 +19833,7 @@ function _doOpenFuturesPosition(amt, curr, price) {
 
   const position = {
     id: Date.now(),
-    wallet: state.address.toLowerCase(),
+    wallet: (state.address || 'demo').toLowerCase(),
     pair: futuresState.pair,
     side: futuresState.side,
     leverage: futuresState.leverage,
