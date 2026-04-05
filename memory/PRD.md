@@ -25,7 +25,9 @@ Core DeFi, Advanced DeFi, World Domination (6 features), Dynamic Copy Trading, A
   - Checklist: "Swaps & Leverage Trading"
   - JS strings: showTxConfirm titles, toast messages, points system
   - How You Earn section: all references updated
-- **Telegram Bot**: Updated "Futures" button labels to "Leverage" in all inline keyboards, FAQ text updated
+- **Telegram Bot**: Updated "Futures" button labels to "Leverage" in all inline keyboards, FAQ text updated, bot commands list updated
+- **Token Logos in Dropdowns**: Converted DEX Aggregator (FROM/TO) and Flash Loans token selects from plain `<select>` to custom dropdowns with original token logos (CRO, USDC, WETH, GANG, WCRO, VVS, TONIC, ATOM)
+- **WCRO added** to TOKEN_LOGOS registry
 - **ZIP delivered** for GoDaddy deployment
 
 ## Key Files

@@ -4735,14 +4735,15 @@ function toggleNavMenu() {
       <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Borrow any amount with zero collateral. Must be repaid within the same transaction. Perfect for arbitrage, liquidations, and collateral swaps.</div>
 
       <div style="display:grid;gap:10px;margin-bottom:14px;">
-        <select id="flashToken" data-testid="flash-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;cursor:pointer;">
-          <option value="CRO">CRO — Pool: 500,000</option>
-          <option value="GANG">GANG — Pool: 10,000,000</option>
-          <option value="USDC">USDC — Pool: 250,000</option>
-          <option value="WETH">WETH — Pool: 150</option>
-          <option value="WCRO">WCRO — Pool: 300,000</option>
-          <option value="VVS">VVS — Pool: 50,000,000</option>
-        </select>
+        <div class="custom-token-select" id="flashTokenWrap" data-testid="flash-token-wrap" style="position:relative;">
+          <button type="button" onclick="toggleTokenDropdown('flashTokenWrap')" style="display:flex;align-items:center;gap:8px;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;cursor:pointer;outline:none;">
+            <img id="flashTokenImg" src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" style="width:22px;height:22px;border-radius:50%;" loading="lazy">
+            <span id="flashTokenLabel" style="font-weight:700;flex:1;text-align:left;">CRO</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="token-dropdown-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,16,26,0.98);border:1px solid var(--border);border-radius:10px;margin-top:4px;z-index:999;max-height:300px;overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,0.6);padding:4px;min-width:160px;"></div>
+          <input type="hidden" id="flashToken" data-testid="flash-token" value="CRO">
+        </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:11px;color:var(--muted);">Pool Available: <span id="flashPoolBal" data-testid="flash-pool-bal" style="color:var(--gold);font-weight:700;">—</span></span>
         </div>
@@ -4976,29 +4977,27 @@ function toggleNavMenu() {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <div>
             <div style="font-size:10px;color:var(--muted);margin-bottom:4px;letter-spacing:1px;">FROM</div>
-            <select id="aggFromToken" data-testid="agg-from-token" onchange="updateAggQuotes()" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
-              <option value="CRO">CRO</option>
-              <option value="USDC">USDC</option>
-              <option value="WETH">WETH</option>
-              <option value="GANG">GANG</option>
-              <option value="WCRO">WCRO</option>
-              <option value="VVS">VVS</option>
-              <option value="TONIC">TONIC</option>
-              <option value="ATOM">ATOM</option>
-            </select>
+            <div class="custom-token-select" id="aggFromTokenWrap" data-testid="agg-from-token-wrap" style="position:relative;min-width:130px;">
+              <button type="button" onclick="toggleTokenDropdown('aggFromTokenWrap')" style="display:flex;align-items:center;gap:8px;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;cursor:pointer;outline:none;">
+                <img id="aggFromTokenImg" src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" style="width:22px;height:22px;border-radius:50%;" loading="lazy">
+                <span id="aggFromTokenLabel" style="font-weight:700;flex:1;text-align:left;">CRO</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="token-dropdown-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,16,26,0.98);border:1px solid var(--border);border-radius:10px;margin-top:4px;z-index:999;max-height:300px;overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,0.6);padding:4px;min-width:160px;"></div>
+              <input type="hidden" id="aggFromToken" data-testid="agg-from-token" value="CRO">
+            </div>
           </div>
           <div>
             <div style="font-size:10px;color:var(--muted);margin-bottom:4px;letter-spacing:1px;">TO</div>
-            <select id="aggToToken" data-testid="agg-to-token" onchange="updateAggQuotes()" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
-              <option value="USDC">USDC</option>
-              <option value="CRO">CRO</option>
-              <option value="WETH">WETH</option>
-              <option value="GANG">GANG</option>
-              <option value="WCRO">WCRO</option>
-              <option value="VVS">VVS</option>
-              <option value="TONIC">TONIC</option>
-              <option value="ATOM">ATOM</option>
-            </select>
+            <div class="custom-token-select" id="aggToTokenWrap" data-testid="agg-to-token-wrap" style="position:relative;min-width:130px;">
+              <button type="button" onclick="toggleTokenDropdown('aggToTokenWrap')" style="display:flex;align-items:center;gap:8px;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;cursor:pointer;outline:none;">
+                <img id="aggToTokenImg" src="https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png" style="width:22px;height:22px;border-radius:50%;" loading="lazy">
+                <span id="aggToTokenLabel" style="font-weight:700;flex:1;text-align:left;">USDC</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="token-dropdown-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,16,26,0.98);border:1px solid var(--border);border-radius:10px;margin-top:4px;z-index:999;max-height:300px;overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,0.6);padding:4px;min-width:160px;"></div>
+              <input type="hidden" id="aggToToken" data-testid="agg-to-token" value="USDC">
+            </div>
           </div>
         </div>
         <input type="number" id="aggAmount" data-testid="agg-amount" placeholder="Amount to swap" oninput="updateAggQuotes()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
@@ -16562,7 +16561,8 @@ const TOKEN_LOGOS = {
   'TONIC': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/17709.png', name: 'Tectonic', color: '#5e3ab2' },
   'BTC': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png', name: 'Bitcoin', color: '#f7931a' },
   'ETH': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png', name: 'Ethereum', color: '#627eea' },
-  'SOL': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png', name: 'Solana', color: '#9945ff' }
+  'SOL': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png', name: 'Solana', color: '#9945ff' },
+  'WCRO': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png', name: 'Wrapped CRO', color: '#002d74' }
 };
 
 function getTokenLogo(sym) {
@@ -16583,8 +16583,11 @@ function toggleTokenDropdown(wrapId) {
   const currentVal = hiddenInput ? hiddenInput.value : '';
   const isOtcSell = wrapId === 'otcSellTokenWrap';
   const isOtcBuy = wrapId === 'otcBuyTokenWrap';
+  const isAgg = wrapId === 'aggFromTokenWrap' || wrapId === 'aggToTokenWrap';
+  const isFlash = wrapId === 'flashTokenWrap';
   const prefix = isOtcSell ? 'SELL: ' : isOtcBuy ? 'BUY: ' : '';
-  const tokens = (isOtcSell || isOtcBuy) ? ['CRO','GANG','USDC','WETH','WBTC'] : ['CRO','GANG','USDC','WETH','WBTC','DAI','USDT','ATOM','VVS','TONIC'];
+  const flashPools = {'CRO':'500,000','GANG':'10,000,000','USDC':'250,000','WETH':'150','WCRO':'300,000','VVS':'50,000,000'};
+  const tokens = isFlash ? ['CRO','GANG','USDC','WETH','WCRO','VVS'] : isAgg ? ['CRO','USDC','WETH','GANG','WCRO','VVS','TONIC','ATOM'] : (isOtcSell || isOtcBuy) ? ['CRO','GANG','USDC','WETH','WBTC'] : ['CRO','GANG','USDC','WETH','WBTC','DAI','USDT','ATOM','VVS','TONIC'];
   list.innerHTML = tokens.map(t => {
     const info = getTokenLogo(t);
     const isActive = t === currentVal;
@@ -16592,7 +16595,7 @@ function toggleTokenDropdown(wrapId) {
       <img src="${info.logo}" style="width:24px;height:24px;border-radius:50%;border:1px solid ${info.color}40;" loading="lazy" onerror="this.style.display='none'">
       <div style="flex:1;">
         <div style="font-weight:700;font-size:13px;color:${isActive ? 'var(--gold)' : 'var(--text)'};">${prefix}${t}</div>
-        <div style="font-size:9px;color:var(--muted);">${info.name}</div>
+        <div style="font-size:9px;color:var(--muted);">${isFlash ? info.name + ' — Pool: ' + (flashPools[t]||'—') : info.name}</div>
       </div>
       ${isActive ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' : ''}
     </div>`;
@@ -16616,6 +16619,13 @@ function selectTokenDropdown(wrapId, token) {
   // Close dropdown
   const list = wrap.querySelector('.token-dropdown-list');
   if (list) list.style.display = 'none';
+  // Trigger callbacks for specific pages
+  if (wrapId === 'aggFromTokenWrap' || wrapId === 'aggToTokenWrap') {
+    if (typeof updateAggQuotes === 'function') updateAggQuotes();
+  }
+  if (wrapId === 'flashTokenWrap') {
+    if (typeof updateFlashPoolBal === 'function') updateFlashPoolBal();
+  }
 }
 
 // Close dropdowns when clicking outside
