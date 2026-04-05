@@ -1193,7 +1193,7 @@ function toggleNavMenu() {
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" data-testid="feature-grid">
         <div class="card" onclick="showPage('futures')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(255,140,0,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#ff8c00'" onmouseout="this.style.borderColor='rgba(255,140,0,0.3)'">
           <div style="font-size:22px;margin-bottom:4px;">📈</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#ff8c00;letter-spacing:1px;">FUTURES</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#ff8c00;letter-spacing:1px;">LEVERAGE</div>
           <div style="font-size:9px;color:var(--muted);margin-top:2px;">33 pairs, 20x</div>
         </div>
         <div class="card" onclick="showPage('tracker')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(0,212,255,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#00d4ff'" onmouseout="this.style.borderColor='rgba(0,212,255,0.3)'">
@@ -2415,7 +2415,7 @@ function toggleNavMenu() {
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Portfolio P&amp;L Tracker</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Token Burn Tracker</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Leaderboard &amp; Points System</div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> 0.3% Platform Fee on all Swaps &amp; Futures</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> 0.3% Platform Fee on all Swaps &amp; Leverage Trading</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> GANG LENDING — Earn Interest, Borrow Crypto (10 tokens)</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> PREDICTION MARKETS — Bet on Crypto, Stocks, Sports &amp; More</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> FLASH LOANS — 0.3% Fee, Zero Collateral, Instant Borrow</div>
@@ -5107,7 +5107,7 @@ function toggleNavMenu() {
   <div class="page" id="page-copytrade" data-testid="page-copytrade">
     <div style="text-align:center;margin-bottom:24px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#e91e63;line-height:1;text-shadow:0 0 30px rgba(233,30,99,0.3);">GANG COPY TRADING</div>
-      <div style="font-size:14px;color:var(--muted);margin-top:6px;"><span class="live-dot"></span>Copy winning Futures trades. Auto-refreshes live. 0.3% copy fee.</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;"><span class="live-dot"></span>Copy winning Leverage trades. Auto-refreshes live. 0.3% copy fee.</div>
     </div>
     <div class="stats-bar" style="margin-bottom:20px;" data-testid="copytrade-stats-bar">
       <div class="stat-item"><div class="stat-label">ACTIVE TRADERS</div><div class="stat-value" id="ctTraderCount" data-testid="ct-trader-count">0</div></div>
@@ -5117,20 +5117,20 @@ function toggleNavMenu() {
     </div>
 
     <div class="card" style="border-color:rgba(233,30,99,0.3);margin-bottom:16px;" data-testid="ct-leaders-card">
-      <div class="card-title" style="color:#e91e63;"><span class="live-dot"></span>TOP FUTURES TRADERS — LIVE</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Real Futures positions from GANG Leverage Trading. Auto-refreshes every 5s. Click COPY to mirror their trade. 0.3% fee.</div>
+      <div class="card-title" style="color:#e91e63;"><span class="live-dot"></span>TOP LEVERAGE TRADERS — LIVE</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Real Leverage positions from GANG Leverage Trading. Auto-refreshes every 5s. Click COPY to mirror their trade. 0.3% fee.</div>
       <div id="ctLeadersGrid" data-testid="ct-leaders-grid" style="display:grid;gap:10px;">
         <div style="text-align:center;color:var(--muted);padding:30px;font-size:13px;">
           <div style="font-size:32px;margin-bottom:10px;opacity:0.3;">📊</div>
-          <div>No Futures trades yet.</div>
-          <div style="margin-top:6px;"><a href="#futures" onclick="showPage('futures')" style="color:#e91e63;text-decoration:underline;cursor:pointer;">Open a Futures position</a> and it will appear here for others to copy.</div>
+          <div>No Leverage trades yet.</div>
+          <div style="margin-top:6px;"><a href="#futures" onclick="showPage('futures')" style="color:#e91e63;text-decoration:underline;cursor:pointer;">Open a Leverage position</a> and it will appear here for others to copy.</div>
         </div>
       </div>
     </div>
 
     <div class="card" style="border-color:rgba(233,30,99,0.3);margin-bottom:16px;" data-testid="ct-copy-form">
       <div class="card-title" style="color:#e91e63;">MANUAL COPY — ENTER YOUR AMOUNT</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Select a trader's Futures position above, then set how much you want to allocate. The same pair, direction, and leverage will be copied.</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Select a trader's Leverage position above, then set how much you want to allocate. The same pair, direction, and leverage will be copied.</div>
       <div id="ctSelectedTrade" data-testid="ct-selected-trade" style="background:var(--surface2);border:1px solid rgba(233,30,99,0.2);border-radius:10px;padding:12px;margin-bottom:12px;display:none;">
         <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">SELECTED TRADE</div>
         <div id="ctSelectedInfo" style="font-size:13px;color:var(--text);font-weight:700;"></div>
@@ -5172,17 +5172,17 @@ function toggleNavMenu() {
     <div class="card" style="margin-bottom:16px;">
       <div class="card-title">YOUR COPY HISTORY</div>
       <div id="ctHistoryList" data-testid="ct-history-list" style="max-height:300px;overflow-y:auto;">
-        <div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No copies yet. Select a winning Futures trade above to start copying.</div>
+        <div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No copies yet. Select a winning Leverage trade above to start copying.</div>
       </div>
     </div>
 
     <div class="card">
       <div class="card-title">HOW COPY TRADING WORKS</div>
       <div style="display:grid;gap:12px;">
-        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">1</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Traders open Futures positions</div><div style="font-size:11px;color:var(--muted);">When someone opens a LONG or SHORT on GANG Futures, their position appears here automatically.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">1</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Traders open Leverage positions</div><div style="font-size:11px;color:var(--muted);">When someone opens a LONG or SHORT on GANG Leverage Trading, their position appears here automatically.</div></div></div>
         <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">2</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Browse winning traders</div><div style="font-size:11px;color:var(--muted);">See their pair, leverage, direction, and live PnL. Winners are ranked at the top.</div></div></div>
         <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">3</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Click COPY and set your amount</div><div style="font-size:11px;color:var(--muted);">Same pair, same direction, same leverage — just with your funds. 0.3% copy fee.</div></div></div>
-        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">4</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Profit when they profit</div><div style="font-size:11px;color:var(--muted);">Your copied position follows the same market. Close anytime from the Futures page.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">4</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Profit when they profit</div><div style="font-size:11px;color:var(--muted);">Your copied position follows the same market. Close anytime from the Leverage Trading page.</div></div></div>
       </div>
     </div>
   </div>
@@ -5501,7 +5501,7 @@ function toggleNavMenu() {
           <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;">0.3%</div>
         </div>
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
-          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">FUTURES</div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">LEVERAGE</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ff8c00;letter-spacing:1px;">0.3%</div>
         </div>
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
@@ -5696,8 +5696,8 @@ function toggleNavMenu() {
 
     <!-- LEVERAGE TRADING Fees (0.3% open + 0.3% close) -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(255,140,0,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#ff8c00;">FUTURES FEES (0.3% OPEN + 0.3% CLOSE)</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on opening and closing every futures position. Fees go directly into the liquidity pool — withdraw your profit from the Futures page Owner Panel.</div>
+      <div class="ref-link-label" style="color:#ff8c00;">LEVERAGE TRADING FEES (0.3% OPEN + 0.3% CLOSE)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on opening and closing every leverage position. Fees go directly into the liquidity pool — withdraw your profit from the Leverage Trading page Owner Panel.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(255,140,0,0.3);border-radius:10px;padding:12px;text-align:center;">
           <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">GANG POOL PROFIT</div>
@@ -5709,7 +5709,7 @@ function toggleNavMenu() {
         </div>
       </div>
       <button class="ref-copy-btn" onclick="navigateTo('futures')" style="width:100%;background:linear-gradient(135deg,#ff8c00,#cc7000);" data-testid="rev-futures-goto-btn">
-        GO TO FUTURES → WITHDRAW PROFIT
+        GO TO LEVERAGE TRADING → WITHDRAW PROFIT
       </button>
     </div>
 
@@ -5990,7 +5990,7 @@ function toggleNavMenu() {
         <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;">HOW YOU EARN</div>
         <div style="font-size:12px;color:var(--muted);line-height:1.8;text-align:left;">
           <b style="color:#ff8c00;">Swap Fees:</b> 0.3% of every swap &rarr; sent to your treasury automatically<br>
-          <b style="color:#ff8c00;">LEVERAGE TRADING:</b> 0.3% open + 0.3% close fee &rarr; stays in pool, withdraw profit from Futures page<br>
+          <b style="color:#ff8c00;">LEVERAGE TRADING:</b> 0.3% open + 0.3% close fee &rarr; stays in pool, withdraw profit from Leverage Trading page<br>
           <b style="color:#ff8c00;">Leverage Trading:</b> 0.3% per trade &rarr; retained in house pool as your edge<br>
           <b style="color:#00e5ff;">Lending Interest:</b> 20% of all borrower interest payments &rarr; collect from Lending page<br>
           <b style="color:#00e5ff;">Lending Origination:</b> 0.3% fee on every new loan &rarr; collect from Lending page<br>
@@ -17666,7 +17666,7 @@ function updateRevAggFees() {
 }
 
 // ═══════════════════════════════════════════
-//  COPY TRADING LOGIC — Linked to Futures
+//  COPY TRADING LOGIC — Linked to Leverage Trading
 // ═══════════════════════════════════════════
 let _ctSelectedPosition = null;
 
@@ -17679,7 +17679,7 @@ function initCTState() {
 }
 
 function _ctGetPairInfo(pair) {
-  // Lookup from FUTURES_PAIRS to get logo, name, color, type
+  // Lookup from FUTURES_PAIRS (Leverage Trading pairs) to get logo, name, color, type
   const fp = FUTURES_PAIRS[pair];
   if (fp) return fp;
   // Fallback for unknown pairs
@@ -17806,7 +17806,7 @@ function selectCopyTrade(idx) {
 function renderCTHistory() {
   const s = initCTState(), el = document.getElementById('ctHistoryList');
   if (!el) return;
-  if (!s.copies || s.copies.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No copies yet. Select a winning Futures trade above to start copying.</div>'; return; }
+  if (!s.copies || s.copies.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No copies yet. Select a winning Leverage trade above to start copying.</div>'; return; }
   el.innerHTML = s.copies.slice().reverse().map(c => {
     const pairInfo = _ctGetPairInfo(c.pair);
     const dirColor = c.side === 'LONG' ? 'var(--green)' : '#e53935';
@@ -17845,7 +17845,7 @@ function updateCTStats() {
 }
 
 function executeCopyTrade() {
-  if (!_ctSelectedPosition) { showToast('Select a Futures trade to copy first', 'error'); return; }
+  if (!_ctSelectedPosition) { showToast('Select a Leverage trade to copy first', 'error'); return; }
   const amount = parseFloat(document.getElementById('ctAmount').value);
   if (!amount || amount < 10) { showToast('Minimum copy trade is 10', 'error'); return; }
   const fee = amount * 0.003;
@@ -17855,7 +17855,7 @@ function executeCopyTrade() {
   const pairInfo = _ctGetPairInfo(p.pair);
 
   showTxConfirm({
-    title: 'Copy Futures Trade',
+    title: 'Copy Leverage Trade',
     iconHtml: pairInfo.logo ? `<img src="${pairInfo.logo}" style="width:56px;height:56px;border-radius:50%;border:3px solid ${pairInfo.color};object-fit:cover;" onerror="this.outerHTML='<div style=\\'font-size:48px;\\'>&#x1f4c8;</div>'">` : '<div style="font-size:48px;">&#x1f4c8;</div>',
     detailsHtml: `<div style="text-align:left;font-size:13px;">
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Copying from:</span><span style="color:#e91e63;font-weight:700;">${shortWallet}</span></div>
@@ -17865,7 +17865,7 @@ function executeCopyTrade() {
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Copy Fee (0.3%):</span><span style="color:#e91e63;">${fee.toFixed(4)} ${p.currency || 'GANG'}</span></div>
     </div>`,
     onConfirm: () => {
-      // Open a real Futures position as the copy
+      // Open a real Leverage position as the copy
       const openingFee = amount * 0.003;
       const posAmount = amount - openingFee;
       futuresState.positions.push({
@@ -20137,7 +20137,7 @@ function openFuturesPosition() {
   const openingFee = amt * 0.003;
 
   showTxConfirm({
-    title: 'CONFIRM FUTURES POSITION',
+    title: 'CONFIRM LEVERAGE POSITION',
     action: futuresState.side.toUpperCase() + ' ' + futuresState.pair + '/USD',
     fromToken: futuresState.side === 'long' ? '📈' : '📉',
     icon: futuresState.side === 'long' ? '📈' : '📉',
@@ -20194,7 +20194,7 @@ function _doOpenFuturesPosition(amt, curr, price) {
   document.getElementById('futuresSL').value = '';
 
   showToast(`Opened ${futuresState.side.toUpperCase()} ${futuresState.pair}/USD ${futuresState.leverage}x — ${position.amount.toFixed(2)} ${curr} (fee: ${openingFee.toFixed(2)})`, 'success');
-  if (typeof addPoints === 'function') addPoints(10, 'Futures trade');
+  if (typeof addPoints === 'function') addPoints(10, 'Leverage trade');
   updateFuturesPositions();
   updateFuturesPool();
 }
@@ -20494,7 +20494,7 @@ function simulateFuturesTick() {
     futuresState.prices[pair] = newPrice;
   }
 
-  // Update price display if on Futures page
+  // Update price display if on Leverage Trading page
   if (getActivePage() === 'futures') {
     const viewedPair = futuresState.pair;
     const viewedPrice = futuresState.prices[viewedPair];
@@ -21528,7 +21528,7 @@ function refreshActivePage() {
   }
 }
 
-// ─── Also refresh Futures positions when prices tick (for Copy Trading) ───
+// ─── Also refresh Leverage Trading positions when prices tick (for Copy Trading) ───
 const _origUpdateFuturesPrice = updateFuturesPrice;
 updateFuturesPrice = async function() {
   await _origUpdateFuturesPrice();

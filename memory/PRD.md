@@ -17,6 +17,17 @@ Core DeFi, Advanced DeFi, World Domination (6 features), Dynamic Copy Trading, A
 - **All math verified**: LONG/SHORT, 20x/15x, fees, liquidation accurate
 - **Critical bug fixes**: position status field, case normalization for side
 
+## Changes (Apr 5, 2026)
+- **Complete "Futures" → "Leverage Trading" sweep**: Cleaned ALL remaining user-visible "Futures" text across entire app
+  - Copy Trading page: "TOP LEVERAGE TRADERS", "Copy winning Leverage trades", position descriptions
+  - Revenue page: Fee summary grid label, fee collection banner title/description, "GO TO LEVERAGE TRADING" button
+  - Feature grid card: "LEVERAGE" label
+  - Checklist: "Swaps & Leverage Trading"
+  - JS strings: showTxConfirm titles, toast messages, points system
+  - How You Earn section: all references updated
+- **Telegram Bot**: Updated "Futures" button labels to "Leverage" in all inline keyboards, FAQ text updated
+- **ZIP delivered** for GoDaddy deployment
+
 ## Key Files
 - `/app/frontend/public/cronos-gangsters.html`
-- `/app/frontend/public/cronos-gangsters-deploy.zip` (12MB)
+- `/app/frontend/public/cronos-gangsters-deploy.zip`

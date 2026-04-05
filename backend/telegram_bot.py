@@ -1363,7 +1363,7 @@ async def roadmap_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("🌐 Visit Website", url=DEX_LINK)],
-        [InlineKeyboardButton("📈 Futures", callback_data="menu_futures"),
+        [InlineKeyboardButton("📈 Leverage", callback_data="menu_futures"),
          InlineKeyboardButton("🏦 Lending", callback_data="menu_lending"),
          InlineKeyboardButton("🔮 Predictions", callback_data="menu_predictions")],
         [InlineKeyboardButton("⚡ Flash Loans", callback_data="menu_flashloans"),
@@ -2451,7 +2451,7 @@ async def _cb_menu_faq(query, context):
         "*Lottery?* 70% winner, 20% burned, 10% treasury.\n\n"
         "*Referrals?* Share link → earn 5% of friend's rewards.\n\n"
         "*Wallet?* MetaMask, Trust, Crypto.com, Rabby, OKX. Cronos chain.\n\n"
-        "*Fees?* All platform fees are exactly 0.3% (Swap, Futures, LP).\n\n"
+        "*Fees?* All platform fees are exactly 0.3% (Swap, Leverage Trading, LP).\n\n"
         "*LEVERAGE TRADING?* 33 pairs (Crypto, Stocks, Indices, Commodities). Up to 20x leverage. Trade with GANG or CRO."
     )
     kb = InlineKeyboardMarkup([
@@ -2544,7 +2544,7 @@ async def _cb_menu_roadmap(query, context):
     )
     kb = InlineKeyboardMarkup([
         [InlineKeyboardButton("🌐 Visit Website", url=DEX_LINK)],
-        [InlineKeyboardButton("📈 Futures", callback_data="menu_futures"),
+        [InlineKeyboardButton("📈 Leverage", callback_data="menu_futures"),
          InlineKeyboardButton("🏦 Lending", callback_data="menu_lending"),
          InlineKeyboardButton("🔮 Predictions", callback_data="menu_predictions")],
         [InlineKeyboardButton("⚡ Flash Loans", callback_data="menu_flashloans"),

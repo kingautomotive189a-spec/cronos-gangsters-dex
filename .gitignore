@@ -88,3 +88,4 @@ android-sdk/-e
 *.env
 *.env.*
 frontend/public/cronos-gangsters-package.zip
+frontend/public/cronos-gangsters-deploy.zip
