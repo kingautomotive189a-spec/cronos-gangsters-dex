@@ -17691,7 +17691,7 @@ function renderCTLeaders() {
   if (!grid) return;
 
   const allPositions = futuresState.positions || [];
-  const openPositions = allPositions.filter(p => p.status === 'open');
+  const openPositions = allPositions.filter(p => !p.status || p.status === 'open');
 
   if (openPositions.length === 0) {
     grid.innerHTML = `<div style="text-align:center;color:var(--muted);padding:40px 20px;font-size:13px;">
@@ -17705,11 +17705,12 @@ function renderCTLeaders() {
   // Sort by PnL (winners first)
   const sorted = openPositions.map(p => {
     const curPrice = futuresState.prices[p.pair] || p.entryPrice;
-    const pnlPct = p.side === 'LONG'
+    const side = (p.side || '').toUpperCase();
+    const pnlPct = side === 'LONG'
       ? ((curPrice - p.entryPrice) / p.entryPrice * 100 * p.leverage)
       : ((p.entryPrice - curPrice) / p.entryPrice * 100 * p.leverage);
     const pnl = p.amount * (pnlPct / 100);
-    return { ...p, curPrice, pnlPct, pnl };
+    return { ...p, side, curPrice, pnlPct, pnl };
   }).sort((a, b) => b.pnlPct - a.pnlPct);
 
   grid.innerHTML = sorted.map((p, i) => {
@@ -17768,13 +17769,14 @@ function renderCTLeaders() {
 }
 
 function selectCopyTrade(idx) {
-  const allPositions = (futuresState.positions || []).filter(p => p.status === 'open');
+  const allPositions = (futuresState.positions || []).filter(p => !p.status || p.status === 'open');
   const sorted = allPositions.map(p => {
     const curPrice = futuresState.prices[p.pair] || p.entryPrice;
-    const pnlPct = p.side === 'LONG'
+    const side = (p.side || '').toUpperCase();
+    const pnlPct = side === 'LONG'
       ? ((curPrice - p.entryPrice) / p.entryPrice * 100 * p.leverage)
       : ((p.entryPrice - curPrice) / p.entryPrice * 100 * p.leverage);
-    return { ...p, curPrice, pnlPct };
+    return { ...p, side, curPrice, pnlPct };
   }).sort((a, b) => b.pnlPct - a.pnlPct);
 
   if (!sorted[idx]) return;
@@ -20170,6 +20172,7 @@ function _doOpenFuturesPosition(amt, curr, price) {
     entryPrice: price,
     tp: tp || null,
     sl: sl || null,
+    status: 'open',
     openedAt: new Date().toISOString()
   };
 
@@ -20283,23 +20286,24 @@ function updateFuturesPositions() {
   el.innerHTML = myPositions.map(pos => {
     const currentPrice = futuresState.prices[pos.pair] || pos.entryPrice;
     const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
-    const pnlPct = pos.side === 'long' ? priceDiff * pos.leverage : -priceDiff * pos.leverage;
+    const sideNorm = (pos.side || '').toLowerCase();
+    const pnlPct = sideNorm === 'long' ? priceDiff * pos.leverage : -priceDiff * pos.leverage;
     const pnlGang = pos.amount * pnlPct;
     const curr = pos.currency || 'GANG';
     const color = pnlGang >= 0 ? 'var(--green)' : 'var(--red)';
     const arrow = pnlGang >= 0 ? '&#9650;' : '&#9660;';
-    const sideColor = pos.side === 'long' ? '#27ae60' : '#e74c3c';
+    const sideColor = sideNorm === 'long' ? '#27ae60' : '#e74c3c';
 
     // Check TP/SL
-    if (pos.tp && ((pos.side === 'long' && currentPrice >= pos.tp) || (pos.side === 'short' && currentPrice <= pos.tp))) {
+    if (pos.tp && ((sideNorm === 'long' && currentPrice >= pos.tp) || (sideNorm === 'short' && currentPrice <= pos.tp))) {
       setTimeout(() => closeFuturesPosition(pos.id), 100);
     }
-    if (pos.sl && ((pos.side === 'long' && currentPrice <= pos.sl) || (pos.side === 'short' && currentPrice >= pos.sl))) {
+    if (pos.sl && ((sideNorm === 'long' && currentPrice <= pos.sl) || (sideNorm === 'short' && currentPrice >= pos.sl))) {
       setTimeout(() => closeFuturesPosition(pos.id), 100);
     }
     // Check liquidation
     const liqPct = 1 / pos.leverage;
-    if ((pos.side === 'long' && priceDiff <= -liqPct) || (pos.side === 'short' && priceDiff >= liqPct)) {
+    if ((sideNorm === 'long' && priceDiff <= -liqPct) || (sideNorm === 'short' && priceDiff >= liqPct)) {
       setTimeout(() => closeFuturesPosition(pos.id), 100);
     }
 
