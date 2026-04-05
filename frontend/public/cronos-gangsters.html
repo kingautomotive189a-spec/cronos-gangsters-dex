@@ -4565,7 +4565,7 @@ function toggleNavMenu() {
         <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">AMOUNT (<span id="futuresCurrLabel">GANG</span>)</div>
         <div style="display:flex;gap:6px;">
           <input class="swap-input" id="futuresAmount" data-testid="futures-amount" type="number" step="any" placeholder="Enter amount" style="flex:1;" />
-          <button onclick="document.getElementById('futuresAmount').value = ((futuresState.currency === 'CRO' ? (state.balances?.CRO || 0) : (state.balances?.GANG || 0))).toFixed(2)" style="background:var(--surface2);border:1px solid var(--border);color:var(--gold);border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;">MAX</button>
+          <button onclick="document.getElementById('futuresAmount').value = _truncDec((futuresState.currency === 'CRO' ? ((state.balances?.CRO || 0) > 0.5 ? (state.balances?.CRO || 0) - 0.5 : 0) : (state.balances?.GANG || 0)), 2)" style="background:var(--surface2);border:1px solid var(--border);color:var(--gold);border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;">MAX</button>
         </div>
         <div style="display:flex;justify-content:space-between;margin-top:6px;">
           <span style="font-size:11px;color:var(--muted);">Position size: <span id="futuresPosSize" style="color:var(--gold);">0</span></span>
@@ -8057,8 +8057,8 @@ function setMaxLiqB() {
   const symB = document.getElementById("liqTokenB")?.value || "GANG";
   let b = state.balances[symB];
   if (b !== undefined) {
-    if (symB === "CRO" && b > 0.5) b -= 0.5; // Reserve 0.5 CRO for gas
-    document.getElementById("liqB").value = b.toFixed(6);
+    if (symB === "CRO" && b > 0.5) b -= 0.5;
+    document.getElementById("liqB").value = _truncDec(b, 6);
     calcLiqRatioFromB();
   }
 }
@@ -10714,6 +10714,13 @@ async function approveToken(tokenAddr, spender, amount) {
   }
 }
 
+// Global helper: Truncate (floor) a float to N decimals — NEVER rounds up — prevents "exceeded" errors on MAX
+function _truncDec(val, decimals) {
+  if (!val || val <= 0) return "0";
+  const factor = Math.pow(10, decimals);
+  return (Math.floor(val * factor) / factor).toString();
+}
+
 function setMax(inputId) {
   const input = document.getElementById(inputId);
   // Truncate a float to n decimals WITHOUT rounding up (prevents overflow)
@@ -10791,8 +10798,13 @@ function setPct(inputId, selectId, pct) {
     const cached = getPairLP(symA, symB);
     const rawBal = cached ? cached.raw : null;
     if (rawBal && rawBal > 0n) {
-      const full = parseFloat(ethers.formatUnits(rawBal, 18));
-      input.value = (full * pct / 100).toFixed(8);
+      if (pct >= 100) {
+        const safe = rawBal > 1n ? rawBal - 1n : rawBal;
+        input.value = ethers.formatUnits(safe, 18);
+      } else {
+        const full = parseFloat(ethers.formatUnits(rawBal, 18));
+        input.value = _truncDec(full * pct / 100, 8);
+      }
       calcRemoveLiq();
       return;
     }
@@ -10801,15 +10813,25 @@ function setPct(inputId, selectId, pct) {
     if (action === 'unstake') {
       const rawStaked = state.stakedAmountsRaw?.[pid];
       if (rawStaked && rawStaked > 0n) {
-        const full = parseFloat(ethers.formatUnits(rawStaked, 18));
-        input.value = (full * pct / 100).toFixed(8);
+        if (pct >= 100) {
+          const safe = rawStaked > 1n ? rawStaked - 1n : rawStaked;
+          input.value = ethers.formatUnits(safe, 18);
+        } else {
+          const full = parseFloat(ethers.formatUnits(rawStaked, 18));
+          input.value = _truncDec(full * pct / 100, 8);
+        }
         return;
       }
     } else {
       const rawBal = state.lpBalancesRaw?.[pid];
       if (rawBal && rawBal > 0n) {
-        const full = parseFloat(ethers.formatUnits(rawBal, 18));
-        input.value = (full * pct / 100).toFixed(8);
+        if (pct >= 100) {
+          const safe = rawBal > 1n ? rawBal - 1n : rawBal;
+          input.value = ethers.formatUnits(safe, 18);
+        } else {
+          const full = parseFloat(ethers.formatUnits(rawBal, 18));
+          input.value = _truncDec(full * pct / 100, 8);
+        }
         return;
       }
     }
@@ -10825,12 +10847,12 @@ function setPct(inputId, selectId, pct) {
         bal = vault?.shares > 0 ? sharesToLPEstimate(vault) : 0;
       }
     }
-    input.value = (bal * pct / 100).toFixed(8);
+    input.value = _truncDec(bal * pct / 100, 8);
     return;
   }
 
   if (bal > 0) {
-    input.value = (bal * pct / 100).toFixed(6);
+    input.value = _truncDec(bal * pct / 100, 6);
   }
   // Trigger recalculations
   if (inputId === 'swapFrom') calcSwap();
@@ -10846,9 +10868,9 @@ function setVaultPct(vid, action, pct) {
   const input = document.getElementById('vaultActionAmt');
   if (!input) return;
   if (action === 'deposit') {
-    input.value = (_vaultModalBal * pct / 100).toFixed(8);
+    input.value = _truncDec(_vaultModalBal * pct / 100, 8);
   } else {
-    input.value = (_vaultModalWithdrawBal * pct / 100).toFixed(8);
+    input.value = _truncDec(_vaultModalWithdrawBal * pct / 100, 8);
   }
 }
 
@@ -12674,9 +12696,10 @@ function openFarmLiq(pid, action) {
     const hasStaked = stakedAmt > 0.000001;
     const hasWalletLP = parseFloat(lpBal) > 0.000001;
 
-    // Use raw BigInt for MAX values
+    // Use raw BigInt for MAX values — subtract 1 wei to prevent exceeded errors
     const rawLPBal = state.lpBalancesRaw?.[pid];
-    const maxLPStr = rawLPBal && rawLPBal > 0n ? ethers.formatUnits(rawLPBal, 18) : "0";
+    const safeLPBal = rawLPBal && rawLPBal > 1n ? rawLPBal - 1n : rawLPBal;
+    const maxLPStr = safeLPBal && safeLPBal > 0n ? ethers.formatUnits(safeLPBal, 18) : "0";
 
     let stakedWarning = "";
     if (hasStaked && !hasWalletLP) {
@@ -12815,7 +12838,8 @@ function setFarmWithdrawPct(pct) {
   const el = document.getElementById("farmWithdrawAmt");
   if (!el || !rawBal || rawBal <= 0n) return;
   if (p >= 100) {
-    el.value = ethers.formatUnits(rawBal, 18);
+    const safe = rawBal > 1n ? rawBal - 1n : rawBal;
+    el.value = ethers.formatUnits(safe, 18);
   } else {
     const partial = rawBal * BigInt(Math.floor(p * 100)) / 10000n;
     el.value = ethers.formatUnits(partial, 18);
@@ -15334,7 +15358,7 @@ async function setStakeGangMax() {
     } catch {}
   }
   const inp = document.getElementById('stakeGangAmt');
-  if (inp) { inp.value = bal.toFixed(4); updateStakePreview(); }
+  if (inp) { inp.value = _truncDec(bal, 4); updateStakePreview(); }
 }
 
 function updateStakePreview() {
@@ -18995,8 +19019,9 @@ function _getBal(sym) { return (state.balances && state.balances[sym]) ? state.b
 
 // Copy Trading MAX
 function ctSetMax() {
-  const bal = _getBal('CRO');
-  document.getElementById('ctAmount').value = bal;
+  let bal = _getBal('CRO');
+  if (bal > 0.5) bal -= 0.5; // Reserve gas
+  document.getElementById('ctAmount').value = _truncDec(bal, 6);
   const feeEl = document.getElementById('ctFeePreview');
   if (feeEl) feeEl.textContent = (bal * 0.003).toFixed(4);
 }
@@ -19008,11 +19033,10 @@ function updateCtBal() {
 // Revenue Staking MAX
 function rsSetMax() {
   const s = initRSState();
-  // If user has staked, MAX fills staked amount (for unstaking); otherwise fills GANG balance
   const gangBal = _getBal('GANG');
   const staked = s.userStake || 0;
   const val = gangBal > 0 ? gangBal : staked;
-  document.getElementById('rsStakeAmount').value = val;
+  document.getElementById('rsStakeAmount').value = _truncDec(val, 6);
 }
 function updateRsBals() {
   const s = initRSState();
@@ -19025,8 +19049,9 @@ function updateRsBals() {
 // Limit Orders MAX
 function loSetMax() {
   const token = document.getElementById('loToken').value;
-  const bal = _getBal(token);
-  document.getElementById('loAmount').value = bal;
+  let bal = _getBal(token);
+  if (token === 'CRO' && bal > 0.5) bal -= 0.5;
+  document.getElementById('loAmount').value = _truncDec(bal, 6);
   const feeEl = document.getElementById('loFeePreview');
   if (feeEl) feeEl.textContent = (bal * 0.003).toFixed(4);
 }
@@ -19039,8 +19064,9 @@ document.getElementById('loToken')?.addEventListener('change', updateLoBal);
 
 // Perpetual DEX MAX
 function ppSetMax() {
-  const bal = _getBal('CRO');
-  document.getElementById('ppCollateral').value = bal;
+  let bal = _getBal('CRO');
+  if (bal > 0.5) bal -= 0.5;
+  document.getElementById('ppCollateral').value = _truncDec(bal, 6);
   const feeEl = document.getElementById('ppFeePreview');
   if (feeEl) feeEl.textContent = (bal * 0.003).toFixed(4);
 }
@@ -19052,8 +19078,9 @@ function updatePpBal() {
 // OTC Trading MAX
 function otcSetMax() {
   const token = document.getElementById('otcSellToken').value;
-  const bal = _getBal(token);
-  document.getElementById('otcSellAmount').value = bal;
+  let bal = _getBal(token);
+  if (token === 'CRO' && bal > 0.5) bal -= 0.5;
+  document.getElementById('otcSellAmount').value = _truncDec(bal, 6);
   const feeEl = document.getElementById('otcFeePreview');
   if (feeEl) feeEl.textContent = (bal * 0.003).toFixed(4);
 }
@@ -19079,9 +19106,9 @@ const FLASH_POOLS = { 'GANG': 10000000, 'USDC': 500000, 'WETH': 150, 'WCRO': 300
 function flashSetMax() {
   const token = document.getElementById('flashToken')?.value || 'GANG';
   const pool = FLASH_POOLS[token] || 0;
-  document.getElementById('flashAmount').value = pool;
+  document.getElementById('flashAmount').value = _truncDec(pool * 0.999, 2); // 99.9% to prevent exceeding
   const feeEl = document.getElementById('flashFeePreview');
-  if (feeEl) feeEl.textContent = (pool * 0.003).toFixed(2);
+  if (feeEl) feeEl.textContent = (pool * 0.999 * 0.003).toFixed(2);
 }
 function updateFlashPoolBal() {
   const token = document.getElementById('flashToken')?.value || 'GANG';
@@ -19094,8 +19121,8 @@ document.getElementById('flashToken')?.addEventListener('change', updateFlashPoo
 // Lending MAX
 function lendSetMax() {
   const token = document.getElementById('lendBorrowToken')?.value || 'USDC';
-  const bal = _getBal(token);
-  document.getElementById('lendBorrowAmt').value = bal > 0 ? bal : 1000;
+  let bal = _getBal(token);
+  document.getElementById('lendBorrowAmt').value = _truncDec(bal > 0 ? bal : 1000, 6);
 }
 setTimeout(updateAllFeatureBalances, 1200);
 // Re-update on wallet connect events
