@@ -17229,8 +17229,9 @@ function initLendState() {
       if (s.userBorrowed[token] === undefined) s.userBorrowed[token] = 0;
       // Seed individual empty pools with realistic liquidity
       const seed = seedData[token] || { supplied: 0, borrowed: 0 };
-      if (s.pools[token].totalSupplied <= 0 && seed.supplied > 0) {
-        s.pools[token].totalSupplied = seed.supplied;
+      if (s.pools[token].totalSupplied < seed.supplied * 0.01 && seed.supplied > 0) {
+        const userSup = s.userSupplied[token] || 0;
+        s.pools[token].totalSupplied = seed.supplied + userSup;
         s.pools[token].totalBorrowed = seed.borrowed;
         needsSave = true;
       }
