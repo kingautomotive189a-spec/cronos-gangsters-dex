@@ -37,6 +37,11 @@ Core DeFi, Advanced DeFi, World Domination (6 features), Dynamic Copy Trading, A
 - **Telegram Bot menu**: Added "KYC & Audit" button to main inline keyboard menu
 - **ZIP delivered** for GoDaddy deployment
 
+## Changes (Feb 2026 — Session 2)
+- **Bot Dashboard API Fix**: Fixed `dashboard.html` API routing for GoDaddy deployment. Replaced hardcoded `window.location.origin` with configurable `BACKEND_URL` constant. Users can now set their backend server URL at the top of the file so the bot control panel works on static hosting.
+- **ZIP delivered** for GoDaddy deployment
+
 ## Key Files
 - `/app/frontend/public/cronos-gangsters.html`
+- `/app/frontend/public/dashboard.html`
 - `/app/frontend/public/cronos-gangsters-deploy.zip`

@@ -409,7 +409,14 @@ main{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:24px 16px
 </main>
 
 <script>
-const API = window.location.origin + '/api';
+// ═══════════════════════════════════════════════════════════════
+// BACKEND API URL — Change this to your actual backend server URL
+// For GoDaddy hosting, set this to wherever your FastAPI backend runs
+// Example: 'https://your-backend-server.com/api'
+// Leave as '' to auto-detect from current domain (works when backend is on same host)
+// ═══════════════════════════════════════════════════════════════
+const BACKEND_URL = ''; // <-- SET YOUR BACKEND URL HERE (e.g. 'https://api.cronosgangsters.com')
+const API = (BACKEND_URL || window.location.origin) + '/api';
 const logBox = document.getElementById('logBox');
 
 function log(msg) {
