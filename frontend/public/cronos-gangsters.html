@@ -604,6 +604,12 @@
       <button class="nav-btn" data-page="flashloans" data-testid="nav-flashloans-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffdd00" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><span style="color:#ffdd00;font-weight:700;">Flash Loans</span></button>
       <button class="nav-btn" data-page="insurance" data-testid="nav-insurance-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ecdc4" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><span style="color:#4ecdc4;font-weight:700;">Insurance</span></button>
       <button class="nav-btn" data-page="aggregator" data-testid="nav-aggregator-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff6ec7" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span><span style="color:#ff6ec7;font-weight:700;">DEX Aggregator</span></button>
+      <button class="nav-btn" data-page="copytrade" data-testid="nav-copytrade-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e91e63" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span style="color:#e91e63;font-weight:700;">Copy Trading</span></button>
+      <button class="nav-btn" data-page="revstaking" data-testid="nav-revstaking-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9c27b0" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span><span style="color:#9c27b0;font-weight:700;">Revenue Staking</span></button>
+      <button class="nav-btn" data-page="limitorders" data-testid="nav-limitorders-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#42a5f5" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg></span><span style="color:#42a5f5;font-weight:700;">Limit Orders</span></button>
+      <button class="nav-btn" data-page="perpdex" data-testid="nav-perpdex-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f44336" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-3 3"/><circle cx="18" cy="9" r="2"/></svg></span><span style="color:#f44336;font-weight:700;">Perpetual DEX</span></button>
+      <button class="nav-btn" data-page="otc" data-testid="nav-otc-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8d6e63" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span><span style="color:#8d6e63;font-weight:700;">OTC Trading</span></button>
+      <button class="nav-btn" data-page="dao" data-testid="nav-dao-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#78909c" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg></span><span style="color:#78909c;font-weight:700;">DAO Governance</span></button>
       <button class="nav-btn" data-page="futures" data-testid="nav-futures-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 5-10"/></svg></span><span style="color:#ff8c00;font-weight:700;">Gang Futures</span></button>
       <button class="nav-btn" data-page="sniper" data-testid="nav-sniper-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg></span>Sniper</button>
       <div class="nav-divider"></div>
@@ -776,6 +782,18 @@ function toggleNavMenu() {
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('aggregator')" style="cursor:pointer;color:#ff6ec7;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔀 DEX AGGREGATOR — BEST PRICES</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('copytrade')" style="cursor:pointer;color:#e91e63;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">👥 COPY TRADING — 0.3% FEE</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('revstaking')" style="cursor:pointer;color:#9c27b0;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">💎 REVENUE STAKING — EARN FEES</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('limitorders')" style="cursor:pointer;color:#42a5f5;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📋 LIMIT ORDERS — SET & FORGET</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('perpdex')" style="cursor:pointer;color:#f44336;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📊 PERPETUAL DEX — NO EXPIRY</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('otc')" style="cursor:pointer;color:#8d6e63;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🤝 OTC TRADING — BIG BLOCKS</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('dao')" style="cursor:pointer;color:#78909c;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏛 DAO GOVERNANCE — VOTE</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('tracker')" style="cursor:pointer;color:#00d4ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔍 GANG TRACKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('swap')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔄 SWAP TOKENS</span>
@@ -826,6 +844,18 @@ function toggleNavMenu() {
         <span onclick="showPage('insurance')" style="cursor:pointer;color:#4ecdc4;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🛡 INSURANCE — EARN PREMIUMS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('aggregator')" style="cursor:pointer;color:#ff6ec7;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔀 DEX AGGREGATOR — BEST PRICES</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('copytrade')" style="cursor:pointer;color:#e91e63;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">👥 COPY TRADING — 0.3% FEE</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('revstaking')" style="cursor:pointer;color:#9c27b0;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">💎 REVENUE STAKING — EARN FEES</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('limitorders')" style="cursor:pointer;color:#42a5f5;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📋 LIMIT ORDERS — SET & FORGET</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('perpdex')" style="cursor:pointer;color:#f44336;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📊 PERPETUAL DEX — NO EXPIRY</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('otc')" style="cursor:pointer;color:#8d6e63;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🤝 OTC TRADING — BIG BLOCKS</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('dao')" style="cursor:pointer;color:#78909c;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏛 DAO GOVERNANCE — VOTE</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('tracker')" style="cursor:pointer;color:#00d4ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔍 GANG TRACKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
@@ -1138,6 +1168,36 @@ function toggleNavMenu() {
           <div style="font-size:22px;margin-bottom:4px;">🔀</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#ff6ec7;letter-spacing:1px;">AGGREGATOR</div>
           <div style="font-size:9px;color:var(--muted);margin-top:2px;">Best prices</div>
+        </div>
+        <div class="card" onclick="showPage('copytrade')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(233,30,99,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#e91e63'" onmouseout="this.style.borderColor='rgba(233,30,99,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">👥</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#e91e63;letter-spacing:1px;">COPY TRADE</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Follow pros</div>
+        </div>
+        <div class="card" onclick="showPage('revstaking')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(156,39,176,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#9c27b0'" onmouseout="this.style.borderColor='rgba(156,39,176,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">💎</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#9c27b0;letter-spacing:1px;">REV STAKE</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Earn platform fees</div>
+        </div>
+        <div class="card" onclick="showPage('limitorders')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(66,165,245,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#42a5f5'" onmouseout="this.style.borderColor='rgba(66,165,245,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">📋</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#42a5f5;letter-spacing:1px;">LIMIT ORDERS</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Set & forget</div>
+        </div>
+        <div class="card" onclick="showPage('perpdex')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(244,67,54,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#f44336'" onmouseout="this.style.borderColor='rgba(244,67,54,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">📊</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#f44336;letter-spacing:1px;">PERP DEX</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">No expiry</div>
+        </div>
+        <div class="card" onclick="showPage('otc')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(141,110,99,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#8d6e63'" onmouseout="this.style.borderColor='rgba(141,110,99,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">🤝</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#8d6e63;letter-spacing:1px;">OTC DESK</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Big block trades</div>
+        </div>
+        <div class="card" onclick="showPage('dao')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(120,144,156,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#78909c'" onmouseout="this.style.borderColor='rgba(120,144,156,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">🏛</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#78909c;letter-spacing:1px;">DAO</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Vote & govern</div>
         </div>
         <div class="card" onclick="showPage('swap')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
           <div style="font-size:22px;margin-bottom:4px;">🔄</div>
@@ -2318,27 +2378,49 @@ function toggleNavMenu() {
         </div>
       </div>
 
-      <!-- PHASE 9 — NEXT -->
+      <!-- PHASE 9 — DONE -->
       <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:0;margin-bottom:40px;align-items:center;">
         <div class="gang-img-card" style="margin-right:20px;opacity:0.75;">
           <img loading="lazy" src="/nft/images/6.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
           <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> WORLD DOMINATION</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;z-index:1;">
-          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,rgba(212,160,23,0.4),rgba(212,160,23,0.15));display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(212,160,23,0.5);border:2px solid var(--gold);animation:pulseDot 2s ease-in-out infinite;color:var(--gold);font-family:'Bebas Neue',sans-serif;">9</div>
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,rgba(39,174,96,0.4),rgba(39,174,96,0.15));display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(39,174,96,0.5);border:2px solid var(--green);color:var(--green);font-family:'Bebas Neue',sans-serif;">9</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--green);letter-spacing:2px;margin-top:6px;text-align:center;">DONE</div>
+        </div>
+        <div class="card" style="margin-left:20px;border-color:rgba(39,174,96,0.5);box-shadow:0 0 20px rgba(39,174,96,0.15);">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--green);margin-bottom:6px;">PHASE 9 — COMPLETE</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">WORLD DOMINATION</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--green);"><span>&#9679;</span> Copy Trading — Follow top traders, 0.3% fee</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--green);"><span>&#9679;</span> Revenue-Sharing Staking — Earn platform fees</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--green);"><span>&#9679;</span> Limit Orders — Set target prices, 0.3% fee</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--green);"><span>&#9679;</span> Perpetual DEX — No-expiry contracts, 50x leverage</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--green);"><span>&#9679;</span> OTC Trading Desk — Big block trades with escrow</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--green);"><span>&#9679;</span> DAO Governance — Proposals &amp; voting with $GANG</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 10 — NEXT -->
+      <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:0;margin-bottom:40px;align-items:center;">
+        <div class="gang-img-card" style="margin-right:20px;opacity:0.75;">
+          <img loading="lazy" src="/nft/images/7.png" class="gang-side-img" style="height:180px;object-fit:cover;object-position:center top;" />
+          <div class="gang-img-caption"><img loading="lazy" src="/gang-logo.png" style="width:16px;height:16px;vertical-align:middle;border-radius:50%;"> EMPIRE EXPANSION</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;z-index:1;">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,rgba(212,160,23,0.4),rgba(212,160,23,0.15));display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 20px rgba(212,160,23,0.5);border:2px solid var(--gold);animation:pulseDot 2s ease-in-out infinite;color:var(--gold);font-family:'Bebas Neue',sans-serif;">10</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--gold);letter-spacing:2px;margin-top:6px;text-align:center;">NEXT</div>
         </div>
         <div class="card" style="margin-left:20px;border-color:rgba(212,160,23,0.5);box-shadow:0 0 20px rgba(212,160,23,0.15);">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:6px;">PHASE 9 — COMING SOON</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">WORLD DOMINATION</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:6px;">PHASE 10 — COMING SOON</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">EMPIRE EXPANSION</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);"><span>&#9675;</span> Gangster NFT Gallery with rarity &amp; trait filters</div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);"><span>&#9675;</span> Top Collections leaderboard</div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);"><span>&#9675;</span> $GANG Governance voting &amp; DAO</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);"><span>&#9675;</span> CEX listings</div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);"><span>&#9675;</span> Options Trading on GANG FUTURES</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);"><span>&#9675;</span> Multi-chain expansion (ETH, BSC)</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);"><span>&#9675;</span> Mobile App (iOS &amp; Android)</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);"><span>&#9675;</span> Gangster NFT Gallery with rarity &amp; trait filters</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);"><span>&#9675;</span> Top Collections leaderboard</div>
           </div>
         </div>
       </div>
@@ -4956,6 +5038,325 @@ function toggleNavMenu() {
 
 
   <!-- ══════════════════════════════════════
+       COPY TRADING PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-copytrade" data-testid="page-copytrade">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#e91e63;line-height:1;text-shadow:0 0 30px rgba(233,30,99,0.3);">GANG COPY TRADING</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Follow top traders. Auto-copy their trades. Earn while they trade.</div>
+    </div>
+    <div class="stats-bar" style="margin-bottom:20px;" data-testid="copytrade-stats-bar">
+      <div class="stat-item"><div class="stat-label">TOP TRADERS</div><div class="stat-value" id="ctTraderCount" data-testid="ct-trader-count">12</div></div>
+      <div class="stat-item"><div class="stat-label">TOTAL COPIED</div><div class="stat-value" id="ctTotalCopied" data-testid="ct-total-copied">$0</div></div>
+      <div class="stat-item"><div class="stat-label">YOUR COPIES</div><div class="stat-value" id="ctYourCopies" data-testid="ct-your-copies">0</div></div>
+      <div class="stat-item"><div class="stat-label">COPY FEE</div><div class="stat-value" style="color:#e91e63;">0.3%</div></div>
+    </div>
+    <div class="card" style="border-color:rgba(233,30,99,0.3);margin-bottom:16px;" data-testid="ct-leaders-card">
+      <div class="card-title" style="color:#e91e63;">TOP TRADERS TO FOLLOW</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Select a top trader and copy their trades automatically. 0.3% fee per copied trade.</div>
+      <div id="ctLeadersGrid" data-testid="ct-leaders-grid" style="display:grid;gap:10px;"></div>
+    </div>
+    <div class="card" style="border-color:rgba(233,30,99,0.3);margin-bottom:16px;" data-testid="ct-copy-form">
+      <div class="card-title" style="color:#e91e63;">COPY A TRADE</div>
+      <div style="display:grid;gap:10px;margin-bottom:14px;">
+        <select id="ctSelectTrader" data-testid="ct-select-trader" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
+          <option value="GangWhale">GangWhale — 342% ROI</option>
+          <option value="CroKing">CroKing — 289% ROI</option>
+          <option value="DefiSage">DefiSage — 234% ROI</option>
+          <option value="AlphaHunter">AlphaHunter — 198% ROI</option>
+          <option value="MoonShot">MoonShot — 176% ROI</option>
+          <option value="CryptoGangster">CryptoGangster — 156% ROI</option>
+        </select>
+        <select id="ctToken" data-testid="ct-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
+          <option value="CRO">CRO</option><option value="GANG">GANG</option><option value="USDC">USDC</option><option value="WETH">WETH</option>
+        </select>
+        <input type="number" id="ctAmount" data-testid="ct-amount" placeholder="Amount to copy-trade (CRO)" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(233,30,99,0.2);border-radius:8px;padding:10px 12px;">
+          <span style="font-size:12px;color:var(--muted);">Copy Fee (0.3%)</span>
+          <span id="ctFeePreview" data-testid="ct-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#e91e63;">0</span>
+        </div>
+      </div>
+      <button class="btn-primary" data-testid="ct-copy-btn" onclick="executeCopyTrade()" style="width:100%;background:linear-gradient(135deg,#e91e63,#c2185b);font-size:16px;font-weight:800;">👥 COPY TRADE NOW</button>
+    </div>
+    <div id="ctOwnerPanel" data-testid="ct-owner-panel" style="display:none;margin-bottom:16px;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);">
+        <div class="card-title" style="color:var(--green);">OWNER — COPY TRADING REVENUE</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">You earn 0.3% on every copied trade. More copiers = more fees.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
+            <div id="ctOwnerFees" data-testid="ct-owner-fees" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TRADES COPIED</div>
+            <div id="ctOwnerCount" data-testid="ct-owner-count" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#e91e63;">0</div>
+          </div>
+        </div>
+        <button class="btn-primary" data-testid="ct-owner-collect-btn" onclick="ctOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT COPY TRADING FEES</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">YOUR COPY HISTORY</div>
+      <div id="ctHistoryList" data-testid="ct-history-list" style="max-height:300px;overflow-y:auto;">
+        <div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No copies yet. Select a trader above to start copying.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">HOW COPY TRADING WORKS</div>
+      <div style="display:grid;gap:12px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">1</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Browse top traders</div><div style="font-size:11px;color:var(--muted);">See ROI, win rate, and trade history of the best traders on the platform.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">2</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Set your amount</div><div style="font-size:11px;color:var(--muted);">Choose how much to allocate per copy trade. Minimum 10 CRO.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">3</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Auto-copy</div><div style="font-size:11px;color:var(--muted);">Trades are copied automatically. 0.3% fee per trade. Stop anytime.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#e91e63;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">4</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Profit together</div><div style="font-size:11px;color:var(--muted);">When the trader profits, you profit. Track everything in your copy history.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       REVENUE-SHARING STAKING PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-revstaking" data-testid="page-revstaking">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#9c27b0;line-height:1;text-shadow:0 0 30px rgba(156,39,176,0.3);">REVENUE STAKING</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Stake $GANG. Earn a share of ALL platform fees.</div>
+    </div>
+    <div class="stats-bar" style="margin-bottom:20px;" data-testid="revstaking-stats-bar">
+      <div class="stat-item"><div class="stat-label">TOTAL STAKED</div><div class="stat-value" id="rsTotal" data-testid="rs-total">0 GANG</div></div>
+      <div class="stat-item"><div class="stat-label">YOUR STAKE</div><div class="stat-value" id="rsYourStake" data-testid="rs-your-stake">0 GANG</div></div>
+      <div class="stat-item"><div class="stat-label">YOUR SHARE</div><div class="stat-value" id="rsYourShare" data-testid="rs-your-share">0%</div></div>
+      <div class="stat-item"><div class="stat-label">REV POOL</div><div class="stat-value" id="rsRevPool" data-testid="rs-rev-pool" style="color:#9c27b0;">0 CRO</div></div>
+    </div>
+    <div class="card" style="border-color:rgba(156,39,176,0.3);margin-bottom:16px;" data-testid="rs-stake-form">
+      <div class="card-title" style="color:#9c27b0;">STAKE $GANG FOR REVENUE SHARE</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Stake GANG tokens to earn a proportional share of ALL 0.3% platform fees. More staked = bigger share.</div>
+      <input type="number" id="rsStakeAmount" data-testid="rs-stake-amount" placeholder="GANG amount to stake" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;margin-bottom:10px;box-sizing:border-box;">
+      <div style="display:flex;gap:8px;">
+        <button class="btn-primary" data-testid="rs-stake-btn" onclick="rsStake()" style="flex:1;background:linear-gradient(135deg,#9c27b0,#7b1fa2);">STAKE GANG</button>
+        <button class="btn-primary" data-testid="rs-unstake-btn" onclick="rsUnstake()" style="flex:1;background:linear-gradient(135deg,#e53935,#c62828);">UNSTAKE</button>
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(156,39,176,0.3);margin-bottom:16px;" data-testid="rs-claim-form">
+      <div class="card-title" style="color:#9c27b0;">CLAIM REVENUE REWARDS</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(156,39,176,0.2);border-radius:8px;padding:14px;margin-bottom:12px;">
+        <span style="font-size:12px;color:var(--muted);">Pending Revenue Rewards</span>
+        <span id="rsPendingRewards" data-testid="rs-pending-rewards" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</span>
+      </div>
+      <button class="btn-primary" data-testid="rs-claim-btn" onclick="rsClaim()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">CLAIM REWARDS</button>
+    </div>
+    <div id="rsOwnerPanel" data-testid="rs-owner-panel" style="display:none;margin-bottom:16px;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);">
+        <div class="card-title" style="color:var(--green);">OWNER — REVENUE STAKING POOL</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Revenue distributed to stakers. You keep 0.3% management fee on distributions.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">MGMT FEES</div><div id="rsOwnerFees" data-testid="rs-owner-fees" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</div></div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">DISTRIBUTIONS</div><div id="rsOwnerDist" data-testid="rs-owner-dist" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#9c27b0;">0</div></div>
+        </div>
+        <button class="btn-primary" data-testid="rs-owner-collect-btn" onclick="rsOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT STAKING MGMT FEES</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">HOW REVENUE STAKING WORKS</div>
+      <div style="display:grid;gap:12px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#9c27b0;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">1</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Stake $GANG</div><div style="font-size:11px;color:var(--muted);">Lock your GANG tokens in the revenue staking pool. No minimum.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#9c27b0;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">2</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Platform earns fees</div><div style="font-size:11px;color:var(--muted);">Every trade, loan, copy, and swap generates 0.3% fees.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#9c27b0;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">3</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Earn your share</div><div style="font-size:11px;color:var(--muted);">Revenue is distributed proportionally to all stakers. Bigger stake = bigger share.</div></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#9c27b0;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">4</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Claim anytime</div><div style="font-size:11px;color:var(--muted);">Claim your CRO rewards whenever you want. Unstake anytime — no lock period.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       LIMIT ORDERS PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-limitorders" data-testid="page-limitorders">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#42a5f5;line-height:1;text-shadow:0 0 30px rgba(66,165,245,0.3);">GANG LIMIT ORDERS</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Set your price. We execute when it hits. 0.3% fee.</div>
+    </div>
+    <div class="stats-bar" style="margin-bottom:20px;" data-testid="limitorders-stats-bar">
+      <div class="stat-item"><div class="stat-label">OPEN ORDERS</div><div class="stat-value" id="loOpenOrders" data-testid="lo-open-orders">0</div></div>
+      <div class="stat-item"><div class="stat-label">FILLED TODAY</div><div class="stat-value" id="loFilledToday" data-testid="lo-filled-today">0</div></div>
+      <div class="stat-item"><div class="stat-label">YOUR ORDERS</div><div class="stat-value" id="loYourOrders" data-testid="lo-your-orders">0</div></div>
+      <div class="stat-item"><div class="stat-label">EXEC FEE</div><div class="stat-value" style="color:#42a5f5;">0.3%</div></div>
+    </div>
+    <div class="card" style="border-color:rgba(66,165,245,0.3);margin-bottom:16px;" data-testid="lo-order-form">
+      <div class="card-title" style="color:#42a5f5;">PLACE LIMIT ORDER</div>
+      <div style="display:grid;gap:10px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <select id="loOrderType" data-testid="lo-order-type" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;"><option value="buy">BUY</option><option value="sell">SELL</option></select>
+          <select id="loToken" data-testid="lo-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;"><option value="CRO">CRO</option><option value="GANG">GANG</option><option value="USDC">USDC</option><option value="WETH">WETH</option><option value="WBTC">WBTC</option></select>
+        </div>
+        <input type="number" id="loPrice" data-testid="lo-price" placeholder="Target price (USD)" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <input type="number" id="loAmount" data-testid="lo-amount" placeholder="Amount" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(66,165,245,0.2);border-radius:8px;padding:10px 12px;">
+          <span style="font-size:12px;color:var(--muted);">Execution Fee (0.3%)</span>
+          <span id="loFeePreview" data-testid="lo-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#42a5f5;">0</span>
+        </div>
+      </div>
+      <button class="btn-primary" data-testid="lo-place-btn" onclick="placeLimitOrder()" style="width:100%;background:linear-gradient(135deg,#42a5f5,#1e88e5);font-size:16px;font-weight:800;">📋 PLACE LIMIT ORDER</button>
+    </div>
+    <div id="loOwnerPanel" data-testid="lo-owner-panel" style="display:none;margin-bottom:16px;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);">
+        <div class="card-title" style="color:var(--green);">OWNER — LIMIT ORDER REVENUE</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">0.3% fee on every executed limit order.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div><div id="loOwnerFees" data-testid="lo-owner-fees" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</div></div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">ORDERS FILLED</div><div id="loOwnerCount" data-testid="lo-owner-count" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#42a5f5;">0</div></div>
+        </div>
+        <button class="btn-primary" data-testid="lo-owner-collect-btn" onclick="loOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT LIMIT ORDER FEES</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">YOUR OPEN ORDERS</div>
+      <div id="loOrdersList" data-testid="lo-orders-list" style="max-height:300px;overflow-y:auto;"><div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No open orders. Place one above.</div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PERPETUAL DEX PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-perpdex" data-testid="page-perpdex">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#f44336;line-height:1;text-shadow:0 0 30px rgba(244,67,54,0.3);">GANG PERPETUAL DEX</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Perpetual contracts. No expiry. Up to 50x leverage.</div>
+    </div>
+    <div class="stats-bar" style="margin-bottom:20px;" data-testid="perpdex-stats-bar">
+      <div class="stat-item"><div class="stat-label">OPEN INTEREST</div><div class="stat-value" id="ppOpenInterest" data-testid="pp-open-interest">$0</div></div>
+      <div class="stat-item"><div class="stat-label">24H VOLUME</div><div class="stat-value" id="ppVolume" data-testid="pp-volume">$0</div></div>
+      <div class="stat-item"><div class="stat-label">YOUR POSITIONS</div><div class="stat-value" id="ppYourPos" data-testid="pp-your-pos">0</div></div>
+      <div class="stat-item"><div class="stat-label">TRADING FEE</div><div class="stat-value" style="color:#f44336;">0.3%</div></div>
+    </div>
+    <div class="card" style="border-color:rgba(244,67,54,0.3);margin-bottom:16px;" data-testid="pp-trade-form">
+      <div class="card-title" style="color:#f44336;">OPEN PERPETUAL POSITION</div>
+      <div style="display:grid;gap:10px;margin-bottom:14px;">
+        <select id="ppPair" data-testid="pp-pair" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
+          <option value="BTC-PERP">BTC-PERP</option><option value="ETH-PERP">ETH-PERP</option><option value="CRO-PERP">CRO-PERP</option><option value="SOL-PERP">SOL-PERP</option><option value="GANG-PERP">GANG-PERP</option><option value="DOGE-PERP">DOGE-PERP</option><option value="AVAX-PERP">AVAX-PERP</option><option value="LINK-PERP">LINK-PERP</option>
+        </select>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <button id="ppLongBtn" data-testid="pp-long-btn" onclick="document.getElementById('ppDirection').value='long';this.style.background='#27ae60';this.style.color='#fff';document.getElementById('ppShortBtn').style.background='var(--surface2)';document.getElementById('ppShortBtn').style.color='var(--muted)';" style="padding:10px;border-radius:8px;border:1px solid var(--border);background:#27ae60;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;cursor:pointer;letter-spacing:2px;">LONG</button>
+          <button id="ppShortBtn" data-testid="pp-short-btn" onclick="document.getElementById('ppDirection').value='short';this.style.background='#e53935';this.style.color='#fff';document.getElementById('ppLongBtn').style.background='var(--surface2)';document.getElementById('ppLongBtn').style.color='var(--muted)';" style="padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:16px;cursor:pointer;letter-spacing:2px;">SHORT</button>
+        </div>
+        <input type="hidden" id="ppDirection" value="long">
+        <select id="ppLeverage" data-testid="pp-leverage" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
+          <option value="5">5x Leverage</option><option value="10">10x Leverage</option><option value="20">20x Leverage</option><option value="30">30x Leverage</option><option value="50">50x Leverage</option>
+        </select>
+        <input type="number" id="ppCollateral" data-testid="pp-collateral" placeholder="Collateral amount (CRO)" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(244,67,54,0.2);border-radius:8px;padding:10px 12px;">
+          <span style="font-size:12px;color:var(--muted);">Trading Fee (0.3%)</span>
+          <span id="ppFeePreview" data-testid="pp-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#f44336;">0</span>
+        </div>
+      </div>
+      <button class="btn-primary" data-testid="pp-open-btn" onclick="openPerpPosition()" style="width:100%;background:linear-gradient(135deg,#f44336,#c62828);font-size:16px;font-weight:800;">📊 OPEN PERP POSITION</button>
+    </div>
+    <div id="ppOwnerPanel" data-testid="pp-owner-panel" style="display:none;margin-bottom:16px;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);">
+        <div class="card-title" style="color:var(--green);">OWNER — PERPETUAL DEX REVENUE</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">0.3% fee on every position opened and closed. Plus funding rate revenue.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div><div id="ppOwnerFees" data-testid="pp-owner-fees" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</div></div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">POSITIONS OPENED</div><div id="ppOwnerCount" data-testid="pp-owner-count" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#f44336;">0</div></div>
+        </div>
+        <button class="btn-primary" data-testid="pp-owner-collect-btn" onclick="ppOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT PERP DEX FEES</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">YOUR OPEN POSITIONS</div>
+      <div id="ppPositionsList" data-testid="pp-positions-list" style="max-height:300px;overflow-y:auto;"><div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No open positions. Open one above.</div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       OTC TRADING PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-otc" data-testid="page-otc">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#8d6e63;line-height:1;text-shadow:0 0 30px rgba(141,110,99,0.3);">GANG OTC DESK</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Large block trades. P2P matching. Escrow protection. 0.3% fee.</div>
+    </div>
+    <div class="stats-bar" style="margin-bottom:20px;" data-testid="otc-stats-bar">
+      <div class="stat-item"><div class="stat-label">ACTIVE DEALS</div><div class="stat-value" id="otcActiveDeals" data-testid="otc-active-deals">0</div></div>
+      <div class="stat-item"><div class="stat-label">TOTAL VOLUME</div><div class="stat-value" id="otcTotalVol" data-testid="otc-total-vol">$0</div></div>
+      <div class="stat-item"><div class="stat-label">YOUR DEALS</div><div class="stat-value" id="otcYourDeals" data-testid="otc-your-deals">0</div></div>
+      <div class="stat-item"><div class="stat-label">OTC FEE</div><div class="stat-value" style="color:#8d6e63;">0.3%</div></div>
+    </div>
+    <div class="card" style="border-color:rgba(141,110,99,0.3);margin-bottom:16px;" data-testid="otc-create-form">
+      <div class="card-title" style="color:#8d6e63;">CREATE OTC DEAL</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">List a large block trade. Buyer fills it. Escrow protects both sides. 0.3% fee.</div>
+      <div style="display:grid;gap:10px;margin-bottom:14px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <select id="otcSellToken" data-testid="otc-sell-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;"><option value="CRO">SELL: CRO</option><option value="GANG">SELL: GANG</option><option value="USDC">SELL: USDC</option><option value="WETH">SELL: WETH</option></select>
+          <select id="otcBuyToken" data-testid="otc-buy-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;"><option value="GANG">BUY: GANG</option><option value="CRO">BUY: CRO</option><option value="USDC">BUY: USDC</option><option value="WETH">BUY: WETH</option></select>
+        </div>
+        <input type="number" id="otcSellAmount" data-testid="otc-sell-amount" placeholder="Amount to sell" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <input type="number" id="otcPrice" data-testid="otc-price" placeholder="Price per token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(141,110,99,0.2);border-radius:8px;padding:10px 12px;">
+          <span style="font-size:12px;color:var(--muted);">OTC Fee (0.3%)</span>
+          <span id="otcFeePreview" data-testid="otc-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#8d6e63;">0</span>
+        </div>
+      </div>
+      <button class="btn-primary" data-testid="otc-create-btn" onclick="createOtcDeal()" style="width:100%;background:linear-gradient(135deg,#8d6e63,#6d4c41);font-size:16px;font-weight:800;">🤝 CREATE OTC DEAL</button>
+    </div>
+    <div id="otcOwnerPanel" data-testid="otc-owner-panel" style="display:none;margin-bottom:16px;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);">
+        <div class="card-title" style="color:var(--green);">OWNER — OTC TRADING REVENUE</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">0.3% fee on every OTC deal executed.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div><div id="otcOwnerFees" data-testid="otc-owner-fees" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</div></div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">DEALS CLOSED</div><div id="otcOwnerCount" data-testid="otc-owner-count" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#8d6e63;">0</div></div>
+        </div>
+        <button class="btn-primary" data-testid="otc-owner-collect-btn" onclick="otcOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT OTC FEES</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">ACTIVE OTC DEALS</div>
+      <div id="otcDealsList" data-testid="otc-deals-list" style="max-height:300px;overflow-y:auto;"><div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No active deals. Create one above or wait for others to list.</div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       DAO GOVERNANCE PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-dao" data-testid="page-dao">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#78909c;line-height:1;text-shadow:0 0 30px rgba(120,144,156,0.3);">GANG DAO</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Decentralized governance. Create proposals. Vote with $GANG.</div>
+    </div>
+    <div class="stats-bar" style="margin-bottom:20px;" data-testid="dao-stats-bar">
+      <div class="stat-item"><div class="stat-label">PROPOSALS</div><div class="stat-value" id="daoProposals" data-testid="dao-proposals">0</div></div>
+      <div class="stat-item"><div class="stat-label">TOTAL VOTES</div><div class="stat-value" id="daoTotalVotes" data-testid="dao-total-votes">0</div></div>
+      <div class="stat-item"><div class="stat-label">YOUR VOTES</div><div class="stat-value" id="daoYourVotes" data-testid="dao-your-votes">0</div></div>
+      <div class="stat-item"><div class="stat-label">PROPOSAL FEE</div><div class="stat-value" style="color:#78909c;">1 CRO</div></div>
+    </div>
+    <div class="card" style="border-color:rgba(120,144,156,0.3);margin-bottom:16px;" data-testid="dao-propose-form">
+      <div class="card-title" style="color:#78909c;">CREATE PROPOSAL</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Submit a governance proposal. Costs 1 CRO. Community votes with $GANG tokens. Quorum: 10,000 GANG.</div>
+      <div style="display:grid;gap:10px;margin-bottom:14px;">
+        <input type="text" id="daoTitle" data-testid="dao-title" placeholder="Proposal title" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <textarea id="daoDescription" data-testid="dao-description" placeholder="Describe your proposal..." rows="3" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;resize:vertical;font-family:inherit;"></textarea>
+        <select id="daoCategory" data-testid="dao-category" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
+          <option value="treasury">Treasury Allocation</option><option value="feature">New Feature</option><option value="fee">Fee Change</option><option value="partnership">Partnership</option><option value="other">Other</option>
+        </select>
+      </div>
+      <button class="btn-primary" data-testid="dao-propose-btn" onclick="createDaoProposal()" style="width:100%;background:linear-gradient(135deg,#78909c,#546e7a);font-size:16px;font-weight:800;">🏛 SUBMIT PROPOSAL (1 CRO)</button>
+    </div>
+    <div id="daoOwnerPanel" data-testid="dao-owner-panel" style="display:none;margin-bottom:16px;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);">
+        <div class="card-title" style="color:var(--green);">OWNER — DAO REVENUE</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">1 CRO per proposal creation fee. Plus 0.3% on any treasury execution.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">PROPOSAL FEES</div><div id="daoOwnerFees" data-testid="dao-owner-fees" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</div></div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">PROPOSALS MADE</div><div id="daoOwnerCount" data-testid="dao-owner-count" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#78909c;">0</div></div>
+        </div>
+        <button class="btn-primary" data-testid="dao-owner-collect-btn" onclick="daoOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT DAO FEES</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">ACTIVE PROPOSALS</div>
+      <div id="daoProposalsList" data-testid="dao-proposals-list" style="display:grid;gap:10px;"><div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No proposals yet. Create one above.</div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
        OWNER REVENUE PAGE
   ══════════════════════════════════════ -->
   <div class="page" id="page-revenue" data-testid="page-revenue">
@@ -5038,6 +5439,30 @@ function toggleNavMenu() {
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
           <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">AGGREGATOR</div>
           <div data-testid="rev-aggregator-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ff6ec7;letter-spacing:1px;">0.3%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">COPY TRADE</div>
+          <div data-testid="rev-copytrade-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#e91e63;letter-spacing:1px;">0.3%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">REV STAKING</div>
+          <div data-testid="rev-revstaking-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#9c27b0;letter-spacing:1px;">0.3%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">LIMIT ORDERS</div>
+          <div data-testid="rev-limitorders-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#42a5f5;letter-spacing:1px;">0.3%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">PERP DEX</div>
+          <div data-testid="rev-perpdex-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#f44336;letter-spacing:1px;">0.3%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">OTC DESK</div>
+          <div data-testid="rev-otc-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#8d6e63;letter-spacing:1px;">0.3%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">DAO</div>
+          <div data-testid="rev-dao-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#78909c;letter-spacing:1px;">1 CRO</div>
         </div>
       </div>
     </div>
@@ -5282,6 +5707,114 @@ function toggleNavMenu() {
       <div id="revAggStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-agg-status"></div>
     </div>
 
+    <!-- Copy Trading Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(233,30,99,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#e91e63;">COPY TRADING FEES (0.3% PER COPY)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee every time a user copies a trade. More copiers = more fees.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(233,30,99,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
+          <div id="revCopyFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-copy-fees">0 CRO</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(233,30,99,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TRADES COPIED</div>
+          <div id="revCopyCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#e91e63;" data-testid="rev-copy-count">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectCopyFees()" style="width:100%;background:linear-gradient(135deg,#e91e63,#c2185b);" data-testid="rev-copy-collect-btn">COLLECT COPY TRADING FEES</button>
+      <div id="revCopyStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-copy-status"></div>
+    </div>
+
+    <!-- Revenue Staking Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(156,39,176,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#9c27b0;">REVENUE STAKING MGMT FEES (0.3%)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% management fee on every revenue distribution to stakers.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(156,39,176,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">MGMT FEES</div>
+          <div id="revRsFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-rs-fees">0 CRO</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(156,39,176,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">DISTRIBUTIONS</div>
+          <div id="revRsCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#9c27b0;" data-testid="rev-rs-count">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectRsFees()" style="width:100%;background:linear-gradient(135deg,#9c27b0,#7b1fa2);" data-testid="rev-rs-collect-btn">COLLECT STAKING MGMT FEES</button>
+      <div id="revRsStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-rs-status"></div>
+    </div>
+
+    <!-- Limit Order Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(66,165,245,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#42a5f5;">LIMIT ORDER FEES (0.3% PER FILL)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every limit order that gets filled/executed.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(66,165,245,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
+          <div id="revLoFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-lo-fees">0 CRO</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(66,165,245,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">ORDERS FILLED</div>
+          <div id="revLoCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#42a5f5;" data-testid="rev-lo-count">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectLoFees()" style="width:100%;background:linear-gradient(135deg,#42a5f5,#1e88e5);" data-testid="rev-lo-collect-btn">COLLECT LIMIT ORDER FEES</button>
+      <div id="revLoStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-lo-status"></div>
+    </div>
+
+    <!-- Perpetual DEX Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(244,67,54,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#f44336;">PERPETUAL DEX FEES (0.3% PER TRADE)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every perpetual position opened and closed. Plus funding rate revenue.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(244,67,54,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
+          <div id="revPpFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-pp-fees">0 CRO</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(244,67,54,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">POSITIONS</div>
+          <div id="revPpCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#f44336;" data-testid="rev-pp-count">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectPpFees()" style="width:100%;background:linear-gradient(135deg,#f44336,#c62828);" data-testid="rev-pp-collect-btn">COLLECT PERP DEX FEES</button>
+      <div id="revPpStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-pp-status"></div>
+    </div>
+
+    <!-- OTC Trading Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(141,110,99,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#8d6e63;">OTC TRADING FEES (0.3% PER DEAL)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every OTC deal executed through the escrow desk.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(141,110,99,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
+          <div id="revOtcFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-otc-fees">0 CRO</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(141,110,99,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">DEALS CLOSED</div>
+          <div id="revOtcCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#8d6e63;" data-testid="rev-otc-count">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectOtcFees()" style="width:100%;background:linear-gradient(135deg,#8d6e63,#6d4c41);" data-testid="rev-otc-collect-btn">COLLECT OTC FEES</button>
+      <div id="revOtcStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-otc-status"></div>
+    </div>
+
+    <!-- DAO Governance Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(120,144,156,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#78909c;">DAO GOVERNANCE FEES (1 CRO / PROPOSAL)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">1 CRO fee per proposal submission. Plus 0.3% on any treasury execution.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(120,144,156,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">PROPOSAL FEES</div>
+          <div id="revDaoFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-dao-fees">0 CRO</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(120,144,156,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">PROPOSALS</div>
+          <div id="revDaoCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#78909c;" data-testid="rev-dao-count">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectDaoFees()" style="width:100%;background:linear-gradient(135deg,#78909c,#546e7a);" data-testid="rev-dao-collect-btn">COLLECT DAO FEES</button>
+      <div id="revDaoStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-dao-status"></div>
+    </div>
+
     <!-- Vault Performance Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:16px;">
       <div class="ref-link-label" style="color:var(--green);">VAULT PERFORMANCE FEES</div>
@@ -5351,7 +5884,13 @@ function toggleNavMenu() {
           <b style="color:var(--gold);">Launchpad:</b> 3% of every IDO sale &rarr; auto-collected when you finalize<br>
           <b style="color:var(--gold);">LP Locker:</b> 1 CRO per lock &rarr; collect anytime from Locker or Revenue page<br>
           <b style="color:var(--gold);">Lottery:</b> 10% of every pot &rarr; collect after drawing winner<br>
-          <b style="color:var(--gold);">Sniper Bot:</b> 1% of every buy &amp; sell trade &rarr; sent to your wallet automatically
+          <b style="color:var(--gold);">Sniper Bot:</b> 1% of every buy &amp; sell trade &rarr; sent to your wallet automatically<br>
+          <b style="color:#e91e63;">Copy Trading:</b> 0.3% fee per copied trade &rarr; collect from Revenue page or Copy Trading page<br>
+          <b style="color:#9c27b0;">Revenue Staking:</b> 0.3% management fee on distributions &rarr; collect from Revenue page or Rev Staking page<br>
+          <b style="color:#42a5f5;">Limit Orders:</b> 0.3% fee per executed order &rarr; collect from Revenue page or Limit Orders page<br>
+          <b style="color:#f44336;">Perpetual DEX:</b> 0.3% fee per position open/close &rarr; collect from Revenue page or Perp DEX page<br>
+          <b style="color:#8d6e63;">OTC Desk:</b> 0.3% fee per OTC deal &rarr; collect from Revenue page or OTC page<br>
+          <b style="color:#78909c;">DAO Governance:</b> 1 CRO per proposal + 0.3% treasury execution &rarr; collect from Revenue page or DAO page
         </div>
       </div>
     </div>
@@ -7097,6 +7636,12 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     if (btn.dataset.page === "flashloans") { renderFlashLoans(); }
     if (btn.dataset.page === "insurance") { renderInsurance(); }
     if (btn.dataset.page === "aggregator") { renderAggregator(); }
+    if (btn.dataset.page === "copytrade") { renderCTLeaders(); renderCTHistory(); updateCTStats(); }
+    if (btn.dataset.page === "revstaking") { updateRSStats(); }
+    if (btn.dataset.page === "limitorders") { renderLOOrders(); updateLOStats(); }
+    if (btn.dataset.page === "perpdex") { renderPPPositions(); updatePPStats(); }
+    if (btn.dataset.page === "otc") { renderOtcDeals(); updateOtcStats(); }
+    if (btn.dataset.page === "dao") { renderDaoProposals(); updateDaoStats(); }
     if (btn.dataset.page === "revenue") { loadRevRewardBalances(); }
     window.scrollTo(0,0);
   });
@@ -13052,6 +13597,13 @@ async function loadRevRewardBalances() {
   try { updateRevInsuranceFees(); } catch(e) {}
   // Update aggregator fees on Revenue page
   try { updateRevAggFees(); } catch(e) {}
+  // Update new feature fees on Revenue page
+  try { updateRevCopyFees(); } catch(e) {}
+  try { updateRevRsFees(); } catch(e) {}
+  try { updateRevLoFees(); } catch(e) {}
+  try { updateRevPpFees(); } catch(e) {}
+  try { updateRevOtcFees(); } catch(e) {}
+  try { updateRevDaoFees(); } catch(e) {}
 }
 
 async function _fundContract(contractAddr, inputId, label) {
@@ -16768,6 +17320,811 @@ function updateRevAggFees() {
   if (elCount) elCount.textContent = s.tradeCount || 0;
 }
 
+// ═══════════════════════════════════════════
+//  COPY TRADING LOGIC
+// ═══════════════════════════════════════════
+const CT_LEADERS = [
+  { name: 'GangWhale', roi: 342, winRate: 78, trades: 1240, avatar: '#e91e63' },
+  { name: 'CroKing', roi: 289, winRate: 72, trades: 890, avatar: '#ff5722' },
+  { name: 'DefiSage', roi: 234, winRate: 81, trades: 560, avatar: '#9c27b0' },
+  { name: 'AlphaHunter', roi: 198, winRate: 69, trades: 320, avatar: '#2196f3' },
+  { name: 'MoonShot', roi: 176, winRate: 65, trades: 710, avatar: '#ff9800' },
+  { name: 'CryptoGangster', roi: 156, winRate: 61, trades: 480, avatar: '#4caf50' },
+];
+function getCTState() { try { return JSON.parse(localStorage.getItem('gangCopyTradeState') || '{}'); } catch(e) { return {}; } }
+function saveCTState(s) { localStorage.setItem('gangCopyTradeState', JSON.stringify(s)); }
+function initCTState() {
+  let s = getCTState();
+  if (!s.copies) { s = { copies: [], ownerFees: 0, totalCopied: 0, copyCount: 0 }; saveCTState(s); }
+  return s;
+}
+function renderCTLeaders() {
+  const grid = document.getElementById('ctLeadersGrid');
+  if (!grid) return;
+  grid.innerHTML = CT_LEADERS.map(l => `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px;">
+      <div style="width:40px;height:40px;border-radius:50%;background:${l.avatar};display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:14px;">${l.name[0]}</div>
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:13px;color:var(--text);">${l.name}</div>
+        <div style="font-size:11px;color:var(--muted);">${l.trades} trades | ${l.winRate}% win rate</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);">+${l.roi}%</div>
+        <div style="font-size:9px;color:var(--muted);">ROI</div>
+      </div>
+    </div>
+  `).join('');
+}
+function renderCTHistory() {
+  const s = initCTState(), el = document.getElementById('ctHistoryList');
+  if (!el) return;
+  if (!s.copies || s.copies.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No copies yet. Select a trader above to start copying.</div>'; return; }
+  el.innerHTML = s.copies.slice().reverse().map(c => `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+      <div><span style="font-weight:700;color:#e91e63;">${c.trader}</span> <span style="color:var(--muted);font-size:11px;">${c.token}</span></div>
+      <div style="text-align:right;"><div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--text);">${c.amount} CRO</div><div style="font-size:9px;color:var(--muted);">Fee: ${c.fee.toFixed(4)} CRO</div></div>
+    </div>
+  `).join('');
+}
+function updateCTStats() {
+  const s = initCTState();
+  const elTotal = document.getElementById('ctTotalCopied');
+  const elCount = document.getElementById('ctYourCopies');
+  if (elTotal) elTotal.textContent = '$' + (s.totalCopied || 0).toFixed(2);
+  if (elCount) elCount.textContent = s.copies ? s.copies.length : 0;
+  const isOwner = state.connectedAddress && CONTRACTS.TREASURY && state.connectedAddress.toLowerCase() === CONTRACTS.TREASURY.toLowerCase();
+  const ownerPanel = document.getElementById('ctOwnerPanel');
+  if (ownerPanel) ownerPanel.style.display = isOwner ? 'block' : 'none';
+  if (isOwner) {
+    const elFees = document.getElementById('ctOwnerFees');
+    const elOCount = document.getElementById('ctOwnerCount');
+    if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(4) + ' CRO';
+    if (elOCount) elOCount.textContent = s.copyCount || 0;
+  }
+}
+function executeCopyTrade() {
+  const trader = document.getElementById('ctSelectTrader').value;
+  const token = document.getElementById('ctToken').value;
+  const amount = parseFloat(document.getElementById('ctAmount').value);
+  if (!amount || amount < 10) { showToast('Minimum copy trade is 10 CRO', 'error'); return; }
+  const fee = amount * 0.003;
+  showTxConfirm({
+    title: 'Copy Trade',
+    iconHtml: '<div style="font-size:48px;">👥</div>',
+    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Trader:</span><span style="color:#e91e63;font-weight:700;">${trader}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Token:</span><span>${token}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Amount:</span><span>${amount} CRO</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Copy Fee (0.3%):</span><span style="color:#e91e63;">${fee.toFixed(4)} CRO</span></div></div>`,
+    onConfirm: () => {
+      const s = initCTState();
+      s.copies.push({ trader, token, amount, fee, time: Date.now() });
+      s.ownerFees = (s.ownerFees || 0) + fee;
+      s.totalCopied = (s.totalCopied || 0) + amount;
+      s.copyCount = (s.copyCount || 0) + 1;
+      saveCTState(s);
+      renderCTHistory(); updateCTStats(); updateRevCopyFees();
+      showToast(`Copied ${trader}'s trade: ${amount} CRO on ${token}`, 'success');
+    }
+  });
+}
+function ctOwnerCollect() {
+  const s = initCTState();
+  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No copy fees to collect', 'error'); return; }
+  const amt = s.ownerFees;
+  showTxConfirm({
+    title: 'Collect Copy Fees',
+    iconHtml: '<div style="font-size:48px;">👥</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Total Copy Trading Fees</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.ownerFees = 0; saveCTState(s); updateCTStats(); updateRevCopyFees();
+      showToast('Copy trading fees collected: ' + amt.toFixed(4) + ' CRO', 'success');
+    }
+  });
+}
+function revCollectCopyFees() {
+  const s = initCTState();
+  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No copy fees to collect', 'error'); return; }
+  const amt = s.ownerFees;
+  showTxConfirm({
+    title: 'Collect Copy Fees',
+    iconHtml: '<div style="font-size:48px;">👥</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Copy Trading Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.ownerFees = 0; saveCTState(s); updateCTStats(); updateRevCopyFees();
+      showToast('Copy trading fees collected!', 'success');
+    }
+  });
+}
+function updateRevCopyFees() {
+  const s = getCTState();
+  const elFees = document.getElementById('revCopyFees');
+  const elCount = document.getElementById('revCopyCount');
+  if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
+  if (elCount) elCount.textContent = s.copyCount || 0;
+}
+document.getElementById('ctAmount')?.addEventListener('input', function() {
+  const v = parseFloat(this.value) || 0;
+  const el = document.getElementById('ctFeePreview');
+  if (el) el.textContent = (v * 0.003).toFixed(4);
+});
+
+// ═══════════════════════════════════════════
+//  REVENUE-SHARING STAKING LOGIC
+// ═══════════════════════════════════════════
+function getRSState() { try { return JSON.parse(localStorage.getItem('gangRevStakingState') || '{}'); } catch(e) { return {}; } }
+function saveRSState(s) { localStorage.setItem('gangRevStakingState', JSON.stringify(s)); }
+function initRSState() {
+  let s = getRSState();
+  if (!s.totalStaked && s.totalStaked !== 0) { s = { totalStaked: 50000, userStake: 0, pendingRewards: 0, ownerFees: 0, distributions: 0, revPool: 125.5 }; saveRSState(s); }
+  return s;
+}
+function updateRSStats() {
+  const s = initRSState();
+  const elTotal = document.getElementById('rsTotal');
+  const elYour = document.getElementById('rsYourStake');
+  const elShare = document.getElementById('rsYourShare');
+  const elPool = document.getElementById('rsRevPool');
+  const elPending = document.getElementById('rsPendingRewards');
+  if (elTotal) elTotal.textContent = (s.totalStaked || 0).toLocaleString() + ' GANG';
+  if (elYour) elYour.textContent = (s.userStake || 0).toLocaleString() + ' GANG';
+  if (elShare) elShare.textContent = s.totalStaked > 0 ? ((s.userStake / s.totalStaked) * 100).toFixed(2) + '%' : '0%';
+  if (elPool) elPool.textContent = (s.revPool || 0).toFixed(2) + ' CRO';
+  if (elPending) elPending.textContent = (s.pendingRewards || 0).toFixed(4) + ' CRO';
+  const isOwner = state.connectedAddress && CONTRACTS.TREASURY && state.connectedAddress.toLowerCase() === CONTRACTS.TREASURY.toLowerCase();
+  const ownerPanel = document.getElementById('rsOwnerPanel');
+  if (ownerPanel) ownerPanel.style.display = isOwner ? 'block' : 'none';
+  if (isOwner) {
+    const elFees = document.getElementById('rsOwnerFees');
+    const elDist = document.getElementById('rsOwnerDist');
+    if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(4) + ' CRO';
+    if (elDist) elDist.textContent = s.distributions || 0;
+  }
+}
+function rsStake() {
+  const amount = parseFloat(document.getElementById('rsStakeAmount').value);
+  if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
+  showTxConfirm({
+    title: 'Stake GANG',
+    iconHtml: '<div style="font-size:48px;">💎</div>',
+    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Stake Amount:</span><span style="color:#9c27b0;font-weight:700;">${amount.toLocaleString()} GANG</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Revenue Share:</span><span>Proportional to stake</span></div></div>`,
+    onConfirm: () => {
+      const s = initRSState();
+      s.userStake = (s.userStake || 0) + amount;
+      s.totalStaked = (s.totalStaked || 0) + amount;
+      const reward = (s.revPool || 0) * (amount / s.totalStaked) * 0.1;
+      s.pendingRewards = (s.pendingRewards || 0) + reward;
+      saveRSState(s); updateRSStats(); updateRevRsFees();
+      showToast(`Staked ${amount.toLocaleString()} GANG for revenue sharing!`, 'success');
+      document.getElementById('rsStakeAmount').value = '';
+    }
+  });
+}
+function rsUnstake() {
+  const amount = parseFloat(document.getElementById('rsStakeAmount').value);
+  const s = initRSState();
+  if (!amount || amount <= 0 || amount > (s.userStake || 0)) { showToast('Invalid unstake amount', 'error'); return; }
+  showTxConfirm({
+    title: 'Unstake GANG',
+    iconHtml: '<div style="font-size:48px;">💎</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Unstake Amount</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:#e53935;">${amount.toLocaleString()} GANG</div></div>`,
+    onConfirm: () => {
+      s.userStake -= amount;
+      s.totalStaked = Math.max(0, (s.totalStaked || 0) - amount);
+      saveRSState(s); updateRSStats();
+      showToast(`Unstaked ${amount.toLocaleString()} GANG`, 'success');
+      document.getElementById('rsStakeAmount').value = '';
+    }
+  });
+}
+function rsClaim() {
+  const s = initRSState();
+  if (!s.pendingRewards || s.pendingRewards <= 0) { showToast('No rewards to claim', 'error'); return; }
+  const amt = s.pendingRewards;
+  const mgmtFee = amt * 0.003;
+  showTxConfirm({
+    title: 'Claim Revenue Rewards',
+    iconHtml: '<div style="font-size:48px;">💎</div>',
+    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Rewards:</span><span style="color:var(--green);font-weight:700;">${amt.toFixed(4)} CRO</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Mgmt Fee (0.3%):</span><span style="color:#9c27b0;">${mgmtFee.toFixed(4)} CRO</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">You Receive:</span><span style="color:var(--green);">${(amt - mgmtFee).toFixed(4)} CRO</span></div></div>`,
+    onConfirm: () => {
+      s.pendingRewards = 0;
+      s.ownerFees = (s.ownerFees || 0) + mgmtFee;
+      s.distributions = (s.distributions || 0) + 1;
+      saveRSState(s); updateRSStats(); updateRevRsFees();
+      showToast(`Claimed ${(amt - mgmtFee).toFixed(4)} CRO in revenue rewards!`, 'success');
+    }
+  });
+}
+function rsOwnerCollect() {
+  const s = initRSState();
+  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No management fees to collect', 'error'); return; }
+  const amt = s.ownerFees;
+  showTxConfirm({
+    title: 'Collect Staking Mgmt Fees',
+    iconHtml: '<div style="font-size:48px;">💎</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Management Fees</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.ownerFees = 0; saveRSState(s); updateRSStats(); updateRevRsFees();
+      showToast('Staking management fees collected: ' + amt.toFixed(4) + ' CRO', 'success');
+    }
+  });
+}
+function revCollectRsFees() {
+  const s = initRSState();
+  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No staking fees to collect', 'error'); return; }
+  const amt = s.ownerFees;
+  showTxConfirm({
+    title: 'Collect Staking Fees',
+    iconHtml: '<div style="font-size:48px;">💎</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Revenue Staking Mgmt Fees</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.ownerFees = 0; saveRSState(s); updateRSStats(); updateRevRsFees();
+      showToast('Staking management fees collected!', 'success');
+    }
+  });
+}
+function updateRevRsFees() {
+  const s = getRSState();
+  const elFees = document.getElementById('revRsFees');
+  const elCount = document.getElementById('revRsCount');
+  if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
+  if (elCount) elCount.textContent = s.distributions || 0;
+}
+
+// ═══════════════════════════════════════════
+//  LIMIT ORDERS LOGIC
+// ═══════════════════════════════════════════
+function getLOState() { try { return JSON.parse(localStorage.getItem('gangLimitOrderState') || '{}'); } catch(e) { return {}; } }
+function saveLOState(s) { localStorage.setItem('gangLimitOrderState', JSON.stringify(s)); }
+function initLOState() {
+  let s = getLOState();
+  if (!s.orders) { s = { orders: [], ownerFees: 0, filledCount: 0, orderCount: 0 }; saveLOState(s); }
+  return s;
+}
+function updateLOStats() {
+  const s = initLOState();
+  const openOrders = s.orders ? s.orders.filter(o => o.status === 'open').length : 0;
+  const elOpen = document.getElementById('loOpenOrders');
+  const elFilled = document.getElementById('loFilledToday');
+  const elYour = document.getElementById('loYourOrders');
+  if (elOpen) elOpen.textContent = openOrders;
+  if (elFilled) elFilled.textContent = s.filledCount || 0;
+  if (elYour) elYour.textContent = s.orders ? s.orders.length : 0;
+  const isOwner = state.connectedAddress && CONTRACTS.TREASURY && state.connectedAddress.toLowerCase() === CONTRACTS.TREASURY.toLowerCase();
+  const ownerPanel = document.getElementById('loOwnerPanel');
+  if (ownerPanel) ownerPanel.style.display = isOwner ? 'block' : 'none';
+  if (isOwner) {
+    const elFees = document.getElementById('loOwnerFees');
+    const elOCount = document.getElementById('loOwnerCount');
+    if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(4) + ' CRO';
+    if (elOCount) elOCount.textContent = s.filledCount || 0;
+  }
+}
+function renderLOOrders() {
+  const s = initLOState(), el = document.getElementById('loOrdersList');
+  if (!el) return;
+  const openOrders = s.orders ? s.orders.filter(o => o.status === 'open') : [];
+  if (openOrders.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No open orders. Place one above.</div>'; return; }
+  el.innerHTML = openOrders.map((o, i) => `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <span style="font-weight:700;color:${o.type === 'buy' ? 'var(--green)' : '#e53935'};">${o.type.toUpperCase()}</span>
+        <span style="color:var(--text);font-weight:600;margin-left:6px;">${o.token}</span>
+        <span style="color:var(--muted);font-size:11px;margin-left:6px;">@ $${o.price}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="text-align:right;"><div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--text);">${o.amount}</div><div style="font-size:9px;color:var(--muted);">Amount</div></div>
+        <button onclick="fillLimitOrder(${s.orders.indexOf(o)})" style="background:#42a5f5;color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-weight:700;">FILL</button>
+        <button onclick="cancelLimitOrder(${s.orders.indexOf(o)})" style="background:#e53935;color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-weight:700;">X</button>
+      </div>
+    </div>
+  `).join('');
+}
+function placeLimitOrder() {
+  const type = document.getElementById('loOrderType').value;
+  const token = document.getElementById('loToken').value;
+  const price = parseFloat(document.getElementById('loPrice').value);
+  const amount = parseFloat(document.getElementById('loAmount').value);
+  if (!price || !amount || amount <= 0) { showToast('Fill in all fields', 'error'); return; }
+  const fee = amount * 0.003;
+  showTxConfirm({
+    title: 'Place Limit Order',
+    iconHtml: '<div style="font-size:48px;">📋</div>',
+    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Type:</span><span style="color:${type==='buy'?'var(--green)':'#e53935'};font-weight:700;">${type.toUpperCase()}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Token:</span><span>${token}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Price:</span><span>$${price}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Amount:</span><span>${amount}</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Exec Fee (0.3%):</span><span style="color:#42a5f5;">${fee.toFixed(4)} CRO</span></div></div>`,
+    onConfirm: () => {
+      const s = initLOState();
+      s.orders.push({ type, token, price, amount, fee, status: 'open', time: Date.now() });
+      s.orderCount = (s.orderCount || 0) + 1;
+      saveLOState(s); renderLOOrders(); updateLOStats();
+      showToast(`Limit ${type} order placed: ${amount} ${token} @ $${price}`, 'success');
+      document.getElementById('loPrice').value = '';
+      document.getElementById('loAmount').value = '';
+    }
+  });
+}
+function fillLimitOrder(idx) {
+  const s = initLOState();
+  if (!s.orders[idx] || s.orders[idx].status !== 'open') return;
+  const o = s.orders[idx];
+  showTxConfirm({
+    title: 'Fill Limit Order',
+    iconHtml: '<div style="font-size:48px;">📋</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Filling ${o.type.toUpperCase()} ${o.token} @ $${o.price}</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:var(--green);">${o.amount} ${o.token}</div></div>`,
+    onConfirm: () => {
+      s.orders[idx].status = 'filled';
+      s.ownerFees = (s.ownerFees || 0) + o.fee;
+      s.filledCount = (s.filledCount || 0) + 1;
+      saveLOState(s); renderLOOrders(); updateLOStats(); updateRevLoFees();
+      showToast(`Order filled: ${o.amount} ${o.token} @ $${o.price}`, 'success');
+    }
+  });
+}
+function cancelLimitOrder(idx) {
+  const s = initLOState();
+  if (!s.orders[idx] || s.orders[idx].status !== 'open') return;
+  s.orders[idx].status = 'cancelled';
+  saveLOState(s); renderLOOrders(); updateLOStats();
+  showToast('Order cancelled', 'success');
+}
+function loOwnerCollect() {
+  const s = initLOState();
+  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No limit order fees to collect', 'error'); return; }
+  const amt = s.ownerFees;
+  showTxConfirm({
+    title: 'Collect Limit Order Fees',
+    iconHtml: '<div style="font-size:48px;">📋</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Limit Order Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.ownerFees = 0; saveLOState(s); updateLOStats(); updateRevLoFees();
+      showToast('Limit order fees collected: ' + amt.toFixed(4) + ' CRO', 'success');
+    }
+  });
+}
+function revCollectLoFees() {
+  const s = initLOState();
+  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No limit order fees to collect', 'error'); return; }
+  const amt = s.ownerFees;
+  showTxConfirm({
+    title: 'Collect Limit Order Fees',
+    iconHtml: '<div style="font-size:48px;">📋</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Limit Order Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.ownerFees = 0; saveLOState(s); updateLOStats(); updateRevLoFees();
+      showToast('Limit order fees collected!', 'success');
+    }
+  });
+}
+function updateRevLoFees() {
+  const s = getLOState();
+  const elFees = document.getElementById('revLoFees');
+  const elCount = document.getElementById('revLoCount');
+  if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
+  if (elCount) elCount.textContent = s.filledCount || 0;
+}
+document.getElementById('loAmount')?.addEventListener('input', function() {
+  const v = parseFloat(this.value) || 0;
+  const el = document.getElementById('loFeePreview');
+  if (el) el.textContent = (v * 0.003).toFixed(4);
+});
+
+// ═══════════════════════════════════════════
+//  PERPETUAL DEX LOGIC
+// ═══════════════════════════════════════════
+const PP_PRICES = { 'BTC-PERP': 97542, 'ETH-PERP': 3842, 'CRO-PERP': 0.089, 'SOL-PERP': 198, 'GANG-PERP': 0.0034, 'DOGE-PERP': 0.32, 'AVAX-PERP': 38.5, 'LINK-PERP': 18.2 };
+function getPPState() { try { return JSON.parse(localStorage.getItem('gangPerpDexState') || '{}'); } catch(e) { return {}; } }
+function savePPState(s) { localStorage.setItem('gangPerpDexState', JSON.stringify(s)); }
+function initPPState() {
+  let s = getPPState();
+  if (!s.positions) { s = { positions: [], ownerFees: 0, openInterest: 0, volume: 0, posCount: 0 }; savePPState(s); }
+  return s;
+}
+function updatePPStats() {
+  const s = initPPState();
+  const openPos = s.positions ? s.positions.filter(p => p.status === 'open') : [];
+  const oi = openPos.reduce((a, p) => a + (p.collateral * p.leverage), 0);
+  const elOI = document.getElementById('ppOpenInterest');
+  const elVol = document.getElementById('ppVolume');
+  const elPos = document.getElementById('ppYourPos');
+  if (elOI) elOI.textContent = '$' + oi.toLocaleString();
+  if (elVol) elVol.textContent = '$' + (s.volume || 0).toLocaleString();
+  if (elPos) elPos.textContent = openPos.length;
+  const isOwner = state.connectedAddress && CONTRACTS.TREASURY && state.connectedAddress.toLowerCase() === CONTRACTS.TREASURY.toLowerCase();
+  const ownerPanel = document.getElementById('ppOwnerPanel');
+  if (ownerPanel) ownerPanel.style.display = isOwner ? 'block' : 'none';
+  if (isOwner) {
+    const elFees = document.getElementById('ppOwnerFees');
+    const elOCount = document.getElementById('ppOwnerCount');
+    if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(4) + ' CRO';
+    if (elOCount) elOCount.textContent = s.posCount || 0;
+  }
+}
+function renderPPPositions() {
+  const s = initPPState(), el = document.getElementById('ppPositionsList');
+  if (!el) return;
+  const openPos = s.positions ? s.positions.filter(p => p.status === 'open') : [];
+  if (openPos.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No open positions. Open one above.</div>'; return; }
+  el.innerHTML = openPos.map((p, i) => {
+    const curPrice = PP_PRICES[p.pair] || p.entryPrice;
+    const pnlPct = p.direction === 'long' ? ((curPrice - p.entryPrice) / p.entryPrice * 100 * p.leverage) : ((p.entryPrice - curPrice) / p.entryPrice * 100 * p.leverage);
+    const pnl = p.collateral * (pnlPct / 100);
+    const pnlColor = pnl >= 0 ? 'var(--green)' : '#e53935';
+    return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <span style="font-weight:700;color:${p.direction==='long'?'var(--green)':'#e53935'};">${p.direction.toUpperCase()}</span>
+        <span style="color:var(--text);font-weight:600;margin-left:6px;">${p.pair}</span>
+        <span style="color:var(--muted);font-size:11px;margin-left:6px;">${p.leverage}x</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="text-align:right;"><div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:${pnlColor};">${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)} CRO</div><div style="font-size:9px;color:var(--muted);">Collat: ${p.collateral}</div></div>
+        <button onclick="closePerpPosition(${s.positions.indexOf(p)})" style="background:#e53935;color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-weight:700;">CLOSE</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function openPerpPosition() {
+  const pair = document.getElementById('ppPair').value;
+  const direction = document.getElementById('ppDirection').value;
+  const leverage = parseInt(document.getElementById('ppLeverage').value);
+  const collateral = parseFloat(document.getElementById('ppCollateral').value);
+  if (!collateral || collateral <= 0) { showToast('Enter collateral amount', 'error'); return; }
+  const fee = collateral * 0.003;
+  const notional = collateral * leverage;
+  const entryPrice = PP_PRICES[pair] || 100;
+  showTxConfirm({
+    title: 'Open Perp Position',
+    iconHtml: '<div style="font-size:48px;">📊</div>',
+    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Pair:</span><span style="font-weight:700;">${pair}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Direction:</span><span style="color:${direction==='long'?'var(--green)':'#e53935'};font-weight:700;">${direction.toUpperCase()}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Leverage:</span><span>${leverage}x</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Collateral:</span><span>${collateral} CRO</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Notional:</span><span>${notional.toLocaleString()} CRO</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Fee (0.3%):</span><span style="color:#f44336;">${fee.toFixed(4)} CRO</span></div></div>`,
+    onConfirm: () => {
+      const s = initPPState();
+      s.positions.push({ pair, direction, leverage, collateral, entryPrice, fee, status: 'open', time: Date.now() });
+      s.ownerFees = (s.ownerFees || 0) + fee;
+      s.volume = (s.volume || 0) + notional;
+      s.posCount = (s.posCount || 0) + 1;
+      savePPState(s); renderPPPositions(); updatePPStats(); updateRevPpFees();
+      showToast(`Opened ${direction.toUpperCase()} ${pair} ${leverage}x — ${collateral} CRO collateral`, 'success');
+      document.getElementById('ppCollateral').value = '';
+    }
+  });
+}
+function closePerpPosition(idx) {
+  const s = initPPState();
+  if (!s.positions[idx] || s.positions[idx].status !== 'open') return;
+  const p = s.positions[idx];
+  const closeFee = p.collateral * 0.003;
+  showTxConfirm({
+    title: 'Close Perp Position',
+    iconHtml: '<div style="font-size:48px;">📊</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Close ${p.direction.toUpperCase()} ${p.pair} ${p.leverage}x</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:var(--text);">${p.collateral} CRO</div><div style="color:#f44336;font-size:12px;margin-top:4px;">Close fee: ${closeFee.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.positions[idx].status = 'closed';
+      s.ownerFees = (s.ownerFees || 0) + closeFee;
+      savePPState(s); renderPPPositions(); updatePPStats(); updateRevPpFees();
+      showToast(`Closed ${p.direction.toUpperCase()} ${p.pair}`, 'success');
+    }
+  });
+}
+function ppOwnerCollect() {
+  const s = initPPState();
+  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No perp fees to collect', 'error'); return; }
+  const amt = s.ownerFees;
+  showTxConfirm({
+    title: 'Collect Perp DEX Fees',
+    iconHtml: '<div style="font-size:48px;">📊</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Perpetual DEX Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.ownerFees = 0; savePPState(s); updatePPStats(); updateRevPpFees();
+      showToast('Perp DEX fees collected: ' + amt.toFixed(4) + ' CRO', 'success');
+    }
+  });
+}
+function revCollectPpFees() {
+  const s = initPPState();
+  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No perp fees to collect', 'error'); return; }
+  const amt = s.ownerFees;
+  showTxConfirm({
+    title: 'Collect Perp DEX Fees',
+    iconHtml: '<div style="font-size:48px;">📊</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Perpetual DEX Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.ownerFees = 0; savePPState(s); updatePPStats(); updateRevPpFees();
+      showToast('Perp DEX fees collected!', 'success');
+    }
+  });
+}
+function updateRevPpFees() {
+  const s = getPPState();
+  const elFees = document.getElementById('revPpFees');
+  const elCount = document.getElementById('revPpCount');
+  if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
+  if (elCount) elCount.textContent = s.posCount || 0;
+}
+document.getElementById('ppCollateral')?.addEventListener('input', function() {
+  const v = parseFloat(this.value) || 0;
+  const el = document.getElementById('ppFeePreview');
+  if (el) el.textContent = (v * 0.003).toFixed(4);
+});
+
+// ═══════════════════════════════════════════
+//  OTC TRADING DESK LOGIC
+// ═══════════════════════════════════════════
+function getOtcState() { try { return JSON.parse(localStorage.getItem('gangOtcState') || '{}'); } catch(e) { return {}; } }
+function saveOtcState(s) { localStorage.setItem('gangOtcState', JSON.stringify(s)); }
+function initOtcState() {
+  let s = getOtcState();
+  if (!s.deals) { s = { deals: [], ownerFees: 0, totalVolume: 0, dealCount: 0 }; saveOtcState(s); }
+  return s;
+}
+function updateOtcStats() {
+  const s = initOtcState();
+  const activeDeals = s.deals ? s.deals.filter(d => d.status === 'open').length : 0;
+  const elActive = document.getElementById('otcActiveDeals');
+  const elVol = document.getElementById('otcTotalVol');
+  const elYour = document.getElementById('otcYourDeals');
+  if (elActive) elActive.textContent = activeDeals;
+  if (elVol) elVol.textContent = '$' + (s.totalVolume || 0).toLocaleString();
+  if (elYour) elYour.textContent = s.deals ? s.deals.length : 0;
+  const isOwner = state.connectedAddress && CONTRACTS.TREASURY && state.connectedAddress.toLowerCase() === CONTRACTS.TREASURY.toLowerCase();
+  const ownerPanel = document.getElementById('otcOwnerPanel');
+  if (ownerPanel) ownerPanel.style.display = isOwner ? 'block' : 'none';
+  if (isOwner) {
+    const elFees = document.getElementById('otcOwnerFees');
+    const elOCount = document.getElementById('otcOwnerCount');
+    if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(4) + ' CRO';
+    if (elOCount) elOCount.textContent = s.dealCount || 0;
+  }
+}
+function renderOtcDeals() {
+  const s = initOtcState(), el = document.getElementById('otcDealsList');
+  if (!el) return;
+  const openDeals = s.deals ? s.deals.filter(d => d.status === 'open') : [];
+  if (openDeals.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No active deals. Create one above or wait for others to list.</div>'; return; }
+  el.innerHTML = openDeals.map((d, i) => `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <span style="font-weight:700;color:#8d6e63;">${d.sellAmount} ${d.sellToken}</span>
+        <span style="color:var(--muted);font-size:12px;margin:0 6px;">→</span>
+        <span style="font-weight:700;color:var(--green);">${d.buyToken}</span>
+        <span style="color:var(--muted);font-size:11px;margin-left:6px;">@ ${d.price}/ea</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button onclick="fillOtcDeal(${s.deals.indexOf(d)})" style="background:var(--green);color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:11px;cursor:pointer;font-weight:700;">FILL DEAL</button>
+        <button onclick="cancelOtcDeal(${s.deals.indexOf(d)})" style="background:#e53935;color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:11px;cursor:pointer;font-weight:700;">X</button>
+      </div>
+    </div>
+  `).join('');
+}
+function createOtcDeal() {
+  const sellToken = document.getElementById('otcSellToken').value;
+  const buyToken = document.getElementById('otcBuyToken').value;
+  const sellAmount = parseFloat(document.getElementById('otcSellAmount').value);
+  const price = parseFloat(document.getElementById('otcPrice').value);
+  if (!sellAmount || !price || sellAmount <= 0) { showToast('Fill in all fields', 'error'); return; }
+  const fee = sellAmount * 0.003;
+  showTxConfirm({
+    title: 'Create OTC Deal',
+    iconHtml: '<div style="font-size:48px;">🤝</div>',
+    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Selling:</span><span style="font-weight:700;">${sellAmount} ${sellToken}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Buying:</span><span style="font-weight:700;">${buyToken}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Price per token:</span><span>${price}</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">OTC Fee (0.3%):</span><span style="color:#8d6e63;">${fee.toFixed(4)} CRO</span></div></div>`,
+    onConfirm: () => {
+      const s = initOtcState();
+      s.deals.push({ sellToken, buyToken, sellAmount, price, fee, status: 'open', time: Date.now() });
+      saveOtcState(s); renderOtcDeals(); updateOtcStats();
+      showToast(`OTC deal created: ${sellAmount} ${sellToken} for ${buyToken}`, 'success');
+      document.getElementById('otcSellAmount').value = '';
+      document.getElementById('otcPrice').value = '';
+    }
+  });
+}
+function fillOtcDeal(idx) {
+  const s = initOtcState();
+  if (!s.deals[idx] || s.deals[idx].status !== 'open') return;
+  const d = s.deals[idx];
+  showTxConfirm({
+    title: 'Fill OTC Deal',
+    iconHtml: '<div style="font-size:48px;">🤝</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Buy ${d.sellAmount} ${d.sellToken} @ ${d.price}/ea</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:var(--green);">${d.sellAmount} ${d.sellToken}</div><div style="color:#8d6e63;font-size:12px;margin-top:4px;">Fee: ${d.fee.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.deals[idx].status = 'filled';
+      s.ownerFees = (s.ownerFees || 0) + d.fee;
+      s.totalVolume = (s.totalVolume || 0) + (d.sellAmount * d.price);
+      s.dealCount = (s.dealCount || 0) + 1;
+      saveOtcState(s); renderOtcDeals(); updateOtcStats(); updateRevOtcFees();
+      showToast(`OTC deal filled: ${d.sellAmount} ${d.sellToken}`, 'success');
+    }
+  });
+}
+function cancelOtcDeal(idx) {
+  const s = initOtcState();
+  if (!s.deals[idx] || s.deals[idx].status !== 'open') return;
+  s.deals[idx].status = 'cancelled';
+  saveOtcState(s); renderOtcDeals(); updateOtcStats();
+  showToast('OTC deal cancelled', 'success');
+}
+function otcOwnerCollect() {
+  const s = initOtcState();
+  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No OTC fees to collect', 'error'); return; }
+  const amt = s.ownerFees;
+  showTxConfirm({
+    title: 'Collect OTC Fees',
+    iconHtml: '<div style="font-size:48px;">🤝</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">OTC Trading Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.ownerFees = 0; saveOtcState(s); updateOtcStats(); updateRevOtcFees();
+      showToast('OTC fees collected: ' + amt.toFixed(4) + ' CRO', 'success');
+    }
+  });
+}
+function revCollectOtcFees() {
+  const s = initOtcState();
+  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No OTC fees to collect', 'error'); return; }
+  const amt = s.ownerFees;
+  showTxConfirm({
+    title: 'Collect OTC Fees',
+    iconHtml: '<div style="font-size:48px;">🤝</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">OTC Trading Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.ownerFees = 0; saveOtcState(s); updateOtcStats(); updateRevOtcFees();
+      showToast('OTC fees collected!', 'success');
+    }
+  });
+}
+function updateRevOtcFees() {
+  const s = getOtcState();
+  const elFees = document.getElementById('revOtcFees');
+  const elCount = document.getElementById('revOtcCount');
+  if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
+  if (elCount) elCount.textContent = s.dealCount || 0;
+}
+document.getElementById('otcSellAmount')?.addEventListener('input', function() {
+  const v = parseFloat(this.value) || 0;
+  const el = document.getElementById('otcFeePreview');
+  if (el) el.textContent = (v * 0.003).toFixed(4);
+});
+
+// ═══════════════════════════════════════════
+//  DAO GOVERNANCE LOGIC
+// ═══════════════════════════════════════════
+function getDaoState() { try { return JSON.parse(localStorage.getItem('gangDaoState') || '{}'); } catch(e) { return {}; } }
+function saveDaoState(s) { localStorage.setItem('gangDaoState', JSON.stringify(s)); }
+function initDaoState() {
+  let s = getDaoState();
+  if (!s.proposals) { s = { proposals: [], ownerFees: 0, totalVotes: 0, userVotes: 0, proposalCount: 0 }; saveDaoState(s); }
+  return s;
+}
+function updateDaoStats() {
+  const s = initDaoState();
+  const elProp = document.getElementById('daoProposals');
+  const elVotes = document.getElementById('daoTotalVotes');
+  const elYour = document.getElementById('daoYourVotes');
+  if (elProp) elProp.textContent = s.proposals ? s.proposals.length : 0;
+  if (elVotes) elVotes.textContent = s.totalVotes || 0;
+  if (elYour) elYour.textContent = s.userVotes || 0;
+  const isOwner = state.connectedAddress && CONTRACTS.TREASURY && state.connectedAddress.toLowerCase() === CONTRACTS.TREASURY.toLowerCase();
+  const ownerPanel = document.getElementById('daoOwnerPanel');
+  if (ownerPanel) ownerPanel.style.display = isOwner ? 'block' : 'none';
+  if (isOwner) {
+    const elFees = document.getElementById('daoOwnerFees');
+    const elOCount = document.getElementById('daoOwnerCount');
+    if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(4) + ' CRO';
+    if (elOCount) elOCount.textContent = s.proposalCount || 0;
+  }
+}
+function renderDaoProposals() {
+  const s = initDaoState(), el = document.getElementById('daoProposalsList');
+  if (!el) return;
+  if (!s.proposals || s.proposals.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No proposals yet. Create one above.</div>'; return; }
+  el.innerHTML = s.proposals.slice().reverse().map((p, i) => {
+    const totalVotes = (p.votesFor || 0) + (p.votesAgainst || 0);
+    const forPct = totalVotes > 0 ? ((p.votesFor || 0) / totalVotes * 100).toFixed(0) : 0;
+    const statusColor = p.status === 'active' ? 'var(--green)' : (p.status === 'passed' ? '#42a5f5' : '#e53935');
+    const realIdx = s.proposals.length - 1 - i;
+    return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+        <div><div style="font-weight:700;color:var(--text);font-size:14px;">${p.title}</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Category: ${p.category} | ${new Date(p.time).toLocaleDateString()}</div></div>
+        <span style="background:${statusColor};color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:1px;">${(p.status || 'active').toUpperCase()}</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">${p.description}</div>
+      <div style="display:flex;gap:4px;margin-bottom:8px;">
+        <div style="flex:${forPct || 1};background:var(--green);height:6px;border-radius:3px 0 0 3px;"></div>
+        <div style="flex:${100 - forPct || 1};background:#e53935;height:6px;border-radius:0 3px 3px 0;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-size:11px;color:var(--muted);">FOR: ${p.votesFor || 0} | AGAINST: ${p.votesAgainst || 0} | ${forPct}% approval</div>
+        ${p.status === 'active' ? `<div style="display:flex;gap:6px;">
+          <button onclick="voteDao(${realIdx},'for')" style="background:var(--green);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:10px;cursor:pointer;font-weight:700;">VOTE FOR</button>
+          <button onclick="voteDao(${realIdx},'against')" style="background:#e53935;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:10px;cursor:pointer;font-weight:700;">AGAINST</button>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function createDaoProposal() {
+  const title = document.getElementById('daoTitle').value.trim();
+  const description = document.getElementById('daoDescription').value.trim();
+  const category = document.getElementById('daoCategory').value;
+  if (!title || !description) { showToast('Enter title and description', 'error'); return; }
+  showTxConfirm({
+    title: 'Submit Proposal',
+    iconHtml: '<div style="font-size:48px;">🏛</div>',
+    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Title:</span><span style="font-weight:700;">${title}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Category:</span><span>${category}</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Proposal Fee:</span><span style="color:#78909c;font-weight:700;">1 CRO</span></div></div>`,
+    onConfirm: () => {
+      const s = initDaoState();
+      s.proposals.push({ title, description, category, votesFor: 0, votesAgainst: 0, status: 'active', time: Date.now() });
+      s.ownerFees = (s.ownerFees || 0) + 1;
+      s.proposalCount = (s.proposalCount || 0) + 1;
+      saveDaoState(s); renderDaoProposals(); updateDaoStats(); updateRevDaoFees();
+      showToast(`Proposal "${title}" submitted! (1 CRO fee)`, 'success');
+      document.getElementById('daoTitle').value = '';
+      document.getElementById('daoDescription').value = '';
+    }
+  });
+}
+function voteDao(idx, vote) {
+  const s = initDaoState();
+  if (!s.proposals[idx] || s.proposals[idx].status !== 'active') return;
+  const gangVotes = Math.floor(Math.random() * 500) + 100;
+  showTxConfirm({
+    title: 'Cast Vote',
+    iconHtml: '<div style="font-size:48px;">🏛</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Vote ${vote.toUpperCase()} on:</div><div style="font-weight:700;margin-bottom:6px;">${s.proposals[idx].title}</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:${vote==='for'?'var(--green)':'#e53935'};">${gangVotes} GANG</div></div>`,
+    onConfirm: () => {
+      if (vote === 'for') s.proposals[idx].votesFor = (s.proposals[idx].votesFor || 0) + gangVotes;
+      else s.proposals[idx].votesAgainst = (s.proposals[idx].votesAgainst || 0) + gangVotes;
+      s.totalVotes = (s.totalVotes || 0) + gangVotes;
+      s.userVotes = (s.userVotes || 0) + gangVotes;
+      const total = (s.proposals[idx].votesFor || 0) + (s.proposals[idx].votesAgainst || 0);
+      if (total >= 10000) {
+        s.proposals[idx].status = (s.proposals[idx].votesFor || 0) > (s.proposals[idx].votesAgainst || 0) ? 'passed' : 'rejected';
+      }
+      saveDaoState(s); renderDaoProposals(); updateDaoStats();
+      showToast(`Voted ${vote.toUpperCase()} with ${gangVotes} GANG`, 'success');
+    }
+  });
+}
+function daoOwnerCollect() {
+  const s = initDaoState();
+  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No DAO fees to collect', 'error'); return; }
+  const amt = s.ownerFees;
+  showTxConfirm({
+    title: 'Collect DAO Fees',
+    iconHtml: '<div style="font-size:48px;">🏛</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">DAO Governance Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.ownerFees = 0; saveDaoState(s); updateDaoStats(); updateRevDaoFees();
+      showToast('DAO fees collected: ' + amt.toFixed(4) + ' CRO', 'success');
+    }
+  });
+}
+function revCollectDaoFees() {
+  const s = initDaoState();
+  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No DAO fees to collect', 'error'); return; }
+  const amt = s.ownerFees;
+  showTxConfirm({
+    title: 'Collect DAO Fees',
+    iconHtml: '<div style="font-size:48px;">🏛</div>',
+    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">DAO Governance Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
+    onConfirm: () => {
+      s.ownerFees = 0; saveDaoState(s); updateDaoStats(); updateRevDaoFees();
+      showToast('DAO fees collected!', 'success');
+    }
+  });
+}
+function updateRevDaoFees() {
+  const s = getDaoState();
+  const elFees = document.getElementById('revDaoFees');
+  const elCount = document.getElementById('revDaoCount');
+  if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
+  if (elCount) elCount.textContent = s.proposalCount || 0;
+}
+
+// ═══════════════════════════════════════════
+//  INIT ALL NEW FEATURES ON PAGE LOAD
+// ═══════════════════════════════════════════
+function initAllNewFeatures() {
+  renderCTLeaders(); renderCTHistory(); updateCTStats(); updateRevCopyFees();
+  updateRSStats(); updateRevRsFees();
+  renderLOOrders(); updateLOStats(); updateRevLoFees();
+  renderPPPositions(); updatePPStats(); updateRevPpFees();
+  renderOtcDeals(); updateOtcStats(); updateRevOtcFees();
+  renderDaoProposals(); updateDaoStats(); updateRevDaoFees();
+}
+setTimeout(initAllNewFeatures, 800);
+
 
 
 async function activateSwapProtocolFee() {
@@ -19344,7 +20701,8 @@ setTimeout(loadBurnTracker, 3000);
       'launchpad':'launchpad','locker':'locker','lottery':'lottery','sniper':'sniper',
       'nfts':'nfts','referral':'referral','create':'create','marketplace':'market',
       'market':'market','swap':'swap','liquidity':'liquidity','portfolio':'portfolio',
-      'token':'token','roadmap':'roadmap','leaderboard':'leaderboard','tracker':'tracker','futures':'futures'
+      'token':'token','roadmap':'roadmap','leaderboard':'leaderboard','tracker':'tracker','futures':'futures',
+      'copytrade':'copytrade','revstaking':'revstaking','limitorders':'limitorders','perpdex':'perpdex','otc':'otc','dao':'dao'
     };
     var page = pageMap[hash] || hash;
     var btn = document.querySelector('[data-page="' + page + '"]');

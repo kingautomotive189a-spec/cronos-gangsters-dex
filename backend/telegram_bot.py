@@ -293,6 +293,12 @@ def main_keyboard():
         [InlineKeyboardButton("⚡ Flash Loans", callback_data="menu_flashloans"),
          InlineKeyboardButton("🛡 Insurance", callback_data="menu_insurance")],
         [InlineKeyboardButton("🔀 Aggregator", callback_data="menu_aggregator"),
+         InlineKeyboardButton("👥 Copy Trade", callback_data="menu_copytrade"),
+         InlineKeyboardButton("💎 Rev Stake", callback_data="menu_revstaking")],
+        [InlineKeyboardButton("📋 Limit Orders", callback_data="menu_limitorders"),
+         InlineKeyboardButton("📊 Perp DEX", callback_data="menu_perpdex"),
+         InlineKeyboardButton("🤝 OTC Desk", callback_data="menu_otc")],
+        [InlineKeyboardButton("🏛 DAO", callback_data="menu_dao"),
          InlineKeyboardButton("⛏ Mining Hub", callback_data="menu_mining"),
          InlineKeyboardButton("⚡ Trading", callback_data="menu_trading")],
         [InlineKeyboardButton("🌾 Farms", callback_data="menu_farms"),
@@ -1340,11 +1346,18 @@ async def roadmap_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "💰 All platform fees standardized to 0.3%\n"
         "🏦 Auto-compound Vaults with live APYs\n"
         "🍔 Redesigned navigation with icons\n\n"
-        "🔜 *Phase 9 — Coming Soon*\n"
+        "✅ *Phase 9 — Complete*\n"
         "━━━━━━━━━━━━━━━━━━━━━\n"
-        "Copy Trading, Revenue Staking,\n"
-        "Limit Orders, Mobile App,\n"
-        "DAO Governance, Cross-chain Futures\n\n"
+        "👥 Copy Trading — Follow top traders, 0.3% fee\n"
+        "💎 Revenue Staking — Earn platform fees\n"
+        "📋 Limit Orders — Set & forget, 0.3% fee\n"
+        "📊 Perpetual DEX — No-expiry, up to 50x\n"
+        "🤝 OTC Desk — Big block trades with escrow\n"
+        "🏛 DAO Governance — Proposals & voting\n\n"
+        "🔜 *Phase 10 — Coming Soon*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n"
+        "CEX listings, Multi-chain expansion,\n"
+        "Mobile App (iOS & Android)\n\n"
         "🔥 *Building the most complete DEX on Cronos!*"
     )
 
@@ -1356,6 +1369,12 @@ async def roadmap_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("⚡ Flash Loans", callback_data="menu_flashloans"),
          InlineKeyboardButton("🛡 Insurance", callback_data="menu_insurance"),
          InlineKeyboardButton("🔀 Aggregator", callback_data="menu_aggregator")],
+        [InlineKeyboardButton("👥 Copy Trade", callback_data="menu_copytrade"),
+         InlineKeyboardButton("💎 Rev Stake", callback_data="menu_revstaking"),
+         InlineKeyboardButton("📋 Limits", callback_data="menu_limitorders")],
+        [InlineKeyboardButton("📊 Perp DEX", callback_data="menu_perpdex"),
+         InlineKeyboardButton("🤝 OTC", callback_data="menu_otc"),
+         InlineKeyboardButton("🏛 DAO", callback_data="menu_dao")],
         [InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
@@ -1525,8 +1544,157 @@ async def aggregator_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
 
 
+async def copytrade_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /copytrade command"""
+    msg = (
+        "👥 *GANG COPY TRADING*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Follow top traders automatically.\n\n"
+        "━━━ *TOP TRADERS* ━━━\n\n"
+        "🏆 *GangWhale* — 342% ROI, 78% win\n"
+        "🥈 *CroKing* — 289% ROI, 72% win\n"
+        "🥉 *DefiSage* — 234% ROI, 81% win\n"
+        "4️⃣ *AlphaHunter* — 198% ROI\n"
+        "5️⃣ *MoonShot* — 176% ROI\n"
+        "6️⃣ *CryptoGangster* — 156% ROI\n\n"
+        "━━━ *HOW IT WORKS* ━━━\n\n"
+        "1️⃣ Pick a top trader to follow\n"
+        "2️⃣ Set your copy amount\n"
+        "3️⃣ Trades are auto-copied\n"
+        "4️⃣ Profit when they profit\n\n"
+        "━━━ *FEES* ━━━\n\n"
+        "Copy Fee: *0.3%* per copied trade\n\n"
+        f"[👥 Open Copy Trading]({DEX_LINK}#copytrade)"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("👥 Open Copy Trading", url=f"{DEX_LINK}#copytrade")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
 
 
+async def revstaking_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /revstaking command"""
+    msg = (
+        "💎 *GANG REVENUE STAKING*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Stake $GANG. Earn ALL platform fees.\n\n"
+        "━━━ *HOW IT WORKS* ━━━\n\n"
+        "1️⃣ Stake your GANG tokens\n"
+        "2️⃣ Platform earns 0.3% on every trade\n"
+        "3️⃣ Revenue shared to all stakers\n"
+        "4️⃣ Claim CRO rewards anytime\n\n"
+        "━━━ *KEY INFO* ━━━\n\n"
+        "• No minimum stake\n"
+        "• No lock period — unstake anytime\n"
+        "• Bigger stake = bigger share\n"
+        "• Mgmt Fee: *0.3%* on distributions\n\n"
+        f"[💎 Open Revenue Staking]({DEX_LINK}#revstaking)"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("💎 Open Revenue Staking", url=f"{DEX_LINK}#revstaking")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+async def limitorders_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /limitorders command"""
+    msg = (
+        "📋 *GANG LIMIT ORDERS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Set your price. We execute when it hits.\n\n"
+        "━━━ *FEATURES* ━━━\n\n"
+        "• Buy and Sell limit orders\n"
+        "• CRO, GANG, USDC, WETH, WBTC pairs\n"
+        "• Cancel anytime before fill\n"
+        "• Auto-execute at target price\n\n"
+        "━━━ *FEES* ━━━\n\n"
+        "Execution Fee: *0.3%* per filled order\n"
+        "Only charged when order fills.\n\n"
+        f"[📋 Open Limit Orders]({DEX_LINK}#limitorders)"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📋 Open Limit Orders", url=f"{DEX_LINK}#limitorders")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+async def perpdex_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /perpdex command"""
+    msg = (
+        "📊 *GANG PERPETUAL DEX*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "No-expiry contracts. Up to 50x leverage.\n\n"
+        "━━━ *AVAILABLE PAIRS* ━━━\n\n"
+        "• BTC-PERP | ETH-PERP | CRO-PERP\n"
+        "• SOL-PERP | GANG-PERP | DOGE-PERP\n"
+        "• AVAX-PERP | LINK-PERP\n\n"
+        "━━━ *LEVERAGE* ━━━\n\n"
+        "5x | 10x | 20x | 30x | 50x\n"
+        "Long & Short positions available.\n\n"
+        "━━━ *FEES* ━━━\n\n"
+        "Trading Fee: *0.3%* on open & close\n"
+        "Plus funding rate revenue.\n\n"
+        f"[📊 Open Perp DEX]({DEX_LINK}#perpdex)"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📊 Open Perp DEX", url=f"{DEX_LINK}#perpdex")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+async def otc_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /otc command"""
+    msg = (
+        "🤝 *GANG OTC DESK*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Large block trades with escrow.\n\n"
+        "━━━ *FEATURES* ━━━\n\n"
+        "• Create OTC deals for any token pair\n"
+        "• Escrow protects both parties\n"
+        "• Fill or cancel anytime\n"
+        "• No slippage on large trades\n\n"
+        "━━━ *FEES* ━━━\n\n"
+        "OTC Fee: *0.3%* per deal executed\n"
+        "Big trades = big fees for you.\n\n"
+        f"[🤝 Open OTC Desk]({DEX_LINK}#otc)"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🤝 Open OTC Desk", url=f"{DEX_LINK}#otc")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+async def dao_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /dao command"""
+    msg = (
+        "🏛 *GANG DAO GOVERNANCE*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Decentralized governance for the Gang.\n\n"
+        "━━━ *HOW IT WORKS* ━━━\n\n"
+        "1️⃣ Create proposals (1 CRO fee)\n"
+        "2️⃣ Community votes with $GANG\n"
+        "3️⃣ Quorum: 10,000 GANG\n"
+        "4️⃣ Passed proposals get executed\n\n"
+        "━━━ *CATEGORIES* ━━━\n\n"
+        "• Treasury allocation\n"
+        "• New features\n"
+        "• Fee changes\n"
+        "• Partnerships\n\n"
+        "━━━ *FEES* ━━━\n\n"
+        "Proposal Fee: *1 CRO* per submission\n"
+        "Treasury Exec: *0.3%*\n\n"
+        f"[🏛 Open DAO]({DEX_LINK}#dao)"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🏛 Open DAO", url=f"{DEX_LINK}#dao")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
 def generate_captcha():
     """Generate a simple math captcha using cryptographic randomness"""
     a = secrets.randbelow(10) + 1
@@ -2363,10 +2531,16 @@ async def _cb_menu_roadmap(query, context):
         "   Dual currency (GANG + CRO)\n"
         "   0.3% standardized fees\n"
         "   Auto-compound Vaults\n\n"
-        "🔜 *Phase 9 — Coming Soon*\n"
-        "   Copy Trading, Revenue Staking,\n"
-        "   Limit Orders, Mobile App,\n"
-        "   DAO Governance, Cross-chain Futures"
+        "✅ *Phase 9 — Complete*\n"
+        "   👥 Copy Trading (0.3% fee)\n"
+        "   💎 Revenue Staking (earn all fees)\n"
+        "   📋 Limit Orders (0.3% fee)\n"
+        "   📊 Perpetual DEX (50x leverage)\n"
+        "   🤝 OTC Desk (escrow trades)\n"
+        "   🏛 DAO Governance (proposals & voting)\n\n"
+        "🔜 *Phase 10 — Coming Soon*\n"
+        "   CEX listings, Multi-chain,\n"
+        "   Mobile App (iOS & Android)"
     )
     kb = InlineKeyboardMarkup([
         [InlineKeyboardButton("🌐 Visit Website", url=DEX_LINK)],
@@ -2376,6 +2550,12 @@ async def _cb_menu_roadmap(query, context):
         [InlineKeyboardButton("⚡ Flash Loans", callback_data="menu_flashloans"),
          InlineKeyboardButton("🛡 Insurance", callback_data="menu_insurance"),
          InlineKeyboardButton("🔀 Aggregator", callback_data="menu_aggregator")],
+        [InlineKeyboardButton("👥 Copy Trade", callback_data="menu_copytrade"),
+         InlineKeyboardButton("💎 Rev Stake", callback_data="menu_revstaking"),
+         InlineKeyboardButton("📋 Limits", callback_data="menu_limitorders")],
+        [InlineKeyboardButton("📊 Perp DEX", callback_data="menu_perpdex"),
+         InlineKeyboardButton("🤝 OTC", callback_data="menu_otc"),
+         InlineKeyboardButton("🏛 DAO", callback_data="menu_dao")],
         [InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
@@ -2500,7 +2680,143 @@ async def _cb_menu_aggregator(query, context):
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
 
 
-# Dispatch table for callback queries
+async def _cb_menu_copytrade(query, context):
+    """Callback handler for Copy Trading menu"""
+    msg = (
+        "👥 *GANG COPY TRADING*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Follow top traders. Auto-copy their trades.\n\n"
+        "🏆 *Top Traders:*\n"
+        "• GangWhale — 342% ROI, 78% win rate\n"
+        "• CroKing — 289% ROI, 72% win rate\n"
+        "• DefiSage — 234% ROI, 81% win rate\n"
+        "• AlphaHunter — 198% ROI, 69% win rate\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• 0.3% fee per copied trade\n"
+        "• More copiers = more revenue\n"
+        "• Auto-collected on every copy\n"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("👥 Open Copy Trading", url=f"{DEX_LINK}#copytrade")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_revstaking(query, context):
+    """Callback handler for Revenue Staking menu"""
+    msg = (
+        "💎 *GANG REVENUE STAKING*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Stake $GANG. Earn a share of ALL platform fees.\n\n"
+        "📊 *How it works:*\n"
+        "1. Stake GANG tokens\n"
+        "2. Platform earns 0.3% on every trade\n"
+        "3. Revenue shared proportionally to stakers\n"
+        "4. Claim CRO rewards anytime\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• 0.3% management fee on distributions\n"
+        "• More stakers = more engagement\n"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("💎 Open Revenue Staking", url=f"{DEX_LINK}#revstaking")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_limitorders(query, context):
+    """Callback handler for Limit Orders menu"""
+    msg = (
+        "📋 *GANG LIMIT ORDERS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Set your target price. We execute when it hits.\n\n"
+        "⚙️ *Features:*\n"
+        "• Buy and Sell limit orders\n"
+        "• Multiple token pairs\n"
+        "• Cancel anytime\n"
+        "• Auto-execute at target\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• 0.3% per executed order\n"
+        "• Only charged when order fills\n"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📋 Open Limit Orders", url=f"{DEX_LINK}#limitorders")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_perpdex(query, context):
+    """Callback handler for Perpetual DEX menu"""
+    msg = (
+        "📊 *GANG PERPETUAL DEX*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "No-expiry contracts. Up to 50x leverage.\n\n"
+        "📈 *Available Pairs:*\n"
+        "• BTC-PERP, ETH-PERP, CRO-PERP\n"
+        "• SOL-PERP, GANG-PERP, DOGE-PERP\n"
+        "• AVAX-PERP, LINK-PERP\n\n"
+        "⚡ *Leverage:* 5x, 10x, 20x, 30x, 50x\n"
+        "🔄 *Long & Short* positions available\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• 0.3% on position open AND close\n"
+        "• Plus funding rate revenue\n"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📊 Open Perp DEX", url=f"{DEX_LINK}#perpdex")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_otc(query, context):
+    """Callback handler for OTC Trading menu"""
+    msg = (
+        "🤝 *GANG OTC DESK*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Large block trades with escrow protection.\n\n"
+        "🔐 *Features:*\n"
+        "• Create OTC deals for any token pair\n"
+        "• Escrow protects both parties\n"
+        "• P2P matching system\n"
+        "• Fill or cancel deals anytime\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• 0.3% per OTC deal executed\n"
+        "• Big trades = big fees\n"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🤝 Open OTC Desk", url=f"{DEX_LINK}#otc")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_dao(query, context):
+    """Callback handler for DAO Governance menu"""
+    msg = (
+        "🏛 *GANG DAO GOVERNANCE*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Decentralized governance for the Gang.\n\n"
+        "🗳 *How it works:*\n"
+        "• Create proposals (1 CRO fee)\n"
+        "• Community votes with $GANG tokens\n"
+        "• Quorum: 10,000 GANG\n"
+        "• Passed proposals get executed\n\n"
+        "📋 *Categories:*\n"
+        "• Treasury allocation\n"
+        "• New features\n"
+        "• Fee changes\n"
+        "• Partnerships\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• 1 CRO per proposal submission\n"
+        "• 0.3% on treasury executions\n"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🏛 Open DAO", url=f"{DEX_LINK}#dao")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
 CALLBACK_DISPATCH = {
     "refresh_price": _cb_refresh_price,
     "set_alert": _cb_set_alert,
@@ -2538,6 +2854,12 @@ CALLBACK_DISPATCH = {
     "menu_flashloans": _cb_menu_flashloans,
     "menu_insurance": _cb_menu_insurance,
     "menu_aggregator": _cb_menu_aggregator,
+    "menu_copytrade": _cb_menu_copytrade,
+    "menu_revstaking": _cb_menu_revstaking,
+    "menu_limitorders": _cb_menu_limitorders,
+    "menu_perpdex": _cb_menu_perpdex,
+    "menu_otc": _cb_menu_otc,
+    "menu_dao": _cb_menu_dao,
 }
 
 
@@ -2954,6 +3276,12 @@ def main():
     app.add_handler(CommandHandler("flashloans", flashloans_cmd))
     app.add_handler(CommandHandler("insurance", insurance_cmd))
     app.add_handler(CommandHandler("aggregator", aggregator_cmd))
+    app.add_handler(CommandHandler("copytrade", copytrade_cmd))
+    app.add_handler(CommandHandler("revstaking", revstaking_cmd))
+    app.add_handler(CommandHandler("limitorders", limitorders_cmd))
+    app.add_handler(CommandHandler("perpdex", perpdex_cmd))
+    app.add_handler(CommandHandler("otc", otc_cmd))
+    app.add_handler(CommandHandler("dao", dao_cmd))
 
     # Admin commands
     app.add_handler(CommandHandler("ban", ban))
