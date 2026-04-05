@@ -250,6 +250,7 @@
   #txConfirmModal .tx-warning{display:flex;align-items:center;gap:8px;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:11px;color:#e74c3c;}
   #txConfirmModal .tx-cronos-badge{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;font-size:10px;color:var(--muted);letter-spacing:1px;border-top:1px solid rgba(255,255,255,0.04);}
   .modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
+  #txConfirmModal{z-index:9999;}
   .modal-overlay.open{display:flex;}
   .modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;width:100%;max-width:400px;margin:14px;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
   .modal-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold);margin-bottom:16px;display:flex;justify-content:space-between;}
@@ -15655,9 +15656,9 @@ function updateLendingUI() {
     const elYours = document.getElementById('lend' + id + 'Yours');
 
     if (elApy) elApy.textContent = supplyAPY.toFixed(1) + '% APY';
-    if (elPool) elPool.textContent = pool.totalSupplied.toFixed(2) + ' ' + TK;
+    if (elPool) elPool.textContent = pool.totalSupplied.toFixed(2) + ' ' + token;
     if (elUtil) elUtil.textContent = util.toFixed(0) + '%';
-    if (elYours) elYours.textContent = userSup.toFixed(2) + ' ' + TK;
+    if (elYours) elYours.textContent = userSup.toFixed(2) + ' ' + token;
 
     totalSuppliedUSD += pool.totalSupplied * price;
     totalBorrowedUSD += pool.totalBorrowed * price;
@@ -15733,7 +15734,7 @@ function lendSupply(token) {
   const amount = parseFloat(input?.value);
   if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
 
-  const apy = LENDING_POOLS[token] ? LENDING_POOLS[token].baseSupplyAPY : 3;
+  const apy = LENDING_POOLS[token] ? LENDING_POOLS[token].baseRate : 3;
   showTxConfirm({
     title: 'CONFIRM SUPPLY',
     action: 'Supply ' + token,
@@ -16148,36 +16149,68 @@ function createPredMarket() {
   if (!question) { showToast('Enter a question', 'error'); return; }
   if (!endDate) { showToast('Set an end date', 'error'); return; }
 
-  let s = initPredState();
-  const id = 'custom_' + Date.now();
-  s.markets.push({
-    id, question, optA, optB, category, endDate, poolA: 0, poolB: 0, status: 'active', bets: []
+  showTxConfirm({
+    title: 'CREATE PREDICTION MARKET',
+    action: 'Create new market',
+    fromToken: '🔮',
+    icon: '🔮',
+    amount: 'New Market',
+    fee: 'Free to create',
+    receive: 'Market: "' + question + '"',
+    color: '#a855f7',
+    btnColor: 'linear-gradient(135deg,#a855f7,#7c3aed)',
+    details: [
+      { label: 'Question', value: question.substring(0, 40) + (question.length > 40 ? '...' : '') },
+      { label: 'Option A', value: optA, cls: 'green' },
+      { label: 'Option B', value: optB },
+      { label: 'Category', value: category },
+      { label: 'End Date', value: endDate },
+    ],
+    onConfirm: function() {
+      let s = initPredState();
+      const id = 'custom_' + Date.now();
+      s.markets.push({ id, question, optA, optB, category, endDate, poolA: 0, poolB: 0, status: 'active', bets: [] });
+      savePredState(s);
+      document.getElementById('predQuestion').value = '';
+      document.getElementById('predEndDate').value = '';
+      showToast('Market created: "' + question + '"', 'success');
+      renderPredMarkets();
+    }
   });
-  savePredState(s);
-
-  document.getElementById('predQuestion').value = '';
-  document.getElementById('predEndDate').value = '';
-  showToast('Market created: "' + question + '"', 'success');
-  renderPredMarkets();
 }
 
 function predOwnerCollect() {
   let s = initPredState();
   if ((s.ownerFees || 0) <= 0) { showToast('No fees to collect', 'error'); return; }
-  showToast('Collected ' + s.ownerFees.toFixed(2) + ' CRO in prediction fees!', 'success');
-  s.ownerFees = 0;
-  savePredState(s);
-  renderPredMarkets();
-  updateRevPredFees();
+  showTxConfirm({
+    title: 'COLLECT PREDICTION FEES',
+    action: 'Withdraw prediction fees',
+    fromToken: '🔮', icon: '🔮',
+    amount: s.ownerFees.toFixed(2) + ' CRO',
+    fee: 'No withdrawal fee',
+    receive: s.ownerFees.toFixed(2) + ' CRO to your wallet',
+    color: '#a855f7',
+    btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+    onConfirm: function() {
+      let s2 = initPredState();
+      showToast('Collected ' + s2.ownerFees.toFixed(2) + ' CRO in prediction fees!', 'success');
+      s2.ownerFees = 0; savePredState(s2); renderPredMarkets(); updateRevPredFees();
+    }
+  });
 }
 
 function revCollectPredFees() {
   let s = initPredState();
   if ((s.ownerFees || 0) <= 0) { showToast('No prediction fees to collect', 'error'); return; }
-  showToast('Collected ' + s.ownerFees.toFixed(2) + ' CRO in prediction fees!', 'success');
-  s.ownerFees = 0;
-  savePredState(s);
-  updateRevPredFees();
+  showTxConfirm({
+    title: 'COLLECT PREDICTION FEES', action: 'Withdraw prediction fees', fromToken: '🔮', icon: '🔮',
+    amount: s.ownerFees.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerFees.toFixed(2) + ' CRO to wallet',
+    color: '#a855f7', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+    onConfirm: function() {
+      let s2 = initPredState(); showToast('Collected ' + s2.ownerFees.toFixed(2) + ' CRO!', 'success');
+      s2.ownerFees = 0; savePredState(s2); updateRevPredFees();
+    }
+  });
 }
 
 function updateRevPredFees() {
@@ -16307,20 +16340,29 @@ function _doFlashLoan(token, amount, fee, strategy, stratNames) {
 function flashOwnerCollect() {
   let s = initFlashState();
   if ((s.ownerFees || 0) <= 0) { showToast('No fees to collect', 'error'); return; }
-  showToast('Collected ' + s.ownerFees.toFixed(2) + ' CRO in flash loan fees!', 'success');
-  s.ownerFees = 0;
-  saveFlashState(s);
-  renderFlashLoans();
-  updateRevFlashFees();
+  showTxConfirm({
+    title: 'COLLECT FLASH LOAN FEES', action: 'Withdraw flash loan fees', fromToken: '⚡', icon: '⚡',
+    amount: s.ownerFees.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerFees.toFixed(2) + ' CRO to wallet',
+    color: '#ffdd00', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+    onConfirm: function() {
+      let s2 = initFlashState(); showToast('Collected ' + s2.ownerFees.toFixed(2) + ' CRO!', 'success');
+      s2.ownerFees = 0; saveFlashState(s2); renderFlashLoans(); updateRevFlashFees();
+    }
+  });
 }
 
 function revCollectFlashFees() {
   let s = initFlashState();
   if ((s.ownerFees || 0) <= 0) { showToast('No flash loan fees to collect', 'error'); return; }
-  showToast('Collected ' + s.ownerFees.toFixed(2) + ' CRO in flash loan fees!', 'success');
-  s.ownerFees = 0;
-  saveFlashState(s);
-  updateRevFlashFees();
+  showTxConfirm({
+    title: 'COLLECT FLASH LOAN FEES', action: 'Withdraw flash loan fees', fromToken: '⚡', icon: '⚡',
+    amount: s.ownerFees.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerFees.toFixed(2) + ' CRO to wallet',
+    color: '#ffdd00', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+    onConfirm: function() {
+      let s2 = initFlashState(); showToast('Collected ' + s2.ownerFees.toFixed(2) + ' CRO!', 'success');
+      s2.ownerFees = 0; saveFlashState(s2); updateRevFlashFees();
+    }
+  });
 }
 
 function updateRevFlashFees() {
@@ -16480,20 +16522,29 @@ function _doBuyInsurance(type, amount, duration, premium, typeName) {
 function insOwnerCollect() {
   let s = initInsState();
   if ((s.ownerPremiums || 0) <= 0) { showToast('No premiums to collect', 'error'); return; }
-  showToast('Collected ' + s.ownerPremiums.toFixed(2) + ' CRO in insurance premiums!', 'success');
-  s.ownerPremiums = 0;
-  saveInsState(s);
-  renderInsurance();
-  updateRevInsuranceFees();
+  showTxConfirm({
+    title: 'COLLECT INSURANCE PREMIUMS', action: 'Withdraw insurance premiums', fromToken: '🛡', icon: '🛡',
+    amount: s.ownerPremiums.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerPremiums.toFixed(2) + ' CRO to wallet',
+    color: '#4ecdc4', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+    onConfirm: function() {
+      let s2 = initInsState(); showToast('Collected ' + s2.ownerPremiums.toFixed(2) + ' CRO!', 'success');
+      s2.ownerPremiums = 0; saveInsState(s2); renderInsurance(); updateRevInsuranceFees();
+    }
+  });
 }
 
 function revCollectInsuranceFees() {
   let s = initInsState();
   if ((s.ownerPremiums || 0) <= 0) { showToast('No insurance premiums to collect', 'error'); return; }
-  showToast('Collected ' + s.ownerPremiums.toFixed(2) + ' CRO in insurance premiums!', 'success');
-  s.ownerPremiums = 0;
-  saveInsState(s);
-  updateRevInsuranceFees();
+  showTxConfirm({
+    title: 'COLLECT INSURANCE PREMIUMS', action: 'Withdraw insurance premiums', fromToken: '🛡', icon: '🛡',
+    amount: s.ownerPremiums.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerPremiums.toFixed(2) + ' CRO to wallet',
+    color: '#4ecdc4', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+    onConfirm: function() {
+      let s2 = initInsState(); showToast('Collected ' + s2.ownerPremiums.toFixed(2) + ' CRO!', 'success');
+      s2.ownerPremiums = 0; saveInsState(s2); updateRevInsuranceFees();
+    }
+  });
 }
 
 function updateRevInsuranceFees() {
@@ -16684,20 +16735,29 @@ function _doAggSwap(fromToken, toToken, amount, fee, bestRate, bestDex, toAmount
 function aggOwnerCollect() {
   let s = initAggState();
   if ((s.ownerFees || 0) <= 0) { showToast('No fees to collect', 'error'); return; }
-  showToast('Collected ' + s.ownerFees.toFixed(2) + ' CRO in aggregator fees!', 'success');
-  s.ownerFees = 0;
-  saveAggState(s);
-  renderAggregator();
-  updateRevAggFees();
+  showTxConfirm({
+    title: 'COLLECT AGGREGATOR FEES', action: 'Withdraw aggregator fees', fromToken: '🔀', icon: '🔀',
+    amount: s.ownerFees.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerFees.toFixed(2) + ' CRO to wallet',
+    color: '#ff6ec7', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+    onConfirm: function() {
+      let s2 = initAggState(); showToast('Collected ' + s2.ownerFees.toFixed(2) + ' CRO!', 'success');
+      s2.ownerFees = 0; saveAggState(s2); renderAggregator(); updateRevAggFees();
+    }
+  });
 }
 
 function revCollectAggFees() {
   let s = initAggState();
   if ((s.ownerFees || 0) <= 0) { showToast('No aggregator fees to collect', 'error'); return; }
-  showToast('Collected ' + s.ownerFees.toFixed(2) + ' CRO in aggregator fees!', 'success');
-  s.ownerFees = 0;
-  saveAggState(s);
-  updateRevAggFees();
+  showTxConfirm({
+    title: 'COLLECT AGGREGATOR FEES', action: 'Withdraw aggregator fees', fromToken: '🔀', icon: '🔀',
+    amount: s.ownerFees.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerFees.toFixed(2) + ' CRO to wallet',
+    color: '#ff6ec7', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+    onConfirm: function() {
+      let s2 = initAggState(); showToast('Collected ' + s2.ownerFees.toFixed(2) + ' CRO!', 'success');
+      s2.ownerFees = 0; saveAggState(s2); updateRevAggFees();
+    }
+  });
 }
 
 function updateRevAggFees() {
