@@ -4,7 +4,7 @@
 Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deployment. Features include DeFi protocols (Swap, Lending, Futures, etc.), NFTs, Telegram Bot integration, and revenue collection for the owner.
 
 ## Architecture
-- **Frontend**: Single `cronos-gangsters.html` file (~21,350 lines), vanilla JS + Ethers.js v6
+- **Frontend**: Single `cronos-gangsters.html` file (~21,400 lines), vanilla JS + Ethers.js v6
 - **Backend**: FastAPI (`server.py`) + Python Telegram Bot (`telegram_bot.py`)
 - **Storage**: LocalStorage (mocked DeFi state), no database
 - **Deployment**: User downloads ZIP → uploads to GoDaddy manually
@@ -35,27 +35,27 @@ Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deploymen
 - Stage 1: Transaction details + CANCEL/CONFIRM
 - Stage 2: "PROCESSING TRANSACTION" gold spinner (1.5s)
 - Stage 3: "TRANSACTION CONFIRMED" green checkmark, tx hash, Cronoscan link, DONE button
-- Applied to ALL mocked features
 
 ### MAX Buttons & Balance Displays (Feb 5, 2026)
 - MAX button on ALL input fields across all features
 - Balance/staked amount displays showing available amounts
-- Token-specific balance updates when switching tokens
 
 ### Phase 10 — Dynamic Copy Trading + Global Auto-Refresh (Feb 5, 2026)
-- **Dynamic Copy Trading** — Linked to real `futuresState.positions`, shows actual simulated Futures trades instead of fake static names. Click COPY to mirror real trades with 0.3% fee.
-- **Global Auto-Refresh Engine** — All charts, balances, positions, and stats auto-update:
-  - Futures positions PnL updates every 10s (via price feed)
-  - Copy Trading leaders auto-refresh every 5-6s when active
-  - Perpetual DEX prices fluctuate every 3s (random walk simulation)
-  - Revenue Staking rewards accrue every 8s (live CRO trickle)
-  - Balance displays refresh globally every 15s
-  - Active page data refreshes every 5s
-- **Live Indicators** — Green pulsing dot on Futures, Copy Trading, Perp DEX, Revenue Staking pages
-- **Value Pulse Animations** — CSS animations flash green/red when values change
-- **Revenue Page** — All 6 mocked feature fee banners now properly load data on page open
-- **Bug Fix** — Fixed `renderFuturesPositions()` call (function didn't exist → changed to `updateFuturesPositions()`)
-- **Perp DEX Enhanced** — Positions now show entry vs current price, PnL with percentage
+- **Dynamic Copy Trading** — Linked to real `futuresState.positions` from Leverage page
+- **Global Auto-Refresh Engine** — Charts, balances, PnL auto-update every 3-15s
+- **Live Indicators** — Green pulsing dots on active pages
+- **Value Pulse Animations** — CSS flash on value changes
+
+### Phase 10b — Professional Copy Trading UI (Feb 5, 2026)
+- **Proper token logos** — BTC, ETH, SOL, TSLA, NVDA, GOLD, AAPL, etc. pulled from FUTURES_PAIRS (CoinGecko + TradingView CDN)
+- **Rank badges** — #1 TOP (gold), #2 (silver), #3 (bronze) for top PnL traders
+- **Asset type badges** — STOCK, INDEX, COMDTY labels on non-crypto assets
+- **Entry vs Current price** displayed live on each card
+- **Trader wallet addresses** shown professionally (0x7a25...488D)
+- **Popup shows token logo** — BTC logo in the 3-stage confirmation modal
+- **Selected trade panel** shows logo + full pair name (e.g., BTC/USD)
+- **Copy history** shows logos next to each historical copy
+- **Direction indicator** on logo — green L (long) or red S (short) badge overlay
 
 ## Backlog / Phase 11 (Future)
 - CEX listings
@@ -65,13 +65,12 @@ Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deploymen
 - Top Collections leaderboard
 
 ## Testing Status
-- Iteration 6: 100% pass (14/14 tests, all 6 features)
+- Iteration 6: 100% pass (14/14 tests)
 - Iteration 7: 92% pass → fixed duplicate function bug
-- Phase 10: Manual screenshot tests — Copy Trading, Perp DEX, Revenue Staking, Revenue Page all verified working
-- 3-stage popup confirmed working for copy trades
+- Phase 10/10b: Manual screenshot tests — Copy Trading logos, popups, PnL, auto-refresh all verified
 
 ## Key Files
-- `/app/frontend/public/cronos-gangsters.html` — Main DApp (~21,350 lines)
+- `/app/frontend/public/cronos-gangsters.html` — Main DApp (~21,400 lines)
 - `/app/backend/telegram_bot.py` — Telegram Bot (~3,320 lines)
 - `/app/backend/server.py` — FastAPI server
-- `/app/frontend/public/cronos-gangsters-deploy.zip` — Lean deployable package (39MB)
+- `/app/frontend/public/cronos-gangsters-deploy.zip` — Lean deployable package

@@ -17540,19 +17540,26 @@ function initCTState() {
   return s;
 }
 
+function _ctGetPairInfo(pair) {
+  // Lookup from FUTURES_PAIRS to get logo, name, color, type
+  const fp = FUTURES_PAIRS[pair];
+  if (fp) return fp;
+  // Fallback for unknown pairs
+  return { logo: '', name: pair, color: '#888', type: 'crypto', badge: pair[0] };
+}
+
 function renderCTLeaders() {
   const grid = document.getElementById('ctLeadersGrid');
   if (!grid) return;
 
-  // Pull real positions from Futures state
   const allPositions = futuresState.positions || [];
   const openPositions = allPositions.filter(p => p.status === 'open');
 
   if (openPositions.length === 0) {
-    grid.innerHTML = `<div style="text-align:center;color:var(--muted);padding:30px;font-size:13px;">
-      <div style="font-size:32px;margin-bottom:10px;opacity:0.3;">📊</div>
-      <div>No Futures trades yet.</div>
-      <div style="margin-top:6px;"><a href="#futures" onclick="showPage('futures')" style="color:#e91e63;text-decoration:underline;cursor:pointer;">Open a Futures position</a> and it will appear here for others to copy.</div>
+    grid.innerHTML = `<div style="text-align:center;color:var(--muted);padding:40px 20px;font-size:13px;">
+      <div style="font-size:48px;margin-bottom:12px;opacity:0.15;">&#x1f4c8;</div>
+      <div style="font-weight:700;font-size:15px;color:var(--text);margin-bottom:6px;">No Active Leverage Trades</div>
+      <div style="color:var(--muted);line-height:1.5;">Head to <a href="#futures" onclick="showPage('futures')" style="color:#e91e63;text-decoration:underline;cursor:pointer;font-weight:700;">GANG FUTURES</a> and open a position.<br>It will appear here instantly for others to copy.</div>
     </div>`;
     return;
   }
@@ -17570,30 +17577,54 @@ function renderCTLeaders() {
   grid.innerHTML = sorted.map((p, i) => {
     const wallet = p.wallet || 'unknown';
     const shortWallet = wallet.length > 10 ? wallet.substring(0, 6) + '...' + wallet.substring(wallet.length - 4) : wallet;
+    const info = _ctGetPairInfo(p.pair);
     const dirColor = p.side === 'LONG' ? 'var(--green)' : '#e53935';
+    const dirBg = p.side === 'LONG' ? 'rgba(39,174,96,0.15)' : 'rgba(229,57,53,0.15)';
     const pnlColor = p.pnl >= 0 ? 'var(--green)' : '#e53935';
     const pnlSign = p.pnl >= 0 ? '+' : '';
-    const avatarColors = ['#e91e63','#9c27b0','#2196f3','#ff9800','#4caf50','#00bcd4','#ff5722','#795548'];
-    const avatarColor = avatarColors[i % avatarColors.length];
-    return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;align-items:center;gap:12px;transition:all .2s;cursor:pointer;" onmouseover="this.style.borderColor='#e91e63'" onmouseout="this.style.borderColor='var(--border)'">
-      <div style="width:42px;height:42px;border-radius:50%;background:${avatarColor};display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:14px;flex-shrink:0;">${shortWallet[0].toUpperCase()}</div>
+    const arrow = p.pnl >= 0 ? '&#9650;' : '&#9660;';
+    // Rank badge
+    const rankBadge = i === 0 ? `<div style="position:absolute;top:-6px;left:-6px;background:linear-gradient(135deg,#ffd700,#ff8c00);color:#000;font-size:9px;font-weight:900;padding:2px 8px;border-radius:10px;letter-spacing:0.5px;box-shadow:0 2px 8px rgba(255,215,0,0.4);z-index:2;">#1 TOP</div>`
+      : i === 1 ? `<div style="position:absolute;top:-6px;left:-6px;background:linear-gradient(135deg,#c0c0c0,#a0a0a0);color:#000;font-size:9px;font-weight:900;padding:2px 8px;border-radius:10px;letter-spacing:0.5px;z-index:2;">#2</div>`
+      : i === 2 ? `<div style="position:absolute;top:-6px;left:-6px;background:linear-gradient(135deg,#cd7f32,#a0522d);color:#fff;font-size:9px;font-weight:900;padding:2px 8px;border-radius:10px;letter-spacing:0.5px;z-index:2;">#3</div>` : '';
+    // Type badge
+    const typeBadge = info.type === 'stock' ? `<span style="background:#1565c0;color:#fff;font-size:7px;font-weight:800;padding:1px 4px;border-radius:3px;margin-left:4px;vertical-align:middle;">STOCK</span>`
+      : info.type === 'index' ? `<span style="background:#6a1b9a;color:#fff;font-size:7px;font-weight:800;padding:1px 4px;border-radius:3px;margin-left:4px;vertical-align:middle;">INDEX</span>`
+      : info.type === 'commodity' ? `<span style="background:#e65100;color:#fff;font-size:7px;font-weight:800;padding:1px 4px;border-radius:3px;margin-left:4px;vertical-align:middle;">COMDTY</span>` : '';
+    // Logo HTML
+    const logoHtml = info.logo
+      ? `<img src="${info.logo}" alt="${p.pair}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid ${info.color || 'var(--border)'};background:#1a1a2e;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div style="display:none;width:40px;height:40px;border-radius:50%;background:${info.color || '#444'};align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:14px;border:2px solid ${info.color || 'var(--border)'};">${(info.badge || p.pair[0])}</div>`
+      : `<div style="width:40px;height:40px;border-radius:50%;background:${info.color || '#444'};display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:14px;border:2px solid ${info.color || 'var(--border)'};">${(info.badge || p.pair[0])}</div>`;
+
+    return `<div style="position:relative;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;transition:all .25s;cursor:pointer;overflow:visible;" onmouseover="this.style.borderColor='${info.color || '#e91e63'}';this.style.boxShadow='0 0 15px ${info.color || '#e91e63'}22'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'" data-testid="ct-leader-${i}">
+      ${rankBadge}
+      <div style="flex-shrink:0;position:relative;">
+        ${logoHtml}
+        <div style="position:absolute;bottom:-2px;right:-2px;background:${dirColor};border:2px solid var(--surface2);width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;"><span style="font-size:7px;color:#fff;font-weight:900;">${p.side === 'LONG' ? 'L' : 'S'}</span></div>
+      </div>
       <div style="flex:1;min-width:0;">
-        <div style="font-weight:700;font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${shortWallet}</div>
-        <div style="display:flex;gap:6px;align-items:center;margin-top:2px;">
-          <span style="background:${dirColor};color:#fff;font-size:9px;font-weight:800;padding:2px 6px;border-radius:3px;letter-spacing:1px;">${p.side}</span>
-          <span style="font-size:11px;color:var(--muted);">${p.pair} ${p.leverage}x</span>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <span style="font-weight:800;font-size:15px;color:var(--text);">${info.name || p.pair}</span>
+          ${typeBadge}
+          <span style="background:${dirBg};color:${dirColor};font-size:9px;font-weight:800;padding:2px 7px;border-radius:4px;letter-spacing:1px;">${p.side} ${p.leverage}x</span>
         </div>
-        <div style="font-size:10px;color:var(--muted);margin-top:2px;">${p.currency || 'GANG'} | Size: ${p.amount.toFixed(1)} | Entry: $${p.entryPrice.toLocaleString()}</div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:2px;">
+          <div style="font-size:10px;color:var(--muted);">Entry <span style="color:var(--text);font-weight:600;">$${p.entryPrice.toLocaleString(undefined,{maximumFractionDigits:p.entryPrice>100?2:6})}</span></div>
+          <div style="font-size:10px;color:var(--muted);">Now <span style="color:${pnlColor};font-weight:600;">$${p.curPrice.toLocaleString(undefined,{maximumFractionDigits:p.curPrice>100?2:6})}</span></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:4px;">
+          <span style="font-size:10px;color:var(--muted);">Size: <span style="font-weight:600;color:var(--text);">${p.amount.toLocaleString()} ${p.currency || 'GANG'}</span></span>
+          <span style="font-size:10px;color:var(--muted);">Trader: <span style="font-weight:600;color:var(--gold);">${shortWallet}</span></span>
+        </div>
       </div>
-      <div style="text-align:right;flex-shrink:0;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:${pnlColor};">${pnlSign}${p.pnlPct.toFixed(1)}%</div>
-        <div style="font-size:10px;color:${pnlColor};">${pnlSign}${p.pnl.toFixed(2)} ${p.currency || 'GANG'}</div>
+      <div style="text-align:right;flex-shrink:0;min-width:80px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:${pnlColor};line-height:1;">${arrow} ${pnlSign}${p.pnlPct.toFixed(1)}%</div>
+        <div style="font-size:11px;color:${pnlColor};font-weight:600;margin-top:2px;">${pnlSign}${p.pnl.toFixed(2)} ${p.currency || 'GANG'}</div>
       </div>
-      <button onclick="event.stopPropagation();selectCopyTrade(${i})" data-testid="ct-copy-${i}" style="background:linear-gradient(135deg,#e91e63,#c2185b);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;flex-shrink:0;transition:all .2s;" onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='none'">COPY</button>
+      <button onclick="event.stopPropagation();selectCopyTrade(${i})" data-testid="ct-copy-${i}" style="background:linear-gradient(135deg,#e91e63,#c2185b);color:#fff;border:none;border-radius:8px;padding:10px 16px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;flex-shrink:0;transition:all .2s;box-shadow:0 2px 10px rgba(233,30,99,0.3);" onmouseover="this.style.filter='brightness(1.2)';this.style.transform='scale(1.05)'" onmouseout="this.style.filter='none';this.style.transform='scale(1)'">COPY</button>
     </div>`;
   }).join('');
 
-  // Update trader count stat
   const elCount = document.getElementById('ctTraderCount');
   if (elCount) elCount.textContent = sorted.length;
 }
@@ -17613,36 +17644,47 @@ function selectCopyTrade(idx) {
 
   const sel = document.getElementById('ctSelectedTrade');
   const info = document.getElementById('ctSelectedInfo');
+  const pairInfo = _ctGetPairInfo(_ctSelectedPosition.pair);
+  const dirColor = _ctSelectedPosition.side==='LONG' ? 'var(--green)' : '#e53935';
   if (sel) sel.style.display = 'block';
-  if (info) info.innerHTML = `<span style="color:${_ctSelectedPosition.side==='LONG'?'var(--green)':'#e53935'}">${_ctSelectedPosition.side}</span> ${_ctSelectedPosition.pair} ${_ctSelectedPosition.leverage}x — Entry: $${_ctSelectedPosition.entryPrice.toLocaleString()} (${_ctSelectedPosition.currency || 'GANG'})`;
+  if (info) info.innerHTML = `<div style="display:flex;align-items:center;gap:10px;">
+    ${pairInfo.logo ? `<img src="${pairInfo.logo}" style="width:28px;height:28px;border-radius:50%;border:2px solid ${pairInfo.color};object-fit:cover;" onerror="this.style.display='none'">` : ''}
+    <div>
+      <div style="font-weight:800;font-size:14px;"><span style="color:${dirColor}">${_ctSelectedPosition.side}</span> ${pairInfo.name || _ctSelectedPosition.pair} <span style="color:var(--muted);font-size:12px;">${_ctSelectedPosition.leverage}x</span></div>
+      <div style="font-size:10px;color:var(--muted);">Entry: $${_ctSelectedPosition.entryPrice.toLocaleString()} | ${_ctSelectedPosition.currency || 'GANG'}</div>
+    </div>
+  </div>`;
 
-  // Update balance display
   const curr = _ctSelectedPosition.currency || 'GANG';
   const el = document.getElementById('ctAvailBal');
   if (el) el.textContent = _getBal(curr).toLocaleString() + ' ' + curr;
 
-  // Scroll to the copy form
   document.getElementById('ctSelectedTrade')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  showToast(`Selected: ${_ctSelectedPosition.side} ${_ctSelectedPosition.pair} ${_ctSelectedPosition.leverage}x — Enter your amount below`, 'success');
+  showToast(`Selected: ${_ctSelectedPosition.side} ${pairInfo.name || _ctSelectedPosition.pair} ${_ctSelectedPosition.leverage}x — Enter your copy amount`, 'success');
 }
 
 function renderCTHistory() {
   const s = initCTState(), el = document.getElementById('ctHistoryList');
   if (!el) return;
   if (!s.copies || s.copies.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No copies yet. Select a winning Futures trade above to start copying.</div>'; return; }
-  el.innerHTML = s.copies.slice().reverse().map(c => `
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
-      <div>
-        <span style="font-weight:700;color:${c.side==='LONG'?'var(--green)':'#e53935'}">${c.side}</span>
-        <span style="color:var(--text);font-weight:600;margin-left:4px;">${c.pair}</span>
-        <span style="color:var(--muted);font-size:11px;margin-left:4px;">${c.leverage}x</span>
+  el.innerHTML = s.copies.slice().reverse().map(c => {
+    const pairInfo = _ctGetPairInfo(c.pair);
+    const dirColor = c.side === 'LONG' ? 'var(--green)' : '#e53935';
+    return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;">
+      ${pairInfo.logo ? `<img src="${pairInfo.logo}" style="width:24px;height:24px;border-radius:50%;border:1px solid ${pairInfo.color};object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">` : ''}
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span style="font-weight:700;color:${dirColor};font-size:12px;">${c.side}</span>
+          <span style="color:var(--text);font-weight:600;font-size:12px;">${pairInfo.name || c.pair}</span>
+          <span style="color:var(--muted);font-size:10px;">${c.leverage}x</span>
+        </div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px;">Copied from ${(c.trader || '').substring(0,8)}... | Fee: ${c.fee.toFixed(4)} ${c.currency || 'GANG'}</div>
       </div>
-      <div style="text-align:right;">
+      <div style="text-align:right;flex-shrink:0;">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--text);">${c.amount} ${c.currency || 'GANG'}</div>
-        <div style="font-size:9px;color:var(--muted);">Fee: ${c.fee.toFixed(4)} | Copied from ${(c.trader || '').substring(0,8)}...</div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function updateCTStats() {
@@ -17670,13 +17712,14 @@ function executeCopyTrade() {
   const p = _ctSelectedPosition;
   const wallet = p.wallet || 'unknown';
   const shortWallet = wallet.length > 10 ? wallet.substring(0, 6) + '...' + wallet.substring(wallet.length - 4) : wallet;
+  const pairInfo = _ctGetPairInfo(p.pair);
 
   showTxConfirm({
     title: 'Copy Futures Trade',
-    iconHtml: '<div style="font-size:48px;">👥</div>',
+    iconHtml: pairInfo.logo ? `<img src="${pairInfo.logo}" style="width:56px;height:56px;border-radius:50%;border:3px solid ${pairInfo.color};object-fit:cover;" onerror="this.outerHTML='<div style=\\'font-size:48px;\\'>&#x1f4c8;</div>'">` : '<div style="font-size:48px;">&#x1f4c8;</div>',
     detailsHtml: `<div style="text-align:left;font-size:13px;">
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Copying from:</span><span style="color:#e91e63;font-weight:700;">${shortWallet}</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Position:</span><span style="color:${p.side==='LONG'?'var(--green)':'#e53935'};font-weight:700;">${p.side} ${p.pair} ${p.leverage}x</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Position:</span><span style="color:${p.side==='LONG'?'var(--green)':'#e53935'};font-weight:700;">${p.side} ${pairInfo.name || p.pair} ${p.leverage}x</span></div>
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Entry Price:</span><span>$${p.entryPrice.toLocaleString()}</span></div>
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Your Amount:</span><span>${amount} ${p.currency || 'GANG'}</span></div>
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Copy Fee (0.3%):</span><span style="color:#e91e63;">${fee.toFixed(4)} ${p.currency || 'GANG'}</span></div>
