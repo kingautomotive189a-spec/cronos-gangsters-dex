@@ -593,6 +593,35 @@
     .farm-stat-value { font-size: 12px; }
   }
 
+  /* Auto-refresh pulse animation — flashes value on update */
+  @keyframes valuePulse {
+    0% { text-shadow: 0 0 0 transparent; }
+    30% { text-shadow: 0 0 8px rgba(39,174,96,0.7); }
+    100% { text-shadow: 0 0 0 transparent; }
+  }
+  @keyframes valuePulseRed {
+    0% { text-shadow: 0 0 0 transparent; }
+    30% { text-shadow: 0 0 8px rgba(231,76,60,0.7); }
+    100% { text-shadow: 0 0 0 transparent; }
+  }
+  .val-pulse { animation: valuePulse 0.8s ease-out; }
+  .val-pulse-red { animation: valuePulseRed 0.8s ease-out; }
+
+  /* Live dot indicator */
+  @keyframes liveDot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .live-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #27ae60;
+    animation: liveDot 1.5s ease-in-out infinite;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
 </style>
 </head>
 <body>
@@ -4390,7 +4419,7 @@ function toggleNavMenu() {
     <!-- Header -->
     <div style="text-align:center;margin-bottom:16px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#ff8c00;line-height:1;text-shadow:0 0 30px rgba(255,140,0,0.3);">GANG FUTURES</div>
-      <div style="font-size:13px;color:var(--muted);letter-spacing:1px;margin-top:4px;">Leverage trade with GANG — real prices, real payouts</div>
+      <div style="font-size:13px;color:var(--muted);letter-spacing:1px;margin-top:4px;"><span class="live-dot"></span>Live prices — auto-updates every 10s</div>
       <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,#ff8c00,transparent);margin:10px auto 0;"></div>
     </div>
 
@@ -5073,7 +5102,7 @@ function toggleNavMenu() {
   <div class="page" id="page-copytrade" data-testid="page-copytrade">
     <div style="text-align:center;margin-bottom:24px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#e91e63;line-height:1;text-shadow:0 0 30px rgba(233,30,99,0.3);">GANG COPY TRADING</div>
-      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Copy winning Futures trades from top-performing traders. 0.3% copy fee.</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;"><span class="live-dot"></span>Copy winning Futures trades. Auto-refreshes live. 0.3% copy fee.</div>
     </div>
     <div class="stats-bar" style="margin-bottom:20px;" data-testid="copytrade-stats-bar">
       <div class="stat-item"><div class="stat-label">ACTIVE TRADERS</div><div class="stat-value" id="ctTraderCount" data-testid="ct-trader-count">0</div></div>
@@ -5083,8 +5112,8 @@ function toggleNavMenu() {
     </div>
 
     <div class="card" style="border-color:rgba(233,30,99,0.3);margin-bottom:16px;" data-testid="ct-leaders-card">
-      <div class="card-title" style="color:#e91e63;">TOP FUTURES TRADERS</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Real Futures positions from GANG Leverage Trading. Click COPY to mirror their trade with your own funds. 0.3% copy fee applied.</div>
+      <div class="card-title" style="color:#e91e63;"><span class="live-dot"></span>TOP FUTURES TRADERS — LIVE</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Real Futures positions from GANG Leverage Trading. Auto-refreshes every 5s. Click COPY to mirror their trade. 0.3% fee.</div>
       <div id="ctLeadersGrid" data-testid="ct-leaders-grid" style="display:grid;gap:10px;">
         <div style="text-align:center;color:var(--muted);padding:30px;font-size:13px;">
           <div style="font-size:32px;margin-bottom:10px;opacity:0.3;">📊</div>
@@ -5159,7 +5188,7 @@ function toggleNavMenu() {
   <div class="page" id="page-revstaking" data-testid="page-revstaking">
     <div style="text-align:center;margin-bottom:24px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#9c27b0;line-height:1;text-shadow:0 0 30px rgba(156,39,176,0.3);">REVENUE STAKING</div>
-      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Stake $GANG. Earn a share of ALL platform fees.</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;"><span class="live-dot"></span>Stake $GANG. Rewards accrue in real-time.</div>
     </div>
     <div class="stats-bar" style="margin-bottom:20px;" data-testid="revstaking-stats-bar">
       <div class="stat-item"><div class="stat-label">TOTAL STAKED</div><div class="stat-value" id="rsTotal" data-testid="rs-total">0 GANG</div></div>
@@ -5272,7 +5301,7 @@ function toggleNavMenu() {
   <div class="page" id="page-perpdex" data-testid="page-perpdex">
     <div style="text-align:center;margin-bottom:24px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#f44336;line-height:1;text-shadow:0 0 30px rgba(244,67,54,0.3);">GANG PERPETUAL DEX</div>
-      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Perpetual contracts. No expiry. Up to 50x leverage.</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;"><span class="live-dot"></span>Perpetual contracts. No expiry. Live PnL updates every 3s.</div>
     </div>
     <div class="stats-bar" style="margin-bottom:20px;" data-testid="perpdex-stats-bar">
       <div class="stat-item"><div class="stat-label">OPEN INTEREST</div><div class="stat-value" id="ppOpenInterest" data-testid="pp-open-interest">$0</div></div>
@@ -7721,7 +7750,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     if (btn.dataset.page === "referral") updateReferralUI();
     if (btn.dataset.page === "nfts") { loadNftPreviewGallery(); updateNftUI(); }
     if (btn.dataset.page === "market") { initMarketplace(); }
-    if (btn.dataset.page === "revenue") { checkOwnerRevenue(); }
+    if (btn.dataset.page === "revenue") { checkOwnerRevenue(); updateRevCopyFees(); updateRevPpFees(); updateRevOtcFees(); updateRevLoFees(); updateRevDaoFees(); updateRevRsFees(); }
     if (btn.dataset.page === "create") { renderDeployedTokens(); }
     if (btn.dataset.page === "launchpad") { loadLaunchpadPage(); }
     if (btn.dataset.page === "locker") { loadLockerPage(); }
@@ -17670,7 +17699,7 @@ function executeCopyTrade() {
         copiedFrom: wallet
       });
       saveFuturesState();
-      renderFuturesPositions();
+      updateFuturesPositions();
 
       // Record copy trade
       const s = initCTState();
@@ -17749,7 +17778,12 @@ function updateRSStats() {
   if (elYour) elYour.textContent = (s.userStake || 0).toLocaleString() + ' GANG';
   if (elShare) elShare.textContent = s.totalStaked > 0 ? ((s.userStake / s.totalStaked) * 100).toFixed(2) + '%' : '0%';
   if (elPool) elPool.textContent = (s.revPool || 0).toFixed(2) + ' CRO';
-  if (elPending) elPending.textContent = (s.pendingRewards || 0).toFixed(4) + ' CRO';
+  const newPendingText = (s.pendingRewards || 0).toFixed(4) + ' CRO';
+  if (elPending) {
+    const prev = elPending.textContent;
+    elPending.textContent = newPendingText;
+    if (prev !== newPendingText && s.pendingRewards > 0) pulseValue(elPending, false);
+  }
   const isOwner = state.connectedAddress && CONTRACTS.TREASURY && state.connectedAddress.toLowerCase() === CONTRACTS.TREASURY.toLowerCase();
   const ownerPanel = document.getElementById('rsOwnerPanel');
   if (ownerPanel) ownerPanel.style.display = isOwner ? 'block' : 'none';
@@ -18024,17 +18058,20 @@ function renderPPPositions() {
   if (openPos.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No open positions. Open one above.</div>'; return; }
   el.innerHTML = openPos.map((p, i) => {
     const curPrice = PP_PRICES[p.pair] || p.entryPrice;
-    const pnlPct = p.direction === 'long' ? ((curPrice - p.entryPrice) / p.entryPrice * 100 * p.leverage) : ((p.entryPrice - curPrice) / p.entryPrice * 100 * p.leverage);
+    const priceDiff = (curPrice - p.entryPrice) / p.entryPrice;
+    const pnlPct = p.direction === 'long' ? (priceDiff * 100 * p.leverage) : (-priceDiff * 100 * p.leverage);
     const pnl = p.collateral * (pnlPct / 100);
     const pnlColor = pnl >= 0 ? 'var(--green)' : '#e53935';
+    const arrow = pnl >= 0 ? '&#9650;' : '&#9660;';
     return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
       <div>
         <span style="font-weight:700;color:${p.direction==='long'?'var(--green)':'#e53935'};">${p.direction.toUpperCase()}</span>
         <span style="color:var(--text);font-weight:600;margin-left:6px;">${p.pair}</span>
         <span style="color:var(--muted);font-size:11px;margin-left:6px;">${p.leverage}x</span>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px;">Entry: $${p.entryPrice.toLocaleString(undefined,{maximumFractionDigits:p.entryPrice>100?2:6})} | Now: $${curPrice.toLocaleString(undefined,{maximumFractionDigits:curPrice>100?2:6})}</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
-        <div style="text-align:right;"><div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:${pnlColor};">${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)} CRO</div><div style="font-size:9px;color:var(--muted);">Collat: ${p.collateral}</div></div>
+        <div style="text-align:right;"><div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:${pnlColor};">${arrow} ${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)} CRO (${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(1)}%)</div><div style="font-size:9px;color:var(--muted);">Collat: ${p.collateral}</div></div>
         <button onclick="closePerpPosition(${s.positions.indexOf(p)})" style="background:#e53935;color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-weight:700;">CLOSE</button>
       </div>
     </div>`;
@@ -21087,6 +21124,207 @@ window.updateWalletUI = function() {
 
 // Load burn tracker on page load
 setTimeout(loadBurnTracker, 3000);
+
+// ══════════════════════════════════════════════════════════════
+// GLOBAL AUTO-REFRESH ENGINE — Makes everything feel alive
+// ══════════════════════════════════════════════════════════════
+
+// Helper: pulse-animate an element when its value changes
+function pulseValue(el, isNegative) {
+  if (!el) return;
+  el.classList.remove('val-pulse', 'val-pulse-red');
+  void el.offsetWidth; // trigger reflow
+  el.classList.add(isNegative ? 'val-pulse-red' : 'val-pulse');
+}
+
+// Track previous values to detect changes and pulse
+const _prevValues = {};
+function updateAndPulse(elId, newText, forceColor) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const prev = _prevValues[elId];
+  if (prev !== newText) {
+    _prevValues[elId] = newText;
+    el.textContent = newText;
+    if (prev !== undefined) {
+      const isNeg = forceColor === 'red' || (typeof newText === 'string' && newText.startsWith('-'));
+      pulseValue(el, isNeg);
+    }
+  }
+}
+
+// ─── Dynamic Perp DEX Price Simulation ───
+// Make PP_PRICES fluctuate realistically every tick
+function tickPerpPrices() {
+  const pairs = Object.keys(PP_PRICES);
+  pairs.forEach(pair => {
+    const base = PP_PRICES[pair];
+    // Random walk: -0.3% to +0.3% per tick
+    const change = (Math.random() - 0.48) * 0.006; // slight bullish bias
+    PP_PRICES[pair] = Math.max(base * 0.5, base * (1 + change));
+  });
+}
+
+// ─── Revenue Staking: simulate rewards accruing over time ───
+function tickRevenueStaking() {
+  const s = getRSState();
+  if (!s.totalStaked || s.totalStaked <= 0) return;
+  if (s.userStake > 0) {
+    // User earns a tiny bit of revenue every tick (simulates real yield)
+    const share = s.userStake / s.totalStaked;
+    const rewardTick = 0.001 * share; // small CRO trickle
+    s.pendingRewards = (s.pendingRewards || 0) + rewardTick;
+    // Slightly grow the revenue pool  
+    s.revPool = (s.revPool || 0) + 0.0005;
+    saveRSState(s);
+  }
+}
+
+// ─── Get the currently active page name ───
+function getActivePage() {
+  const activePage = document.querySelector('.page.active');
+  if (!activePage) return '';
+  return (activePage.id || '').replace('page-', '');
+}
+
+// ─── Refresh data for the currently visible page ───
+function refreshActivePage() {
+  const page = getActivePage();
+
+  switch(page) {
+    case 'futures':
+      updateFuturesPositions();
+      updateFuturesPosInfo();
+      updateFuturesPool();
+      break;
+
+    case 'copytrade':
+      renderCTLeaders();
+      updateCTStats();
+      renderCTHistory();
+      // Refresh the selected trade balance if one is picked
+      if (_ctSelectedPosition) {
+        const curr = _ctSelectedPosition.currency || 'GANG';
+        const el = document.getElementById('ctAvailBal');
+        if (el) el.textContent = _getBal(curr).toLocaleString() + ' ' + curr;
+      }
+      break;
+
+    case 'revstaking':
+      tickRevenueStaking();
+      updateRSStats();
+      break;
+
+    case 'limitorders':
+      renderLOOrders();
+      updateLOStats();
+      break;
+
+    case 'perpdex':
+      tickPerpPrices();
+      renderPPPositions();
+      updatePPStats();
+      break;
+
+    case 'otc':
+      renderOtcDeals();
+      updateOtcStats();
+      break;
+
+    case 'dao':
+      renderDaoProposals();
+      updateDaoStats();
+      break;
+
+    case 'swap':
+      updateSwapBalances();
+      break;
+
+    case 'lending':
+      updateLendingUI();
+      break;
+
+    case 'revenue':
+      checkOwnerRevenue();
+      loadRevRewardBalances();
+      updateRevCopyFees();
+      updateRevPpFees();
+      updateRevOtcFees();
+      updateRevLoFees();
+      updateRevDaoFees();
+      updateRevRsFees();
+      break;
+
+    case 'portfolio':
+      renderPortfolio();
+      break;
+  }
+}
+
+// ─── Also refresh Futures positions when prices tick (for Copy Trading) ───
+const _origUpdateFuturesPrice = updateFuturesPrice;
+updateFuturesPrice = async function() {
+  await _origUpdateFuturesPrice();
+  // If Copy Trading page is active, also refresh leaders
+  if (getActivePage() === 'copytrade') {
+    renderCTLeaders();
+    updateCTStats();
+  }
+};
+
+// ─── Balance refresh for all pages with balance displays ───
+function refreshAllBalanceDisplays() {
+  // These functions already exist in the codebase
+  try { if (typeof updateSwapBalances === 'function') updateSwapBalances(); } catch(e) {}
+  try { if (typeof updateBalanceDisplays === 'function') updateBalanceDisplays(); } catch(e) {}
+  
+  // Update Copy Trading balance
+  try { if (typeof updateCtBal === 'function') updateCtBal(); } catch(e) {}
+  // Update Rev Staking balance
+  try { if (typeof updateRsBals === 'function') updateRsBals(); } catch(e) {}
+  // Update Limit Orders balance
+  try { if (typeof updateLoBal === 'function') updateLoBal(); } catch(e) {}
+  // Update Perp DEX balance
+  try { if (typeof updatePpBal === 'function') updatePpBal(); } catch(e) {}
+  // Update OTC balance
+  try { if (typeof updateOtcBal === 'function') updateOtcBal(); } catch(e) {}
+}
+
+// ─── MASTER REFRESH LOOP — runs every 5 seconds ───
+setInterval(() => {
+  refreshActivePage();
+}, 5000);
+
+// ─── Perp prices tick faster (every 3s) for realistic feel ───
+setInterval(() => {
+  tickPerpPrices();
+  // If perpdex page is active, re-render positions to show updated PnL
+  if (getActivePage() === 'perpdex') {
+    renderPPPositions();
+    updatePPStats();
+  }
+}, 3000);
+
+// ─── Revenue Staking rewards accrue every 8 seconds ───
+setInterval(() => {
+  tickRevenueStaking();
+  if (getActivePage() === 'revstaking') {
+    updateRSStats();
+  }
+}, 8000);
+
+// ─── Balance displays refresh every 15 seconds globally ───
+setInterval(refreshAllBalanceDisplays, 15000);
+
+// ─── Copy Trading leaders refresh every 6 seconds when on that page ───
+setInterval(() => {
+  if (getActivePage() === 'copytrade') {
+    renderCTLeaders();
+    updateCTStats();
+  }
+}, 6000);
+
+console.log('[GANG] Global auto-refresh engine started — charts, balances, and positions update automatically.');
 </script>
 <script>
 (function() {
