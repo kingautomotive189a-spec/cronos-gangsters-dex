@@ -38,7 +38,18 @@ Core DeFi, Advanced DeFi, World Domination (6 features), Dynamic Copy Trading, A
 - **ZIP delivered** for GoDaddy deployment
 
 ## Changes (Feb 2026 — Session 2)
-- **Bot Dashboard API Fix**: Fixed `dashboard.html` API routing for GoDaddy deployment. Replaced hardcoded `window.location.origin` with configurable `BACKEND_URL` constant. Users can now set their backend server URL at the top of the file so the bot control panel works on static hosting.
+- **Bot Dashboard API Fix**: Fixed `dashboard.html` API routing for GoDaddy deployment. Replaced hardcoded `window.location.origin` with configurable `BACKEND_URL` constant.
+- **NFT Staking (JS Logic)**: Full stake/unstake/claim with rarity multipliers (Legendary 3x, Epic 2x, Rare 1.5x, Common 1x). 0.3% fee on claim. Live reward ticking. "Your NFTs Available to Stake" grid with quick-stake.
+- **Auto-Buyback & Burn (JS Logic)**: Manual buyback trigger, deflationary stats (4.2M GANG burned, 12.7K CRO spent), auto 10% of all platform fees routed to buyback.
+- **Daily Check-in (JS Logic)**: Streak tracking, week grid, tiered rewards (10 GANG base, +100 at week 1, +500 at day 14, +2000 at day 30), LocalStorage persistence.
+- **VIP Tiers (JS Logic)**: 4 tiers (Bronze 10K, Silver 100K, Gold 1M, Diamond 10M GANG), auto-detects current tier from wallet balance, highlights active tier card.
+- **Squad Farming (JS Logic)**: Create/join squads with codes, APY boost table (5-30%), 3 seeded demo squads, 0.3% fee on rewards.
+- **POL Bonds (JS Logic)**: 3 bond pairs (CRO-GANG 8%, USDC-GANG 6%, WETH-GANG 10% discount), 5-day vesting with progress bar, claimable when vested, 0.3% fee.
+- **Trading Competitions (JS Logic)**: Weekly 500K GANG prize pool, 100 GANG entry fee, countdown timer, top-3 leaderboard, participant count.
+- **Revenue Page — New Banners**: NFT Staking Fees (0.3%), Auto-Buyback & Burn stats, POL Bond Fees (0.3%), Competition Entry Fees, Squad Farming Fees (0.3%).
+- **Revenue Page — Contract Deployment**: "Deploy NFT Staking Contract" + "Deploy Buyback & Burn Contract" buttons with simulated tx hash.
+- **Revenue Page — HOW YOU EARN**: Updated with 6 new fee streams.
+- **Revenue Summary Grid**: Added NFT Staking, Buyback, Bonds, Competitions, Squad entries.
 - **ZIP delivered** for GoDaddy deployment
 
 ## Key Files

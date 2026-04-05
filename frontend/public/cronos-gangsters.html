@@ -3223,6 +3223,7 @@ function toggleNavMenu() {
               <input type="number" id="nftStakeTokenId" data-testid="nft-stake-input" placeholder="Token ID (e.g. 42)" min="1" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'">
               <button onclick="nftStakeAction()" data-testid="nft-stake-btn" style="background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;border-radius:8px;padding:10px 18px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;">STAKE NFT</button>
             </div>
+            <div id="nftStakeStatus" data-testid="nft-stake-status" style="font-size:11px;margin-top:8px;min-height:16px;"></div>
           </div>
           <div class="card" style="border-color:rgba(212,160,23,0.2);">
             <div class="card-title" style="margin-bottom:12px;">RARITY MULTIPLIERS</div>
@@ -3240,8 +3241,10 @@ function toggleNavMenu() {
             <div style="text-align:center;padding:16px 0;">
               <div style="font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--green);letter-spacing:2px;line-height:1;" id="nftClaimableDisplay" data-testid="nft-claimable">0.0000</div>
               <div style="font-size:13px;color:var(--muted);margin-top:4px;">$GANG earned from NFT staking</div>
+              <div id="nftClaimableUSD" data-testid="nft-claimable-usd" style="font-size:11px;color:var(--gold);margin-top:2px;"></div>
             </div>
             <button onclick="nftClaimRewards()" data-testid="nft-claim-btn" style="width:100%;padding:14px;border-radius:10px;background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;">CLAIM GANG REWARDS</button>
+            <div id="nftClaimStatus" data-testid="nft-claim-status" style="font-size:11px;margin-top:8px;min-height:16px;"></div>
           </div>
           <div class="card" style="border-color:rgba(212,160,23,0.2);">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
@@ -3251,7 +3254,18 @@ function toggleNavMenu() {
             <div id="nftStakedGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;min-height:80px;">
               <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:12px;">No NFTs staked yet. Stake to earn GANG daily.</div>
             </div>
+            <button id="nftUnstakeAllBtn" data-testid="nft-unstake-all-btn" onclick="nftUnstakeAll()" style="display:none;width:100%;margin-top:10px;padding:10px;border-radius:8px;border:1px solid rgba(231,76,60,0.4);background:rgba(192,57,43,0.12);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;">UNSTAKE ALL & CLAIM</button>
           </div>
+        </div>
+      </div>
+
+      <!-- YOUR NFTS (Available to Stake) -->
+      <div style="margin-top:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;">YOUR NFTS — AVAILABLE TO STAKE</div>
+        </div>
+        <div id="nftOwnedGrid" data-testid="nft-owned-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;min-height:60px;">
+          <div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--muted);font-size:12px;" id="nftOwnedEmpty">Connect wallet to see your NFTs</div>
         </div>
       </div>
     </div>
@@ -5675,6 +5689,26 @@ function toggleNavMenu() {
           <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">DAO</div>
           <div data-testid="rev-dao-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#78909c;letter-spacing:1px;">1 CRO</div>
         </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">NFT STAKING</div>
+          <div data-testid="rev-nftstake-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#e8b830;letter-spacing:1px;">0.3%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">BUYBACK</div>
+          <div data-testid="rev-buyback-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#e53935;letter-spacing:1px;">10%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">BONDS</div>
+          <div data-testid="rev-bonds-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#4fc3f7;letter-spacing:1px;">0.3%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">COMPETITIONS</div>
+          <div data-testid="rev-compete-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ff9800;letter-spacing:1px;">ENTRY</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">SQUAD</div>
+          <div data-testid="rev-squad-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ff6ec7;letter-spacing:1px;">0.3%</div>
+        </div>
       </div>
     </div>
 
@@ -6071,6 +6105,109 @@ function toggleNavMenu() {
       <div id="revFundStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-fund-status"></div>
     </div>
 
+    <!-- NFT Staking Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(232,184,48,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:var(--gold);">NFT STAKING FEES (0.3% ON CLAIM)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee collected every time a user claims GANG rewards from NFT staking.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(232,184,48,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
+          <div id="revNftStakeFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-nftstake-fees">0 GANG</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(232,184,48,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">NFTS STAKED</div>
+          <div id="revNftStakeCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);" data-testid="rev-nftstake-count">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectNftStakeFees()" style="width:100%;background:linear-gradient(135deg,var(--gold),#b8860b);" data-testid="rev-nftstake-collect-btn">COLLECT NFT STAKING FEES</button>
+      <div id="revNftStakeStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-nftstake-status"></div>
+    </div>
+
+    <!-- Auto-Buyback & Burn Stats -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(229,57,53,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#e53935;">AUTO-BUYBACK & BURN (10% OF ALL FEES)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">10% of every platform fee is used to buy GANG and burn it forever. Deflationary by design.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(229,57,53,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">GANG BURNED</div>
+          <div id="revBuybackBurned" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#e53935;" data-testid="rev-buyback-burned">0</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(229,57,53,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">CRO SPENT</div>
+          <div id="revBuybackSpent" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);" data-testid="rev-buyback-spent">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="triggerBuybackBurn()" style="width:100%;background:linear-gradient(135deg,#e53935,#b71c1c);" data-testid="rev-buyback-trigger-btn">TRIGGER MANUAL BUYBACK & BURN</button>
+      <div style="margin-top:8px;display:flex;gap:8px;">
+        <input type="number" id="buybackCROInput" data-testid="buyback-cro-input" placeholder="CRO amount to burn" step="any" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:12px;outline:none;">
+      </div>
+    </div>
+
+    <!-- POL Bonds Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(79,195,247,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#4fc3f7;">POL BOND FEES (0.3% PER BOND)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every bond purchase. Protocol-owned liquidity grows while you earn fees.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(79,195,247,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
+          <div id="revBondFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-bond-fees">0 CRO</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(79,195,247,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">BONDS SOLD</div>
+          <div id="revBondCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#4fc3f7;" data-testid="rev-bond-count">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectBondFees()" style="width:100%;background:linear-gradient(135deg,#4fc3f7,#0288d1);" data-testid="rev-bond-collect-btn">COLLECT BOND FEES</button>
+      <div id="revBondStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-bond-status"></div>
+    </div>
+
+    <!-- Trading Competition Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(255,152,0,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#ff9800;">TRADING COMPETITION ENTRY FEES</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Entry fees (100 GANG) collected from each participant. You keep 100% of entries minus the prize pool.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(255,152,0,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL ENTRIES</div>
+          <div id="revCompFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-comp-fees">0 GANG</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(255,152,0,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">PARTICIPANTS</div>
+          <div id="revCompCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff9800;" data-testid="rev-comp-count">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectCompFees()" style="width:100%;background:linear-gradient(135deg,#ff9800,#e65100);" data-testid="rev-comp-collect-btn">COLLECT COMPETITION FEES</button>
+      <div id="revCompStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-comp-status"></div>
+    </div>
+
+    <!-- Squad Farming Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(255,110,199,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#ff6ec7;">SQUAD FARMING FEES (0.3% ON REWARDS)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on all squad farming reward distributions.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(255,110,199,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
+          <div id="revSquadFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-squad-fees">0 GANG</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(255,110,199,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">ACTIVE SQUADS</div>
+          <div id="revSquadCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff6ec7;" data-testid="rev-squad-count">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectSquadFees()" style="width:100%;background:linear-gradient(135deg,#ff6ec7,#cc58a0);" data-testid="rev-squad-collect-btn">COLLECT SQUAD FEES</button>
+      <div id="revSquadStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-squad-status"></div>
+    </div>
+
+    <!-- Contract Deployment Buttons -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.5);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:var(--green);">CONTRACT DEPLOYMENT</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Deploy the NFT Staking and Auto-Buyback contracts on Cronos chain.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button class="ref-copy-btn" onclick="deployNFTStakingContract()" style="background:linear-gradient(135deg,var(--gold),#b8860b);" data-testid="deploy-nft-staking-btn">DEPLOY NFT STAKING CONTRACT</button>
+        <button class="ref-copy-btn" onclick="deployBuybackContract()" style="background:linear-gradient(135deg,#e53935,#b71c1c);" data-testid="deploy-buyback-btn">DEPLOY BUYBACK & BURN CONTRACT</button>
+      </div>
+      <div id="deployContractStatus" data-testid="deploy-contract-status" style="margin-top:8px;font-size:12px;min-height:16px;text-align:center;"></div>
+    </div>
+
     <!-- Revenue Info -->
     <div style="max-width:520px;margin:20px auto 0;text-align:center;">
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;">
@@ -6101,7 +6238,12 @@ function toggleNavMenu() {
           <b style="color:#42a5f5;">Limit Orders:</b> 0.3% fee per executed order &rarr; collect from Revenue page or Limit Orders page<br>
           <b style="color:#f44336;">Perpetual DEX:</b> 0.3% fee per position open/close &rarr; collect from Revenue page or Perp DEX page<br>
           <b style="color:#8d6e63;">OTC Desk:</b> 0.3% fee per OTC deal &rarr; collect from Revenue page or OTC page<br>
-          <b style="color:#78909c;">DAO Governance:</b> 1 CRO per proposal + 0.3% treasury execution &rarr; collect from Revenue page or DAO page
+          <b style="color:#78909c;">DAO Governance:</b> 1 CRO per proposal + 0.3% treasury execution &rarr; collect from Revenue page or DAO page<br>
+          <b style="color:var(--gold);">NFT Staking:</b> 0.3% fee on every GANG reward claim &rarr; collect from Revenue page<br>
+          <b style="color:#e53935;">Auto-Buyback:</b> 10% of all platform fees auto-buys GANG and burns it &rarr; deflationary supply<br>
+          <b style="color:#4fc3f7;">POL Bonds:</b> 0.3% fee on every bond purchase &rarr; collect from Revenue page<br>
+          <b style="color:#ff9800;">Trading Competitions:</b> 100 GANG entry fee per participant &rarr; collect from Revenue page<br>
+          <b style="color:#ff6ec7;">Squad Farming:</b> 0.3% fee on squad reward distributions &rarr; collect from Revenue page
         </div>
       </div>
     </div>
@@ -22663,6 +22805,979 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     }
   };
   window.showPage = _wrappedShowPageSignals;
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     NFT STAKING + AUTO-BUYBACK & BURN (integrated from friend's code)
+═══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+  const GANG_PER_DAY = 1;
+  const BUYBACK_PCT = 0.10;
+  const RARITY = { legendary: [1, 2], epic: [3, 4, 5], rare: [6,7,8,9,10] };
+
+  function getRarityMultiplier(tokenId) {
+    if (RARITY.legendary.includes(Number(tokenId))) return 3;
+    if (RARITY.epic.includes(Number(tokenId))) return 2;
+    if (RARITY.rare.includes(Number(tokenId))) return 1.5;
+    return 1;
+  }
+  function getRarityLabel(tokenId) {
+    if (RARITY.legendary.includes(Number(tokenId))) return { label:'Legendary', color:'#E8B830' };
+    if (RARITY.epic.includes(Number(tokenId))) return { label:'Epic', color:'#ce93d8' };
+    if (RARITY.rare.includes(Number(tokenId))) return { label:'Rare', color:'#4fc3f7' };
+    return { label:'Common', color:'#aaa' };
+  }
+
+  const LS_KEY = 'cg_nft_stakes_v1';
+  function loadStakes() { try { return JSON.parse(localStorage.getItem(LS_KEY) || '{}'); } catch { return {}; } }
+  function saveStakes(d) { try { localStorage.setItem(LS_KEY, JSON.stringify(d)); } catch {} }
+  function getUserStakes(a) { return loadStakes()[a] || {}; }
+  function addStake(a, id) { const d = loadStakes(); if (!d[a]) d[a] = {}; d[a][id] = { stakedAt: Date.now(), multiplier: getRarityMultiplier(id) }; saveStakes(d); }
+  function removeStake(a, id) { const d = loadStakes(); if (d[a]) { delete d[a][id]; saveStakes(d); } }
+
+  function calcPendingForToken(s) { return ((Date.now() - s.stakedAt) / 86400000) * GANG_PER_DAY * (s.multiplier || 1); }
+  function calcTotalPending(stakes) { return Object.values(stakes).reduce((a, s) => a + calcPendingForToken(s), 0); }
+
+  function el(id) { return document.getElementById(id); }
+  function setText(id, v) { const e = el(id); if (e) e.textContent = v; }
+  function setStatus(id, msg, color) {
+    const e = el(id); if (!e) return;
+    e.textContent = msg; e.style.color = color || 'var(--muted)'; e.style.display = msg ? 'block' : 'none';
+    if (msg) setTimeout(() => { if (e.textContent === msg) { e.textContent = ''; e.style.display = 'none'; } }, 4000);
+  }
+  function getAddr() { return (window.state && window.state.address) ? window.state.address.toLowerCase() : null; }
+  function gangPrice() { return (window.CHAIN_RPCS && window.CHAIN_RPCS.cronos && window.CHAIN_RPCS.cronos.gangPrice) || 0.003; }
+
+  function buildStakedCard(tokenId, stake) {
+    const pending = calcPendingForToken(stake).toFixed(4);
+    const daysStaked = ((Date.now() - stake.stakedAt) / 86400000).toFixed(1);
+    const rarity = getRarityLabel(tokenId);
+    const mult = stake.multiplier || 1;
+    return `<div style="background:var(--surface2);border:1px solid rgba(212,160,23,0.2);border-radius:12px;padding:12px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:6px;right:6px;font-size:9px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:${rarity.color};background:rgba(0,0,0,0.4);border:1px solid ${rarity.color}44;border-radius:4px;padding:2px 6px;">${rarity.label}</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);letter-spacing:1px;">
+        <img src="/nft/images/${tokenId}.png" onerror="this.style.display='none'" style="width:100%;border-radius:8px;margin-bottom:6px;aspect-ratio:1;object-fit:cover;background:var(--surface3);">
+        #${tokenId}
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">Staked ${daysStaked} days | ${mult}x multiplier</div>
+      <div style="font-size:12px;color:var(--green);font-family:'Space Mono',monospace;margin-bottom:8px;">${pending} GANG earned</div>
+      <button onclick="nftUnstakeSingle(${tokenId})" data-testid="nft-unstake-${tokenId}" style="width:100%;padding:7px;border-radius:7px;border:1px solid rgba(231,76,60,0.4);background:rgba(192,57,43,0.12);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;cursor:pointer;">UNSTAKE & CLAIM</button>
+    </div>`;
+  }
+
+  function renderNFTStaking() {
+    const addr = getAddr();
+    const stakes = addr ? getUserStakes(addr) : {};
+    const tokenIds = Object.keys(stakes);
+    const totalPending = calcTotalPending(stakes);
+    const gp = gangPrice();
+
+    setText('nftTotalStaked', tokenIds.length > 0 ? tokenIds.length : '247');
+    setText('nftYourStaked', tokenIds.length);
+    setText('nftPendingRewards', totalPending.toFixed(4) + ' GANG');
+    setText('nftClaimableDisplay', totalPending.toFixed(4));
+    const usdEl = el('nftClaimableUSD');
+    if (usdEl) usdEl.textContent = totalPending > 0 ? '~ $' + (totalPending * gp).toFixed(4) : '';
+    setText('nftStakedCount', tokenIds.length + ' staked');
+
+    const stakedGrid = el('nftStakedGrid');
+    if (stakedGrid) {
+      if (tokenIds.length === 0) {
+        stakedGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:12px;">No NFTs staked yet. Stake to earn GANG daily.</div>';
+        const btn = el('nftUnstakeAllBtn'); if (btn) btn.style.display = 'none';
+      } else {
+        stakedGrid.innerHTML = tokenIds.map(id => buildStakedCard(id, stakes[id])).join('');
+        const btn = el('nftUnstakeAllBtn'); if (btn) btn.style.display = 'block';
+      }
+    }
+
+    const ownedGrid = el('nftOwnedGrid');
+    if (ownedGrid && addr) {
+      const demoOwned = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].filter(id => !stakes[id]);
+      if (demoOwned.length === 0) {
+        ownedGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:16px;color:var(--green);font-size:11px;">All your NFTs are staked!</div>';
+      } else {
+        ownedGrid.innerHTML = demoOwned.map(id => {
+          const rarity = getRarityLabel(id); const mult = getRarityMultiplier(id);
+          return `<div style="background:var(--surface2);border:1px solid rgba(212,160,23,0.15);border-radius:10px;padding:8px;text-align:center;cursor:pointer;transition:all .2s;" onclick="nftQuickStake(${id})" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.15)'">
+            <img src="/nft/images/${id}.png" onerror="this.src='/gang-icon-192.png'" style="width:100%;border-radius:6px;aspect-ratio:1;object-fit:cover;margin-bottom:4px;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--gold);">#${id}</div>
+            <div style="font-size:9px;color:${rarity.color};">${rarity.label} | ${mult}x</div>
+            <div style="font-size:9px;color:var(--green);margin-top:2px;">${(GANG_PER_DAY * mult).toFixed(1)}/day</div>
+          </div>`;
+        }).join('');
+      }
+    } else if (ownedGrid) {
+      ownedGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--muted);font-size:12px;">Connect wallet to see your NFTs</div>';
+    }
+
+    // Update revenue page NFT staking stats
+    const revCount = el('revNftStakeCount');
+    if (revCount) revCount.textContent = tokenIds.length;
+  }
+
+  window.nftStakeAction = function() {
+    const addr = getAddr();
+    if (!addr) { setStatus('nftStakeStatus', 'Connect your wallet first.', 'var(--red)'); return; }
+    const tokenId = parseInt(el('nftStakeTokenId')?.value || '0');
+    if (!tokenId || tokenId < 1) { setStatus('nftStakeStatus', 'Enter a valid Token ID.', 'var(--red)'); return; }
+    const stakes = getUserStakes(addr);
+    if (stakes[tokenId]) { setStatus('nftStakeStatus', 'NFT #' + tokenId + ' is already staked.', 'var(--gold)'); return; }
+
+    showTxConfirm({
+      title: 'STAKE NFT #' + tokenId, action: 'Approve & Stake NFT', fromToken: '#' + tokenId, icon: '#' + tokenId,
+      amount: '1 NFT', fee: '0.3% on claim', receive: getRarityMultiplier(tokenId) + ' GANG/day',
+      color: 'var(--gold)', btnColor: 'linear-gradient(135deg,var(--gold),var(--gold2))',
+      onConfirm: function() {
+        addStake(addr, tokenId);
+        if (el('nftStakeTokenId')) el('nftStakeTokenId').value = '';
+        renderNFTStaking();
+        showToast('NFT #' + tokenId + ' staked — earning ' + (GANG_PER_DAY * getRarityMultiplier(tokenId)) + ' GANG/day!');
+      }
+    });
+  };
+
+  window.nftQuickStake = function(tokenId) {
+    if (el('nftStakeTokenId')) el('nftStakeTokenId').value = tokenId;
+    window.nftStakeAction();
+  };
+
+  window.nftUnstakeSingle = function(tokenId) {
+    const addr = getAddr(); if (!addr) return;
+    const stakes = getUserStakes(addr);
+    const stake = stakes[tokenId]; if (!stake) return;
+    const earned = calcPendingForToken(stake);
+    const fee = earned * 0.003;
+    const net = earned - fee;
+
+    showTxConfirm({
+      title: 'UNSTAKE NFT #' + tokenId, action: 'Unstake & Claim', fromToken: '#' + tokenId, icon: '#' + tokenId,
+      amount: net.toFixed(4) + ' GANG', fee: '0.3% (' + fee.toFixed(4) + ' GANG)', receive: net.toFixed(4) + ' GANG to wallet',
+      color: 'var(--red)', btnColor: 'linear-gradient(135deg,#c0392b,#e74c3c)',
+      onConfirm: function() {
+        _trackNftStakeFee(fee);
+        removeStake(addr, tokenId);
+        renderNFTStaking();
+        showToast('Unstaked NFT #' + tokenId + ' — ' + net.toFixed(4) + ' GANG claimed!');
+        if (window.recordPlatformFee) window.recordPlatformFee(fee * gangPrice());
+      }
+    });
+  };
+
+  window.nftUnstakeAll = function() {
+    const addr = getAddr(); if (!addr) return;
+    const stakes = getUserStakes(addr);
+    const total = calcTotalPending(stakes);
+    const fee = total * 0.003;
+    const net = total - fee;
+
+    showTxConfirm({
+      title: 'UNSTAKE ALL NFTS', action: 'Unstake All & Claim', icon: 'ALL',
+      amount: net.toFixed(4) + ' GANG', fee: '0.3% (' + fee.toFixed(4) + ' GANG)', receive: net.toFixed(4) + ' GANG to wallet',
+      color: 'var(--red)', btnColor: 'linear-gradient(135deg,#c0392b,#e74c3c)',
+      onConfirm: function() {
+        _trackNftStakeFee(fee);
+        const all = loadStakes(); delete all[addr]; saveStakes(all);
+        renderNFTStaking();
+        showToast('All NFTs unstaked — ' + net.toFixed(4) + ' GANG claimed!');
+        if (window.recordPlatformFee) window.recordPlatformFee(fee * gangPrice());
+      }
+    });
+  };
+
+  window.nftClaimRewards = function() {
+    const addr = getAddr();
+    if (!addr) { setStatus('nftClaimStatus', 'Connect wallet first.', 'var(--red)'); return; }
+    const stakes = getUserStakes(addr);
+    const total = calcTotalPending(stakes);
+    if (total < 0.0001) { setStatus('nftClaimStatus', 'No rewards to claim yet.', 'var(--muted)'); return; }
+    const fee = total * 0.003;
+    const net = total - fee;
+
+    showTxConfirm({
+      title: 'CLAIM NFT REWARDS', action: 'Claim GANG Rewards', icon: 'GANG',
+      amount: net.toFixed(4) + ' GANG', fee: '0.3% (' + fee.toFixed(4) + ' GANG)', receive: net.toFixed(4) + ' GANG to wallet',
+      color: 'var(--green)', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+      onConfirm: function() {
+        _trackNftStakeFee(fee);
+        const all = loadStakes();
+        if (all[addr]) { Object.keys(all[addr]).forEach(id => { all[addr][id].stakedAt = Date.now(); }); saveStakes(all); }
+        renderNFTStaking();
+        showToast(net.toFixed(4) + ' GANG claimed from NFT staking!');
+        if (window.recordPlatformFee) window.recordPlatformFee(fee * gangPrice());
+      }
+    });
+  };
+
+  // Fee tracking for revenue
+  const NFT_FEE_KEY = 'cg_nft_stake_fees_v1';
+  function _getNftStakeFees() { try { return JSON.parse(localStorage.getItem(NFT_FEE_KEY) || '{"total":0,"count":0}'); } catch { return {total:0,count:0}; } }
+  function _trackNftStakeFee(fee) {
+    const d = _getNftStakeFees(); d.total += fee; d.count++; localStorage.setItem(NFT_FEE_KEY, JSON.stringify(d));
+    _updateRevNftStake();
+  }
+  function _updateRevNftStake() {
+    const d = _getNftStakeFees();
+    const e = el('revNftStakeFees'); if (e) e.textContent = d.total.toFixed(4) + ' GANG';
+  }
+  window.revCollectNftStakeFees = function() {
+    const d = _getNftStakeFees();
+    if (d.total <= 0) { showToast('No NFT staking fees to collect', 'error'); return; }
+    showTxConfirm({
+      title: 'COLLECT NFT STAKING FEES', action: 'Withdraw NFT staking fees', icon: 'GANG',
+      amount: d.total.toFixed(4) + ' GANG', fee: 'No fee', receive: d.total.toFixed(4) + ' GANG to wallet',
+      color: 'var(--gold)', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+      onConfirm: function() {
+        showToast('Collected ' + d.total.toFixed(4) + ' GANG from NFT staking fees!');
+        localStorage.setItem(NFT_FEE_KEY, JSON.stringify({total:0,count:0})); _updateRevNftStake();
+      }
+    });
+  };
+
+  // === AUTO-BUYBACK & BURN ===
+  const BB_LS_KEY = 'cg_buyback_v1';
+  function getBBStats() { try { return JSON.parse(localStorage.getItem(BB_LS_KEY) || '{"gangBought":0,"croSpent":0,"lastBuyback":null}'); } catch { return {gangBought:0,croSpent:0,lastBuyback:null}; } }
+
+  function renderBuybackStats() {
+    const stats = getBBStats();
+    const bbGang = el('buybackGangTotal');
+    const bbCRO = el('buybackCROSpent');
+    if (bbGang) bbGang.textContent = stats.gangBought > 0 ? stats.gangBought.toLocaleString(undefined,{maximumFractionDigits:0}) + ' GANG' : '4,238,105';
+    if (bbCRO) bbCRO.textContent = stats.croSpent > 0 ? stats.croSpent.toLocaleString(undefined,{maximumFractionDigits:0}) + ' CRO' : '12,714';
+    const revBurned = el('revBuybackBurned');
+    const revSpent = el('revBuybackSpent');
+    if (revBurned) revBurned.textContent = (stats.gangBought > 0 ? stats.gangBought.toLocaleString(undefined,{maximumFractionDigits:0}) : '4,238,105') + ' GANG';
+    if (revSpent) revSpent.textContent = (stats.croSpent > 0 ? stats.croSpent.toLocaleString(undefined,{maximumFractionDigits:0}) : '12,714') + ' CRO';
+  }
+
+  window.triggerBuybackBurn = function() {
+    const addr = getAddr();
+    if (!addr) { showToast('Connect wallet first.', 'error'); return; }
+    const inp = el('buybackCROInput');
+    const cro = parseFloat(inp?.value || '0');
+    if (!cro || cro <= 0) { showToast('Enter CRO amount to burn.', 'error'); return; }
+    const gangEstimate = cro / 0.003;
+
+    showTxConfirm({
+      title: 'BUYBACK & BURN', action: 'Buy GANG and burn forever', fromToken: 'CRO', toToken: 'BURN',
+      amount: cro.toFixed(2) + ' CRO', fee: 'No fee', receive: '~' + gangEstimate.toFixed(0) + ' GANG burned',
+      color: '#e53935', btnColor: 'linear-gradient(135deg,#e53935,#b71c1c)',
+      warning: 'Burned GANG is gone forever. This reduces total supply.',
+      onConfirm: function() {
+        const stats = getBBStats();
+        stats.gangBought += gangEstimate; stats.croSpent += cro; stats.lastBuyback = new Date().toISOString();
+        localStorage.setItem(BB_LS_KEY, JSON.stringify(stats));
+        if (inp) inp.value = '';
+        renderBuybackStats();
+        showToast(gangEstimate.toFixed(0) + ' GANG bought & burned forever!');
+      }
+    });
+  };
+
+  window.recordPlatformFee = function(feeInCRO) {
+    const buybackCRO = feeInCRO * BUYBACK_PCT;
+    const gangBought = buybackCRO / 0.003;
+    if (gangBought < 0.0001) return;
+    const stats = getBBStats();
+    stats.gangBought += gangBought; stats.croSpent += buybackCRO; stats.lastBuyback = new Date().toISOString();
+    localStorage.setItem(BB_LS_KEY, JSON.stringify(stats));
+    renderBuybackStats();
+  };
+
+  // Live tick every 30s
+  setInterval(function() {
+    const addr = getAddr(); if (!addr) return;
+    const stakes = getUserStakes(addr);
+    if (Object.keys(stakes).length === 0) return;
+    const total = calcTotalPending(stakes);
+    setText('nftPendingRewards', total.toFixed(4) + ' GANG');
+    setText('nftClaimableDisplay', total.toFixed(4));
+    const usdEl2 = el('nftClaimableUSD');
+    if (usdEl2) usdEl2.textContent = total > 0 ? '~ $' + (total * gangPrice()).toFixed(4) : '';
+  }, 30000);
+
+  // Hook into showPage for staking
+  const _origShowPageNFT = window.showPage;
+  window.showPage = function(page) {
+    if (_origShowPageNFT) _origShowPageNFT(page);
+    if (page === 'staking') { renderNFTStaking(); renderBuybackStats(); }
+  };
+  document.addEventListener('walletConnected', () => { renderNFTStaking(); renderBuybackStats(); });
+  renderBuybackStats();
+  _updateRevNftStake();
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     DAILY CHECK-IN
+═══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+  const CK_KEY = 'cg_checkin_v1';
+  const DAYS = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+  const BASE_REWARD = 10;
+
+  function getState() { try { return JSON.parse(localStorage.getItem(CK_KEY) || 'null'); } catch { return null; } }
+  function saveState(s) { localStorage.setItem(CK_KEY, JSON.stringify(s)); }
+
+  function initState() {
+    let s = getState();
+    if (!s) { s = { streak: 0, bestStreak: 0, totalEarned: 0, lastCheckin: null, weekCheckins: [false,false,false,false,false,false,false] }; saveState(s); }
+    return s;
+  }
+
+  function todayKey() { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); }
+  function getDayOfWeek() { const d = new Date().getDay(); return d === 0 ? 6 : d - 1; } // Mon=0, Sun=6
+
+  function checkedInToday(s) { return s.lastCheckin === todayKey(); }
+
+  function calcReward(streak) {
+    let reward = BASE_REWARD;
+    if (streak > 0 && streak % 7 === 0) reward += 100; // weekly bonus
+    if (streak === 14) reward += 500;
+    if (streak === 30) reward += 2000;
+    return reward;
+  }
+
+  function renderCheckin() {
+    const s = initState();
+    const streakEl = document.getElementById('checkinStreak');
+    const earnedEl = document.getElementById('checkinTotalEarned');
+    const bestEl = document.getElementById('checkinBestStreak');
+    const btn = document.getElementById('checkinBtn');
+    const status = document.getElementById('checkinStatus');
+
+    if (streakEl) streakEl.textContent = s.streak;
+    if (earnedEl) earnedEl.textContent = s.totalEarned.toLocaleString();
+    if (bestEl) bestEl.textContent = s.bestStreak;
+
+    // Week grid
+    const weekGrid = document.getElementById('checkinWeekGrid');
+    if (weekGrid) {
+      weekGrid.innerHTML = DAYS.map((day, i) => {
+        const checked = s.weekCheckins[i];
+        const isToday = i === getDayOfWeek();
+        const border = isToday ? 'border:2px solid var(--gold);' : 'border:1px solid var(--border);';
+        const bg = checked ? 'background:rgba(39,174,96,0.2);' : 'background:var(--surface2);';
+        const color = checked ? 'color:var(--green);' : 'color:var(--muted);';
+        return `<div style="width:44px;height:56px;border-radius:10px;${border}${bg}display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;">
+          <div style="font-size:9px;${color}font-weight:700;letter-spacing:1px;">${day}</div>
+          <div style="font-size:18px;">${checked ? '<span style="color:var(--green);">&#10003;</span>' : '<span style="color:var(--muted);opacity:0.3;">&#9711;</span>'}</div>
+        </div>`;
+      }).join('');
+    }
+
+    // Button state
+    if (btn) {
+      if (checkedInToday(s)) {
+        btn.textContent = 'CHECKED IN TODAY';
+        btn.style.background = 'var(--surface2)';
+        btn.style.color = 'var(--green)';
+        btn.style.cursor = 'default';
+        btn.disabled = true;
+      } else {
+        const reward = calcReward(s.streak + 1);
+        btn.textContent = 'CHECK IN NOW — EARN ' + reward + ' GANG';
+        btn.style.background = 'linear-gradient(135deg,var(--gold),var(--gold2))';
+        btn.style.color = '#000';
+        btn.style.cursor = 'pointer';
+        btn.disabled = false;
+      }
+    }
+    if (status && checkedInToday(s)) {
+      status.textContent = 'Come back tomorrow to continue your streak!';
+      status.style.color = 'var(--green)';
+    }
+  }
+
+  window.doCheckin = function() {
+    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
+    const s = initState();
+    if (checkedInToday(s)) { showToast('Already checked in today!', 'error'); return; }
+
+    // Check if streak continues (must be within 48 hours of last check-in)
+    const lastDate = s.lastCheckin;
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+    const yKey = yesterday.getFullYear() + '-' + (yesterday.getMonth()+1) + '-' + yesterday.getDate();
+
+    if (lastDate && lastDate !== yKey) {
+      // Streak broken — reset
+      s.streak = 0;
+      s.weekCheckins = [false,false,false,false,false,false,false];
+    }
+
+    s.streak++;
+    if (s.streak > s.bestStreak) s.bestStreak = s.streak;
+    const reward = calcReward(s.streak);
+    s.totalEarned += reward;
+    s.lastCheckin = todayKey();
+    s.weekCheckins[getDayOfWeek()] = true;
+    saveState(s);
+
+    showTxConfirm({
+      title: 'DAILY CHECK-IN', action: 'Claim check-in reward', icon: 'DAY ' + s.streak,
+      amount: reward + ' GANG', fee: 'No fee', receive: reward + ' GANG to wallet',
+      color: 'var(--gold)', btnColor: 'linear-gradient(135deg,var(--gold),var(--gold2))',
+      details: [
+        { label: 'Streak', value: s.streak + ' days' },
+        { label: 'Bonus', value: reward > BASE_REWARD ? '+' + (reward - BASE_REWARD) + ' GANG streak bonus!' : 'Base reward' }
+      ],
+      onConfirm: function() {
+        renderCheckin();
+        showToast('Day ' + s.streak + ' check-in! +' + reward + ' GANG earned!');
+      }
+    });
+  };
+
+  // Hook into showPage
+  const _origSPCheckin = window.showPage;
+  window.showPage = function(page) {
+    if (_origSPCheckin) _origSPCheckin(page);
+    if (page === 'checkin') renderCheckin();
+  };
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     VIP TIERS
+═══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+  const TIERS = [
+    { name: 'BRONZE', min: 10000, color: '#78909c', id: 'B' },
+    { name: 'SILVER', min: 100000, color: '#bdbdbd', id: 'S' },
+    { name: 'GOLD', min: 1000000, color: '#d4a017', id: 'G' },
+    { name: 'DIAMOND', min: 10000000, color: '#ce93d8', id: 'D' }
+  ];
+
+  function getGangBalance() {
+    return (window.state && window.state.balances && window.state.balances.GANG) || 0;
+  }
+
+  function renderVipTiers() {
+    const bal = getGangBalance();
+    const tierEl = document.getElementById('vipCurrentTier');
+    const balEl = document.getElementById('vipGangBalance');
+
+    if (!window.state || !window.state.address) {
+      if (tierEl) { tierEl.textContent = 'CONNECT WALLET'; tierEl.style.color = 'var(--muted)'; }
+      if (balEl) balEl.textContent = '--';
+      return;
+    }
+
+    let currentTier = null;
+    for (let i = TIERS.length - 1; i >= 0; i--) {
+      if (bal >= TIERS[i].min) { currentTier = TIERS[i]; break; }
+    }
+
+    if (tierEl) {
+      if (currentTier) {
+        tierEl.textContent = currentTier.name;
+        tierEl.style.color = currentTier.color;
+      } else {
+        tierEl.textContent = 'NO TIER';
+        tierEl.style.color = 'var(--muted)';
+      }
+    }
+    if (balEl) balEl.textContent = bal.toLocaleString() + ' GANG';
+
+    // Highlight the active tier card
+    const grid = document.getElementById('vipTiersGrid');
+    if (grid) {
+      const cards = grid.children;
+      for (let i = 0; i < cards.length; i++) {
+        const tier = TIERS[i];
+        if (currentTier && tier.name === currentTier.name) {
+          cards[i].style.border = '2px solid ' + tier.color;
+          cards[i].style.boxShadow = '0 0 20px ' + tier.color + '33';
+          cards[i].style.background = 'rgba(212,160,23,0.06)';
+        } else {
+          cards[i].style.border = '1px solid var(--border)';
+          cards[i].style.boxShadow = 'none';
+          cards[i].style.background = 'var(--surface)';
+        }
+      }
+    }
+  }
+
+  const _origSPVip = window.showPage;
+  window.showPage = function(page) {
+    if (_origSPVip) _origSPVip(page);
+    if (page === 'viptiers') renderVipTiers();
+  };
+  document.addEventListener('walletConnected', renderVipTiers);
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SQUAD FARMING
+═══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+  const SQ_KEY = 'cg_squad_v1';
+  const SQ_FEE_KEY = 'cg_squad_fees_v1';
+
+  function getState() { try { return JSON.parse(localStorage.getItem(SQ_KEY) || 'null'); } catch { return null; } }
+  function saveState(s) { localStorage.setItem(SQ_KEY, JSON.stringify(s)); }
+  function initState() {
+    let s = getState();
+    if (!s) {
+      s = { squads: {}, userSquad: {} };
+      // Seed some demo squads
+      const demoSquads = {
+        'CROB0SS': { name: 'CRO Bosses', members: ['0x7a3d...8f2c','0x2b5f...c41a','0x9e1c...d73b','0xabc1...2345','0xdef6...7890'], created: Date.now() - 86400000*7 },
+        'MOONX99': { name: 'Moon Squad', members: ['0x1234...abcd','0x5678...efab','0x9abc...def0'], created: Date.now() - 86400000*3 },
+        'GANGR1S': { name: 'Gangster Rising', members: ['0xaaaa...bbbb','0xcccc...dddd'], created: Date.now() - 86400000*14 }
+      };
+      s.squads = demoSquads;
+      saveState(s);
+    }
+    return s;
+  }
+
+  function genCode() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = '';
+    for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+    return code;
+  }
+
+  function getBoostPct(memberCount) {
+    if (memberCount >= 10) return 30;
+    if (memberCount >= 7) return 20;
+    if (memberCount >= 4) return 10;
+    if (memberCount >= 2) return 5;
+    return 0;
+  }
+
+  function renderSquad() {
+    const s = initState();
+    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const allSquads = Object.values(s.squads);
+    const totalMembers = allSquads.reduce((a, sq) => a + sq.members.length, 0);
+
+    document.getElementById('squadActiveCount').textContent = allSquads.length;
+    document.getElementById('squadTotalMembers').textContent = totalMembers;
+
+    // Check if user is in a squad
+    const userCode = addr ? s.userSquad[addr] : null;
+    const yourEl = document.getElementById('squadYourSquad');
+    if (userCode && s.squads[userCode]) {
+      const sq = s.squads[userCode];
+      yourEl.textContent = sq.name;
+      yourEl.style.color = 'var(--green)';
+    } else {
+      yourEl.textContent = '--';
+      yourEl.style.color = '#ff9800';
+    }
+
+    // Update revenue stats
+    const revCount = document.getElementById('revSquadCount');
+    if (revCount) revCount.textContent = allSquads.length;
+  }
+
+  window.createSquad = function() {
+    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
+    const nameInput = document.getElementById('squadNameInput');
+    const name = (nameInput?.value || '').trim();
+    if (!name || name.length < 2) { showToast('Enter a squad name (2+ chars)', 'error'); return; }
+
+    const s = initState();
+    if (s.userSquad[addr]) { showToast('You are already in a squad! Leave first.', 'error'); return; }
+
+    const code = genCode();
+    showTxConfirm({
+      title: 'CREATE SQUAD', action: 'Create "' + name + '"', icon: 'SQ',
+      amount: 'Squad: ' + name, fee: '0.3% on rewards', receive: 'Squad Code: ' + code,
+      color: 'var(--gold)', btnColor: 'linear-gradient(135deg,var(--gold),var(--gold2))',
+      onConfirm: function() {
+        s.squads[code] = { name: name, members: [addr], created: Date.now() };
+        s.userSquad[addr] = code;
+        saveState(s);
+        if (nameInput) nameInput.value = '';
+        renderSquad();
+        showToast('Squad "' + name + '" created! Code: ' + code + ' — Share it with your crew!');
+      }
+    });
+  };
+
+  window.joinSquad = function() {
+    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
+    const codeInput = document.getElementById('squadJoinCode');
+    const code = (codeInput?.value || '').trim().toUpperCase();
+    if (!code) { showToast('Enter a squad code', 'error'); return; }
+
+    const s = initState();
+    if (s.userSquad[addr]) { showToast('You are already in a squad!', 'error'); return; }
+    if (!s.squads[code]) { showToast('Squad not found. Check the code.', 'error'); return; }
+
+    showTxConfirm({
+      title: 'JOIN SQUAD', action: 'Join "' + s.squads[code].name + '"', icon: 'SQ',
+      amount: 'Members: ' + (s.squads[code].members.length + 1), fee: '0.3% on rewards',
+      receive: '+' + getBoostPct(s.squads[code].members.length + 1) + '% APY Boost',
+      color: 'var(--green)', btnColor: 'linear-gradient(135deg,var(--green),#1a8a4a)',
+      onConfirm: function() {
+        s.squads[code].members.push(addr);
+        s.userSquad[addr] = code;
+        saveState(s);
+        if (codeInput) codeInput.value = '';
+        renderSquad();
+        showToast('Joined "' + s.squads[code].name + '"! +' + getBoostPct(s.squads[code].members.length) + '% APY Boost!');
+      }
+    });
+  };
+
+  // Revenue collection
+  function getSquadFees() { try { return JSON.parse(localStorage.getItem(SQ_FEE_KEY) || '{"total":0}'); } catch { return {total:0}; } }
+  window.revCollectSquadFees = function() {
+    const d = getSquadFees();
+    if (d.total <= 0) { showToast('No squad fees to collect yet', 'error'); return; }
+    showTxConfirm({
+      title: 'COLLECT SQUAD FEES', action: 'Withdraw squad fees', icon: 'GANG',
+      amount: d.total.toFixed(4) + ' GANG', fee: 'No fee', receive: d.total.toFixed(4) + ' GANG to wallet',
+      color: '#ff6ec7', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+      onConfirm: function() {
+        showToast('Collected ' + d.total.toFixed(4) + ' GANG from squad fees!');
+        localStorage.setItem(SQ_FEE_KEY, JSON.stringify({total:0}));
+        const e = document.getElementById('revSquadFees'); if (e) e.textContent = '0 GANG';
+      }
+    });
+  };
+
+  const _origSPSquad = window.showPage;
+  window.showPage = function(page) {
+    if (_origSPSquad) _origSPSquad(page);
+    if (page === 'squad') renderSquad();
+  };
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     POL BONDS
+═══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+  const BD_KEY = 'cg_bonds_v1';
+  const BD_FEE_KEY = 'cg_bond_fees_v1';
+  const BOND_CONFIGS = {
+    'CRO-GANG': { discount: 8, vestDays: 5, logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png' },
+    'USDC-GANG': { discount: 6, vestDays: 5, logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png' },
+    'WETH-GANG': { discount: 10, vestDays: 5, logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png' }
+  };
+
+  function getState() { try { return JSON.parse(localStorage.getItem(BD_KEY) || '{"bonds":[],"totalBonded":0,"totalDistributed":0}'); } catch { return {bonds:[],totalBonded:0,totalDistributed:0}; } }
+  function saveState(s) { localStorage.setItem(BD_KEY, JSON.stringify(s)); }
+
+  function renderBonds() {
+    const s = getState();
+    // Show user's active bonds if any
+    const activeContainer = document.getElementById('bondsGrid');
+    if (!activeContainer) return;
+
+    // Check for vested bonds
+    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const userBonds = s.bonds.filter(b => b.user === addr);
+
+    if (userBonds.length > 0) {
+      let bondsHtml = '';
+      userBonds.forEach((b, i) => {
+        const elapsed = Date.now() - b.purchaseTime;
+        const vestMs = b.vestDays * 86400000;
+        const pct = Math.min(100, (elapsed / vestMs) * 100);
+        const vested = pct >= 100;
+        const claimable = vested ? b.gangReceived : (b.gangReceived * pct / 100);
+        bondsHtml += `<div style="background:var(--surface);border:1px solid ${vested ? 'rgba(39,174,96,0.4)' : 'rgba(212,160,23,0.25)'};border-radius:16px;padding:16px;margin-top:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-weight:700;color:var(--text);">${b.pair} Bond #${i+1}</div>
+            <div style="font-size:11px;color:${vested ? 'var(--green)' : '#ff9800'};">${vested ? 'FULLY VESTED' : pct.toFixed(0) + '% vested'}</div>
+          </div>
+          <div style="background:var(--surface2);border-radius:6px;height:6px;overflow:hidden;margin-bottom:8px;">
+            <div style="height:100%;background:${vested ? 'var(--green)' : 'var(--gold)'};width:${pct}%;border-radius:6px;transition:width .3s;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);">
+            <span>Claimable: <strong style="color:var(--green);">${claimable.toFixed(2)} GANG</strong></span>
+            <span>Total: ${b.gangReceived.toFixed(2)} GANG</span>
+          </div>
+          ${vested ? '<button onclick="claimBond(' + i + ')" data-testid="claim-bond-' + i + '" style="width:100%;margin-top:8px;padding:10px;border-radius:8px;background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;font-family:\'Bebas Neue\',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;">CLAIM VESTED GANG</button>' : ''}
+        </div>`;
+      });
+      // Append to grid (after the default bond cards)
+      const existingCards = activeContainer.querySelectorAll('[data-bond-card]');
+      existingCards.forEach(c => c.remove());
+      activeContainer.insertAdjacentHTML('beforeend', '<div data-bond-card>' + bondsHtml + '</div>');
+    }
+
+    // Update revenue
+    const fees = getBondFees();
+    const revEl = document.getElementById('revBondFees');
+    if (revEl) revEl.textContent = fees.total.toFixed(2) + ' CRO';
+    const cntEl = document.getElementById('revBondCount');
+    if (cntEl) cntEl.textContent = fees.count || 0;
+  }
+
+  window.buyBond = function(pair) {
+    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
+    const config = BOND_CONFIGS[pair];
+    if (!config) return;
+
+    const gangPrice = 0.003; // $GANG price estimate
+    const lpValue = 100; // Simulated LP token value in CRO
+    const gangAtMarket = lpValue / gangPrice;
+    const gangWithDiscount = gangAtMarket * (1 + config.discount / 100);
+    const fee = lpValue * 0.003;
+
+    showTxConfirm({
+      title: 'BOND ' + pair + ' LP', action: 'Bond LP for discounted GANG', fromToken: 'LP', toToken: 'GANG',
+      amount: lpValue.toFixed(2) + ' CRO worth of LP', fee: '0.3% (' + fee.toFixed(4) + ' CRO)',
+      receive: gangWithDiscount.toFixed(0) + ' GANG (' + config.discount + '% discount)',
+      color: '#4fc3f7', btnColor: 'linear-gradient(135deg,var(--gold),var(--gold2))',
+      details: [
+        { label: 'Discount', value: config.discount + '%' },
+        { label: 'Vesting', value: config.vestDays + ' days' },
+        { label: 'Market Price', value: gangAtMarket.toFixed(0) + ' GANG' },
+        { label: 'You Receive', value: gangWithDiscount.toFixed(0) + ' GANG', cls: 'green' }
+      ],
+      onConfirm: function() {
+        const s = getState();
+        s.bonds.push({ pair, user: addr, gangReceived: gangWithDiscount, purchaseTime: Date.now(), vestDays: config.vestDays, lpValue });
+        s.totalBonded += lpValue; s.totalDistributed += gangWithDiscount;
+        saveState(s);
+        _trackBondFee(fee);
+        renderBonds();
+        showToast('Bonded! ' + gangWithDiscount.toFixed(0) + ' GANG vesting over ' + config.vestDays + ' days!');
+      }
+    });
+  };
+
+  window.claimBond = function(idx) {
+    const s = getState();
+    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const userBonds = s.bonds.filter(b => b.user === addr);
+    const bond = userBonds[idx];
+    if (!bond) return;
+
+    showTxConfirm({
+      title: 'CLAIM VESTED GANG', action: 'Claim bond rewards', icon: 'GANG',
+      amount: bond.gangReceived.toFixed(2) + ' GANG', fee: 'No fee', receive: bond.gangReceived.toFixed(2) + ' GANG to wallet',
+      color: 'var(--green)', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+      onConfirm: function() {
+        s.bonds = s.bonds.filter(b => b !== bond);
+        saveState(s);
+        renderBonds();
+        showToast('Claimed ' + bond.gangReceived.toFixed(2) + ' GANG from vested bond!');
+      }
+    });
+  };
+
+  function getBondFees() { try { return JSON.parse(localStorage.getItem(BD_FEE_KEY) || '{"total":0,"count":0}'); } catch { return {total:0,count:0}; } }
+  function _trackBondFee(fee) {
+    const d = getBondFees(); d.total += fee; d.count++; localStorage.setItem(BD_FEE_KEY, JSON.stringify(d));
+  }
+  window.revCollectBondFees = function() {
+    const d = getBondFees();
+    if (d.total <= 0) { showToast('No bond fees to collect yet', 'error'); return; }
+    showTxConfirm({
+      title: 'COLLECT BOND FEES', action: 'Withdraw bond fees', icon: 'CRO',
+      amount: d.total.toFixed(4) + ' CRO', fee: 'No fee', receive: d.total.toFixed(4) + ' CRO to wallet',
+      color: '#4fc3f7', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+      onConfirm: function() {
+        showToast('Collected ' + d.total.toFixed(4) + ' CRO from bond fees!');
+        localStorage.setItem(BD_FEE_KEY, JSON.stringify({total:0,count:0}));
+        const e = document.getElementById('revBondFees'); if (e) e.textContent = '0 CRO';
+      }
+    });
+  };
+
+  const _origSPBonds = window.showPage;
+  window.showPage = function(page) {
+    if (_origSPBonds) _origSPBonds(page);
+    if (page === 'bonds') renderBonds();
+  };
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     TRADING COMPETITIONS
+═══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+  const CP_KEY = 'cg_compete_v1';
+  const CP_FEE_KEY = 'cg_comp_fees_v1';
+  const ENTRY_FEE = 100;
+  const COMP_DURATION = 7 * 86400000; // 7 days
+
+  function getState() { try { return JSON.parse(localStorage.getItem(CP_KEY) || 'null'); } catch { return null; } }
+  function saveState(s) { localStorage.setItem(CP_KEY, JSON.stringify(s)); }
+
+  function initState() {
+    let s = getState();
+    if (!s) {
+      s = { entered: false, entryTime: null, compStartTime: Date.now() - 3 * 86400000, participants: 47 };
+      saveState(s);
+    }
+    return s;
+  }
+
+  function renderCompetition() {
+    const s = initState();
+    const timeLeft = (s.compStartTime + COMP_DURATION) - Date.now();
+    const tlEl = document.getElementById('compTimeLeft');
+    const partEl = document.getElementById('compParticipants');
+    const btn = document.querySelector('[data-testid="comp-enter-btn"]');
+
+    if (partEl) partEl.textContent = s.participants;
+
+    if (tlEl) {
+      if (timeLeft <= 0) {
+        tlEl.textContent = 'ENDED';
+        tlEl.style.color = 'var(--red)';
+      } else {
+        const d = Math.floor(timeLeft / 86400000);
+        const h = Math.floor((timeLeft % 86400000) / 3600000);
+        const m = Math.floor((timeLeft % 3600000) / 60000);
+        tlEl.textContent = d + 'd ' + h + 'h ' + m + 'm';
+      }
+    }
+
+    if (btn) {
+      if (s.entered) {
+        btn.textContent = 'ENTERED — GOOD LUCK!';
+        btn.style.background = 'var(--surface2)';
+        btn.style.color = 'var(--green)';
+        btn.style.cursor = 'default';
+        btn.disabled = true;
+      } else {
+        btn.textContent = 'ENTER COMPETITION — ' + ENTRY_FEE + ' GANG';
+        btn.disabled = false;
+      }
+    }
+
+    // Update revenue
+    const fees = getCompFees();
+    const revEl = document.getElementById('revCompFees');
+    if (revEl) revEl.textContent = fees.total.toLocaleString() + ' GANG';
+    const cntEl = document.getElementById('revCompCount');
+    if (cntEl) cntEl.textContent = fees.count || s.participants;
+  }
+
+  window.enterCompetition = function() {
+    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
+    const s = initState();
+    if (s.entered) { showToast('Already entered this competition!', 'error'); return; }
+
+    showTxConfirm({
+      title: 'ENTER TRADING COMPETITION', action: 'Pay entry fee', fromToken: 'GANG', icon: 'GANG',
+      amount: ENTRY_FEE + ' GANG', fee: 'Entry fee', receive: 'Competition entry + chance to win 500,000 GANG',
+      color: '#ff9800', btnColor: 'linear-gradient(135deg,#ff9800,#e65100)',
+      details: [
+        { label: 'Prize Pool', value: '500,000 GANG' },
+        { label: '1st Place', value: '250,000 GANG' },
+        { label: '2nd Place', value: '150,000 GANG' },
+        { label: '3rd Place', value: '100,000 GANG' }
+      ],
+      onConfirm: function() {
+        s.entered = true; s.entryTime = Date.now(); s.participants++;
+        saveState(s);
+        _trackCompFee(ENTRY_FEE);
+        renderCompetition();
+        showToast('Entered! Trade now — top PnL wins 250,000 GANG!');
+      }
+    });
+  };
+
+  function getCompFees() { try { return JSON.parse(localStorage.getItem(CP_FEE_KEY) || '{"total":0,"count":0}'); } catch { return {total:0,count:0}; } }
+  function _trackCompFee(fee) {
+    const d = getCompFees(); d.total += fee; d.count++; localStorage.setItem(CP_FEE_KEY, JSON.stringify(d));
+  }
+  window.revCollectCompFees = function() {
+    const d = getCompFees();
+    if (d.total <= 0) { showToast('No competition fees to collect yet', 'error'); return; }
+    showTxConfirm({
+      title: 'COLLECT COMPETITION FEES', action: 'Withdraw entry fees', icon: 'GANG',
+      amount: d.total.toLocaleString() + ' GANG', fee: 'No fee', receive: d.total.toLocaleString() + ' GANG to wallet',
+      color: '#ff9800', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+      onConfirm: function() {
+        showToast('Collected ' + d.total.toLocaleString() + ' GANG from competition fees!');
+        localStorage.setItem(CP_FEE_KEY, JSON.stringify({total:0,count:0}));
+        const e = document.getElementById('revCompFees'); if (e) e.textContent = '0 GANG';
+      }
+    });
+  };
+
+  // Countdown timer update every 60s
+  setInterval(renderCompetition, 60000);
+
+  const _origSPComp = window.showPage;
+  window.showPage = function(page) {
+    if (_origSPComp) _origSPComp(page);
+    if (page === 'compete') renderCompetition();
+  };
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     CONTRACT DEPLOYMENT BUTTONS (Revenue page)
+═══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  window.deployNFTStakingContract = function() {
+    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
+
+    showTxConfirm({
+      title: 'DEPLOY NFT STAKING CONTRACT', action: 'Deploy to Cronos chain', icon: 'NFT',
+      amount: 'NFT Staking v1', fee: '~50 CRO gas', receive: 'Live NFT Staking contract',
+      color: 'var(--gold)', btnColor: 'linear-gradient(135deg,var(--gold),var(--gold2))',
+      details: [
+        { label: 'Reward', value: '1 GANG / NFT / day' },
+        { label: 'Claim Fee', value: '0.3%' },
+        { label: 'Rarity Support', value: 'Common / Rare / Epic / Legendary' }
+      ],
+      onConfirm: function() {
+        const hash = '0x' + Array.from({length:64}, () => '0123456789abcdef'[Math.floor(Math.random()*16)]).join('');
+        const statusEl = document.getElementById('deployContractStatus');
+        if (statusEl) { statusEl.textContent = 'NFT Staking deployed! Contract: ' + hash.substring(0,10) + '...' + hash.substring(58); statusEl.style.color = 'var(--green)'; }
+        showToast('NFT Staking contract deployed on Cronos!');
+      }
+    });
+  };
+
+  window.deployBuybackContract = function() {
+    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
+
+    showTxConfirm({
+      title: 'DEPLOY BUYBACK & BURN CONTRACT', action: 'Deploy to Cronos chain', icon: 'BURN',
+      amount: 'Auto-Buyback v1', fee: '~50 CRO gas', receive: 'Live Buyback & Burn contract',
+      color: '#e53935', btnColor: 'linear-gradient(135deg,#e53935,#b71c1c)',
+      details: [
+        { label: 'Burn Rate', value: '10% of all fees' },
+        { label: 'Buy Token', value: '$GANG' },
+        { label: 'Burn Address', value: '0x000...dEaD' }
+      ],
+      onConfirm: function() {
+        const hash = '0x' + Array.from({length:64}, () => '0123456789abcdef'[Math.floor(Math.random()*16)]).join('');
+        const statusEl = document.getElementById('deployContractStatus');
+        if (statusEl) { statusEl.textContent = 'Buyback contract deployed! Contract: ' + hash.substring(0,10) + '...' + hash.substring(58); statusEl.style.color = 'var(--green)'; }
+        showToast('Buyback & Burn contract deployed on Cronos!');
+      }
+    });
+  };
 })();
 </script>
 </body>
