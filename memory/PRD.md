@@ -4,7 +4,7 @@
 Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deployment. Features include DeFi protocols (Swap, Lending, Futures, etc.), NFTs, Telegram Bot integration, and revenue collection for the owner.
 
 ## Architecture
-- **Frontend**: Single `cronos-gangsters.html` file (~20,700 lines), vanilla JS + Ethers.js v6
+- **Frontend**: Single `cronos-gangsters.html` file (~20,850 lines), vanilla JS + Ethers.js v6
 - **Backend**: FastAPI (`server.py`) + Python Telegram Bot (`telegram_bot.py`)
 - **Storage**: LocalStorage (mocked DeFi state), no database
 - **Deployment**: User downloads ZIP → uploads to GoDaddy manually
@@ -22,7 +22,6 @@ Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deploymen
 - Flash Loans (0.3% fee per loan)
 - Insurance Protocol (2-5% premiums)
 - DEX Aggregator (0.3% routing fee across 6 DEXs)
-- Custom wallet-style `showTxConfirm()` popup for all mocked features
 
 ### Phase 9 — World Domination (Completed Feb 5, 2026)
 - **Copy Trading** — Follow top traders, 0.3% fee per copied trade
@@ -31,6 +30,13 @@ Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deploymen
 - **Perpetual DEX** — No-expiry contracts, up to 50x leverage, 0.3% open/close fee
 - **OTC Trading Desk** — Large block trades with escrow, 0.3% per deal
 - **DAO Governance** — Create proposals (1 CRO fee), vote with GANG, quorum 10,000
+
+### Custom Transaction Popup — 3-Stage Flow (Feb 5, 2026)
+- **Stage 1**: Transaction details (icon, amounts, fees, CANCEL/CONFIRM buttons)
+- **Stage 2**: "PROCESSING TRANSACTION" with gold spinning animation (1.5s)
+- **Stage 3**: "TRANSACTION CONFIRMED" with green checkmark, fake tx hash, Cronoscan link, DONE button (auto-close 3s)
+- Contextual subtitles: "Copy trade confirmed", "Staking confirmed", "Withdrawal confirmed", "Proposal submitted", etc.
+- Applied to ALL mocked features: Lending, Predictions, Flash Loans, Insurance, Aggregator, Copy Trading, Rev Staking, Limit Orders, Perp DEX, OTC, DAO, and all Revenue COLLECT buttons
 
 ### Integration Completeness (All features have)
 - Nav button with SVG icon
@@ -41,7 +47,7 @@ Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deploymen
 - HOW YOU EARN entry
 - HTML Roadmap entry (Phase 9 COMPLETE)
 - Telegram bot: command handler, callback handler, keyboard button, roadmap update
-- `showTxConfirm()` modal for all mocked actions
+- `showTxConfirm()` 3-stage modal for all mocked actions
 - LocalStorage state management
 - Owner panel (visible when treasury wallet connected)
 
@@ -73,9 +79,11 @@ Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deploymen
 ## Testing Status
 - Iteration 5: 100% pass (pre-Phase 9)
 - Iteration 6: 100% pass (14/14 tests, all 6 new features verified)
+- Iteration 7: 92% pass (11/12, duplicate function bug found)
+- Manual retest: 100% pass (duplicate function fixed, all 3 popup stages verified)
 
 ## Key Files
-- `/app/frontend/public/cronos-gangsters.html` — Main DApp (20,700+ lines)
-- `/app/backend/telegram_bot.py` — Telegram Bot (3,300+ lines)
+- `/app/frontend/public/cronos-gangsters.html` — Main DApp (20,850+ lines)
+- `/app/backend/telegram_bot.py` — Telegram Bot (3,320+ lines)
 - `/app/backend/server.py` — FastAPI server
 - `/app/frontend/public/cronos-gangsters-package.zip` — Deployable package

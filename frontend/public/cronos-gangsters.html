@@ -1074,7 +1074,7 @@ function toggleNavMenu() {
             <div style="font-size:11px;color:var(--muted);margin-top:4px;">Buy token: <span id="limitToSym">GANG</span></div>
           </div>
           <div style="font-size:11px;color:var(--gold);margin-bottom:10px;text-align:center;">0.3% platform fee applies when order executes</div>
-          <button class="btn-primary" id="limitOrderBtn" data-testid="place-limit-order-btn" onclick="placeLimitOrder()" style="background:linear-gradient(135deg,#ff6b35,#e55a2b);">PLACE LIMIT ORDER</button>
+          <button class="btn-primary" id="limitOrderBtn" data-testid="place-limit-order-btn" onclick="placeSwapLimitOrder()" style="background:linear-gradient(135deg,#ff6b35,#e55a2b);">PLACE LIMIT ORDER</button>
           
           <div style="margin-top:16px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;">OPEN ORDERS</div>
@@ -20539,7 +20539,7 @@ function saveLimitOrders(orders) {
   localStorage.setItem('gang_limit_orders', JSON.stringify(orders));
 }
 
-function placeLimitOrder() {
+function placeSwapLimitOrder() {
   if (!state.address) { showToast('Connect wallet first', 'error'); return; }
   const fromSym = document.getElementById('tokenFrom')?.value || 'CRO';
   const toSym = document.getElementById('tokenTo')?.value || 'GANG';
@@ -20565,7 +20565,7 @@ function placeLimitOrder() {
   addPoints(5);
 }
 
-function cancelLimitOrder(id) {
+function cancelSwapLimitOrder(id) {
   const orders = getLimitOrders().filter(o => o.id !== id);
   saveLimitOrders(orders);
   showToast('Order cancelled', '');
@@ -20586,7 +20586,7 @@ function renderLimitOrders() {
         <div style="font-size:13px;color:var(--text);">${o.amount} ${o.fromSym} &#8594; ${o.toSym}</div>
         <div style="font-size:11px;color:var(--muted);">@ $${o.targetPrice}</div>
       </div>
-      <button onclick="cancelLimitOrder(${o.id})" style="background:rgba(192,57,43,0.15);border:1px solid var(--red);color:var(--red);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">CANCEL</button>
+      <button onclick="cancelSwapLimitOrder(${o.id})" style="background:rgba(192,57,43,0.15);border:1px solid var(--red);color:var(--red);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">CANCEL</button>
     </div>
   `).join('');
 }
