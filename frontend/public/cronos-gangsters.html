@@ -3883,7 +3883,10 @@ function toggleNavMenu() {
           <option value="VVS">VVS</option>
           <option value="TONIC">TONIC</option>
         </select>
-        <input type="number" id="lendBorrowAmt" data-testid="lend-borrow-amount" placeholder="Borrow amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
+        <div style="position:relative;flex:1;">
+          <input type="number" id="lendBorrowAmt" data-testid="lend-borrow-amount" placeholder="Borrow amount" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;padding-right:56px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
+          <button onclick="lendSetMax()" data-testid="lend-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#ff8c00,#cc7000);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
+        </div>
       </div>
       <div style="display:flex;gap:8px;">
         <button class="btn-primary" data-testid="lend-borrow-btn" onclick="lendBorrow()" style="flex:1;font-size:16px;border-radius:10px;background:linear-gradient(135deg,#ff8c00,#cc7000);">BORROW</button>
@@ -4706,7 +4709,13 @@ function toggleNavMenu() {
           <option value="WCRO">WCRO — Pool: 300,000</option>
           <option value="VVS">VVS — Pool: 50,000,000</option>
         </select>
-        <input type="number" id="flashAmount" data-testid="flash-amount" placeholder="Amount to borrow" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:11px;color:var(--muted);">Pool Available: <span id="flashPoolBal" data-testid="flash-pool-bal" style="color:var(--gold);font-weight:700;">—</span></span>
+        </div>
+        <div style="position:relative;">
+          <input type="number" id="flashAmount" data-testid="flash-amount" placeholder="Amount to borrow" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
+          <button onclick="flashSetMax()" data-testid="flash-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#ffdd00,#e6c700);color:#000;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
+        </div>
         <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(255,221,0,0.2);border-radius:8px;padding:10px 12px;">
           <span style="font-size:12px;color:var(--muted);">Flash Loan Fee (0.3%)</span>
           <span id="flashFeePreview" data-testid="flash-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#ffdd00;">0</span>
@@ -5091,7 +5100,13 @@ function toggleNavMenu() {
         <select id="ctToken" data-testid="ct-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
           <option value="CRO">CRO</option><option value="GANG">GANG</option><option value="USDC">USDC</option><option value="WETH">WETH</option>
         </select>
-        <input type="number" id="ctAmount" data-testid="ct-amount" placeholder="Amount to copy-trade (CRO)" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:11px;color:var(--muted);">Balance: <span id="ctAvailBal" data-testid="ct-avail-bal" style="color:var(--gold);font-weight:700;">0 CRO</span></span>
+        </div>
+        <div style="position:relative;">
+          <input type="number" id="ctAmount" data-testid="ct-amount" placeholder="Amount to copy-trade (CRO)" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
+          <button onclick="ctSetMax()" data-testid="ct-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#e91e63,#c2185b);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
+        </div>
         <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(233,30,99,0.2);border-radius:8px;padding:10px 12px;">
           <span style="font-size:12px;color:var(--muted);">Copy Fee (0.3%)</span>
           <span id="ctFeePreview" data-testid="ct-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#e91e63;">0</span>
@@ -5150,7 +5165,14 @@ function toggleNavMenu() {
     <div class="card" style="border-color:rgba(156,39,176,0.3);margin-bottom:16px;" data-testid="rs-stake-form">
       <div class="card-title" style="color:#9c27b0;">STAKE $GANG FOR REVENUE SHARE</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Stake GANG tokens to earn a proportional share of ALL 0.3% platform fees. More staked = bigger share.</div>
-      <input type="number" id="rsStakeAmount" data-testid="rs-stake-amount" placeholder="GANG amount to stake" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;margin-bottom:10px;box-sizing:border-box;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-size:11px;color:var(--muted);">Available: <span id="rsAvailBal" data-testid="rs-avail-bal" style="color:var(--gold);font-weight:700;">0 GANG</span></span>
+        <span style="font-size:11px;color:var(--muted);">Staked: <span id="rsStakedBal" data-testid="rs-staked-bal" style="color:#9c27b0;font-weight:700;">0 GANG</span></span>
+      </div>
+      <div style="position:relative;margin-bottom:10px;">
+        <input type="number" id="rsStakeAmount" data-testid="rs-stake-amount" placeholder="GANG amount to stake or unstake" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
+        <button onclick="rsSetMax()" data-testid="rs-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#9c27b0,#7b1fa2);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
+      </div>
       <div style="display:flex;gap:8px;">
         <button class="btn-primary" data-testid="rs-stake-btn" onclick="rsStake()" style="flex:1;background:linear-gradient(135deg,#9c27b0,#7b1fa2);">STAKE GANG</button>
         <button class="btn-primary" data-testid="rs-unstake-btn" onclick="rsUnstake()" style="flex:1;background:linear-gradient(135deg,#e53935,#c62828);">UNSTAKE</button>
@@ -5208,7 +5230,13 @@ function toggleNavMenu() {
           <select id="loToken" data-testid="lo-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;"><option value="CRO">CRO</option><option value="GANG">GANG</option><option value="USDC">USDC</option><option value="WETH">WETH</option><option value="WBTC">WBTC</option></select>
         </div>
         <input type="number" id="loPrice" data-testid="lo-price" placeholder="Target price (USD)" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
-        <input type="number" id="loAmount" data-testid="lo-amount" placeholder="Amount" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:11px;color:var(--muted);">Balance: <span id="loAvailBal" data-testid="lo-avail-bal" style="color:var(--gold);font-weight:700;">0</span></span>
+        </div>
+        <div style="position:relative;">
+          <input type="number" id="loAmount" data-testid="lo-amount" placeholder="Amount" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
+          <button onclick="loSetMax()" data-testid="lo-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#42a5f5,#1e88e5);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
+        </div>
         <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(66,165,245,0.2);border-radius:8px;padding:10px 12px;">
           <span style="font-size:12px;color:var(--muted);">Execution Fee (0.3%)</span>
           <span id="loFeePreview" data-testid="lo-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#42a5f5;">0</span>
@@ -5261,7 +5289,13 @@ function toggleNavMenu() {
         <select id="ppLeverage" data-testid="pp-leverage" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
           <option value="5">5x Leverage</option><option value="10">10x Leverage</option><option value="20">20x Leverage</option><option value="30">30x Leverage</option><option value="50">50x Leverage</option>
         </select>
-        <input type="number" id="ppCollateral" data-testid="pp-collateral" placeholder="Collateral amount (CRO)" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:11px;color:var(--muted);">Balance: <span id="ppAvailBal" data-testid="pp-avail-bal" style="color:var(--gold);font-weight:700;">0 CRO</span></span>
+        </div>
+        <div style="position:relative;">
+          <input type="number" id="ppCollateral" data-testid="pp-collateral" placeholder="Collateral amount (CRO)" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
+          <button onclick="ppSetMax()" data-testid="pp-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#f44336,#c62828);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
+        </div>
         <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(244,67,54,0.2);border-radius:8px;padding:10px 12px;">
           <span style="font-size:12px;color:var(--muted);">Trading Fee (0.3%)</span>
           <span id="ppFeePreview" data-testid="pp-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#f44336;">0</span>
@@ -5308,7 +5342,13 @@ function toggleNavMenu() {
           <select id="otcSellToken" data-testid="otc-sell-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;"><option value="CRO">SELL: CRO</option><option value="GANG">SELL: GANG</option><option value="USDC">SELL: USDC</option><option value="WETH">SELL: WETH</option></select>
           <select id="otcBuyToken" data-testid="otc-buy-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;"><option value="GANG">BUY: GANG</option><option value="CRO">BUY: CRO</option><option value="USDC">BUY: USDC</option><option value="WETH">BUY: WETH</option></select>
         </div>
-        <input type="number" id="otcSellAmount" data-testid="otc-sell-amount" placeholder="Amount to sell" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:11px;color:var(--muted);">Balance: <span id="otcAvailBal" data-testid="otc-avail-bal" style="color:var(--gold);font-weight:700;">0</span></span>
+        </div>
+        <div style="position:relative;">
+          <input type="number" id="otcSellAmount" data-testid="otc-sell-amount" placeholder="Amount to sell" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
+          <button onclick="otcSetMax()" data-testid="otc-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#8d6e63,#6d4c41);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
+        </div>
         <input type="number" id="otcPrice" data-testid="otc-price" placeholder="Price per token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
         <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(141,110,99,0.2);border-radius:8px;padding:10px 12px;">
           <span style="font-size:12px;color:var(--muted);">OTC Fee (0.3%)</span>
@@ -7686,11 +7726,11 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     if (btn.dataset.page === "flashloans") { renderFlashLoans(); }
     if (btn.dataset.page === "insurance") { renderInsurance(); }
     if (btn.dataset.page === "aggregator") { renderAggregator(); }
-    if (btn.dataset.page === "copytrade") { renderCTLeaders(); renderCTHistory(); updateCTStats(); }
-    if (btn.dataset.page === "revstaking") { updateRSStats(); }
-    if (btn.dataset.page === "limitorders") { renderLOOrders(); updateLOStats(); }
-    if (btn.dataset.page === "perpdex") { renderPPPositions(); updatePPStats(); }
-    if (btn.dataset.page === "otc") { renderOtcDeals(); updateOtcStats(); }
+    if (btn.dataset.page === "copytrade") { renderCTLeaders(); renderCTHistory(); updateCTStats(); updateCtBal(); }
+    if (btn.dataset.page === "revstaking") { updateRSStats(); updateRsBals(); }
+    if (btn.dataset.page === "limitorders") { renderLOOrders(); updateLOStats(); updateLoBal(); }
+    if (btn.dataset.page === "perpdex") { renderPPPositions(); updatePPStats(); updatePpBal(); }
+    if (btn.dataset.page === "otc") { renderOtcDeals(); updateOtcStats(); updateOtcBal(); }
     if (btn.dataset.page === "dao") { renderDaoProposals(); updateDaoStats(); }
     if (btn.dataset.page === "revenue") { loadRevRewardBalances(); }
     window.scrollTo(0,0);
@@ -18257,6 +18297,123 @@ function initAllNewFeatures() {
   renderDaoProposals(); updateDaoStats(); updateRevDaoFees();
 }
 setTimeout(initAllNewFeatures, 800);
+
+// ═══════════════════════════════════════════
+//  MAX BUTTONS & BALANCE DISPLAYS
+// ═══════════════════════════════════════════
+function _getBal(sym) { return (state.balances && state.balances[sym]) ? state.balances[sym] : 0; }
+
+// Copy Trading MAX
+function ctSetMax() {
+  const bal = _getBal('CRO');
+  document.getElementById('ctAmount').value = bal;
+  const feeEl = document.getElementById('ctFeePreview');
+  if (feeEl) feeEl.textContent = (bal * 0.003).toFixed(4);
+}
+function updateCtBal() {
+  const el = document.getElementById('ctAvailBal');
+  if (el) el.textContent = _getBal('CRO').toLocaleString() + ' CRO';
+}
+
+// Revenue Staking MAX
+function rsSetMax() {
+  const s = initRSState();
+  // If user has staked, MAX fills staked amount (for unstaking); otherwise fills GANG balance
+  const gangBal = _getBal('GANG');
+  const staked = s.userStake || 0;
+  const val = gangBal > 0 ? gangBal : staked;
+  document.getElementById('rsStakeAmount').value = val;
+}
+function updateRsBals() {
+  const s = initRSState();
+  const elAvail = document.getElementById('rsAvailBal');
+  const elStaked = document.getElementById('rsStakedBal');
+  if (elAvail) elAvail.textContent = _getBal('GANG').toLocaleString() + ' GANG';
+  if (elStaked) elStaked.textContent = (s.userStake || 0).toLocaleString() + ' GANG';
+}
+
+// Limit Orders MAX
+function loSetMax() {
+  const token = document.getElementById('loToken').value;
+  const bal = _getBal(token);
+  document.getElementById('loAmount').value = bal;
+  const feeEl = document.getElementById('loFeePreview');
+  if (feeEl) feeEl.textContent = (bal * 0.003).toFixed(4);
+}
+function updateLoBal() {
+  const token = document.getElementById('loToken')?.value || 'CRO';
+  const el = document.getElementById('loAvailBal');
+  if (el) el.textContent = _getBal(token).toLocaleString() + ' ' + token;
+}
+document.getElementById('loToken')?.addEventListener('change', updateLoBal);
+
+// Perpetual DEX MAX
+function ppSetMax() {
+  const bal = _getBal('CRO');
+  document.getElementById('ppCollateral').value = bal;
+  const feeEl = document.getElementById('ppFeePreview');
+  if (feeEl) feeEl.textContent = (bal * 0.003).toFixed(4);
+}
+function updatePpBal() {
+  const el = document.getElementById('ppAvailBal');
+  if (el) el.textContent = _getBal('CRO').toLocaleString() + ' CRO';
+}
+
+// OTC Trading MAX
+function otcSetMax() {
+  const token = document.getElementById('otcSellToken').value;
+  const bal = _getBal(token);
+  document.getElementById('otcSellAmount').value = bal;
+  const feeEl = document.getElementById('otcFeePreview');
+  if (feeEl) feeEl.textContent = (bal * 0.003).toFixed(4);
+}
+function updateOtcBal() {
+  const token = document.getElementById('otcSellToken')?.value || 'CRO';
+  const el = document.getElementById('otcAvailBal');
+  if (el) el.textContent = _getBal(token).toLocaleString() + ' ' + token;
+}
+document.getElementById('otcSellToken')?.addEventListener('change', updateOtcBal);
+
+// Update all balances when page shown or wallet changes
+function updateAllFeatureBalances() {
+  try { updateCtBal(); } catch(e) {}
+  try { updateRsBals(); } catch(e) {}
+  try { updateLoBal(); } catch(e) {}
+  try { updatePpBal(); } catch(e) {}
+  try { updateOtcBal(); } catch(e) {}
+  try { updateFlashPoolBal(); } catch(e) {}
+}
+
+// Flash Loans MAX
+const FLASH_POOLS = { 'GANG': 10000000, 'USDC': 500000, 'WETH': 150, 'WCRO': 300000, 'VVS': 50000000 };
+function flashSetMax() {
+  const token = document.getElementById('flashToken')?.value || 'GANG';
+  const pool = FLASH_POOLS[token] || 0;
+  document.getElementById('flashAmount').value = pool;
+  const feeEl = document.getElementById('flashFeePreview');
+  if (feeEl) feeEl.textContent = (pool * 0.003).toFixed(2);
+}
+function updateFlashPoolBal() {
+  const token = document.getElementById('flashToken')?.value || 'GANG';
+  const pool = FLASH_POOLS[token] || 0;
+  const el = document.getElementById('flashPoolBal');
+  if (el) el.textContent = pool.toLocaleString() + ' ' + token;
+}
+document.getElementById('flashToken')?.addEventListener('change', updateFlashPoolBal);
+
+// Lending MAX
+function lendSetMax() {
+  const token = document.getElementById('lendBorrowToken')?.value || 'USDC';
+  const bal = _getBal(token);
+  document.getElementById('lendBorrowAmt').value = bal > 0 ? bal : 1000;
+}
+setTimeout(updateAllFeatureBalances, 1200);
+// Re-update on wallet connect events
+const _origUpdateBal = window.updateBalances;
+window.updateBalances = function() {
+  if (_origUpdateBal) _origUpdateBal.apply(this, arguments);
+  setTimeout(updateAllFeatureBalances, 500);
+};
 
 
 

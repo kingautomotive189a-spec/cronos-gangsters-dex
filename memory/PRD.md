@@ -4,7 +4,7 @@
 Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deployment. Features include DeFi protocols (Swap, Lending, Futures, etc.), NFTs, Telegram Bot integration, and revenue collection for the owner.
 
 ## Architecture
-- **Frontend**: Single `cronos-gangsters.html` file (~20,850 lines), vanilla JS + Ethers.js v6
+- **Frontend**: Single `cronos-gangsters.html` file (~21,000 lines), vanilla JS + Ethers.js v6
 - **Backend**: FastAPI (`server.py`) + Python Telegram Bot (`telegram_bot.py`)
 - **Storage**: LocalStorage (mocked DeFi state), no database
 - **Deployment**: User downloads ZIP → uploads to GoDaddy manually
@@ -32,42 +32,16 @@ Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deploymen
 - **DAO Governance** — Create proposals (1 CRO fee), vote with GANG, quorum 10,000
 
 ### Custom Transaction Popup — 3-Stage Flow (Feb 5, 2026)
-- **Stage 1**: Transaction details (icon, amounts, fees, CANCEL/CONFIRM buttons)
-- **Stage 2**: "PROCESSING TRANSACTION" with gold spinning animation (1.5s)
-- **Stage 3**: "TRANSACTION CONFIRMED" with green checkmark, fake tx hash, Cronoscan link, DONE button (auto-close 3s)
-- Contextual subtitles: "Copy trade confirmed", "Staking confirmed", "Withdrawal confirmed", "Proposal submitted", etc.
-- Applied to ALL mocked features: Lending, Predictions, Flash Loans, Insurance, Aggregator, Copy Trading, Rev Staking, Limit Orders, Perp DEX, OTC, DAO, and all Revenue COLLECT buttons
+- Stage 1: Transaction details + CANCEL/CONFIRM
+- Stage 2: "PROCESSING TRANSACTION" gold spinner (1.5s)
+- Stage 3: "TRANSACTION CONFIRMED" green checkmark, tx hash, Cronoscan link, DONE button
+- Applied to ALL mocked features
 
-### Integration Completeness (All features have)
-- Nav button with SVG icon
-- 2x Scrolling ticker entries
-- Feature grid box on main page
-- Revenue summary tile (fee percentage)
-- Revenue COLLECT banner with button
-- HOW YOU EARN entry
-- HTML Roadmap entry (Phase 9 COMPLETE)
-- Telegram bot: command handler, callback handler, keyboard button, roadmap update
-- `showTxConfirm()` 3-stage modal for all mocked actions
-- LocalStorage state management
-- Owner panel (visible when treasury wallet connected)
-
-## Fee Structure
-| Feature | Fee | Type |
-|---------|-----|------|
-| Swap | 0.3% | On-chain |
-| Lending Origination | 0.3% | Mocked |
-| Lending Interest | 20% share | Mocked |
-| Liquidation | 5% | Mocked |
-| Predictions | 5% of pot | Mocked |
-| Flash Loans | 0.3% | Mocked |
-| Insurance | 2-5% premium | Mocked |
-| DEX Aggregator | 0.3% routing | Mocked |
-| Copy Trading | 0.3% per copy | Mocked |
-| Rev Staking Mgmt | 0.3% on distributions | Mocked |
-| Limit Orders | 0.3% per fill | Mocked |
-| Perpetual DEX | 0.3% open/close | Mocked |
-| OTC Trading | 0.3% per deal | Mocked |
-| DAO Governance | 1 CRO per proposal | Mocked |
+### MAX Buttons & Balance Displays (Feb 5, 2026)
+- MAX button on ALL input fields across all features
+- Balance/staked amount displays showing available amounts
+- Token-specific balance updates when switching tokens
+- Applied to: Copy Trading, Revenue Staking, Limit Orders, Perp DEX, OTC Trading, Flash Loans, Lending
 
 ## Backlog / Phase 10 (Future)
 - CEX listings
@@ -77,13 +51,12 @@ Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deploymen
 - Top Collections leaderboard
 
 ## Testing Status
-- Iteration 5: 100% pass (pre-Phase 9)
-- Iteration 6: 100% pass (14/14 tests, all 6 new features verified)
-- Iteration 7: 92% pass (11/12, duplicate function bug found)
-- Manual retest: 100% pass (duplicate function fixed, all 3 popup stages verified)
+- Iteration 6: 100% pass (14/14 tests, all 6 features)
+- Iteration 7: 92% pass → fixed duplicate function bug
+- Manual: 100% pass (3-stage popup, MAX buttons, balances verified)
 
 ## Key Files
-- `/app/frontend/public/cronos-gangsters.html` — Main DApp (20,850+ lines)
-- `/app/backend/telegram_bot.py` — Telegram Bot (3,320+ lines)
+- `/app/frontend/public/cronos-gangsters.html` — Main DApp (~21,000 lines)
+- `/app/backend/telegram_bot.py` — Telegram Bot (~3,320 lines)
 - `/app/backend/server.py` — FastAPI server
 - `/app/frontend/public/cronos-gangsters-package.zip` — Deployable package
