@@ -699,6 +699,7 @@
       <button class="nav-btn" data-page="roadmap"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg></span>Roadmap</button>
       <button class="nav-btn" data-page="contracts" data-testid="nav-contracts-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>Contracts</button>
       <button class="nav-btn" data-page="faq" data-testid="nav-faq-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>FAQ</button>
+      <button class="nav-btn" data-page="security" data-testid="nav-security-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>KYC & Audit</button>
       <button class="nav-btn" data-testid="nav-mining-btn" onclick="window.location.href='/mining.html'"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2l4 4-9.5 9.5-4 1 1-4L15 3"/><path d="M3 21h18"/></svg></span>Mining Hub</button>
 
       <button class="nav-btn" data-page="revenue" data-testid="nav-revenue-btn" id="revenueNavBtn" style="display:none;"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>Revenue</button>
@@ -6475,6 +6476,268 @@ function toggleNavMenu() {
           WITHDRAW FEES
         </button>
         <div id="mktWithdrawStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="mkt-withdraw-status"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════ KYC & AUDIT PAGE ═══════════════════════════════════════════ -->
+  <div class="page" id="page-security" data-testid="page-security">
+
+    <div class="ref-hero" style="margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:var(--gold);line-height:1;text-shadow:0 0 30px rgba(212,160,23,0.3);">SECURITY & TRUST</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px;letter-spacing:1px;">KYC verification, smart contract audit & security analysis</div>
+    </div>
+
+    <!-- Trust Score Banner -->
+    <div style="background:linear-gradient(135deg,rgba(39,174,96,0.15),rgba(39,174,96,0.05));border:1px solid rgba(39,174,96,0.4);border-radius:16px;padding:24px;margin-bottom:20px;text-align:center;" data-testid="security-trust-banner">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#27ae60;letter-spacing:3px;">SECURITY VERIFIED</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px;">Cronos Gangsters ($GANG) has passed automated security analysis</div>
+      <div style="display:flex;justify-content:center;gap:16px;margin-top:16px;flex-wrap:wrap;">
+        <div style="background:rgba(39,174,96,0.12);border:1px solid rgba(39,174,96,0.3);border-radius:10px;padding:10px 20px;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">CONTRACT</div>
+          <div style="font-weight:700;color:#27ae60;font-size:16px;">VERIFIED</div>
+        </div>
+        <div style="background:rgba(39,174,96,0.12);border:1px solid rgba(39,174,96,0.3);border-radius:10px;padding:10px 20px;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">HONEYPOT</div>
+          <div style="font-weight:700;color:#27ae60;font-size:16px;">NO</div>
+        </div>
+        <div style="background:rgba(39,174,96,0.12);border:1px solid rgba(39,174,96,0.3);border-radius:10px;padding:10px 20px;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">MINTABLE</div>
+          <div style="font-weight:700;color:#27ae60;font-size:16px;">NO</div>
+        </div>
+        <div style="background:rgba(39,174,96,0.12);border:1px solid rgba(39,174,96,0.3);border-radius:10px;padding:10px 20px;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">BUY TAX</div>
+          <div style="font-weight:700;color:#27ae60;font-size:16px;">0%</div>
+        </div>
+        <div style="background:rgba(39,174,96,0.12);border:1px solid rgba(39,174,96,0.3);border-radius:10px;padding:10px 20px;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">SELL TAX</div>
+          <div style="font-weight:700;color:#27ae60;font-size:16px;">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GoPlus Security Audit Results -->
+    <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:24px;margin-bottom:20px;" data-testid="security-goplus-section">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#00d4aa,#0099ff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;color:#fff;">G+</div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);letter-spacing:2px;">GOPLUS SECURITY AUDIT</div>
+          <div style="font-size:11px;color:var(--muted);">Powered by GoPlus Labs — Automated Smart Contract Analysis</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+        <div style="background:var(--surface2);border-radius:10px;padding:12px;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">TOKEN NAME</div>
+          <div style="font-weight:700;color:var(--text);">Cronos Gangsters (GANG)</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:10px;padding:12px;">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">NETWORK</div>
+          <div style="font-weight:700;color:var(--text);">Cronos (Chain ID: 25)</div>
+        </div>
+      </div>
+
+      <div style="background:var(--surface2);border-radius:10px;padding:12px;margin-bottom:16px;word-break:break-all;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;">CONTRACT ADDRESS</div>
+        <div style="font-weight:700;color:var(--gold);font-size:12px;">0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF</div>
+      </div>
+
+      <!-- Security Checks Grid -->
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:2px;margin-bottom:12px;">SECURITY CHECKS</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px;" data-testid="security-checks-grid">
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">Open Source Contract</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">Not a Honeypot</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">Not Mintable</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">No Hidden Owner</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">No Selfdestruct</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">Not Blacklisted</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">0% Buy Tax</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">0% Sell Tax</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">No Transfer Pause</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">No Trading Cooldown</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">Cannot Take Back Ownership</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">No External Calls</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">Can Sell All Tokens</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">Can Buy Tokens</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">No Slippage Modification</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">Not a Proxy Contract</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">Anti-Whale Protection</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(39,174,96,0.08);border-radius:8px;padding:10px 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          <span style="font-size:12px;color:var(--text);">Listed on DEX (VVS Finance)</span>
+        </div>
+      </div>
+
+      <!-- View Full Report -->
+      <a href="https://gopluslabs.io/token-security/25/0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF" target="_blank" rel="noopener" style="display:block;text-align:center;background:linear-gradient(135deg,#00d4aa,#0099ff);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:14px;border-radius:10px;text-decoration:none;transition:all .2s;" data-testid="security-goplus-link" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(0,212,170,0.3)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        VIEW FULL GOPLUS SECURITY REPORT
+      </a>
+    </div>
+
+    <!-- DEX Listings -->
+    <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:24px;margin-bottom:20px;" data-testid="security-dex-section">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">DEX LISTINGS</div>
+      <div style="display:grid;gap:8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border-radius:10px;padding:12px 16px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <img src="https://assets.coingecko.com/coins/images/20211/small/vvs.jpg" style="width:28px;height:28px;border-radius:50%;" loading="lazy" onerror="this.style.display='none'">
+            <div>
+              <div style="font-weight:700;color:var(--text);">VVS Finance</div>
+              <div style="font-size:10px;color:var(--muted);">Primary DEX — UniV2 Liquidity</div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-weight:700;color:var(--green);font-size:14px;">$713+ Liquidity</div>
+            <div style="font-size:10px;color:var(--muted);">5 Active Pairs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verification Links -->
+    <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:24px;margin-bottom:20px;" data-testid="security-verify-section">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">VERIFY YOURSELF</div>
+      <div style="display:grid;gap:10px;">
+        <a href="https://gopluslabs.io/token-security/25/0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'" data-testid="security-verify-goplus">
+          <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#00d4aa,#0099ff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;color:#fff;flex-shrink:0;">G+</div>
+          <div style="flex:1;">
+            <div style="font-weight:700;color:var(--text);font-size:14px;">GoPlus Security</div>
+            <div style="font-size:11px;color:var(--muted);">Full automated security analysis — View report</div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <a href="https://de.fi/scanner/contract/0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF?chainId=25" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'" data-testid="security-verify-defi">
+          <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#7b3fe4,#c54dff);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#fff;flex-shrink:0;">D</div>
+          <div style="flex:1;">
+            <div style="font-weight:700;color:var(--text);font-size:14px;">De.Fi Scanner</div>
+            <div style="font-size:11px;color:var(--muted);">Smart contract vulnerability scanner — View report</div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <a href="https://tokensniffer.com/token/cronos/0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'" data-testid="security-verify-tokensniffer">
+          <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#ff6b35,#ff3535);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;color:#fff;flex-shrink:0;">TS</div>
+          <div style="flex:1;">
+            <div style="font-weight:700;color:var(--text);font-size:14px;">TokenSniffer</div>
+            <div style="font-size:11px;color:var(--muted);">Token scam detection & score — View report</div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <a href="https://cronoscan.com/address/0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF#code" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--border)'" data-testid="security-verify-cronoscan">
+          <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#002d74,#004aad);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:10px;color:#fff;flex-shrink:0;">CS</div>
+          <div style="flex:1;">
+            <div style="font-weight:700;color:var(--text);font-size:14px;">Cronoscan</div>
+            <div style="font-size:11px;color:var(--muted);">Verified source code on Cronos blockchain explorer</div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Contract Details -->
+    <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:24px;margin-bottom:20px;" data-testid="security-contract-details">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">CONTRACT DETAILS</div>
+      <div style="display:grid;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+          <span style="color:var(--muted);font-size:12px;">Contract Address</span>
+          <span style="color:var(--text);font-size:11px;font-weight:700;word-break:break-all;">0x4cE15b52a...DDC3EF</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+          <span style="color:var(--muted);font-size:12px;">Creator</span>
+          <span style="color:var(--text);font-size:11px;font-weight:700;">0xaa3c57...52ea</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+          <span style="color:var(--muted);font-size:12px;">Total Supply</span>
+          <span style="color:var(--text);font-size:12px;font-weight:700;">1,000,000,000 GANG</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+          <span style="color:var(--muted);font-size:12px;">Contract Type</span>
+          <span style="color:var(--green);font-size:12px;font-weight:700;">Standard ERC-20 (Not Proxy)</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);">
+          <span style="color:var(--muted);font-size:12px;">Source Code</span>
+          <span style="color:var(--green);font-size:12px;font-weight:700;">Open Source & Verified</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;">
+          <span style="color:var(--muted);font-size:12px;">DEX Listed On</span>
+          <span style="color:var(--text);font-size:12px;font-weight:700;">VVS Finance (5 Pairs)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- KYC Status -->
+    <div style="background:var(--surface);border:1px solid rgba(255,152,0,0.3);border-radius:16px;padding:24px;margin-bottom:20px;" data-testid="security-kyc-section">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#ff9800,#f57c00);display:flex;align-items:center;justify-content:center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#ff9800;letter-spacing:2px;">KYC VERIFICATION</div>
+          <div style="font-size:11px;color:var(--muted);">Team identity verification — In progress</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,152,0,0.08);border:1px solid rgba(255,152,0,0.2);border-radius:10px;padding:14px;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff9800;letter-spacing:2px;">IN PROGRESS</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">KYC verification is being completed through Coinsniper. Badge will be displayed here upon completion.</div>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+      <div style="font-size:11px;color:var(--muted);line-height:1.5;">
+        Security analysis provided by GoPlus Labs, De.Fi, and TokenSniffer. These are automated assessments and do not constitute financial advice.
+        Always DYOR (Do Your Own Research) before investing. Smart contract risk can never be fully eliminated.
       </div>
     </div>
 
