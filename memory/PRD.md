@@ -28,7 +28,9 @@ Core DeFi, Advanced DeFi, World Domination (6 features), Dynamic Copy Trading, A
 - **Telegram Bot**: Updated "Futures" button labels to "Leverage" in all inline keyboards, FAQ text updated, bot commands list updated
 - **Token Logos in Dropdowns**: Converted DEX Aggregator (FROM/TO) and Flash Loans token selects from plain `<select>` to custom dropdowns with original token logos (CRO, USDC, WETH, GANG, WCRO, VVS, TONIC, ATOM)
 - **WCRO added** to TOKEN_LOGOS registry
-- **ZIP delivered** for GoDaddy deployment
+- **All-Green Charts**: Both TradingView widgets (main chart + Leverage Trading) now render all candles in green — up AND down candles, borders, wicks, and volume bars all green
+- **Bullish Price Simulation**: Stronger upward bias on all 33 pairs — prices trend green more consistently, change % always shows positive green
+- **Lending Pool Seeding Fix**: Individual pool seeding — even if some pools have user data, empty pools still get auto-seeded with realistic liquidity and APYs
 
 ## Key Files
 - `/app/frontend/public/cronos-gangsters.html`
