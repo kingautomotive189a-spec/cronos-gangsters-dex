@@ -1,45 +1,81 @@
-# Cronos Gangsters DApp — PRD
+# Cronos Gangsters DApp — Product Requirements Document
+
+## Original Problem Statement
+Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deployment. Features include DeFi protocols (Swap, Lending, Futures, etc.), NFTs, Telegram Bot integration, and revenue collection for the owner.
 
 ## Architecture
-- Frontend: Vanilla HTML/JS (`cronos-gangsters.html` ~19.4k lines), Ethers.js v6
-- Backend: FastAPI (`server.py`, `trading_api.py`, `mining_api.py`)
-- Telegram Bot: python-telegram-bot v20+ (`telegram_bot.py`)
-- Deployment: User downloads ZIP, uploads HTML to GoDaddy manually
+- **Frontend**: Single `cronos-gangsters.html` file (~20,700 lines), vanilla JS + Ethers.js v6
+- **Backend**: FastAPI (`server.py`) + Python Telegram Bot (`telegram_bot.py`)
+- **Storage**: LocalStorage (mocked DeFi state), no database
+- **Deployment**: User downloads ZIP → uploads to GoDaddy manually
 
-## Standard Checklist for Every New Feature
-1. Nav button in sidebar (unique SVG icon)
-2. Scrolling ticker entry (both copies)
-3. Feature grid box
-4. Revenue page summary tile
-5. Revenue page fee COLLECT banner
-6. "HOW YOU EARN" entry
-7. Telegram bot command + callback
-8. Telegram main keyboard button
-9. Telegram roadmap update (both versions)
-10. HTML Roadmap page update
-11. Transaction Confirmation Modal on all mocked action buttons
+## Completed Features (All Phases 1-9)
+### Core DeFi
+- Swap, Liquidity, Farms, Vaults, Staking, Lottery
+- Token Creator, Launchpad, LP Locker, Sniper Bot
+- NFT Minting & Marketplace, Referral System
+- GANG Futures, GANG Tracker, Bridge
 
-## Transaction Confirmation Modal
-Custom wallet-style popup on ALL mocked/simulated actions:
-- Lending: Supply, Withdraw, Borrow, Repay
-- Predictions: Place Bet, Create Market
-- Flash Loans: Execute Flash Loan
-- Insurance: Buy Coverage
-- DEX Aggregator: Swap Via Best Route
-- Futures: Open Position, Close Position
-- All Owner COLLECT buttons (Predictions, Flash, Insurance, Aggregator)
-- All Revenue COLLECT buttons
+### Phase 8 — Advanced DeFi (Completed)
+- Lending & Borrowing (20% interest share, 0.3% origination, 5% liquidation)
+- Prediction Markets (5% of resolved pots)
+- Flash Loans (0.3% fee per loan)
+- Insurance Protocol (2-5% premiums)
+- DEX Aggregator (0.3% routing fee across 6 DEXs)
+- Custom wallet-style `showTxConfirm()` popup for all mocked features
 
-NOT applied to real on-chain features (Swap, Staking, Lottery, NFT Mint, Farms, Vaults, Bridge, LP Locker, Launchpad, Marketplace, Token Creator) — those use the real wallet popup.
+### Phase 9 — World Domination (Completed Feb 5, 2026)
+- **Copy Trading** — Follow top traders, 0.3% fee per copied trade
+- **Revenue-Sharing Staking** — Stake GANG, earn proportional platform fees, 0.3% mgmt fee
+- **Limit Orders** — Buy/sell at target price, 0.3% execution fee
+- **Perpetual DEX** — No-expiry contracts, up to 50x leverage, 0.3% open/close fee
+- **OTC Trading Desk** — Large block trades with escrow, 0.3% per deal
+- **DAO Governance** — Create proposals (1 CRO fee), vote with GANG, quorum 10,000
 
-## All Revenue Banners (18 total)
-1-18: Swap(0.3%), Futures(0.3%), Leverage(0.3%), Lending(20%+0.3%+5%), Predictions(5%), Flash Loans(0.3%), Insurance(2-5%), Aggregator(0.3%), Vaults, NFTs(50CRO), Marketplace(2.5%), Staking(25%), Referral, Token Creator(25-500CRO), Launchpad(3%), LP Locker(1CRO), Lottery(10%), Sniper(1%)
+### Integration Completeness (All features have)
+- Nav button with SVG icon
+- 2x Scrolling ticker entries
+- Feature grid box on main page
+- Revenue summary tile (fee percentage)
+- Revenue COLLECT banner with button
+- HOW YOU EARN entry
+- HTML Roadmap entry (Phase 9 COMPLETE)
+- Telegram bot: command handler, callback handler, keyboard button, roadmap update
+- `showTxConfirm()` modal for all mocked actions
+- LocalStorage state management
+- Owner panel (visible when treasury wallet connected)
 
-## Bugs Fixed
-- `TK` undefined in `updateLendingUI` → replaced with `token`
-- `baseSupplyAPY` property not found → replaced with `baseRate`
+## Fee Structure
+| Feature | Fee | Type |
+|---------|-----|------|
+| Swap | 0.3% | On-chain |
+| Lending Origination | 0.3% | Mocked |
+| Lending Interest | 20% share | Mocked |
+| Liquidation | 5% | Mocked |
+| Predictions | 5% of pot | Mocked |
+| Flash Loans | 0.3% | Mocked |
+| Insurance | 2-5% premium | Mocked |
+| DEX Aggregator | 0.3% routing | Mocked |
+| Copy Trading | 0.3% per copy | Mocked |
+| Rev Staking Mgmt | 0.3% on distributions | Mocked |
+| Limit Orders | 0.3% per fill | Mocked |
+| Perpetual DEX | 0.3% open/close | Mocked |
+| OTC Trading | 0.3% per deal | Mocked |
+| DAO Governance | 1 CRO per proposal | Mocked |
 
-## Backlog
-- P1: Copy Trading feature
-- P1: Revenue-Sharing Staking feature
-- P2: Perpetual DEX / Options, OTC Trading, DAO Governance, Limit Orders
+## Backlog / Phase 10 (Future)
+- CEX listings
+- Multi-chain expansion (ETH, BSC)
+- Mobile App (iOS & Android)
+- Gangster NFT Gallery with rarity & trait filters
+- Top Collections leaderboard
+
+## Testing Status
+- Iteration 5: 100% pass (pre-Phase 9)
+- Iteration 6: 100% pass (14/14 tests, all 6 new features verified)
+
+## Key Files
+- `/app/frontend/public/cronos-gangsters.html` — Main DApp (20,700+ lines)
+- `/app/backend/telegram_bot.py` — Telegram Bot (3,300+ lines)
+- `/app/backend/server.py` — FastAPI server
+- `/app/frontend/public/cronos-gangsters-package.zip` — Deployable package
