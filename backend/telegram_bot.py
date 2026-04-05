@@ -290,6 +290,8 @@ def main_keyboard():
          InlineKeyboardButton("🔍 GANG TRACKER", callback_data="menu_tracker")],
         [InlineKeyboardButton("🏦 Lend & Borrow", callback_data="menu_lending"),
          InlineKeyboardButton("🔮 Predictions", callback_data="menu_predictions")],
+        [InlineKeyboardButton("⚡ Flash Loans", callback_data="menu_flashloans"),
+         InlineKeyboardButton("🛡 Insurance", callback_data="menu_insurance")],
         [InlineKeyboardButton("⛏ Mining Hub", callback_data="menu_mining"),
          InlineKeyboardButton("⚡ Trading", callback_data="menu_trading")],
         [InlineKeyboardButton("🌾 Farms", callback_data="menu_farms"),
@@ -1328,22 +1330,30 @@ async def roadmap_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "   Crypto + Stocks + Indices + Commodities\n"
         "   Dual currency: GANG & CRO pools\n"
         "🔍 GANG TRACKER — Multi-chain wallet scanner\n"
+        "🏦 GANG LENDING — Earn interest, borrow crypto\n"
+        "🔮 PREDICTION MARKETS — Bet on outcomes\n"
+        "⚡ FLASH LOANS — 0.3% fee, zero collateral\n"
+        "🛡 INSURANCE — Earn premiums from coverage\n"
         "📊 DexScreener Live Chart — Multi-coin selector\n"
         "💰 All platform fees standardized to 0.3%\n"
         "🏦 Auto-compound Vaults with live APYs\n"
         "🍔 Redesigned navigation with icons\n\n"
         "🔜 *Phase 9 — Coming Soon*\n"
         "━━━━━━━━━━━━━━━━━━━━━\n"
-        "Limit Orders, Advanced Charts,\n"
-        "Mobile App, DAO Governance,\n"
-        "Cross-chain Futures\n\n"
+        "Copy Trading, Revenue Staking,\n"
+        "Limit Orders, Mobile App,\n"
+        "DAO Governance, Cross-chain Futures\n\n"
         "🔥 *Building the most complete DEX on Cronos!*"
     )
 
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("🌐 Visit Website", url=DEX_LINK)],
-        [InlineKeyboardButton("📈 GANG FUTURES", callback_data="menu_futures"),
-         InlineKeyboardButton("🔍 GANG TRACKER", callback_data="menu_tracker")],
+        [InlineKeyboardButton("📈 Futures", callback_data="menu_futures"),
+         InlineKeyboardButton("🏦 Lending", callback_data="menu_lending"),
+         InlineKeyboardButton("🔮 Predictions", callback_data="menu_predictions")],
+        [InlineKeyboardButton("⚡ Flash Loans", callback_data="menu_flashloans"),
+         InlineKeyboardButton("🛡 Insurance", callback_data="menu_insurance"),
+         InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
 
@@ -1414,6 +1424,71 @@ async def predictions_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ])
 
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+async def flashloans_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /flashloans command"""
+    msg = (
+        "⚡ *GANG FLASH LOANS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Borrow instantly. Repay in the same block.\n"
+        "Zero collateral needed.\n\n"
+        "━━━ *AVAILABLE POOLS* ━━━\n\n"
+        "💎 *CRO* — 500,000 available\n"
+        "🔫 *GANG* — 10,000,000 available\n"
+        "💵 *USDC* — 250,000 available\n"
+        "⟠ *WETH* — 150 available\n"
+        "🔄 *WCRO* — 300,000 available\n"
+        "🟣 *VVS* — 50,000,000 available\n\n"
+        "━━━ *STRATEGIES* ━━━\n\n"
+        "📊 *Arbitrage* — Buy low, sell high across DEXs\n"
+        "💀 *Liquidation* — Liquidate undercollateralized positions\n"
+        "🔄 *Collateral Swap* — Swap collateral without repaying\n"
+        "🛡 *Self-Liquidation* — Close risky positions\n\n"
+        "━━━ *FEES* ━━━\n\n"
+        "Flash Loan Fee: *0.3%* per loan\n"
+        "Zero risk — loans repay or revert entirely\n\n"
+        f"[⚡ Open Flash Loans]({DEX_LINK}#flashloans)"
+    )
+
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("⚡ Open Flash Loans", url=f"{DEX_LINK}#flashloans")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+async def insurance_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /insurance command"""
+    msg = (
+        "🛡 *GANG INSURANCE PROTOCOL*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Protect your crypto. Earn premiums.\n\n"
+        "━━━ *COVERAGE TYPES* ━━━\n\n"
+        "🔐 *Smart Contract Cover* — 2.5%/month\n"
+        "💵 *Stablecoin Depeg Cover* — 3%/month\n"
+        "🏦 *Exchange Hack Cover* — 4%/month\n"
+        "⚠️ *Rug Pull Cover* — 5%/month\n"
+        "🛡 *Full Coverage (All Risks)* — 5%/month\n\n"
+        "━━━ *HOW IT WORKS* ━━━\n\n"
+        "1️⃣ Choose coverage type & amount\n"
+        "2️⃣ Pay monthly premium (2-5%)\n"
+        "3️⃣ Protected against covered events\n"
+        "4️⃣ Longer durations = up to 20% discount!\n\n"
+        "━━━ *OWNER FEES* ━━━\n\n"
+        "All premiums flow to the owner\n"
+        "No claims = *pure profit*\n\n"
+        f"[🛡 Open Insurance]({DEX_LINK}#insurance)"
+    )
+
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🛡 Open Insurance", url=f"{DEX_LINK}#insurance")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
 
 
 def generate_captcha():
@@ -2245,6 +2320,8 @@ async def _cb_menu_roadmap(query, context):
         "   GANG TRACKER (multi-chain)\n"
         "   GANG LENDING (earn interest)\n"
         "   PREDICTION MARKETS (bet & win)\n"
+        "   FLASH LOANS (0.3% per loan)\n"
+        "   INSURANCE PROTOCOL (earn premiums)\n"
         "   DexScreener Live Chart\n"
         "   Dual currency (GANG + CRO)\n"
         "   0.3% standardized fees\n"
@@ -2259,7 +2336,9 @@ async def _cb_menu_roadmap(query, context):
         [InlineKeyboardButton("📈 Futures", callback_data="menu_futures"),
          InlineKeyboardButton("🏦 Lending", callback_data="menu_lending"),
          InlineKeyboardButton("🔮 Predictions", callback_data="menu_predictions")],
-        [InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
+        [InlineKeyboardButton("⚡ Flash Loans", callback_data="menu_flashloans"),
+         InlineKeyboardButton("🛡 Insurance", callback_data="menu_insurance"),
+         InlineKeyboardButton("🔍 Tracker", callback_data="menu_tracker")],
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
@@ -2311,6 +2390,53 @@ async def _cb_menu_predictions(query, context):
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
 
 
+async def _cb_menu_flashloans(query, context):
+    """Callback handler for Flash Loans menu"""
+    msg = (
+        "⚡ *GANG FLASH LOANS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Borrow any amount. Zero collateral. Repay same block.\n\n"
+        "💎 *CRO* — 500K pool\n"
+        "🔫 *GANG* — 10M pool\n"
+        "💵 *USDC* — 250K pool\n"
+        "⟠ *WETH* — 150 pool\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• 0.3% of every flash loan\n"
+        "• Zero risk — loans repay or revert\n"
+        "• Pure fee collection machine\n\n"
+        "Strategies: Arbitrage, Liquidation, Collateral Swaps"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("⚡ Open Flash Loans", url=f"{DEX_LINK}#flashloans")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
+async def _cb_menu_insurance(query, context):
+    """Callback handler for Insurance menu"""
+    msg = (
+        "🛡 *GANG INSURANCE PROTOCOL*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Users pay premiums. You collect.\n\n"
+        "🔐 *Smart Contract* — 2.5%/mo\n"
+        "💵 *Depeg Cover* — 3%/mo\n"
+        "🏦 *Hack Cover* — 4%/mo\n"
+        "⚠️ *Rug Pull* — 5%/mo\n"
+        "🛡 *Full Coverage* — 5%/mo\n\n"
+        "💰 *Your fees as owner:*\n"
+        "• All premiums flow to you\n"
+        "• No claims = pure profit\n"
+        "• Like being the insurance company\n\n"
+        "Zero capital required from you."
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🛡 Open Insurance", url=f"{DEX_LINK}#insurance")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+
 # Dispatch table for callback queries
 CALLBACK_DISPATCH = {
     "refresh_price": _cb_refresh_price,
@@ -2346,6 +2472,8 @@ CALLBACK_DISPATCH = {
     "menu_roadmap": _cb_menu_roadmap,
     "menu_lending": _cb_menu_lending,
     "menu_predictions": _cb_menu_predictions,
+    "menu_flashloans": _cb_menu_flashloans,
+    "menu_insurance": _cb_menu_insurance,
 }
 
 
@@ -2759,6 +2887,8 @@ def main():
     app.add_handler(CommandHandler("roadmap", roadmap_cmd))
     app.add_handler(CommandHandler("lending", lending_cmd))
     app.add_handler(CommandHandler("predictions", predictions_cmd))
+    app.add_handler(CommandHandler("flashloans", flashloans_cmd))
+    app.add_handler(CommandHandler("insurance", insurance_cmd))
 
     # Admin commands
     app.add_handler(CommandHandler("ban", ban))

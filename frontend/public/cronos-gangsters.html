@@ -573,6 +573,8 @@
       <button class="nav-btn" data-page="liquidity"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></span>Liquidity</button>
       <button class="nav-btn" data-page="lending" data-testid="nav-lending-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 14h4"/><path d="M14 14h4"/></svg></span><span style="color:#00e5ff;font-weight:700;">Lend & Borrow</span></button>
       <button class="nav-btn" data-page="predict" data-testid="nav-predict-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/><path d="M8 12h8"/></svg></span><span style="color:#a855f7;font-weight:700;">Predictions</span></button>
+      <button class="nav-btn" data-page="flashloans" data-testid="nav-flashloans-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffdd00" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><span style="color:#ffdd00;font-weight:700;">Flash Loans</span></button>
+      <button class="nav-btn" data-page="insurance" data-testid="nav-insurance-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ecdc4" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><span style="color:#4ecdc4;font-weight:700;">Insurance</span></button>
       <button class="nav-btn" data-page="futures" data-testid="nav-futures-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 5-10"/></svg></span><span style="color:#ff8c00;font-weight:700;">Gang Futures</span></button>
       <button class="nav-btn" data-page="sniper" data-testid="nav-sniper-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg></span>Sniper</button>
       <div class="nav-divider"></div>
@@ -739,6 +741,10 @@ function toggleNavMenu() {
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('predict')" style="cursor:pointer;color:#a855f7;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔮 PREDICTION MARKETS — BET & WIN</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('flashloans')" style="cursor:pointer;color:#ffdd00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">⚡ FLASH LOANS — 0.3% FEE</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('insurance')" style="cursor:pointer;color:#4ecdc4;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🛡 INSURANCE — EARN PREMIUMS</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('tracker')" style="cursor:pointer;color:#00d4ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔍 GANG TRACKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('swap')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔄 SWAP TOKENS</span>
@@ -783,6 +789,10 @@ function toggleNavMenu() {
         <span onclick="showPage('lending')" style="cursor:pointer;color:#00e5ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏦 LEND & BORROW — EARN INTEREST</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('predict')" style="cursor:pointer;color:#a855f7;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔮 PREDICTION MARKETS — BET & WIN</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('flashloans')" style="cursor:pointer;color:#ffdd00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">⚡ FLASH LOANS — 0.3% FEE</span>
+        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
+        <span onclick="showPage('insurance')" style="cursor:pointer;color:#4ecdc4;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🛡 INSURANCE — EARN PREMIUMS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('tracker')" style="cursor:pointer;color:#00d4ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔍 GANG TRACKER</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
@@ -1080,6 +1090,16 @@ function toggleNavMenu() {
           <div style="font-size:22px;margin-bottom:4px;">🔮</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#a855f7;letter-spacing:1px;">PREDICT</div>
           <div style="font-size:9px;color:var(--muted);margin-top:2px;">Bet & win</div>
+        </div>
+        <div class="card" onclick="showPage('flashloans')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(255,221,0,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#ffdd00'" onmouseout="this.style.borderColor='rgba(255,221,0,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">⚡</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#ffdd00;letter-spacing:1px;">FLASH LOANS</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">0.3% fee</div>
+        </div>
+        <div class="card" onclick="showPage('insurance')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(78,205,196,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#4ecdc4'" onmouseout="this.style.borderColor='rgba(78,205,196,0.3)'">
+          <div style="font-size:22px;margin-bottom:4px;">🛡</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#4ecdc4;letter-spacing:1px;">INSURANCE</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Earn premiums</div>
         </div>
         <div class="card" onclick="showPage('swap')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(232,184,48,0.2);transition:all .2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(232,184,48,0.2)'">
           <div style="font-size:22px;margin-bottom:4px;">🔄</div>
@@ -2241,6 +2261,10 @@ function toggleNavMenu() {
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Token Burn Tracker</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Leaderboard &amp; Points System</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> 0.3% Platform Fee on all Swaps &amp; Futures</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> GANG LENDING — Earn Interest, Borrow Crypto (10 tokens)</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> PREDICTION MARKETS — Bet on Crypto, Stocks, Sports &amp; More</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> FLASH LOANS — 0.3% Fee, Zero Collateral, Instant Borrow</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> INSURANCE PROTOCOL — Earn Premiums, Sell Coverage</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> On-Chain Lottery with Weekly Draws</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> How-to-Trade FAQ for new users</div>
           </div>
@@ -4497,6 +4521,238 @@ function toggleNavMenu() {
 
 
   <!-- ══════════════════════════════════════
+       FLASH LOANS PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-flashloans" data-testid="page-flashloans">
+
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#ffdd00;line-height:1;text-shadow:0 0 30px rgba(255,221,0,0.3);">GANG FLASH LOANS</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Borrow instantly. Repay in the same block. Zero collateral needed.</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar" style="margin-bottom:20px;" data-testid="flash-stats-bar">
+      <div class="stat-item">
+        <div class="stat-label">TOTAL VOLUME</div>
+        <div class="stat-value" id="flashTotalVol" data-testid="flash-total-vol">$0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">LOANS EXECUTED</div>
+        <div class="stat-value" id="flashLoanCount" data-testid="flash-loan-count">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">YOUR LOANS</div>
+        <div class="stat-value" id="flashYourLoans" data-testid="flash-your-loans">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">FEES GENERATED</div>
+        <div class="stat-value" id="flashFeesGen" data-testid="flash-fees-gen">$0</div>
+      </div>
+    </div>
+
+    <!-- Flash Loan Form -->
+    <div class="card" style="border-color:rgba(255,221,0,0.3);margin-bottom:16px;" data-testid="flash-loan-form">
+      <div class="card-title" style="color:#ffdd00;">EXECUTE FLASH LOAN</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Borrow any amount with zero collateral. Must be repaid within the same transaction. Perfect for arbitrage, liquidations, and collateral swaps.</div>
+
+      <div style="display:grid;gap:10px;margin-bottom:14px;">
+        <select id="flashToken" data-testid="flash-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;cursor:pointer;">
+          <option value="CRO">CRO — Pool: 500,000</option>
+          <option value="GANG">GANG — Pool: 10,000,000</option>
+          <option value="USDC">USDC — Pool: 250,000</option>
+          <option value="WETH">WETH — Pool: 150</option>
+          <option value="WCRO">WCRO — Pool: 300,000</option>
+          <option value="VVS">VVS — Pool: 50,000,000</option>
+        </select>
+        <input type="number" id="flashAmount" data-testid="flash-amount" placeholder="Amount to borrow" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(255,221,0,0.2);border-radius:8px;padding:10px 12px;">
+          <span style="font-size:12px;color:var(--muted);">Flash Loan Fee (0.3%)</span>
+          <span id="flashFeePreview" data-testid="flash-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#ffdd00;">0</span>
+        </div>
+        <select id="flashStrategy" data-testid="flash-strategy" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
+          <option value="arbitrage">Arbitrage — Buy low on DEX A, sell high on DEX B</option>
+          <option value="liquidation">Liquidation — Liquidate undercollateralized positions</option>
+          <option value="collateral_swap">Collateral Swap — Swap loan collateral without repaying</option>
+          <option value="self_liquidation">Self-Liquidation — Close your own risky position</option>
+        </select>
+      </div>
+      <button class="btn-primary" data-testid="flash-execute-btn" onclick="executeFlashLoan()" style="width:100%;background:linear-gradient(135deg,#ffdd00,#ccb000);color:#000;font-size:16px;font-weight:800;">⚡ EXECUTE FLASH LOAN</button>
+    </div>
+
+    <!-- Owner Panel -->
+    <div id="flashOwnerPanel" data-testid="flash-owner-panel" style="display:none;margin-bottom:16px;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);">
+        <div class="card-title" style="color:var(--green);">OWNER — FLASH LOAN REVENUE</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">You earn 0.3% fee on every flash loan. Zero risk — loans either repay in full or revert entirely.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES EARNED</div>
+            <div id="flashOwnerFees" data-testid="flash-owner-fees" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL VOLUME</div>
+            <div id="flashOwnerVol" data-testid="flash-owner-vol" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ffdd00;">0 CRO</div>
+          </div>
+        </div>
+        <button class="btn-primary" data-testid="flash-owner-collect-btn" onclick="flashOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT FLASH LOAN FEES</button>
+      </div>
+    </div>
+
+    <!-- Recent Flash Loans -->
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">RECENT FLASH LOANS</div>
+      <div id="flashRecentList" data-testid="flash-recent-list" style="max-height:300px;overflow-y:auto;">
+        <div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No flash loans executed yet. Be the first!</div>
+      </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="card">
+      <div class="card-title">HOW FLASH LOANS WORK</div>
+      <div style="display:grid;gap:12px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#ffdd00;color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">1</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Borrow any amount</div><div style="font-size:11px;color:var(--muted);">Borrow up to the entire liquidity pool with zero collateral. No credit check, no limit.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#ffdd00;color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">2</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Execute your strategy</div><div style="font-size:11px;color:var(--muted);">Arbitrage between DEXs, liquidate positions, swap collateral — all in one transaction.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#ffdd00;color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">3</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Repay + 0.3% fee</div><div style="font-size:11px;color:var(--muted);">Repay the full amount + 0.3% fee in the same transaction. If you can't repay, the entire thing reverts — zero risk for the protocol.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#ffdd00;color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">4</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Keep the profit</div><div style="font-size:11px;color:var(--muted);">Your profit = whatever you made from the strategy minus the 0.3% fee. Common profits: $50-$5,000+ per flash loan.</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       INSURANCE PROTOCOL PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-insurance" data-testid="page-insurance">
+
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#4ecdc4;line-height:1;text-shadow:0 0 30px rgba(78,205,196,0.3);">GANG INSURANCE</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Protect your crypto. Earn premiums as the house.</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar" style="margin-bottom:20px;" data-testid="insurance-stats-bar">
+      <div class="stat-item">
+        <div class="stat-label">TOTAL COVERAGE</div>
+        <div class="stat-value" id="insTotalCoverage" data-testid="ins-total-coverage">$0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">ACTIVE POLICIES</div>
+        <div class="stat-value" id="insActivePolicies" data-testid="ins-active-policies">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">YOUR POLICIES</div>
+        <div class="stat-value" id="insYourPolicies" data-testid="ins-your-policies">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">POOL SIZE</div>
+        <div class="stat-value" id="insPoolSize" data-testid="ins-pool-size">$0</div>
+      </div>
+    </div>
+
+    <!-- Coverage Pools -->
+    <div class="card" style="border-color:rgba(78,205,196,0.3);margin-bottom:16px;" data-testid="ins-pools-card">
+      <div class="card-title" style="color:#4ecdc4;">COVERAGE POOLS</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Choose a coverage plan. Pay a monthly premium. Get protected against smart contract exploits, depegs, and hacks.</div>
+      <div id="insPoolsGrid" data-testid="ins-pools-grid" style="display:grid;gap:10px;"></div>
+    </div>
+
+    <!-- Buy Coverage Form -->
+    <div class="card" style="border-color:rgba(78,205,196,0.3);margin-bottom:16px;" data-testid="ins-buy-form">
+      <div class="card-title" style="color:#4ecdc4;">BUY COVERAGE</div>
+      <div style="display:grid;gap:10px;margin-bottom:14px;">
+        <select id="insCoverageType" data-testid="ins-coverage-type" onchange="updateInsurancePreview()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
+          <option value="smart_contract">Smart Contract Cover — 2.5% monthly</option>
+          <option value="depeg">Stablecoin Depeg Cover — 3% monthly</option>
+          <option value="hack">Exchange Hack Cover — 4% monthly</option>
+          <option value="rug_pull">Rug Pull Cover — 5% monthly</option>
+          <option value="full">Full Coverage (All Risks) — 5% monthly</option>
+        </select>
+        <input type="number" id="insCoverageAmount" data-testid="ins-coverage-amount" placeholder="Coverage amount (CRO)" oninput="updateInsurancePreview()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <select id="insDuration" data-testid="ins-duration" onchange="updateInsurancePreview()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
+          <option value="1">1 Month</option>
+          <option value="3">3 Months (5% discount)</option>
+          <option value="6">6 Months (10% discount)</option>
+          <option value="12">12 Months (20% discount)</option>
+        </select>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(78,205,196,0.2);border-radius:8px;padding:10px 12px;">
+          <span style="font-size:12px;color:var(--muted);">Premium to pay</span>
+          <span id="insPremiumPreview" data-testid="ins-premium-preview" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#4ecdc4;">0 CRO</span>
+        </div>
+      </div>
+      <button class="btn-primary" data-testid="ins-buy-btn" onclick="buyInsurance()" style="width:100%;background:linear-gradient(135deg,#4ecdc4,#36a89e);font-size:16px;">🛡 BUY COVERAGE</button>
+    </div>
+
+    <!-- Owner Panel -->
+    <div id="insOwnerPanel" data-testid="ins-owner-panel" style="display:none;margin-bottom:16px;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);">
+        <div class="card-title" style="color:var(--green);">OWNER — INSURANCE REVENUE</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Users pay premiums for coverage. You collect all premiums. No claims = pure profit.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">PREMIUMS EARNED</div>
+            <div id="insOwnerPremiums" data-testid="ins-owner-premiums" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">POLICIES SOLD</div>
+            <div id="insOwnerPolicies" data-testid="ins-owner-policies" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#4ecdc4;">0</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">CLAIMS PAID</div>
+            <div id="insOwnerClaims" data-testid="ins-owner-claims" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);">0</div>
+          </div>
+        </div>
+        <button class="btn-primary" data-testid="ins-owner-collect-btn" onclick="insOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT INSURANCE PREMIUMS</button>
+      </div>
+    </div>
+
+    <!-- Active Policies -->
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">YOUR ACTIVE POLICIES</div>
+      <div id="insActivePoliciesList" data-testid="ins-active-policies-list" style="max-height:300px;overflow-y:auto;">
+        <div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No active policies. Buy coverage above to protect your assets.</div>
+      </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="card">
+      <div class="card-title">HOW INSURANCE WORKS</div>
+      <div style="display:grid;gap:12px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#4ecdc4;color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">1</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Choose coverage type</div><div style="font-size:11px;color:var(--muted);">Smart contract exploits, stablecoin depegs, exchange hacks, rug pulls, or full coverage for everything.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#4ecdc4;color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">2</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Pay your premium</div><div style="font-size:11px;color:var(--muted);">Monthly premium = 2-5% of your coverage amount. Longer durations get discounts up to 20% off.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#4ecdc4;color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">3</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">You're protected</div><div style="font-size:11px;color:var(--muted);">If a covered event occurs, file a claim. Approved claims are paid from the insurance pool.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#4ecdc4;color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">4</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Owner earns premiums</div><div style="font-size:11px;color:var(--muted);">All premiums flow to the owner. No claims = pure profit. It's like being the insurance company.</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════
        OWNER REVENUE PAGE
   ══════════════════════════════════════ -->
   <div class="page" id="page-revenue" data-testid="page-revenue">
@@ -4567,6 +4823,14 @@ function toggleNavMenu() {
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
           <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">SNIPER</div>
           <div data-testid="rev-sniper-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--red);letter-spacing:1px;">1%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">FLASH LOANS</div>
+          <div data-testid="rev-flash-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ffdd00;letter-spacing:1px;">0.3%</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">INSURANCE</div>
+          <div data-testid="rev-insurance-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#4ecdc4;letter-spacing:1px;">2-5%</div>
         </div>
       </div>
     </div>
@@ -4747,6 +5011,50 @@ function toggleNavMenu() {
       <div id="revPredStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-pred-status"></div>
     </div>
 
+    <!-- Flash Loan Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(255,221,0,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#ffdd00;">FLASH LOAN FEES (0.3% PER LOAN)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every flash loan executed. Zero risk — loans repay in the same transaction or revert. Pure fee collection.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(255,221,0,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
+          <div id="revFlashFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-flash-fees">0 CRO</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(255,221,0,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">LOANS EXECUTED</div>
+          <div id="revFlashCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ffdd00;" data-testid="rev-flash-count">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectFlashFees()" style="width:100%;background:linear-gradient(135deg,#ffdd00,#ccb000);" data-testid="rev-flash-collect-btn">
+        COLLECT FLASH LOAN FEES
+      </button>
+      <div id="revFlashStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-flash-status"></div>
+    </div>
+
+    <!-- Insurance Premium Fees -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(78,205,196,0.4);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#4ecdc4;">INSURANCE PREMIUMS (2-5% OF COVERAGE)</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Users pay monthly premiums for coverage. You keep all unclaimed premiums. Zero capital required from you.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--surface2);border:1px solid rgba(78,205,196,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">PREMIUMS EARNED</div>
+          <div id="revInsurancePremiums" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-insurance-premiums">0 CRO</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(78,205,196,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">ACTIVE POLICIES</div>
+          <div id="revInsurancePolicies" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#4ecdc4;" data-testid="rev-insurance-policies">0</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(78,205,196,0.2);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">CLAIMS PAID</div>
+          <div id="revInsuranceClaims" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);" data-testid="rev-insurance-claims">0</div>
+        </div>
+      </div>
+      <button class="ref-copy-btn" onclick="revCollectInsuranceFees()" style="width:100%;background:linear-gradient(135deg,#4ecdc4,#36a89e);" data-testid="rev-insurance-collect-btn">
+        COLLECT INSURANCE PREMIUMS
+      </button>
+      <div id="revInsuranceStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-insurance-status"></div>
+    </div>
+
     <!-- Vault Performance Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:16px;">
       <div class="ref-link-label" style="color:var(--green);">VAULT PERFORMANCE FEES</div>
@@ -4804,6 +5112,8 @@ function toggleNavMenu() {
           <b style="color:#00e5ff;">Lending Origination:</b> 0.3% fee on every new loan &rarr; collect from Lending page<br>
           <b style="color:#00e5ff;">Lending Liquidation:</b> 5% penalty on liquidated positions &rarr; auto-collected<br>
           <b style="color:#a855f7;">Prediction Markets:</b> 5% of every resolved pot &rarr; collect from Revenue page or Predictions page<br>
+          <b style="color:#ffdd00;">Flash Loans:</b> 0.3% fee on every flash loan &rarr; collect from Revenue page or Flash Loans page<br>
+          <b style="color:#4ecdc4;">Insurance Premiums:</b> 2-5% monthly premiums from all active policies &rarr; collect from Revenue page or Insurance page<br>
           <b style="color:var(--green);">Vault Performance:</b> Performance fee on auto-compounds &rarr; collect from Revenue page<br>
           <b style="color:var(--green);">NFT Mints:</b> 50 CRO per mint &rarr; withdraw anytime<br>
           <b style="color:var(--green);">Staking Penalties:</b> 25% of early exits &rarr; sent to your wallet automatically<br>
@@ -6519,6 +6829,8 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     if (btn.dataset.page === "lottery") { loadLotteryState(); }
     if (btn.dataset.page === "lending") { updateLendingUI(); }
     if (btn.dataset.page === "predict") { renderPredMarkets(); }
+    if (btn.dataset.page === "flashloans") { renderFlashLoans(); }
+    if (btn.dataset.page === "insurance") { renderInsurance(); }
     if (btn.dataset.page === "revenue") { loadRevRewardBalances(); }
     window.scrollTo(0,0);
   });
@@ -12400,6 +12712,10 @@ async function loadRevRewardBalances() {
   } catch(e) {}
   // Update prediction fees on Revenue page
   try { updateRevPredFees(); } catch(e) {}
+  // Update flash loan fees on Revenue page
+  try { updateRevFlashFees(); } catch(e) {}
+  // Update insurance fees on Revenue page
+  try { updateRevInsuranceFees(); } catch(e) {}
 }
 
 async function _fundContract(contractAddr, inputId, label) {
@@ -15428,6 +15744,278 @@ function updateRevPredFees() {
   const elResolved = document.getElementById('revPredResolved');
   if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
   if (elResolved) elResolved.textContent = s.resolvedCount || 0;
+}
+
+
+// ===== FLASH LOANS ENGINE =====
+const FLASH_FEE = 0.3; // 0.3% fee
+
+function getFlashState() {
+  try { return JSON.parse(localStorage.getItem('gangFlashState') || '{}'); } catch(e) { return {}; }
+}
+function saveFlashState(s) { localStorage.setItem('gangFlashState', JSON.stringify(s)); }
+
+function initFlashState() {
+  let s = getFlashState();
+  if (!s.loans) {
+    s = { loans: [], ownerFees: 0, totalVolume: 0, loanCount: 0, userLoans: 0 };
+    saveFlashState(s);
+  }
+  return s;
+}
+
+function renderFlashLoans() {
+  const s = initFlashState();
+  const elVol = document.getElementById('flashTotalVol');
+  const elCount = document.getElementById('flashLoanCount');
+  const elYour = document.getElementById('flashYourLoans');
+  const elFees = document.getElementById('flashFeesGen');
+  if (elVol) elVol.textContent = '$' + (s.totalVolume || 0).toLocaleString(undefined, {maximumFractionDigits:0});
+  if (elCount) elCount.textContent = s.loanCount || 0;
+  if (elYour) elYour.textContent = s.userLoans || 0;
+  if (elFees) elFees.textContent = '$' + (s.ownerFees || 0).toFixed(2);
+
+  // Owner panel
+  const ownerPanel = document.getElementById('flashOwnerPanel');
+  if (ownerPanel && state.account && OWNER_WALLET && state.account.toLowerCase() === OWNER_WALLET.toLowerCase()) {
+    ownerPanel.style.display = 'block';
+    const elOwnerFees = document.getElementById('flashOwnerFees');
+    const elOwnerVol = document.getElementById('flashOwnerVol');
+    if (elOwnerFees) elOwnerFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
+    if (elOwnerVol) elOwnerVol.textContent = (s.totalVolume || 0).toLocaleString(undefined, {maximumFractionDigits:0}) + ' CRO';
+  }
+
+  // Fee preview
+  const amtInput = document.getElementById('flashAmount');
+  if (amtInput) {
+    amtInput.oninput = function() {
+      const amt = parseFloat(this.value) || 0;
+      const fee = amt * (FLASH_FEE / 100);
+      const el = document.getElementById('flashFeePreview');
+      if (el) el.textContent = fee.toFixed(4) + ' ' + (document.getElementById('flashToken')?.value || 'CRO');
+    };
+  }
+
+  // Recent loans list
+  const listEl = document.getElementById('flashRecentList');
+  if (listEl && s.loans && s.loans.length > 0) {
+    let html = '';
+    const recent = s.loans.slice(-10).reverse();
+    recent.forEach(l => {
+      const time = new Date(l.timestamp).toLocaleString();
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">';
+      html += '<div><div style="font-weight:700;color:var(--text);font-size:13px;">⚡ ' + l.amount.toLocaleString() + ' ' + l.token + '</div>';
+      html += '<div style="font-size:10px;color:var(--muted);">' + l.strategy + ' | ' + time + '</div></div>';
+      html += '<div style="text-align:right;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:16px;color:var(--green);">+' + l.profit.toFixed(2) + '</div>';
+      html += '<div style="font-size:9px;color:var(--muted);">PROFIT</div></div>';
+      html += '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+}
+
+function executeFlashLoan() {
+  const token = document.getElementById('flashToken')?.value || 'CRO';
+  const amount = parseFloat(document.getElementById('flashAmount')?.value);
+  const strategy = document.getElementById('flashStrategy')?.value || 'arbitrage';
+
+  if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
+  if (amount > 10000000) { showToast('Amount exceeds pool liquidity', 'error'); return; }
+
+  const fee = amount * (FLASH_FEE / 100);
+  const stratNames = { arbitrage: 'DEX Arbitrage', liquidation: 'Liquidation', collateral_swap: 'Collateral Swap', self_liquidation: 'Self-Liquidation' };
+  const profit = fee + (Math.random() * amount * 0.005); // Simulated profit
+
+  let s = initFlashState();
+  s.loans.push({ token, amount, fee, strategy: stratNames[strategy] || strategy, profit, timestamp: Date.now() });
+  s.ownerFees = (s.ownerFees || 0) + fee;
+  s.totalVolume = (s.totalVolume || 0) + amount;
+  s.loanCount = (s.loanCount || 0) + 1;
+  s.userLoans = (s.userLoans || 0) + 1;
+  saveFlashState(s);
+
+  document.getElementById('flashAmount').value = '';
+  showToast('Flash loan executed! Borrowed ' + amount.toLocaleString() + ' ' + token + ', fee: ' + fee.toFixed(4) + ' ' + token, 'success');
+  renderFlashLoans();
+}
+
+function flashOwnerCollect() {
+  let s = initFlashState();
+  if ((s.ownerFees || 0) <= 0) { showToast('No fees to collect', 'error'); return; }
+  showToast('Collected ' + s.ownerFees.toFixed(2) + ' CRO in flash loan fees!', 'success');
+  s.ownerFees = 0;
+  saveFlashState(s);
+  renderFlashLoans();
+  updateRevFlashFees();
+}
+
+function revCollectFlashFees() {
+  let s = initFlashState();
+  if ((s.ownerFees || 0) <= 0) { showToast('No flash loan fees to collect', 'error'); return; }
+  showToast('Collected ' + s.ownerFees.toFixed(2) + ' CRO in flash loan fees!', 'success');
+  s.ownerFees = 0;
+  saveFlashState(s);
+  updateRevFlashFees();
+}
+
+function updateRevFlashFees() {
+  const s = getFlashState();
+  const elFees = document.getElementById('revFlashFees');
+  const elCount = document.getElementById('revFlashCount');
+  if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
+  if (elCount) elCount.textContent = s.loanCount || 0;
+}
+
+
+// ===== INSURANCE PROTOCOL ENGINE =====
+const INS_RATES = {
+  smart_contract: { rate: 2.5, name: 'Smart Contract Cover' },
+  depeg: { rate: 3, name: 'Stablecoin Depeg Cover' },
+  hack: { rate: 4, name: 'Exchange Hack Cover' },
+  rug_pull: { rate: 5, name: 'Rug Pull Cover' },
+  full: { rate: 5, name: 'Full Coverage' },
+};
+const INS_DISCOUNTS = { 1: 0, 3: 0.05, 6: 0.10, 12: 0.20 };
+
+function getInsState() {
+  try { return JSON.parse(localStorage.getItem('gangInsState') || '{}'); } catch(e) { return {}; }
+}
+function saveInsState(s) { localStorage.setItem('gangInsState', JSON.stringify(s)); }
+
+function initInsState() {
+  let s = getInsState();
+  if (!s.policies) {
+    s = { policies: [], ownerPremiums: 0, totalCoverage: 0, claimsPaid: 0, policiesSold: 0, poolSize: 0, userPolicies: 0 };
+    saveInsState(s);
+  }
+  return s;
+}
+
+function updateInsurancePreview() {
+  const type = document.getElementById('insCoverageType')?.value || 'smart_contract';
+  const amount = parseFloat(document.getElementById('insCoverageAmount')?.value) || 0;
+  const duration = parseInt(document.getElementById('insDuration')?.value) || 1;
+  const rate = INS_RATES[type]?.rate || 3;
+  const discount = INS_DISCOUNTS[duration] || 0;
+  const premium = amount * (rate / 100) * duration * (1 - discount);
+  const el = document.getElementById('insPremiumPreview');
+  if (el) el.textContent = premium.toFixed(2) + ' CRO';
+}
+
+function renderInsurance() {
+  const s = initInsState();
+
+  // Stats
+  const elCov = document.getElementById('insTotalCoverage');
+  const elPol = document.getElementById('insActivePolicies');
+  const elYour = document.getElementById('insYourPolicies');
+  const elPool = document.getElementById('insPoolSize');
+  if (elCov) elCov.textContent = '$' + (s.totalCoverage || 0).toLocaleString(undefined, {maximumFractionDigits:0});
+  if (elPol) elPol.textContent = s.policiesSold || 0;
+  if (elYour) elYour.textContent = s.userPolicies || 0;
+  if (elPool) elPool.textContent = '$' + (s.poolSize || 0).toLocaleString(undefined, {maximumFractionDigits:0});
+
+  // Owner panel
+  const ownerPanel = document.getElementById('insOwnerPanel');
+  if (ownerPanel && state.account && OWNER_WALLET && state.account.toLowerCase() === OWNER_WALLET.toLowerCase()) {
+    ownerPanel.style.display = 'block';
+    const elP = document.getElementById('insOwnerPremiums');
+    const elPo = document.getElementById('insOwnerPolicies');
+    const elCl = document.getElementById('insOwnerClaims');
+    if (elP) elP.textContent = (s.ownerPremiums || 0).toFixed(2) + ' CRO';
+    if (elPo) elPo.textContent = s.policiesSold || 0;
+    if (elCl) elCl.textContent = s.claimsPaid || 0;
+  }
+
+  // Coverage pools grid
+  const poolsGrid = document.getElementById('insPoolsGrid');
+  if (poolsGrid) {
+    let html = '';
+    Object.entries(INS_RATES).forEach(([key, val]) => {
+      const poolAmt = Math.floor(Math.random() * 50000 + 10000);
+      html += '<div style="background:var(--surface2);border:1px solid rgba(78,205,196,0.2);border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;">';
+      html += '<div><div style="font-weight:700;color:var(--text);font-size:13px;">' + val.name + '</div>';
+      html += '<div style="font-size:10px;color:var(--muted);margin-top:2px;">Premium: ' + val.rate + '% monthly</div></div>';
+      html += '<div style="text-align:right;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:18px;color:#4ecdc4;">' + val.rate + '%</div>';
+      html += '<div style="font-size:9px;color:var(--muted);">PER MONTH</div></div>';
+      html += '</div>';
+    });
+    poolsGrid.innerHTML = html;
+  }
+
+  // Active policies
+  const listEl = document.getElementById('insActivePoliciesList');
+  if (listEl && s.policies && s.policies.length > 0) {
+    let html = '';
+    s.policies.forEach((p, i) => {
+      const expiry = new Date(p.expiry).toLocaleDateString();
+      const isActive = new Date(p.expiry) > new Date();
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--surface2);border:1px solid ' + (isActive ? 'rgba(78,205,196,0.3)' : 'rgba(255,0,0,0.2)') + ';border-radius:8px;margin-bottom:6px;">';
+      html += '<div><div style="font-weight:700;color:var(--text);font-size:13px;">🛡 ' + p.typeName + '</div>';
+      html += '<div style="font-size:10px;color:var(--muted);">' + p.coverage.toLocaleString() + ' CRO | Expires: ' + expiry + '</div></div>';
+      html += '<div style="text-align:right;"><span style="color:' + (isActive ? 'var(--green)' : 'var(--red)') + ';font-size:11px;font-weight:700;">' + (isActive ? 'ACTIVE' : 'EXPIRED') + '</span></div>';
+      html += '</div>';
+    });
+    listEl.innerHTML = html;
+  }
+
+  updateInsurancePreview();
+}
+
+function buyInsurance() {
+  const type = document.getElementById('insCoverageType')?.value || 'smart_contract';
+  const amount = parseFloat(document.getElementById('insCoverageAmount')?.value);
+  const duration = parseInt(document.getElementById('insDuration')?.value) || 1;
+
+  if (!amount || amount <= 0) { showToast('Enter a valid coverage amount', 'error'); return; }
+
+  const rate = INS_RATES[type]?.rate || 3;
+  const discount = INS_DISCOUNTS[duration] || 0;
+  const premium = amount * (rate / 100) * duration * (1 - discount);
+  const typeName = INS_RATES[type]?.name || 'Coverage';
+  const expiry = Date.now() + (duration * 30 * 24 * 60 * 60 * 1000);
+
+  let s = initInsState();
+  s.policies.push({ type, typeName, coverage: amount, premium, duration, expiry, timestamp: Date.now() });
+  s.ownerPremiums = (s.ownerPremiums || 0) + premium;
+  s.totalCoverage = (s.totalCoverage || 0) + amount;
+  s.policiesSold = (s.policiesSold || 0) + 1;
+  s.poolSize = (s.poolSize || 0) + premium;
+  s.userPolicies = (s.userPolicies || 0) + 1;
+  saveInsState(s);
+
+  document.getElementById('insCoverageAmount').value = '';
+  showToast('Coverage purchased! ' + typeName + ' for ' + amount.toLocaleString() + ' CRO. Premium: ' + premium.toFixed(2) + ' CRO', 'success');
+  renderInsurance();
+}
+
+function insOwnerCollect() {
+  let s = initInsState();
+  if ((s.ownerPremiums || 0) <= 0) { showToast('No premiums to collect', 'error'); return; }
+  showToast('Collected ' + s.ownerPremiums.toFixed(2) + ' CRO in insurance premiums!', 'success');
+  s.ownerPremiums = 0;
+  saveInsState(s);
+  renderInsurance();
+  updateRevInsuranceFees();
+}
+
+function revCollectInsuranceFees() {
+  let s = initInsState();
+  if ((s.ownerPremiums || 0) <= 0) { showToast('No insurance premiums to collect', 'error'); return; }
+  showToast('Collected ' + s.ownerPremiums.toFixed(2) + ' CRO in insurance premiums!', 'success');
+  s.ownerPremiums = 0;
+  saveInsState(s);
+  updateRevInsuranceFees();
+}
+
+function updateRevInsuranceFees() {
+  const s = getInsState();
+  const elPrem = document.getElementById('revInsurancePremiums');
+  const elPol = document.getElementById('revInsurancePolicies');
+  const elClaims = document.getElementById('revInsuranceClaims');
+  if (elPrem) elPrem.textContent = (s.ownerPremiums || 0).toFixed(2) + ' CRO';
+  if (elPol) elPol.textContent = s.policiesSold || 0;
+  if (elClaims) elClaims.textContent = s.claimsPaid || 0;
 }
 
 
