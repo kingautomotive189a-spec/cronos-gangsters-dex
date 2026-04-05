@@ -380,6 +380,58 @@ async def stop_bot():
         bot_process = None
         return {"success": True, "message": "Bot force stopped"}
 
+
+# CoinGecko proxy cache
+_cg_cache = {}
+_cg_cache_ttl = 30  # seconds
+
+@api_router.get("/coingecko/price")
+async def proxy_coingecko_price(ids: str, vs_currencies: str = "usd"):
+    """Proxy CoinGecko price API to avoid CORS — with cache"""
+    cache_key = f"price_{ids}_{vs_currencies}"
+    now = datetime.now(timezone.utc).timestamp()
+    if cache_key in _cg_cache and now - _cg_cache[cache_key]['ts'] < _cg_cache_ttl:
+        return _cg_cache[cache_key]['data']
+    url = f"https://api.coingecko.com/api/v3/simple/price?ids={ids}&vs_currencies={vs_currencies}&include_24hr_change=true&include_24hr_vol=true"
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as resp:
+                data = await resp.json()
+                if 'status' in data and 'error_code' in data.get('status', {}):
+                    if cache_key in _cg_cache:
+                        return _cg_cache[cache_key]['data']
+                    return data
+                _cg_cache[cache_key] = {'data': data, 'ts': now}
+                return data
+    except Exception:
+        if cache_key in _cg_cache:
+            return _cg_cache[cache_key]['data']
+        return {}
+
+@api_router.get("/coingecko/chart")
+async def proxy_coingecko_chart(id: str, days: int = 30):
+    """Proxy CoinGecko market chart API to avoid CORS — with cache"""
+    cache_key = f"chart_{id}_{days}"
+    now = datetime.now(timezone.utc).timestamp()
+    if cache_key in _cg_cache and now - _cg_cache[cache_key]['ts'] < _cg_cache_ttl:
+        return _cg_cache[cache_key]['data']
+    url = f"https://api.coingecko.com/api/v3/coins/{id}/market_chart?vs_currency=usd&days={days}&interval=daily"
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as resp:
+                data = await resp.json()
+                if 'status' in data and 'error_code' in data.get('status', {}):
+                    if cache_key in _cg_cache:
+                        return _cg_cache[cache_key]['data']
+                    return data
+                _cg_cache[cache_key] = {'data': data, 'ts': now}
+                return data
+    except Exception:
+        if cache_key in _cg_cache:
+            return _cg_cache[cache_key]['data']
+        return {}
+
+
 @api_router.get("/bot/commands")
 async def get_bot_commands():
     """Get list of available bot commands"""

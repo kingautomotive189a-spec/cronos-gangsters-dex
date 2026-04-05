@@ -660,6 +660,7 @@
       <button class="nav-btn" data-page="perpdex" data-testid="nav-perpdex-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-3 3"/><circle cx="18" cy="9" r="2"/></svg></span>Perpetual DEX<span class="nav-desc">No expiry</span></button>
       <button class="nav-btn" data-page="copytrade" data-testid="nav-copytrade-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Copy Trading<span class="nav-desc">Follow pros</span></button>
       <button class="nav-btn" data-page="flashloans" data-testid="nav-flashloans-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>Flash Loans</button>
+      <button class="nav-btn" data-page="signals" data-testid="nav-signals-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Trading Signals<span class="nav-desc">Live Analysis</span></button>
       <div class="nav-divider"></div>
 
       <div class="nav-group-label">EARN</div>
@@ -6480,6 +6481,83 @@ function toggleNavMenu() {
     </div>
 
   </div>
+
+
+  <!-- ═══════════════════════════════════════════ TRADING SIGNALS PAGE ═══════════════════════════════════════════ -->
+  <div class="page" id="page-signals" data-testid="page-signals">
+
+    <div class="ref-hero" style="margin-bottom:20px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:var(--gold);line-height:1;text-shadow:0 0 30px rgba(212,160,23,0.3);">TRADING SIGNALS</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px;letter-spacing:1px;">Real-time technical analysis — Live from CoinGecko API — Auto-refreshes every 60s</div>
+    </div>
+
+    <!-- Token Selector -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;" id="signalTokenBar" data-testid="signal-token-bar"></div>
+
+    <!-- Signal Summary Banner -->
+    <div id="signalSummaryBanner" data-testid="signal-summary" style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:20px;margin-bottom:16px;text-align:center;">
+      <div style="font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;">OVERALL SIGNAL</div>
+      <div id="signalOverallLabel" style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;color:#27ae60;">LOADING...</div>
+      <div id="signalOverallDesc" style="font-size:12px;color:var(--muted);margin-top:4px;">Calculating indicators from live market data...</div>
+    </div>
+
+    <!-- Price & Change -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">PRICE</div>
+        <div id="sigPrice" data-testid="sig-price" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);margin-top:4px;">—</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">24H CHANGE</div>
+        <div id="sig24hChange" data-testid="sig-24h-change" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);margin-top:4px;">—</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">24H VOLUME</div>
+        <div id="sig24hVol" data-testid="sig-24h-vol" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);margin-top:4px;">—</div>
+      </div>
+    </div>
+
+    <!-- Signal Gauge -->
+    <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:20px;margin-bottom:16px;" data-testid="signal-gauge-section">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">SIGNAL STRENGTH</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:11px;color:#e53935;font-weight:700;">STRONG SELL</span>
+        <span style="font-size:11px;color:#ff9800;font-weight:700;">SELL</span>
+        <span style="font-size:11px;color:var(--muted);font-weight:700;">NEUTRAL</span>
+        <span style="font-size:11px;color:#66bb6a;font-weight:700;">BUY</span>
+        <span style="font-size:11px;color:#27ae60;font-weight:700;">STRONG BUY</span>
+      </div>
+      <div style="position:relative;height:12px;background:linear-gradient(to right,#e53935,#ff9800,#757575,#66bb6a,#27ae60);border-radius:6px;overflow:hidden;">
+        <div id="signalGaugeNeedle" style="position:absolute;top:-2px;width:4px;height:16px;background:#fff;border-radius:2px;box-shadow:0 0 8px rgba(255,255,255,0.8);transition:left 0.5s ease;left:50%;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:10px;">
+        <div id="sigBuyCount" style="font-size:12px;color:var(--green);font-weight:700;">Buy: 0</div>
+        <div id="sigNeutralCount" style="font-size:12px;color:var(--muted);font-weight:700;">Neutral: 0</div>
+        <div id="sigSellCount" style="font-size:12px;color:#e53935;font-weight:700;">Sell: 0</div>
+      </div>
+    </div>
+
+    <!-- Technical Indicators Grid -->
+    <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:20px;margin-bottom:16px;" data-testid="signal-indicators-section">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">TECHNICAL INDICATORS</div>
+      <div id="signalIndicatorsGrid" style="display:grid;gap:6px;"></div>
+    </div>
+
+    <!-- Moving Averages -->
+    <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:20px;margin-bottom:16px;" data-testid="signal-ma-section">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">MOVING AVERAGES</div>
+      <div id="signalMAGrid" style="display:grid;gap:6px;"></div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:11px;color:var(--muted);line-height:1.5;">
+        Trading signals are calculated from real market data using standard technical analysis formulas. This is NOT financial advice. Always DYOR. Past performance does not guarantee future results.
+      </div>
+    </div>
+
+  </div>
+
 
   <!-- ═══════════════════════════════════════════ KYC & AUDIT PAGE ═══════════════════════════════════════════ -->
   <div class="page" id="page-security" data-testid="page-security">
@@ -21900,7 +21978,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       'nfts':'nfts','referral':'referral','create':'create','marketplace':'market',
       'market':'market','swap':'swap','liquidity':'liquidity','portfolio':'portfolio',
       'token':'token','roadmap':'roadmap','leaderboard':'leaderboard','tracker':'tracker','futures':'futures',
-      'copytrade':'copytrade','revstaking':'revstaking','limitorders':'limitorders','perpdex':'perpdex','otc':'otc','dao':'dao'
+      'copytrade':'copytrade','revstaking':'revstaking','limitorders':'limitorders','perpdex':'perpdex','otc':'otc','dao':'dao',
+      'signals':'signals','security':'security'
     };
     var page = pageMap[hash] || hash;
     var btn = document.querySelector('[data-page="' + page + '"]');
@@ -21909,6 +21988,299 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   if (document.readyState === 'complete') { setTimeout(navigateToHash, 100); }
   else { window.addEventListener('load', function() { setTimeout(navigateToHash, 100); }); }
   window.addEventListener('hashchange', navigateToHash);
+})();
+
+// ═══════════════════════════════════════════ TRADING SIGNALS ENGINE (REAL DATA) ═══════════════════════════════════════════
+(function() {
+  const SIG_TOKENS = [
+    { id: 'bitcoin', sym: 'BTC', name: 'Bitcoin', logo: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png', color: '#f7931a' },
+    { id: 'ethereum', sym: 'ETH', name: 'Ethereum', logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png', color: '#627eea' },
+    { id: 'crypto-com-chain', sym: 'CRO', name: 'Cronos', logo: 'https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png', color: '#002d74' },
+    { id: 'solana', sym: 'SOL', name: 'Solana', logo: 'https://assets.coingecko.com/coins/images/4128/small/solana.png', color: '#9945ff' },
+    { id: 'binancecoin', sym: 'BNB', name: 'BNB', logo: 'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png', color: '#f3ba2f' },
+    { id: 'ripple', sym: 'XRP', name: 'XRP', logo: 'https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png', color: '#0085c0' },
+    { id: 'cardano', sym: 'ADA', name: 'Cardano', logo: 'https://assets.coingecko.com/coins/images/975/small/cardano.png', color: '#0033ad' },
+    { id: 'dogecoin', sym: 'DOGE', name: 'Dogecoin', logo: 'https://assets.coingecko.com/coins/images/5/small/dogecoin.png', color: '#c2a633' },
+    { id: 'polkadot', sym: 'DOT', name: 'Polkadot', logo: 'https://assets.coingecko.com/coins/images/12171/small/polkadot.png', color: '#e6007a' },
+    { id: 'chainlink', sym: 'LINK', name: 'Chainlink', logo: 'https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png', color: '#2a5ada' },
+    { id: 'avalanche-2', sym: 'AVAX', name: 'Avalanche', logo: 'https://assets.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png', color: '#e84142' },
+    { id: 'matic-network', sym: 'MATIC', name: 'Polygon', logo: 'https://assets.coingecko.com/coins/images/4713/small/polygon.png', color: '#8247e5' },
+  ];
+  let _sigSelectedToken = SIG_TOKENS[0];
+  let _sigInterval = null;
+
+  function initSignalTokenBar() {
+    const bar = document.getElementById('signalTokenBar');
+    if (!bar) return;
+    bar.innerHTML = SIG_TOKENS.map((t, i) =>
+      `<button onclick="_selectSignalToken(${i})" data-testid="sig-token-${t.sym}" style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;border:1px solid ${i===0?'var(--gold)':'var(--border)'};background:${i===0?'rgba(212,160,23,0.15)':'var(--surface)'};cursor:pointer;transition:all .2s;font-size:12px;color:${i===0?'var(--gold)':'var(--text)'};" id="sigTokBtn${i}">
+        <img src="${t.logo}" style="width:18px;height:18px;border-radius:50%;" loading="lazy" onerror="this.style.display='none'">
+        <span style="font-weight:700;">${t.sym}</span>
+      </button>`
+    ).join('');
+  }
+
+  window._selectSignalToken = function(idx) {
+    _sigSelectedToken = SIG_TOKENS[idx];
+    SIG_TOKENS.forEach((t, i) => {
+      const btn = document.getElementById('sigTokBtn' + i);
+      if (btn) {
+        btn.style.border = i === idx ? '1px solid var(--gold)' : '1px solid var(--border)';
+        btn.style.background = i === idx ? 'rgba(212,160,23,0.15)' : 'var(--surface)';
+        btn.style.color = i === idx ? 'var(--gold)' : 'var(--text)';
+      }
+    });
+    fetchSignalData();
+  };
+
+  function calcRSI(prices, period) {
+    if (prices.length < period + 1) return 50;
+    let gains = 0, losses = 0;
+    for (let i = prices.length - period; i < prices.length; i++) {
+      const diff = prices[i] - prices[i - 1];
+      if (diff > 0) gains += diff; else losses -= diff;
+    }
+    const avgGain = gains / period;
+    const avgLoss = losses / period;
+    if (avgLoss === 0) return 100;
+    const rs = avgGain / avgLoss;
+    return 100 - (100 / (1 + rs));
+  }
+
+  function calcSMA(prices, period) {
+    if (prices.length < period) return prices[prices.length - 1];
+    const slice = prices.slice(-period);
+    return slice.reduce((a, b) => a + b, 0) / period;
+  }
+
+  function calcEMA(prices, period) {
+    if (prices.length < period) return prices[prices.length - 1];
+    const k = 2 / (period + 1);
+    let ema = prices.slice(0, period).reduce((a, b) => a + b, 0) / period;
+    for (let i = period; i < prices.length; i++) {
+      ema = prices[i] * k + ema * (1 - k);
+    }
+    return ema;
+  }
+
+  function calcMACD(prices) {
+    const ema12 = calcEMA(prices, 12);
+    const ema26 = calcEMA(prices, 26);
+    const macdLine = ema12 - ema26;
+    // Approximate signal line
+    const shortPrices = prices.slice(-30);
+    const macdValues = [];
+    for (let i = 26; i < shortPrices.length; i++) {
+      const e12 = calcEMA(shortPrices.slice(0, i + 1), 12);
+      const e26 = calcEMA(shortPrices.slice(0, i + 1), 26);
+      macdValues.push(e12 - e26);
+    }
+    const signalLine = macdValues.length >= 9 ? calcEMA(macdValues, 9) : macdLine;
+    return { macd: macdLine, signal: signalLine, histogram: macdLine - signalLine };
+  }
+
+  function calcStochastic(prices, period) {
+    if (prices.length < period) return 50;
+    const slice = prices.slice(-period);
+    const low = Math.min(...slice);
+    const high = Math.max(...slice);
+    if (high === low) return 50;
+    return ((prices[prices.length - 1] - low) / (high - low)) * 100;
+  }
+
+  function calcWilliamsR(prices, period) {
+    if (prices.length < period) return -50;
+    const slice = prices.slice(-period);
+    const high = Math.max(...slice);
+    const low = Math.min(...slice);
+    if (high === low) return -50;
+    return ((high - prices[prices.length - 1]) / (high - low)) * -100;
+  }
+
+  function calcCCI(prices, period) {
+    if (prices.length < period) return 0;
+    const slice = prices.slice(-period);
+    const mean = slice.reduce((a, b) => a + b, 0) / period;
+    const meanDev = slice.reduce((a, b) => a + Math.abs(b - mean), 0) / period;
+    if (meanDev === 0) return 0;
+    return (prices[prices.length - 1] - mean) / (0.015 * meanDev);
+  }
+
+  function getSignalLabel(val, type) {
+    if (type === 'rsi') {
+      if (val > 70) return { label: 'SELL', color: '#e53935', desc: 'Overbought' };
+      if (val > 60) return { label: 'SELL', color: '#ff9800', desc: 'Near overbought' };
+      if (val < 30) return { label: 'BUY', color: '#27ae60', desc: 'Oversold' };
+      if (val < 40) return { label: 'BUY', color: '#66bb6a', desc: 'Near oversold' };
+      return { label: 'NEUTRAL', color: '#757575', desc: 'Neutral zone' };
+    }
+    if (type === 'macd') {
+      if (val > 0) return { label: 'BUY', color: '#27ae60', desc: 'Bullish momentum' };
+      return { label: 'SELL', color: '#e53935', desc: 'Bearish momentum' };
+    }
+    if (type === 'stoch') {
+      if (val > 80) return { label: 'SELL', color: '#e53935', desc: 'Overbought' };
+      if (val < 20) return { label: 'BUY', color: '#27ae60', desc: 'Oversold' };
+      return { label: 'NEUTRAL', color: '#757575', desc: 'Mid range' };
+    }
+    if (type === 'williams') {
+      if (val > -20) return { label: 'SELL', color: '#e53935', desc: 'Overbought' };
+      if (val < -80) return { label: 'BUY', color: '#27ae60', desc: 'Oversold' };
+      return { label: 'NEUTRAL', color: '#757575', desc: 'Mid range' };
+    }
+    if (type === 'cci') {
+      if (val > 100) return { label: 'SELL', color: '#e53935', desc: 'Overbought' };
+      if (val < -100) return { label: 'BUY', color: '#27ae60', desc: 'Oversold' };
+      return { label: 'NEUTRAL', color: '#757575', desc: 'Neutral' };
+    }
+    if (type === 'ma') {
+      if (val > 0) return { label: 'BUY', color: '#27ae60', desc: 'Price above MA' };
+      return { label: 'SELL', color: '#e53935', desc: 'Price below MA' };
+    }
+    return { label: 'NEUTRAL', color: '#757575', desc: '' };
+  }
+
+  function renderIndicatorRow(name, value, signal) {
+    return `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border-radius:10px;padding:10px 14px;">
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:13px;color:var(--text);">${name}</div>
+        <div style="font-size:10px;color:var(--muted);">${signal.desc}</div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-right:12px;">${value}</div>
+      <div style="font-weight:900;font-size:12px;color:${signal.color};min-width:60px;text-align:right;">${signal.label}</div>
+    </div>`;
+  }
+
+  async function fetchSignalData() {
+    const t = _sigSelectedToken;
+    const banner = document.getElementById('signalOverallLabel');
+    if (banner) { banner.textContent = 'LOADING...'; banner.style.color = 'var(--muted)'; }
+    try {
+      // Fetch real market data via backend proxy (avoids CORS)
+      const apiBase = window.location.origin + '/api';
+      const [priceRes, histRes] = await Promise.all([
+        fetch(`${apiBase}/coingecko/price?ids=${t.id}&vs_currencies=usd`),
+        fetch(`${apiBase}/coingecko/chart?id=${t.id}&days=30`)
+      ]);
+      const priceData = await priceRes.json();
+      const histData = await histRes.json();
+
+      // Check for rate limit or error responses
+      if (!priceData[t.id] || !histData.prices) {
+        const banner2 = document.getElementById('signalOverallLabel');
+        if (banner2) { banner2.textContent = 'RATE LIMITED'; banner2.style.color = '#ff9800'; }
+        const descEl2 = document.getElementById('signalOverallDesc');
+        if (descEl2) descEl2.textContent = 'CoinGecko API rate limit — retrying in 60s...';
+        return;
+      }
+
+      const info = priceData[t.id];
+      const price = info.usd;
+      const change24h = info.usd_24h_change || 0;
+      const vol24h = info.usd_24h_vol || 0;
+      const closePrices = histData.prices.map(p => p[1]);
+
+      // Display price info
+      const pEl = document.getElementById('sigPrice');
+      const cEl = document.getElementById('sig24hChange');
+      const vEl = document.getElementById('sig24hVol');
+      if (pEl) pEl.textContent = '$' + price.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits: price > 100 ? 2 : 6});
+      if (cEl) { cEl.textContent = (change24h >= 0 ? '+' : '') + change24h.toFixed(2) + '%'; cEl.style.color = change24h >= 0 ? 'var(--green)' : '#e53935'; }
+      if (vEl) vEl.textContent = '$' + (vol24h >= 1e9 ? (vol24h/1e9).toFixed(1)+'B' : vol24h >= 1e6 ? (vol24h/1e6).toFixed(1)+'M' : vol24h.toLocaleString(undefined,{maximumFractionDigits:0}));
+
+      // Calculate indicators
+      const rsi14 = calcRSI(closePrices, 14);
+      const rsi7 = calcRSI(closePrices, 7);
+      const macd = calcMACD(closePrices);
+      const stoch14 = calcStochastic(closePrices, 14);
+      const williamsR = calcWilliamsR(closePrices, 14);
+      const cci14 = calcCCI(closePrices, 14);
+
+      // Moving averages
+      const sma5 = calcSMA(closePrices, 5);
+      const sma10 = calcSMA(closePrices, 10);
+      const sma20 = calcSMA(closePrices, 20);
+      const sma30 = calcSMA(closePrices, 30);
+      const ema5 = calcEMA(closePrices, 5);
+      const ema10 = calcEMA(closePrices, 10);
+      const ema20 = calcEMA(closePrices, 20);
+      const ema30 = calcEMA(closePrices, 30);
+
+      // Render indicators
+      const indicators = [
+        { name: 'RSI (14)', val: rsi14.toFixed(1), sig: getSignalLabel(rsi14, 'rsi') },
+        { name: 'RSI (7)', val: rsi7.toFixed(1), sig: getSignalLabel(rsi7, 'rsi') },
+        { name: 'MACD (12,26,9)', val: macd.histogram.toFixed(4), sig: getSignalLabel(macd.histogram, 'macd') },
+        { name: 'Stochastic %K (14)', val: stoch14.toFixed(1), sig: getSignalLabel(stoch14, 'stoch') },
+        { name: 'Williams %R', val: williamsR.toFixed(1), sig: getSignalLabel(williamsR, 'williams') },
+        { name: 'CCI (14)', val: cci14.toFixed(1), sig: getSignalLabel(cci14, 'cci') },
+      ];
+      const maRows = [
+        { name: 'SMA (5)', val: '$'+sma5.toLocaleString(undefined,{maximumFractionDigits:2}), sig: getSignalLabel(price - sma5, 'ma') },
+        { name: 'SMA (10)', val: '$'+sma10.toLocaleString(undefined,{maximumFractionDigits:2}), sig: getSignalLabel(price - sma10, 'ma') },
+        { name: 'SMA (20)', val: '$'+sma20.toLocaleString(undefined,{maximumFractionDigits:2}), sig: getSignalLabel(price - sma20, 'ma') },
+        { name: 'SMA (30)', val: '$'+sma30.toLocaleString(undefined,{maximumFractionDigits:2}), sig: getSignalLabel(price - sma30, 'ma') },
+        { name: 'EMA (5)', val: '$'+ema5.toLocaleString(undefined,{maximumFractionDigits:2}), sig: getSignalLabel(price - ema5, 'ma') },
+        { name: 'EMA (10)', val: '$'+ema10.toLocaleString(undefined,{maximumFractionDigits:2}), sig: getSignalLabel(price - ema10, 'ma') },
+        { name: 'EMA (20)', val: '$'+ema20.toLocaleString(undefined,{maximumFractionDigits:2}), sig: getSignalLabel(price - ema20, 'ma') },
+        { name: 'EMA (30)', val: '$'+ema30.toLocaleString(undefined,{maximumFractionDigits:2}), sig: getSignalLabel(price - ema30, 'ma') },
+      ];
+
+      const indGrid = document.getElementById('signalIndicatorsGrid');
+      if (indGrid) indGrid.innerHTML = indicators.map(i => renderIndicatorRow(i.name, i.val, i.sig)).join('');
+      const maGrid = document.getElementById('signalMAGrid');
+      if (maGrid) maGrid.innerHTML = maRows.map(i => renderIndicatorRow(i.name, i.val, i.sig)).join('');
+
+      // Overall signal calculation
+      const allSignals = [...indicators.map(i => i.sig.label), ...maRows.map(i => i.sig.label)];
+      let buyCount = allSignals.filter(s => s === 'BUY').length;
+      let sellCount = allSignals.filter(s => s === 'SELL').length;
+      let neutralCount = allSignals.filter(s => s === 'NEUTRAL').length;
+      const total = allSignals.length;
+      const score = (buyCount - sellCount) / total; // -1 to +1
+
+      // Update gauge needle
+      const needle = document.getElementById('signalGaugeNeedle');
+      if (needle) needle.style.left = ((score + 1) / 2 * 100) + '%';
+
+      // Update counts
+      const bc = document.getElementById('sigBuyCount');
+      const nc = document.getElementById('sigNeutralCount');
+      const sc = document.getElementById('sigSellCount');
+      if (bc) bc.textContent = 'Buy: ' + buyCount;
+      if (nc) nc.textContent = 'Neutral: ' + neutralCount;
+      if (sc) sc.textContent = 'Sell: ' + sellCount;
+
+      // Overall label
+      let overallLabel, overallColor, overallDesc;
+      if (score > 0.4) { overallLabel = 'STRONG BUY'; overallColor = '#27ae60'; overallDesc = buyCount + ' of ' + total + ' indicators signal BUY'; }
+      else if (score > 0.1) { overallLabel = 'BUY'; overallColor = '#66bb6a'; overallDesc = buyCount + ' of ' + total + ' indicators signal BUY'; }
+      else if (score < -0.4) { overallLabel = 'STRONG SELL'; overallColor = '#e53935'; overallDesc = sellCount + ' of ' + total + ' indicators signal SELL'; }
+      else if (score < -0.1) { overallLabel = 'SELL'; overallColor = '#ff9800'; overallDesc = sellCount + ' of ' + total + ' indicators signal SELL'; }
+      else { overallLabel = 'NEUTRAL'; overallColor = '#757575'; overallDesc = 'Market is undecided — ' + neutralCount + ' neutral signals'; }
+
+      if (banner) { banner.textContent = overallLabel; banner.style.color = overallColor; }
+      const descEl = document.getElementById('signalOverallDesc');
+      if (descEl) descEl.textContent = overallDesc;
+
+    } catch (err) {
+      console.error('Signal fetch error:', err);
+      if (banner) { banner.textContent = 'ERROR'; banner.style.color = '#e53935'; }
+    }
+  }
+
+  // Init on page show
+  const origShowPage = window.showPage;
+  const _wrappedShowPageSignals = function(page) {
+    origShowPage(page);
+    if (page === 'signals') {
+      initSignalTokenBar();
+      fetchSignalData();
+      if (_sigInterval) clearInterval(_sigInterval);
+      _sigInterval = setInterval(fetchSignalData, 60000);
+    }
+  };
+  window.showPage = _wrappedShowPageSignals;
 })();
 </script>
 </body>
