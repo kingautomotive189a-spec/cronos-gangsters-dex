@@ -9,44 +9,41 @@ Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deploymen
 - **Storage**: LocalStorage (mocked DeFi state), no database
 - **Deployment**: User downloads ZIP → uploads to GoDaddy manually
 
-## Completed Features (All Phases 1-10)
-### Core DeFi
-- Swap, Liquidity, Farms, Vaults, Staking, Lottery
-- Token Creator, Launchpad, LP Locker, Sniper Bot
-- NFT Minting & Marketplace, Referral System
-- GANG Futures, GANG Tracker, Bridge
+## Completed Features
 
-### Phase 8 — Advanced DeFi
+### Core DeFi
+- Swap, Liquidity, Farms, Vaults, Staking, Lottery, Token Creator, Launchpad, LP Locker, Sniper Bot, NFT Minting & Marketplace, Referral System, GANG Futures, GANG Tracker, Bridge
+
+### Advanced DeFi (Phase 8)
 - Lending & Borrowing, Prediction Markets, Flash Loans, Insurance, DEX Aggregator
 
-### Phase 9 — World Domination
-- Copy Trading, Revenue-Sharing Staking, Limit Orders, Perpetual DEX, OTC Trading, DAO Governance
+### World Domination (Phase 9)
+- Copy Trading (0.3%), Revenue Staking (0.3%), Limit Orders (0.3%), Perpetual DEX (0.3%), OTC Trading (0.3%), DAO Governance (1 CRO)
 
-### Phase 10 — Dynamic Copy Trading + Auto-Refresh
-- Dynamic Copy Trading linked to real Futures positions
-- Global auto-refresh engine (all data updates every 3-15s)
-- Professional token logos (BTC, ETH, TSLA, NVDA, GOLD, etc.)
-- Rank badges (#1 TOP gold, #2 silver, #3 bronze)
-- Asset type badges (STOCK, INDEX, COMDTY)
-- Popup shows token logo in 3-stage confirmation modal
+### Dynamic Copy Trading + Auto-Refresh (Phase 10)
+- Copy Trading linked to real Futures positions with proper token logos (BTC, ETH, TSLA, NVDA, GOLD, SOL etc.)
+- Rank badges (#1 gold, #2 silver, #3 bronze), asset type badges (STOCK, INDEX, COMDTY)
+- Global auto-refresh engine: Futures PnL (10s), Copy Trading (5-6s), Perp DEX prices (3s), Revenue Staking rewards (8s), balances (15s)
+- Live pulsing green dot indicators, CSS pulse animations on value changes
+- 3-stage wallet popup (Confirm → Processing → Confirmed) on all mocked features
 
-### Phase 10c — Navigation Menu Overhaul (Feb 5, 2026)
-- **Organized into 7 categories**: TRADE, LEVERAGE, EARN, MARKETS, ASSETS, TOOLS, INFO
-- **Consistent clean styling** — ALL items white/light text, no rainbow colors
-- **Gold left-border accent** on active menu item
-- **Subtle descriptions** on key items (e.g., "Up to 100x", "No expiry", "Follow pros", "Earn fees", "Big blocks")
-- **Tighter spacing** — more items visible without scrolling
-- **Gradient dividers** between categories
-- **Dark premium background** with subtle border glow
+### Navigation Menu Overhaul (Phase 10c)
+- Organized into 7 categories: TRADE, LEVERAGE, EARN, MARKETS, ASSETS, TOOLS, INFO
+- Clean white text, gold category headers, no rainbow colors
+- Subtle descriptions on key items, gold left-border accent on active item
 
-## Backlog / Phase 11 (Future)
-- CEX listings
-- Multi-chain expansion (ETH, BSC)
-- Mobile App (iOS & Android)
-- Gangster NFT Gallery with rarity & trait filters
+### Full Audit (Phase 10d - Feb 5, 2026)
+- Verified all 34 page nav buttons match page IDs
+- All 12 collect fee functions verified (6 feature + 6 revenue)
+- All 6 Revenue page fee banners show correct data
+- All key feature pages navigate correctly
+- Live prices, marquee banner, stats bar all functional
+
+## Backlog / Future
+- CEX listings, Multi-chain expansion, Mobile App, NFT Gallery with rarity filters
 
 ## Key Files
 - `/app/frontend/public/cronos-gangsters.html` — Main DApp (~21,400 lines)
 - `/app/backend/telegram_bot.py` — Telegram Bot
 - `/app/backend/server.py` — FastAPI server
-- `/app/frontend/public/cronos-gangsters-deploy.zip` — Lean deployable package
+- `/app/frontend/public/cronos-gangsters-deploy.zip` — Deployable package (12MB)
