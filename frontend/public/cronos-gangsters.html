@@ -16404,21 +16404,24 @@ function initLendState() {
     }
     saveLendState(s);
   } else {
-    // Check if pools need seeding (all empty = fresh install or reset)
-    let allEmpty = true;
+    // Ensure all pools exist and seed any that are empty
+    let needsSave = false;
     for (const token of Object.keys(LENDING_POOLS)) {
       if (!s.pools[token]) s.pools[token] = { totalSupplied: 0, totalBorrowed: 0 };
-      if (s.pools[token].totalSupplied > 0 && s.pools[token].totalBorrowed > 0) { allEmpty = false; }
-    }
-    if (allEmpty) {
-      for (const token of Object.keys(LENDING_POOLS)) {
-        const seed = seedData[token] || { supplied: 0, borrowed: 0 };
-        // Only seed pool-level liquidity, preserve user balances
-        s.pools[token].totalSupplied = Math.max(s.pools[token].totalSupplied, seed.supplied);
-        s.pools[token].totalBorrowed = Math.max(s.pools[token].totalBorrowed, seed.borrowed);
+      if (!s.userSupplied) s.userSupplied = {};
+      if (!s.userBorrowed) s.userBorrowed = {};
+      if (s.userSupplied[token] === undefined) s.userSupplied[token] = 0;
+      if (s.userBorrowed[token] === undefined) s.userBorrowed[token] = 0;
+      // Seed individual empty pools with realistic liquidity
+      const seed = seedData[token] || { supplied: 0, borrowed: 0 };
+      if (s.pools[token].totalSupplied <= 0 && seed.supplied > 0) {
+        s.pools[token].totalSupplied = seed.supplied;
+        s.pools[token].totalBorrowed = seed.borrowed;
+        needsSave = true;
       }
-      saveLendState(s);
     }
+    if (!s.ownerFees) s.ownerFees = { interest: 0, origination: 0, liquidation: 0 };
+    if (needsSave) saveLendState(s);
   }
   return s;
 }
