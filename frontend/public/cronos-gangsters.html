@@ -22849,8 +22849,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     e.textContent = msg; e.style.color = color || 'var(--muted)'; e.style.display = msg ? 'block' : 'none';
     if (msg) setTimeout(() => { if (e.textContent === msg) { e.textContent = ''; e.style.display = 'none'; } }, 4000);
   }
-  function getAddr() { return (window.state && window.state.address) ? window.state.address.toLowerCase() : null; }
-  function gangPrice() { return (window.CHAIN_RPCS && window.CHAIN_RPCS.cronos && window.CHAIN_RPCS.cronos.gangPrice) || 0.003; }
+  function getAddr() { return (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null; }
+  function gangPrice() { return (typeof CHAIN_RPCS !== 'undefined' && CHAIN_RPCS.cronos && CHAIN_RPCS.cronos.gangPrice) || 0.003; }
 
   function buildStakedCard(tokenId, stake) {
     const pending = calcPendingForToken(stake).toFixed(4);
@@ -23196,7 +23196,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   }
 
   window.doCheckin = function() {
-    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
     const s = initState();
     if (checkedInToday(s)) { showToast('Already checked in today!', 'error'); return; }
@@ -23258,7 +23258,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   ];
 
   function getGangBalance() {
-    return (window.state && window.state.balances && window.state.balances.GANG) || 0;
+    return (typeof state !== 'undefined' && state.balances && state.balances.GANG) || 0;
   }
 
   function renderVipTiers() {
@@ -23266,7 +23266,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const tierEl = document.getElementById('vipCurrentTier');
     const balEl = document.getElementById('vipGangBalance');
 
-    if (!window.state || !window.state.address) {
+    if (typeof state === 'undefined' || !state.address) {
       if (tierEl) { tierEl.textContent = 'CONNECT WALLET'; tierEl.style.color = 'var(--muted)'; }
       if (balEl) balEl.textContent = '--';
       return;
@@ -23360,7 +23360,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
   function renderSquad() {
     const s = initState();
-    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     const allSquads = Object.values(s.squads);
     const totalMembers = allSquads.reduce((a, sq) => a + sq.members.length, 0);
 
@@ -23385,7 +23385,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   }
 
   window.createSquad = function() {
-    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
     const nameInput = document.getElementById('squadNameInput');
     const name = (nameInput?.value || '').trim();
@@ -23411,7 +23411,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   };
 
   window.joinSquad = function() {
-    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
     const codeInput = document.getElementById('squadJoinCode');
     const code = (codeInput?.value || '').trim().toUpperCase();
@@ -23486,7 +23486,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     if (!activeContainer) return;
 
     // Check for vested bonds
-    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     const userBonds = s.bonds.filter(b => b.user === addr);
 
     if (userBonds.length > 0) {
@@ -23527,7 +23527,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   }
 
   window.buyBond = function(pair) {
-    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
     const config = BOND_CONFIGS[pair];
     if (!config) return;
@@ -23563,7 +23563,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
   window.claimBond = function(idx) {
     const s = getState();
-    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     const userBonds = s.bonds.filter(b => b.user === addr);
     const bond = userBonds[idx];
     if (!bond) return;
@@ -23674,7 +23674,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   }
 
   window.enterCompetition = function() {
-    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
     const s = initState();
     if (s.entered) { showToast('Already entered this competition!', 'error'); return; }
@@ -23737,7 +23737,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   'use strict';
 
   window.deployNFTStakingContract = function() {
-    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
 
     showTxConfirm({
@@ -23759,7 +23759,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   };
 
   window.deployBuybackContract = function() {
-    const addr = (window.state && window.state.address) ? window.state.address.toLowerCase() : null;
+    const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
 
     showTxConfirm({
