@@ -572,6 +572,7 @@
       <button class="nav-btn active" data-page="swap"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg></span>Swap</button>
       <button class="nav-btn" data-page="liquidity"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></span>Liquidity</button>
       <button class="nav-btn" data-page="lending" data-testid="nav-lending-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 14h4"/><path d="M14 14h4"/></svg></span><span style="color:#00e5ff;font-weight:700;">Lend & Borrow</span></button>
+      <button class="nav-btn" data-page="predict" data-testid="nav-predict-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/><path d="M8 12h8"/></svg></span><span style="color:#a855f7;font-weight:700;">Predictions</span></button>
       <button class="nav-btn" data-page="futures" data-testid="nav-futures-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 5-10"/></svg></span><span style="color:#ff8c00;font-weight:700;">Gang Futures</span></button>
       <button class="nav-btn" data-page="sniper" data-testid="nav-sniper-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg></span>Sniper</button>
       <div class="nav-divider"></div>
@@ -3513,6 +3514,168 @@ function toggleNavMenu() {
           </div>
         </div>
 
+        <!-- WBTC Pool -->
+        <div class="card" style="padding:14px;border-color:rgba(247,147,26,0.3);" data-testid="lend-pool-wbtc">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3717.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">WBTC</div>
+                <div style="font-size:10px;color:var(--muted);">Wrapped Bitcoin</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendWbtcApy" data-testid="lend-wbtc-apy">1.8% APY</div>
+              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">POOL SIZE</div><div id="lendWbtcPool" data-testid="lend-wbtc-pool" style="color:var(--text);">0 WBTC</div></div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">UTILIZATION</div><div id="lendWbtcUtil" data-testid="lend-wbtc-util" style="color:#ff8c00;">0%</div></div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div><div id="lendWbtcYours" data-testid="lend-wbtc-yours" style="color:var(--green);">0 WBTC</div></div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <input type="number" id="lendWbtcAmt" data-testid="lend-wbtc-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
+            <button class="btn-primary" data-testid="lend-wbtc-supply-btn" onclick="lendSupply('WBTC')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-wbtc-withdraw-btn" onclick="lendWithdraw('WBTC')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- DAI Pool -->
+        <div class="card" style="padding:14px;border-color:rgba(251,176,52,0.3);" data-testid="lend-pool-dai">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">DAI</div>
+                <div style="font-size:10px;color:var(--muted);">Dai Stablecoin</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendDaiApy" data-testid="lend-dai-apy">3.5% APY</div>
+              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">POOL SIZE</div><div id="lendDaiPool" data-testid="lend-dai-pool" style="color:var(--text);">0 DAI</div></div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">UTILIZATION</div><div id="lendDaiUtil" data-testid="lend-dai-util" style="color:#ff8c00;">0%</div></div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div><div id="lendDaiYours" data-testid="lend-dai-yours" style="color:var(--green);">0 DAI</div></div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <input type="number" id="lendDaiAmt" data-testid="lend-dai-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
+            <button class="btn-primary" data-testid="lend-dai-supply-btn" onclick="lendSupply('DAI')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-dai-withdraw-btn" onclick="lendWithdraw('DAI')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- USDT Pool -->
+        <div class="card" style="padding:14px;border-color:rgba(38,161,123,0.3);" data-testid="lend-pool-usdt">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/825.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">USDT</div>
+                <div style="font-size:10px;color:var(--muted);">Tether</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendUsdtApy" data-testid="lend-usdt-apy">4.0% APY</div>
+              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">POOL SIZE</div><div id="lendUsdtPool" data-testid="lend-usdt-pool" style="color:var(--text);">0 USDT</div></div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">UTILIZATION</div><div id="lendUsdtUtil" data-testid="lend-usdt-util" style="color:#ff8c00;">0%</div></div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div><div id="lendUsdtYours" data-testid="lend-usdt-yours" style="color:var(--green);">0 USDT</div></div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <input type="number" id="lendUsdtAmt" data-testid="lend-usdt-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
+            <button class="btn-primary" data-testid="lend-usdt-supply-btn" onclick="lendSupply('USDT')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-usdt-withdraw-btn" onclick="lendWithdraw('USDT')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- ATOM Pool -->
+        <div class="card" style="padding:14px;border-color:rgba(108,108,229,0.3);" data-testid="lend-pool-atom">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">ATOM</div>
+                <div style="font-size:10px;color:var(--muted);">Cosmos</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendAtomApy" data-testid="lend-atom-apy">5.2% APY</div>
+              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">POOL SIZE</div><div id="lendAtomPool" data-testid="lend-atom-pool" style="color:var(--text);">0 ATOM</div></div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">UTILIZATION</div><div id="lendAtomUtil" data-testid="lend-atom-util" style="color:#ff8c00;">0%</div></div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div><div id="lendAtomYours" data-testid="lend-atom-yours" style="color:var(--green);">0 ATOM</div></div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <input type="number" id="lendAtomAmt" data-testid="lend-atom-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
+            <button class="btn-primary" data-testid="lend-atom-supply-btn" onclick="lendSupply('ATOM')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-atom-withdraw-btn" onclick="lendWithdraw('ATOM')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- VVS Pool -->
+        <div class="card" style="padding:14px;border-color:rgba(86,204,242,0.3);" data-testid="lend-pool-vvs">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/14519.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">VVS</div>
+                <div style="font-size:10px;color:var(--muted);">VVS Finance</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendVvsApy" data-testid="lend-vvs-apy">12.0% APY</div>
+              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">POOL SIZE</div><div id="lendVvsPool" data-testid="lend-vvs-pool" style="color:var(--text);">0 VVS</div></div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">UTILIZATION</div><div id="lendVvsUtil" data-testid="lend-vvs-util" style="color:#ff8c00;">0%</div></div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div><div id="lendVvsYours" data-testid="lend-vvs-yours" style="color:var(--green);">0 VVS</div></div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <input type="number" id="lendVvsAmt" data-testid="lend-vvs-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
+            <button class="btn-primary" data-testid="lend-vvs-supply-btn" onclick="lendSupply('VVS')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-vvs-withdraw-btn" onclick="lendWithdraw('VVS')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- TONIC Pool -->
+        <div class="card" style="padding:14px;border-color:rgba(78,186,147,0.3);" data-testid="lend-pool-tonic">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/17596.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">TONIC</div>
+                <div style="font-size:10px;color:var(--muted);">Tectonic</div>
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendTonicApy" data-testid="lend-tonic-apy">15.0% APY</div>
+              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">POOL SIZE</div><div id="lendTonicPool" data-testid="lend-tonic-pool" style="color:var(--text);">0 TONIC</div></div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">UTILIZATION</div><div id="lendTonicUtil" data-testid="lend-tonic-util" style="color:#ff8c00;">0%</div></div>
+            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div><div id="lendTonicYours" data-testid="lend-tonic-yours" style="color:var(--green);">0 TONIC</div></div>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <input type="number" id="lendTonicAmt" data-testid="lend-tonic-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
+            <button class="btn-primary" data-testid="lend-tonic-supply-btn" onclick="lendSupply('TONIC')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-tonic-withdraw-btn" onclick="lendWithdraw('TONIC')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -3538,6 +3701,12 @@ function toggleNavMenu() {
           <option value="GANG">GANG</option>
           <option value="USDC">USDC</option>
           <option value="WETH">WETH</option>
+          <option value="WBTC">WBTC</option>
+          <option value="DAI">DAI</option>
+          <option value="USDT">USDT</option>
+          <option value="ATOM">ATOM</option>
+          <option value="VVS">VVS</option>
+          <option value="TONIC">TONIC</option>
         </select>
         <input type="number" id="lendBorrowAmt" data-testid="lend-borrow-amount" placeholder="Borrow amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
       </div>
@@ -3631,6 +3800,119 @@ function toggleNavMenu() {
 
   <!-- ══════════════════════════════════════
        SNIPER BOT INFO PAGE
+
+  <!-- ══════════════════════════════════════
+       PREDICTION MARKETS PAGE
+  ══════════════════════════════════════ -->
+  <div class="page" id="page-predict" data-testid="page-predict">
+
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#a855f7;line-height:1;text-shadow:0 0 30px rgba(168,85,247,0.3);">GANG PREDICTIONS</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Predict outcomes. Win big. The house always gets its cut.</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar" style="margin-bottom:20px;" data-testid="predict-stats-bar">
+      <div class="stat-item">
+        <div class="stat-label">TOTAL VOLUME</div>
+        <div class="stat-value" id="predTotalVol" data-testid="pred-total-vol">$0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">ACTIVE MARKETS</div>
+        <div class="stat-value" id="predActiveMarkets" data-testid="pred-active-markets">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">YOUR BETS</div>
+        <div class="stat-value" id="predYourBets" data-testid="pred-your-bets">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">YOUR WINNINGS</div>
+        <div class="stat-value" id="predYourWins" data-testid="pred-your-wins">$0</div>
+      </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div style="display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;" data-testid="pred-category-tabs">
+      <button class="tab-btn active" onclick="filterPredMarkets('all')" data-testid="pred-tab-all" style="background:var(--surface2);border:1px solid #a855f7;color:#a855f7;padding:7px 14px;border-radius:20px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;white-space:nowrap;">ALL</button>
+      <button class="tab-btn" onclick="filterPredMarkets('crypto')" data-testid="pred-tab-crypto" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:20px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;white-space:nowrap;">CRYPTO</button>
+      <button class="tab-btn" onclick="filterPredMarkets('stocks')" data-testid="pred-tab-stocks" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:20px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;white-space:nowrap;">STOCKS</button>
+      <button class="tab-btn" onclick="filterPredMarkets('sports')" data-testid="pred-tab-sports" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:20px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;white-space:nowrap;">SPORTS</button>
+      <button class="tab-btn" onclick="filterPredMarkets('politics')" data-testid="pred-tab-politics" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:20px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;white-space:nowrap;">POLITICS</button>
+      <button class="tab-btn" onclick="filterPredMarkets('custom')" data-testid="pred-tab-custom" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:20px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;white-space:nowrap;">CUSTOM</button>
+    </div>
+
+    <!-- Markets Grid -->
+    <div id="predMarketsGrid" data-testid="pred-markets-grid" style="display:grid;gap:12px;"></div>
+
+    <!-- Create Market (Owner) -->
+    <div class="card" style="margin-top:20px;border-color:rgba(168,85,247,0.3);" data-testid="pred-create-card">
+      <div class="card-title" style="color:#a855f7;">CREATE A MARKET</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Anyone can create a prediction market. The creator sets the question, options, and resolution date.</div>
+      <div style="display:grid;gap:8px;margin-bottom:12px;">
+        <input type="text" id="predQuestion" data-testid="pred-question" placeholder="Question (e.g. Will BTC hit $100K by June?)" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <input type="text" id="predOption1" data-testid="pred-option1" placeholder="Option A (e.g. YES)" value="YES" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;outline:none;">
+          <input type="text" id="predOption2" data-testid="pred-option2" placeholder="Option B (e.g. NO)" value="NO" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;outline:none;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <select id="predCategory" data-testid="pred-category" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
+            <option value="crypto">Crypto</option>
+            <option value="stocks">Stocks</option>
+            <option value="sports">Sports</option>
+            <option value="politics">Politics</option>
+            <option value="custom">Custom</option>
+          </select>
+          <input type="date" id="predEndDate" data-testid="pred-end-date" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;outline:none;">
+        </div>
+      </div>
+      <button class="btn-primary" data-testid="pred-create-btn" onclick="createPredMarket()" style="width:100%;background:linear-gradient(135deg,#a855f7,#7c3aed);font-size:16px;">CREATE MARKET</button>
+    </div>
+
+    <!-- Owner Panel -->
+    <div id="predOwnerPanel" data-testid="pred-owner-panel" style="display:none;margin-top:16px;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);">
+        <div class="card-title" style="color:var(--green);">OWNER — PREDICTION REVENUE</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">You earn 5% of every prediction market pot when it resolves.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES EARNED</div>
+            <div id="predOwnerFees" data-testid="pred-owner-fees" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">MARKETS RESOLVED</div>
+            <div id="predOwnerResolved" data-testid="pred-owner-resolved" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#a855f7;">0</div>
+          </div>
+        </div>
+        <button class="btn-primary" data-testid="pred-owner-collect-btn" onclick="predOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT PREDICTION FEES</button>
+      </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title">HOW PREDICTION MARKETS WORK</div>
+      <div style="display:grid;gap:12px;">
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#a855f7;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">1</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Pick a market</div><div style="font-size:11px;color:var(--muted);">Browse active predictions — crypto price targets, stock earnings, sports outcomes, elections, and custom questions.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#a855f7;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">2</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Place your bet</div><div style="font-size:11px;color:var(--muted);">Choose YES or NO (or Option A/B). Bet with CRO. The odds adjust based on how much is bet on each side.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:#a855f7;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">3</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Market resolves</div><div style="font-size:11px;color:var(--muted);">When the event happens, the winning side splits the pot. Winners get paid proportionally to their bet size.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <div style="background:var(--gold);color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">$</div>
+          <div><div style="font-weight:700;color:var(--gold);font-size:13px;">Platform fee: 5%</div><div style="font-size:11px;color:var(--muted);">5% of every pot goes to the platform treasury when the market resolves. The remaining 95% goes to the winners.</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
   ══════════════════════════════════════ -->
   <div class="page" id="page-sniper" data-testid="page-sniper">
 
@@ -14599,6 +14881,12 @@ const LENDING_POOLS = {
   GANG: { baseRate: 4.0, slope1: 12.0, slope2: 100.0, optimal: 70, collateralFactor: 0.60, decimals: 18, priceKey: 'GANG' },
   USDC: { baseRate: 1.5, slope1: 6.0, slope2: 60.0, optimal: 90, collateralFactor: 0.85, decimals: 6, priceKey: 'USDC' },
   WETH: { baseRate: 1.0, slope1: 5.0, slope2: 50.0, optimal: 80, collateralFactor: 0.80, decimals: 18, priceKey: 'WETH' },
+  WBTC: { baseRate: 0.8, slope1: 4.0, slope2: 45.0, optimal: 80, collateralFactor: 0.80, decimals: 8, priceKey: 'WBTC' },
+  DAI:  { baseRate: 1.5, slope1: 6.0, slope2: 55.0, optimal: 90, collateralFactor: 0.85, decimals: 18, priceKey: 'DAI' },
+  USDT: { baseRate: 1.8, slope1: 7.0, slope2: 60.0, optimal: 90, collateralFactor: 0.85, decimals: 6, priceKey: 'USDT' },
+  ATOM: { baseRate: 3.0, slope1: 10.0, slope2: 80.0, optimal: 75, collateralFactor: 0.65, decimals: 6, priceKey: 'ATOM' },
+  VVS:  { baseRate: 6.0, slope1: 18.0, slope2: 120.0, optimal: 65, collateralFactor: 0.45, decimals: 18, priceKey: 'VVS' },
+  TONIC:{ baseRate: 8.0, slope1: 22.0, slope2: 150.0, optimal: 60, collateralFactor: 0.40, decimals: 18, priceKey: 'TONIC' },
 };
 const LEND_OWNER_FEE_PERCENT = 20;
 const LEND_ORIGINATION_FEE = 0.3;
@@ -14649,8 +14937,13 @@ function calcSupplyAPY(token, util) {
 }
 
 function getTokenPrice(token) {
-  const prices = { CRO: 0.08, GANG: 0.008, USDC: 1.0, WETH: 2070 };
+  const prices = { CRO: 0.08, GANG: 0.008, USDC: 1.0, WETH: 2070, WBTC: 67400, DAI: 1.0, USDT: 1.0, ATOM: 5.5, VVS: 0.000004, TONIC: 0.0000003 };
   return prices[token] || 0;
+}
+
+function lendElId(token) {
+  const map = { CRO:'Cro', GANG:'Gang', USDC:'Usdc', WETH:'Weth', WBTC:'Wbtc', DAI:'Dai', USDT:'Usdt', ATOM:'Atom', VVS:'Vvs', TONIC:'Tonic' };
+  return map[token] || token;
 }
 
 function updateLendingUI() {
@@ -14666,13 +14959,12 @@ function updateLendingUI() {
     const price = getTokenPrice(token);
     const util = calcUtilization(pool.totalSupplied, pool.totalBorrowed);
     const supplyAPY = calcSupplyAPY(token, util);
-    const tk = token.toLowerCase();
-    const TK = token;
+    const id = lendElId(token);
 
-    const elApy = document.getElementById('lend' + (TK === 'WETH' ? 'Weth' : TK.charAt(0) + TK.slice(1).toLowerCase()) + 'Apy');
-    const elPool = document.getElementById('lend' + (TK === 'WETH' ? 'Weth' : TK.charAt(0) + TK.slice(1).toLowerCase()) + 'Pool');
-    const elUtil = document.getElementById('lend' + (TK === 'WETH' ? 'Weth' : TK.charAt(0) + TK.slice(1).toLowerCase()) + 'Util');
-    const elYours = document.getElementById('lend' + (TK === 'WETH' ? 'Weth' : TK.charAt(0) + TK.slice(1).toLowerCase()) + 'Yours');
+    const elApy = document.getElementById('lend' + id + 'Apy');
+    const elPool = document.getElementById('lend' + id + 'Pool');
+    const elUtil = document.getElementById('lend' + id + 'Util');
+    const elYours = document.getElementById('lend' + id + 'Yours');
 
     if (elApy) elApy.textContent = supplyAPY.toFixed(1) + '% APY';
     if (elPool) elPool.textContent = pool.totalSupplied.toFixed(2) + ' ' + TK;
@@ -14748,7 +15040,8 @@ function updateLendingUI() {
 }
 
 function lendSupply(token) {
-  const input = document.getElementById('lend' + (token === 'WETH' ? 'Weth' : token.charAt(0) + token.slice(1).toLowerCase()) + 'Amt');
+  const id = lendElId(token);
+  const input = document.getElementById('lend' + id + 'Amt');
   const amount = parseFloat(input?.value);
   if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
 
@@ -14762,7 +15055,8 @@ function lendSupply(token) {
 }
 
 function lendWithdraw(token) {
-  const input = document.getElementById('lend' + (token === 'WETH' ? 'Weth' : token.charAt(0) + token.slice(1).toLowerCase()) + 'Amt');
+  const id = lendElId(token);
+  const input = document.getElementById('lend' + id + 'Amt');
   const amount = parseFloat(input?.value);
   if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
 
@@ -14863,6 +15157,224 @@ function lendOwnerCollect() {
   saveLendState(s);
   updateLendingUI();
 }
+
+
+// ===== PREDICTION MARKETS ENGINE =====
+const PRED_FEE = 5; // 5% platform fee
+const DEFAULT_PRED_MARKETS = [
+  { id: 'btc100k', question: 'Will BTC hit $100,000 by July 2026?', optA: 'YES', optB: 'NO', category: 'crypto', endDate: '2026-07-01', poolA: 245, poolB: 180, status: 'active' },
+  { id: 'eth5k', question: 'Will ETH reach $5,000 by end of 2026?', optA: 'YES', optB: 'NO', category: 'crypto', endDate: '2026-12-31', poolA: 120, poolB: 95, status: 'active' },
+  { id: 'cro1', question: 'Will CRO hit $1.00 in 2026?', optA: 'YES', optB: 'NO', category: 'crypto', endDate: '2026-12-31', poolA: 80, poolB: 310, status: 'active' },
+  { id: 'tsla500', question: 'Will TSLA stock close above $500 by Q3 2026?', optA: 'YES', optB: 'NO', category: 'stocks', endDate: '2026-09-30', poolA: 150, poolB: 130, status: 'active' },
+  { id: 'nvda200', question: 'Will NVDA split again in 2026?', optA: 'YES', optB: 'NO', category: 'stocks', endDate: '2026-12-31', poolA: 60, poolB: 140, status: 'active' },
+  { id: 'aapl250', question: 'Will AAPL hit $250 before June 2026?', optA: 'YES', optB: 'NO', category: 'stocks', endDate: '2026-06-01', poolA: 90, poolB: 70, status: 'active' },
+  { id: 'ucl2026', question: 'Will Real Madrid win Champions League 2026?', optA: 'YES', optB: 'NO', category: 'sports', endDate: '2026-06-15', poolA: 110, poolB: 200, status: 'active' },
+  { id: 'nba2026', question: 'Will Celtics repeat as NBA Champions?', optA: 'YES', optB: 'NO', category: 'sports', endDate: '2026-06-20', poolA: 75, poolB: 160, status: 'active' },
+  { id: 'uselec', question: 'Will Republicans win 2026 midterm Senate?', optA: 'YES', optB: 'NO', category: 'politics', endDate: '2026-11-03', poolA: 180, poolB: 150, status: 'active' },
+  { id: 'gangburn', question: 'Will $GANG burn 50% of supply by 2027?', optA: 'YES', optB: 'NO', category: 'crypto', endDate: '2027-01-01', poolA: 200, poolB: 55, status: 'active' },
+];
+
+function getPredState() {
+  try { return JSON.parse(localStorage.getItem('gangPredState') || '{}'); } catch(e) { return {}; }
+}
+function savePredState(s) { localStorage.setItem('gangPredState', JSON.stringify(s)); }
+
+function initPredState() {
+  let s = getPredState();
+  if (!s.markets) {
+    s = {
+      markets: DEFAULT_PRED_MARKETS.map(m => ({...m, bets: []})),
+      userBets: [],
+      ownerFees: 0,
+      totalVolume: 0,
+      resolvedCount: 0,
+    };
+    savePredState(s);
+  }
+  return s;
+}
+
+let predFilterCat = 'all';
+
+function filterPredMarkets(cat) {
+  predFilterCat = cat;
+  document.querySelectorAll('#page-predict .tab-btn').forEach(b => {
+    b.style.borderColor = 'var(--border)';
+    b.style.color = 'var(--muted)';
+    b.classList.remove('active');
+  });
+  const activeBtn = document.querySelector('[data-testid="pred-tab-' + cat + '"]');
+  if (activeBtn) { activeBtn.style.borderColor = '#a855f7'; activeBtn.style.color = '#a855f7'; activeBtn.classList.add('active'); }
+  renderPredMarkets();
+}
+
+function renderPredMarkets() {
+  const s = initPredState();
+  const grid = document.getElementById('predMarketsGrid');
+  if (!grid) return;
+
+  const filtered = predFilterCat === 'all' ? s.markets : s.markets.filter(m => m.category === predFilterCat);
+
+  // Update stats
+  const activeCount = s.markets.filter(m => m.status === 'active').length;
+  const userBetCount = s.userBets ? s.userBets.length : 0;
+  const userWins = s.userBets ? s.userBets.filter(b => b.won).reduce((a, b) => a + (b.payout || 0), 0) : 0;
+  const elVol = document.getElementById('predTotalVol');
+  const elActive = document.getElementById('predActiveMarkets');
+  const elBets = document.getElementById('predYourBets');
+  const elWins = document.getElementById('predYourWins');
+  if (elVol) elVol.textContent = '$' + (s.totalVolume || 0).toFixed(0);
+  if (elActive) elActive.textContent = activeCount;
+  if (elBets) elBets.textContent = userBetCount;
+  if (elWins) elWins.textContent = '$' + userWins.toFixed(0);
+
+  // Owner panel
+  const ownerPanel = document.getElementById('predOwnerPanel');
+  if (ownerPanel && state.account && OWNER_WALLET && state.account.toLowerCase() === OWNER_WALLET.toLowerCase()) {
+    ownerPanel.style.display = 'block';
+    const elFees = document.getElementById('predOwnerFees');
+    const elResolved = document.getElementById('predOwnerResolved');
+    if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
+    if (elResolved) elResolved.textContent = s.resolvedCount || 0;
+  }
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:30px;">No markets in this category yet.</div>';
+    return;
+  }
+
+  let html = '';
+  filtered.forEach((m, idx) => {
+    const total = (m.poolA || 0) + (m.poolB || 0);
+    const pctA = total > 0 ? ((m.poolA / total) * 100).toFixed(0) : 50;
+    const pctB = total > 0 ? ((m.poolB / total) * 100).toFixed(0) : 50;
+    const catColors = { crypto: '#ff8c00', stocks: '#00e5ff', sports: '#30c070', politics: '#e04040', custom: '#a855f7' };
+    const catColor = catColors[m.category] || '#a855f7';
+    const isExpired = new Date(m.endDate) < new Date();
+    const statusBadge = m.status === 'resolved' ? '<span style="color:var(--green);font-size:10px;font-weight:700;">RESOLVED</span>'
+      : isExpired ? '<span style="color:var(--red);font-size:10px;font-weight:700;">AWAITING RESOLUTION</span>'
+      : '<span style="color:' + catColor + ';font-size:10px;font-weight:700;">LIVE</span>';
+
+    html += '<div class="card" style="padding:16px;border-color:rgba(168,85,247,0.2);" data-testid="pred-market-' + m.id + '" data-cat="' + m.category + '">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">';
+    html += '<div style="flex:1;"><div style="font-weight:700;color:var(--text);font-size:14px;line-height:1.3;">' + m.question + '</div>';
+    html += '<div style="margin-top:4px;display:flex;gap:8px;align-items:center;"><span style="background:' + catColor + ';color:#000;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">' + m.category + '</span>' + statusBadge + '</div></div>';
+    html += '<div style="text-align:right;flex-shrink:0;margin-left:10px;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;color:#a855f7;">' + total.toFixed(0) + '</div><div style="font-size:9px;color:var(--muted);">CRO POOL</div></div></div>';
+
+    // Odds bar
+    html += '<div style="display:flex;border-radius:6px;overflow:hidden;height:28px;margin-bottom:10px;font-size:12px;font-weight:700;">';
+    html += '<div style="width:' + pctA + '%;background:linear-gradient(90deg,#30c070,#20a060);display:flex;align-items:center;justify-content:center;color:#000;min-width:30px;">' + m.optA + ' ' + pctA + '%</div>';
+    html += '<div style="width:' + pctB + '%;background:linear-gradient(90deg,#e04040,#c03030);display:flex;align-items:center;justify-content:center;color:#fff;min-width:30px;">' + m.optB + ' ' + pctB + '%</div>';
+    html += '</div>';
+
+    html += '<div style="font-size:10px;color:var(--muted);margin-bottom:8px;">Ends: ' + m.endDate + ' | Pool: ' + total.toFixed(0) + ' CRO</div>';
+
+    if (m.status === 'active' && !isExpired) {
+      html += '<div style="display:flex;gap:6px;">';
+      html += '<input type="number" id="predBet_' + m.id + '" placeholder="CRO amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);font-size:13px;outline:none;">';
+      html += '<button class="btn-primary" onclick="placePredBet(\'' + m.id + '\',\'A\')" style="padding:7px 14px;font-size:13px;border-radius:8px;background:linear-gradient(135deg,#30c070,#20a060);">' + m.optA + '</button>';
+      html += '<button class="btn-primary" onclick="placePredBet(\'' + m.id + '\',\'B\')" style="padding:7px 14px;font-size:13px;border-radius:8px;background:linear-gradient(135deg,#e04040,#c03030);">' + m.optB + '</button>';
+      html += '</div>';
+    }
+
+    // Owner resolve buttons
+    if (state.account && OWNER_WALLET && state.account.toLowerCase() === OWNER_WALLET.toLowerCase() && m.status === 'active') {
+      html += '<div style="margin-top:8px;display:flex;gap:6px;">';
+      html += '<button onclick="resolvePredMarket(\'' + m.id + '\',\'A\')" style="flex:1;padding:6px;font-size:11px;border-radius:6px;background:var(--surface2);border:1px solid var(--green);color:var(--green);cursor:pointer;">Resolve: ' + m.optA + ' WINS</button>';
+      html += '<button onclick="resolvePredMarket(\'' + m.id + '\',\'B\')" style="flex:1;padding:6px;font-size:11px;border-radius:6px;background:var(--surface2);border:1px solid var(--red);color:var(--red);cursor:pointer;">Resolve: ' + m.optB + ' WINS</button>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+  });
+
+  grid.innerHTML = html;
+}
+
+function placePredBet(marketId, side) {
+  const input = document.getElementById('predBet_' + marketId);
+  const amount = parseFloat(input?.value);
+  if (!amount || amount <= 0) { showToast('Enter a valid CRO amount', 'error'); return; }
+
+  let s = initPredState();
+  const market = s.markets.find(m => m.id === marketId);
+  if (!market || market.status !== 'active') { showToast('Market is not active', 'error'); return; }
+
+  if (side === 'A') market.poolA = (market.poolA || 0) + amount;
+  else market.poolB = (market.poolB || 0) + amount;
+
+  s.userBets = s.userBets || [];
+  s.userBets.push({ marketId, side, amount, timestamp: Date.now(), won: false, payout: 0 });
+  s.totalVolume = (s.totalVolume || 0) + amount;
+  savePredState(s);
+  if (input) input.value = '';
+  const optName = side === 'A' ? market.optA : market.optB;
+  showToast('Bet ' + amount + ' CRO on "' + optName + '" placed!', 'success');
+  renderPredMarkets();
+}
+
+function resolvePredMarket(marketId, winningSide) {
+  let s = initPredState();
+  const market = s.markets.find(m => m.id === marketId);
+  if (!market) return;
+
+  const total = (market.poolA || 0) + (market.poolB || 0);
+  const fee = total * (PRED_FEE / 100);
+  s.ownerFees = (s.ownerFees || 0) + fee;
+  s.resolvedCount = (s.resolvedCount || 0) + 1;
+  market.status = 'resolved';
+  market.winner = winningSide;
+
+  // Pay out user bets
+  const winPool = winningSide === 'A' ? market.poolA : market.poolB;
+  const totalAfterFee = total - fee;
+  if (s.userBets) {
+    s.userBets.forEach(bet => {
+      if (bet.marketId === marketId && bet.side === winningSide) {
+        bet.won = true;
+        bet.payout = (bet.amount / winPool) * totalAfterFee;
+      }
+    });
+  }
+
+  savePredState(s);
+  const winName = winningSide === 'A' ? market.optA : market.optB;
+  showToast('Market resolved! "' + winName + '" wins. ' + fee.toFixed(2) + ' CRO fee collected.', 'success');
+  renderPredMarkets();
+}
+
+function createPredMarket() {
+  const question = document.getElementById('predQuestion')?.value?.trim();
+  const optA = document.getElementById('predOption1')?.value?.trim() || 'YES';
+  const optB = document.getElementById('predOption2')?.value?.trim() || 'NO';
+  const category = document.getElementById('predCategory')?.value || 'custom';
+  const endDate = document.getElementById('predEndDate')?.value;
+
+  if (!question) { showToast('Enter a question', 'error'); return; }
+  if (!endDate) { showToast('Set an end date', 'error'); return; }
+
+  let s = initPredState();
+  const id = 'custom_' + Date.now();
+  s.markets.push({
+    id, question, optA, optB, category, endDate, poolA: 0, poolB: 0, status: 'active', bets: []
+  });
+  savePredState(s);
+
+  document.getElementById('predQuestion').value = '';
+  document.getElementById('predEndDate').value = '';
+  showToast('Market created: "' + question + '"', 'success');
+  renderPredMarkets();
+}
+
+function predOwnerCollect() {
+  let s = initPredState();
+  if ((s.ownerFees || 0) <= 0) { showToast('No fees to collect', 'error'); return; }
+  showToast('Collected ' + s.ownerFees.toFixed(2) + ' CRO in prediction fees!', 'success');
+  s.ownerFees = 0;
+  savePredState(s);
+  renderPredMarkets();
+}
+
 
 
 async function activateSwapProtocolFee() {
