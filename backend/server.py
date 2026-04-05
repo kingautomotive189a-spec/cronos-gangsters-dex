@@ -386,7 +386,7 @@ async def get_bot_commands():
     commands = [
         {"command": "/start", "description": "Welcome message & project info"},
         {"command": "/help", "description": "Show all available commands"},
-        {"command": "/futures", "description": "GANG FUTURES — 33 pairs, up to 20x leverage"},
+        {"command": "/futures", "description": "LEVERAGE TRADING — 33 pairs, up to 20x leverage"},
         {"command": "/tracker", "description": "GANG TRACKER — Multi-chain wallet scanner"},
         {"command": "/lending", "description": "Lend & Borrow — Earn interest on crypto"},
         {"command": "/roadmap", "description": "Project roadmap & phases"},
