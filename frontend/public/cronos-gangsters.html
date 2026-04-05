@@ -222,6 +222,33 @@
   .token-price-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.2);border-radius:5px;padding:2px 6px;font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);margin-top:3px;}
 
   /* ── MODALS ── */
+  /* ── TX CONFIRM MODAL ── */
+  #txConfirmModal .tx-modal{max-width:400px;width:92%;background:linear-gradient(180deg,#1a1d2e 0%,#141625 100%);border:1px solid rgba(212,160,23,0.25);border-radius:16px;padding:0;box-shadow:0 20px 60px rgba(0,0,0,0.6),0 0 40px rgba(212,160,23,0.08);}
+  #txConfirmModal .tx-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.06);}
+  #txConfirmModal .tx-header-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold);}
+  #txConfirmModal .tx-network{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:4px 12px;font-size:10px;color:var(--muted);letter-spacing:1px;}
+  #txConfirmModal .tx-network-dot{width:6px;height:6px;border-radius:50%;background:#27ae60;animation:txPulse 1.5s ease infinite;}
+  @keyframes txPulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+  #txConfirmModal .tx-body{padding:20px;}
+  #txConfirmModal .tx-action-row{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:20px;}
+  #txConfirmModal .tx-token-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;border:2px solid rgba(255,255,255,0.1);}
+  #txConfirmModal .tx-arrow{color:var(--muted);font-size:18px;}
+  #txConfirmModal .tx-amount{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--text);text-align:center;margin-bottom:4px;}
+  #txConfirmModal .tx-usd{font-size:12px;color:var(--muted);text-align:center;margin-bottom:18px;}
+  #txConfirmModal .tx-details{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:14px;margin-bottom:18px;}
+  #txConfirmModal .tx-detail-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:12px;}
+  #txConfirmModal .tx-detail-row:not(:last-child){border-bottom:1px solid rgba(255,255,255,0.04);}
+  #txConfirmModal .tx-detail-label{color:var(--muted);}
+  #txConfirmModal .tx-detail-value{color:var(--text);font-weight:600;}
+  #txConfirmModal .tx-detail-value.fee{color:var(--gold);}
+  #txConfirmModal .tx-detail-value.green{color:var(--green);}
+  #txConfirmModal .tx-btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  #txConfirmModal .tx-cancel-btn{padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:transparent;color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .2s;}
+  #txConfirmModal .tx-cancel-btn:hover{border-color:var(--red);color:var(--red);}
+  #txConfirmModal .tx-confirm-btn{padding:14px;border-radius:10px;border:none;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;color:#fff;transition:all .2s;font-weight:700;}
+  #txConfirmModal .tx-confirm-btn:hover{filter:brightness(1.15);transform:translateY(-1px);}
+  #txConfirmModal .tx-warning{display:flex;align-items:center;gap:8px;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:11px;color:#e74c3c;}
+  #txConfirmModal .tx-cronos-badge{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;font-size:10px;color:var(--muted);letter-spacing:1px;border-top:1px solid rgba(255,255,255,0.04);}
   .modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
   .modal-overlay.open{display:flex;}
   .modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;width:100%;max-width:400px;margin:14px;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
@@ -5895,6 +5922,43 @@ function toggleNavMenu() {
   </div>
 </div>
 
+<!-- ── Transaction Confirmation Modal ── -->
+<div class="modal-overlay" id="txConfirmModal" data-testid="tx-confirm-modal">
+  <div class="tx-modal">
+    <div class="tx-header">
+      <div class="tx-header-title" id="txConfirmTitle">CONFIRM TRANSACTION</div>
+      <div class="tx-network"><div class="tx-network-dot"></div>CRONOS</div>
+    </div>
+    <div class="tx-body">
+      <div class="tx-action-row" id="txActionRow">
+        <div class="tx-token-icon" id="txFromIcon" style="background:rgba(212,160,23,0.15);color:var(--gold);">?</div>
+        <div class="tx-arrow">→</div>
+        <div class="tx-token-icon" id="txToIcon" style="background:rgba(39,174,96,0.15);color:var(--green);">?</div>
+      </div>
+      <div class="tx-amount" id="txAmountDisplay">0</div>
+      <div class="tx-usd" id="txUsdDisplay"></div>
+      <div class="tx-details" id="txDetailsBlock">
+        <div class="tx-detail-row"><span class="tx-detail-label">Action</span><span class="tx-detail-value" id="txDetailAction">—</span></div>
+        <div class="tx-detail-row"><span class="tx-detail-label">Platform Fee</span><span class="tx-detail-value fee" id="txDetailFee">0.3%</span></div>
+        <div class="tx-detail-row"><span class="tx-detail-label">You Receive</span><span class="tx-detail-value green" id="txDetailReceive">—</span></div>
+        <div id="txExtraDetails"></div>
+      </div>
+      <div class="tx-warning" id="txWarning" style="display:none;">
+        <span style="font-size:16px;">⚠</span>
+        <span id="txWarningText">Please review this transaction carefully.</span>
+      </div>
+      <div class="tx-btn-row">
+        <button class="tx-cancel-btn" data-testid="tx-cancel-btn" onclick="closeTxConfirm()">CANCEL</button>
+        <button class="tx-confirm-btn" data-testid="tx-confirm-btn" id="txConfirmBtn" onclick="confirmTx()" style="background:linear-gradient(135deg,#27ae60,#2ecc71);">CONFIRM</button>
+      </div>
+    </div>
+    <div class="tx-cronos-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      SECURED BY CRONOS BLOCKCHAIN
+    </div>
+  </div>
+</div>
+
 <!-- ── Harvest Confirm Modal ── -->
 <div class="modal-overlay" id="harvestConfirmModal">
   <div class="modal" style="max-width:420px">
@@ -9745,6 +9809,74 @@ function setVaultPct(vid, action, pct) {
 
 
 let _toastTimer;
+// ===== TRANSACTION CONFIRMATION MODAL =====
+let _txPendingCallback = null;
+
+function showTxConfirm(opts) {
+  // opts: { title, action, fromToken, toToken, amount, fee, feeLabel, receive, color, icon, warning, details[], onConfirm }
+  const modal = document.getElementById('txConfirmModal');
+  document.getElementById('txConfirmTitle').textContent = opts.title || 'CONFIRM TRANSACTION';
+  document.getElementById('txAmountDisplay').textContent = opts.amount || '0';
+  document.getElementById('txUsdDisplay').textContent = opts.usdValue || '';
+  document.getElementById('txDetailAction').textContent = opts.action || '—';
+  document.getElementById('txDetailFee').textContent = opts.fee || '0.3%';
+  document.getElementById('txDetailReceive').textContent = opts.receive || '—';
+
+  // Icons
+  const fromIcon = document.getElementById('txFromIcon');
+  const toIcon = document.getElementById('txToIcon');
+  fromIcon.textContent = opts.fromToken || '?';
+  fromIcon.style.background = 'rgba(212,160,23,0.15)';
+  fromIcon.style.color = opts.color || 'var(--gold)';
+  if (opts.icon) {
+    fromIcon.textContent = opts.icon;
+    toIcon.style.display = 'none';
+    document.querySelector('#txActionRow .tx-arrow').style.display = 'none';
+  } else {
+    toIcon.textContent = opts.toToken || '✓';
+    toIcon.style.display = 'flex';
+    document.querySelector('#txActionRow .tx-arrow').style.display = 'block';
+  }
+
+  // Confirm button color
+  const btn = document.getElementById('txConfirmBtn');
+  btn.style.background = opts.btnColor || 'linear-gradient(135deg,#27ae60,#2ecc71)';
+
+  // Warning
+  const warnEl = document.getElementById('txWarning');
+  const warnText = document.getElementById('txWarningText');
+  if (opts.warning) { warnEl.style.display = 'flex'; warnText.textContent = opts.warning; }
+  else { warnEl.style.display = 'none'; }
+
+  // Extra details
+  const extraEl = document.getElementById('txExtraDetails');
+  let extraHtml = '';
+  if (opts.details && opts.details.length > 0) {
+    opts.details.forEach(d => {
+      extraHtml += '<div class="tx-detail-row"><span class="tx-detail-label">' + d.label + '</span><span class="tx-detail-value' + (d.cls ? ' ' + d.cls : '') + '">' + d.value + '</span></div>';
+    });
+  }
+  extraEl.innerHTML = extraHtml;
+
+  _txPendingCallback = opts.onConfirm || null;
+  modal.classList.add('open');
+}
+
+function closeTxConfirm() {
+  document.getElementById('txConfirmModal').classList.remove('open');
+  _txPendingCallback = null;
+}
+
+function confirmTx() {
+  document.getElementById('txConfirmModal').classList.remove('open');
+  if (_txPendingCallback) {
+    const cb = _txPendingCallback;
+    _txPendingCallback = null;
+    cb();
+  }
+}
+
+
 function showToast(msg, type) {
   const el = document.getElementById("toast");
   el.textContent = msg;
@@ -15601,13 +15733,32 @@ function lendSupply(token) {
   const amount = parseFloat(input?.value);
   if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
 
-  let s = initLendState();
-  s.pools[token].totalSupplied += amount;
-  s.userSupplied[token] = (s.userSupplied[token] || 0) + amount;
-  saveLendState(s);
-  if (input) input.value = '';
-  showToast('Supplied ' + amount.toFixed(4) + ' ' + token + ' successfully!', 'success');
-  updateLendingUI();
+  const apy = LENDING_POOLS[token] ? LENDING_POOLS[token].baseSupplyAPY : 3;
+  showTxConfirm({
+    title: 'CONFIRM SUPPLY',
+    action: 'Supply ' + token,
+    fromToken: token.charAt(0),
+    icon: '🏦',
+    amount: amount.toFixed(4) + ' ' + token,
+    fee: 'No supply fee',
+    receive: apy.toFixed(1) + '% APY interest',
+    color: '#00e5ff',
+    btnColor: 'linear-gradient(135deg,#00e5ff,#0090a0)',
+    details: [
+      { label: 'Token', value: token },
+      { label: 'Supply APY', value: apy.toFixed(1) + '%', cls: 'green' },
+      { label: 'Can be withdrawn', value: 'Anytime' },
+    ],
+    onConfirm: function() {
+      let s = initLendState();
+      s.pools[token].totalSupplied += amount;
+      s.userSupplied[token] = (s.userSupplied[token] || 0) + amount;
+      saveLendState(s);
+      if (input) input.value = '';
+      showToast('Supplied ' + amount.toFixed(4) + ' ' + token + ' successfully!', 'success');
+      updateLendingUI();
+    }
+  });
 }
 
 function lendWithdraw(token) {
@@ -15620,7 +15771,6 @@ function lendWithdraw(token) {
   const userSup = s.userSupplied[token] || 0;
   if (amount > userSup) { showToast('Insufficient supply balance', 'error'); return; }
 
-  // Check if withdrawal would cause under-collateralization
   const price = getTokenPrice(token);
   const cf = LENDING_POOLS[token].collateralFactor;
   let totalCollateral = 0, totalBorrow = 0;
@@ -15634,12 +15784,30 @@ function lendWithdraw(token) {
     return;
   }
 
-  s.pools[token].totalSupplied -= amount;
-  s.userSupplied[token] -= amount;
-  saveLendState(s);
-  if (input) input.value = '';
-  showToast('Withdrew ' + amount.toFixed(4) + ' ' + token, 'success');
-  updateLendingUI();
+  showTxConfirm({
+    title: 'CONFIRM WITHDRAWAL',
+    action: 'Withdraw ' + token,
+    fromToken: '🏦',
+    icon: '🏦',
+    amount: amount.toFixed(4) + ' ' + token,
+    fee: 'No withdrawal fee',
+    receive: amount.toFixed(4) + ' ' + token + ' to wallet',
+    color: '#00e5ff',
+    btnColor: 'linear-gradient(135deg,#00e5ff,#0090a0)',
+    details: [
+      { label: 'Token', value: token },
+      { label: 'Remaining Supply', value: (userSup - amount).toFixed(4) + ' ' + token },
+    ],
+    onConfirm: function() {
+      let s2 = initLendState();
+      s2.pools[token].totalSupplied -= amount;
+      s2.userSupplied[token] -= amount;
+      saveLendState(s2);
+      if (input) input.value = '';
+      showToast('Withdrew ' + amount.toFixed(4) + ' ' + token, 'success');
+      updateLendingUI();
+    }
+  });
 }
 
 function lendBorrow() {
@@ -15670,14 +15838,37 @@ function lendBorrow() {
 
   // Origination fee
   const origFee = amount * (LEND_ORIGINATION_FEE / 100);
-  s.ownerFees.origination = (s.ownerFees.origination || 0) + origFee * price;
+  const util = calcUtilization(s.pools[token].totalSupplied, s.pools[token].totalBorrowed);
+  const apr = calcBorrowAPR(token, util);
 
-  s.pools[token].totalBorrowed += amount;
-  s.userBorrowed[token] = (s.userBorrowed[token] || 0) + amount;
-  saveLendState(s);
-  if (amtInput) amtInput.value = '';
-  showToast('Borrowed ' + amount.toFixed(4) + ' ' + token + ' (0.3% origination fee applied)', 'success');
-  updateLendingUI();
+  showTxConfirm({
+    title: 'CONFIRM BORROW',
+    action: 'Borrow ' + token,
+    fromToken: '🏦',
+    icon: '🏦',
+    amount: amount.toFixed(4) + ' ' + token,
+    fee: origFee.toFixed(4) + ' ' + token + ' (0.3% origination)',
+    receive: (amount - origFee).toFixed(4) + ' ' + token,
+    color: '#ff8c00',
+    btnColor: 'linear-gradient(135deg,#ff8c00,#cc7000)',
+    warning: 'Keep health factor above 1.0 to avoid liquidation.',
+    details: [
+      { label: 'Borrow APR', value: apr.toFixed(1) + '%' },
+      { label: 'Origination Fee', value: '0.3%', cls: 'fee' },
+      { label: 'Collateral Used', value: '$' + (totalBorrow + newBorrowUSD).toFixed(2) + ' / $' + totalCollateral.toFixed(2) },
+    ],
+    onConfirm: function() {
+      let s2 = initLendState();
+      const origFee2 = amount * (LEND_ORIGINATION_FEE / 100);
+      s2.ownerFees.origination = (s2.ownerFees.origination || 0) + origFee2 * price;
+      s2.pools[token].totalBorrowed += amount;
+      s2.userBorrowed[token] = (s2.userBorrowed[token] || 0) + amount;
+      saveLendState(s2);
+      if (amtInput) amtInput.value = '';
+      showToast('Borrowed ' + amount.toFixed(4) + ' ' + token + ' (0.3% origination fee applied)', 'success');
+      updateLendingUI();
+    }
+  });
 }
 
 function lendRepay() {
@@ -15692,16 +15883,33 @@ function lendRepay() {
   if (borrowed <= 0) { showToast('No active loan for ' + token, 'error'); return; }
   const repayAmt = Math.min(amount, borrowed);
 
-  // Interest payment to owner (simplified: 1% of repaid amount as interest)
-  const interestPaid = repayAmt * 0.01;
-  s.ownerFees.interest = (s.ownerFees.interest || 0) + interestPaid * getTokenPrice(token) * (LEND_OWNER_FEE_PERCENT / 100);
-
-  s.pools[token].totalBorrowed -= repayAmt;
-  s.userBorrowed[token] -= repayAmt;
-  saveLendState(s);
-  if (amtInput) amtInput.value = '';
-  showToast('Repaid ' + repayAmt.toFixed(4) + ' ' + token + ' successfully!', 'success');
-  updateLendingUI();
+  showTxConfirm({
+    title: 'CONFIRM REPAYMENT',
+    action: 'Repay ' + token + ' loan',
+    fromToken: '🏦',
+    icon: '🏦',
+    amount: repayAmt.toFixed(4) + ' ' + token,
+    fee: 'No repayment fee',
+    receive: 'Loan reduced by ' + repayAmt.toFixed(4) + ' ' + token,
+    color: '#27ae60',
+    btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+    details: [
+      { label: 'Current Loan', value: borrowed.toFixed(4) + ' ' + token },
+      { label: 'Repaying', value: repayAmt.toFixed(4) + ' ' + token },
+      { label: 'Remaining After', value: (borrowed - repayAmt).toFixed(4) + ' ' + token, cls: 'green' },
+    ],
+    onConfirm: function() {
+      let s2 = initLendState();
+      const interestPaid = repayAmt * 0.01;
+      s2.ownerFees.interest = (s2.ownerFees.interest || 0) + interestPaid * getTokenPrice(token) * (LEND_OWNER_FEE_PERCENT / 100);
+      s2.pools[token].totalBorrowed -= repayAmt;
+      s2.userBorrowed[token] -= repayAmt;
+      saveLendState(s2);
+      if (amtInput) amtInput.value = '';
+      showToast('Repaid ' + repayAmt.toFixed(4) + ' ' + token + ' successfully!', 'success');
+      updateLendingUI();
+    }
+  });
 }
 
 function lendOwnerCollect() {
@@ -15855,6 +16063,37 @@ function placePredBet(marketId, side) {
   let s = initPredState();
   const market = s.markets.find(m => m.id === marketId);
   if (!market || market.status !== 'active') { showToast('Market is not active', 'error'); return; }
+
+  const optName = side === 'A' ? market.optA : market.optB;
+  const total = (market.poolA || 0) + (market.poolB || 0) + amount;
+  const poolSide = side === 'A' ? (market.poolA || 0) + amount : (market.poolB || 0) + amount;
+  const odds = ((poolSide / total) * 100).toFixed(0);
+
+  showTxConfirm({
+    title: 'CONFIRM PREDICTION BET',
+    action: 'Bet on "' + optName + '"',
+    fromToken: '🔮',
+    icon: '🔮',
+    amount: amount + ' CRO',
+    fee: '5% of pot on resolution',
+    receive: 'Win share if "' + optName + '" wins',
+    color: '#a855f7',
+    btnColor: side === 'A' ? 'linear-gradient(135deg,#30c070,#20a060)' : 'linear-gradient(135deg,#e04040,#c03030)',
+    details: [
+      { label: 'Market', value: market.question },
+      { label: 'Your Pick', value: optName, cls: side === 'A' ? 'green' : '' },
+      { label: 'Current Pool', value: total.toFixed(0) + ' CRO' },
+      { label: 'Odds', value: odds + '%' },
+    ],
+    onConfirm: function() { _doPlacePredBet(marketId, side, amount); }
+  });
+}
+
+function _doPlacePredBet(marketId, side, amount) {
+  const input = document.getElementById('predBet_' + marketId);
+  let s = initPredState();
+  const market = s.markets.find(m => m.id === marketId);
+  if (!market) return;
 
   if (side === 'A') market.poolA = (market.poolA || 0) + amount;
   else market.poolB = (market.poolB || 0) + amount;
@@ -16027,7 +16266,30 @@ function executeFlashLoan() {
 
   const fee = amount * (FLASH_FEE / 100);
   const stratNames = { arbitrage: 'DEX Arbitrage', liquidation: 'Liquidation', collateral_swap: 'Collateral Swap', self_liquidation: 'Self-Liquidation' };
-  const profit = fee + (Math.random() * amount * 0.005); // Simulated profit
+
+  showTxConfirm({
+    title: 'CONFIRM FLASH LOAN',
+    action: 'Flash Loan — ' + (stratNames[strategy] || strategy),
+    fromToken: '⚡',
+    icon: '⚡',
+    amount: amount.toLocaleString() + ' ' + token,
+    fee: fee.toFixed(4) + ' ' + token + ' (0.3%)',
+    feeLabel: 'Flash Loan Fee',
+    receive: 'Profit from ' + (stratNames[strategy] || strategy),
+    color: '#ffdd00',
+    btnColor: 'linear-gradient(135deg,#ffdd00,#ccb000)',
+    details: [
+      { label: 'Strategy', value: stratNames[strategy] || strategy },
+      { label: 'Pool', value: token },
+      { label: 'Repay Required', value: (amount + fee).toFixed(4) + ' ' + token },
+    ],
+    warning: 'Flash loan must be repaid within the same transaction block.',
+    onConfirm: function() { _doFlashLoan(token, amount, fee, strategy, stratNames); }
+  });
+}
+
+function _doFlashLoan(token, amount, fee, strategy, stratNames) {
+  const profit = fee + (Math.random() * amount * 0.005);
 
   let s = initFlashState();
   s.loans.push({ token, amount, fee, strategy: stratNames[strategy] || strategy, profit, timestamp: Date.now() });
@@ -16176,6 +16438,29 @@ function buyInsurance() {
   const discount = INS_DISCOUNTS[duration] || 0;
   const premium = amount * (rate / 100) * duration * (1 - discount);
   const typeName = INS_RATES[type]?.name || 'Coverage';
+
+  showTxConfirm({
+    title: 'CONFIRM INSURANCE PURCHASE',
+    action: 'Buy ' + typeName,
+    fromToken: '🛡',
+    icon: '🛡',
+    amount: premium.toFixed(2) + ' CRO',
+    usdValue: 'Premium for ' + amount.toLocaleString() + ' CRO coverage',
+    fee: rate + '% monthly' + (discount > 0 ? ' (' + (discount*100) + '% discount)' : ''),
+    receive: typeName + ' — ' + duration + ' month' + (duration > 1 ? 's' : ''),
+    color: '#4ecdc4',
+    btnColor: 'linear-gradient(135deg,#4ecdc4,#36a89e)',
+    details: [
+      { label: 'Coverage Amount', value: amount.toLocaleString() + ' CRO' },
+      { label: 'Duration', value: duration + ' month' + (duration > 1 ? 's' : '') },
+      { label: 'Monthly Rate', value: rate + '%' },
+      { label: 'Discount', value: discount > 0 ? (discount*100) + '% off' : 'None', cls: discount > 0 ? 'green' : '' },
+    ],
+    onConfirm: function() { _doBuyInsurance(type, amount, duration, premium, typeName); }
+  });
+}
+
+function _doBuyInsurance(type, amount, duration, premium, typeName) {
   const expiry = Date.now() + (duration * 30 * 24 * 60 * 60 * 1000);
 
   let s = initInsState();
@@ -16352,17 +16637,35 @@ function executeAggSwap() {
 
   const fee = amount * (AGG_FEE / 100);
   const baseRate = getSimulatedRate(fromToken, toToken);
-
-  // Pick best DEX
-  let bestDex = AGG_DEXS[0];
-  let bestRate = 0;
+  let bestDex = AGG_DEXS[0]; let bestRate = 0;
   AGG_DEXS.forEach(dex => {
     const variance = 1 + (Math.random() * 0.04 - 0.02);
     const rate = baseRate * variance;
     if (rate > bestRate) { bestRate = rate; bestDex = dex; }
   });
-
   const toAmount = (amount - fee) * bestRate;
+
+  showTxConfirm({
+    title: 'CONFIRM AGGREGATED SWAP',
+    action: 'Swap via ' + bestDex.name,
+    fromToken: fromToken.charAt(0),
+    toToken: toToken.charAt(0),
+    amount: amount.toLocaleString() + ' ' + fromToken,
+    fee: fee.toFixed(4) + ' ' + fromToken + ' (0.3%)',
+    receive: toAmount.toFixed(4) + ' ' + toToken,
+    color: '#ff6ec7',
+    btnColor: 'linear-gradient(135deg,#ff6ec7,#cc58a0)',
+    details: [
+      { label: 'Best Route', value: bestDex.name, cls: 'green' },
+      { label: 'Rate', value: '1 ' + fromToken + ' = ' + bestRate.toFixed(6) + ' ' + toToken },
+      { label: 'Routing Fee', value: '0.3%', cls: 'fee' },
+      { label: 'Min. Received', value: (toAmount * 0.995).toFixed(4) + ' ' + toToken },
+    ],
+    onConfirm: function() { _doAggSwap(fromToken, toToken, amount, fee, bestRate, bestDex, toAmount); }
+  });
+}
+
+function _doAggSwap(fromToken, toToken, amount, fee, bestRate, bestDex, toAmount) {
   const savings = (Math.random() * 1.5 + 0.3).toFixed(2);
 
   let s = initAggState();
@@ -17798,6 +18101,31 @@ function openFuturesPosition() {
   const price = futuresState.prices[futuresState.pair];
   if (!price) { showToast('Price not loaded yet', 'error'); return; }
 
+  const openingFee = amt * 0.003;
+
+  showTxConfirm({
+    title: 'CONFIRM FUTURES POSITION',
+    action: futuresState.side.toUpperCase() + ' ' + futuresState.pair + '/USD',
+    fromToken: futuresState.side === 'long' ? '📈' : '📉',
+    icon: futuresState.side === 'long' ? '📈' : '📉',
+    amount: amt.toFixed(2) + ' ' + curr,
+    fee: openingFee.toFixed(4) + ' ' + curr + ' (0.3%)',
+    receive: 'Position: ' + (amt - openingFee).toFixed(2) + ' ' + curr + ' @ ' + futuresState.leverage + 'x',
+    color: futuresState.side === 'long' ? '#27ae60' : '#e74c3c',
+    btnColor: futuresState.side === 'long' ? 'linear-gradient(135deg,#27ae60,#2ecc71)' : 'linear-gradient(135deg,#e74c3c,#c0392b)',
+    details: [
+      { label: 'Pair', value: futuresState.pair + '/USD' },
+      { label: 'Side', value: futuresState.side.toUpperCase(), cls: futuresState.side === 'long' ? 'green' : '' },
+      { label: 'Leverage', value: futuresState.leverage + 'x' },
+      { label: 'Entry Price', value: '$' + price.toFixed(2) },
+      { label: 'Opening Fee', value: '0.3%', cls: 'fee' },
+    ],
+    warning: 'Leveraged trading carries high risk. You can lose your entire position.',
+    onConfirm: function() { _doOpenFuturesPosition(amt, curr, price); }
+  });
+}
+
+function _doOpenFuturesPosition(amt, curr, price) {
   const tp = parseFloat(document.getElementById('futuresTP')?.value) || 0;
   const sl = parseFloat(document.getElementById('futuresSL')?.value) || 0;
 
@@ -17838,6 +18166,39 @@ function openFuturesPosition() {
 }
 
 function closeFuturesPosition(id) {
+  const idx = futuresState.positions.findIndex(p => p.id === id);
+  if (idx === -1) return;
+  const pos = futuresState.positions[idx];
+  const curr = pos.currency || 'GANG';
+  const currentPrice = futuresState.prices[pos.pair] || pos.entryPrice;
+  const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
+  const pnlPct = pos.side === 'long' ? priceDiff * pos.leverage : -priceDiff * pos.leverage;
+  const pnlAmt = pos.amount * pnlPct;
+  const finalPnl = Math.max(pnlAmt, -pos.amount);
+  const closingFee = pos.amount * 0.003;
+  const netPnl = finalPnl - closingFee;
+
+  showTxConfirm({
+    title: 'CONFIRM CLOSE POSITION',
+    action: 'Close ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD',
+    fromToken: netPnl >= 0 ? '✓' : '✗',
+    icon: netPnl >= 0 ? '📈' : '📉',
+    amount: pos.amount.toFixed(2) + ' ' + curr,
+    fee: closingFee.toFixed(4) + ' ' + curr + ' (0.3%)',
+    receive: (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr,
+    color: netPnl >= 0 ? '#27ae60' : '#e74c3c',
+    btnColor: 'linear-gradient(135deg,#e74c3c,#c0392b)',
+    details: [
+      { label: 'Entry Price', value: '$' + pos.entryPrice.toFixed(2) },
+      { label: 'Current Price', value: '$' + currentPrice.toFixed(2) },
+      { label: 'PnL', value: (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, cls: netPnl >= 0 ? 'green' : '' },
+      { label: 'Closing Fee', value: '0.3%', cls: 'fee' },
+    ],
+    onConfirm: function() { _doCloseFuturesPosition(id); }
+  });
+}
+
+function _doCloseFuturesPosition(id) {
   const idx = futuresState.positions.findIndex(p => p.id === id);
   if (idx === -1) return;
   const pos = futuresState.positions[idx];

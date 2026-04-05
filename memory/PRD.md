@@ -1,7 +1,7 @@
 # Cronos Gangsters DApp — PRD
 
 ## Architecture
-- Frontend: Vanilla HTML/JS (`cronos-gangsters.html` ~19k+ lines), Ethers.js v6
+- Frontend: Vanilla HTML/JS (`cronos-gangsters.html` ~19.2k+ lines), Ethers.js v6
 - Backend: FastAPI (`server.py`, `trading_api.py`, `mining_api.py`)
 - Telegram Bot: python-telegram-bot v20+ (`telegram_bot.py`)
 - Deployment: User downloads ZIP, uploads HTML to GoDaddy manually
@@ -18,6 +18,20 @@ Every feature MUST include:
 8. Telegram main keyboard button
 9. Telegram roadmap update (both command + callback)
 10. HTML Roadmap page update
+11. Transaction Confirmation Modal on all action buttons
+
+## Transaction Confirmation Modal
+Global wallet-style confirmation popup on ALL action buttons:
+- Flash Loans (Execute Flash Loan)
+- Insurance (Buy Coverage)
+- DEX Aggregator (Swap Via Best Route)
+- Prediction Markets (Place Bet)
+- Lending (Supply, Withdraw, Borrow, Repay)
+- Futures (Open Position, Close Position)
+- Shows: Action, Amount, Platform Fee, You Receive, extra details
+- CANCEL / CONFIRM buttons
+- "SECURED BY CRONOS BLOCKCHAIN" badge
+- Color-coded per feature (gold/teal/pink/purple/cyan/green/red)
 
 ## All Revenue Banners (18 total)
 1. Swap Fees (0.3%) — auto-collected
@@ -44,11 +58,8 @@ Swap, Liquidity, Farms, Vaults, Staking, Lottery, NFT Minting, NFT Marketplace, 
 
 ## Testing
 - Testing agent iteration 5: 100% pass (18/18 tests, 0 bugs)
-- All 28 pages navigate correctly
-- 30 nav buttons, 29 SVG icons
-- 27 feature grid items with icons
-- 18+ COLLECT banners on Revenue page
-- No critical JavaScript errors
+- Confirmation modal testing: 3/3 popups working, zero console errors
+- All 28 pages navigate correctly, 30 nav buttons, 29 SVG icons
 
 ## Backlog
 - P0: Deploy latest ZIP to GoDaddy
@@ -58,4 +69,3 @@ Swap, Liquidity, Farms, Vaults, Staking, Lottery, NFT Minting, NFT Marketplace, 
 - P2: OTC Trading Desk
 - P2: DAO Governance
 - P2: Limit Orders
-- P2: Mobile App
