@@ -16376,6 +16376,19 @@ function saveLendState(s) { localStorage.setItem('gangLendingState', JSON.string
 
 function initLendState() {
   let s = getLendState();
+  // Pre-seed pools with realistic liquidity and borrowing activity
+  const seedData = {
+    CRO:   { supplied: 125000, borrowed: 68000 },
+    GANG:  { supplied: 2500000, borrowed: 1750000 },
+    USDC:  { supplied: 85000, borrowed: 52000 },
+    WETH:  { supplied: 42, borrowed: 18 },
+    WBTC:  { supplied: 3.5, borrowed: 1.2 },
+    DAI:   { supplied: 60000, borrowed: 35000 },
+    USDT:  { supplied: 95000, borrowed: 58000 },
+    ATOM:  { supplied: 18000, borrowed: 7500 },
+    VVS:   { supplied: 800000000, borrowed: 320000000 },
+    TONIC: { supplied: 5000000000, borrowed: 1800000000 },
+  };
   if (!s.pools) {
     s = {
       pools: {},
@@ -16385,11 +16398,28 @@ function initLendState() {
       lastUpdate: Date.now(),
     };
     for (const token of Object.keys(LENDING_POOLS)) {
-      s.pools[token] = { totalSupplied: 0, totalBorrowed: 0 };
+      const seed = seedData[token] || { supplied: 0, borrowed: 0 };
+      s.pools[token] = { totalSupplied: seed.supplied, totalBorrowed: seed.borrowed };
       s.userSupplied[token] = 0;
       s.userBorrowed[token] = 0;
     }
     saveLendState(s);
+  } else {
+    // Check if pools need seeding (all empty = fresh install or reset)
+    let allEmpty = true;
+    for (const token of Object.keys(LENDING_POOLS)) {
+      if (!s.pools[token]) s.pools[token] = { totalSupplied: 0, totalBorrowed: 0 };
+      if (s.pools[token].totalSupplied > 0 && s.pools[token].totalBorrowed > 0) { allEmpty = false; }
+    }
+    if (allEmpty) {
+      for (const token of Object.keys(LENDING_POOLS)) {
+        const seed = seedData[token] || { supplied: 0, borrowed: 0 };
+        // Only seed pool-level liquidity, preserve user balances
+        s.pools[token].totalSupplied = Math.max(s.pools[token].totalSupplied, seed.supplied);
+        s.pools[token].totalBorrowed = Math.max(s.pools[token].totalBorrowed, seed.borrowed);
+      }
+      saveLendState(s);
+    }
   }
   return s;
 }
