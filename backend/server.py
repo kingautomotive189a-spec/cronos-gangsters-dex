@@ -417,6 +417,7 @@ async def get_bot_commands():
         {"command": "/trading", "description": "Leverage Trading (up to 20x)"},
         {"command": "/contracts", "description": "All verified contract addresses"},
         {"command": "/faq", "description": "Common questions answered"},
+        {"command": "/security", "description": "KYC & Audit verification status"},
     ]
     admin_commands = [
         {"command": "/ban", "description": "Ban a user (reply to message)"},

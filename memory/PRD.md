@@ -29,6 +29,8 @@ Core DeFi, Advanced DeFi, World Domination (6 features), Dynamic Copy Trading, A
 - **Token Logos in Dropdowns**: Converted DEX Aggregator (FROM/TO) and Flash Loans token selects from plain `<select>` to custom dropdowns with original token logos (CRO, USDC, WETH, GANG, WCRO, VVS, TONIC, ATOM)
 - **WCRO added** to TOKEN_LOGOS registry
 - **KYC & Audit Page**: Full "Security & Trust" page with GoPlus Security automated audit results (18 checks all passing), DEX listings, verification links (GoPlus, De.Fi, TokenSniffer, Cronoscan), contract details, and KYC "In Progress" status
+- **Telegram Bot `/security` command**: Shows all 18 GoPlus checks, KYC status, contract info, and verification links with inline buttons
+- **Telegram Bot menu**: Added "KYC & Audit" button to main inline keyboard menu
 - **ZIP delivered** for GoDaddy deployment
 
 ## Key Files

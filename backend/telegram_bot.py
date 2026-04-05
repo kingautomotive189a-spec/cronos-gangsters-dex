@@ -316,7 +316,8 @@ def main_keyboard():
         [InlineKeyboardButton("📜 Contracts", callback_data="menu_contracts"),
          InlineKeyboardButton("🗺 Roadmap", callback_data="menu_roadmap"),
          InlineKeyboardButton("❓ FAQ", callback_data="menu_faq")],
-        [InlineKeyboardButton("🌐 Website", url=DEX_LINK),
+        [InlineKeyboardButton("🛡 KYC & Audit", callback_data="menu_security"),
+         InlineKeyboardButton("🌐 Website", url=DEX_LINK),
          InlineKeyboardButton("🐦 Twitter", url=TWITTER)],
     ])
 
@@ -458,6 +459,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "• /socials - Social media links\n"
         "• /shill - Shareable promo\n"
         "• /contracts - All verified contract addresses\n"
+        "• /security - KYC & Audit status\n"
         "• /faq - Common questions answered\n"
     )
 
@@ -1669,6 +1671,57 @@ async def otc_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
 
 
+async def security_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /security command — KYC & Audit status"""
+    msg = (
+        "🛡 *SECURITY & TRUST — CRONOS GANGSTERS*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "Your investment safety is our priority.\n\n"
+        "━━━ *GOPLUS SECURITY AUDIT* ━━━\n\n"
+        "✅ Open Source Contract\n"
+        "✅ Not a Honeypot\n"
+        "✅ Not Mintable\n"
+        "✅ No Hidden Owner\n"
+        "✅ No Selfdestruct\n"
+        "✅ 0% Buy Tax\n"
+        "✅ 0% Sell Tax\n"
+        "✅ No Blacklist Function\n"
+        "✅ No Transfer Pause\n"
+        "✅ No Trading Cooldown\n"
+        "✅ Cannot Take Back Ownership\n"
+        "✅ No External Calls\n"
+        "✅ Can Buy & Sell Freely\n"
+        "✅ No Slippage Modification\n"
+        "✅ Not a Proxy Contract\n"
+        "✅ Anti-Whale Protection\n"
+        "✅ Listed on VVS Finance DEX\n"
+        "✅ No Dangerous Functions Detected\n\n"
+        "*All 18/18 security checks PASSED*\n\n"
+        "━━━ *KYC STATUS* ━━━\n\n"
+        "🟡 *In Progress* — KYC verification being completed via SolidProof\n\n"
+        "━━━ *CONTRACT INFO* ━━━\n\n"
+        f"📋 *Contract:* `{CONTRACT}`\n"
+        "🔗 *Network:* Cronos (Chain ID: 25)\n"
+        "💰 *Supply:* 1,000,000,000 GANG\n"
+        "📦 *Type:* Standard ERC-20\n"
+        "🔓 *Source:* Open & Verified on Cronoscan\n\n"
+        "━━━ *VERIFY YOURSELF* ━━━\n\n"
+        f"🔗 [GoPlus Security Report](https://gopluslabs.io/token-security/25/{CONTRACT})\n"
+        f"🔗 [De.Fi Scanner](https://de.fi/scanner/contract/{CONTRACT}?chainId=25)\n"
+        f"🔗 [TokenSniffer](https://tokensniffer.com/token/cronos/{CONTRACT})\n"
+        f"🔗 [Cronoscan Verified Code](https://cronoscan.com/address/{CONTRACT}#code)\n\n"
+        "🌐 [View Full Security Page on Website](https://www.cronosgangsters.com/cronos-gangsters.html)\n"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔍 GoPlus Report", url=f"https://gopluslabs.io/token-security/25/{CONTRACT}"),
+         InlineKeyboardButton("📋 Cronoscan", url=f"https://cronoscan.com/address/{CONTRACT}#code")],
+        [InlineKeyboardButton("🌐 Security Page", url="https://www.cronosgangsters.com/cronos-gangsters.html"),
+         InlineKeyboardButton("🔙 Main Menu", callback_data="menu_start")],
+    ])
+    await update.message.reply_text(msg, parse_mode="Markdown", reply_markup=keyboard, disable_web_page_preview=True)
+
+
+
 async def dao_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle /dao command"""
     msg = (
@@ -2817,6 +2870,34 @@ async def _cb_menu_dao(query, context):
         [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
     ])
     await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb)
+
+async def _cb_menu_security(query, context):
+    """Callback handler for KYC & Audit Security menu"""
+    msg = (
+        "🛡 *SECURITY & TRUST*\n"
+        "━━━━━━━━━━━━━━━━━━━━━\n\n"
+        "*GoPlus Security Audit — ALL 18 CHECKS PASSED*\n\n"
+        "✅ Open Source Contract\n"
+        "✅ Not a Honeypot\n"
+        "✅ Not Mintable\n"
+        "✅ No Hidden Owner\n"
+        "✅ 0% Buy/Sell Tax\n"
+        "✅ No Blacklist\n"
+        "✅ No Transfer Pause\n"
+        "✅ Anti-Whale Protection\n"
+        "✅ Listed on VVS Finance DEX\n\n"
+        "🟡 *KYC:* In Progress (via SolidProof)\n\n"
+        f"📋 *Contract:* `{CONTRACT}`\n"
+        "🔗 *Network:* Cronos (Chain ID: 25)\n"
+        "💰 *Supply:* 1,000,000,000 GANG\n"
+    )
+    kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔍 GoPlus Report", url=f"https://gopluslabs.io/token-security/25/{CONTRACT}"),
+         InlineKeyboardButton("📋 Cronoscan", url=f"https://cronoscan.com/address/{CONTRACT}#code")],
+        [InlineKeyboardButton("🔙 Back to Menu", callback_data="menu_back")],
+    ])
+    await query.edit_message_text(msg, parse_mode="Markdown", reply_markup=kb, disable_web_page_preview=True)
+
 CALLBACK_DISPATCH = {
     "refresh_price": _cb_refresh_price,
     "set_alert": _cb_set_alert,
@@ -2860,6 +2941,7 @@ CALLBACK_DISPATCH = {
     "menu_perpdex": _cb_menu_perpdex,
     "menu_otc": _cb_menu_otc,
     "menu_dao": _cb_menu_dao,
+    "menu_security": _cb_menu_security,
 }
 
 
@@ -3282,6 +3364,7 @@ def main():
     app.add_handler(CommandHandler("perpdex", perpdex_cmd))
     app.add_handler(CommandHandler("otc", otc_cmd))
     app.add_handler(CommandHandler("dao", dao_cmd))
+    app.add_handler(CommandHandler("security", security_cmd))
 
     # Admin commands
     app.add_handler(CommandHandler("ban", ban))
