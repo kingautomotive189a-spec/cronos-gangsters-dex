@@ -249,6 +249,27 @@
   #txConfirmModal .tx-confirm-btn:hover{filter:brightness(1.15);transform:translateY(-1px);}
   #txConfirmModal .tx-warning{display:flex;align-items:center;gap:8px;background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:11px;color:#e74c3c;}
   #txConfirmModal .tx-cronos-badge{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;font-size:10px;color:var(--muted);letter-spacing:1px;border-top:1px solid rgba(255,255,255,0.04);}
+  /* ── TX Processing & Confirmed States ── */
+  #txConfirmModal .tx-processing{display:none;text-align:center;padding:30px 20px;}
+  #txConfirmModal .tx-processing.active{display:block;}
+  #txConfirmModal .tx-spinner{width:64px;height:64px;border:3px solid rgba(255,255,255,0.08);border-top:3px solid var(--gold);border-radius:50%;animation:txSpin 1s linear infinite;margin:0 auto 20px;}
+  @keyframes txSpin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+  #txConfirmModal .tx-processing-text{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--gold);margin-bottom:8px;}
+  #txConfirmModal .tx-processing-sub{font-size:12px;color:var(--muted);letter-spacing:1px;}
+  #txConfirmModal .tx-confirmed{display:none;text-align:center;padding:30px 20px;}
+  #txConfirmModal .tx-confirmed.active{display:block;}
+  #txConfirmModal .tx-check-circle{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,rgba(39,174,96,0.2),rgba(39,174,96,0.05));border:3px solid var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:txCheckPop 0.4s cubic-bezier(0.175,0.885,0.32,1.275);}
+  @keyframes txCheckPop{0%{transform:scale(0);opacity:0;}100%{transform:scale(1);opacity:1;}}
+  #txConfirmModal .tx-check-circle svg{width:36px;height:36px;}
+  #txConfirmModal .tx-confirmed-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--green);margin-bottom:6px;}
+  #txConfirmModal .tx-confirmed-sub{font-size:12px;color:var(--muted);margin-bottom:16px;}
+  #txConfirmModal .tx-hash{display:inline-flex;align-items:center;gap:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px 14px;font-size:11px;color:var(--muted);letter-spacing:0.5px;margin-bottom:16px;cursor:pointer;transition:all .2s;text-decoration:none;}
+  #txConfirmModal .tx-hash:hover{border-color:var(--gold);color:var(--gold);}
+  #txConfirmModal .tx-done-btn{padding:14px 40px;border-radius:10px;border:none;background:linear-gradient(135deg,#27ae60,#2ecc71);font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;color:#fff;transition:all .2s;font-weight:700;}
+  #txConfirmModal .tx-done-btn:hover{filter:brightness(1.15);transform:translateY(-1px);}
+  #txConfirmModal .tx-custom-body{padding:20px;text-align:center;}
+  #txConfirmModal .tx-custom-icon{margin-bottom:16px;}
+  #txConfirmModal .tx-custom-details{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:14px;margin-bottom:18px;}
   .modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
   #txConfirmModal{z-index:9999;}
   .modal-overlay.open{display:flex;}
@@ -6469,7 +6490,8 @@ function toggleNavMenu() {
       <div class="tx-header-title" id="txConfirmTitle">CONFIRM TRANSACTION</div>
       <div class="tx-network"><div class="tx-network-dot"></div>CRONOS</div>
     </div>
-    <div class="tx-body">
+    <!-- Stage 1: Details -->
+    <div class="tx-body" id="txStageDetails">
       <div class="tx-action-row" id="txActionRow">
         <div class="tx-token-icon" id="txFromIcon" style="background:rgba(212,160,23,0.15);color:var(--gold);">?</div>
         <div class="tx-arrow">→</div>
@@ -6492,7 +6514,35 @@ function toggleNavMenu() {
         <button class="tx-confirm-btn" data-testid="tx-confirm-btn" id="txConfirmBtn" onclick="confirmTx()" style="background:linear-gradient(135deg,#27ae60,#2ecc71);">CONFIRM</button>
       </div>
     </div>
-    <div class="tx-cronos-badge">
+    <!-- Stage 1b: Custom Details (iconHtml/detailsHtml pattern) -->
+    <div class="tx-custom-body" id="txStageCustom" style="display:none;">
+      <div class="tx-custom-icon" id="txCustomIcon"></div>
+      <div class="tx-custom-details" id="txCustomDetails"></div>
+      <div class="tx-btn-row">
+        <button class="tx-cancel-btn" onclick="closeTxConfirm()">CANCEL</button>
+        <button class="tx-confirm-btn" id="txCustomConfirmBtn" onclick="confirmTx()" style="background:linear-gradient(135deg,#27ae60,#2ecc71);">CONFIRM</button>
+      </div>
+    </div>
+    <!-- Stage 2: Processing -->
+    <div class="tx-processing" id="txStageProcessing" data-testid="tx-processing">
+      <div class="tx-spinner"></div>
+      <div class="tx-processing-text">PROCESSING TRANSACTION</div>
+      <div class="tx-processing-sub">Confirming on Cronos blockchain...</div>
+    </div>
+    <!-- Stage 3: Confirmed -->
+    <div class="tx-confirmed" id="txStageConfirmed" data-testid="tx-confirmed">
+      <div class="tx-check-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <div class="tx-confirmed-title">TRANSACTION CONFIRMED</div>
+      <div class="tx-confirmed-sub" id="txConfirmedSub">Your transaction has been confirmed on the Cronos blockchain</div>
+      <a class="tx-hash" id="txHashLink" href="#" target="_blank" data-testid="tx-hash-link">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        <span id="txHashText">View on Cronoscan</span>
+      </a>
+      <div><button class="tx-done-btn" data-testid="tx-done-btn" onclick="closeTxConfirm()">DONE</button></div>
+    </div>
+    <div class="tx-cronos-badge" id="txCronosBadge">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       SECURED BY CRONOS BLOCKCHAIN
     </div>
@@ -10359,67 +10409,150 @@ let _toastTimer;
 let _txPendingCallback = null;
 
 function showTxConfirm(opts) {
-  // opts: { title, action, fromToken, toToken, amount, fee, feeLabel, receive, color, icon, warning, details[], onConfirm }
   const modal = document.getElementById('txConfirmModal');
+  const stageDetails = document.getElementById('txStageDetails');
+  const stageCustom = document.getElementById('txStageCustom');
+  const stageProcessing = document.getElementById('txStageProcessing');
+  const stageConfirmed = document.getElementById('txStageConfirmed');
+
+  // Reset all stages
+  stageDetails.style.display = 'none';
+  stageCustom.style.display = 'none';
+  stageProcessing.classList.remove('active');
+  stageConfirmed.classList.remove('active');
+  document.getElementById('txCronosBadge').style.display = 'flex';
+
   document.getElementById('txConfirmTitle').textContent = opts.title || 'CONFIRM TRANSACTION';
-  document.getElementById('txAmountDisplay').textContent = opts.amount || '0';
-  document.getElementById('txUsdDisplay').textContent = opts.usdValue || '';
-  document.getElementById('txDetailAction').textContent = opts.action || '—';
-  document.getElementById('txDetailFee').textContent = opts.fee || '0.3%';
-  document.getElementById('txDetailReceive').textContent = opts.receive || '—';
 
-  // Icons
-  const fromIcon = document.getElementById('txFromIcon');
-  const toIcon = document.getElementById('txToIcon');
-  fromIcon.textContent = opts.fromToken || '?';
-  fromIcon.style.background = 'rgba(212,160,23,0.15)';
-  fromIcon.style.color = opts.color || 'var(--gold)';
-  if (opts.icon) {
-    fromIcon.textContent = opts.icon;
-    toIcon.style.display = 'none';
-    document.querySelector('#txActionRow .tx-arrow').style.display = 'none';
+  // Check if using new pattern (iconHtml/detailsHtml)
+  if (opts.iconHtml || opts.detailsHtml) {
+    stageCustom.style.display = 'block';
+    stageDetails.style.display = 'none';
+    document.getElementById('txCustomIcon').innerHTML = opts.iconHtml || '';
+    document.getElementById('txCustomDetails').innerHTML = opts.detailsHtml || '';
+    const customBtn = document.getElementById('txCustomConfirmBtn');
+    customBtn.style.background = opts.btnColor || 'linear-gradient(135deg,#27ae60,#2ecc71)';
   } else {
-    toIcon.textContent = opts.toToken || '✓';
-    toIcon.style.display = 'flex';
-    document.querySelector('#txActionRow .tx-arrow').style.display = 'block';
+    stageDetails.style.display = 'block';
+    stageCustom.style.display = 'none';
+    document.getElementById('txAmountDisplay').textContent = opts.amount || '0';
+    document.getElementById('txUsdDisplay').textContent = opts.usdValue || '';
+    document.getElementById('txDetailAction').textContent = opts.action || '—';
+    document.getElementById('txDetailFee').textContent = opts.fee || '0.3%';
+    document.getElementById('txDetailReceive').textContent = opts.receive || '—';
+
+    // Icons
+    const fromIcon = document.getElementById('txFromIcon');
+    const toIcon = document.getElementById('txToIcon');
+    fromIcon.textContent = opts.fromToken || '?';
+    fromIcon.style.background = 'rgba(212,160,23,0.15)';
+    fromIcon.style.color = opts.color || 'var(--gold)';
+    if (opts.icon) {
+      fromIcon.textContent = opts.icon;
+      toIcon.style.display = 'none';
+      document.querySelector('#txActionRow .tx-arrow').style.display = 'none';
+    } else {
+      toIcon.textContent = opts.toToken || '✓';
+      toIcon.style.display = 'flex';
+      document.querySelector('#txActionRow .tx-arrow').style.display = 'block';
+    }
+
+    // Confirm button color
+    const btn = document.getElementById('txConfirmBtn');
+    btn.style.background = opts.btnColor || 'linear-gradient(135deg,#27ae60,#2ecc71)';
+
+    // Warning
+    const warnEl = document.getElementById('txWarning');
+    const warnText = document.getElementById('txWarningText');
+    if (opts.warning) { warnEl.style.display = 'flex'; warnText.textContent = opts.warning; }
+    else { warnEl.style.display = 'none'; }
+
+    // Extra details
+    const extraEl = document.getElementById('txExtraDetails');
+    let extraHtml = '';
+    if (opts.details && opts.details.length > 0) {
+      opts.details.forEach(d => {
+        extraHtml += '<div class="tx-detail-row"><span class="tx-detail-label">' + d.label + '</span><span class="tx-detail-value' + (d.cls ? ' ' + d.cls : '') + '">' + d.value + '</span></div>';
+      });
+    }
+    extraEl.innerHTML = extraHtml;
   }
-
-  // Confirm button color
-  const btn = document.getElementById('txConfirmBtn');
-  btn.style.background = opts.btnColor || 'linear-gradient(135deg,#27ae60,#2ecc71)';
-
-  // Warning
-  const warnEl = document.getElementById('txWarning');
-  const warnText = document.getElementById('txWarningText');
-  if (opts.warning) { warnEl.style.display = 'flex'; warnText.textContent = opts.warning; }
-  else { warnEl.style.display = 'none'; }
-
-  // Extra details
-  const extraEl = document.getElementById('txExtraDetails');
-  let extraHtml = '';
-  if (opts.details && opts.details.length > 0) {
-    opts.details.forEach(d => {
-      extraHtml += '<div class="tx-detail-row"><span class="tx-detail-label">' + d.label + '</span><span class="tx-detail-value' + (d.cls ? ' ' + d.cls : '') + '">' + d.value + '</span></div>';
-    });
-  }
-  extraEl.innerHTML = extraHtml;
 
   _txPendingCallback = opts.onConfirm || null;
+  _txTitle = opts.title || 'Transaction';
   modal.classList.add('open');
 }
 
 function closeTxConfirm() {
-  document.getElementById('txConfirmModal').classList.remove('open');
+  const modal = document.getElementById('txConfirmModal');
+  modal.classList.remove('open');
   _txPendingCallback = null;
+  clearTimeout(_txAutoCloseTimer);
+}
+
+let _txAutoCloseTimer = null;
+let _txTitle = '';
+
+function _generateTxHash() {
+  const chars = '0123456789abcdef';
+  let hash = '0x';
+  for (let i = 0; i < 64; i++) hash += chars[Math.floor(Math.random() * 16)];
+  return hash;
 }
 
 function confirmTx() {
-  document.getElementById('txConfirmModal').classList.remove('open');
+  const stageDetails = document.getElementById('txStageDetails');
+  const stageCustom = document.getElementById('txStageCustom');
+  const stageProcessing = document.getElementById('txStageProcessing');
+  const stageConfirmed = document.getElementById('txStageConfirmed');
+
+  // Hide details, show processing
+  stageDetails.style.display = 'none';
+  stageCustom.style.display = 'none';
+  stageProcessing.classList.add('active');
+  document.getElementById('txConfirmTitle').textContent = 'PROCESSING';
+
+  // Execute callback during processing
   if (_txPendingCallback) {
     const cb = _txPendingCallback;
     _txPendingCallback = null;
-    cb();
+    try { cb(); } catch(e) { console.error('Tx callback error:', e); }
   }
+
+  // After 1.5s, show confirmed
+  setTimeout(() => {
+    stageProcessing.classList.remove('active');
+    stageConfirmed.classList.add('active');
+    document.getElementById('txConfirmTitle').textContent = 'CONFIRMED';
+
+    // Generate fake tx hash
+    const txHash = _generateTxHash();
+    const shortHash = txHash.substring(0, 10) + '...' + txHash.substring(58);
+    document.getElementById('txHashText').textContent = shortHash + ' — View on Cronoscan';
+    document.getElementById('txHashLink').href = 'https://cronoscan.com/tx/' + txHash;
+
+    // Set confirmed subtitle based on action
+    const sub = document.getElementById('txConfirmedSub');
+    const title = (_txTitle || '').toLowerCase();
+    if (title.includes('collect') || title.includes('claim') || title.includes('withdraw') || title.includes('unstake')) {
+      sub.textContent = 'Withdrawal confirmed on Cronos blockchain';
+    } else if (title.includes('stake')) {
+      sub.textContent = 'Staking confirmed on Cronos blockchain';
+    } else if (title.includes('copy')) {
+      sub.textContent = 'Copy trade confirmed on Cronos blockchain';
+    } else if (title.includes('vote')) {
+      sub.textContent = 'Vote recorded on Cronos blockchain';
+    } else if (title.includes('proposal')) {
+      sub.textContent = 'Proposal submitted on Cronos blockchain';
+    } else {
+      sub.textContent = 'Transaction confirmed on Cronos blockchain';
+    }
+
+    // Auto-close after 3 seconds
+    _txAutoCloseTimer = setTimeout(() => {
+      closeTxConfirm();
+    }, 3000);
+  }, 1500);
 }
 
 
