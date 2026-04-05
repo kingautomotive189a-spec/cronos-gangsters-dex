@@ -3907,18 +3907,16 @@ function toggleNavMenu() {
       </div>
 
       <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;">
-        <select id="lendBorrowToken" data-testid="lend-borrow-token-select" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:14px;cursor:pointer;outline:none;">
-          <option value="CRO">CRO</option>
-          <option value="GANG">GANG</option>
-          <option value="USDC">USDC</option>
-          <option value="WETH">WETH</option>
-          <option value="WBTC">WBTC</option>
-          <option value="DAI">DAI</option>
-          <option value="USDT">USDT</option>
-          <option value="ATOM">ATOM</option>
-          <option value="VVS">VVS</option>
-          <option value="TONIC">TONIC</option>
-        </select>
+        <div class="custom-token-select" id="lendBorrowTokenWrap" data-testid="lend-borrow-token-select" style="position:relative;min-width:130px;">
+          <button type="button" onclick="toggleTokenDropdown('lendBorrowTokenWrap')" style="display:flex;align-items:center;gap:8px;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:14px;cursor:pointer;outline:none;">
+            <img id="lendBorrowTokenImg" src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" style="width:22px;height:22px;border-radius:50%;" loading="lazy">
+            <span id="lendBorrowTokenLabel" style="font-weight:700;flex:1;text-align:left;">CRO</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="token-dropdown-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,16,26,0.98);border:1px solid var(--border);border-radius:10px;margin-top:4px;z-index:999;max-height:300px;overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,0.6);padding:4px;">
+          </div>
+          <input type="hidden" id="lendBorrowToken" value="CRO">
+        </div>
         <div style="position:relative;flex:1;">
           <input type="number" id="lendBorrowAmt" data-testid="lend-borrow-amount" placeholder="Borrow amount" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;padding-right:56px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
           <button onclick="lendSetMax()" data-testid="lend-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#ff8c00,#cc7000);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:10px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
@@ -5268,7 +5266,15 @@ function toggleNavMenu() {
       <div style="display:grid;gap:10px;margin-bottom:14px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <select id="loOrderType" data-testid="lo-order-type" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;"><option value="buy">BUY</option><option value="sell">SELL</option></select>
-          <select id="loToken" data-testid="lo-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;"><option value="CRO">CRO</option><option value="GANG">GANG</option><option value="USDC">USDC</option><option value="WETH">WETH</option><option value="WBTC">WBTC</option></select>
+          <div class="custom-token-select" id="loTokenWrap" style="position:relative;">
+            <button type="button" onclick="toggleTokenDropdown('loTokenWrap')" style="display:flex;align-items:center;gap:8px;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;cursor:pointer;outline:none;">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" style="width:20px;height:20px;border-radius:50%;" loading="lazy">
+              <span style="font-weight:700;flex:1;text-align:left;">CRO</span>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="token-dropdown-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,16,26,0.98);border:1px solid var(--border);border-radius:10px;margin-top:4px;z-index:999;max-height:250px;overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,0.6);padding:4px;min-width:160px;"></div>
+            <input type="hidden" id="loToken" value="CRO">
+          </div>
         </div>
         <input type="number" id="loPrice" data-testid="lo-price" placeholder="Target price (USD)" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
@@ -5380,8 +5386,24 @@ function toggleNavMenu() {
       <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">List a large block trade. Buyer fills it. Escrow protects both sides. 0.3% fee.</div>
       <div style="display:grid;gap:10px;margin-bottom:14px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <select id="otcSellToken" data-testid="otc-sell-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;"><option value="CRO">SELL: CRO</option><option value="GANG">SELL: GANG</option><option value="USDC">SELL: USDC</option><option value="WETH">SELL: WETH</option></select>
-          <select id="otcBuyToken" data-testid="otc-buy-token" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;"><option value="GANG">BUY: GANG</option><option value="CRO">BUY: CRO</option><option value="USDC">BUY: USDC</option><option value="WETH">BUY: WETH</option></select>
+          <div class="custom-token-select" id="otcSellTokenWrap" style="position:relative;">
+            <button type="button" onclick="toggleTokenDropdown('otcSellTokenWrap')" style="display:flex;align-items:center;gap:6px;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:12px;cursor:pointer;outline:none;">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png" style="width:18px;height:18px;border-radius:50%;" loading="lazy">
+              <span style="font-weight:700;flex:1;text-align:left;">SELL: CRO</span>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="token-dropdown-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,16,26,0.98);border:1px solid var(--border);border-radius:10px;margin-top:4px;z-index:999;max-height:250px;overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,0.6);padding:4px;min-width:160px;"></div>
+            <input type="hidden" id="otcSellToken" value="CRO">
+          </div>
+          <div class="custom-token-select" id="otcBuyTokenWrap" style="position:relative;">
+            <button type="button" onclick="toggleTokenDropdown('otcBuyTokenWrap')" style="display:flex;align-items:center;gap:6px;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:12px;cursor:pointer;outline:none;">
+              <img src="/gang-logo.png" style="width:18px;height:18px;border-radius:50%;" loading="lazy">
+              <span style="font-weight:700;flex:1;text-align:left;">BUY: GANG</span>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <div class="token-dropdown-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,16,26,0.98);border:1px solid var(--border);border-radius:10px;margin-top:4px;z-index:999;max-height:250px;overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,0.6);padding:4px;min-width:160px;"></div>
+            <input type="hidden" id="otcBuyToken" value="GANG">
+          </div>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:11px;color:var(--muted);">Balance: <span id="otcAvailBal" data-testid="otc-avail-bal" style="color:var(--gold);font-weight:700;">0</span></span>
@@ -16493,6 +16515,85 @@ function updateLendingUI() {
     loansEl.innerHTML = hasLoans ? html : '<div style="color:var(--muted);text-align:center;padding:16px;">No active loans. Supply collateral and borrow above.</div>';
   }
 }
+
+// ═══════════════════════════════════════════
+// CUSTOM TOKEN DROPDOWN WITH LOGOS
+// ═══════════════════════════════════════════
+const TOKEN_LOGOS = {
+  'CRO': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3635.png', name: 'Cronos', color: '#002d74' },
+  'GANG': { logo: '/gang-logo.png', name: 'Gangster', color: '#d4a017' },
+  'USDC': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png', name: 'USD Coin', color: '#2775ca' },
+  'WETH': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2396.png', name: 'Wrapped ETH', color: '#627eea' },
+  'WBTC': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3717.png', name: 'Wrapped BTC', color: '#f09242' },
+  'DAI': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png', name: 'Dai', color: '#f5ac37' },
+  'USDT': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png', name: 'Tether', color: '#26a17b' },
+  'ATOM': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3794.png', name: 'Cosmos', color: '#2e3148' },
+  'VVS': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/14519.png', name: 'VVS Finance', color: '#68d3a1' },
+  'TONIC': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/17709.png', name: 'Tectonic', color: '#5e3ab2' },
+  'BTC': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png', name: 'Bitcoin', color: '#f7931a' },
+  'ETH': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png', name: 'Ethereum', color: '#627eea' },
+  'SOL': { logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png', name: 'Solana', color: '#9945ff' }
+};
+
+function getTokenLogo(sym) {
+  return TOKEN_LOGOS[sym] || { logo: '', name: sym, color: '#444' };
+}
+
+function toggleTokenDropdown(wrapId) {
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+  const list = wrap.querySelector('.token-dropdown-list');
+  if (!list) return;
+  const isOpen = list.style.display !== 'none';
+  // Close all others first
+  document.querySelectorAll('.token-dropdown-list').forEach(l => l.style.display = 'none');
+  if (isOpen) { list.style.display = 'none'; return; }
+  // Determine tokens and prefix
+  const hiddenInput = wrap.querySelector('input[type="hidden"]');
+  const currentVal = hiddenInput ? hiddenInput.value : '';
+  const isOtcSell = wrapId === 'otcSellTokenWrap';
+  const isOtcBuy = wrapId === 'otcBuyTokenWrap';
+  const prefix = isOtcSell ? 'SELL: ' : isOtcBuy ? 'BUY: ' : '';
+  const tokens = (isOtcSell || isOtcBuy) ? ['CRO','GANG','USDC','WETH','WBTC'] : ['CRO','GANG','USDC','WETH','WBTC','DAI','USDT','ATOM','VVS','TONIC'];
+  list.innerHTML = tokens.map(t => {
+    const info = getTokenLogo(t);
+    const isActive = t === currentVal;
+    return `<div onclick="selectTokenDropdown('${wrapId}','${t}')" style="display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;border-radius:8px;transition:all .15s;background:${isActive ? 'rgba(212,160,23,0.12)' : 'transparent'};border-left:2px solid ${isActive ? 'var(--gold)' : 'transparent'};" onmouseover="this.style.background='rgba(212,160,23,0.08)'" onmouseout="this.style.background='${isActive ? 'rgba(212,160,23,0.12)' : 'transparent'}'">
+      <img src="${info.logo}" style="width:24px;height:24px;border-radius:50%;border:1px solid ${info.color}40;" loading="lazy" onerror="this.style.display='none'">
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:13px;color:${isActive ? 'var(--gold)' : 'var(--text)'};">${prefix}${t}</div>
+        <div style="font-size:9px;color:var(--muted);">${info.name}</div>
+      </div>
+      ${isActive ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' : ''}
+    </div>`;
+  }).join('');
+  list.style.display = 'block';
+}
+
+function selectTokenDropdown(wrapId, token) {
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+  const hiddenInput = wrap.querySelector('input[type="hidden"]');
+  const imgEl = wrap.querySelector('button img');
+  const labelEl = wrap.querySelector('button span');
+  const info = getTokenLogo(token);
+  if (hiddenInput) hiddenInput.value = token;
+  if (imgEl) imgEl.src = info.logo;
+  const isOtcSell = wrapId === 'otcSellTokenWrap';
+  const isOtcBuy = wrapId === 'otcBuyTokenWrap';
+  const prefix = isOtcSell ? 'SELL: ' : isOtcBuy ? 'BUY: ' : '';
+  if (labelEl) labelEl.textContent = prefix + token;
+  // Close dropdown
+  const list = wrap.querySelector('.token-dropdown-list');
+  if (list) list.style.display = 'none';
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.custom-token-select')) {
+    document.querySelectorAll('.token-dropdown-list').forEach(l => l.style.display = 'none');
+  }
+});
 
 function lendSupply(token) {
   const id = lendElId(token);

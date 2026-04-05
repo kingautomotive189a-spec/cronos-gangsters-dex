@@ -4,7 +4,7 @@
 Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deployment. Features include DeFi protocols (Swap, Lending, Futures, etc.), NFTs, Telegram Bot integration, and revenue collection for the owner.
 
 ## Architecture
-- **Frontend**: Single `cronos-gangsters.html` file (~21,400 lines), vanilla JS + Ethers.js v6
+- **Frontend**: Single `cronos-gangsters.html` file (~21,500 lines), vanilla JS + Ethers.js v6
 - **Backend**: FastAPI (`server.py`) + Python Telegram Bot (`telegram_bot.py`)
 - **Storage**: LocalStorage (mocked DeFi state), no database
 - **Deployment**: User downloads ZIP → uploads to GoDaddy manually
@@ -21,29 +21,24 @@ Build a massive Web3 DApp as a single standalone HTML file for GoDaddy deploymen
 - Copy Trading (0.3%), Revenue Staking (0.3%), Limit Orders (0.3%), Perpetual DEX (0.3%), OTC Trading (0.3%), DAO Governance (1 CRO)
 
 ### Dynamic Copy Trading + Auto-Refresh (Phase 10)
-- Copy Trading linked to real Futures positions with proper token logos (BTC, ETH, TSLA, NVDA, GOLD, SOL etc.)
-- Rank badges (#1 gold, #2 silver, #3 bronze), asset type badges (STOCK, INDEX, COMDTY)
-- Global auto-refresh engine: Futures PnL (10s), Copy Trading (5-6s), Perp DEX prices (3s), Revenue Staking rewards (8s), balances (15s)
-- Live pulsing green dot indicators, CSS pulse animations on value changes
-- 3-stage wallet popup (Confirm → Processing → Confirmed) on all mocked features
+- Copy Trading linked to real Futures positions with proper token logos
+- Global auto-refresh engine for all data
 
 ### Navigation Menu Overhaul (Phase 10c)
 - Organized into 7 categories: TRADE, LEVERAGE, EARN, MARKETS, ASSETS, TOOLS, INFO
-- Clean white text, gold category headers, no rainbow colors
-- Subtle descriptions on key items, gold left-border accent on active item
 
-### Full Audit (Phase 10d - Feb 5, 2026)
-- Verified all 34 page nav buttons match page IDs
-- All 12 collect fee functions verified (6 feature + 6 revenue)
-- All 6 Revenue page fee banners show correct data
-- All key feature pages navigate correctly
-- Live prices, marquee banner, stats bar all functional
+### Professional Token Dropdowns (Phase 10e - Feb 5, 2026)
+- Custom dropdown component with token logos replacing all plain HTML selects
+- **Lending Borrow dropdown**: 10 tokens with CoinMarketCap logos (CRO, GANG, USDC, WETH, WBTC, DAI, USDT, ATOM, VVS, TONIC)
+- **Limit Orders dropdown**: 10 tokens with logos
+- **OTC Trading dropdowns**: SELL/BUY prefix with logos for 5 tokens each
+- Gold checkmark on active selection, hover effects, dark premium backgrounds
 
 ## Backlog / Future
 - CEX listings, Multi-chain expansion, Mobile App, NFT Gallery with rarity filters
 
 ## Key Files
-- `/app/frontend/public/cronos-gangsters.html` — Main DApp (~21,400 lines)
+- `/app/frontend/public/cronos-gangsters.html` — Main DApp (~21,500 lines)
 - `/app/backend/telegram_bot.py` — Telegram Bot
 - `/app/backend/server.py` — FastAPI server
 - `/app/frontend/public/cronos-gangsters-deploy.zip` — Deployable package (12MB)
