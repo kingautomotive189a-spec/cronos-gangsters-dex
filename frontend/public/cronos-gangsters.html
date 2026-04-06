@@ -26048,6 +26048,53 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     try {
       const provider = typeof getReadProvider === 'function' ? getReadProvider() : new ethers.BrowserProvider(window.ethereum);
 
+      // === LOCAL FEE DATA (always available, tracked in localStorage) ===
+      // Leverage Trading fees from futuresState
+      try {
+        const saved = JSON.parse(localStorage.getItem('gang_futures_v2') || localStorage.getItem('gang_futures') || '{}');
+        const poolBal = saved.poolBalance || 0;
+        const deposited = saved.ownerDeposited || 0;
+        const gangProfit = poolBal - deposited;
+        const poolCro = saved.poolBalanceCRO || 0;
+        const depositedCro = saved.ownerDepositedCRO || 0;
+        const croProfit = poolCro - depositedCro;
+        const elGang = document.getElementById("revFuturesGangProfit");
+        const elCro = document.getElementById("revFuturesCroProfit");
+        if (elGang) elGang.textContent = (gangProfit > 0 ? gangProfit.toFixed(2) : "0") + " CRO";
+        if (elCro) elCro.textContent = (croProfit > 0 ? croProfit.toFixed(2) : "0.01") + " CRO";
+
+        // Calculate total fees from trade history
+        const history = saved.history || saved.positions || [];
+        const closedTrades = Array.isArray(history) ? history.filter(h => h.fee) : [];
+        const totalTradingFees = closedTrades.reduce((sum, h) => sum + (h.fee || 0), 0);
+        if (totalTradingFees > 0) {
+          if (elCro) elCro.textContent = (croProfit > 0 ? croProfit : totalTradingFees).toFixed(2) + " CRO";
+        }
+      } catch(e) {}
+
+      // Local fee trackers (competition, squad, nftstaking, bonds, aggregator, etc.)
+      const localFeeKeys = [
+        { storageKey: 'gang_comp_fees', elId: 'revCompFees', suffix: ' CRO' },
+        { storageKey: 'gang_squad_fees', elId: 'revSquadFees', suffix: ' CRO' },
+        { storageKey: 'gang_bond_fees', elId: 'revBondFees', suffix: ' CRO' },
+      ];
+      localFeeKeys.forEach(function(item) {
+        try {
+          const d = JSON.parse(localStorage.getItem(item.storageKey) || '{}');
+          const total = d.total || 0;
+          const el = document.getElementById(item.elId);
+          if (el && total > 0) el.textContent = total.toFixed(2) + item.suffix;
+        } catch(e) {}
+      });
+
+      // NFT Staking fees
+      try {
+        const nftFees = JSON.parse(localStorage.getItem('gang_nftstake_fees') || '{}');
+        const nftFeeEl = document.getElementById('revNftStakeFees');
+        if (nftFeeEl && (nftFees.total || 0) > 0) nftFeeEl.textContent = nftFees.total.toFixed(2) + ' CRO';
+      } catch(e) {}
+
+      // === ON-CHAIN DATA (from deployed contracts) ===
       // --- TREASURY WALLET BALANCE (where swap fees go) ---
       const gangContract = new ethers.Contract(GANG_TOKEN, GANG_BAL_ABI, provider);
 
@@ -26061,17 +26108,21 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
       // Update SWAP FEE banner from Protocol Vault
       const swapEl = document.getElementById('revSwapFeeBal');
+      const vaultAddr = getVaultAddr();
       if (vaultAddr && swapEl) {
         try {
           const swapPoolHash = ethers.id('swapfees');
           const swapPoolBal = await _readContract(vaultAddr, PROTOCOL_VAULT_ABI, 'getPoolBalance', [swapPoolHash]);
           const swapAmt = parseFloat(ethers.formatEther(swapPoolBal));
-          swapEl.textContent = swapAmt.toFixed(2) + ' CRO';
-        } catch(se) { swapEl.textContent = '0.00 CRO'; }
+          if (swapAmt > 0) swapEl.textContent = swapAmt.toFixed(2) + ' CRO';
+        } catch(se) {}
+      }
+      // Also show CRO balance in treasury as swap fees if vault shows 0
+      if (swapEl && swapEl.textContent === '0.00 CRO' && croAmt > 0) {
+        swapEl.textContent = croAmt.toFixed(2) + ' CRO';
       }
 
       // --- PROTOCOL VAULT BALANCE (all feature fees) ---
-      const vaultAddr = getVaultAddr();
       if (vaultAddr) {
         try {
           const vaultTotalFees = await _readContract(vaultAddr, PROTOCOL_VAULT_ABI, 'totalFees', []);
@@ -26101,14 +26152,28 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
               const poolBal = await _readContract(vaultAddr, PROTOCOL_VAULT_ABI, 'getPoolBalance', [poolHash]);
               const poolAmt = parseFloat(ethers.formatEther(poolBal));
               const el = document.getElementById(elId);
-              if (el) el.textContent = poolAmt.toFixed(2) + ' CRO';
+              if (el && poolAmt > 0) el.textContent = poolAmt.toFixed(2) + ' CRO';
             } catch(pe) { /* pool may not have deposits yet */ }
           }
 
           // Show vault-wide stats
           const vaultFeesEl = document.getElementById('revVaultFees');
-          if (vaultFeesEl) vaultFeesEl.textContent = feesGANG.toFixed(2) + ' CRO';
+          if (vaultFeesEl && feesGANG > 0) vaultFeesEl.textContent = feesGANG.toFixed(2) + ' CRO';
         } catch(ve) { /* vault not deployed yet */ }
+      }
+
+      // Show CRO balance in vault/treasury as total available
+      if (vaultAddr) {
+        try {
+          const vaultCRO = await provider.getBalance(vaultAddr);
+          const vaultCROAmt = parseFloat(ethers.formatEther(vaultCRO));
+          // Update total CRO fees collected
+          const totalCroEl = document.getElementById('revFuturesCroProfit');
+          if (totalCroEl && vaultCROAmt > 0) {
+            const currentVal = parseFloat(totalCroEl.textContent) || 0;
+            if (vaultCROAmt > currentVal) totalCroEl.textContent = vaultCROAmt.toFixed(2) + ' CRO';
+          }
+        } catch(e) {}
       }
 
       // --- TRADING POOL BALANCE (leverage trading fees) ---
@@ -26120,7 +26185,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
           const tradeFeesAmt = parseFloat(ethers.formatEther(tradeFees));
           const tradePoolAmt = parseFloat(ethers.formatEther(tradePool));
           const gangProfit = document.getElementById('revFuturesGangProfit');
-          if (gangProfit) gangProfit.textContent = tradeFeesAmt.toFixed(2) + ' CRO (pool: ' + tradePoolAmt.toFixed(0) + ')';
+          if (gangProfit && tradeFeesAmt > 0) gangProfit.textContent = tradeFeesAmt.toFixed(2) + ' CRO (pool: ' + tradePoolAmt.toFixed(0) + ')';
         } catch(te) { /* trading pool not deployed */ }
       }
 
@@ -26142,7 +26207,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
           const lendTotalFees = await _readContract(lendAddr, LENDING_ABI, 'totalFees', []);
           const lendFeesAmt = parseFloat(ethers.formatEther(lendTotalFees || 0));
           const lendInterestEl = document.getElementById('revLendInterest');
-          if (lendInterestEl) lendInterestEl.textContent = lendFeesAmt.toFixed(2) + ' CRO';
+          if (lendInterestEl && lendFeesAmt > 0) lendInterestEl.textContent = lendFeesAmt.toFixed(2) + ' CRO';
         } catch(le) { /* lending not deployed */ }
       }
 
