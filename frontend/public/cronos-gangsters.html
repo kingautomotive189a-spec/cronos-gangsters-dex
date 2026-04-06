@@ -5805,20 +5805,21 @@ function toggleNavMenu() {
     </div>
 
     <!-- Swap Protocol Fee (0.3%) -->
-    <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:var(--green);">SWAP FEES (0.3%)</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% of every swap goes to your treasury wallet. Fees accumulate in the DEX router and are sent to your treasury on each trade.</div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.5);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:var(--green);">SWAP FEES (0.3%) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">LIVE ON-CHAIN</span></div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% platform fee is deducted from EVERY swap and sent directly to your treasury wallet via MetaMask. This is REAL — check your wallet balance.</div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
         <span style="font-size:13px;color:var(--muted);">Treasury Balance</span>
-        <span id="revSwapFeeBal" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;" data-testid="rev-swap-fee-bal">-- GANG</span>
+        <span id="revSwapFeeBal" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;" data-testid="rev-swap-fee-bal">Loading...</span>
       </div>
-      <div style="font-size:11px;color:var(--green);text-align:center;">Swap fees are sent to your treasury wallet automatically on every trade</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-align:center;">Treasury: <span style="font-family:monospace;color:var(--gold);font-size:10px;">0xaA3C...52eA</span></div>
+      <div style="font-size:11px;color:var(--green);text-align:center;">Every swap sends 0.3% to this wallet automatically. The fees are already in your wallet!</div>
     </div>
 
     <!-- LEVERAGE TRADING Fees (0.3% open + 0.3% close) -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(255,140,0,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#ff8c00;">LEVERAGE TRADING FEES (0.3% OPEN + 0.3% CLOSE)</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on opening and closing every leverage position. Fees go directly into the liquidity pool — withdraw your profit from the Leverage Trading page Owner Panel.</div>
+      <div class="ref-link-label" style="color:#ff8c00;">LEVERAGE TRADING FEES <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on opening and closing every leverage position. Fees accumulate in the Trading Pool contract. Click "Collect Trading Fees" to withdraw.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(255,140,0,0.3);border-radius:10px;padding:12px;text-align:center;">
           <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">GANG POOL PROFIT</div>
@@ -5847,7 +5848,7 @@ function toggleNavMenu() {
 
     <!-- Lending & Borrowing Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(0,229,255,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#00e5ff;">LENDING FEES (20% INTEREST + 0.3% ORIGINATION + 5% LIQUIDATION)</div>
+      <div class="ref-link-label" style="color:#00e5ff;">LENDING FEES (20% INTEREST + 0.3% ORIGINATION + 5% LIQUIDATION) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Earn 20% of all interest payments, 0.3% origination fee on every loan, and 5% of liquidation penalties.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(0,229,255,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -5870,7 +5871,7 @@ function toggleNavMenu() {
 
     <!-- Prediction Markets Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(168,85,247,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#a855f7;">PREDICTION MARKET FEES (5% OF EACH POT)</div>
+      <div class="ref-link-label" style="color:#a855f7;">PREDICTION MARKET FEES (5% OF EACH POT) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">You earn 5% of every prediction market pot when it resolves. Collect accumulated fees anytime.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(168,85,247,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -5890,7 +5891,7 @@ function toggleNavMenu() {
 
     <!-- Flash Loan Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(255,221,0,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#ffdd00;">FLASH LOAN FEES (0.3% PER LOAN)</div>
+      <div class="ref-link-label" style="color:#ffdd00;">FLASH LOAN FEES (0.3% PER LOAN) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every flash loan executed. Zero risk — loans repay in the same transaction or revert. Pure fee collection.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(255,221,0,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -5910,7 +5911,7 @@ function toggleNavMenu() {
 
     <!-- Insurance Premium Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(78,205,196,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#4ecdc4;">INSURANCE PREMIUMS (2-5% OF COVERAGE)</div>
+      <div class="ref-link-label" style="color:#4ecdc4;">INSURANCE PREMIUMS (2-5% OF COVERAGE) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Users pay monthly premiums for coverage. You keep all unclaimed premiums. Zero capital required from you.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(78,205,196,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -5934,7 +5935,7 @@ function toggleNavMenu() {
 
     <!-- DEX Aggregator Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(255,110,199,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#ff6ec7;">DEX AGGREGATOR FEES (0.3% ROUTING FEE)</div>
+      <div class="ref-link-label" style="color:#ff6ec7;">DEX AGGREGATOR FEES (0.3% ROUTING FEE) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every trade routed through the aggregator. Users get the best price, you earn on every swap.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(255,110,199,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -5954,7 +5955,7 @@ function toggleNavMenu() {
 
     <!-- Copy Trading Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(233,30,99,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#e91e63;">COPY TRADING FEES (0.3% PER COPY)</div>
+      <div class="ref-link-label" style="color:#e91e63;">COPY TRADING FEES (0.3% PER COPY) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee every time a user copies a trade. More copiers = more fees.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(233,30,99,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -5972,7 +5973,7 @@ function toggleNavMenu() {
 
     <!-- Revenue Staking Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(156,39,176,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#9c27b0;">REVENUE STAKING MGMT FEES (0.3%)</div>
+      <div class="ref-link-label" style="color:#9c27b0;">REVENUE STAKING MGMT FEES (0.3%) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% management fee on every revenue distribution to stakers.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(156,39,176,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -5990,7 +5991,7 @@ function toggleNavMenu() {
 
     <!-- Limit Order Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(66,165,245,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#42a5f5;">LIMIT ORDER FEES (0.3% PER FILL)</div>
+      <div class="ref-link-label" style="color:#42a5f5;">LIMIT ORDER FEES (0.3% PER FILL) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every limit order that gets filled/executed.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(66,165,245,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -6008,7 +6009,7 @@ function toggleNavMenu() {
 
     <!-- Perpetual DEX Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(244,67,54,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#f44336;">PERPETUAL DEX FEES (0.3% PER TRADE)</div>
+      <div class="ref-link-label" style="color:#f44336;">PERPETUAL DEX FEES (0.3% PER TRADE) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every perpetual position opened and closed. Plus funding rate revenue.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(244,67,54,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -6026,7 +6027,7 @@ function toggleNavMenu() {
 
     <!-- OTC Trading Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(141,110,99,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#8d6e63;">OTC TRADING FEES (0.3% PER DEAL)</div>
+      <div class="ref-link-label" style="color:#8d6e63;">OTC TRADING FEES (0.3% PER DEAL) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every OTC deal executed through the escrow desk.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(141,110,99,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -6044,7 +6045,7 @@ function toggleNavMenu() {
 
     <!-- DAO Governance Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(120,144,156,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#78909c;">DAO GOVERNANCE FEES (1 CRO / PROPOSAL)</div>
+      <div class="ref-link-label" style="color:#78909c;">DAO GOVERNANCE FEES (1 CRO / PROPOSAL) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">1 CRO fee per proposal submission. Plus 0.3% on any treasury execution.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(120,144,156,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -6107,7 +6108,7 @@ function toggleNavMenu() {
 
     <!-- NFT Staking Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(232,184,48,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:var(--gold);">NFT STAKING FEES (0.3% ON CLAIM)</div>
+      <div class="ref-link-label" style="color:var(--gold);">NFT STAKING FEES (0.3% ON CLAIM) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee collected every time a user claims GANG rewards from NFT staking.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(232,184,48,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -6125,7 +6126,7 @@ function toggleNavMenu() {
 
     <!-- Auto-Buyback & Burn Stats -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(229,57,53,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#e53935;">AUTO-BUYBACK & BURN (10% OF ALL FEES)</div>
+      <div class="ref-link-label" style="color:#e53935;">AUTO-BUYBACK & BURN (10% OF ALL FEES) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">10% of every platform fee is used to buy GANG and burn it forever. Deflationary by design.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(229,57,53,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -6145,7 +6146,7 @@ function toggleNavMenu() {
 
     <!-- POL Bonds Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(79,195,247,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#4fc3f7;">POL BOND FEES (0.3% PER BOND)</div>
+      <div class="ref-link-label" style="color:#4fc3f7;">POL BOND FEES (0.3% PER BOND) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every bond purchase. Protocol-owned liquidity grows while you earn fees.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(79,195,247,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -6163,7 +6164,7 @@ function toggleNavMenu() {
 
     <!-- Trading Competition Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(255,152,0,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#ff9800;">TRADING COMPETITION ENTRY FEES</div>
+      <div class="ref-link-label" style="color:#ff9800;">TRADING COMPETITION ENTRY FEES <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Entry fees (100 GANG) collected from each participant. You keep 100% of entries minus the prize pool.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(255,152,0,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -6181,7 +6182,7 @@ function toggleNavMenu() {
 
     <!-- Squad Farming Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(255,110,199,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#ff6ec7;">SQUAD FARMING FEES (0.3% ON REWARDS)</div>
+      <div class="ref-link-label" style="color:#ff6ec7;">SQUAD FARMING FEES (0.3% ON REWARDS) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on all squad farming reward distributions.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(255,110,199,0.2);border-radius:10px;padding:10px;text-align:center;">
@@ -23751,6 +23752,139 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       await vaultDeposit('otctrading', 10, 'Fill OTC Deal');
       showToast('OTC deal filled! GANG deposited on-chain.', 'success');
     } catch(e) { showToast('Failed: ' + e.message, 'error'); }
+  };
+
+  // ═══════════════════════════════════════════════════
+  //  REVENUE DASHBOARD — Live On-Chain Balance Reader
+  // ═══════════════════════════════════════════════════
+
+  const GANG_BAL_ABI = ['function balanceOf(address) view returns (uint256)'];
+  const TREASURY_ADDR = '0xaA3C5749628610fF410EF9133a4ac4f58e9A52eA';
+
+  async function refreshRevenueData() {
+    if (!state.address) return;
+    try {
+      const provider = typeof getReadProvider === 'function' ? getReadProvider() : new ethers.BrowserProvider(window.ethereum);
+
+      // --- TREASURY WALLET BALANCE (where swap fees go) ---
+      const gangContract = new ethers.Contract(GANG_TOKEN, GANG_BAL_ABI, provider);
+
+      // GANG balance in treasury = accumulated swap fees + other fees
+      const treasuryGANG = await gangContract.balanceOf(TREASURY_ADDR);
+      const gangAmt = parseFloat(ethers.formatEther(treasuryGANG));
+
+      // CRO balance in treasury
+      const treasuryCRO = await provider.getBalance(TREASURY_ADDR);
+      const croAmt = parseFloat(ethers.formatEther(treasuryCRO));
+
+      // Update SWAP FEE banner
+      const swapEl = document.getElementById('revSwapFeeBal');
+      if (swapEl) swapEl.textContent = gangAmt.toFixed(2) + ' GANG + ' + croAmt.toFixed(4) + ' CRO';
+
+      // --- PROTOCOL VAULT BALANCE (all feature fees) ---
+      const vaultAddr = getVaultAddr();
+      if (vaultAddr) {
+        try {
+          const vaultTotalFees = await _readContract(vaultAddr, PROTOCOL_VAULT_ABI, 'totalFees', []);
+          const vaultBal = await _readContract(vaultAddr, PROTOCOL_VAULT_ABI, 'vaultBalance', []);
+          const feesGANG = parseFloat(ethers.formatEther(vaultTotalFees));
+          const vaultTotal = parseFloat(ethers.formatEther(vaultBal));
+
+          // Update individual pool banners by reading pool balances
+          const pools = ['predictions','flashloans','insurance','aggregator','copytrading','revstaking','limitorders','perpdex','otctrading','dao','squad','competition','bonds_CRO-GANG'];
+          const poolElMap = {
+            'predictions': 'revPredFees',
+            'flashloans': 'revFlashFees',
+            'insurance': 'revInsurancePremiums',
+            'aggregator': 'revAggFees',
+            'copytrading': 'revCopyFees',
+            'revstaking': 'revRsFees',
+            'limitorders': 'revLoFees',
+            'perpdex': 'revPpFees',
+            'otctrading': 'revOtcFees',
+            'dao': 'revDaoFees'
+          };
+
+          for (const [pool, elId] of Object.entries(poolElMap)) {
+            try {
+              const poolHash = ethers.id(pool);
+              const poolBal = await _readContract(vaultAddr, PROTOCOL_VAULT_ABI, 'getPoolBalance', [poolHash]);
+              const poolAmt = parseFloat(ethers.formatEther(poolBal));
+              const el = document.getElementById(elId);
+              if (el) el.textContent = poolAmt.toFixed(2) + ' GANG';
+            } catch(pe) { /* pool may not have deposits yet */ }
+          }
+
+          // Show vault-wide stats
+          const vaultFeesEl = document.getElementById('revVaultFees');
+          if (vaultFeesEl) vaultFeesEl.textContent = feesGANG.toFixed(2) + ' GANG';
+        } catch(ve) { /* vault not deployed yet */ }
+      }
+
+      // --- TRADING POOL BALANCE (leverage trading fees) ---
+      const poolAddr = getTradingPoolAddr();
+      if (poolAddr) {
+        try {
+          const tradeFees = await _readContract(poolAddr, TRADING_POOL_ABI, 'totalFees', []);
+          const tradePool = await _readContract(poolAddr, TRADING_POOL_ABI, 'poolBalance', []);
+          const tradeFeesAmt = parseFloat(ethers.formatEther(tradeFees));
+          const tradePoolAmt = parseFloat(ethers.formatEther(tradePool));
+          const gangProfit = document.getElementById('revFuturesGangProfit');
+          if (gangProfit) gangProfit.textContent = tradeFeesAmt.toFixed(2) + ' GANG (pool: ' + tradePoolAmt.toFixed(0) + ')';
+        } catch(te) { /* trading pool not deployed */ }
+      }
+
+      // --- NFT MINT REVENUE ---
+      try {
+        const nftAddr = '0x97489dc06aA00b62B52D7eB6E5b51E8c3dd36431';
+        const nftBal = await provider.getBalance(nftAddr);
+        const nftAmt = parseFloat(ethers.formatEther(nftBal));
+        const nftEl = document.getElementById('revNftBalance');
+        if (nftEl) nftEl.textContent = nftAmt.toFixed(4) + ' CRO';
+        const nftSumEl = document.getElementById('revNftBal');
+        if (nftSumEl) nftSumEl.textContent = nftAmt.toFixed(2);
+      } catch(ne) { /* nft contract read error */ }
+
+      // --- LENDING POOL FEES ---
+      const lendAddr = getLendingAddr();
+      if (lendAddr) {
+        try {
+          const lendTotalFees = await _readContract(lendAddr, LENDING_ABI, 'totalFees', []);
+          const lendFeesAmt = parseFloat(ethers.formatEther(lendTotalFees || 0));
+          const lendInterestEl = document.getElementById('revLendInterest');
+          if (lendInterestEl) lendInterestEl.textContent = lendFeesAmt.toFixed(2) + ' GANG';
+        } catch(le) { /* lending not deployed */ }
+      }
+
+    } catch(e) { console.warn('Revenue refresh error:', e); }
+  }
+
+  // Add "COLLECT ALL FEES" master button after deploy buttons
+  setTimeout(() => {
+    const deployBox = document.getElementById('deployContractStatus');
+    if (deployBox && !document.getElementById('collectAllFeesBtn')) {
+      const parent = deployBox.parentElement;
+      const masterBtn = document.createElement('button');
+      masterBtn.id = 'collectAllFeesBtn';
+      masterBtn.className = 'ref-copy-btn';
+      masterBtn.setAttribute('data-testid', 'collect-all-fees-btn');
+      masterBtn.style.cssText = 'width:100%;margin-top:14px;background:linear-gradient(135deg,#27ae60,#1a8a4a);font-size:16px;padding:14px;';
+      masterBtn.textContent = 'COLLECT ALL PROTOCOL VAULT FEES';
+      masterBtn.onclick = async function() {
+        try {
+          await vaultCollectFees('All Protocol');
+          await refreshRevenueData();
+        } catch(e) { showToast('Fee collection failed: ' + e.message, 'error'); }
+      };
+      parent.appendChild(masterBtn);
+    }
+  }, 2000);
+
+  // Hook into showPage to refresh revenue data
+  const _origShowPageRev = window.showPage;
+  window.showPage = function(page) {
+    if (_origShowPageRev) _origShowPageRev(page);
+    if (page === 'revenue') { refreshRevenueData(); }
   };
 })();
 </script>

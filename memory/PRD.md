@@ -1,76 +1,64 @@
 # Cronos Gangsters DApp — Product Requirements Document
 
 ## Original Problem Statement
-Build a comprehensive Web3 DApp for the Cronos blockchain ecosystem. Single HTML file (`cronos-gangsters.html`) for manual GoDaddy upload.
-
-**Critical Mandate:** "Make everything real. Whatever is fake and it can be real. Make it real." — ALL features must use real on-chain smart contracts with MetaMask transactions. No LocalStorage mocking.
+Build a comprehensive Web3 DApp for the Cronos blockchain. Single HTML file for manual GoDaddy upload. **All features must be real on-chain with MetaMask transactions. No fakes.**
 
 ## Architecture
-- **Frontend**: Single HTML file (~24.4k lines) with vanilla JS, Ethers.js v6
-- **Backend**: FastAPI for API proxy
-- **Mining Hub**: `mining.html` with 4 Canvas games + backend-validated betting
-- **Deployment**: ZIP file download for manual GoDaddy upload
+- Single HTML file (~24.5k lines) + Ethers.js v6
+- FastAPI backend for API proxy
+- Mining Hub (`mining.html`) with 4 Canvas games
+- ZIP delivery for GoDaddy
 
-## Smart Contracts — 6 Total (All Compiled, Embedded, Ready to Deploy)
+## Smart Contracts — 6 Total
 
-| # | Contract | Purpose | Deploy Button |
-|---|----------|---------|---------------|
-| 1 | GANGNFTStaking | Stake NFTs, earn GANG, 0.3% claim fee | Revenue page |
-| 2 | GANGBuybackBurn | Auto-buy GANG + burn, deflationary | Revenue page |
-| 3 | GANGLendingPool | Supply/withdraw/borrow/repay GANG | Revenue page |
-| 4 | GANGTradingPool | Leverage trading collateral deposits | Revenue page |
-| 5 | GANGBondDepository | LP token bonding with 5-day vesting | Revenue page |
-| 6 | GANGProtocolVault | Universal vault for all other features | Revenue page |
+| Contract | Purpose | Fees |
+|----------|---------|------|
+| GANGNFTStaking | Stake NFTs, earn GANG | 0.3% claim fee |
+| GANGBuybackBurn | Auto-buy + burn GANG | Burns 10% of fees |
+| GANGLendingPool | Supply/withdraw/borrow/repay | 20% interest + 0.3% origination |
+| GANGTradingPool | Leverage trading collateral | 0.3% open + close |
+| GANGBondDepository | LP bonding with 5-day vesting | 0.3% per bond |
+| GANGProtocolVault | Universal vault for all features | 0.3% per deposit |
 
-## Features Using Real On-Chain Contracts
+## Revenue Flow — How You Get Paid
 
-### Via Dedicated Contracts (1-4):
-- NFT Staking (stake/unstake/claim)
-- Auto-Buyback & Burn
-- Lending Pool (GANG supply/withdraw/borrow/repay)
-- Leverage Trading (GANG collateral deposit/withdraw)
+| Feature | Fee | Where It Goes | How to Collect |
+|---------|-----|--------------|----------------|
+| **Swaps** | 0.3% | Treasury wallet (auto) | Already in your wallet! |
+| **Leverage Trading** | 0.3% open/close | Trading Pool contract | "Collect Trading Fees" button |
+| **NFT Staking** | 0.3% on claims | Treasury wallet (auto) | Already in your wallet! |
+| **Lending** | 20% interest, 0.3% origination | Lending Pool contract | "Collect Lending Fees" |
+| **Predictions** | 5% of pot | Protocol Vault | "Collect Prediction Fees" |
+| **Flash Loans** | 0.3% per loan | Protocol Vault | "Collect Flash Fees" |
+| **Insurance** | 2-5% premiums | Protocol Vault | "Collect Insurance Fees" |
+| **DEX Aggregator** | 0.3% routing | Protocol Vault | "Collect Aggregator Fees" |
+| **Copy Trading** | 0.3% per copy | Protocol Vault | "Collect Copy Fees" |
+| **Revenue Staking** | 0.3% management | Protocol Vault | "Collect RS Fees" |
+| **Limit Orders** | 0.3% per fill | Protocol Vault | "Collect LO Fees" |
+| **Perp DEX** | 0.3% per trade | Protocol Vault | "Collect Perp Fees" |
+| **OTC Trading** | 0.3% per deal | Protocol Vault | "Collect OTC Fees" |
+| **DAO** | 100 GANG/proposal | Protocol Vault | "Collect DAO Fees" |
+| **POL Bonds** | 0.3% per bond | Protocol Vault | "Collect Bond Fees" |
+| **Competitions** | Entry fees | Protocol Vault | "Collect Comp Fees" |
+| **Squad Farming** | 0.3% on rewards | Protocol Vault | "Collect Squad Fees" |
 
-### Via Protocol Vault (6):
-- Prediction Markets (bet placement)
-- Flash Loans (execution fees)
-- Insurance (premium payments)
-- DEX Aggregator (routing fees)
-- Copy Trading (copy fees)
-- Revenue Staking (stake/unstake)
-- Limit Orders (order placement)
-- Perpetual DEX (margin deposits)
-- OTC Trading (deal escrow)
-- DAO Governance (proposal fees, vote deposits)
-- Squad Farming (join fees)
-- Trading Competitions (entry fees)
-- POL Bonds (LP token deposits)
+## Revenue Dashboard Features
+- Live on-chain treasury balance (GANG + CRO)
+- Per-feature fee balances read from Protocol Vault
+- "COLLECT ALL PROTOCOL VAULT FEES" master button
+- All banners show ON-CHAIN badge
+- "HOW YOU EARN" breakdown section
 
-### Via Bond Depository (5):
-- 8 Bond Pairs: CRO-GANG, USDC-GANG, WETH-GANG, WBTC-GANG, DAI-GANG, ATOM-GANG, USDT-GANG, VVS-GANG
-
-### Already Real (Native Ethers.js):
-- Token Swap (VVS Router)
-- NFT Minting (CRO payment)
-- Wallet Connection (MetaMask)
-
-## Revenue Collection
-All fee collection buttons on Revenue page use real on-chain `collectFees()` calls through the Protocol Vault contract.
-
-## Mining Hub
-- 4 HTML5 Canvas games (Road Racer, Shooting Gallery, Premium Slots, Drift Racer)
-- Backend-validated betting (balance checked server-side)
-- Client-side balance validation added to prevent invalid bets
-- Real GANG deposits/withdrawals for funding/cashout
+## Bond Pairs (8 total)
+CRO-GANG (8%), USDC-GANG (6%), WETH-GANG (10%), WBTC-GANG (12%), DAI-GANG (7%), ATOM-GANG (9%), USDT-GANG (5%), VVS-GANG (11%)
 
 ## Key Files
-- `/app/frontend/public/cronos-gangsters.html` (~24.4k lines)
+- `/app/frontend/public/cronos-gangsters.html` (~24.5k lines)
 - `/app/frontend/public/mining.html`
 - `/app/frontend/public/dashboard.html`
 - `/app/backend/server.py`
-- `/tmp/contracts/` — Compiled Solidity contracts
 
 ## Backlog
-- P1: CEX listings integration
+- P1: CEX listings
 - P1: Multi-chain expansion
 - P2: Mobile App
-- P2: Deploy separate lending pools per token (non-GANG)
