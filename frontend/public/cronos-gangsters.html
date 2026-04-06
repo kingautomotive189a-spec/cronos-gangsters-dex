@@ -19723,16 +19723,22 @@ async function updateAllWalletBalanceDisplays() {
     const erc20Abi = ['function balanceOf(address) view returns (uint256)'];
 
     // Get GANG + CRO balances
-    const gangRaw = await _readContract(GANG_ADDR, erc20Abi, 'balanceOf', [userAddr]);
-    const gangBal = parseFloat(ethers.formatEther(gangRaw));
+    const gangAddr = (typeof window.GANG_TOKEN !== 'undefined') ? window.GANG_TOKEN : (typeof CONTRACTS !== 'undefined' && CONTRACTS.GANG ? CONTRACTS.GANG : (TOKENS && TOKENS.GANG ? TOKENS.GANG.address : null));
+    var gangBal = 0;
+    try {
+      const gangRaw = await (typeof window._readContract === 'function' ? window._readContract : _readContract)(gangAddr, erc20Abi, 'balanceOf', [userAddr]);
+      gangBal = parseFloat(ethers.formatEther(gangRaw));
+    } catch(e) { /* balance check failed */ }
     const croRaw = await state.provider.getBalance(userAddr);
     const croBal = parseFloat(ethers.formatEther(croRaw));
 
-    // Leverage page
+    // Leverage page — show balance for selected currency
     const futEl = document.getElementById('futuresWalletBal');
     if (futEl) {
       const curr = futuresState?.currency || 'GANG';
-      futEl.textContent = (curr === 'CRO' ? croBal.toFixed(2) + ' CRO' : gangBal.toFixed(2) + ' GANG');
+      if (curr === 'CRO') futEl.textContent = croBal.toFixed(2) + ' CRO';
+      else if (curr === 'GANG') futEl.textContent = gangBal.toFixed(2) + ' GANG';
+      else futEl.textContent = gangBal.toFixed(2) + ' GANG';
     }
 
     // Lending page — CRO and GANG
@@ -20996,6 +21002,7 @@ function setFuturesCurrency(curr) {
   updateFuturesPosInfo();
   updateFuturesPool();
   saveFuturesState();
+  if (typeof updateAllWalletBalanceDisplays === 'function') updateAllWalletBalanceDisplays();
 }
 
 function selectFuturesPair(pair) {
