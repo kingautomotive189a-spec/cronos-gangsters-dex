@@ -22955,9 +22955,14 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     for (let i = 0; i < 40; i++) {
       await new Promise(r => setTimeout(r, 4000));
       const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] });
-      if (receipt) { if (receipt.status === '0x0') throw new Error('TX failed'); return receipt; }
+      if (receipt) {
+        if (receipt.status === '0x0') {
+          throw new Error('Transaction reverted on-chain. TX: ' + txHash.substring(0,10) + '... Check Cronoscan for details.');
+        }
+        return receipt;
+      }
     }
-    throw new Error('TX not confirmed');
+    throw new Error('TX not confirmed after 160s');
   }
 
   // ── READ CONTRACT HELPER ──
