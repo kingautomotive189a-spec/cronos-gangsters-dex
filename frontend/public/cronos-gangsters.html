@@ -4925,19 +4925,16 @@ function toggleNavMenu() {
     <!-- Trade Panel -->
     <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.3);">
       <!-- Long / Short Toggle -->
-      <div style="display:flex;gap:0;margin-bottom:14px;background:var(--surface2);border-radius:10px;padding:3px;border:1px solid var(--border);">
-        <!-- Buy/Sell Spread (Trading 212 Style) -->
-        <div style="display:flex;gap:0;background:var(--surface2);border-radius:12px;overflow:hidden;border:1px solid var(--border);">
-          <button id="futuresBtnShort" data-testid="futures-short-btn" onclick="setFuturesSide('short')" style="flex:1;padding:14px 8px;border:none;border-radius:0;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .2s;background:transparent;text-align:center;">
-            <div style="font-size:11px;letter-spacing:2px;color:var(--muted);font-weight:600;margin-bottom:2px;">SELL</div>
-            <div id="futuresSellPrice" style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--muted);">$—</div>
+      <div style="display:flex;gap:0;margin-bottom:14px;background:var(--surface2);border-radius:12px;padding:4px;border:1px solid var(--border);">
+        <!-- Buy/Sell Spread (Full-width, big buttons) -->
+          <button id="futuresBtnShort" data-testid="futures-short-btn" onclick="setFuturesSide('short')" style="flex:1;padding:20px 12px;border:none;border-radius:10px;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .2s;background:rgba(229,57,53,0.15);text-align:center;margin-right:2px;">
+            <div style="font-size:14px;letter-spacing:3px;color:#e53935;font-weight:700;margin-bottom:4px;">SELL</div>
+            <div id="futuresSellPrice" style="font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#e53935;">$—</div>
           </button>
-          <div style="width:1px;background:var(--border);"></div>
-          <button id="futuresBtnLong" data-testid="futures-long-btn" onclick="setFuturesSide('long')" style="flex:1;padding:14px 8px;border:none;border-radius:0;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .2s;background:rgba(39,174,96,0.12);text-align:center;">
-            <div style="font-size:11px;letter-spacing:2px;color:#27ae60;font-weight:600;margin-bottom:2px;">BUY</div>
-            <div id="futuresBuyPrice" style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:#27ae60;">$—</div>
+          <button id="futuresBtnLong" data-testid="futures-long-btn" onclick="setFuturesSide('long')" style="flex:1;padding:20px 12px;border:none;border-radius:10px;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .2s;background:rgba(39,174,96,0.15);text-align:center;margin-left:2px;">
+            <div style="font-size:14px;letter-spacing:3px;color:#27ae60;font-weight:700;margin-bottom:4px;">BUY</div>
+            <div id="futuresBuyPrice" style="font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#27ae60;">$—</div>
           </button>
-        </div>
       </div>
 
       <!-- Leverage -->
@@ -21942,21 +21939,25 @@ function setFuturesSide(side) {
   const shortBtn = document.getElementById('futuresBtnShort');
   const openBtn = document.getElementById('futuresOpenBtn');
   if (side === 'long') {
-    longBtn.style.background = 'rgba(39,174,96,0.12)';
+    longBtn.style.background = 'rgba(39,174,96,0.3)';
+    longBtn.style.border = '2px solid #27ae60';
     longBtn.querySelector('div:first-child').style.color = '#27ae60';
     longBtn.querySelector('div:last-child').style.color = '#27ae60';
-    shortBtn.style.background = 'transparent';
-    shortBtn.querySelector('div:first-child').style.color = 'var(--muted)';
-    shortBtn.querySelector('div:last-child').style.color = 'var(--muted)';
+    shortBtn.style.background = 'rgba(229,57,53,0.08)';
+    shortBtn.style.border = '2px solid transparent';
+    shortBtn.querySelector('div:first-child').style.color = 'rgba(229,57,53,0.5)';
+    shortBtn.querySelector('div:last-child').style.color = 'rgba(229,57,53,0.5)';
     openBtn.style.background = 'linear-gradient(135deg,#27ae60,#2ecc71)';
     openBtn.textContent = 'CONFIRM BUY';
   } else {
-    shortBtn.style.background = 'rgba(231,76,60,0.12)';
-    shortBtn.querySelector('div:first-child').style.color = '#e74c3c';
-    shortBtn.querySelector('div:last-child').style.color = '#e74c3c';
-    longBtn.style.background = 'transparent';
-    longBtn.querySelector('div:first-child').style.color = 'var(--muted)';
-    longBtn.querySelector('div:last-child').style.color = 'var(--muted)';
+    shortBtn.style.background = 'rgba(229,57,53,0.3)';
+    shortBtn.style.border = '2px solid #e53935';
+    shortBtn.querySelector('div:first-child').style.color = '#e53935';
+    shortBtn.querySelector('div:last-child').style.color = '#e53935';
+    longBtn.style.background = 'rgba(39,174,96,0.08)';
+    longBtn.style.border = '2px solid transparent';
+    longBtn.querySelector('div:first-child').style.color = 'rgba(39,174,96,0.5)';
+    longBtn.querySelector('div:last-child').style.color = 'rgba(39,174,96,0.5)';
     openBtn.style.background = 'linear-gradient(135deg,#e74c3c,#c0392b)';
     openBtn.textContent = 'CONFIRM SELL';
   }
