@@ -21563,6 +21563,15 @@ try {
   });
 } catch {}
 
+// Load volume/trade counters
+try {
+  const vol = JSON.parse(localStorage.getItem('gang_futures_vol') || '{}');
+  if (vol.volume24h) futuresState.volume24h = vol.volume24h;
+  if (vol.volume24hTimestamp) futuresState.volume24hTimestamp = vol.volume24hTimestamp;
+  if (vol.totalVolume) futuresState.totalVolume = vol.totalVolume;
+  if (vol.totalTrades) futuresState.totalTrades = vol.totalTrades;
+} catch {}
+
 // Auto-clear old fake positions (pre-contract era) — DISABLED to prevent data loss
 // Previous cleanup already ran for users with gang_futures_cleaned_v3 flag
 try {
@@ -21626,6 +21635,13 @@ function saveFuturesState() {
     obj['ownerDeposited'+t] = futuresState['ownerDeposited'+t] || 0;
   });
   localStorage.setItem('gang_futures_v2', JSON.stringify(obj));
+  // Persist volume/trade counters separately so they survive page refresh
+  localStorage.setItem('gang_futures_vol', JSON.stringify({
+    volume24h: futuresState.volume24h || 0,
+    volume24hTimestamp: futuresState.volume24hTimestamp || 0,
+    totalVolume: futuresState.totalVolume || 0,
+    totalTrades: futuresState.totalTrades || 0
+  }));
 }
 
 function setFuturesCurrency(curr) {
