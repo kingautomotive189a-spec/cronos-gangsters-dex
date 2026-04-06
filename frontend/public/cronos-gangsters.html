@@ -21828,6 +21828,9 @@ function updateFuturesPositions() {
       if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'LIQUIDATED'), 100); }
     }
 
+    const liveValue = Math.max(0, pos.amount + pnlGang);
+    const liveColor = liveValue >= pos.amount ? 'var(--green)' : 'var(--red)';
+
     return `
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
@@ -21843,7 +21846,8 @@ function updateFuturesPositions() {
       <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:10px;">
         <span>Entry: $${pos.entryPrice.toLocaleString(undefined,{maximumFractionDigits:pos.entryPrice>100?2:6})}</span>
         <span>Now: $${currentPrice.toLocaleString(undefined,{maximumFractionDigits:currentPrice>100?2:6})}</span>
-        <span>Size: ${pos.amount.toFixed(2)} ${curr}</span>
+        <span>Deposited: ${pos.amount.toFixed(2)} ${curr}</span>
+        <span style="color:${liveColor};font-weight:700;">Value: ${liveValue.toFixed(2)} ${curr}</span>
       </div>
       <button onclick="closeFuturesPosition(${pos.id})" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--red);background:rgba(231,76,60,0.1);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;cursor:pointer;">CLOSE POSITION</button>
     </div>`;
