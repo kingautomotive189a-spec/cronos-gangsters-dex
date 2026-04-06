@@ -24191,8 +24191,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
   async function vaultDeposit(poolName, amount, label) {
     const vaultAddr = getVaultAddr();
-    if (!vaultAddr) { showToast('Deploy Protocol Vault from Revenue page first', 'error'); return false; }
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return false; }
+    if (!vaultAddr) { showToast('Deploy Protocol Vault from Revenue page first', 'error'); throw new Error('Protocol Vault not deployed'); }
+    if (!state.signer) { showToast('Connect wallet first', 'error'); throw new Error('Wallet not connected'); }
 
     // CHECK REAL GANG BALANCE FIRST
     const userAddr = await state.signer.getAddress();
@@ -24201,9 +24201,12 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       const userBal = parseFloat(ethers.formatEther(balRaw));
       if (userBal < amount) {
         showToast('Insufficient GANG balance! You have ' + userBal.toFixed(2) + ' GANG but need ' + amount + ' for ' + label, 'error');
-        return false;
+        throw new Error('Insufficient GANG balance');
       }
-    } catch(e) { /* Balance check failed, proceed — MetaMask will catch if insufficient */ }
+    } catch(e) {
+      if (e.message === 'Insufficient GANG balance') throw e;
+      /* Balance check RPC failed, proceed — MetaMask will catch if insufficient */
+    }
 
     const weiAmt = ethers.parseEther(amount.toString());
     await _approveGANG(vaultAddr, weiAmt);
@@ -24216,8 +24219,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
   async function vaultWithdraw(poolName, amount, label) {
     const vaultAddr = getVaultAddr();
-    if (!vaultAddr) { showToast('Deploy Protocol Vault first', 'error'); return false; }
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return false; }
+    if (!vaultAddr) { showToast('Deploy Protocol Vault first', 'error'); throw new Error('Protocol Vault not deployed'); }
+    if (!state.signer) { showToast('Connect wallet first', 'error'); throw new Error('Wallet not connected'); }
 
     const weiAmt = ethers.parseEther(amount.toString());
     showToast('Withdrawing ' + amount + ' GANG from ' + label + '...', 'info');
