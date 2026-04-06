@@ -7087,7 +7087,7 @@ function toggleNavMenu() {
         </div>
         <div style="flex:1;"><div style="font-weight:700;color:var(--text);font-size:15px;">CRO — GANG <span style="font-size:9px;background:rgba(39,174,96,0.2);color:#27ae60;padding:2px 6px;border-radius:4px;margin-left:4px;">LP BOND</span></div><div style="font-size:10px;color:var(--muted);">Provide CRO-GANG liquidity for discounted $GANG</div></div>
         <div style="text-align:right;"><div style="font-weight:700;color:#4fc3f7;font-size:18px;">8%</div><div style="font-size:10px;color:var(--muted);">5-day vest</div></div>
-        <button onclick="buyBond('CRO-GANG')" data-testid="bond-cro-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
+        <input type="number" id="bondAmt_CRO-GANG" placeholder="GANG amount" step="any" style="width:90px;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;text-align:center;" /><button onclick="buyBond('CRO-GANG')" data-testid="bond-cro-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
       </div>
       <!-- USDC-GANG -->
       <div style="background:linear-gradient(135deg,var(--surface),rgba(38,128,235,0.05));border:1px solid rgba(38,128,235,0.3);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;">
@@ -7097,7 +7097,7 @@ function toggleNavMenu() {
         </div>
         <div style="flex:1;"><div style="font-weight:700;color:var(--text);font-size:15px;">USDC — GANG <span style="font-size:9px;background:rgba(38,128,235,0.2);color:#2680eb;padding:2px 6px;border-radius:4px;margin-left:4px;">LP BOND</span></div><div style="font-size:10px;color:var(--muted);">Provide USDC-GANG liquidity for discounted $GANG</div></div>
         <div style="text-align:right;"><div style="font-weight:700;color:#4fc3f7;font-size:18px;">6%</div><div style="font-size:10px;color:var(--muted);">5-day vest</div></div>
-        <button onclick="buyBond('USDC-GANG')" data-testid="bond-usdc-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
+        <input type="number" id="bondAmt_USDC-GANG" placeholder="GANG amount" step="any" style="width:90px;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;text-align:center;" /><button onclick="buyBond('USDC-GANG')" data-testid="bond-usdc-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
       </div>
       <!-- WETH-GANG -->
       <div style="background:linear-gradient(135deg,var(--surface),rgba(98,126,234,0.05));border:1px solid rgba(98,126,234,0.3);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;">
@@ -7107,7 +7107,7 @@ function toggleNavMenu() {
         </div>
         <div style="flex:1;"><div style="font-weight:700;color:var(--text);font-size:15px;">WETH — GANG <span style="font-size:9px;background:rgba(98,126,234,0.2);color:#627eea;padding:2px 6px;border-radius:4px;margin-left:4px;">LP BOND</span></div><div style="font-size:10px;color:var(--muted);">Provide WETH-GANG liquidity for discounted $GANG</div></div>
         <div style="text-align:right;"><div style="font-weight:700;color:#4fc3f7;font-size:18px;">10%</div><div style="font-size:10px;color:var(--muted);">5-day vest</div></div>
-        <button onclick="buyBond('WETH-GANG')" data-testid="bond-weth-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
+        <input type="number" id="bondAmt_WETH-GANG" placeholder="GANG amount" step="any" style="width:90px;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;text-align:center;" /><button onclick="buyBond('WETH-GANG')" data-testid="bond-weth-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
       </div>
       <!-- WBTC-GANG -->
       <div style="background:linear-gradient(135deg,var(--surface),rgba(247,147,26,0.05));border:1px solid rgba(247,147,26,0.3);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;">
@@ -7117,7 +7117,7 @@ function toggleNavMenu() {
         </div>
         <div style="flex:1;"><div style="font-weight:700;color:var(--text);font-size:15px;">WBTC — GANG <span style="font-size:9px;background:rgba(247,147,26,0.2);color:#f7931a;padding:2px 6px;border-radius:4px;margin-left:4px;">LP BOND</span></div><div style="font-size:10px;color:var(--muted);">Provide WBTC-GANG liquidity for discounted $GANG</div></div>
         <div style="text-align:right;"><div style="font-weight:700;color:#4fc3f7;font-size:18px;">12%</div><div style="font-size:10px;color:var(--muted);">5-day vest</div></div>
-        <button onclick="buyBond('WBTC-GANG')" data-testid="bond-wbtc-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
+        <input type="number" id="bondAmt_WBTC-GANG" placeholder="GANG amount" step="any" style="width:90px;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;text-align:center;" /><button onclick="buyBond('WBTC-GANG')" data-testid="bond-wbtc-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
       </div>
       <!-- DAI-GANG -->
       <div style="background:linear-gradient(135deg,var(--surface),rgba(251,183,12,0.05));border:1px solid rgba(251,183,12,0.3);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;">
@@ -7127,7 +7127,7 @@ function toggleNavMenu() {
         </div>
         <div style="flex:1;"><div style="font-weight:700;color:var(--text);font-size:15px;">DAI — GANG <span style="font-size:9px;background:rgba(251,183,12,0.2);color:#fbb70c;padding:2px 6px;border-radius:4px;margin-left:4px;">LP BOND</span></div><div style="font-size:10px;color:var(--muted);">Provide DAI-GANG liquidity for discounted $GANG</div></div>
         <div style="text-align:right;"><div style="font-weight:700;color:#4fc3f7;font-size:18px;">7%</div><div style="font-size:10px;color:var(--muted);">5-day vest</div></div>
-        <button onclick="buyBond('DAI-GANG')" data-testid="bond-dai-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
+        <input type="number" id="bondAmt_DAI-GANG" placeholder="GANG amount" step="any" style="width:90px;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;text-align:center;" /><button onclick="buyBond('DAI-GANG')" data-testid="bond-dai-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
       </div>
       <!-- ATOM-GANG -->
       <div style="background:linear-gradient(135deg,var(--surface),rgba(110,68,255,0.05));border:1px solid rgba(110,68,255,0.3);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;">
@@ -7137,7 +7137,7 @@ function toggleNavMenu() {
         </div>
         <div style="flex:1;"><div style="font-weight:700;color:var(--text);font-size:15px;">ATOM — GANG <span style="font-size:9px;background:rgba(110,68,255,0.2);color:#6e44ff;padding:2px 6px;border-radius:4px;margin-left:4px;">LP BOND</span></div><div style="font-size:10px;color:var(--muted);">Provide ATOM-GANG liquidity for discounted $GANG</div></div>
         <div style="text-align:right;"><div style="font-weight:700;color:#4fc3f7;font-size:18px;">9%</div><div style="font-size:10px;color:var(--muted);">5-day vest</div></div>
-        <button onclick="buyBond('ATOM-GANG')" data-testid="bond-atom-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
+        <input type="number" id="bondAmt_ATOM-GANG" placeholder="GANG amount" step="any" style="width:90px;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;text-align:center;" /><button onclick="buyBond('ATOM-GANG')" data-testid="bond-atom-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
       </div>
       <!-- USDT-GANG -->
       <div style="background:linear-gradient(135deg,var(--surface),rgba(80,175,149,0.05));border:1px solid rgba(80,175,149,0.3);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;">
@@ -7147,7 +7147,7 @@ function toggleNavMenu() {
         </div>
         <div style="flex:1;"><div style="font-weight:700;color:var(--text);font-size:15px;">USDT — GANG <span style="font-size:9px;background:rgba(80,175,149,0.2);color:#50af95;padding:2px 6px;border-radius:4px;margin-left:4px;">LP BOND</span></div><div style="font-size:10px;color:var(--muted);">Provide USDT-GANG liquidity for discounted $GANG</div></div>
         <div style="text-align:right;"><div style="font-weight:700;color:#4fc3f7;font-size:18px;">5%</div><div style="font-size:10px;color:var(--muted);">5-day vest</div></div>
-        <button onclick="buyBond('USDT-GANG')" data-testid="bond-usdt-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
+        <input type="number" id="bondAmt_USDT-GANG" placeholder="GANG amount" step="any" style="width:90px;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;text-align:center;" /><button onclick="buyBond('USDT-GANG')" data-testid="bond-usdt-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
       </div>
       <!-- VVS-GANG -->
       <div style="background:linear-gradient(135deg,var(--surface),rgba(234,75,75,0.05));border:1px solid rgba(234,75,75,0.3);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;">
@@ -7157,7 +7157,7 @@ function toggleNavMenu() {
         </div>
         <div style="flex:1;"><div style="font-weight:700;color:var(--text);font-size:15px;">VVS — GANG <span style="font-size:9px;background:rgba(234,75,75,0.2);color:#ea4b4b;padding:2px 6px;border-radius:4px;margin-left:4px;">LP BOND</span></div><div style="font-size:10px;color:var(--muted);">Provide VVS-GANG liquidity for discounted $GANG</div></div>
         <div style="text-align:right;"><div style="font-weight:700;color:#4fc3f7;font-size:18px;">11%</div><div style="font-size:10px;color:var(--muted);">5-day vest</div></div>
-        <button onclick="buyBond('VVS-GANG')" data-testid="bond-vvs-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
+        <input type="number" id="bondAmt_VVS-GANG" placeholder="GANG amount" step="any" style="width:90px;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;text-align:center;" /><button onclick="buyBond('VVS-GANG')" data-testid="bond-vvs-gang-btn" style="padding:12px 24px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 8px rgba(212,160,23,0.3);">BOND</button>
       </div>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
@@ -25040,8 +25040,12 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const config = BOND_CONFIGS[pair];
     if (!config) return;
 
+    // Read amount from input
+    const amtInput = document.getElementById('bondAmt_' + pair);
+    const lpValue = parseFloat(amtInput?.value);
+    if (!lpValue || lpValue <= 0) { showToast('Enter GANG amount to bond', 'error'); return; }
+
     const gangPrice = 0.003;
-    const lpValue = 100;
     const gangAtMarket = lpValue / gangPrice;
     const gangWithDiscount = gangAtMarket * (1 + config.discount / 100);
     const fee = lpValue * 0.003;
@@ -25053,6 +25057,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
         showToast('Bonding ' + pair + ' LP on-chain... MetaMask will confirm.', 'info');
         await window.vaultDeposit('bonds_' + pair, lpValue, pair + ' Bond Purchase');
         showToast('Bond deposited on-chain! ' + gangWithDiscount.toFixed(0) + ' GANG vesting over ' + config.vestDays + ' days.', 'success');
+        if (amtInput) amtInput.value = '';
       } else {
         showToast('Connect wallet first for on-chain bonds.', 'error');
         return;
