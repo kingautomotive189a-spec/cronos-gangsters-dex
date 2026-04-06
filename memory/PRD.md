@@ -70,7 +70,17 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - **FIX**: Removed conflicting `window.openPerpPosition`/`window.closePerpPosition` overrides that short-circuited the confirmation modal flow
 - **FIX**: Close position now withdraws actual collateral amount (not hardcoded 10 GANG)
 
-## Completed (2026-04-06 — Landing Page & Leverage Trading Visual Upgrade)
+## Completed (2026-04-06 — Perpetual DEX Chart + Logos)
+- **NEW**: TradingView chart on Perpetual DEX page (same style as Leverage Trading — candlestick, RSI, moving average, dark theme)
+- **NEW**: Token logos for all 8 Perp pairs (BTC, ETH, CRO, SOL, GANG, DOGE, AVAX, LINK) via CoinGecko
+- **NEW**: Chart header with live price display, pair logo, and PERPETUAL badge
+- **NEW**: Chart auto-switches when pair dropdown changes (`switchPPPair()`)
+- **NEW**: Live price updates in chart header every 3s tick
+- **UPGRADE**: Perpetual DEX page header with "FULLY ON-CHAIN | CRONOS MAINNET" badge and professional copy
+
+## Completed (2026-04-06 — Stock/Forex Icons)
+- **NEW**: Real company logos for all 29 stock assets via Clearbit CDN
+- **NEW**: Country flag icons for all 7 forex pairs via FlagCDN
 - **NEW**: "100% ON-CHAIN DEFI" hero section with "LIVE ON CRONOS MAINNET" badge and professional blockchain copy
 - **NEW**: Trust indicators (MetaMask Verified, Non-Custodial, Smart Contract Secured, Open Source Contracts)
 - **NEW**: Leverage Trading FLAGSHIP showcase card with stats (69 pairs, 100x, 0.3% fees, LIVE prices) + asset tags
