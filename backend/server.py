@@ -496,25 +496,43 @@ _crypto_cache = {}
 _crypto_cache_ts = 0
 
 YAHOO_SYMBOL_MAP = {
-    # Stocks
+    # Stocks — Big Tech
     'AAPL': 'AAPL', 'TSLA': 'TSLA', 'NVDA': 'NVDA', 'MSFT': 'MSFT',
     'AMZN': 'AMZN', 'GOOGL': 'GOOGL', 'META': 'META', 'AMD': 'AMD',
-    'NFLX': 'NFLX', 'COIN': 'COIN', 'DIS': 'DIS', 'PYPL': 'PYPL',
-    'BA': 'BA', 'JPM': 'JPM',
+    'NFLX': 'NFLX', 'INTC': 'INTC',
+    # Stocks — Finance
+    'COIN': 'COIN', 'JPM': 'JPM', 'GS': 'GS', 'V': 'V', 'MA': 'MA', 'PYPL': 'PYPL',
+    # Stocks — Defence
+    'BA': 'BA', 'LMT': 'LMT', 'RTX': 'RTX',
+    # Stocks — EV
+    'RIVN': 'RIVN', 'NIO': 'NIO',
+    # Stocks — E-Commerce & Consumer
+    'SHOP': 'SHOP', 'DIS': 'DIS', 'UBER': 'UBER', 'ABNB': 'ABNB', 'RBLX': 'RBLX',
+    # Stocks — AI
+    'PLTR': 'PLTR', 'SNOW': 'SNOW', 'CRM': 'CRM',
+    # Forex
+    'EURUSD': 'EURUSD=X', 'GBPUSD': 'GBPUSD=X', 'USDJPY': 'JPY=X',
+    'AUDUSD': 'AUDUSD=X', 'USDCAD': 'CAD=X', 'USDCHF': 'CHF=X', 'EURGBP': 'EURGBP=X',
     # Indices
     'NAS100': '^NDX', 'SP500': '^GSPC', 'DJI': '^DJI',
+    'FTSE': '^FTSE', 'DAX': '^GDAXI', 'NIKKEI': '^N225',
     # Commodities
-    'GOLD': 'GC=F', 'SILVER': 'SI=F', 'OIL': 'CL=F', 'NATGAS': 'NG=F',
+    'GOLD': 'GC=F', 'SILVER': 'SI=F', 'PLATINUM': 'PL=F',
+    'OIL': 'CL=F', 'NATGAS': 'NG=F', 'COPPER': 'HG=F', 'WHEAT': 'ZW=F',
     # Crypto (Yahoo Finance tickers)
     'BTC': 'BTC-USD', 'ETH': 'ETH-USD', 'BNB': 'BNB-USD', 'CRO': 'CRO-USD',
     'SOL': 'SOL-USD', 'XRP': 'XRP-USD', 'DOGE': 'DOGE-USD', 'ADA': 'ADA-USD',
-    'AVAX': 'AVAX-USD', 'LINK': 'LINK-USD', 'ARB': 'ARB11841-USD', 'MATIC': 'MATIC-USD'
+    'AVAX': 'AVAX-USD', 'LINK': 'LINK-USD', 'ARB': 'ARB11841-USD', 'MATIC': 'MATIC-USD',
+    'DOT': 'DOT-USD', 'UNI': 'UNI7083-USD', 'SHIB': 'SHIB-USD', 'PEPE': 'PEPE24478-USD',
+    'NEAR': 'NEAR-USD', 'ATOM': 'ATOM-USD', 'FIL': 'FIL-USD', 'RENDER': 'RNDR-USD',
 }
 
 COINGECKO_ID_MAP = {
     'BTC': 'bitcoin', 'ETH': 'ethereum', 'BNB': 'binancecoin', 'CRO': 'crypto-com-chain',
     'SOL': 'solana', 'XRP': 'ripple', 'DOGE': 'dogecoin', 'ADA': 'cardano',
-    'AVAX': 'avalanche-2', 'LINK': 'chainlink', 'ARB': 'arbitrum', 'MATIC': 'matic-network'
+    'AVAX': 'avalanche-2', 'LINK': 'chainlink', 'ARB': 'arbitrum', 'MATIC': 'matic-network',
+    'DOT': 'polkadot', 'UNI': 'uniswap', 'SHIB': 'shiba-inu', 'PEPE': 'pepe',
+    'NEAR': 'near', 'ATOM': 'cosmos', 'FIL': 'filecoin', 'RENDER': 'render-token',
 }
 
 @api_router.get("/futures/prices")

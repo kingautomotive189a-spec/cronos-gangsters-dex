@@ -14,10 +14,17 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - Trading Pool: `0xc7002e7c73d4910f0f83a66d187d2be951360619`
 - Protocol Vault: `0x7bed7483eeb27c7cd85ba76dfb141290156138ea`
 
-## Leverage Trading — 33 Pairs (Crypto, Stocks, Indices, Commodities)
-**Crypto** (12): BTC, ETH, BNB, CRO, SOL, XRP, DOGE, ADA, AVAX, LINK, ARB, MATIC
-**Stocks** (14): AAPL, TSLA, NVDA, MSFT, AMZN, GOOGL, META, AMD, NFLX, COIN, DIS, PYPL, BA, JPM
-**Indices & Commodities** (7): NAS100, SP500, DJI, GOLD, SILVER, OIL, NATGAS
+## Leverage Trading — 69 Pairs (Crypto, Stocks, Forex, Indices, Commodities)
+**Crypto** (20): BTC, ETH, BNB, CRO, SOL, XRP, DOGE, ADA, AVAX, LINK, ARB, MATIC, DOT, UNI, SHIB, PEPE, NEAR, ATOM, FIL, RENDER
+**Stocks — Big Tech** (10): AAPL, TSLA, NVDA, MSFT, AMZN, GOOGL, META, AMD, NFLX, INTC
+**Stocks — Finance** (6): COIN, JPM, GS, V, MA, PYPL
+**Stocks — Defence** (3): BA, LMT, RTX
+**Stocks — EV** (2): RIVN, NIO
+**Stocks — E-Commerce** (5): SHOP, DIS, UBER, ABNB, RBLX
+**Stocks — AI** (3): PLTR, SNOW, CRM
+**Forex** (7): EURUSD, GBPUSD, USDJPY, AUDUSD, USDCAD, USDCHF, EURGBP
+**Indices** (6): NAS100, SP500, DJI, FTSE, DAX, NIKKEI
+**Commodities** (7): GOLD, SILVER, PLATINUM, OIL, NATGAS, COPPER, WHEAT
 
 ## Real-Time Price Feed System (2026-04-06)
 **Crypto Pairs** — 3-tier fallback:

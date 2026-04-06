@@ -1304,7 +1304,7 @@ function toggleNavMenu() {
         <div class="card" onclick="showPage('futures')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(255,140,0,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#ff8c00'" onmouseout="this.style.borderColor='rgba(255,140,0,0.3)'">
           <div style="font-size:22px;margin-bottom:4px;">📈</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#ff8c00;letter-spacing:1px;">LEVERAGE</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">33 pairs, 20x</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">69 pairs, 100x</div>
         </div>
         <div class="card" onclick="showPage('tracker')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(0,212,255,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#00d4ff'" onmouseout="this.style.borderColor='rgba(0,212,255,0.3)'">
           <div style="font-size:22px;margin-bottom:4px;">🔍</div>
@@ -2513,12 +2513,12 @@ function toggleNavMenu() {
           <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:var(--green);margin-bottom:6px;">PHASE 8 — COMPLETE</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">LEVERAGE TRADING &amp; BEYOND</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> LEVERAGE TRADING — Up to 100x on 33 pairs</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> LEVERAGE TRADING — Up to 100x on 69 pairs</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> 12 Crypto Pairs (BTC, ETH, SOL, CRO, BNB & more)</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> 14 Stock Pairs (AAPL, TSLA, NVDA, MSFT, AMZN, GOOGL, META & more)</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> 7 Indices &amp; Commodities (NASDAQ 100, S&amp;P 500, Gold, Silver, Oil)</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Dual Currency Pool — Trade with GANG or CRO</div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Live TradingView Charts for all 33 pairs</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Live TradingView Charts for all 69 pairs</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> GANG TRACKER — Multi-Chain Wallet Scanner (7 chains)</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Multi-Coin Chart Viewer (GANG, BTC, ETH, SOL & 9 more)</div>
             <div style="display:flex;align-items:center;gap:10px;font-size:14px;"><span style="color:var(--green);">&#10003;</span> Limit Orders on Swap Page</div>
@@ -4685,7 +4685,7 @@ function toggleNavMenu() {
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:5px;color:#fff;line-height:1;text-shadow:0 0 40px rgba(255,140,0,0.25);">LEVERAGE <span style="color:#ff8c00;">TRADING</span></div>
       </div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.45);letter-spacing:0.3px;margin-top:4px;font-weight:400;"><span class="live-dot"></span>Live prices — auto-updates every 1.5s | Up to 100x leverage | 33 pairs | <span style="color:#27ae60;font-weight:700;">ON-CHAIN</span></div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.45);letter-spacing:0.3px;margin-top:4px;font-weight:400;"><span class="live-dot"></span>Live prices — auto-updates every 1.5s | Up to 100x leverage | 69 pairs | <span style="color:#27ae60;font-weight:700;">ON-CHAIN</span></div>
       <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,#ff8c00,transparent);margin:10px auto 0;"></div>
     </div>
 
@@ -4705,68 +4705,58 @@ function toggleNavMenu() {
       </div>
     </div>
 
-    <!-- Token Pair Selector -->
-    <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;font-weight:600;">CRYPTO</div>
-    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none;" id="futuresPairBar">
-      <button class="futures-pair active" data-pair="BTC" onclick="selectFuturesPair('BTC')"><img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" class="fp-logo" onerror="this.style.display='none'"/>BTC</button>
-      <button class="futures-pair" data-pair="ETH" onclick="selectFuturesPair('ETH')"><img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" class="fp-logo" onerror="this.style.display='none'"/>ETH</button>
-      <button class="futures-pair" data-pair="BNB" onclick="selectFuturesPair('BNB')"><img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" class="fp-logo" onerror="this.style.display='none'"/>BNB</button>
-      <button class="futures-pair" data-pair="CRO" onclick="selectFuturesPair('CRO')"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" class="fp-logo" onerror="this.style.display='none'"/>CRO</button>
-      <button class="futures-pair" data-pair="SOL" onclick="selectFuturesPair('SOL')"><img src="https://assets.coingecko.com/coins/images/4128/small/solana.png" class="fp-logo" onerror="this.style.display='none'"/>SOL</button>
-      <button class="futures-pair" data-pair="XRP" onclick="selectFuturesPair('XRP')"><img src="https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png" class="fp-logo" onerror="this.style.display='none'"/>XRP</button>
-      <button class="futures-pair" data-pair="DOGE" onclick="selectFuturesPair('DOGE')"><img src="https://assets.coingecko.com/coins/images/5/small/dogecoin.png" class="fp-logo" onerror="this.style.display='none'"/>DOGE</button>
-      <button class="futures-pair" data-pair="ADA" onclick="selectFuturesPair('ADA')"><img src="https://assets.coingecko.com/coins/images/975/small/cardano.png" class="fp-logo" onerror="this.style.display='none'"/>ADA</button>
-      <button class="futures-pair" data-pair="AVAX" onclick="selectFuturesPair('AVAX')"><img src="https://assets.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png" class="fp-logo" onerror="this.style.display='none'"/>AVAX</button>
-      <button class="futures-pair" data-pair="LINK" onclick="selectFuturesPair('LINK')"><img src="https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png" class="fp-logo" onerror="this.style.display='none'"/>LINK</button>
-      <button class="futures-pair" data-pair="ARB" onclick="selectFuturesPair('ARB')"><img src="https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg" class="fp-logo" onerror="this.style.display='none'"/>ARB</button>
-      <button class="futures-pair" data-pair="MATIC" onclick="selectFuturesPair('MATIC')"><img src="https://assets.coingecko.com/coins/images/4713/small/polygon.png" class="fp-logo" onerror="this.style.display='none'"/>MATIC</button>
+    <!-- Asset Browser — Trading 212 Style -->
+    <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.15);padding:0;overflow:hidden;">
+      <!-- Category Tabs -->
+      <div style="display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border);background:rgba(255,140,0,0.03);">
+        <button class="cat-tab active" data-cat="crypto" onclick="filterFuturesCat('crypto')">Crypto</button>
+        <button class="cat-tab" data-cat="bigtech" onclick="filterFuturesCat('bigtech')">Big Tech</button>
+        <button class="cat-tab" data-cat="stock" onclick="filterFuturesCat('stock')">All Stocks</button>
+        <button class="cat-tab" data-cat="forex" onclick="filterFuturesCat('forex')">Forex</button>
+        <button class="cat-tab" data-cat="commodity" onclick="filterFuturesCat('commodity')">Commodities</button>
+        <button class="cat-tab" data-cat="index" onclick="filterFuturesCat('index')">Indices</button>
+        <button class="cat-tab" data-cat="all" onclick="filterFuturesCat('all')">Browse All</button>
+      </div>
+      <style>
+        .cat-tab{padding:12px 18px;border:none;background:transparent;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+        .cat-tab:hover{color:var(--text);}
+        .cat-tab.active{color:#ff8c00;border-bottom-color:#ff8c00;}
+      </style>
+      <!-- Asset Cards Grid -->
+      <div id="futuresAssetGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:12px;max-height:320px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,140,0,0.3) transparent;"></div>
+      <!-- Quick Category Pills -->
+      <div style="padding:8px 12px 12px;border-top:1px solid var(--border);">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-bottom:6px;">QUICK FILTERS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <button class="pill-btn" onclick="filterFuturesCat('bigtech')">Big Tech</button>
+          <button class="pill-btn" onclick="filterFuturesCat('commodity')">Oil &amp; Gas</button>
+          <button class="pill-btn" onclick="filterFuturesCat('forex')">Currencies</button>
+          <button class="pill-btn" onclick="filterFuturesCat('ev')">EVs</button>
+          <button class="pill-btn" onclick="filterFuturesCat('banks')">Banks</button>
+          <button class="pill-btn" onclick="filterFuturesCat('defence')">Defence</button>
+          <button class="pill-btn" onclick="filterFuturesCat('defi')">DeFi</button>
+          <button class="pill-btn" onclick="filterFuturesCat('meme')">Meme Coins</button>
+          <button class="pill-btn" onclick="filterFuturesCat('ecommerce')">E-Commerce</button>
+          <button class="pill-btn" onclick="filterFuturesCat('ai')">AI</button>
+          <button class="pill-btn" onclick="filterFuturesCat('gaming')">Gaming</button>
+          <button class="pill-btn" onclick="filterFuturesCat('metals')">Precious Metals</button>
+          <button class="pill-btn" onclick="filterFuturesCat('energy')">Energy</button>
+        </div>
+      </div>
+      <style>
+        .pill-btn{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
+        .pill-btn:hover{border-color:rgba(255,140,0,0.5);color:var(--text);background:rgba(255,140,0,0.08);}
+        .asset-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:6px;}
+        .asset-card:hover{border-color:rgba(255,140,0,0.5);background:rgba(255,140,0,0.05);transform:translateY(-1px);}
+        .asset-card.selected{border-color:#ff8c00;background:rgba(255,140,0,0.12);}
+        .asset-card .ac-logo{width:32px;height:32px;border-radius:50%;object-fit:cover;background:var(--surface2);}
+        .asset-card .ac-badge{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;}
+        @media(max-width:480px){
+          #futuresAssetGrid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))!important;max-height:240px!important;}
+          .cat-tab{padding:10px 12px;font-size:11px;}
+        }
+      </style>
     </div>
-    <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;font-weight:600;">STOCKS</div>
-    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none;">
-      <button class="futures-pair" data-pair="AAPL" onclick="selectFuturesPair('AAPL')"><img src="https://s3-symbol-logo.tradingview.com/apple--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#a2aaad>A</span>'"/>AAPL</button>
-      <button class="futures-pair" data-pair="TSLA" onclick="selectFuturesPair('TSLA')"><img src="https://s3-symbol-logo.tradingview.com/tesla--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#cc0000>T</span>'"/>TSLA</button>
-      <button class="futures-pair" data-pair="NVDA" onclick="selectFuturesPair('NVDA')"><img src="https://s3-symbol-logo.tradingview.com/nvidia--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#76b900>N</span>'"/>NVDA</button>
-      <button class="futures-pair" data-pair="MSFT" onclick="selectFuturesPair('MSFT')"><img src="https://s3-symbol-logo.tradingview.com/microsoft--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#00a4ef>M</span>'"/>MSFT</button>
-      <button class="futures-pair" data-pair="AMZN" onclick="selectFuturesPair('AMZN')"><img src="https://s3-symbol-logo.tradingview.com/amazon--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#ff9900>A</span>'"/>AMZN</button>
-      <button class="futures-pair" data-pair="GOOGL" onclick="selectFuturesPair('GOOGL')"><img src="https://s3-symbol-logo.tradingview.com/alphabet--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#4285f4>G</span>'"/>GOOGL</button>
-      <button class="futures-pair" data-pair="META" onclick="selectFuturesPair('META')"><img src="https://s3-symbol-logo.tradingview.com/meta-platforms--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0668e1>M</span>'"/>META</button>
-      <button class="futures-pair" data-pair="AMD" onclick="selectFuturesPair('AMD')"><img src="https://s3-symbol-logo.tradingview.com/advanced-micro-devices--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#ed1c24>A</span>'"/>AMD</button>
-      <button class="futures-pair" data-pair="NFLX" onclick="selectFuturesPair('NFLX')"><img src="https://s3-symbol-logo.tradingview.com/netflix--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#e50914>N</span>'"/>NFLX</button>
-      <button class="futures-pair" data-pair="COIN" onclick="selectFuturesPair('COIN')"><img src="https://s3-symbol-logo.tradingview.com/coinbase--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0052ff>C</span>'"/>COIN</button>
-      <button class="futures-pair" data-pair="DIS" onclick="selectFuturesPair('DIS')"><img src="https://s3-symbol-logo.tradingview.com/walt-disney--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#113ccf>D</span>'"/>DIS</button>
-      <button class="futures-pair" data-pair="PYPL" onclick="selectFuturesPair('PYPL')"><img src="https://s3-symbol-logo.tradingview.com/paypal--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#003087>P</span>'"/>PYPL</button>
-      <button class="futures-pair" data-pair="BA" onclick="selectFuturesPair('BA')"><img src="https://s3-symbol-logo.tradingview.com/boeing--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0033a0>B</span>'"/>BA</button>
-      <button class="futures-pair" data-pair="JPM" onclick="selectFuturesPair('JPM')"><img src="https://s3-symbol-logo.tradingview.com/jpmorgan-chase--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0b6eaa>JP</span>'"/>JPM</button>
-    </div>
-    <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;font-weight:600;">INDICES &amp; COMMODITIES</div>
-    <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;scrollbar-width:none;">
-      <button class="futures-pair" data-pair="NAS100" onclick="selectFuturesPair('NAS100')"><img src="https://s3-symbol-logo.tradingview.com/country/US--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0096d6>NDX</span>'"/>NASDAQ 100</button>
-      <button class="futures-pair" data-pair="SP500" onclick="selectFuturesPair('SP500')"><img src="https://s3-symbol-logo.tradingview.com/country/US--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#ef3e42>500</span>'"/>S&amp;P 500</button>
-      <button class="futures-pair" data-pair="DJI" onclick="selectFuturesPair('DJI')"><img src="https://s3-symbol-logo.tradingview.com/country/US--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#1d6fa5>DJI</span>'"/>DOW JONES</button>
-      <button class="futures-pair" data-pair="GOLD" onclick="selectFuturesPair('GOLD')"><img src="https://s3-symbol-logo.tradingview.com/gold--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#ffd700;color:#000>AU</span>'"/>GOLD</button>
-      <button class="futures-pair" data-pair="SILVER" onclick="selectFuturesPair('SILVER')"><img src="https://s3-symbol-logo.tradingview.com/silver--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#c0c0c0;color:#000>AG</span>'"/>SILVER</button>
-      <button class="futures-pair" data-pair="OIL" onclick="selectFuturesPair('OIL')"><img src="https://s3-symbol-logo.tradingview.com/crude-oil--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#2d2d2d>OIL</span>'"/>CRUDE OIL</button>
-      <button class="futures-pair" data-pair="NATGAS" onclick="selectFuturesPair('NATGAS')"><img src="https://s3-symbol-logo.tradingview.com/natural-gas--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#4caf50>GAS</span>'"/>NAT GAS</button>
-    </div>
-    <style>
-      .futures-pair{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:10px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:all .2s;}
-      .futures-pair:hover{color:var(--text);border-color:rgba(255,140,0,0.5);background:rgba(255,140,0,0.08);}
-      .futures-pair.active{background:#ff8c00 !important;color:#000 !important;border-color:#ff8c00 !important;}
-      .futures-pair.active .fp-logo{filter:brightness(0);}
-      .futures-pair.active .fp-badge{opacity:0.8;}
-      .fp-logo{width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0;}
-      .fp-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:8px;font-weight:700;color:#fff;flex-shrink:0;letter-spacing:0;}
-      @media(max-width:480px){
-        .futures-pair{padding:6px 10px;font-size:12px;gap:4px;border-radius:8px;}
-        .fp-logo{width:16px;height:16px;}
-        .fp-badge{width:16px;height:16px;font-size:7px;}
-        #futuresChart{height:220px!important;}
-        .lev-btn{font-size:14px;padding:7px;}
-      }
-      @media(max-width:700px){
-        #futuresChart{height:260px!important;}
-      }
-    </style>
 
     <!-- Price + Chart -->
     <div class="card" style="margin-bottom:14px;padding:0;overflow:hidden;border-color:rgba(255,140,0,0.2);">
@@ -21195,42 +21185,85 @@ if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js').c
 // FEATURE: LEVERAGE TRADING
 // ══════════════════════════════════════════════════════════════
 const FUTURES_PAIRS = {
-  // Crypto
-  BTC: { symbol: 'BTCUSDT', tv: 'BINANCE:BTCUSDT', name: 'BTC/USD', type: 'crypto', yahoo: 'BTC', logo: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png', color: '#f7931a' },
-  ETH: { symbol: 'ETHUSDT', tv: 'BINANCE:ETHUSDT', name: 'ETH/USD', type: 'crypto', yahoo: 'ETH', logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png', color: '#627eea' },
-  BNB: { symbol: 'BNBUSDT', tv: 'BINANCE:BNBUSDT', name: 'BNB/USD', type: 'crypto', yahoo: 'BNB', logo: 'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png', color: '#f3ba2f' },
-  CRO: { symbol: 'CROUSDT', tv: 'CRYPTO:CROUSD', name: 'CRO/USD', type: 'crypto', yahoo: 'CRO', logo: 'https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png', color: '#002d74' },
-  SOL: { symbol: 'SOLUSDT', tv: 'BINANCE:SOLUSDT', name: 'SOL/USD', type: 'crypto', yahoo: 'SOL', logo: 'https://assets.coingecko.com/coins/images/4128/small/solana.png', color: '#9945ff' },
-  XRP: { symbol: 'XRPUSDT', tv: 'BINANCE:XRPUSDT', name: 'XRP/USD', type: 'crypto', yahoo: 'XRP', logo: 'https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png', color: '#23292f' },
-  DOGE: { symbol: 'DOGEUSDT', tv: 'BINANCE:DOGEUSDT', name: 'DOGE/USD', type: 'crypto', yahoo: 'DOGE', logo: 'https://assets.coingecko.com/coins/images/5/small/dogecoin.png', color: '#c3a634' },
-  ADA: { symbol: 'ADAUSDT', tv: 'BINANCE:ADAUSDT', name: 'ADA/USD', type: 'crypto', yahoo: 'ADA', logo: 'https://assets.coingecko.com/coins/images/975/small/cardano.png', color: '#0033ad' },
-  AVAX: { symbol: 'AVAXUSDT', tv: 'BINANCE:AVAXUSDT', name: 'AVAX/USD', type: 'crypto', yahoo: 'AVAX', logo: 'https://assets.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png', color: '#e84142' },
-  LINK: { symbol: 'LINKUSDT', tv: 'BINANCE:LINKUSDT', name: 'LINK/USD', type: 'crypto', yahoo: 'LINK', logo: 'https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png', color: '#2a5ada' },
-  ARB: { symbol: 'ARBUSDT', tv: 'BINANCE:ARBUSDT', name: 'ARB/USD', type: 'crypto', yahoo: 'ARB', logo: 'https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg', color: '#28a0f0' },
-  MATIC: { symbol: 'MATICUSDT', tv: 'BINANCE:MATICUSDT', name: 'MATIC/USD', type: 'crypto', yahoo: 'MATIC', logo: 'https://assets.coingecko.com/coins/images/4713/small/polygon.png', color: '#8247e5' },
-  // Stocks
-  AAPL: { symbol: 'AAPL', tv: 'NASDAQ:AAPL', name: 'APPLE', type: 'stock', yahoo: 'AAPL', logo: 'https://s3-symbol-logo.tradingview.com/apple--big.svg', color: '#a2aaad' },
-  TSLA: { symbol: 'TSLA', tv: 'NASDAQ:TSLA', name: 'TESLA', type: 'stock', yahoo: 'TSLA', logo: 'https://s3-symbol-logo.tradingview.com/tesla--big.svg', color: '#cc0000' },
-  NVDA: { symbol: 'NVDA', tv: 'NASDAQ:NVDA', name: 'NVIDIA', type: 'stock', yahoo: 'NVDA', logo: 'https://s3-symbol-logo.tradingview.com/nvidia--big.svg', color: '#76b900' },
-  MSFT: { symbol: 'MSFT', tv: 'NASDAQ:MSFT', name: 'MICROSOFT', type: 'stock', yahoo: 'MSFT', logo: 'https://s3-symbol-logo.tradingview.com/microsoft--big.svg', color: '#00a4ef' },
-  AMZN: { symbol: 'AMZN', tv: 'NASDAQ:AMZN', name: 'AMAZON', type: 'stock', yahoo: 'AMZN', logo: 'https://s3-symbol-logo.tradingview.com/amazon--big.svg', color: '#ff9900' },
-  GOOGL: { symbol: 'GOOGL', tv: 'NASDAQ:GOOGL', name: 'GOOGLE', type: 'stock', yahoo: 'GOOGL', logo: 'https://s3-symbol-logo.tradingview.com/alphabet--big.svg', color: '#4285f4' },
-  META: { symbol: 'META', tv: 'NASDAQ:META', name: 'META', type: 'stock', yahoo: 'META', logo: 'https://s3-symbol-logo.tradingview.com/meta-platforms--big.svg', color: '#0668e1' },
-  AMD: { symbol: 'AMD', tv: 'NASDAQ:AMD', name: 'AMD', type: 'stock', yahoo: 'AMD', logo: 'https://s3-symbol-logo.tradingview.com/advanced-micro-devices--big.svg', color: '#ed1c24' },
-  NFLX: { symbol: 'NFLX', tv: 'NASDAQ:NFLX', name: 'NETFLIX', type: 'stock', yahoo: 'NFLX', logo: 'https://s3-symbol-logo.tradingview.com/netflix--big.svg', color: '#e50914' },
-  COIN: { symbol: 'COIN', tv: 'NASDAQ:COIN', name: 'COINBASE', type: 'stock', yahoo: 'COIN', logo: 'https://s3-symbol-logo.tradingview.com/coinbase--big.svg', color: '#0052ff' },
-  DIS: { symbol: 'DIS', tv: 'NYSE:DIS', name: 'DISNEY', type: 'stock', yahoo: 'DIS', logo: 'https://s3-symbol-logo.tradingview.com/walt-disney--big.svg', color: '#113ccf' },
-  PYPL: { symbol: 'PYPL', tv: 'NASDAQ:PYPL', name: 'PAYPAL', type: 'stock', yahoo: 'PYPL', logo: 'https://s3-symbol-logo.tradingview.com/paypal--big.svg', color: '#003087' },
-  BA: { symbol: 'BA', tv: 'NYSE:BA', name: 'BOEING', type: 'stock', yahoo: 'BA', logo: 'https://s3-symbol-logo.tradingview.com/boeing--big.svg', color: '#0033a0' },
-  JPM: { symbol: 'JPM', tv: 'NYSE:JPM', name: 'JP MORGAN', type: 'stock', yahoo: 'JPM', logo: 'https://s3-symbol-logo.tradingview.com/jpmorgan-chase--big.svg', color: '#0b6eaa' },
-  // Indices & Commodities
-  NAS100: { symbol: 'NAS100', tv: 'PEPPERSTONE:NAS100', name: 'NASDAQ 100', type: 'index', yahoo: 'NAS100', logo: 'https://s3-symbol-logo.tradingview.com/country/US--big.svg', color: '#0096d6', badge: 'NDX' },
-  SP500: { symbol: 'SP500', tv: 'PEPPERSTONE:US500', name: 'S&P 500', type: 'index', yahoo: 'SP500', logo: 'https://s3-symbol-logo.tradingview.com/country/US--big.svg', color: '#ef3e42', badge: '500' },
-  DJI: { symbol: 'DJI', tv: 'TVC:DJI', name: 'DOW JONES', type: 'index', yahoo: 'DJI', logo: 'https://s3-symbol-logo.tradingview.com/country/US--big.svg', color: '#1d6fa5', badge: 'DJI' },
-  GOLD: { symbol: 'GOLD', tv: 'TVC:GOLD', name: 'GOLD', type: 'commodity', yahoo: 'GOLD', logo: 'https://s3-symbol-logo.tradingview.com/gold--big.svg', color: '#ffd700', badge: 'AU' },
-  SILVER: { symbol: 'SILVER', tv: 'TVC:SILVER', name: 'SILVER', type: 'commodity', yahoo: 'SILVER', logo: 'https://s3-symbol-logo.tradingview.com/silver--big.svg', color: '#c0c0c0', badge: 'AG' },
-  OIL: { symbol: 'OIL', tv: 'TVC:USOIL', name: 'CRUDE OIL', type: 'commodity', yahoo: 'OIL', logo: 'https://s3-symbol-logo.tradingview.com/crude-oil--big.svg', color: '#2d2d2d', badge: 'OIL' },
-  NATGAS: { symbol: 'NATGAS', tv: 'TVC:NATGAS', name: 'NATURAL GAS', type: 'commodity', yahoo: 'NATGAS', logo: 'https://s3-symbol-logo.tradingview.com/natural-gas--big.svg', color: '#4caf50', badge: 'GAS' }
+  // === CRYPTO (20) ===
+  BTC: { symbol: 'BTCUSDT', tv: 'BINANCE:BTCUSDT', name: 'Bitcoin', type: 'crypto', cat: ['crypto'], logo: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png', color: '#f7931a' },
+  ETH: { symbol: 'ETHUSDT', tv: 'BINANCE:ETHUSDT', name: 'Ethereum', type: 'crypto', cat: ['crypto','defi'], logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png', color: '#627eea' },
+  BNB: { symbol: 'BNBUSDT', tv: 'BINANCE:BNBUSDT', name: 'BNB', type: 'crypto', cat: ['crypto'], logo: 'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png', color: '#f3ba2f' },
+  CRO: { symbol: 'CROUSDT', tv: 'CRYPTO:CROUSD', name: 'Cronos', type: 'crypto', cat: ['crypto'], logo: 'https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png', color: '#002d74' },
+  SOL: { symbol: 'SOLUSDT', tv: 'BINANCE:SOLUSDT', name: 'Solana', type: 'crypto', cat: ['crypto','defi'], logo: 'https://assets.coingecko.com/coins/images/4128/small/solana.png', color: '#9945ff' },
+  XRP: { symbol: 'XRPUSDT', tv: 'BINANCE:XRPUSDT', name: 'Ripple', type: 'crypto', cat: ['crypto'], logo: 'https://assets.coingecko.com/coins/images/44/small/xrp-symbol-white-128.png', color: '#23292f' },
+  DOGE: { symbol: 'DOGEUSDT', tv: 'BINANCE:DOGEUSDT', name: 'Dogecoin', type: 'crypto', cat: ['crypto','meme'], logo: 'https://assets.coingecko.com/coins/images/5/small/dogecoin.png', color: '#c3a634' },
+  ADA: { symbol: 'ADAUSDT', tv: 'BINANCE:ADAUSDT', name: 'Cardano', type: 'crypto', cat: ['crypto','defi'], logo: 'https://assets.coingecko.com/coins/images/975/small/cardano.png', color: '#0033ad' },
+  AVAX: { symbol: 'AVAXUSDT', tv: 'BINANCE:AVAXUSDT', name: 'Avalanche', type: 'crypto', cat: ['crypto','defi'], logo: 'https://assets.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png', color: '#e84142' },
+  LINK: { symbol: 'LINKUSDT', tv: 'BINANCE:LINKUSDT', name: 'Chainlink', type: 'crypto', cat: ['crypto','defi','ai'], logo: 'https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png', color: '#2a5ada' },
+  ARB: { symbol: 'ARBUSDT', tv: 'BINANCE:ARBUSDT', name: 'Arbitrum', type: 'crypto', cat: ['crypto','defi'], logo: 'https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg', color: '#28a0f0' },
+  MATIC: { symbol: 'MATICUSDT', tv: 'BINANCE:MATICUSDT', name: 'Polygon', type: 'crypto', cat: ['crypto','defi'], logo: 'https://assets.coingecko.com/coins/images/4713/small/polygon.png', color: '#8247e5' },
+  DOT: { symbol: 'DOTUSDT', tv: 'BINANCE:DOTUSDT', name: 'Polkadot', type: 'crypto', cat: ['crypto','defi'], logo: 'https://assets.coingecko.com/coins/images/12171/small/polkadot.png', color: '#e6007a' },
+  UNI: { symbol: 'UNIUSDT', tv: 'BINANCE:UNIUSDT', name: 'Uniswap', type: 'crypto', cat: ['crypto','defi'], logo: 'https://assets.coingecko.com/coins/images/12504/small/uniswap-logo.png', color: '#ff007a' },
+  SHIB: { symbol: 'SHIBUSDT', tv: 'BINANCE:SHIBUSDT', name: 'Shiba Inu', type: 'crypto', cat: ['crypto','meme'], logo: 'https://assets.coingecko.com/coins/images/11939/small/shiba.png', color: '#ffa409' },
+  PEPE: { symbol: 'PEPEUSDT', tv: 'BINANCE:PEPEUSDT', name: 'Pepe', type: 'crypto', cat: ['crypto','meme'], logo: 'https://assets.coingecko.com/coins/images/29850/small/pepe-token.jpeg', color: '#4a8c3f' },
+  NEAR: { symbol: 'NEARUSDT', tv: 'BINANCE:NEARUSDT', name: 'NEAR', type: 'crypto', cat: ['crypto','ai'], logo: 'https://assets.coingecko.com/coins/images/10365/small/near.jpg', color: '#000' },
+  ATOM: { symbol: 'ATOMUSDT', tv: 'BINANCE:ATOMUSDT', name: 'Cosmos', type: 'crypto', cat: ['crypto','defi'], logo: 'https://assets.coingecko.com/coins/images/1481/small/cosmos_hub.png', color: '#2e3148' },
+  FIL: { symbol: 'FILUSDT', tv: 'BINANCE:FILUSDT', name: 'Filecoin', type: 'crypto', cat: ['crypto','ai'], logo: 'https://assets.coingecko.com/coins/images/12817/small/filecoin.png', color: '#0090ff' },
+  RENDER: { symbol: 'RENDERUSDT', tv: 'BINANCE:RENDERUSDT', name: 'Render', type: 'crypto', cat: ['crypto','ai'], logo: 'https://assets.coingecko.com/coins/images/11636/small/rndr.png', color: '#333' },
+  // === STOCKS: Big Tech (9) ===
+  AAPL: { yahoo: 'AAPL', tv: 'NASDAQ:AAPL', name: 'Apple', type: 'stock', cat: ['stock','bigtech'], badge: 'A', badgeColor: '#a2aaad' },
+  TSLA: { yahoo: 'TSLA', tv: 'NASDAQ:TSLA', name: 'Tesla', type: 'stock', cat: ['stock','bigtech','ev','ai'], badge: 'T', badgeColor: '#cc0000' },
+  NVDA: { yahoo: 'NVDA', tv: 'NASDAQ:NVDA', name: 'NVIDIA', type: 'stock', cat: ['stock','bigtech','ai'], badge: 'N', badgeColor: '#76b900' },
+  MSFT: { yahoo: 'MSFT', tv: 'NASDAQ:MSFT', name: 'Microsoft', type: 'stock', cat: ['stock','bigtech','ai'], badge: 'M', badgeColor: '#00a4ef' },
+  AMZN: { yahoo: 'AMZN', tv: 'NASDAQ:AMZN', name: 'Amazon', type: 'stock', cat: ['stock','bigtech','ecommerce'], badge: 'A', badgeColor: '#ff9900' },
+  GOOGL: { yahoo: 'GOOGL', tv: 'NASDAQ:GOOGL', name: 'Alphabet', type: 'stock', cat: ['stock','bigtech','ai'], badge: 'G', badgeColor: '#4285f4' },
+  META: { yahoo: 'META', tv: 'NASDAQ:META', name: 'Meta', type: 'stock', cat: ['stock','bigtech','ai'], badge: 'M', badgeColor: '#0668e1' },
+  AMD: { yahoo: 'AMD', tv: 'NASDAQ:AMD', name: 'AMD', type: 'stock', cat: ['stock','bigtech','ai'], badge: 'A', badgeColor: '#ed1c24' },
+  NFLX: { yahoo: 'NFLX', tv: 'NASDAQ:NFLX', name: 'Netflix', type: 'stock', cat: ['stock','bigtech'], badge: 'N', badgeColor: '#e50914' },
+  INTC: { yahoo: 'INTC', tv: 'NASDAQ:INTC', name: 'Intel', type: 'stock', cat: ['stock','bigtech','ai'], badge: 'IN', badgeColor: '#0071c5' },
+  // === STOCKS: Finance (6) ===
+  COIN: { yahoo: 'COIN', tv: 'NASDAQ:COIN', name: 'Coinbase', type: 'stock', cat: ['stock','banks'], badge: 'C', badgeColor: '#0052ff' },
+  JPM: { yahoo: 'JPM', tv: 'NYSE:JPM', name: 'JPMorgan', type: 'stock', cat: ['stock','banks'], badge: 'JP', badgeColor: '#0b6eaa' },
+  GS: { yahoo: 'GS', tv: 'NYSE:GS', name: 'Goldman Sachs', type: 'stock', cat: ['stock','banks'], badge: 'GS', badgeColor: '#6eaad0' },
+  V: { yahoo: 'V', tv: 'NYSE:V', name: 'Visa', type: 'stock', cat: ['stock','banks'], badge: 'V', badgeColor: '#1a1f71' },
+  MA: { yahoo: 'MA', tv: 'NYSE:MA', name: 'Mastercard', type: 'stock', cat: ['stock','banks'], badge: 'MA', badgeColor: '#eb001b' },
+  PYPL: { yahoo: 'PYPL', tv: 'NASDAQ:PYPL', name: 'PayPal', type: 'stock', cat: ['stock','banks','ecommerce'], badge: 'P', badgeColor: '#003087' },
+  // === STOCKS: Defence (3) ===
+  BA: { yahoo: 'BA', tv: 'NYSE:BA', name: 'Boeing', type: 'stock', cat: ['stock','defence'], badge: 'B', badgeColor: '#0033a0' },
+  LMT: { yahoo: 'LMT', tv: 'NYSE:LMT', name: 'Lockheed Martin', type: 'stock', cat: ['stock','defence'], badge: 'LM', badgeColor: '#003366' },
+  RTX: { yahoo: 'RTX', tv: 'NYSE:RTX', name: 'RTX Corp', type: 'stock', cat: ['stock','defence'], badge: 'RT', badgeColor: '#00205b' },
+  // === STOCKS: EV (2) ===
+  RIVN: { yahoo: 'RIVN', tv: 'NASDAQ:RIVN', name: 'Rivian', type: 'stock', cat: ['stock','ev'], badge: 'R', badgeColor: '#00c08b' },
+  NIO: { yahoo: 'NIO', tv: 'NYSE:NIO', name: 'NIO', type: 'stock', cat: ['stock','ev'], badge: 'NI', badgeColor: '#003896' },
+  // === STOCKS: E-Commerce & Consumer (5) ===
+  SHOP: { yahoo: 'SHOP', tv: 'NYSE:SHOP', name: 'Shopify', type: 'stock', cat: ['stock','ecommerce'], badge: 'SH', badgeColor: '#95bf47' },
+  DIS: { yahoo: 'DIS', tv: 'NYSE:DIS', name: 'Disney', type: 'stock', cat: ['stock','gaming'], badge: 'D', badgeColor: '#113ccf' },
+  UBER: { yahoo: 'UBER', tv: 'NYSE:UBER', name: 'Uber', type: 'stock', cat: ['stock','ecommerce'], badge: 'U', badgeColor: '#000' },
+  ABNB: { yahoo: 'ABNB', tv: 'NASDAQ:ABNB', name: 'Airbnb', type: 'stock', cat: ['stock','ecommerce'], badge: 'AB', badgeColor: '#ff5a5f' },
+  RBLX: { yahoo: 'RBLX', tv: 'NYSE:RBLX', name: 'Roblox', type: 'stock', cat: ['stock','gaming'], badge: 'RB', badgeColor: '#e2231a' },
+  // === STOCKS: AI (3) ===
+  PLTR: { yahoo: 'PLTR', tv: 'NYSE:PLTR', name: 'Palantir', type: 'stock', cat: ['stock','ai','defence'], badge: 'PL', badgeColor: '#1d1d1d' },
+  SNOW: { yahoo: 'SNOW', tv: 'NYSE:SNOW', name: 'Snowflake', type: 'stock', cat: ['stock','ai'], badge: 'SN', badgeColor: '#29b5e8' },
+  CRM: { yahoo: 'CRM', tv: 'NYSE:CRM', name: 'Salesforce', type: 'stock', cat: ['stock','ai'], badge: 'SF', badgeColor: '#00a1e0' },
+  // === FOREX (7) ===
+  EURUSD: { yahoo: 'EURUSD=X', tv: 'FX:EURUSD', name: 'EUR/USD', type: 'forex', cat: ['forex'], badge: 'EU', badgeColor: '#003399' },
+  GBPUSD: { yahoo: 'GBPUSD=X', tv: 'FX:GBPUSD', name: 'GBP/USD', type: 'forex', cat: ['forex'], badge: 'GB', badgeColor: '#cf142b' },
+  USDJPY: { yahoo: 'JPY=X', tv: 'FX:USDJPY', name: 'USD/JPY', type: 'forex', cat: ['forex'], badge: 'JP', badgeColor: '#bc002d' },
+  AUDUSD: { yahoo: 'AUDUSD=X', tv: 'FX:AUDUSD', name: 'AUD/USD', type: 'forex', cat: ['forex'], badge: 'AU', badgeColor: '#002868' },
+  USDCAD: { yahoo: 'CAD=X', tv: 'FX:USDCAD', name: 'USD/CAD', type: 'forex', cat: ['forex'], badge: 'CA', badgeColor: '#ff0000' },
+  USDCHF: { yahoo: 'CHF=X', tv: 'FX:USDCHF', name: 'USD/CHF', type: 'forex', cat: ['forex'], badge: 'CH', badgeColor: '#d52b1e' },
+  EURGBP: { yahoo: 'EURGBP=X', tv: 'FX:EURGBP', name: 'EUR/GBP', type: 'forex', cat: ['forex'], badge: 'EG', badgeColor: '#003399' },
+  // === INDICES (6) ===
+  NAS100: { yahoo: '^NDX', tv: 'PEPPERSTONE:NAS100', name: 'NASDAQ 100', type: 'index', cat: ['index'], badge: 'NDX', badgeColor: '#0096d6' },
+  SP500: { yahoo: '^GSPC', tv: 'PEPPERSTONE:US500', name: 'S&P 500', type: 'index', cat: ['index'], badge: '500', badgeColor: '#ef3e42' },
+  DJI: { yahoo: '^DJI', tv: 'TVC:DJI', name: 'Dow Jones', type: 'index', cat: ['index'], badge: 'DJI', badgeColor: '#1d6fa5' },
+  FTSE: { yahoo: '^FTSE', tv: 'TVC:UKX', name: 'FTSE 100', type: 'index', cat: ['index'], badge: 'FT', badgeColor: '#003366' },
+  DAX: { yahoo: '^GDAXI', tv: 'TVC:DEU40', name: 'DAX 40', type: 'index', cat: ['index'], badge: 'DAX', badgeColor: '#ffcc00' },
+  NIKKEI: { yahoo: '^N225', tv: 'TVC:NI225', name: 'Nikkei 225', type: 'index', cat: ['index'], badge: 'NK', badgeColor: '#bc002d' },
+  // === COMMODITIES (7) ===
+  GOLD: { yahoo: 'GC=F', tv: 'TVC:GOLD', name: 'Gold', type: 'commodity', cat: ['commodity','metals'], badge: 'AU', badgeColor: '#ffd700' },
+  SILVER: { yahoo: 'SI=F', tv: 'TVC:SILVER', name: 'Silver', type: 'commodity', cat: ['commodity','metals'], badge: 'AG', badgeColor: '#c0c0c0' },
+  PLATINUM: { yahoo: 'PL=F', tv: 'TVC:PLATINUM', name: 'Platinum', type: 'commodity', cat: ['commodity','metals'], badge: 'PT', badgeColor: '#e5e4e2' },
+  OIL: { yahoo: 'CL=F', tv: 'TVC:USOIL', name: 'Crude Oil', type: 'commodity', cat: ['commodity','energy'], badge: 'OIL', badgeColor: '#2d2d2d' },
+  NATGAS: { yahoo: 'NG=F', tv: 'TVC:NATGAS', name: 'Natural Gas', type: 'commodity', cat: ['commodity','energy'], badge: 'GAS', badgeColor: '#4caf50' },
+  COPPER: { yahoo: 'HG=F', tv: 'TVC:COPPER', name: 'Copper', type: 'commodity', cat: ['commodity','metals'], badge: 'CU', badgeColor: '#b87333' },
+  WHEAT: { yahoo: 'ZW=F', tv: 'TVC:WHEAT', name: 'Wheat', type: 'commodity', cat: ['commodity'], badge: 'WH', badgeColor: '#daa520' }
 };
 
 let futuresState = {
@@ -21347,20 +21380,26 @@ function setFuturesCurrency(curr) {
 }
 
 function selectFuturesPair(pair) {
+  if (!FUTURES_PAIRS[pair]) return;
   futuresState.pair = pair;
+  // Update old-style pill buttons if they exist
   document.querySelectorAll('.futures-pair').forEach(b => {
     b.classList.toggle('active', b.dataset.pair === pair);
   });
+  // Update asset grid cards
+  document.querySelectorAll('.asset-card').forEach(function(c) { c.classList.remove('selected'); });
+  var sel = document.querySelector('[data-testid="asset-card-' + pair.toLowerCase() + '"]');
+  if (sel) sel.classList.add('selected');
   const p = FUTURES_PAIRS[pair];
-  document.getElementById('futuresPairName').textContent = p.name;
+  document.getElementById('futuresPairName').textContent = p.name + '/USD';
   // Update logo in header
   const logoContainer = document.getElementById('futuresPairLogo');
   if (logoContainer) {
-    logoContainer.style.background = p.color || '#ff8c00';
+    logoContainer.style.background = p.color || p.badgeColor || '#ff8c00';
     if (p.logo) {
       logoContainer.innerHTML = '<img src="' + p.logo + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML=\'<span style=font-size:12px;font-weight:700;color:#fff>' + (p.badge || pair.charAt(0)) + '</span>\'" />';
     } else {
-      logoContainer.innerHTML = '<span style="font-size:12px;font-weight:700;color:' + (p.color === '#ffd700' || p.color === '#c0c0c0' ? '#000' : '#fff') + ';">' + (p.badge || pair) + '</span>';
+      logoContainer.innerHTML = '<span style="font-size:12px;font-weight:700;color:' + (p.badgeColor === '#ffd700' || p.badgeColor === '#c0c0c0' || p.badgeColor === '#e5e4e2' || p.badgeColor === '#ffcc00' ? '#000' : '#fff') + ';">' + (p.badge || pair) + '</span>';
     }
   }
   // Update type badge
@@ -21620,6 +21659,87 @@ function _fmtPrice(p) {
   if (p >= 0.01) return p.toLocaleString(undefined, {minimumFractionDigits:4, maximumFractionDigits:6});
   return p.toLocaleString(undefined, {minimumFractionDigits:6, maximumFractionDigits:8});
 }
+
+// === ASSET GRID RENDERER (Trading 212 style) ===
+var _currentCatFilter = 'crypto';
+function renderAssetGrid(cat) {
+  _currentCatFilter = cat;
+  const grid = document.getElementById('futuresAssetGrid');
+  if (!grid) return;
+  var html = '';
+  for (var key in FUTURES_PAIRS) {
+    var p = FUTURES_PAIRS[key];
+    var cats = p.cat || [p.type];
+    var show = cat === 'all' || cats.indexOf(cat) !== -1;
+    if (!show) continue;
+    var price = futuresState.prices[key] || 0;
+    var change = 0;
+    if (_prev24hPrice[key] && _prev24hPrice[key] > 0) {
+      change = ((price - _prev24hPrice[key]) / _prev24hPrice[key] * 100);
+    }
+    var changeColor = change >= 0 ? '#26a69a' : '#ef5350';
+    var changePrefix = change >= 0 ? '+' : '';
+    var selected = futuresState.pair === key ? ' selected' : '';
+    // Logo or badge
+    var logoHtml = '';
+    if (p.logo) {
+      logoHtml = '<img src="' + p.logo + '" class="ac-logo" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" /><span class="ac-badge" style="display:none;background:' + (p.color || p.badgeColor || '#555') + ';">' + (p.badge || key.charAt(0)) + '</span>';
+    } else {
+      logoHtml = '<span class="ac-badge" style="background:' + (p.badgeColor || '#555') + ';">' + (p.badge || key.substring(0,2)) + '</span>';
+    }
+    html += '<div class="asset-card' + selected + '" onclick="selectFuturesPair(\'' + key + '\')" data-testid="asset-card-' + key.toLowerCase() + '">' +
+      logoHtml +
+      '<div style="font-family:\'Space Grotesk\',sans-serif;font-size:12px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + p.name + '</div>' +
+      '<div style="font-family:\'Space Mono\',monospace;font-size:13px;color:var(--text);font-weight:700;">' + (price > 0 ? '$' + _fmtPrice(price) : '—') + '</div>' +
+      '<div style="font-size:10px;color:' + changeColor + ';font-weight:600;">' + (price > 0 ? changePrefix + change.toFixed(2) + '%' : '') + '</div>' +
+    '</div>';
+  }
+  grid.innerHTML = html;
+}
+
+function filterFuturesCat(cat) {
+  // Update tab styling
+  document.querySelectorAll('.cat-tab').forEach(function(t) {
+    t.classList.toggle('active', t.dataset.cat === cat);
+  });
+  renderAssetGrid(cat);
+}
+
+window.filterFuturesCat = filterFuturesCat;
+
+// Refresh asset grid prices periodically
+setInterval(function() {
+  if (getActivePage && getActivePage() === 'futures') {
+    renderAssetGrid(_currentCatFilter);
+  }
+}, 8000);
+
+// Batch-fetch prices for all visible assets on first render
+async function _fetchAllVisiblePrices() {
+  var allKeys = Object.keys(FUTURES_PAIRS);
+  // Fetch in chunks of 20 — send the key names directly (backend maps them)
+  for (var i = 0; i < allKeys.length; i += 20) {
+    var chunk = allKeys.slice(i, i + 20);
+    try {
+      var backendUrl = window.location.origin;
+      var resp = await fetch(backendUrl + '/api/futures/prices?symbols=' + chunk.join(','), { signal: AbortSignal.timeout(10000) });
+      var data = await resp.json();
+      if (data.prices) {
+        for (var j = 0; j < chunk.length; j++) {
+          var k2 = chunk[j];
+          var pd = data.prices[k2];
+          if (pd && pd.price > 0) {
+            futuresState.prices[k2] = pd.price;
+            if (pd.change) _prev24hPrice[k2] = pd.price / (1 + pd.change/100);
+          }
+        }
+      }
+    } catch(e) { console.warn('Batch price fetch error:', e); }
+  }
+  renderAssetGrid(_currentCatFilter);
+}
+setTimeout(_fetchAllVisiblePrices, 3000);
+
 
 document.getElementById('futuresAmount')?.addEventListener('input', updateFuturesPosInfo);
 
@@ -22195,6 +22315,7 @@ setTimeout(() => {
   updateFuturesPrice();
   updateFuturesPool();
   renderFuturesHistory();
+  renderAssetGrid('crypto'); // Initialize the asset card grid
   // Connect to Binance WebSocket for real-time prices
   connectBinanceWS();
   // Fallback: Fetch price from API every 5 seconds in case WebSocket drops
