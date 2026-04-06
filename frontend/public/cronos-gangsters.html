@@ -7479,6 +7479,16 @@ function toggleNavMenu() {
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
       <div style="font-size:11px;color:var(--muted);">When you bond LP tokens, you receive $GANG at a discount. Your GANG vests over 5 days. 0.3% fee on bond purchase.</div>
     </div>
+
+    <!-- YOUR ACTIVE BONDS -->
+    <div style="margin-top:16px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:10px;text-align:center;">YOUR ACTIVE BONDS</div>
+      <div id="userBondsContainer" data-testid="user-bonds-container" style="display:grid;gap:10px;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;">
+          <div style="font-size:12px;color:var(--muted);">No active bonds. Purchase a bond above to start earning discounted $GANG.</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══════════════════════════════════════════ TRADING COMPETITIONS PAGE ═══════════════════════════════════════════ -->
@@ -26176,41 +26186,40 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
   function renderBonds() {
     const s = getState();
-    // Show user's active bonds if any
-    const activeContainer = document.getElementById('bondsGrid');
-    if (!activeContainer) return;
-
-    // Check for vested bonds
     const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     const userBonds = s.bonds.filter(b => b.user === addr);
+    const container = document.getElementById('userBondsContainer');
+    if (!container) return;
 
-    if (userBonds.length > 0) {
-      let bondsHtml = '';
-      userBonds.forEach((b, i) => {
+    if (userBonds.length === 0) {
+      container.innerHTML = '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;"><div style="font-size:12px;color:var(--muted);">No active bonds. Purchase a bond above to start earning discounted $GANG.</div></div>';
+    } else {
+      container.innerHTML = userBonds.map((b, i) => {
         const elapsed = Date.now() - b.purchaseTime;
         const vestMs = b.vestDays * 86400000;
         const pct = Math.min(100, (elapsed / vestMs) * 100);
         const vested = pct >= 100;
         const claimable = vested ? b.gangReceived : (b.gangReceived * pct / 100);
-        bondsHtml += `<div style="background:var(--surface);border:1px solid ${vested ? 'rgba(39,174,96,0.4)' : 'rgba(212,160,23,0.25)'};border-radius:16px;padding:16px;margin-top:12px;">
+        const timeLeft = vested ? 'READY' : ((vestMs - elapsed) > 86400000 ? Math.ceil((vestMs - elapsed) / 86400000) + 'd left' : Math.ceil((vestMs - elapsed) / 3600000) + 'h left');
+        return `<div style="background:var(--surface);border:1px solid ${vested ? 'rgba(39,174,96,0.4)' : 'rgba(212,160,23,0.25)'};border-radius:16px;padding:16px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-            <div style="font-weight:700;color:var(--text);">${b.pair} Bond #${i+1}</div>
-            <div style="font-size:11px;color:${vested ? 'var(--green)' : '#ff9800'};">${vested ? 'FULLY VESTED' : pct.toFixed(0) + '% vested'}</div>
+            <div style="font-weight:700;color:var(--text);font-size:14px;">${b.pair} Bond</div>
+            <div style="font-size:11px;padding:3px 8px;border-radius:6px;font-weight:700;background:${vested ? 'rgba(39,174,96,0.15)' : 'rgba(255,152,0,0.15)'};color:${vested ? 'var(--green)' : '#ff9800'};">${vested ? 'FULLY VESTED' : timeLeft}</div>
           </div>
-          <div style="background:var(--surface2);border-radius:6px;height:6px;overflow:hidden;margin-bottom:8px;">
+          <div style="background:var(--surface2);border-radius:6px;height:8px;overflow:hidden;margin-bottom:10px;">
             <div style="height:100%;background:${vested ? 'var(--green)' : 'var(--gold)'};width:${pct}%;border-radius:6px;transition:width .3s;"></div>
           </div>
-          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);">
-            <span>Claimable: <strong style="color:var(--green);">${claimable.toFixed(2)} GANG</strong></span>
-            <span>Total: ${b.gangReceived.toFixed(2)} GANG</span>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;">
+            <span>Deposited: <strong style="color:var(--text);">${b.lpValue.toFixed(2)} GANG</strong></span>
+            <span>Vesting: <strong style="color:var(--gold);">${pct.toFixed(0)}%</strong></span>
           </div>
-          ${vested ? '<button onclick="claimBond(' + i + ')" data-testid="claim-bond-' + i + '" style="width:100%;margin-top:8px;padding:10px;border-radius:8px;background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;font-family:\'Bebas Neue\',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;">CLAIM VESTED GANG</button>' : ''}
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);">
+            <span>Claimable: <strong style="color:var(--green);">${claimable.toFixed(2)} GANG</strong></span>
+            <span>Total: <strong style="color:var(--gold);">${b.gangReceived.toFixed(2)} GANG</strong></span>
+          </div>
+          ${vested ? '<button onclick="claimBond(' + i + ')" data-testid="claim-bond-' + i + '" style="width:100%;margin-top:10px;padding:12px;border-radius:10px;background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;font-family:\'Bebas Neue\',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;box-shadow:0 2px 8px rgba(39,174,96,0.3);">CLAIM VESTED GANG</button>' : '<div style="margin-top:8px;padding:8px;border-radius:8px;background:rgba(255,152,0,0.08);text-align:center;font-size:11px;color:#ff9800;">Vesting in progress — ' + timeLeft + '</div>'}
         </div>`;
-      });
-      // Append to grid (after the default bond cards)
-      const existingCards = activeContainer.querySelectorAll('[data-bond-card]');
-      existingCards.forEach(c => c.remove());
-      activeContainer.insertAdjacentHTML('beforeend', '<div data-bond-card>' + bondsHtml + '</div>');
+      }).join('');
     }
 
     // Update revenue
