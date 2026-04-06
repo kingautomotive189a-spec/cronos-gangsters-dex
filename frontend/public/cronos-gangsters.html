@@ -23600,10 +23600,13 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   // Clear ALL old/legacy positions from LocalStorage
   window.clearAllFuturesPositions = function() {
     futuresState.positions = [];
+    futuresState.history = [];
     saveFuturesState();
     updateFuturesPositions();
     updateFuturesPool();
-    showToast('All old positions cleared!', 'success');
+    const histEl = document.getElementById('futuresHistory');
+    if (histEl) histEl.innerHTML = '<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;">No trade history</div>';
+    showToast('All old positions & history cleared!', 'success');
   };
 
   // ═══════════════════════════════════════════════════
