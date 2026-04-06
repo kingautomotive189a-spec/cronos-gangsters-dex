@@ -4694,7 +4694,10 @@ function toggleNavMenu() {
 
     <!-- Open Positions -->
     <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.2);">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff8c00;letter-spacing:2px;margin-bottom:12px;">OPEN POSITIONS</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff8c00;letter-spacing:2px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
+        OPEN POSITIONS
+        <button onclick="clearAllFuturesPositions()" data-testid="clear-old-positions-btn" style="font-size:10px;padding:4px 10px;border-radius:6px;background:rgba(231,76,60,0.2);color:#e74c3c;border:1px solid rgba(231,76,60,0.4);cursor:pointer;font-family:inherit;letter-spacing:0.5px;">CLEAR OLD POSITIONS</button>
+      </div>
       <div id="futuresPositions" data-testid="futures-positions">
         <div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No open positions</div>
       </div>
@@ -21141,6 +21144,17 @@ function closeFuturesPosition(id) {
   const idx = futuresState.positions.findIndex(p => p.id === id);
   if (idx === -1) return;
   const pos = futuresState.positions[idx];
+
+  // Old legacy positions (no onChain flag) — close directly without popup
+  if (!pos.onChain) {
+    if (typeof window._realCloseFuturesPosition === 'function') {
+      window._realCloseFuturesPosition(id);
+    } else {
+      _doCloseFuturesPosition(id);
+    }
+    return;
+  }
+
   const curr = pos.currency || 'GANG';
   const currentPrice = futuresState.prices[pos.pair] || pos.entryPrice;
   const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
@@ -21153,8 +21167,8 @@ function closeFuturesPosition(id) {
   showTxConfirm({
     title: 'CONFIRM CLOSE POSITION',
     action: 'Close ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD',
-    fromToken: netPnl >= 0 ? '✓' : '✗',
-    icon: netPnl >= 0 ? '📈' : '📉',
+    fromToken: netPnl >= 0 ? 'W' : 'L',
+    icon: 'GANG',
     amount: pos.amount.toFixed(2) + ' ' + curr,
     fee: closingFee.toFixed(4) + ' ' + curr + ' (0.3%)',
     receive: (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr,
@@ -21167,7 +21181,6 @@ function closeFuturesPosition(id) {
       { label: 'Closing Fee', value: '0.3%', cls: 'fee' },
     ],
     onConfirm: function() {
-      // Use real on-chain version if available
       if (typeof window._realCloseFuturesPosition === 'function') {
         window._realCloseFuturesPosition(id);
       } else {
@@ -23450,11 +23463,10 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const netPnl = finalPnl - closingFee;
 
     const poolAddr = getTradingPoolAddr();
-    // If this was an on-chain position, withdraw collateral from contract
+    // ONLY attempt on-chain withdrawal for positions flagged as onChain
     if (pos.onChain && poolAddr && curr === 'GANG' && state.signer) {
       try {
-        // Withdraw the user's remaining collateral (capped at what they deposited net of open fee)
-        const withdrawAmt = Math.max(0, pos.amount); // amount after open fee
+        const withdrawAmt = Math.max(0, pos.amount);
         const weiAmt = ethers.parseEther(withdrawAmt.toFixed(18));
         showToast('Withdrawing GANG collateral from on-chain pool...', 'info');
         await _sendContractTx(poolAddr, TRADING_POOL_ABI, 'withdrawCollateral', [weiAmt]);
@@ -23464,7 +23476,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       }
     }
 
-    // Track locally
+    // Close locally — remove from open positions
     pos.status = 'closed';
     pos.closedAt = new Date().toISOString();
     pos.closePrice = currentPrice;
@@ -23482,6 +23494,15 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     showToast('Closed ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD — PnL: ' + (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, netPnl >= 0 ? 'success' : 'error');
     updateFuturesPositions();
     updateFuturesPool();
+  };
+
+  // Clear ALL old/legacy positions from LocalStorage
+  window.clearAllFuturesPositions = function() {
+    futuresState.positions = [];
+    saveFuturesState();
+    updateFuturesPositions();
+    updateFuturesPool();
+    showToast('All old positions cleared!', 'success');
   };
 
   // ═══════════════════════════════════════════════════
