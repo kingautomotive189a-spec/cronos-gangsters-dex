@@ -721,7 +721,7 @@
       <button class="nav-btn" data-page="portfolio"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.22-8.56"/><path d="M21 3v9h-9"/></svg></span>Portfolio</button>
       <button class="nav-btn" data-page="tracker" data-testid="nav-tracker-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></span>Gang Tracker</button>
       <button class="nav-btn" data-page="nfts" data-testid="nav-nfts-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>Mint Gangster NFTs</button>
-      <button class="nav-btn" data-page="nfts" data-testid="nav-nftstaking-btn" onclick="setTimeout(function(){const el=document.getElementById('nftStakingSection');if(el)el.scrollIntoView({behavior:'smooth'})},300)"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1"/><path d="M7 17l5-5 5 5"/></svg></span>NFT Staking<span class="nav-desc">Stake NFTs</span></button>
+      <button class="nav-btn" data-page="nftstaking" data-testid="nav-nftstaking-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1"/><path d="M7 17l5-5 5 5"/></svg></span>NFT Staking<span class="nav-desc">Stake & Earn</span></button>
       <button class="nav-btn" data-page="market" data-testid="nav-market-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Marketplace</button>
       <div class="nav-divider"></div>
 
@@ -7489,6 +7489,80 @@ function toggleNavMenu() {
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
       <div style="font-size:11px;color:var(--muted);">When you bond LP tokens, you receive $GANG at a discount. Your GANG vests over 5 days. 0.3% fee on bond purchase.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ NFT STAKING PAGE ═══════════════════════════════════════════ -->
+  <div class="page" id="page-nftstaking" data-testid="page-nftstaking">
+    <div style="text-align:center;margin-bottom:20px;padding:20px 12px;background:linear-gradient(180deg,rgba(212,160,23,0.06) 0%,transparent 100%);border-radius:16px;border:1px solid rgba(212,160,23,0.08);">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.3);border-radius:20px;padding:5px 14px;margin-bottom:12px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#27ae60;display:inline-block;animation:pulseDot 2s ease-in-out infinite;"></span>
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:#27ae60;letter-spacing:1.5px;font-weight:600;">ON-CHAIN CONTRACT | CRONOS MAINNET</span>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:var(--gold);line-height:1;text-shadow:0 0 30px rgba(212,160,23,0.2);">NFT <span style="color:#fff;">STAKING</span></div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.45);margin-top:8px;line-height:1.6;max-width:480px;margin-left:auto;margin-right:auto;">Stake your Cronos Gangsters NFTs to earn daily $GANG rewards. Every stake, unstake, and claim is a real on-chain transaction confirmed through your wallet.</div>
+    </div>
+
+    <!-- Stats -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">TOTAL STAKED</div>
+        <div id="nftpTotalStaked" style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);margin-top:6px;">0</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">YOUR STAKED</div>
+        <div id="nftpYourStaked" style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green);margin-top:6px;">0</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">PENDING REWARDS</div>
+        <div id="nftpPending" style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#4fc3f7;margin-top:6px;">0 GANG</div>
+      </div>
+    </div>
+
+    <!-- STAKE YOUR NFT -->
+    <div class="card" style="border-color:rgba(212,160,23,0.3);margin-bottom:16px;">
+      <div class="card-title" style="color:var(--gold);">STAKE YOUR NFT</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Enter the Token ID of your Cronos Gangsters NFT. MetaMask will pop up to confirm the staking transaction.</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="number" id="nftpStakeTokenId" data-testid="nftp-stake-input" placeholder="Token ID (e.g. 42)" min="1" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);font-size:14px;outline:none;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'">
+        <button onclick="nftpStakeFromPage()" data-testid="nftp-stake-btn" style="background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;border-radius:10px;padding:12px 24px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;box-shadow:0 2px 8px rgba(212,160,23,0.3);transition:all .2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">STAKE NFT</button>
+      </div>
+      <div id="nftpStakeStatus" style="font-size:11px;margin-top:8px;min-height:16px;"></div>
+    </div>
+
+    <!-- YOUR STAKED NFTS -->
+    <div class="card" style="border-color:rgba(39,174,96,0.3);margin-bottom:16px;">
+      <div class="card-title" style="color:var(--green);">YOUR STAKED NFTS</div>
+      <div id="nftpStakedGrid" data-testid="nftp-staked-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;min-height:60px;">
+        <div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--muted);font-size:12px;">Connect wallet to view your staked NFTs</div>
+      </div>
+      <div style="margin-top:14px;display:grid;gap:10px;">
+        <button onclick="nftClaimRewards()" data-testid="nftp-claim-btn" style="width:100%;padding:14px;border-radius:10px;background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;box-shadow:0 2px 8px rgba(39,174,96,0.3);transition:all .2s;" onmouseover="this.style.transform='scale(1.01)'" onmouseout="this.style.transform='scale(1)'">CLAIM GANG REWARDS</button>
+        <button onclick="nftUnstakeAll()" data-testid="nftp-unstake-all-btn" style="width:100%;padding:12px;border-radius:10px;border:1px solid rgba(231,76,60,0.4);background:rgba(192,57,43,0.12);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;transition:all .2s;">UNSTAKE ALL & CLAIM</button>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="card" style="border-color:rgba(212,160,23,0.15);">
+      <div class="card-title" style="color:var(--gold);">HOW IT WORKS</div>
+      <div style="display:grid;gap:12px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,160,23,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--gold);">1</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Own a Cronos Gangsters NFT</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Mint or buy from the marketplace</div></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,160,23,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--gold);">2</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Enter Token ID & Stake</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">MetaMask confirms the on-chain staking transaction</div></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(39,174,96,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--green);">3</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Earn Daily $GANG Rewards</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Rewards accumulate automatically while staked</div></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(79,195,247,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Bebas Neue',sans-serif;font-size:14px;color:#4fc3f7;">4</div>
+          <div><div style="font-weight:700;color:var(--text);font-size:13px;">Claim or Unstake Anytime</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Claim rewards or unstake — MetaMask confirms every action</div></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -24048,7 +24122,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       'market':'market','swap':'swap','liquidity':'liquidity','portfolio':'portfolio',
       'token':'token','roadmap':'roadmap','leaderboard':'leaderboard','tracker':'tracker','futures':'futures',
       'copytrade':'copytrade','revstaking':'revstaking','limitorders':'limitorders','perpdex':'perpdex','otc':'otc','dao':'dao',
-      'signals':'signals','security':'security'
+      'signals':'signals','security':'security','nftstaking':'nftstaking'
     };
     var page = pageMap[hash] || hash;
     var btn = document.querySelector('[data-page="' + page + '"]');
@@ -26318,8 +26392,77 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   window.showPage = function(page) {
     if (_origSPBonds) _origSPBonds(page);
     if (page === 'bonds') renderBonds();
+    if (page === 'nftstaking') loadNFTStakingPage();
   };
 })();
+
+// ═══ NFT STAKING PAGE LOGIC ═══
+function nftpStakeFromPage() {
+  const tokenId = document.getElementById('nftpStakeTokenId')?.value;
+  if (tokenId) {
+    const origInput = document.getElementById('nftStakeTokenId');
+    if (origInput) origInput.value = tokenId;
+  }
+  if (typeof window.nftStakeAction === 'function') {
+    window.nftStakeAction();
+    setTimeout(loadNFTStakingPage, 3000);
+  }
+}
+
+async function loadNFTStakingPage() {
+  if (!state || !state.address) return;
+  const stakingAddr = (typeof getStakingAddr === 'function') ? getStakingAddr() : (CONTRACTS && CONTRACTS.NFT_STAKING) || '';
+  if (!stakingAddr) return;
+
+  try {
+    const rawP = state._rawProvider || window.ethereum;
+    if (!rawP) return;
+    const iface = new ethers.Interface(NFT_STAKING_ABI);
+
+    // Total staked
+    const totalData = iface.encodeFunctionData('totalStaked');
+    const totalResult = await rawP.request({ method: 'eth_call', params: [{ to: stakingAddr, data: totalData }, 'latest'] });
+    const totalStaked = parseInt(totalResult, 16);
+    const el1 = document.getElementById('nftpTotalStaked');
+    if (el1) el1.textContent = totalStaked;
+
+    // User staked tokens
+    const userData = iface.encodeFunctionData('getUserStakedTokens', [state.address]);
+    const userResult = await rawP.request({ method: 'eth_call', params: [{ to: stakingAddr, data: userData }, 'latest'] });
+    const decoded = iface.decodeFunctionResult('getUserStakedTokens', userResult);
+    const stakedTokens = decoded[0].map(t => Number(t));
+    const el2 = document.getElementById('nftpYourStaked');
+    if (el2) el2.textContent = stakedTokens.length;
+
+    // Pending rewards
+    const pendData = iface.encodeFunctionData('pendingRewardAll', [state.address]);
+    const pendResult = await rawP.request({ method: 'eth_call', params: [{ to: stakingAddr, data: pendData }, 'latest'] });
+    const pendingReward = parseFloat(ethers.formatEther(BigInt(pendResult)));
+    const el3 = document.getElementById('nftpPending');
+    if (el3) el3.textContent = pendingReward.toFixed(2) + ' GANG';
+
+    // Render staked grid
+    const grid = document.getElementById('nftpStakedGrid');
+    if (grid) {
+      if (stakedTokens.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--muted);font-size:12px;">No NFTs staked yet. Enter a Token ID above to stake.</div>';
+      } else {
+        grid.innerHTML = stakedTokens.map(id => `
+          <div style="background:var(--surface2);border:1px solid rgba(212,160,23,0.2);border-radius:12px;padding:14px;text-align:center;transition:all .2s;" onmouseover="this.style.borderColor='rgba(212,160,23,0.5)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);">#${id}</div>
+            <div style="font-size:10px;color:var(--muted);margin:4px 0 8px;">Gangster NFT</div>
+            <button onclick="nftUnstakeSingle(${id});setTimeout(loadNFTStakingPage,3000)" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(231,76,60,0.3);background:rgba(231,76,60,0.1);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;cursor:pointer;">UNSTAKE</button>
+          </div>
+        `).join('');
+      }
+    }
+  } catch(e) {
+    console.warn('NFT staking page load error:', e);
+    // Fallback — show local state
+    const el2 = document.getElementById('nftpYourStaked');
+    if (el2) el2.textContent = document.getElementById('nftStakedCount')?.textContent?.split(' ')[0] || '0';
+  }
+}
 </script>
 
 <!-- ═══════════════════════════════════════════════════════════════════════
