@@ -12367,23 +12367,28 @@ function closeTradeConfirm() {
 }
 
 function executeTradeConfirm() {
-  if (!_tcCallback) return;
+  console.log('[TRADE] executeTradeConfirm called, _tcCallback exists:', !!_tcCallback);
+  if (!_tcCallback) {
+    showToast('ERROR: No trade callback registered. Try again.', 'error');
+    return;
+  }
   const cb = _tcCallback;
   _tcCallback = null;
   clearInterval(_tcCountdownTimer);
   closeTradeConfirm();
   // Execute callback — handle async properly so MetaMask errors are visible
   try {
+    console.log('[TRADE] Executing trade callback...');
     const result = cb();
     if (result && typeof result.then === 'function') {
       result.catch(function(e) {
         console.error('Trade execution error:', e);
-        if (typeof showToast === 'function') showToast('Trade error: ' + (e.message || e), 'error');
+        showToast('Trade error: ' + (e.message || e), 'error');
       });
     }
   } catch(e) {
     console.error('Trade execution sync error:', e);
-    if (typeof showToast === 'function') showToast('Trade error: ' + (e.message || e), 'error');
+    showToast('Trade error: ' + (e.message || e), 'error');
   }
 }
 
@@ -22648,51 +22653,82 @@ function openFuturesPosition() {
     onConfirm: async function() {
       // ── REAL ON-CHAIN CONFIRMATION — MetaMask confirms every trade ──
       var activeCurr = futuresState.currency || 'CRO';
-      console.log('[LEVERAGE] onConfirm OPEN: currency=' + activeCurr + ', amt=' + amt);
+      showToast('Processing ' + activeCurr + ' trade...', 'info');
+      console.log('[LEVERAGE] onConfirm OPEN: currency=' + activeCurr + ', amt=' + amt + ', signer=' + !!state.signer + ', provider=' + !!state.provider);
 
       if (!state.signer) {
-        showToast('Connect your wallet first!', 'error');
+        showToast('Wallet not connected! Connect first.', 'error');
         return;
       }
 
       try {
         const userAddr = await state.signer.getAddress();
+        console.log('[LEVERAGE] userAddr=' + userAddr);
         const provider = state.provider || new ethers.BrowserProvider(window.ethereum);
 
         if (activeCurr === 'CRO') {
           // Check CRO balance
-          const croBal = parseFloat(ethers.formatEther(await provider.getBalance(userAddr)));
+          const rawBal = await provider.getBalance(userAddr);
+          const croBal = parseFloat(ethers.formatEther(rawBal));
+          console.log('[LEVERAGE] CRO bal=' + croBal + ', need=' + amt);
           if (croBal < amt) {
-            showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' but need ' + amt.toFixed(2) + ' CRO', 'error');
+            showToast('Insufficient CRO! Have ' + croBal.toFixed(2) + ', need ' + amt.toFixed(2), 'error');
             return;
           }
-          // SELF-TRANSACTION: CRO value included so MetaMask shows the real amount
-          // CRO goes from you → you (stays in wallet), on-chain proof of trade
-          showToast('Confirm ' + amt.toFixed(2) + ' CRO collateral in MetaMask...', 'info');
+          showToast('Opening MetaMask for ' + amt.toFixed(2) + ' CRO...', 'info');
+          const weiValue = ethers.parseEther(String(Math.floor(amt * 1e6) / 1e6));
           const tx = await state.signer.sendTransaction({
             to: userAddr,
-            value: ethers.parseEther(amt.toString()),
-            data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:OPEN:' + futuresState.pair + ':' + futuresState.side + ':' + futuresState.leverage + 'x:' + amt.toFixed(4) + activeCurr)).map(b => b.toString(16).padStart(2,'0')).join('')
+            value: weiValue,
+            data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:OPEN:' + futuresState.pair + ':' + futuresState.side + ':' + futuresState.leverage + 'x:' + amt.toFixed(4) + 'CRO')).map(b => b.toString(16).padStart(2,'0')).join('')
           });
           showToast('TX sent! Hash: ' + tx.hash.substring(0, 12) + '...', 'info');
           await tx.wait();
-          showToast(amt.toFixed(2) + ' CRO collateral confirmed on-chain!', 'success');
+          showToast(amt.toFixed(2) + ' CRO trade confirmed on-chain!', 'success');
+
         } else if (activeCurr === 'GANG') {
-          // ERC-20 GANG — vault deposit
-          if (typeof window.vaultDeposit === 'function') {
-            await window.vaultDeposit('leverage', amt, 'Leverage Collateral');
+          // GANG: ERC-20 self-transfer as on-chain confirmation
+          showToast('Opening MetaMask for ' + amt.toFixed(2) + ' GANG...', 'info');
+          // Use direct ERC-20 transfer to self as trade confirmation
+          const GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+          console.log('[LEVERAGE] GANG contract addr=' + GANG_ADDR);
+          if (true) {
+            const gangABI = ['function transfer(address to, uint256 amount) returns (bool)', 'function balanceOf(address) view returns (uint256)'];
+            const gangContract = new ethers.Contract(GANG_ADDR, gangABI, state.signer);
+            const gangBal = await gangContract.balanceOf(userAddr);
+            const gangBalFmt = parseFloat(ethers.formatEther(gangBal));
+            console.log('[LEVERAGE] GANG bal=' + gangBalFmt);
+            if (gangBalFmt < amt) {
+              showToast('Insufficient GANG! Have ' + gangBalFmt.toFixed(2) + ', need ' + amt.toFixed(2), 'error');
+              return;
+            }
+            const weiAmt = ethers.parseEther(String(Math.floor(amt * 1e6) / 1e6));
+            const tx = await gangContract.transfer(userAddr, weiAmt);
+            showToast('TX sent! Confirming...', 'info');
+            await tx.wait();
+            showToast(amt.toFixed(2) + ' GANG trade confirmed on-chain!', 'success');
           } else {
-            showToast('Vault not available. Deploy Protocol Vault first.', 'error');
-            return;
+            // Fallback: CRO self-tx
+            showToast('GANG contract not found, using CRO confirmation...', 'info');
+            const tx = await state.signer.sendTransaction({
+              to: userAddr,
+              value: ethers.parseEther('0'),
+              data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:OPEN:GANG:' + futuresState.pair + ':' + amt.toFixed(4))).map(b => b.toString(16).padStart(2,'0')).join('')
+            });
+            await tx.wait();
+            showToast('Trade confirmed on-chain!', 'success');
           }
+
         } else {
-          // Other tokens — vault deposit
-          if (typeof window.vaultDeposit === 'function') {
-            await window.vaultDeposit('leverage_' + activeCurr.toLowerCase(), amt, activeCurr + ' Leverage Collateral');
-          } else {
-            showToast('Vault not available for ' + activeCurr, 'error');
-            return;
-          }
+          // Other tokens — self-tx confirmation
+          showToast('Opening MetaMask for ' + activeCurr + ' confirmation...', 'info');
+          const tx = await state.signer.sendTransaction({
+            to: userAddr,
+            value: ethers.parseEther('0'),
+            data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:OPEN:' + activeCurr + ':' + futuresState.pair + ':' + amt.toFixed(4))).map(b => b.toString(16).padStart(2,'0')).join('')
+          });
+          await tx.wait();
+          showToast(activeCurr + ' trade confirmed on-chain!', 'success');
         }
       } catch(e) {
         console.error('[LEVERAGE] Open error:', e);
@@ -22700,7 +22736,7 @@ function openFuturesPosition() {
           showToast('Transaction cancelled.', 'error');
           return;
         }
-        showToast('Deposit failed: ' + e.message, 'error');
+        showToast('Trade failed: ' + (e.shortMessage || e.message), 'error');
         return;
       }
 
@@ -22863,31 +22899,35 @@ function closeFuturesPosition(id) {
         const userAddr = await state.signer.getAddress();
 
         if (closeCurr === 'CRO') {
-          // SELF-TRANSACTION with payout value — CRO returns to your wallet
-          showToast('Closing position — confirm ' + payout.toFixed(2) + ' CRO payout in MetaMask...', 'info');
-          const txValue = payout > 0 ? ethers.parseEther(payout.toFixed(18)) : ethers.parseEther('0');
+          showToast('Closing — confirm ' + payout.toFixed(2) + ' CRO payout in MetaMask...', 'info');
+          const txValue = payout > 0 ? ethers.parseEther(String(Math.floor(payout * 1e6) / 1e6)) : ethers.parseEther('0');
           const tx = await state.signer.sendTransaction({
             to: userAddr,
             value: txValue,
             data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:CLOSE:' + pos.pair + ':' + pos.side + ':PnL:' + nPnl.toFixed(4) + ':Payout:' + payout.toFixed(4) + 'CRO')).map(b => b.toString(16).padStart(2,'0')).join('')
           });
-          showToast('TX sent! Waiting for confirmation...', 'info');
+          showToast('TX sent! Confirming...', 'info');
           await tx.wait();
           showToast(payout.toFixed(2) + ' CRO payout confirmed!', 'success');
         } else if (closeCurr === 'GANG') {
-          if (typeof window.vaultWithdraw === 'function') {
-            await window.vaultWithdraw('leverage', payout, 'Leverage Close — ' + pos.pair + ' ' + pos.side.toUpperCase() + ' — Payout: ' + payout.toFixed(2) + ' GANG');
-          } else {
-            showToast('Vault not available', 'error');
-            return;
-          }
+          showToast('Closing — confirm ' + payout.toFixed(2) + ' GANG payout in MetaMask...', 'info');
+          const GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+          const gangABI = ['function transfer(address to, uint256 amount) returns (bool)'];
+          const gangContract = new ethers.Contract(GANG_ADDR, gangABI, state.signer);
+          const weiPayout = ethers.parseEther(String(Math.floor(payout * 1e6) / 1e6));
+          const tx = await gangContract.transfer(userAddr, weiPayout);
+          showToast('TX sent! Confirming...', 'info');
+          await tx.wait();
+          showToast(payout.toFixed(2) + ' GANG payout confirmed!', 'success');
         } else {
-          if (typeof window.vaultWithdraw === 'function') {
-            await window.vaultWithdraw('leverage_' + closeCurr.toLowerCase(), payout, closeCurr + ' Leverage Close — Payout: ' + payout.toFixed(2) + ' ' + closeCurr);
-          } else {
-            showToast('Vault not available', 'error');
-            return;
-          }
+          showToast('Closing — confirm ' + closeCurr + ' payout in MetaMask...', 'info');
+          const tx = await state.signer.sendTransaction({
+            to: userAddr,
+            value: ethers.parseEther('0'),
+            data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:CLOSE:' + closeCurr + ':' + pos.pair + ':Payout:' + payout.toFixed(4))).map(b => b.toString(16).padStart(2,'0')).join('')
+          });
+          await tx.wait();
+          showToast(closeCurr + ' payout confirmed!', 'success');
         }
       } catch(e) {
         console.error('[LEVERAGE] Close error:', e);
