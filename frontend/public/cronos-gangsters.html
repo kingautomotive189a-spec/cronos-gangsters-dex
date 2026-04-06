@@ -17691,9 +17691,9 @@ const LEND_ORIGINATION_FEE = 0.3;
 const LEND_LIQUIDATION_PENALTY = 5;
 
 function getLendState() {
-  try { return JSON.parse(localStorage.getItem('gangLendingState') || '{}'); } catch(e) { return {}; }
+  try { return JSON.parse(localStorage.getItem('gangLendingState_v2') || '{}'); } catch(e) { return {}; }
 }
-function saveLendState(s) { localStorage.setItem('gangLendingState', JSON.stringify(s)); }
+function saveLendState(s) { localStorage.setItem('gangLendingState_v2', JSON.stringify(s)); }
 
 function initLendState() {
   let s = getLendState();
