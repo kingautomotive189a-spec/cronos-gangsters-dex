@@ -112,6 +112,12 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - **UPGRADE**: "BUILT DIFFERENT. BUILT ON-CHAIN" section with CronoScan verification copy
 - **FIX**: Scrolling banner updated from 33 to 69 pairs
 
+## Completed (2026-04-06 — Leverage Trading MetaMask Fix)
+- **FIX**: Leverage Trading CRO deposits now directly trigger MetaMask wallet confirmation via `state.signer.sendTransaction`
+- **FIX**: Removed fragile `window._realDoOpenFuturesPosition` lookup pattern that silently fell back to mock `_doOpenFuturesPosition` when the IIFE failed to execute
+- **FIX**: `onConfirm` callback now inlines the real on-chain logic: CRO via `sendTransaction`, GANG via `vaultDeposit`, other tokens via vault
+- **FIX**: No wallet = error toast. No fallback to mock/demo. Every leverage trade requires MetaMask confirmation.
+
 ## Upcoming Tasks
 - P1: CEX listings
 - P1: Multi-chain expansion

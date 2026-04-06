@@ -22477,11 +22477,95 @@ function openFuturesPosition() {
       { label: 'Est. Liq. Price', value: '$' + _fmtPrice(estLiqPrice), cls: 'red' },
     ],
     onConfirm: async function() {
-      if (typeof window._realDoOpenFuturesPosition === 'function') {
-        await window._realDoOpenFuturesPosition(amt, curr, price);
-      } else {
-        _doOpenFuturesPosition(amt, curr, price);
+      // ── REAL ON-CHAIN DEPOSIT — NO FALLBACK TO MOCK ──
+      if (!state.signer) {
+        showToast('Connect your wallet first!', 'error');
+        return;
       }
+
+      if (curr === 'CRO') {
+        // NATIVE CRO — send real CRO via signer.sendTransaction
+        try {
+          const userAddr = await state.signer.getAddress();
+          const provider = state.provider || new ethers.BrowserProvider(window.ethereum);
+          const croBal = parseFloat(ethers.formatEther(await provider.getBalance(userAddr)));
+          if (croBal < amt) {
+            showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' but need ' + amt.toFixed(2) + ' CRO', 'error');
+            return;
+          }
+          const target = (typeof window.getVaultAddr === 'function' && window.getVaultAddr()) || TREASURY_OWNER;
+          showToast('Sending ' + amt.toFixed(2) + ' CRO collateral on-chain...', 'info');
+          const tx = await state.signer.sendTransaction({
+            to: target,
+            value: ethers.parseEther(amt.toString())
+          });
+          await tx.wait();
+          showToast(amt.toFixed(2) + ' CRO deposited on-chain!', 'success');
+        } catch(e) {
+          if (e.code === 4001 || (e.message && e.message.includes('rejected'))) {
+            showToast('Transaction cancelled.', 'error');
+            return;
+          }
+          showToast('CRO deposit failed: ' + e.message, 'error');
+          return;
+        }
+      } else if (curr === 'GANG') {
+        // ERC-20 GANG — use vault deposit
+        try {
+          if (typeof window.vaultDeposit === 'function') {
+            await window.vaultDeposit('leverage', amt, 'Leverage Collateral');
+          } else {
+            showToast('Vault not available. Deploy Protocol Vault first.', 'error');
+            return;
+          }
+        } catch(e) {
+          showToast('GANG deposit failed: ' + e.message, 'error');
+          return;
+        }
+      } else {
+        // Other tokens (BTC, ETH, SOL etc.) — use vault if available
+        try {
+          if (typeof window.vaultDeposit === 'function') {
+            await window.vaultDeposit('leverage_' + curr.toLowerCase(), amt, curr + ' Leverage Collateral');
+          } else {
+            showToast('Vault not available for ' + curr, 'error');
+            return;
+          }
+        } catch(e) {
+          showToast(curr + ' deposit failed: ' + e.message, 'error');
+          return;
+        }
+      }
+
+      // ── On-chain deposit succeeded — now track position locally ──
+      const _tp = parseFloat(document.getElementById('futuresTP')?.value) || 0;
+      const _sl = parseFloat(document.getElementById('futuresSL')?.value) || 0;
+      const _openingFee = amt * 0.003;
+      const position = {
+        id: Date.now(),
+        wallet: (state.address || '').toLowerCase(),
+        pair: futuresState.pair,
+        side: futuresState.side,
+        leverage: futuresState.leverage,
+        currency: curr,
+        amount: amt - _openingFee,
+        entryPrice: price,
+        tp: _tp || null,
+        sl: _sl || null,
+        status: 'open',
+        openedAt: new Date().toISOString(),
+        onChain: true
+      };
+      futuresState.poolBalanceCRO += _openingFee;
+      futuresState.positions.push(position);
+      saveFuturesState();
+      document.getElementById('futuresAmount').value = '';
+      document.getElementById('futuresTP').value = '';
+      document.getElementById('futuresSL').value = '';
+      showToast('Opened ' + futuresState.side.toUpperCase() + ' ' + futuresState.pair + '/USD ' + futuresState.leverage + 'x — ' + position.amount.toFixed(2) + ' ' + curr + ' (fee: ' + _openingFee.toFixed(2) + ' → CRO)', 'success');
+      if (typeof addPoints === 'function') addPoints(10, 'Leverage trade');
+      updateFuturesPositions();
+      updateFuturesPool();
     }
   });
 }
