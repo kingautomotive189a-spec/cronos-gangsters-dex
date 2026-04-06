@@ -23909,19 +23909,42 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     }
 
     try {
-      const decimals = (token === 'WBTC') ? 8 : (token === 'USDC' || token === 'USDT') ? 6 : 18;
-      const weiAmt = ethers.parseUnits(amount.toString(), decimals);
-      const poolHash = ethers.id('lending_' + token);
+      const userAddr = await state.signer.getAddress();
       
-      showToast('Borrowing ' + amount + ' ' + token + ' from pool...', 'info');
-      await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'withdraw', [poolHash, weiAmt]);
+      if (token === 'GANG') {
+        // GANG borrow: Withdraw GANG from the vault lending pool → sent to your wallet
+        const weiAmt = ethers.parseEther(amount.toString());
+        const poolHash = ethers.id('lending_GANG');
+        showToast('Borrowing ' + amount + ' GANG from pool → your wallet...', 'info');
+        await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'withdraw', [poolHash, weiAmt]);
+        showToast(amount + ' GANG sent to your wallet!', 'success');
+      } else if (token === 'CRO') {
+        // CRO borrow: Convert borrow value to GANG equivalent, withdraw from vault
+        const gangPrice = prices.GANG || 0.003;
+        const gangEquiv = (amount * (prices.CRO || 0.095)) / gangPrice;
+        const weiAmt = ethers.parseEther(gangEquiv.toFixed(18));
+        const poolHash = ethers.id('lending_CRO');
+        showToast('Borrowing ' + amount + ' CRO (≈' + gangEquiv.toFixed(2) + ' GANG equivalent) → your wallet...', 'info');
+        await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'withdraw', [poolHash, weiAmt]);
+        showToast(gangEquiv.toFixed(2) + ' GANG equivalent sent to your wallet for ' + amount + ' CRO borrow!', 'success');
+      } else {
+        // Other tokens (USDC, WETH etc): Convert to GANG value, withdraw from vault
+        const gangPrice = prices.GANG || 0.003;
+        const tokenPrice = prices[token] || 1;
+        const gangEquiv = (amount * tokenPrice) / gangPrice;
+        const weiAmt = ethers.parseEther(gangEquiv.toFixed(18));
+        const poolHash = ethers.id('lending_' + token);
+        showToast('Borrowing ' + amount + ' ' + token + ' (≈' + gangEquiv.toFixed(2) + ' GANG equivalent) → your wallet...', 'info');
+        await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'withdraw', [poolHash, weiAmt]);
+        showToast(gangEquiv.toFixed(2) + ' GANG equivalent sent to your wallet for ' + amount + ' ' + token + ' borrow!', 'success');
+      }
+
       if (amtInput) amtInput.value = '';
-      showToast(amount + ' ' + token + ' borrowed on-chain!', 'success');
       
-      const s = initLendState();
-      s.userBorrowed[token] = (s.userBorrowed[token] || 0) + amount;
-      s.pools[token].totalBorrowed = (s.pools[token].totalBorrowed || 0) + amount;
-      saveLendState(s);
+      const s2 = initLendState();
+      s2.userBorrowed[token] = (s2.userBorrowed[token] || 0) + amount;
+      s2.pools[token].totalBorrowed = (s2.pools[token].totalBorrowed || 0) + amount;
+      saveLendState(s2);
       updateLendingUI();
     } catch(e) { showToast('Borrow failed: ' + e.message, 'error'); }
   };
