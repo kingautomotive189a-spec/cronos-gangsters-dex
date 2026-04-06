@@ -46,6 +46,7 @@ Each pool has:
 - CRITICAL FIX: Rewired ALL 16+ showTxConfirm onConfirm callbacks across Lending, Predictions, Flash Loans, Insurance, Aggregator, Copy Trading, Limit Orders, Perp DEX, OTC, DAO, Squads, Competitions — every one now calls the `window.*` on-chain override to trigger MetaMask before updating state. Previously these bypassed MetaMask entirely.
 - Fixed vaultDeposit/vaultWithdraw to throw errors instead of returning false, preventing features from proceeding without on-chain confirmation
 - Removed all 28 fake showTxConfirm popups. Non-trading features (22) go straight to MetaMask. Trading features (6) now use new showTradeConfirm with real price-fetch flow: spinning "Fetching Live Price" → shows live price + trade details with 15s countdown → Cancel/Confirm → MetaMask. Applied to: Leverage Open/Close, DEX Aggregator Swap, Copy Trading, Perp DEX Open/Close, Limit Orders Place/Fill, OTC Create/Fill
+- Built and deployed Multi-Token Lending Vault smart contract — a real on-chain lending pool that holds ACTUAL tokens (GANG, CRO, USDC, WETH, WBTC, USDT, DAI). Supply deposits real tokens, Borrow sends real tokens to your wallet (if pool has liquidity), Repay takes tokens back. Liquidity-gated: if pool is empty, borrow is blocked.
 
 ## Upcoming Tasks
 - P1: CEX listings
