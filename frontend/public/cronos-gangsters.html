@@ -21851,19 +21851,8 @@ try {
   if (vol.totalTrades) futuresState.totalTrades = vol.totalTrades;
 } catch {}
 
-// Auto-clear old fake positions (pre-contract era) — DISABLED to prevent data loss
-// Previous cleanup already ran for users with gang_futures_cleaned_v3 flag
-try {
-  if (!localStorage.getItem('gang_futures_cleaned_v3')) {
-    // Only clear if there are no on-chain positions (i.e., no wallet-linked trades)
-    const hasRealPositions = futuresState.positions && futuresState.positions.some(p => p.wallet && p.wallet !== 'demo');
-    if (!hasRealPositions) {
-      futuresState.positions = [];
-      futuresState.history = [];
-    }
-    localStorage.setItem('gang_futures_cleaned_v3', '1');
-  }
-} catch {}
+// Auto-clear old fake positions (pre-contract era) — FULLY DISABLED
+// All positions are now real on-chain trades and must NEVER be wiped
 
 
 // Track volume — call on every trade open/close
