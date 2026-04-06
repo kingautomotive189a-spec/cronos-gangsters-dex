@@ -937,7 +937,7 @@ function toggleNavMenu() {
   <div data-testid="promo-banner" style="overflow:hidden;background:linear-gradient(90deg,rgba(212,160,23,0.12),rgba(212,160,23,0.25),rgba(212,160,23,0.12));border-top:1px solid rgba(212,160,23,0.3);border-bottom:1px solid rgba(212,160,23,0.3);padding:10px 0;margin-bottom:0;">
     <div style="display:flex;animation:bannerScroll 30s linear infinite;width:max-content;">
       <div style="display:flex;gap:28px;padding:0 14px;flex-shrink:0;">
-        <span onclick="showPage('futures')" style="cursor:pointer;color:#ff8c00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📈 LEVERAGE TRADING — 33 PAIRS</span>
+        <span onclick="showPage('futures')" style="cursor:pointer;color:#ff8c00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📈 LEVERAGE TRADING — 69 PAIRS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('lending')" style="cursor:pointer;color:#00e5ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v4c0 1.657 3.582 3 8 3s8-1.343 8-3V6"/><path d="M4 10v4c0 1.657 3.582 3 8 3s8-1.343 8-3v-4"/></svg> LEND & BORROW — EARN INTEREST</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
@@ -1000,7 +1000,7 @@ function toggleNavMenu() {
         <span onclick="showPage('faq')" style="cursor:pointer;color:var(--gold);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">❓ FAQ</span>
       </div>
       <div style="display:flex;gap:28px;padding:0 14px;flex-shrink:0;">
-        <span onclick="showPage('futures')" style="cursor:pointer;color:#ff8c00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📈 LEVERAGE TRADING — 33 PAIRS</span>
+        <span onclick="showPage('futures')" style="cursor:pointer;color:#ff8c00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📈 LEVERAGE TRADING — 69 PAIRS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('lending')" style="cursor:pointer;color:#00e5ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v4c0 1.657 3.582 3 8 3s8-1.343 8-3V6"/><path d="M4 10v4c0 1.657 3.582 3 8 3s8-1.343 8-3v-4"/></svg> LEND & BORROW — EARN INTEREST</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
@@ -1064,6 +1064,95 @@ function toggleNavMenu() {
        SWAP PAGE
   ══════════════════════════════════════ -->
   <div class="page active" id="page-swap">
+
+    <!-- ══ FULLY ON-CHAIN HERO ══ -->
+    <div data-testid="onchain-hero" style="text-align:center;padding:28px 16px 24px;margin-bottom:20px;background:linear-gradient(180deg,rgba(212,160,23,0.06) 0%,transparent 100%);border-bottom:1px solid rgba(212,160,23,0.1);">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.3);border-radius:20px;padding:5px 14px;margin-bottom:14px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#27ae60;display:inline-block;animation:pulseDot 2s ease-in-out infinite;"></span>
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:#27ae60;letter-spacing:1.5px;font-weight:600;">LIVE ON CRONOS MAINNET</span>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;color:#fff;line-height:1.1;margin-bottom:8px;">100% <span style="color:var(--gold);">ON-CHAIN</span> DEFI</div>
+      <div style="max-width:540px;margin:0 auto;font-family:'Space Grotesk',sans-serif;font-size:13px;color:rgba(235,235,245,0.55);line-height:1.7;letter-spacing:0.2px;">
+        Every trade, every stake, every swap is a real blockchain transaction — confirmed on Cronos and verified through your wallet. No custodians, no middlemen, no simulations. Your keys, your assets, your protocol.
+      </div>
+      <div style="display:flex;justify-content:center;gap:20px;margin-top:18px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(235,235,245,0.5);letter-spacing:0.5px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>MetaMask Verified</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(235,235,245,0.5);letter-spacing:0.5px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <span>Non-Custodial</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(235,235,245,0.5);letter-spacing:0.5px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Smart Contract Secured</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(235,235,245,0.5);letter-spacing:0.5px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <span>Open Source Contracts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ LEVERAGE TRADING SHOWCASE ══ -->
+    <div data-testid="leverage-showcase" onclick="showPage('futures')" style="cursor:pointer;margin-bottom:20px;background:linear-gradient(135deg,rgba(255,140,0,0.08),rgba(255,140,0,0.02));border:1px solid rgba(255,140,0,0.25);border-radius:16px;padding:20px;transition:all .3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(255,140,0,0.5)';this.style.boxShadow='0 0 30px rgba(255,140,0,0.1)'" onmouseout="this.style.borderColor='rgba(255,140,0,0.25)';this.style.boxShadow='none'">
+      <div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,#ff8c00,#cc7000);padding:4px 14px;border-radius:0 16px 0 12px;font-family:'Space Grotesk',sans-serif;font-size:10px;color:#000;font-weight:700;letter-spacing:1px;">FLAGSHIP</div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff;line-height:1;">LEVERAGE <span style="color:#ff8c00;">TRADING</span></div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.45);margin-top:2px;">Trade 69 assets with up to 100x leverage — real-time prices, on-chain settlement</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <div style="background:rgba(255,140,0,0.08);border:1px solid rgba(255,140,0,0.15);border-radius:8px;padding:6px 12px;text-align:center;flex:1;min-width:70px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff8c00;">69</div>
+          <div style="font-size:9px;color:rgba(235,235,245,0.4);letter-spacing:1px;">PAIRS</div>
+        </div>
+        <div style="background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.15);border-radius:8px;padding:6px 12px;text-align:center;flex:1;min-width:70px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);">100x</div>
+          <div style="font-size:9px;color:rgba(235,235,245,0.4);letter-spacing:1px;">MAX LEV</div>
+        </div>
+        <div style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.15);border-radius:8px;padding:6px 12px;text-align:center;flex:1;min-width:70px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#00d4ff;">0.3%</div>
+          <div style="font-size:9px;color:rgba(235,235,245,0.4);letter-spacing:1px;">FEES</div>
+        </div>
+        <div style="background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.15);border-radius:8px;padding:6px 12px;text-align:center;flex:1;min-width:70px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);">LIVE</div>
+          <div style="font-size:9px;color:rgba(235,235,245,0.4);letter-spacing:1px;">PRICES</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
+        <span style="font-size:10px;color:rgba(235,235,245,0.3);background:rgba(255,255,255,0.04);padding:3px 8px;border-radius:4px;">BTC</span>
+        <span style="font-size:10px;color:rgba(235,235,245,0.3);background:rgba(255,255,255,0.04);padding:3px 8px;border-radius:4px;">ETH</span>
+        <span style="font-size:10px;color:rgba(235,235,245,0.3);background:rgba(255,255,255,0.04);padding:3px 8px;border-radius:4px;">AAPL</span>
+        <span style="font-size:10px;color:rgba(235,235,245,0.3);background:rgba(255,255,255,0.04);padding:3px 8px;border-radius:4px;">TSLA</span>
+        <span style="font-size:10px;color:rgba(235,235,245,0.3);background:rgba(255,255,255,0.04);padding:3px 8px;border-radius:4px;">GOLD</span>
+        <span style="font-size:10px;color:rgba(235,235,245,0.3);background:rgba(255,255,255,0.04);padding:3px 8px;border-radius:4px;">EURUSD</span>
+        <span style="font-size:10px;color:rgba(235,235,245,0.3);background:rgba(255,255,255,0.04);padding:3px 8px;border-radius:4px;">NAS100</span>
+        <span style="font-size:10px;color:#ff8c00;background:rgba(255,140,0,0.1);padding:3px 8px;border-radius:4px;cursor:pointer;">+62 more</span>
+      </div>
+    </div>
+
+    <!-- ══ EARN HIGHLIGHTS ══ -->
+    <div data-testid="earn-highlights" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;">
+      <div onclick="showPage('farms')" style="cursor:pointer;background:linear-gradient(135deg,rgba(39,174,96,0.08),rgba(39,174,96,0.02));border:1px solid rgba(39,174,96,0.2);border-radius:14px;padding:16px 12px;text-align:center;transition:all .3s;" onmouseover="this.style.borderColor='rgba(39,174,96,0.5)'" onmouseout="this.style.borderColor='rgba(39,174,96,0.2)'">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="1.8" style="margin-bottom:6px;"><path d="M12 22c4-4 8-7.5 8-12a8 8 0 10-16 0c0 4.5 4 8 8 12z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);letter-spacing:2px;">FARMS</div>
+        <div style="font-size:9px;color:rgba(235,235,245,0.4);margin-top:2px;">Yield Farming</div>
+      </div>
+      <div onclick="showPage('staking')" style="cursor:pointer;background:linear-gradient(135deg,rgba(212,160,23,0.08),rgba(212,160,23,0.02));border:1px solid rgba(212,160,23,0.2);border-radius:14px;padding:16px 12px;text-align:center;transition:all .3s;" onmouseover="this.style.borderColor='rgba(212,160,23,0.5)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" style="margin-bottom:6px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">STAKE</div>
+        <div style="font-size:9px;color:rgba(235,235,245,0.4);margin-top:2px;">Up to 300% APY</div>
+      </div>
+      <div onclick="showPage('revstaking')" style="cursor:pointer;background:linear-gradient(135deg,rgba(156,39,176,0.08),rgba(156,39,176,0.02));border:1px solid rgba(156,39,176,0.2);border-radius:14px;padding:16px 12px;text-align:center;transition:all .3s;" onmouseover="this.style.borderColor='rgba(156,39,176,0.5)'" onmouseout="this.style.borderColor='rgba(156,39,176,0.2)'">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9c27b0" stroke-width="1.8" style="margin-bottom:6px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#9c27b0;letter-spacing:2px;">POOLS</div>
+        <div style="font-size:9px;color:rgba(235,235,245,0.4);margin-top:2px;">Earn Revenue</div>
+      </div>
+    </div>
 
     <!-- ── SWAP BOX FIRST ── -->
     <div class="swap-wrap">
@@ -1260,10 +1349,10 @@ function toggleNavMenu() {
       </div>
     </div>
 
-    <!-- ── WELCOME & GANGSTER GALLERY ── -->
-    <div style="text-align:center;margin:28px 0 16px;padding:0 12px;">
-      <div style="font-size:20px;font-weight:800;color:var(--gold);letter-spacing:1px;">WELCOME TO THE FAMILY</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:4px;letter-spacing:0.5px;">Stack your $GANG or get left behind. We don't play nice — we play DeFi.</div>
+    <!-- ── PROTOCOL TRUST STATEMENT ── -->
+    <div data-testid="protocol-trust" style="text-align:center;margin:28px 0 16px;padding:0 12px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;font-weight:800;color:var(--gold);letter-spacing:2px;">BUILT DIFFERENT. BUILT ON-CHAIN.</div>
+      <div style="max-width:480px;margin:8px auto 0;font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.45);line-height:1.7;letter-spacing:0.2px;">GANG DEX runs entirely on Cronos mainnet. Every position, every swap, every yield harvest is a verifiable blockchain transaction. No backend tricks, no simulated balances — just pure, transparent, decentralized finance secured by smart contracts you can audit on CronoScan.</div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
       <div class="gang-img-card" onclick="showPage('futures')" style="cursor:pointer;">
@@ -1297,8 +1386,8 @@ function toggleNavMenu() {
     <!-- ── FEATURES GRID ── -->
     <div style="max-width:700px;margin:0 auto 28px;padding:0 8px;">
       <div style="text-align:center;margin-bottom:16px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);letter-spacing:3px;">EVERYTHING YOU NEED</div>
-        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">One platform. No limits. All fees 0.3%</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);letter-spacing:3px;">THE FULL ARSENAL</div>
+        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">28+ on-chain features. Every transaction verified on Cronos mainnet.</div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" data-testid="feature-grid">
         <div class="card" onclick="showPage('futures')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(255,140,0,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#ff8c00'" onmouseout="this.style.borderColor='rgba(255,140,0,0.3)'">
@@ -4680,13 +4769,28 @@ function toggleNavMenu() {
   <div class="page" id="page-futures" data-testid="page-futures">
 
     <!-- Header -->
-    <div style="text-align:center;margin-bottom:16px;">
-      <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:6px;">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:5px;color:#fff;line-height:1;text-shadow:0 0 40px rgba(255,140,0,0.25);">LEVERAGE <span style="color:#ff8c00;">TRADING</span></div>
+    <div data-testid="futures-hero" style="text-align:center;margin-bottom:20px;padding:20px 12px;background:linear-gradient(180deg,rgba(255,140,0,0.06) 0%,transparent 100%);border-radius:16px;border:1px solid rgba(255,140,0,0.08);">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,140,0,0.1);border:1px solid rgba(255,140,0,0.25);border-radius:20px;padding:5px 14px;margin-bottom:12px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#ff8c00;display:inline-block;animation:pulseDot 2s ease-in-out infinite;"></span>
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:#ff8c00;letter-spacing:1.5px;font-weight:600;">FULLY ON-CHAIN | CRONOS MAINNET</span>
       </div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.45);letter-spacing:0.3px;margin-top:4px;font-weight:400;"><span class="live-dot"></span>Live prices — auto-updates every 1.5s | Up to 100x leverage | 69 pairs | <span style="color:#27ae60;font-weight:700;">ON-CHAIN</span></div>
-      <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,#ff8c00,transparent);margin:10px auto 0;"></div>
+      <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:5px;color:#fff;line-height:1;text-shadow:0 0 40px rgba(255,140,0,0.25);">LEVERAGE <span style="color:#ff8c00;">TRADING</span></div>
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:rgba(235,235,245,0.5);letter-spacing:0.3px;margin-top:6px;font-weight:400;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6;">
+        Trade crypto, stocks, forex, indices, and commodities with up to <span style="color:#ff8c00;font-weight:700;">100x leverage</span>. Every position is collateralized on-chain through the Protocol Vault. Real-time prices via Binance WebSocket and TradingView charts.
+      </div>
+      <div style="display:flex;justify-content:center;gap:6px;margin-top:14px;flex-wrap:wrap;">
+        <span style="font-size:10px;color:#27ae60;background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.2);padding:4px 10px;border-radius:6px;font-weight:600;letter-spacing:0.5px;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2" style="vertical-align:middle;margin-right:3px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          MetaMask Secured
+        </span>
+        <span style="font-size:10px;color:#ff8c00;background:rgba(255,140,0,0.1);border:1px solid rgba(255,140,0,0.2);padding:4px 10px;border-radius:6px;font-weight:600;letter-spacing:0.5px;">69 Tradeable Assets</span>
+        <span style="font-size:10px;color:var(--gold);background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.2);padding:4px 10px;border-radius:6px;font-weight:600;letter-spacing:0.5px;">TP / SL Orders</span>
+        <span style="font-size:10px;color:#00d4ff;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);padding:4px 10px;border-radius:6px;font-weight:600;letter-spacing:0.5px;">8 Collateral Tokens</span>
+      </div>
+      <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,#ff8c00,transparent);margin:14px auto 0;"></div>
     </div>
 
     <!-- Pool Info Bar -->

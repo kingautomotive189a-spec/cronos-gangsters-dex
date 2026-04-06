@@ -70,6 +70,16 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - **FIX**: Removed conflicting `window.openPerpPosition`/`window.closePerpPosition` overrides that short-circuited the confirmation modal flow
 - **FIX**: Close position now withdraws actual collateral amount (not hardcoded 10 GANG)
 
+## Completed (2026-04-06 — Landing Page & Leverage Trading Visual Upgrade)
+- **NEW**: "100% ON-CHAIN DEFI" hero section with "LIVE ON CRONOS MAINNET" badge and professional blockchain copy
+- **NEW**: Trust indicators (MetaMask Verified, Non-Custodial, Smart Contract Secured, Open Source Contracts)
+- **NEW**: Leverage Trading FLAGSHIP showcase card with stats (69 pairs, 100x, 0.3% fees, LIVE prices) + asset tags
+- **NEW**: FARMS / STAKE / POOLS earn highlight cards with SVG icons
+- **UPGRADE**: Leverage Trading page header with on-chain badge, expanded description, feature pills (MetaMask Secured, 69 Assets, TP/SL Orders, 8 Collateral Tokens)
+- **UPGRADE**: "THE FULL ARSENAL" features grid title with on-chain copy
+- **UPGRADE**: "BUILT DIFFERENT. BUILT ON-CHAIN" section with CronoScan verification copy
+- **FIX**: Scrolling banner updated from 33 to 69 pairs
+
 ## Upcoming Tasks
 - P1: CEX listings
 - P1: Multi-chain expansion
