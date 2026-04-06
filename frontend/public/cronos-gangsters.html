@@ -21968,139 +21968,157 @@ setTimeout(() => {
   updateFuturesPrice();
   updateFuturesPool();
   renderFuturesHistory();
-  // Fetch real price from API every 5 seconds
-  setInterval(updateFuturesPrice, 5000);
-  // Micro-volatility simulation every 1.5s — makes chart feel alive
-  setInterval(simulateFuturesTick, 1500);
+  // Connect to Binance WebSocket for real-time prices
+  connectBinanceWS();
+  // Fallback: Fetch price from API every 10 seconds in case WebSocket drops
+  setInterval(updateFuturesPrice, 10000);
+  // Update position PnL display every 1.5s
+  setInterval(function() { updateFuturesPosInfo(); }, 1500);
 }, 2000);
 
-// ─── Micro-volatility: realistic price jitter between API calls ───
+// ─── REAL-TIME PRICE FEED via Binance WebSocket ───
+let _binanceWS = null;
+let _binanceReconnectTimer = null;
+const BINANCE_PAIR_MAP = {
+  GANG: null, // No Binance feed — use CoinGecko
+  CRO: 'crousdt',
+  BTC: 'btcusdt',
+  ETH: 'ethusdt',
+  SOL: 'solusdt',
+  BNB: 'bnbusdt',
+  USDC: null, // Stablecoin — stays at $1
+  USDT: null, // Stablecoin — stays at $1
+  GOLD: null,
+  OIL: null,
+  SPX: null,
+  TSLA: null,
+  AAPL: null,
+  NVDA: null,
+};
+let _lastBinancePrice = {};
+let _prev24hPrice = {};
+
+function connectBinanceWS() {
+  // Build stream list for pairs that have Binance feeds
+  const streams = Object.values(BINANCE_PAIR_MAP).filter(Boolean).map(s => s + '@ticker');
+  if (streams.length === 0) return;
+  const wsUrl = 'wss://stream.binance.com:9443/stream?streams=' + streams.join('/');
+  
+  try {
+    if (_binanceWS) { _binanceWS.close(); _binanceWS = null; }
+    _binanceWS = new WebSocket(wsUrl);
+    
+    _binanceWS.onmessage = function(event) {
+      try {
+        const msg = JSON.parse(event.data);
+        if (!msg.data) return;
+        const d = msg.data;
+        const symbol = (d.s || '').toLowerCase();
+        const price = parseFloat(d.c); // Current price
+        const open24h = parseFloat(d.o); // 24h open price
+        const change24h = parseFloat(d.P); // 24h change %
+        
+        if (!price || isNaN(price)) return;
+        
+        // Map Binance symbol back to our pair name
+        for (const [pair, binSym] of Object.entries(BINANCE_PAIR_MAP)) {
+          if (binSym && binSym + 'usdt' === symbol + 'usdt' || binSym === symbol) {
+            _lastBinancePrice[pair] = price;
+            _prev24hPrice[pair] = open24h;
+            futuresState.prices[pair] = price;
+            
+            // Update display if this is the currently selected pair
+            if (futuresState.pair === pair) {
+              setFuturesPriceDisplay(pair, price, change24h);
+            }
+            
+            // Update PnL for any open positions in this pair
+            updateFuturesPosInfo();
+            break;
+          }
+        }
+      } catch(e) { /* ignore parse errors */ }
+    };
+    
+    _binanceWS.onopen = function() {
+      console.log('Binance WebSocket connected — live prices active');
+    };
+    
+    _binanceWS.onclose = function() {
+      console.log('Binance WebSocket closed — reconnecting in 5s');
+      clearTimeout(_binanceReconnectTimer);
+      _binanceReconnectTimer = setTimeout(connectBinanceWS, 5000);
+    };
+    
+    _binanceWS.onerror = function() {
+      console.log('Binance WebSocket error — will reconnect');
+      _binanceWS.close();
+    };
+  } catch(e) {
+    console.error('WebSocket init failed:', e);
+    // Fallback to polling
+    clearTimeout(_binanceReconnectTimer);
+    _binanceReconnectTimer = setTimeout(connectBinanceWS, 10000);
+  }
+}
+
+// Keep the API fallback for non-Binance pairs (GANG, GOLD, OIL, stocks)
 let _futuresLastApiPrice = {};
-let _futuresTickDirection = {};
 
 function simulateFuturesTick() {
-  // Tick ALL pairs every cycle — everything moves simultaneously
+  // Only simulate non-Binance pairs (GANG, GOLD, OIL, stocks)
+  // Binance pairs get real prices via WebSocket
   const allPairs = Object.keys(FUTURES_PAIRS);
 
   for (const pair of allPairs) {
+    // Skip pairs with Binance WebSocket feed
+    if (BINANCE_PAIR_MAP[pair]) continue;
+    
     const basePrice = futuresState.prices[pair];
     if (!basePrice || basePrice <= 0) continue;
 
-    // Store the real API price as anchor (updated by updateFuturesPrice)
-    if (!_futuresLastApiPrice[pair] || Math.abs(_futuresLastApiPrice[pair] - basePrice) > basePrice * 0.005) {
-      _futuresLastApiPrice[pair] = basePrice;
-    }
-
-    // ─── UNPREDICTABLE MICRO-TREND ENGINE ───
-    // Each pair has its own micro-trend that lasts random ticks before reversing
-    if (!window._sigTrends) window._sigTrends = {};
-    if (!window._sigTrends[pair]) {
-      window._sigTrends[pair] = {
-        dir: Math.random() > 0.5 ? 1 : -1,     // NO bias — pure 50/50
-        strength: 0.2 + Math.random() * 0.8,     // how strong the trend is (0.2-1.0)
-        remaining: Math.floor(3 + Math.random() * 12), // shorter, less predictable trends (3-15 ticks)
-        volatility: 0,
-        prevMove: 0,
-        reversals: 0,                             // track reversals for entropy
-      };
-    }
-    const trend = window._sigTrends[pair];
-
-    // Determine volatility based on asset type
+    // Simple random walk for non-crypto pairs
     const fp = FUTURES_PAIRS[pair];
-    const assetType = fp ? fp.type : 'crypto';
-    let baseVol;
-    if (assetType === 'crypto') baseVol = 0.0018;   // Higher base volatility
-    else if (assetType === 'commodity') baseVol = 0.0009;
-    else baseVol = 0.0012;
-
-    // Frequent volatility spikes — makes price less smooth/predictable
-    if (Math.random() < 0.08) trend.volatility = 1.5 + Math.random() * 3;
-    else trend.volatility = Math.max(0, trend.volatility * 0.8);
-    const currentVol = baseVol * (1 + trend.volatility);
-
-    // Core move: more noise, less trend influence, random jumps
-    const trendComponent = trend.dir * trend.strength * currentVol * 0.35;
-    const noiseComponent = (Math.random() - 0.5) * currentVol * 1.2;
-    // Random micro-jumps that break patterns
-    const jumpChance = Math.random();
-    const microJump = jumpChance < 0.05 ? (Math.random() - 0.5) * currentVol * 3 : 0;
-    const smoothing = trend.prevMove * 0.15; // less momentum = less predictable
-    let rawMove = trendComponent + noiseComponent + microJump + smoothing;
-
-    // Clamp individual tick moves
-    rawMove = Math.max(-currentVol * 2, Math.min(currentVol * 2, rawMove));
-    trend.prevMove = rawMove;
-
-    // Apply move to price
+    const assetType = fp ? fp.type : 'other';
+    let vol = assetType === 'commodity' ? 0.0006 : 0.0008;
+    
+    const move = (Math.random() - 0.5) * vol * 2;
+    let newPrice = basePrice * (1 + move);
+    
+    // Mean-revert to anchor
     const anchor = _futuresLastApiPrice[pair] || basePrice;
-    let newPrice = basePrice * (1 + rawMove);
-
-    // Mean reversion: gently pull back toward anchor price
     const drift = (newPrice - anchor) / anchor;
-    const maxDrift = 0.006; // ±0.6% max from real price
-    if (Math.abs(drift) > maxDrift * 0.7) {
-      const pullback = drift > 0 ? -0.0002 : 0.0002;
-      newPrice = newPrice * (1 + pullback);
+    if (Math.abs(drift) > 0.004) {
+      newPrice = newPrice * (1 + (drift > 0 ? -0.0003 : 0.0003));
     }
-    if (newPrice > anchor * (1 + maxDrift)) newPrice = anchor * (1 + maxDrift * 0.95);
-    if (newPrice < anchor * (1 - maxDrift)) newPrice = anchor * (1 - maxDrift * 0.95);
-
-    // Countdown the trend and create new one — shorter, more chaotic
-    trend.remaining--;
-    if (trend.remaining <= 0) {
-      // Always reverse or go random — never stay in same direction predictably
-      const coin = Math.random();
-      if (coin < 0.5) {
-        trend.dir = -trend.dir; // reverse
-      } else {
-        trend.dir = Math.random() > 0.5 ? 1 : -1; // completely random
-      }
-      trend.strength = 0.2 + Math.random() * 0.8;
-      trend.remaining = Math.floor(3 + Math.random() * 12); // short unpredictable durations
-      trend.reversals++;
-    }
-    // Random mid-trend direction flips (5% chance each tick)
-    if (Math.random() < 0.05) {
-      trend.dir = -trend.dir;
-      trend.strength = 0.3 + Math.random() * 0.5;
-    }
-
-    // Track direction for display purposes
-    _futuresTickDirection[pair] = newPrice > basePrice ? 1 : newPrice < basePrice ? -1 : 0;
-
-    // Update the price
+    
     futuresState.prices[pair] = newPrice;
   }
 
-  // Update price display if on Leverage Trading page
+  // Update display
   if (getActivePage() === 'futures') {
     const viewedPair = futuresState.pair;
-    const viewedPrice = futuresState.prices[viewedPair];
-    if (viewedPrice) {
-      const priceEl = document.getElementById('futuresPairPrice');
-      if (priceEl) {
-        const oldText = priceEl.textContent;
-        const newText = '$' + viewedPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: viewedPrice > 100 ? 2 : 6 });
-        if (oldText !== newText) {
+    // Only update display for non-Binance pairs (Binance updates via WebSocket)
+    if (!BINANCE_PAIR_MAP[viewedPair]) {
+      const viewedPrice = futuresState.prices[viewedPair];
+      if (viewedPrice) {
+        const priceEl = document.getElementById('futuresPairPrice');
+        if (priceEl) {
+          const newText = '$' + viewedPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: viewedPrice > 100 ? 2 : 6 });
           priceEl.textContent = newText;
-          priceEl.style.transition = 'color 0.3s';
-          priceEl.style.color = 'var(--green)';
-          setTimeout(() => { priceEl.style.color = ''; }, 600);
         }
       }
     }
-    // Update position PnL displays
     updateFuturesPosInfo();
     updateFuturesPositions();
   }
-
-  // If on Copy Trading, refresh leaders with updated prices
   if (getActivePage() === 'copytrade') {
     renderCTLeaders();
     updateCTStats();
   }
 }
+// Run simulation only for non-Binance pairs
+setInterval(simulateFuturesTick, 2000);
 
 // ══════════════════════════════════════════════════════════════
 // FEATURE: GANG TRACKER — FULL WALLET SCANNER
