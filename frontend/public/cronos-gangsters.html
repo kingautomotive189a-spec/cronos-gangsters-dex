@@ -4701,7 +4701,11 @@ function toggleNavMenu() {
       </div>
       <div style="flex:1;background:rgba(255,140,0,0.04);border:1px solid rgba(255,140,0,0.15);border-radius:12px;padding:12px;text-align:center;">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;font-weight:500;">24H VOLUME</div>
-        <div id="futures24hVol" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff8c00;margin-top:2px;">0</div>
+        <div id="futures24hVol" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff8c00;margin-top:2px;">$0</div>
+      </div>
+      <div style="flex:1;background:rgba(255,140,0,0.04);border:1px solid rgba(255,140,0,0.15);border-radius:12px;padding:12px;text-align:center;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;font-weight:500;">TOTAL TRADES</div>
+        <div id="futuresTotalTrades" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);margin-top:2px;">0</div>
       </div>
     </div>
 
@@ -21338,7 +21342,11 @@ let futuresState = {
   poolBalanceUSDC: 0,
   ownerDepositedUSDC: 0,
   poolBalanceUSDT: 0,
-  ownerDepositedUSDT: 0
+  ownerDepositedUSDT: 0,
+  volume24h: 0,
+  volume24hTimestamp: 0,
+  totalVolume: 0,
+  totalTrades: 0
 };
 
 // Load saved state
@@ -21385,6 +21393,40 @@ try {
     localStorage.removeItem('gangBuybackState');
   }
 } catch {}
+
+
+// Track volume — call on every trade open/close
+function _addVolume(amountUSD) {
+  var now = Date.now();
+  // Reset 24h counter if older than 24 hours
+  if (now - (futuresState.volume24hTimestamp || 0) > 86400000) {
+    futuresState.volume24h = 0;
+    futuresState.volume24hTimestamp = now;
+  }
+  futuresState.volume24h = (futuresState.volume24h || 0) + amountUSD;
+  futuresState.totalVolume = (futuresState.totalVolume || 0) + amountUSD;
+  futuresState.totalTrades = (futuresState.totalTrades || 0) + 1;
+  _updateVolumeDisplay();
+}
+
+function _updateVolumeDisplay() {
+  var now = Date.now();
+  // Reset if stale
+  if (now - (futuresState.volume24hTimestamp || 0) > 86400000) {
+    futuresState.volume24h = 0;
+    futuresState.volume24hTimestamp = now;
+  }
+  var vol = futuresState.volume24h || 0;
+  var el = document.getElementById('futures24hVol');
+  if (el) {
+    if (vol >= 1000000) el.textContent = '$' + (vol/1000000).toFixed(2) + 'M';
+    else if (vol >= 1000) el.textContent = '$' + (vol/1000).toFixed(1) + 'K';
+    else if (vol > 0) el.textContent = '$' + vol.toFixed(2);
+    else el.textContent = '$0';
+  }
+  var tradesEl = document.getElementById('futuresTotalTrades');
+  if (tradesEl) tradesEl.textContent = (futuresState.totalTrades || 0).toLocaleString();
+}
 
 function saveFuturesState() {
   const obj = {
@@ -21966,6 +22008,9 @@ function _doOpenFuturesPosition(amt, curr, price) {
   }
 
   futuresState.positions.push(position);
+  // Track volume (position size * price = USD value)
+  var openPrice = futuresState.prices[futuresState.pair] || 0;
+  _addVolume(position.amount * futuresState.leverage * (openPrice > 0 ? 1 : 1));
   saveFuturesState();
 
   document.getElementById('futuresAmount').value = '';
@@ -22223,6 +22268,7 @@ function _forceCloseFuturesPosition(id, reason) {
   });
 
   futuresState.positions.splice(idx, 1);
+  _addVolume(pos.amount * pos.leverage);
   saveFuturesState();
 
   // Show notification
@@ -22454,6 +22500,7 @@ setTimeout(() => {
   updateFuturesPool();
   renderFuturesHistory();
   renderAssetGrid('crypto'); // Initialize the asset card grid
+  _updateVolumeDisplay(); // Show existing volume
   // Connect to Binance WebSocket for real-time prices
   connectBinanceWS();
   // Fallback: Fetch price from API every 5 seconds in case WebSocket drops
@@ -24669,6 +24716,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     futuresState.history.push(Object.assign({}, pos));
     const posIdx = futuresState.positions.indexOf(pos);
     if (posIdx > -1) futuresState.positions.splice(posIdx, 1);
+    _addVolume(pos.amount * pos.leverage);
     saveFuturesState();
     showToast('Closed ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD @ $' + currentPrice.toLocaleString(undefined,{maximumFractionDigits:2}) + ' — PnL: ' + (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, netPnl >= 0 ? 'success' : 'error');
     updateFuturesPositions();
