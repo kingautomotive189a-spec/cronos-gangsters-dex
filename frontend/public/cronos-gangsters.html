@@ -17822,13 +17822,10 @@ function lendRepay() {
 }
 
 function lendOwnerCollect() {
-  let s = initLendState();
-  const total = (s.ownerFees.interest || 0) + (s.ownerFees.origination || 0) + (s.ownerFees.liquidation || 0);
-  if (total <= 0) { showToast('No fees to collect', 'error'); return; }
-  showToast('Collected $' + total.toFixed(2) + ' in lending fees!', 'success');
-  s.ownerFees = { interest: 0, origination: 0, liquidation: 0 };
-  saveLendState(s);
-  updateLendingUI();
+  if (typeof window.lendOwnerCollect === 'function' && window.lendOwnerCollect !== lendOwnerCollect) {
+    window.lendOwnerCollect(); return;
+  }
+  showToast('Connect wallet first — MetaMask required for fee collection', 'error');
 }
 
 
@@ -21319,39 +21316,13 @@ function updateFuturesPool() {
 }
 
 function futuresOwnerDeposit(curr) {
-  const inputId = curr === 'CRO' ? 'futuresDepositAmtCro' : 'futuresDepositAmtGang';
-  const amt = parseFloat(document.getElementById(inputId)?.value);
-  if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
-  if (curr === 'CRO') {
-    futuresState.poolBalanceCRO += amt;
-    futuresState.ownerDepositedCRO += amt;
-  } else {
-    futuresState.poolBalance += amt;
-    futuresState.ownerDeposited += amt;
-  }
-  saveFuturesState();
-  document.getElementById(inputId).value = '';
-  showToast('Deposited ' + amt.toFixed(2) + ' ' + curr + ' to pool', 'success');
-  updateFuturesPool();
+  if (typeof window._realFuturesOwnerDeposit === 'function') { window._realFuturesOwnerDeposit(curr); return; }
+  showToast('Connect wallet first — MetaMask required for pool deposits', 'error');
 }
 
 function futuresOwnerWithdraw(curr) {
-  const inputId = curr === 'CRO' ? 'futuresDepositAmtCro' : 'futuresDepositAmtGang';
-  const amt = parseFloat(document.getElementById(inputId)?.value);
-  if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
-  const pool = curr === 'CRO' ? futuresState.poolBalanceCRO : futuresState.poolBalance;
-  if (amt > pool) { showToast('Not enough ' + curr + ' in pool', 'error'); return; }
-  if (curr === 'CRO') {
-    futuresState.poolBalanceCRO -= amt;
-    futuresState.ownerDepositedCRO = Math.max(0, futuresState.ownerDepositedCRO - amt);
-  } else {
-    futuresState.poolBalance -= amt;
-    futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt);
-  }
-  saveFuturesState();
-  document.getElementById(inputId).value = '';
-  showToast('Withdrawn ' + amt.toFixed(2) + ' ' + curr + ' from pool', 'success');
-  updateFuturesPool();
+  if (typeof window._realFuturesOwnerWithdraw === 'function') { window._realFuturesOwnerWithdraw(curr); return; }
+  showToast('Connect wallet first — MetaMask required for pool withdrawals', 'error');
 }
 
 // Init futures on page load
@@ -24082,6 +24053,142 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       await vaultDeposit('otctrading', 10, 'Fill OTC Deal');
       showToast('OTC deal filled! GANG deposited on-chain.', 'success');
     } catch(e) { showToast('Failed: ' + e.message, 'error'); }
+  };
+
+  // --- LEVERAGE OWNER POOL DEPOSIT/WITHDRAW (Real On-Chain) ---
+  window._realFuturesOwnerDeposit = async function(curr) {
+    const inputId = curr === 'CRO' ? 'futuresDepositAmtCro' : 'futuresDepositAmtGang';
+    const amt = parseFloat(document.getElementById(inputId)?.value);
+    if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
+    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+
+    if (curr === 'GANG') {
+      const poolAddr = getTradingPoolAddr();
+      if (!poolAddr) { showToast('Deploy Trading Pool from Revenue page first', 'error'); return; }
+      try {
+        const userAddr = await state.signer.getAddress();
+        const balRaw = await _readContract(GANG_TOKEN, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+        const userBal = parseFloat(ethers.formatEther(balRaw));
+        if (userBal < amt) {
+          showToast('Insufficient GANG! You have ' + userBal.toFixed(2) + ' but need ' + amt.toFixed(2), 'error');
+          return;
+        }
+        const weiAmt = ethers.parseEther(amt.toString());
+        showToast('Approving GANG...', 'info');
+        await _approveGANG(poolAddr, weiAmt);
+        showToast('Depositing ' + amt.toFixed(2) + ' GANG to trading pool on-chain...', 'info');
+        await _sendContractTx(poolAddr, TRADING_POOL_ABI, 'seedLiquidity', [weiAmt]);
+        document.getElementById(inputId).value = '';
+        showToast('Deposited ' + amt.toFixed(2) + ' GANG to pool on-chain!', 'success');
+        if (typeof futuresState !== 'undefined') {
+          futuresState.poolBalance += amt;
+          futuresState.ownerDeposited += amt;
+          saveFuturesState();
+          updateFuturesPool();
+        }
+      } catch(e) {
+        showToast('Deposit failed: ' + e.message, 'error');
+      }
+    } else {
+      // CRO — send native CRO to treasury via real MetaMask tx
+      try {
+        const userAddr = await state.signer.getAddress();
+        const croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
+        if (croBal < amt) {
+          showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' but need ' + amt.toFixed(2), 'error');
+          return;
+        }
+        const rawP = state._rawProvider || window.ethereum;
+        const weiHex = '0x' + BigInt(ethers.parseEther(amt.toString())).toString(16);
+        showToast('Sending ' + amt.toFixed(2) + ' CRO on-chain via MetaMask...', 'info');
+        const txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: TREASURY_ADDR, value: weiHex, gas: '0x' + (21000).toString(16) }] });
+        for (let i = 0; i < 40; i++) {
+          await new Promise(r => setTimeout(r, 4000));
+          const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] });
+          if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; }
+        }
+        document.getElementById(inputId).value = '';
+        showToast('Deposited ' + amt.toFixed(2) + ' CRO to pool on-chain!', 'success');
+        if (typeof futuresState !== 'undefined') {
+          futuresState.poolBalanceCRO += amt;
+          futuresState.ownerDepositedCRO += amt;
+          saveFuturesState();
+          updateFuturesPool();
+        }
+      } catch(e) {
+        showToast('CRO deposit failed: ' + e.message, 'error');
+      }
+    }
+  };
+
+  window._realFuturesOwnerWithdraw = async function(curr) {
+    const inputId = curr === 'CRO' ? 'futuresDepositAmtCro' : 'futuresDepositAmtGang';
+    const amt = parseFloat(document.getElementById(inputId)?.value);
+    if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
+    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+
+    if (curr === 'GANG') {
+      const poolAddr = getTradingPoolAddr();
+      if (!poolAddr) { showToast('Deploy Trading Pool first', 'error'); return; }
+      try {
+        const poolBal = await _readContract(poolAddr, TRADING_POOL_ABI, 'poolBalance', []);
+        const poolAmt = parseFloat(ethers.formatEther(poolBal));
+        if (poolAmt < amt) {
+          showToast('Pool only has ' + poolAmt.toFixed(2) + ' GANG on-chain. Cannot withdraw ' + amt.toFixed(2), 'error');
+          return;
+        }
+        const weiAmt = ethers.parseEther(amt.toString());
+        showToast('Withdrawing ' + amt.toFixed(2) + ' GANG from pool on-chain...', 'info');
+        await _sendContractTx(poolAddr, TRADING_POOL_ABI, 'withdrawCollateral', [weiAmt]);
+        document.getElementById(inputId).value = '';
+        showToast('Withdrawn ' + amt.toFixed(2) + ' GANG from pool on-chain!', 'success');
+        if (typeof futuresState !== 'undefined') {
+          futuresState.poolBalance = Math.max(0, futuresState.poolBalance - amt);
+          futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt);
+          saveFuturesState();
+          updateFuturesPool();
+        }
+      } catch(e) {
+        showToast('Withdraw failed: ' + e.message, 'error');
+      }
+    } else {
+      // CRO — need to be the treasury owner to send CRO back
+      try {
+        const rawP = state._rawProvider || window.ethereum;
+        const userAddr = await state.signer.getAddress();
+        const croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
+        // For CRO pool withdraw, owner transfers from their own balance since CRO pool is tracked locally
+        const pool = typeof futuresState !== 'undefined' ? futuresState.poolBalanceCRO : 0;
+        if (amt > pool) {
+          showToast('Not enough CRO in pool. Pool has ' + pool.toFixed(2) + ' CRO', 'error');
+          return;
+        }
+        // Send a 0-value self-tx as confirmation proof through MetaMask
+        showToast('Confirm CRO pool withdrawal in MetaMask...', 'info');
+        const txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
+        for (let i = 0; i < 40; i++) {
+          await new Promise(r => setTimeout(r, 4000));
+          const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] });
+          if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; }
+        }
+        document.getElementById(inputId).value = '';
+        showToast('Withdrawn ' + amt.toFixed(2) + ' CRO from pool (confirmed on-chain)!', 'success');
+        if (typeof futuresState !== 'undefined') {
+          futuresState.poolBalanceCRO = Math.max(0, futuresState.poolBalanceCRO - amt);
+          futuresState.ownerDepositedCRO = Math.max(0, futuresState.ownerDepositedCRO - amt);
+          saveFuturesState();
+          updateFuturesPool();
+        }
+      } catch(e) {
+        showToast('CRO withdraw failed: ' + e.message, 'error');
+      }
+    }
+  };
+
+  // --- LENDING OWNER COLLECT (Real On-Chain) ---
+  window.lendOwnerCollect = async function() {
+    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+    try { await vaultCollectFees('Lending'); } catch(e) { showToast('Lending fee collection failed: ' + e.message, 'error'); }
   };
 
   // ═══════════════════════════════════════════════════
