@@ -21862,25 +21862,70 @@ function renderFuturesHistory() {
   const el = document.getElementById('futuresHistory');
   if (!el) return;
   const historyWallet = (state.address || 'demo').toLowerCase();
-  const myHistory = futuresState.history.filter(h => h.wallet === historyWallet).slice(0, 20);
-  if (myHistory.length === 0) {
+  const myHistory = futuresState.history.filter(h => h.wallet === historyWallet);
+  // Sort newest first
+  myHistory.sort(function(a, b) { return new Date(b.closedAt || 0) - new Date(a.closedAt || 0); });
+  const shown = myHistory.slice(0, 30);
+  if (shown.length === 0) {
     el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No trades yet</div>';
     return;
   }
-  el.innerHTML = myHistory.map(h => {
+  el.innerHTML = shown.map(function(h, i) {
     const color = h.pnl >= 0 ? 'var(--green)' : 'var(--red)';
     const sideColor = h.side === 'long' ? '#27ae60' : '#e74c3c';
-    return `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:4px;">
-      <div>
-        <span style="font-size:13px;color:var(--text);">${h.pair}/USD</span>
-        <span style="font-size:10px;padding:2px 6px;border-radius:4px;background:${sideColor}22;color:${sideColor};margin-left:4px;">${h.side.toUpperCase()} ${h.leverage}x</span>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-size:13px;color:${color};font-weight:700;">${h.pnl >= 0 ? '+' : ''}${h.pnl.toFixed(2)} ${h.currency || 'GANG'}</div>
-        <div style="font-size:10px;color:var(--muted);">${new Date(h.closedAt).toLocaleDateString()}</div>
-      </div>
-    </div>`;
+    const curr = h.currency || 'GANG';
+    const entryP = h.entryPrice || 0;
+    const closeP = h.closePrice || entryP;
+    const priceMoved = entryP > 0 ? ((closeP - entryP) / entryP * 100) : 0;
+    const fee = h.fee || (h.amount * 0.003);
+    const pnlPct = h.pnlPct || (h.pnl && h.amount ? (h.pnl / h.amount * 100) : 0);
+    const openDate = h.openedAt ? new Date(h.openedAt) : null;
+    const closeDate = h.closedAt ? new Date(h.closedAt) : null;
+    var duration = '';
+    if (openDate && closeDate) {
+      var diffMs = closeDate - openDate;
+      var diffMin = Math.floor(diffMs / 60000);
+      if (diffMin < 1) duration = '<1m';
+      else if (diffMin < 60) duration = diffMin + 'm';
+      else if (diffMin < 1440) duration = Math.floor(diffMin/60) + 'h ' + (diffMin%60) + 'm';
+      else duration = Math.floor(diffMin/1440) + 'd ' + Math.floor((diffMin%1440)/60) + 'h';
+    }
+    // Determine close reason
+    var closeReason = '';
+    if (h.tp && closeP >= h.tp && h.side === 'long') closeReason = 'TP HIT';
+    else if (h.tp && closeP <= h.tp && h.side === 'short') closeReason = 'TP HIT';
+    else if (h.sl && closeP <= h.sl && h.side === 'long') closeReason = 'SL HIT';
+    else if (h.sl && closeP >= h.sl && h.side === 'short') closeReason = 'SL HIT';
+    else if (h.pnl <= -(h.amount || 0)) closeReason = 'LIQUIDATED';
+    else closeReason = 'MANUAL';
+
+    var reasonColor = closeReason === 'TP HIT' ? 'var(--green)' : closeReason === 'LIQUIDATED' ? '#ff4444' : closeReason === 'SL HIT' ? '#ff8800' : 'var(--muted)';
+
+    return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:6px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
+        '<div style="display:flex;align-items:center;gap:8px;">' +
+          '<span style="font-family:\'Bebas Neue\',sans-serif;font-size:16px;color:#ff8c00;">' + h.pair + '/USD</span>' +
+          '<span style="font-size:10px;padding:2px 6px;border-radius:4px;background:' + sideColor + '22;color:' + sideColor + ';font-weight:700;">' + h.side.toUpperCase() + ' ' + h.leverage + 'x</span>' +
+          '<span style="font-size:9px;padding:2px 6px;border-radius:4px;background:' + reasonColor + '22;color:' + reasonColor + ';font-weight:700;">' + closeReason + '</span>' +
+        '</div>' +
+        '<div style="text-align:right;">' +
+          '<div style="font-size:15px;color:' + color + ';font-weight:700;">' + (h.pnl >= 0 ? '+' : '') + h.pnl.toFixed(2) + ' ' + curr + '</div>' +
+          '<div style="font-size:10px;color:' + color + ';">' + (pnlPct >= 0 ? '+' : '') + pnlPct.toFixed(2) + '%</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;font-size:10px;color:var(--muted);">' +
+        '<div>Entry: <span style="color:var(--text);">$' + entryP.toLocaleString(undefined,{maximumFractionDigits:entryP>100?2:6}) + '</span></div>' +
+        '<div>Close: <span style="color:' + color + ';">$' + closeP.toLocaleString(undefined,{maximumFractionDigits:closeP>100?2:6}) + '</span></div>' +
+        '<div>Size: <span style="color:var(--text);">' + (h.amount||0).toFixed(2) + ' ' + curr + '</span></div>' +
+        '<div>Fee: <span style="color:#e74c3c;">' + fee.toFixed(4) + ' ' + curr + '</span></div>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:4px;">' +
+        '<span>Opened: ' + (openDate ? openDate.toLocaleString() : '—') + '</span>' +
+        '<span>Closed: ' + (closeDate ? closeDate.toLocaleString() : '—') + '</span>' +
+        (duration ? '<span>Duration: ' + duration + '</span>' : '') +
+        '<span>Price move: <span style="color:' + (priceMoved>=0?'var(--green)':'var(--red)') + ';">' + (priceMoved>=0?'+':'') + priceMoved.toFixed(2) + '%</span></span>' +
+      '</div>' +
+    '</div>';
   }).join('');
 }
 
@@ -24201,6 +24246,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     showToast('Closed ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD @ $' + currentPrice.toLocaleString(undefined,{maximumFractionDigits:2}) + ' — PnL: ' + (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, netPnl >= 0 ? 'success' : 'error');
     updateFuturesPositions();
     updateFuturesPool();
+    renderFuturesHistory();
   };
 
   // Clear ALL old/legacy positions from LocalStorage
