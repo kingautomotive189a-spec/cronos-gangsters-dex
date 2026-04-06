@@ -3725,6 +3725,7 @@ function toggleNavMenu() {
               <div id="lendCroYours" data-testid="lend-cro-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 CRO</div>
             </div>
           </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);">Wallet: <span id="lendCroBal" data-testid="lend-cro-bal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <div style="display:flex;gap:6px;">
             <input type="number" id="lendCroAmt" data-testid="lend-cro-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
             <button class="btn-primary" data-testid="lend-cro-supply-btn" onclick="lendSupply('CRO')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
@@ -3764,6 +3765,7 @@ function toggleNavMenu() {
               <div id="lendGangYours" data-testid="lend-gang-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 GANG</div>
             </div>
           </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);">Wallet: <span id="lendGangBal" data-testid="lend-gang-bal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <div style="display:flex;gap:6px;">
             <input type="number" id="lendGangAmt" data-testid="lend-gang-amount" placeholder="Amount" style="flex:1;background:rgba(39,174,96,0.05);border:1px solid rgba(39,174,96,0.15);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(39,174,96,0.5)'" onblur="this.style.borderColor='rgba(39,174,96,0.15)'">
             <button class="btn-primary" data-testid="lend-gang-supply-btn" onclick="lendSupply('GANG')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
@@ -3800,6 +3802,7 @@ function toggleNavMenu() {
               <div id="lendUsdcYours" data-testid="lend-usdc-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 USDC</div>
             </div>
           </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);">Wallet: <span id="lendUsdcBal" data-testid="lend-usdc-bal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <div style="display:flex;gap:6px;">
             <input type="number" id="lendUsdcAmt" data-testid="lend-usdc-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
             <button class="btn-primary" data-testid="lend-usdc-supply-btn" onclick="lendSupply('USDC')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
@@ -3827,6 +3830,7 @@ function toggleNavMenu() {
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendWethUtil" data-testid="lend-weth-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendWethYours" data-testid="lend-weth-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 WETH</div></div>
           </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);">Wallet: <span id="lendWethBal" data-testid="lend-weth-bal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <div style="display:flex;gap:6px;">
             <input type="number" id="lendWethAmt" data-testid="lend-weth-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
             <button class="btn-primary" data-testid="lend-weth-supply-btn" onclick="lendSupply('WETH')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
@@ -3854,6 +3858,7 @@ function toggleNavMenu() {
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendWbtcUtil" data-testid="lend-wbtc-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendWbtcYours" data-testid="lend-wbtc-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 WBTC</div></div>
           </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);">Wallet: <span id="lendWbtcBal" data-testid="lend-wbtc-bal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <div style="display:flex;gap:6px;">
             <input type="number" id="lendWbtcAmt" data-testid="lend-wbtc-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
             <button class="btn-primary" data-testid="lend-wbtc-supply-btn" onclick="lendSupply('WBTC')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
@@ -3881,6 +3886,7 @@ function toggleNavMenu() {
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendDaiUtil" data-testid="lend-dai-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendDaiYours" data-testid="lend-dai-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 DAI</div></div>
           </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);">Wallet: <span id="lendDaiBal" data-testid="lend-dai-bal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <div style="display:flex;gap:6px;">
             <input type="number" id="lendDaiAmt" data-testid="lend-dai-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
             <button class="btn-primary" data-testid="lend-dai-supply-btn" onclick="lendSupply('DAI')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
@@ -3908,6 +3914,7 @@ function toggleNavMenu() {
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendUsdtUtil" data-testid="lend-usdt-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendUsdtYours" data-testid="lend-usdt-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 USDT</div></div>
           </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);">Wallet: <span id="lendUsdtBal" data-testid="lend-usdt-bal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <div style="display:flex;gap:6px;">
             <input type="number" id="lendUsdtAmt" data-testid="lend-usdt-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
             <button class="btn-primary" data-testid="lend-usdt-supply-btn" onclick="lendSupply('USDT')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
@@ -3935,6 +3942,7 @@ function toggleNavMenu() {
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendAtomUtil" data-testid="lend-atom-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendAtomYours" data-testid="lend-atom-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 ATOM</div></div>
           </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);">Wallet: <span id="lendAtomBal" data-testid="lend-atom-bal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <div style="display:flex;gap:6px;">
             <input type="number" id="lendAtomAmt" data-testid="lend-atom-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
             <button class="btn-primary" data-testid="lend-atom-supply-btn" onclick="lendSupply('ATOM')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
@@ -3962,6 +3970,7 @@ function toggleNavMenu() {
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendVvsUtil" data-testid="lend-vvs-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendVvsYours" data-testid="lend-vvs-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 VVS</div></div>
           </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);">Wallet: <span id="lendVvsBal" data-testid="lend-vvs-bal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <div style="display:flex;gap:6px;">
             <input type="number" id="lendVvsAmt" data-testid="lend-vvs-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
             <button class="btn-primary" data-testid="lend-vvs-supply-btn" onclick="lendSupply('VVS')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
@@ -3989,6 +3998,7 @@ function toggleNavMenu() {
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendTonicUtil" data-testid="lend-tonic-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
             <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendTonicYours" data-testid="lend-tonic-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 TONIC</div></div>
           </div>
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);">Wallet: <span id="lendTonicBal" data-testid="lend-tonic-bal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <div style="display:flex;gap:6px;">
             <input type="number" id="lendTonicAmt" data-testid="lend-tonic-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
             <button class="btn-primary" data-testid="lend-tonic-supply-btn" onclick="lendSupply('TONIC')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
@@ -4684,7 +4694,10 @@ function toggleNavMenu() {
 
       <!-- Amount -->
       <div style="margin-bottom:14px;">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;margin-bottom:6px;font-weight:500;">AMOUNT (<span id="futuresCurrLabel">GANG</span>)</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;margin-bottom:6px;font-weight:500;display:flex;justify-content:space-between;">
+          <span>AMOUNT (<span id="futuresCurrLabel">GANG</span>)</span>
+          <span style="color:var(--green);">Balance: <span id="futuresWalletBal" data-testid="futures-wallet-bal" style="color:var(--gold);font-weight:700;">--</span></span>
+        </div>
         <div style="display:flex;gap:6px;">
           <input class="swap-input" id="futuresAmount" data-testid="futures-amount" type="number" step="any" placeholder="Enter amount" style="flex:1;" />
           <button onclick="document.getElementById('futuresAmount').value = _truncDec((futuresState.currency === 'CRO' ? ((state.balances?.CRO || 0) > 0.5 ? (state.balances?.CRO || 0) - 0.5 : 0) : (state.balances?.GANG || 0)), 2)" style="background:var(--surface2);border:1px solid var(--border);color:var(--gold);border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;">MAX</button>
@@ -5002,6 +5015,7 @@ function toggleNavMenu() {
           <option value="rug_pull">Rug Pull Cover — 5% monthly</option>
           <option value="full">Full Coverage (All Risks) — 5% monthly</option>
         </select>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-size:10px;color:var(--muted);">Wallet: <span id="insGangBal" style="color:var(--gold);font-weight:600;">--</span></span></div>
         <input type="number" id="insCoverageAmount" data-testid="ins-coverage-amount" placeholder="Coverage amount (CRO)" oninput="updateInsurancePreview()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
         <select id="insDuration" data-testid="ins-duration" onchange="updateInsurancePreview()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
           <option value="1">1 Month</option>
@@ -5136,6 +5150,7 @@ function toggleNavMenu() {
             </div>
           </div>
         </div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-size:10px;color:var(--muted);">Wallet: <span id="aggGangBal" style="color:var(--gold);font-weight:600;">--</span></span></div>
         <input type="number" id="aggAmount" data-testid="agg-amount" placeholder="Amount to swap" oninput="updateAggQuotes()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
       </div>
 
@@ -5275,6 +5290,7 @@ function toggleNavMenu() {
           <span style="font-size:11px;color:var(--muted);">Your Balance: <span id="ctAvailBal" data-testid="ct-avail-bal" style="color:var(--gold);font-weight:700;">0</span></span>
         </div>
         <div style="position:relative;">
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-size:10px;color:var(--muted);">Wallet: <span id="ctGangBal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <input type="number" id="ctAmount" data-testid="ct-amount" placeholder="Your amount (same currency as original trade)" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
           <button onclick="ctSetMax()" data-testid="ct-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#e91e63,#c2185b);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
         </div>
@@ -5340,7 +5356,7 @@ function toggleNavMenu() {
       <div class="card-title" style="color:#9c27b0;">STAKE $GANG FOR REVENUE SHARE</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Stake GANG tokens to earn a proportional share of ALL 0.3% platform fees. More staked = bigger share.</div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-        <span style="font-size:11px;color:var(--muted);">Available: <span id="rsAvailBal" data-testid="rs-avail-bal" style="color:var(--gold);font-weight:700;">0 GANG</span></span>
+        <span style="font-size:11px;color:var(--muted);">Wallet: <span id="rsGangBal" style="color:var(--gold);font-weight:700;">--</span></span>
         <span style="font-size:11px;color:var(--muted);">Staked: <span id="rsStakedBal" data-testid="rs-staked-bal" style="color:#9c27b0;font-weight:700;">0 GANG</span></span>
       </div>
       <div style="position:relative;margin-bottom:10px;">
@@ -5416,7 +5432,8 @@ function toggleNavMenu() {
           <span style="font-size:11px;color:var(--muted);">Balance: <span id="loAvailBal" data-testid="lo-avail-bal" style="color:var(--gold);font-weight:700;">0</span></span>
         </div>
         <div style="position:relative;">
-          <input type="number" id="loAmount" data-testid="lo-amount" placeholder="Amount" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-size:10px;color:var(--muted);">Wallet: <span id="loGangBal" style="color:var(--gold);font-weight:600;">--</span></span></div>
+        <input type="number" id="loAmount" data-testid="lo-amount" placeholder="Amount" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
           <button onclick="loSetMax()" data-testid="lo-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#42a5f5,#1e88e5);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(66,165,245,0.2);border-radius:8px;padding:10px 12px;">
@@ -5475,6 +5492,7 @@ function toggleNavMenu() {
           <span style="font-size:11px;color:var(--muted);">Balance: <span id="ppAvailBal" data-testid="pp-avail-bal" style="color:var(--gold);font-weight:700;">0 CRO</span></span>
         </div>
         <div style="position:relative;">
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-size:10px;color:var(--muted);">Wallet: <span id="ppGangBal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <input type="number" id="ppCollateral" data-testid="pp-collateral" placeholder="Collateral amount (CRO)" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
           <button onclick="ppSetMax()" data-testid="pp-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#f44336,#c62828);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
         </div>
@@ -5544,6 +5562,7 @@ function toggleNavMenu() {
           <span style="font-size:11px;color:var(--muted);">Balance: <span id="otcAvailBal" data-testid="otc-avail-bal" style="color:var(--gold);font-weight:700;">0</span></span>
         </div>
         <div style="position:relative;">
+          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-size:10px;color:var(--muted);">Wallet: <span id="otcGangBal" style="color:var(--gold);font-weight:600;">--</span></span></div>
           <input type="number" id="otcSellAmount" data-testid="otc-sell-amount" placeholder="Amount to sell" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
           <button onclick="otcSetMax()" data-testid="otc-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#8d6e63,#6d4c41);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
         </div>
@@ -19521,7 +19540,59 @@ const _origUpdateBal = window.updateBalances;
 window.updateBalances = function() {
   if (_origUpdateBal) _origUpdateBal.apply(this, arguments);
   setTimeout(updateAllFeatureBalances, 500);
+  setTimeout(updateAllWalletBalanceDisplays, 1000);
 };
+
+// --- GLOBAL WALLET BALANCE DISPLAY ---
+async function updateAllWalletBalanceDisplays() {
+  if (!state.signer || !state.provider) return;
+  try {
+    const userAddr = await state.signer.getAddress();
+    const erc20Abi = ['function balanceOf(address) view returns (uint256)'];
+
+    // Get GANG + CRO balances
+    const gangRaw = await _readContract(GANG_ADDR, erc20Abi, 'balanceOf', [userAddr]);
+    const gangBal = parseFloat(ethers.formatEther(gangRaw));
+    const croRaw = await state.provider.getBalance(userAddr);
+    const croBal = parseFloat(ethers.formatEther(croRaw));
+
+    // Leverage page
+    const futEl = document.getElementById('futuresWalletBal');
+    if (futEl) {
+      const curr = futuresState?.currency || 'GANG';
+      futEl.textContent = (curr === 'CRO' ? croBal.toFixed(2) + ' CRO' : gangBal.toFixed(2) + ' GANG');
+    }
+
+    // Lending page — CRO and GANG
+    const lCro = document.getElementById('lendCroBal'); if (lCro) lCro.textContent = croBal.toFixed(2) + ' CRO';
+    const lGang = document.getElementById('lendGangBal'); if (lGang) lGang.textContent = gangBal.toFixed(2) + ' GANG';
+
+    // Lending page — ERC20 tokens
+    const erc20s = {Usdc:['USDC',6], Weth:['WETH',18], Wbtc:['WBTC',8], Dai:['DAI',18], Usdt:['USDT',6], Atom:['ATOM',18], Vvs:['VVS',18], Tonic:['TONIC',18]};
+    for (const [k, v] of Object.entries(erc20s)) {
+      try {
+        const addr = TOKEN_ADDRESSES[v[0]];
+        if (addr && addr !== 'native') {
+          const raw = await _readContract(addr, erc20Abi, 'balanceOf', [userAddr]);
+          const bal = parseFloat(ethers.formatUnits(raw, v[1]));
+          const el = document.getElementById('lend' + k + 'Bal');
+          if (el) el.textContent = bal.toFixed(bal < 1 ? 6 : 2) + ' ' + v[0];
+        }
+      } catch(e) { const el = document.getElementById('lend' + k + 'Bal'); if (el) el.textContent = '0'; }
+    }
+
+    // All GANG-based feature balance labels
+    const gangStr = gangBal.toFixed(2) + ' GANG';
+    ['rsGangBal','loGangBal','ppGangBal','otcGangBal','ctGangBal','aggGangBal',
+     'predGangBal','insGangBal','daoGangBal','squadGangBal','compGangBal',
+     'bondGangBal','revSeedGangBal','lockerGangBal','flashGangBal'].forEach(function(id) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = gangStr;
+    });
+  } catch(e) { console.log('Balance display error:', e); }
+}
+// Auto-update every 15s
+setInterval(function() { if (state.signer) updateAllWalletBalanceDisplays(); }, 15000);
 
 
 
