@@ -26534,6 +26534,17 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const bond = userBonds[idx];
     if (!bond) return;
 
+    // Check vesting period
+    const vestMs = (bond.vestDays || 5) * 86400000;
+    const elapsed = Date.now() - bond.purchaseTime;
+    if (elapsed < vestMs) {
+      const remaining = vestMs - elapsed;
+      const daysLeft = Math.ceil(remaining / 86400000);
+      const hoursLeft = Math.ceil((remaining % 86400000) / 3600000);
+      showToast('Bond still vesting! ' + daysLeft + 'd ' + hoursLeft + 'h remaining. Cannot claim yet.', 'error');
+      return;
+    }
+
     try {
       const vaultAddr = (typeof getVaultAddr === 'function' ? getVaultAddr() : '') || (typeof CONTRACTS !== 'undefined' && CONTRACTS.PROTOCOL_VAULT ? CONTRACTS.PROTOCOL_VAULT : '') || localStorage.getItem('GANG_PROTOCOL_VAULT_ADDR') || '';
       if (vaultAddr && bond.onChain && typeof window.vaultWithdraw === 'function') {
@@ -26557,14 +26568,40 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const userBonds = s.bonds.filter(b => b.user === addr && b.pair === pair);
     if (userBonds.length === 0) { showToast('No active ' + pair + ' bonds to withdraw', 'error'); return; }
 
-    // Withdraw all bonds for this pair
+    // Only withdraw FULLY VESTED bonds
+    const now = Date.now();
+    const vestedBonds = userBonds.filter(b => {
+      const vestMs = (b.vestDays || 5) * 86400000;
+      return (now - b.purchaseTime) >= vestMs;
+    });
+    const unvestedBonds = userBonds.filter(b => {
+      const vestMs = (b.vestDays || 5) * 86400000;
+      return (now - b.purchaseTime) < vestMs;
+    });
+
+    if (vestedBonds.length === 0) {
+      // Find the earliest vesting completion
+      let earliestRemaining = Infinity;
+      unvestedBonds.forEach(b => {
+        const vestMs = (b.vestDays || 5) * 86400000;
+        const remaining = vestMs - (now - b.purchaseTime);
+        if (remaining < earliestRemaining) earliestRemaining = remaining;
+      });
+      const daysLeft = Math.ceil(earliestRemaining / 86400000);
+      const hoursLeft = Math.ceil((earliestRemaining % 86400000) / 3600000);
+      showToast('No ' + pair + ' bonds have fully vested yet! Earliest: ' + daysLeft + 'd ' + hoursLeft + 'h remaining.', 'error');
+      return;
+    }
+
     let totalGang = 0;
     let totalLP = 0;
-    userBonds.forEach(b => { totalGang += b.gangReceived; totalLP += b.lpValue; });
+    vestedBonds.forEach(b => { totalGang += b.gangReceived; totalLP += b.lpValue; });
+
+    const stillVesting = unvestedBonds.length;
 
     showTxConfirm({
       title: 'WITHDRAW ' + pair + ' BONDS',
-      action: 'Withdraw all ' + pair + ' bonds',
+      action: 'Withdraw ' + vestedBonds.length + ' vested ' + pair + ' bond(s)',
       icon: 'BD',
       amount: totalGang.toFixed(2) + ' GANG',
       fee: 'No fee',
@@ -26572,7 +26609,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       color: '#e74c3c',
       btnColor: 'linear-gradient(135deg,#e74c3c,#c0392b)',
       details: [
-        { label: 'Bonds Found', value: userBonds.length + ' active' },
+        { label: 'Vested Bonds', value: vestedBonds.length + ' ready', cls: 'green' },
+        { label: 'Still Vesting', value: stillVesting > 0 ? stillVesting + ' bonds (locked)' : 'None', cls: stillVesting > 0 ? 'red' : 'green' },
         { label: 'Total GANG', value: totalGang.toFixed(2) + ' GANG', cls: 'gold' },
         { label: 'Total LP Value', value: totalLP.toFixed(4) + ' CRO' },
       ],
@@ -26582,11 +26620,12 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
           if (vaultAddr && typeof window.vaultWithdraw === 'function') {
             await window.vaultWithdraw('bonds_' + pair, totalLP, pair + ' Bond Withdrawal');
           }
-          // Remove all bonds for this pair from state
-          s.bonds = s.bonds.filter(b => !(b.user === addr && b.pair === pair));
+          // Remove ONLY the vested bonds — unvested ones stay
+          const vestedIds = vestedBonds.map(b => b.purchaseTime);
+          s.bonds = s.bonds.filter(b => !(b.user === addr && b.pair === pair && vestedIds.includes(b.purchaseTime)));
           saveState(s);
           renderBonds();
-          showToast('Withdrawn ' + totalGang.toFixed(2) + ' GANG from ' + userBonds.length + ' ' + pair + ' bond(s)!', 'success');
+          showToast('Withdrawn ' + totalGang.toFixed(2) + ' GANG from ' + vestedBonds.length + ' vested ' + pair + ' bond(s)!' + (stillVesting > 0 ? ' ' + stillVesting + ' still vesting.' : ''), 'success');
         } catch(e) { showToast('Withdrawal failed: ' + e.message, 'error'); }
       }
     });
