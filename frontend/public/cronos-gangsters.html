@@ -17807,7 +17807,11 @@ function lendSupply(token) {
       { label: 'Supply APY', value: apy.toFixed(1) + '%', cls: 'green' },
       { label: 'Can be withdrawn', value: 'Anytime' },
     ],
-    onConfirm: function() {
+    onConfirm: async function() {
+      if (typeof window.lendSupply === 'function') {
+        try { await window.lendSupply(token); } catch(e) {}
+        return;
+      }
       let s = initLendState();
       s.pools[token].totalSupplied += amount;
       s.userSupplied[token] = (s.userSupplied[token] || 0) + amount;
@@ -17856,7 +17860,11 @@ function lendWithdraw(token) {
       { label: 'Token', value: token },
       { label: 'Remaining Supply', value: (userSup - amount).toFixed(4) + ' ' + token },
     ],
-    onConfirm: function() {
+    onConfirm: async function() {
+      if (typeof window.lendWithdraw === 'function') {
+        try { await window.lendWithdraw(token); } catch(e) {}
+        return;
+      }
       let s2 = initLendState();
       s2.pools[token].totalSupplied -= amount;
       s2.userSupplied[token] -= amount;
@@ -17915,7 +17923,11 @@ function lendBorrow() {
       { label: 'Origination Fee', value: '0.3%', cls: 'fee' },
       { label: 'Collateral Used', value: '$' + (totalBorrow + newBorrowUSD).toFixed(2) + ' / $' + totalCollateral.toFixed(2) },
     ],
-    onConfirm: function() {
+    onConfirm: async function() {
+      if (typeof window.lendBorrow === 'function') {
+        try { await window.lendBorrow(); } catch(e) {}
+        return;
+      }
       let s2 = initLendState();
       const origFee2 = amount * (LEND_ORIGINATION_FEE / 100);
       s2.ownerFees.origination = (s2.ownerFees.origination || 0) + origFee2 * price;
@@ -17956,7 +17968,11 @@ function lendRepay() {
       { label: 'Repaying', value: repayAmt.toFixed(4) + ' ' + token },
       { label: 'Remaining After', value: (borrowed - repayAmt).toFixed(4) + ' ' + token, cls: 'green' },
     ],
-    onConfirm: function() {
+    onConfirm: async function() {
+      if (typeof window.lendRepay === 'function') {
+        try { await window.lendRepay(); } catch(e) {}
+        return;
+      }
       let s2 = initLendState();
       const interestPaid = repayAmt * 0.01;
       s2.ownerFees.interest = (s2.ownerFees.interest || 0) + interestPaid * getTokenPrice(token) * (LEND_OWNER_FEE_PERCENT / 100);
@@ -18140,7 +18156,13 @@ function placePredBet(marketId, side) {
       { label: 'Current Pool', value: total.toFixed(0) + ' CRO' },
       { label: 'Odds', value: odds + '%' },
     ],
-    onConfirm: function() { _doPlacePredBet(marketId, side, amount); }
+    onConfirm: async function() {
+      if (typeof window.placePredBet === 'function') {
+        try { await window.placePredBet(marketId, side); } catch(e) {}
+        return;
+      }
+      _doPlacePredBet(marketId, side, amount);
+    }
   });
 }
 
@@ -18220,7 +18242,12 @@ function createPredMarket() {
       { label: 'Category', value: category },
       { label: 'End Date', value: endDate },
     ],
-    onConfirm: function() {
+    onConfirm: async function() {
+      try {
+        if (typeof window.createPredMarket === 'function') {
+          await window.createPredMarket();
+        }
+      } catch(e) { return; }
       let s = initPredState();
       const id = 'custom_' + Date.now();
       s.markets.push({ id, question, optA, optB, category, endDate, poolA: 0, poolB: 0, status: 'active', bets: [] });
@@ -18245,7 +18272,11 @@ function predOwnerCollect() {
     receive: s.ownerFees.toFixed(2) + ' CRO to your wallet',
     color: '#a855f7',
     btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
-    onConfirm: function() {
+    onConfirm: async function() {
+      if (typeof window.revCollectPredFees === 'function') {
+        try { await window.revCollectPredFees(); } catch(e) {}
+        return;
+      }
       let s2 = initPredState();
       showToast('Collected ' + s2.ownerFees.toFixed(2) + ' CRO in prediction fees!', 'success');
       s2.ownerFees = 0; savePredState(s2); renderPredMarkets(); updateRevPredFees();
@@ -18365,7 +18396,14 @@ function executeFlashLoan() {
       { label: 'Repay Required', value: (amount + fee).toFixed(4) + ' ' + token },
     ],
     warning: 'Flash loan must be repaid within the same transaction block.',
-    onConfirm: function() { _doFlashLoan(token, amount, fee, strategy, stratNames); }
+    onConfirm: async function() {
+      try {
+        if (typeof window.executeFlashLoan === 'function') {
+          await window.executeFlashLoan();
+        }
+      } catch(e) { return; }
+      _doFlashLoan(token, amount, fee, strategy, stratNames);
+    }
   });
 }
 
@@ -18392,7 +18430,11 @@ function flashOwnerCollect() {
     title: 'COLLECT FLASH LOAN FEES', action: 'Withdraw flash loan fees', fromToken: '⚡', icon: '⚡',
     amount: s.ownerFees.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerFees.toFixed(2) + ' CRO to wallet',
     color: '#ffdd00', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
-    onConfirm: function() {
+    onConfirm: async function() {
+      if (typeof window.revCollectFlashFees === 'function') {
+        try { await window.revCollectFlashFees(); } catch(e) {}
+        return;
+      }
       let s2 = initFlashState(); showToast('Collected ' + s2.ownerFees.toFixed(2) + ' CRO!', 'success');
       s2.ownerFees = 0; saveFlashState(s2); renderFlashLoans(); updateRevFlashFees();
     }
@@ -18539,7 +18581,14 @@ function buyInsurance() {
       { label: 'Monthly Rate', value: rate + '%' },
       { label: 'Discount', value: discount > 0 ? (discount*100) + '% off' : 'None', cls: discount > 0 ? 'green' : '' },
     ],
-    onConfirm: function() { _doBuyInsurance(type, amount, duration, premium, typeName); }
+    onConfirm: async function() {
+      try {
+        if (typeof window.buyInsurance === 'function') {
+          await window.buyInsurance();
+        }
+      } catch(e) { return; }
+      _doBuyInsurance(type, amount, duration, premium, typeName);
+    }
   });
 }
 
@@ -18729,7 +18778,14 @@ function executeAggSwap() {
       { label: 'Routing Fee', value: '0.3%', cls: 'fee' },
       { label: 'Min. Received', value: (toAmount * 0.995).toFixed(4) + ' ' + toToken },
     ],
-    onConfirm: function() { _doAggSwap(fromToken, toToken, amount, fee, bestRate, bestDex, toAmount); }
+    onConfirm: async function() {
+      try {
+        if (typeof window.executeAggSwap === 'function') {
+          await window.executeAggSwap();
+        }
+      } catch(e) { return; }
+      _doAggSwap(fromToken, toToken, amount, fee, bestRate, bestDex, toAmount);
+    }
   });
 }
 
@@ -18960,7 +19016,12 @@ function executeCopyTrade() {
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Your Amount:</span><span>${amount} ${p.currency || 'GANG'}</span></div>
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Copy Fee (0.3%):</span><span style="color:#e91e63;">${fee.toFixed(4)} ${p.currency || 'GANG'}</span></div>
     </div>`,
-    onConfirm: () => {
+    onConfirm: async () => {
+      try {
+        if (typeof window.executeCopyTrade === 'function') {
+          await window.executeCopyTrade();
+        }
+      } catch(e) { return; }
       // Open a real Leverage position as the copy
       const openingFee = amount * 0.003;
       const posAmount = amount - openingFee;
@@ -19204,7 +19265,12 @@ function placeLimitOrder() {
     title: 'Place Limit Order',
     iconHtml: '<div style="font-size:48px;">📋</div>',
     detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Type:</span><span style="color:${type==='buy'?'var(--green)':'#e53935'};font-weight:700;">${type.toUpperCase()}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Token:</span><span>${token}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Price:</span><span>$${price}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Amount:</span><span>${amount}</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Exec Fee (0.3%):</span><span style="color:#42a5f5;">${fee.toFixed(4)} CRO</span></div></div>`,
-    onConfirm: () => {
+    onConfirm: async () => {
+      try {
+        if (typeof window.placeLimitOrder === 'function') {
+          await window.placeLimitOrder();
+        }
+      } catch(e) { return; }
       const s = initLOState();
       s.orders.push({ type, token, price, amount, fee, status: 'open', time: Date.now() });
       s.orderCount = (s.orderCount || 0) + 1;
@@ -19223,7 +19289,12 @@ function fillLimitOrder(idx) {
     title: 'Fill Limit Order',
     iconHtml: '<div style="font-size:48px;">📋</div>',
     detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Filling ${o.type.toUpperCase()} ${o.token} @ $${o.price}</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:var(--green);">${o.amount} ${o.token}</div></div>`,
-    onConfirm: () => {
+    onConfirm: async () => {
+      try {
+        if (typeof window.fillLimitOrder === 'function') {
+          await window.fillLimitOrder(idx);
+        }
+      } catch(e) { return; }
       s.orders[idx].status = 'filled';
       s.ownerFees = (s.ownerFees || 0) + o.fee;
       s.filledCount = (s.filledCount || 0) + 1;
@@ -19324,7 +19395,12 @@ function openPerpPosition() {
     title: 'Open Perp Position',
     iconHtml: '<div style="font-size:48px;">📊</div>',
     detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Pair:</span><span style="font-weight:700;">${pair}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Direction:</span><span style="color:${direction==='long'?'var(--green)':'#e53935'};font-weight:700;">${direction.toUpperCase()}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Leverage:</span><span>${leverage}x</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Collateral:</span><span>${collateral} CRO</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Notional:</span><span>${notional.toLocaleString()} CRO</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Fee (0.3%):</span><span style="color:#f44336;">${fee.toFixed(4)} CRO</span></div></div>`,
-    onConfirm: () => {
+    onConfirm: async () => {
+      try {
+        if (typeof window.openPerpPosition === 'function') {
+          await window.openPerpPosition();
+        }
+      } catch(e) { return; }
       const s = initPPState();
       s.positions.push({ pair, direction, leverage, collateral, entryPrice, fee, status: 'open', time: Date.now() });
       s.ownerFees = (s.ownerFees || 0) + fee;
@@ -19345,7 +19421,12 @@ function closePerpPosition(idx) {
     title: 'Close Perp Position',
     iconHtml: '<div style="font-size:48px;">📊</div>',
     detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Close ${p.direction.toUpperCase()} ${p.pair} ${p.leverage}x</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:var(--text);">${p.collateral} CRO</div><div style="color:#f44336;font-size:12px;margin-top:4px;">Close fee: ${closeFee.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
+    onConfirm: async () => {
+      try {
+        if (typeof window.closePerpPosition === 'function') {
+          await window.closePerpPosition(idx);
+        }
+      } catch(e) { return; }
       s.positions[idx].status = 'closed';
       s.ownerFees = (s.ownerFees || 0) + closeFee;
       savePPState(s); renderPPPositions(); updatePPStats(); updateRevPpFees();
@@ -19428,7 +19509,12 @@ function createOtcDeal() {
     title: 'Create OTC Deal',
     iconHtml: '<div style="font-size:48px;">🤝</div>',
     detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Selling:</span><span style="font-weight:700;">${sellAmount} ${sellToken}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Buying:</span><span style="font-weight:700;">${buyToken}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Price per token:</span><span>${price}</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">OTC Fee (0.3%):</span><span style="color:#8d6e63;">${fee.toFixed(4)} CRO</span></div></div>`,
-    onConfirm: () => {
+    onConfirm: async () => {
+      try {
+        if (typeof window.createOtcDeal === 'function') {
+          await window.createOtcDeal();
+        }
+      } catch(e) { return; }
       const s = initOtcState();
       s.deals.push({ sellToken, buyToken, sellAmount, price, fee, status: 'open', time: Date.now() });
       saveOtcState(s); renderOtcDeals(); updateOtcStats();
@@ -19446,7 +19532,12 @@ function fillOtcDeal(idx) {
     title: 'Fill OTC Deal',
     iconHtml: '<div style="font-size:48px;">🤝</div>',
     detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Buy ${d.sellAmount} ${d.sellToken} @ ${d.price}/ea</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:var(--green);">${d.sellAmount} ${d.sellToken}</div><div style="color:#8d6e63;font-size:12px;margin-top:4px;">Fee: ${d.fee.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
+    onConfirm: async () => {
+      try {
+        if (typeof window.fillOtcDeal === 'function') {
+          await window.fillOtcDeal(idx);
+        }
+      } catch(e) { return; }
       s.deals[idx].status = 'filled';
       s.ownerFees = (s.ownerFees || 0) + d.fee;
       s.totalVolume = (s.totalVolume || 0) + (d.sellAmount * d.price);
@@ -19544,7 +19635,12 @@ function createDaoProposal() {
     title: 'Submit Proposal',
     iconHtml: '<div style="font-size:48px;">🏛</div>',
     detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Title:</span><span style="font-weight:700;">${title}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Category:</span><span>${category}</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Proposal Fee:</span><span style="color:#78909c;font-weight:700;">1 CRO</span></div></div>`,
-    onConfirm: () => {
+    onConfirm: async () => {
+      try {
+        if (typeof window.createDaoProposal === 'function') {
+          await window.createDaoProposal();
+        }
+      } catch(e) { return; }
       const s = initDaoState();
       s.proposals.push({ title, description, category, votesFor: 0, votesAgainst: 0, status: 'active', time: Date.now() });
       s.ownerFees = (s.ownerFees || 0) + 1;
@@ -19564,7 +19660,12 @@ function voteDao(idx, vote) {
     title: 'Cast Vote',
     iconHtml: '<div style="font-size:48px;">🏛</div>',
     detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Vote ${vote.toUpperCase()} on:</div><div style="font-weight:700;margin-bottom:6px;">${s.proposals[idx].title}</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:${vote==='for'?'var(--green)':'#e53935'};">${gangVotes} GANG</div></div>`,
-    onConfirm: () => {
+    onConfirm: async () => {
+      try {
+        if (typeof window.voteDao === 'function') {
+          await window.voteDao(idx, vote);
+        }
+      } catch(e) { return; }
       if (vote === 'for') s.proposals[idx].votesFor = (s.proposals[idx].votesFor || 0) + gangVotes;
       else s.proposals[idx].votesAgainst = (s.proposals[idx].votesAgainst || 0) + gangVotes;
       s.totalVotes = (s.totalVotes || 0) + gangVotes;
@@ -25080,13 +25181,13 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
           if (typeof window.vaultDeposit === 'function') {
             await window.vaultDeposit('squad', 10, 'Squad Join Fee');
           }
-        } catch(e) { /* Continue if vault not deployed */ }
-        s.squads[code].members.push(addr);
-        s.userSquad[addr] = code;
-        saveState(s);
-        if (codeInput) codeInput.value = '';
-        renderSquad();
-        showToast('Joined "' + s.squads[code].name + '"! +' + getBoostPct(s.squads[code].members.length) + '% APY Boost!');
+          s.squads[code].members.push(addr);
+          s.userSquad[addr] = code;
+          saveState(s);
+          if (codeInput) codeInput.value = '';
+          renderSquad();
+          showToast('Joined "' + s.squads[code].name + '"! +' + getBoostPct(s.squads[code].members.length) + '% APY Boost!');
+        } catch(e) { showToast('Join failed: ' + e.message, 'error'); }
       }
     });
   };

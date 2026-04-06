@@ -43,6 +43,8 @@ Each pool has:
 - E2E wallet flow audit: All critical financial features confirmed to have async on-chain `window.*` overrides using `vaultDeposit`/`vaultWithdraw`
 - No remaining fake localStorage-only transactions in user-facing financial flows
 - Fixed leverage trading deposit revert: Replaced hardcoded 300k gas with `eth_estimateGas` + 30% buffer; added contract token verification; switched to max-approval pattern to avoid repeated approve popups; made `onConfirm` callbacks `async` for proper error propagation
+- CRITICAL FIX: Rewired ALL 16+ showTxConfirm onConfirm callbacks across Lending, Predictions, Flash Loans, Insurance, Aggregator, Copy Trading, Limit Orders, Perp DEX, OTC, DAO, Squads, Competitions — every one now calls the `window.*` on-chain override to trigger MetaMask before updating state. Previously these bypassed MetaMask entirely.
+- Fixed vaultDeposit/vaultWithdraw to throw errors instead of returning false, preventing features from proceeding without on-chain confirmation
 
 ## Upcoming Tasks
 - P1: CEX listings
