@@ -25051,8 +25051,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 <script>
 (function() {
   'use strict';
-  const SQ_KEY = 'cg_squad_v1';
-  const SQ_FEE_KEY = 'cg_squad_fees_v1';
+  const SQ_KEY = 'cg_squad_v2'; // v2 reset: old fake entries without MetaMask are cleared
+  const SQ_FEE_KEY = 'cg_squad_fees_v2';
 
   function getState() { try { return JSON.parse(localStorage.getItem(SQ_KEY) || 'null'); } catch { return null; } }
   function saveState(s) { localStorage.setItem(SQ_KEY, JSON.stringify(s)); }
@@ -25374,8 +25374,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 <script>
 (function() {
   'use strict';
-  const CP_KEY = 'cg_compete_v1';
-  const CP_FEE_KEY = 'cg_comp_fees_v1';
+  const CP_KEY = 'cg_compete_v2'; // v2 reset: old fake entries without MetaMask are cleared
+  const CP_FEE_KEY = 'cg_comp_fees_v2';
   const ENTRY_FEE = 100;
   const COMP_DURATION = 7 * 86400000; // 7 days
 
