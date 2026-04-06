@@ -5807,13 +5807,12 @@ function toggleNavMenu() {
     <!-- Swap Protocol Fee (0.3%) -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.5);margin-bottom:16px;">
       <div class="ref-link-label" style="color:var(--green);">SWAP FEES (0.3%) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">LIVE ON-CHAIN</span></div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% platform fee is deducted from EVERY swap and sent directly to your treasury wallet via MetaMask. This is REAL — check your wallet balance.</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% platform fee on every GANG swap goes into the Protocol Vault. Click collect to withdraw to your wallet.</div>
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:13px;color:var(--muted);">Treasury Balance</span>
-        <span id="revSwapFeeBal" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;" data-testid="rev-swap-fee-bal">Loading...</span>
+        <span style="font-size:13px;color:var(--muted);">Swap Fees Collected</span>
+        <span id="revSwapFeeBal" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;" data-testid="rev-swap-fee-bal">0.00 GANG</span>
       </div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-align:center;">Treasury: <span style="font-family:monospace;color:var(--gold);font-size:10px;">0xaA3C...52eA</span></div>
-      <div style="font-size:11px;color:var(--green);text-align:center;">Every swap sends 0.3% to this wallet automatically. The fees are already in your wallet!</div>
+      <button onclick="revCollectSwapFees()" data-testid="rev-swap-collect-btn" class="ref-copy-btn" style="width:100%;background:linear-gradient(135deg,#27ae60,#1a8a4a);">COLLECT SWAP FEES</button>
     </div>
 
     <!-- LEVERAGE TRADING Fees (0.3% open + 0.3% close) -->
@@ -8947,22 +8946,36 @@ async function doSwap() {
     const feeAmount = fullAmtIn * BigInt(PLATFORM_FEE_BPS) / BigInt(10000);
     const amtIn     = fullAmtIn - feeAmount;
 
-    // Send platform fee to treasury
-    showToast("Sending platform fee to treasury...", "");
-    if (fromSym === "CRO") {
-      // Native CRO fee — send as ETH transfer
-      const feeTx = await state.signer.sendTransaction({
-        to: TREASURY.address,
-        value: feeAmount
-      });
-      await feeTx.wait();
-    } else {
-      // ERC20 fee — transfer fee directly to treasury (no approval needed for transfer from own wallet)
-      const tokenContract = new ethers.Contract(fromToken.address, [
-        "function transfer(address to, uint256 amount) returns (bool)"
+    // Send platform fee to Protocol Vault (collectible from Revenue page)
+    const vaultAddr = typeof getVaultAddr === 'function' ? getVaultAddr() : '';
+    if (vaultAddr && fromSym === 'GANG') {
+      // GANG fee → deposit into Protocol Vault swap pool
+      showToast("Depositing 0.3% swap fee into Protocol Vault...", "");
+      const poolHash = ethers.id('swapfees');
+      const gangContract = new ethers.Contract(fromToken.address, [
+        "function approve(address spender, uint256 amount) returns (bool)"
       ], state.signer);
-      const feeTx = await tokenContract.transfer(TREASURY.address, feeAmount);
-      await feeTx.wait();
+      const approveTx = await gangContract.approve(vaultAddr, feeAmount);
+      await approveTx.wait();
+      const vaultContract = new ethers.Contract(vaultAddr, typeof PROTOCOL_VAULT_ABI !== 'undefined' ? PROTOCOL_VAULT_ABI : [], state.signer);
+      const depTx = await vaultContract.deposit(poolHash, feeAmount);
+      await depTx.wait();
+    } else {
+      // Non-GANG / no vault → send fee to owner wallet directly
+      showToast("Sending 0.3% platform fee...", "");
+      if (fromSym === "CRO") {
+        const feeTx = await state.signer.sendTransaction({
+          to: TREASURY.address,
+          value: feeAmount
+        });
+        await feeTx.wait();
+      } else {
+        const tokenContract = new ethers.Contract(fromToken.address, [
+          "function transfer(address to, uint256 amount) returns (bool)"
+        ], state.signer);
+        const feeTx = await tokenContract.transfer(TREASURY.address, feeAmount);
+        await feeTx.wait();
+      }
     }
 
     const minOut = ethers.parseUnits(
@@ -23486,6 +23499,14 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       showToast('Collecting trading pool fees...', 'info');
       await _sendContractTx(poolAddr, TRADING_POOL_ABI, 'collectFees', []);
       showToast('Trading fees collected to your wallet!', 'success');
+      refreshRevenueData();
+    } catch(e) { showToast('Fee collection failed: ' + e.message, 'error'); }
+  };
+
+  window.revCollectSwapFees = async function() {
+    try {
+      await vaultCollectFees('Swap');
+      refreshRevenueData();
     } catch(e) { showToast('Fee collection failed: ' + e.message, 'error'); }
   };
 
@@ -23809,9 +23830,16 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       const treasuryCRO = await provider.getBalance(TREASURY_ADDR);
       const croAmt = parseFloat(ethers.formatEther(treasuryCRO));
 
-      // Update SWAP FEE banner
+      // Update SWAP FEE banner from Protocol Vault
       const swapEl = document.getElementById('revSwapFeeBal');
-      if (swapEl) swapEl.textContent = gangAmt.toFixed(2) + ' GANG + ' + croAmt.toFixed(4) + ' CRO';
+      if (vaultAddr && swapEl) {
+        try {
+          const swapPoolHash = ethers.id('swapfees');
+          const swapPoolBal = await _readContract(vaultAddr, PROTOCOL_VAULT_ABI, 'getPoolBalance', [swapPoolHash]);
+          const swapAmt = parseFloat(ethers.formatEther(swapPoolBal));
+          swapEl.textContent = swapAmt.toFixed(2) + ' GANG';
+        } catch(se) { swapEl.textContent = '0.00 GANG'; }
+      }
 
       // --- PROTOCOL VAULT BALANCE (all feature fees) ---
       const vaultAddr = getVaultAddr();
@@ -23823,8 +23851,9 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
           const vaultTotal = parseFloat(ethers.formatEther(vaultBal));
 
           // Update individual pool banners by reading pool balances
-          const pools = ['predictions','flashloans','insurance','aggregator','copytrading','revstaking','limitorders','perpdex','otctrading','dao','squad','competition','bonds_CRO-GANG'];
+          const pools = ['swapfees','predictions','flashloans','insurance','aggregator','copytrading','revstaking','limitorders','perpdex','otctrading','dao','squad','competition','bonds_CRO-GANG'];
           const poolElMap = {
+            'swapfees': 'revSwapFeeBal',
             'predictions': 'revPredFees',
             'flashloans': 'revFlashFees',
             'insurance': 'revInsurancePremiums',

@@ -568,6 +568,11 @@ var gameActive = false, gameCanvas, gameCtx, gameAnimFrame, gameTouchHandler;
 function launchGame(type) {
   if (!wallet) { showToast('Connect wallet first!'); return; }
   if (betAmount < 1) { showToast('Set bet amount!'); return; }
+  var userBal = userData ? (userData.balance || 0) : 0;
+  if (userBal < betAmount) {
+    showToast('Insufficient balance! You have ' + userBal.toFixed(2) + ' $GANG but bet is ' + betAmount + '. Fund your mining wallet first.');
+    return;
+  }
   var overlay = document.getElementById('gameOverlay');
   overlay.classList.add('active');
   gameCanvas = document.getElementById('gameCanvas');
