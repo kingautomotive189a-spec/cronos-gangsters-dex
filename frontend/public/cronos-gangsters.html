@@ -2815,7 +2815,7 @@ function toggleNavMenu() {
           <input class="input-field" id="lockTokenAddr" data-testid="lock-token-addr" type="text" placeholder="0x... (paste LP or token address)" style="width:100%;box-sizing:border-box;font-family:monospace;">
         </div>
         <div>
-          <div style="font-size:10px;color:var(--muted);margin-bottom:4px;">AMOUNT TO LOCK</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:10px;color:var(--muted);">AMOUNT TO LOCK</span><span style="font-size:11px;color:var(--muted);">GANG Wallet: <span id="lockerGangBal" data-testid="locker-gang-bal" style="color:var(--gold);font-weight:700;">--</span></span></div>
           <div style="display:flex;gap:8px;align-items:center;">
             <input class="input-field" id="lockAmount" data-testid="lock-amount" type="number" step="any" placeholder="Amount" style="flex:1;">
             <button class="pct-btn" onclick="lockPctBtn(25)" style="padding:6px 10px;">25%</button>
@@ -4191,7 +4191,8 @@ function toggleNavMenu() {
     <!-- Create Market (Owner) -->
     <div class="card" style="margin-top:20px;border-color:rgba(168,85,247,0.3);" data-testid="pred-create-card">
       <div class="card-title" style="color:#a855f7;">CREATE A MARKET</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Anyone can create a prediction market. The creator sets the question, options, and resolution date.</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Anyone can create a prediction market. The creator sets the question, options, and resolution date.</div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:6px;"><span style="font-size:11px;color:var(--muted);">Wallet: <span id="predGangBal" data-testid="pred-gang-bal" style="color:var(--gold);font-weight:700;">--</span></span></div>
       <div style="display:grid;gap:8px;margin-bottom:12px;">
         <input type="text" id="predQuestion" data-testid="pred-question" placeholder="Question (e.g. Will BTC hit $100K by June?)" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
@@ -5022,6 +5023,7 @@ function toggleNavMenu() {
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:11px;color:var(--muted);">Pool Available: <span id="flashPoolBal" data-testid="flash-pool-bal" style="color:var(--gold);font-weight:700;">—</span></span>
+          <span style="font-size:11px;color:var(--muted);margin-left:12px;">Wallet: <span id="flashGangBal" data-testid="flash-gang-bal" style="color:var(--gold);font-weight:700;">--</span></span>
         </div>
         <div style="position:relative;">
           <input type="number" id="flashAmount" data-testid="flash-amount" placeholder="Amount to borrow" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
@@ -5734,7 +5736,8 @@ function toggleNavMenu() {
     </div>
     <div class="card" style="border-color:rgba(120,144,156,0.3);margin-bottom:16px;" data-testid="dao-propose-form">
       <div class="card-title" style="color:#78909c;">CREATE PROPOSAL</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Submit a governance proposal. Costs 1 CRO. Community votes with $GANG tokens. Quorum: 10,000 GANG.</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Submit a governance proposal. Costs 1 CRO. Community votes with $GANG tokens. Quorum: 10,000 GANG.</div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:6px;"><span style="font-size:11px;color:var(--muted);">Wallet: <span id="daoGangBal" data-testid="dao-gang-bal" style="color:var(--gold);font-weight:700;">--</span></span></div>
       <div style="display:grid;gap:10px;margin-bottom:14px;">
         <input type="text" id="daoTitle" data-testid="dao-title" placeholder="Proposal title" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
         <textarea id="daoDescription" data-testid="dao-description" placeholder="Describe your proposal..." rows="3" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;resize:vertical;font-family:inherit;"></textarea>
@@ -6291,6 +6294,7 @@ function toggleNavMenu() {
       <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Seed GANG tokens into your DeFi protocol pools. These funds power lending, trading, bonds, and more.</div>
       <div style="display:flex;gap:8px;margin-bottom:12px;">
         <input class="input-field" id="revSeedAmt" data-testid="rev-seed-amt" type="number" step="any" placeholder="GANG amount to add" style="flex:1;">
+        <span style="font-size:11px;color:var(--muted);white-space:nowrap;align-self:center;">Wallet: <span id="revSeedGangBal" data-testid="rev-seed-gang-bal" style="color:var(--gold);font-weight:700;">--</span></span>
       </div>
       <div style="display:grid;gap:8px;">
         <button class="ref-copy-btn" data-testid="rev-seed-vault-btn" onclick="revSeedPool('vault')" style="width:100%;background:linear-gradient(135deg,#27ae60,#1a8a4a);">ADD FUNDS — PROTOCOL VAULT (Predictions, Flash, Insurance, Aggregator, Copy Trade, Rev Staking, Limit Orders, Perp, OTC, DAO, Squad, Competitions)</button>
@@ -7036,7 +7040,8 @@ function toggleNavMenu() {
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
       <div class="card" style="border-color:rgba(212,160,23,0.35);">
         <div class="card-title">CREATE A SQUAD</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Name your crew and invite friends. 0.3% fee on squad rewards.</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Name your crew and invite friends. 0.3% fee on squad rewards.</div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:6px;"><span style="font-size:11px;color:var(--muted);">Wallet: <span id="squadGangBal" data-testid="squad-gang-bal" style="color:var(--gold);font-weight:700;">--</span></span></div>
         <input type="text" id="squadNameInput" data-testid="squad-name-input" placeholder="Squad Name (e.g. CRO Kings)" maxlength="24" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;margin-bottom:10px;box-sizing:border-box;">
         <button onclick="createSquad()" data-testid="squad-create-btn" style="width:100%;padding:14px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;">CREATE SQUAD</button>
       </div>
@@ -7063,6 +7068,7 @@ function toggleNavMenu() {
     <div class="ref-hero" style="margin-bottom:20px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:var(--gold);line-height:1;">POL BONDS <span style="font-size:14px;background:#27ae60;color:#fff;padding:3px 8px;border-radius:5px;vertical-align:middle;letter-spacing:0.5px;">ON-CHAIN</span></div>
       <div style="font-size:13px;color:var(--green);margin-top:6px;">Protocol-Owned Liquidity — Real LP token deposits via MetaMask. 5-day vesting. Deploy from Revenue page.</div>
+      <div style="display:flex;justify-content:flex-end;margin-top:6px;"><span style="font-size:11px;color:var(--muted);">Wallet: <span id="bondGangBal" data-testid="bond-gang-bal" style="color:var(--gold);font-weight:700;">--</span></span></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;">
@@ -7179,7 +7185,8 @@ function toggleNavMenu() {
         <div><div style="font-size:10px;color:var(--muted);">PARTICIPANTS</div><div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--text);" id="compParticipants">47</div></div>
         <div><div style="font-size:10px;color:var(--muted);">ENDS IN</div><div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ff9800;" id="compTimeLeft">3d 14h</div></div>
       </div>
-      <button onclick="enterCompetition()" data-testid="comp-enter-btn" style="margin-top:16px;padding:14px 48px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;">ENTER COMPETITION — 100 GANG</button>
+      <div style="margin-top:10px;"><span style="font-size:11px;color:var(--muted);">Wallet: <span id="compGangBal" data-testid="comp-gang-bal" style="color:var(--gold);font-weight:700;">--</span></span></div>
+      <button onclick="enterCompetition()" data-testid="comp-enter-btn" style="margin-top:10px;padding:14px 48px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;">ENTER COMPETITION — 100 GANG</button>
     </div>
     <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:20px;margin-bottom:20px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">LEADERBOARD — TOP TRADERS</div>

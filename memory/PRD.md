@@ -37,8 +37,13 @@ Each pool has:
 - Bonds, Daily Check-in, Squads, Trading Competitions
 - All Fee Collections, Revenue Seed Fund
 
+## Completed (2026-04-06)
+- Wallet balance labels injected into ALL 8 missing UI locations: Predictions, DAO, Squads, Competitions, Bonds, Revenue Seed Fund, Locker, Flash Loans
+- All 16 balance display IDs verified present in HTML and wired to `updateAllWalletBalanceDisplays()`
+- E2E wallet flow audit: All critical financial features confirmed to have async on-chain `window.*` overrides using `vaultDeposit`/`vaultWithdraw`
+- No remaining fake localStorage-only transactions in user-facing financial flows
+
 ## Upcoming Tasks
-- P1: Wallet balance labels (Predictions, DAO, Bonds, Flash Loans)
 - P1: CEX listings
 - P1: Multi-chain expansion
 - P2: Mobile App
