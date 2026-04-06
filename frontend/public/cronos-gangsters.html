@@ -11640,78 +11640,15 @@ let _toastTimer;
 let _txPendingCallback = null;
 
 function showTxConfirm(opts) {
-  const modal = document.getElementById('txConfirmModal');
-  const stageDetails = document.getElementById('txStageDetails');
-  const stageCustom = document.getElementById('txStageCustom');
-  const stageProcessing = document.getElementById('txStageProcessing');
-  const stageConfirmed = document.getElementById('txStageConfirmed');
-
-  // Reset all stages
-  stageDetails.style.display = 'none';
-  stageCustom.style.display = 'none';
-  stageProcessing.classList.remove('active');
-  stageConfirmed.classList.remove('active');
-  document.getElementById('txCronosBadge').style.display = 'flex';
-
-  document.getElementById('txConfirmTitle').textContent = opts.title || 'CONFIRM TRANSACTION';
-
-  // Check if using new pattern (iconHtml/detailsHtml)
-  if (opts.iconHtml || opts.detailsHtml) {
-    stageCustom.style.display = 'block';
-    stageDetails.style.display = 'none';
-    document.getElementById('txCustomIcon').innerHTML = opts.iconHtml || '';
-    document.getElementById('txCustomDetails').innerHTML = opts.detailsHtml || '';
-    const customBtn = document.getElementById('txCustomConfirmBtn');
-    customBtn.style.background = opts.btnColor || 'linear-gradient(135deg,#27ae60,#2ecc71)';
-  } else {
-    stageDetails.style.display = 'block';
-    stageCustom.style.display = 'none';
-    document.getElementById('txAmountDisplay').textContent = opts.amount || '0';
-    document.getElementById('txUsdDisplay').textContent = opts.usdValue || '';
-    document.getElementById('txDetailAction').textContent = opts.action || '—';
-    document.getElementById('txDetailFee').textContent = opts.fee || '0.3%';
-    document.getElementById('txDetailReceive').textContent = opts.receive || '—';
-
-    // Icons
-    const fromIcon = document.getElementById('txFromIcon');
-    const toIcon = document.getElementById('txToIcon');
-    fromIcon.textContent = opts.fromToken || '?';
-    fromIcon.style.background = 'rgba(212,160,23,0.15)';
-    fromIcon.style.color = opts.color || 'var(--gold)';
-    if (opts.icon) {
-      fromIcon.textContent = opts.icon;
-      toIcon.style.display = 'none';
-      document.querySelector('#txActionRow .tx-arrow').style.display = 'none';
-    } else {
-      toIcon.textContent = opts.toToken || '✓';
-      toIcon.style.display = 'flex';
-      document.querySelector('#txActionRow .tx-arrow').style.display = 'block';
-    }
-
-    // Confirm button color
-    const btn = document.getElementById('txConfirmBtn');
-    btn.style.background = opts.btnColor || 'linear-gradient(135deg,#27ae60,#2ecc71)';
-
-    // Warning
-    const warnEl = document.getElementById('txWarning');
-    const warnText = document.getElementById('txWarningText');
-    if (opts.warning) { warnEl.style.display = 'flex'; warnText.textContent = opts.warning; }
-    else { warnEl.style.display = 'none'; }
-
-    // Extra details
-    const extraEl = document.getElementById('txExtraDetails');
-    let extraHtml = '';
-    if (opts.details && opts.details.length > 0) {
-      opts.details.forEach(d => {
-        extraHtml += '<div class="tx-detail-row"><span class="tx-detail-label">' + d.label + '</span><span class="tx-detail-value' + (d.cls ? ' ' + d.cls : '') + '">' + d.value + '</span></div>';
+  // SKIP fake popup — go straight to MetaMask (real on-chain confirmation)
+  if (opts.onConfirm) {
+    const result = opts.onConfirm();
+    if (result && typeof result.then === 'function') {
+      result.catch(function(e) {
+        console.error('Transaction error:', e);
       });
     }
-    extraEl.innerHTML = extraHtml;
   }
-
-  _txPendingCallback = opts.onConfirm || null;
-  _txTitle = opts.title || 'Transaction';
-  modal.classList.add('open');
 }
 
 function closeTxConfirm() {
