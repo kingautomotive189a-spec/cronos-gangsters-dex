@@ -24103,6 +24103,15 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   window.vaultDeposit = vaultDeposit;
   window.vaultWithdraw = vaultWithdraw;
   window.vaultCollectFees = vaultCollectFees;
+  window._readContract = _readContract;
+  window._sendContractTx = _sendContractTx;
+  window._approveGANG = _approveGANG;
+  window.getVaultAddr = getVaultAddr;
+  window.getTradingPoolAddr = getTradingPoolAddr;
+  window.PROTOCOL_VAULT_ABI = PROTOCOL_VAULT_ABI;
+  window.TRADING_POOL_ABI = TRADING_POOL_ABI;
+  window.GANG_TOKEN = GANG_TOKEN;
+  window.TREASURY_ADDR = TREASURY_ADDR;
 
   // ═══════════════════════════════════════════════════
   //  OVERRIDE ALL MOCKED FEATURES — Real on-chain
@@ -24559,7 +24568,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       masterBtn.textContent = 'COLLECT ALL PROTOCOL VAULT FEES';
       masterBtn.onclick = async function() {
         try {
-          await vaultCollectFees('All Protocol');
+          await window.vaultCollectFees('All Protocol');
           await refreshRevenueData();
         } catch(e) { showToast('Fee collection failed: ' + e.message, 'error'); }
       };
@@ -24883,8 +24892,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       onConfirm: async function() {
         // Real on-chain confirmation via MetaMask
         try {
-          if (typeof vaultDeposit === 'function') {
-            await vaultDeposit('squad', 10, 'Squad Creation Fee');
+          if (typeof window.vaultDeposit === 'function') {
+            await window.vaultDeposit('squad', 10, 'Squad Creation Fee');
           } else {
             // Fallback: send self-tx to confirm via MetaMask
             const rawP = state._rawProvider || window.ethereum;
@@ -24929,8 +24938,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       onConfirm: async function() {
         // Real on-chain deposit via Protocol Vault
         try {
-          if (typeof vaultDeposit === 'function') {
-            await vaultDeposit('squad', 10, 'Squad Join Fee');
+          if (typeof window.vaultDeposit === 'function') {
+            await window.vaultDeposit('squad', 10, 'Squad Join Fee');
           }
         } catch(e) { /* Continue if vault not deployed */ }
         s.squads[code].members.push(addr);
@@ -24947,8 +24956,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   function getSquadFees() { try { return JSON.parse(localStorage.getItem(SQ_FEE_KEY) || '{"total":0}'); } catch { return {total:0}; } }
   window.revCollectSquadFees = async function() {
     try {
-      if (typeof vaultCollectFees === 'function') {
-        await vaultCollectFees('Squad');
+      if (typeof window.vaultCollectFees === 'function') {
+        await window.vaultCollectFees('Squad');
       }
       const d = getSquadFees();
       showToast('Collected ' + d.total.toFixed(4) + ' GANG from squad fees!');
@@ -25049,24 +25058,14 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
     // Use Protocol Vault for real on-chain bond deposit
     try {
-      const vaultAddr = typeof getVaultAddr === 'function' ? getVaultAddr() : '';
-      if (vaultAddr) {
-        // CHECK REAL GANG BALANCE FIRST
-        const userAddr = await state.signer.getAddress();
-        const balRaw = await _readContract(GANG_TOKEN, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
-        const userBal = parseFloat(ethers.formatEther(balRaw));
-        if (userBal < lpValue) {
-          showToast('Insufficient GANG! You have ' + userBal.toFixed(2) + ' but need ' + lpValue + ' GANG for this bond', 'error');
-          return;
-        }
-        const weiAmt = ethers.parseEther(lpValue.toString());
-        const poolHash = ethers.id('bonds_' + pair);
-        await _approveGANG(vaultAddr, weiAmt);
+      const vaultAddr = (typeof getVaultAddr === 'function' ? getVaultAddr() : '') || (typeof CONTRACTS !== 'undefined' && CONTRACTS.PROTOCOL_VAULT ? CONTRACTS.PROTOCOL_VAULT : '') || localStorage.getItem('GANG_PROTOCOL_VAULT_ADDR') || '';
+      if (vaultAddr && typeof window.vaultDeposit === 'function') {
         showToast('Bonding ' + pair + ' LP on-chain... MetaMask will confirm.', 'info');
-        await _sendContractTx(vaultAddr, typeof PROTOCOL_VAULT_ABI !== 'undefined' ? PROTOCOL_VAULT_ABI : [], 'deposit', [poolHash, weiAmt]);
+        await window.vaultDeposit('bonds_' + pair, lpValue, pair + ' Bond Purchase');
         showToast('Bond deposited on-chain! ' + gangWithDiscount.toFixed(0) + ' GANG vesting over ' + config.vestDays + ' days.', 'success');
       } else {
-        showToast('Deploy Protocol Vault from Revenue page for real on-chain bonds.', 'info');
+        showToast('Connect wallet first for on-chain bonds.', 'error');
+        return;
       }
       // Track locally for UI
       const s = getState();
@@ -25086,12 +25085,10 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     if (!bond) return;
 
     try {
-      const vaultAddr = typeof getVaultAddr === 'function' ? getVaultAddr() : '';
-      if (vaultAddr && bond.onChain) {
-        const weiAmt = ethers.parseEther(bond.lpValue.toString());
-        const poolHash = ethers.id('bonds_' + bond.pair);
+      const vaultAddr = (typeof getVaultAddr === 'function' ? getVaultAddr() : '') || (typeof CONTRACTS !== 'undefined' && CONTRACTS.PROTOCOL_VAULT ? CONTRACTS.PROTOCOL_VAULT : '') || localStorage.getItem('GANG_PROTOCOL_VAULT_ADDR') || '';
+      if (vaultAddr && bond.onChain && typeof window.vaultWithdraw === 'function') {
         showToast('Claiming vested GANG from on-chain bond...', 'info');
-        await _sendContractTx(vaultAddr, typeof PROTOCOL_VAULT_ABI !== 'undefined' ? PROTOCOL_VAULT_ABI : [], 'withdraw', [poolHash, weiAmt]);
+        await window.vaultWithdraw('bonds_' + bond.pair, bond.lpValue, bond.pair + ' Bond Claim');
         showToast('Claimed ' + bond.gangReceived.toFixed(2) + ' GANG from on-chain bond!', 'success');
       } else {
         showToast('Claimed ' + bond.gangReceived.toFixed(2) + ' GANG!', 'success');
@@ -25108,8 +25105,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   }
   window.revCollectBondFees = async function() {
     try {
-      if (typeof vaultCollectFees === 'function') {
-        await vaultCollectFees('Bonds');
+      if (typeof window.vaultCollectFees === 'function') {
+        await window.vaultCollectFees('Bonds');
       }
       const d = getBondFees();
       showToast('Collected ' + d.total.toFixed(4) + ' CRO from bond fees!');
@@ -25199,8 +25196,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     if (s.entered) { showToast('Already entered this competition!', 'error'); return; }
 
     try {
-      if (typeof vaultDeposit === 'function') {
-        await vaultDeposit('competition', ENTRY_FEE, 'Competition Entry');
+      if (typeof window.vaultDeposit === 'function') {
+        await window.vaultDeposit('competition', ENTRY_FEE, 'Competition Entry');
       }
       s.entered = true; s.entryTime = Date.now(); s.participants++;
       saveState(s);
@@ -25216,8 +25213,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   }
   window.revCollectCompFees = async function() {
     try {
-      if (typeof vaultCollectFees === 'function') {
-        await vaultCollectFees('Competition');
+      if (typeof window.vaultCollectFees === 'function') {
+        await window.vaultCollectFees('Competition');
       }
       const d = getCompFees();
       showToast('Collected ' + d.total.toLocaleString() + ' GANG from competition fees!');
