@@ -4120,29 +4120,29 @@ function toggleNavMenu() {
         </div>
         <button class="btn-primary" data-testid="lend-owner-collect-btn" onclick="lendOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT LENDING FEES</button>
       </div>
+    </div>
 
-      <!-- Add Liquidity Section -->
-      <div class="card" style="border-color:rgba(0,229,255,0.3);background:linear-gradient(145deg,rgba(0,229,255,0.03),transparent);margin-top:12px;">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          <div class="card-title" style="color:#00e5ff;margin-bottom:0;">ADD POOL LIQUIDITY</div>
-        </div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Seed the lending pool with tokens so users can borrow. Only the pool owner can add liquidity. The more you add, the more users can borrow.</div>
-        <div style="display:flex;gap:8px;margin-bottom:10px;">
-          <select id="lendLiqToken" data-testid="lend-liq-token" style="flex:0.6;padding:10px;border-radius:8px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:var(--text);font-size:13px;cursor:pointer;">
-            <option value="GANG">GANG</option>
-            <option value="CRO">WCRO</option>
-            <option value="USDC">USDC</option>
-            <option value="USDT">USDT</option>
-            <option value="WETH">WETH</option>
-            <option value="WBTC">WBTC</option>
-            <option value="DAI">DAI</option>
-          </select>
-          <input class="input-field" id="lendLiqAmount" data-testid="lend-liq-amount" type="number" step="any" placeholder="Amount" style="flex:1;">
-        </div>
-        <button class="btn-primary" data-testid="lend-add-liq-btn" onclick="doAddLendingLiquidity()" style="width:100%;background:linear-gradient(135deg,#00e5ff,#0090a0);">ADD LIQUIDITY</button>
-        <div id="lendLiqStatus" data-testid="lend-liq-status" style="font-size:11px;color:var(--muted);margin-top:8px;text-align:center;"></div>
+    <!-- Add Liquidity Section (always visible for pool owner) -->
+    <div class="card" style="border-color:rgba(0,229,255,0.3);background:linear-gradient(145deg,rgba(0,229,255,0.03),transparent);margin-top:12px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <div class="card-title" style="color:#00e5ff;margin-bottom:0;">ADD POOL LIQUIDITY</div>
       </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Seed the lending pool with tokens so users can borrow. The more you add, the more users can borrow.</div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <select id="lendLiqToken" data-testid="lend-liq-token" style="flex:0.6;padding:10px;border-radius:8px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:var(--text);font-size:13px;cursor:pointer;">
+          <option value="GANG">GANG</option>
+          <option value="CRO">WCRO</option>
+          <option value="USDC">USDC</option>
+          <option value="USDT">USDT</option>
+          <option value="WETH">WETH</option>
+          <option value="WBTC">WBTC</option>
+          <option value="DAI">DAI</option>
+        </select>
+        <input class="input-field" id="lendLiqAmount" data-testid="lend-liq-amount" type="number" step="any" placeholder="Amount" style="flex:1;">
+      </div>
+      <button class="btn-primary" data-testid="lend-add-liq-btn" onclick="doAddLendingLiquidity()" style="width:100%;background:linear-gradient(135deg,#00e5ff,#0090a0);">ADD LIQUIDITY</button>
+      <div id="lendLiqStatus" data-testid="lend-liq-status" style="font-size:11px;color:var(--muted);margin-top:8px;text-align:center;"></div>
     </div>
 
     <!-- How It Works -->
