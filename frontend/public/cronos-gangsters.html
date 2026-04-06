@@ -6139,6 +6139,22 @@ function toggleNavMenu() {
       <div id="revFundStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-fund-status"></div>
     </div>
 
+    <!-- ADD FUNDS TO DEFI POOLS -->
+    <div class="ref-link-box" style="max-width:520px;border-color:rgba(0,229,255,0.5);margin-bottom:16px;">
+      <div class="ref-link-label" style="color:#00e5ff;">ADD FUNDS TO DEFI POOLS <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Seed GANG tokens into your DeFi protocol pools. These funds power lending, trading, bonds, and more.</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <input class="input-field" id="revSeedAmt" data-testid="rev-seed-amt" type="number" step="any" placeholder="GANG amount to add" style="flex:1;">
+      </div>
+      <div style="display:grid;gap:8px;">
+        <button class="ref-copy-btn" data-testid="rev-seed-vault-btn" onclick="revSeedPool('vault')" style="width:100%;background:linear-gradient(135deg,#27ae60,#1a8a4a);">ADD FUNDS — PROTOCOL VAULT (Predictions, Flash, Insurance, Aggregator, Copy Trade, Rev Staking, Limit Orders, Perp, OTC, DAO, Squad, Competitions)</button>
+        <button class="ref-copy-btn" data-testid="rev-seed-trading-btn" onclick="revSeedPool('trading')" style="width:100%;background:linear-gradient(135deg,#ff8c00,#cc7000);">ADD FUNDS — LEVERAGE TRADING POOL</button>
+        <button class="ref-copy-btn" data-testid="rev-seed-lending-btn" onclick="revSeedPool('lending')" style="width:100%;background:linear-gradient(135deg,#00e5ff,#0090a0);">ADD FUNDS — LENDING POOL</button>
+        <button class="ref-copy-btn" data-testid="rev-seed-bonds-btn" onclick="revSeedPool('bonds')" style="width:100%;background:linear-gradient(135deg,#4fc3f7,#0288d1);">ADD FUNDS — BOND DEPOSITORY (For Bond Payouts)</button>
+      </div>
+      <div id="revSeedStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-seed-status"></div>
+    </div>
+
     <!-- NFT Staking Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(232,184,48,0.4);margin-bottom:16px;">
       <div class="ref-link-label" style="color:var(--gold);">NFT STAKING FEES (0.3% ON CLAIM) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
@@ -23844,6 +23860,61 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   };
 
   window.copyDeployedAddresses = function() {
+
+  window.revSeedPool = async function(pool) {
+    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+    const amtEl = document.getElementById('revSeedAmt');
+    const amount = parseFloat(amtEl?.value);
+    if (!amount || amount <= 0) { showToast('Enter GANG amount to add', 'error'); return; }
+
+    // Check GANG balance
+    const userAddr = await state.signer.getAddress();
+    const balRaw = await _readContract(GANG_ADDR, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+    const userBal = parseFloat(ethers.formatEther(balRaw));
+    if (userBal < amount) {
+      showToast('Insufficient GANG! You have ' + userBal.toFixed(2) + ' but need ' + amount, 'error');
+      return;
+    }
+
+    const weiAmt = ethers.parseEther(amount.toString());
+    const statusEl = document.getElementById('revSeedStatus');
+
+    try {
+      if (pool === 'vault') {
+        const vaultAddr = getVaultAddr();
+        if (!vaultAddr) { showToast('Protocol Vault not deployed', 'error'); return; }
+        await _approveGANG(vaultAddr, weiAmt);
+        showToast('Adding ' + amount + ' GANG to Protocol Vault...', 'info');
+        await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'seedPool', [weiAmt]);
+      } else if (pool === 'trading') {
+        const poolAddr = getTradingPoolAddr();
+        if (!poolAddr) { showToast('Trading Pool not deployed', 'error'); return; }
+        await _approveGANG(poolAddr, weiAmt);
+        showToast('Adding ' + amount + ' GANG to Trading Pool...', 'info');
+        await _sendContractTx(poolAddr, TRADING_POOL_ABI, 'seedLiquidity', [weiAmt]);
+      } else if (pool === 'lending') {
+        const lendAddr = getLendingAddr();
+        if (!lendAddr) { showToast('Lending Pool not deployed', 'error'); return; }
+        const poolHash = ethers.id('lending_GANG');
+        const vaultAddr = getVaultAddr();
+        await _approveGANG(vaultAddr, weiAmt);
+        showToast('Adding ' + amount + ' GANG to Lending Pool...', 'info');
+        await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'deposit', [poolHash, weiAmt]);
+      } else if (pool === 'bonds') {
+        const bondAddr = getBondDepAddr();
+        if (!bondAddr) { showToast('Bond Depository not deployed', 'error'); return; }
+        await _approveGANG(bondAddr, weiAmt);
+        showToast('Adding ' + amount + ' GANG to Bond Depository...', 'info');
+        await _sendContractTx(bondAddr, BOND_DEP_ABI, 'seedGANG', [weiAmt]);
+      }
+      showToast(amount + ' GANG added to ' + pool + ' pool!', 'success');
+      if (amtEl) amtEl.value = '';
+      if (statusEl) { statusEl.style.display = 'block'; statusEl.innerHTML = '<span style="color:var(--green);">' + amount + ' GANG successfully added!</span>'; }
+    } catch(e) {
+      showToast('Failed to add funds: ' + e.message, 'error');
+      if (statusEl) { statusEl.style.display = 'block'; statusEl.innerHTML = '<span style="color:var(--red);">Error: ' + e.message + '</span>'; }
+    }
+  };
     const keys = ['GANG_TRADING_POOL_ADDR','GANG_PROTOCOL_VAULT_ADDR','GANG_BOND_DEPOSITORY_ADDR','GANG_NFT_STAKING_ADDR','GANG_BUYBACK_ADDR','GANG_LENDING_ADDR','GANG_LAUNCHPAD_ADDR','GANG_LOCKER_ADDR','GANG_VAULT_V2_ADDR'];
     let text = '';
     keys.forEach(function(k) {
