@@ -18986,10 +18986,10 @@ function buyInsurance() {
     ],
     onConfirm: async function() {
       try {
-        if (typeof window.buyInsurance === 'function') {
-          await window.buyInsurance();
-        }
-      } catch(e) { return; }
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('insurance', premium, 'Insurance — ' + typeName + ' ' + amount.toLocaleString() + ' CRO x ' + duration + 'mo');
+        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       _doBuyInsurance(type, amount, duration, premium, typeName);
     }
   });
@@ -25471,19 +25471,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   window.flashOwnerCollect = async function() { try { await vaultCollectFees('Flash Loans'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectFlashFees = async function() { try { await vaultCollectFees('Flash Loans'); } catch(e) { showToast(e.message, 'error'); } };
 
-  // --- INSURANCE ---
-  window.buyInsurance = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('insCoverageAmount');
-    const amount = parseFloat(amtEl?.value);
-    if (!amount || amount <= 0) { showToast('Enter cover amount', 'error'); return; }
-    const premium = amount * 0.03;
-    try {
-      await vaultDeposit('insurance', premium, 'Insurance Premium');
-      showToast('Insurance purchased! Premium: ' + premium.toFixed(2) + ' GANG paid on-chain.', 'success');
-      if (amtEl) amtEl.value = '';
-    } catch(e) { showToast('Insurance failed: ' + e.message, 'error'); }
-  };
+  // --- INSURANCE (on-chain wired inline) ---
   window.insOwnerCollect = async function() { try { await vaultCollectFees('Insurance'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectInsuranceFees = async function() { try { await vaultCollectFees('Insurance'); } catch(e) { showToast(e.message, 'error'); } };
 
