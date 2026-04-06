@@ -23927,63 +23927,36 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   const _origDoOpenFutures = window._doOpenFuturesPosition || (typeof _doOpenFuturesPosition === 'function' ? _doOpenFuturesPosition : null);
 
   window._realDoOpenFuturesPosition = async function(amt, curr, price) {
-    const poolAddr = getTradingPoolAddr();
-    // If trading pool is deployed and currency is GANG, do real on-chain deposit
-    if (poolAddr && curr === 'GANG' && state.signer) {
+    // Use Protocol Vault (proven to work) for GANG deposits
+    if (curr === 'GANG' && state.signer) {
       try {
-        // CHECK REAL GANG BALANCE FIRST
-        const userAddr = await state.signer.getAddress();
-        const balRaw = await _readContract(GANG_TOKEN, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
-        const userBal = parseFloat(ethers.formatEther(balRaw));
-        if (userBal < amt) {
-          showToast('Insufficient GANG! You have ' + userBal.toFixed(2) + ' but need ' + amt.toFixed(2) + ' GANG', 'error');
-          return;
-        }
-        // Verify contract token matches GANG
-        try {
-          const contractToken = await _readContract(poolAddr, ['function token() view returns (address)'], 'token', []);
-          if (contractToken.toLowerCase() !== GANG_TOKEN.toLowerCase()) {
-            showToast('Trading Pool token mismatch! Redeploy from Revenue page.', 'error');
-            return;
-          }
-        } catch(tokenErr) { console.log('Token check skipped:', tokenErr.message); }
-        const weiAmt = ethers.parseEther(amt.toString());
-        // Approve max to avoid repeated approval popups
-        const maxApproval = ethers.parseEther('999999999999');
-        try {
-          const currentAllowance = await _readContract(GANG_TOKEN, ['function allowance(address,address) view returns (uint256)'], 'allowance', [userAddr, poolAddr]);
-          if (currentAllowance < weiAmt) {
-            await _approveGANG(poolAddr, maxApproval);
-          } else {
-            showToast('GANG already approved, depositing...', 'info');
-          }
-        } catch(allowErr) {
-          // If allowance check fails, just approve
-          await _approveGANG(poolAddr, maxApproval);
-        }
-        showToast('Depositing ' + amt.toFixed(2) + ' GANG collateral on-chain...', 'info');
-        await _sendContractTx(poolAddr, TRADING_POOL_ABI, 'depositCollateral', [weiAmt]);
-        showToast('GANG collateral locked on-chain!', 'success');
+        await vaultDeposit('leverage', amt, 'Leverage Collateral');
       } catch(e) {
-        const reason = e.reason || e.message || 'Unknown error';
-        showToast('On-chain deposit failed: ' + reason, 'error');
+        showToast('Deposit failed: ' + e.message, 'error');
         return; // Don't open position if deposit fails
       }
-    } else if (poolAddr && curr === 'CRO') {
+    } else if (curr === 'CRO' && state.signer) {
       // CHECK REAL CRO BALANCE
-      if (state.signer) {
-        try {
-          const userAddr = await state.signer.getAddress();
-          const croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
-          if (croBal < amt) {
-            showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' but need ' + amt.toFixed(2) + ' CRO', 'error');
-            return;
-          }
-        } catch(e) {}
-      }
+      try {
+        const userAddr = await state.signer.getAddress();
+        const croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
+        if (croBal < amt) {
+          showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' but need ' + amt.toFixed(2) + ' CRO', 'error');
+          return;
+        }
+      } catch(e) {}
       showToast('CRO positions use native gas — collateral tracked locally.', 'info');
-    } else if (!poolAddr && curr === 'GANG') {
-      showToast('Deploy Trading Pool from Revenue page for real on-chain collateral.', 'info');
+    } else if (curr !== 'CRO' && curr !== 'GANG' && state.signer) {
+      // Other tokens (BTC, ETH, SOL, BNB, USDC, USDT) — use vault
+      try {
+        await vaultDeposit('leverage_' + curr.toLowerCase(), amt, curr + ' Leverage Collateral');
+      } catch(e) {
+        showToast('Deposit failed: ' + e.message, 'error');
+        return;
+      }
+    } else if (!state.signer) {
+      showToast('Connect wallet first', 'error');
+      return;
     }
 
     // Now track the position locally for PnL
@@ -24003,7 +23976,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       sl: sl || null,
       status: 'open',
       openedAt: new Date().toISOString(),
-      onChain: !!(poolAddr && curr === 'GANG')
+      onChain: !!(curr === 'GANG' && typeof getVaultAddr === 'function' && getVaultAddr())
     };
     if (curr === 'CRO') {
       futuresState.poolBalanceCRO += openingFee;
@@ -24036,15 +24009,11 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const closingFee = pos.amount * 0.003;
     const netPnl = finalPnl - closingFee;
 
-    const poolAddr = getTradingPoolAddr();
     // ONLY attempt on-chain withdrawal for positions flagged as onChain
-    if (pos.onChain && poolAddr && curr === 'GANG' && state.signer) {
+    if (pos.onChain && curr === 'GANG' && state.signer) {
       try {
         const withdrawAmt = Math.max(0, pos.amount);
-        const weiAmt = ethers.parseEther(withdrawAmt.toFixed(18));
-        showToast('Withdrawing GANG collateral from on-chain pool...', 'info');
-        await _sendContractTx(poolAddr, TRADING_POOL_ABI, 'withdrawCollateral', [weiAmt]);
-        showToast('GANG collateral returned to your wallet!', 'success');
+        await vaultWithdraw('leverage', withdrawAmt, 'Leverage Withdrawal');
       } catch(e) {
         showToast('On-chain withdrawal failed: ' + e.message + '. Position closed locally.', 'error');
       }
