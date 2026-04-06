@@ -24168,14 +24168,25 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const banner = document.getElementById('signalOverallLabel');
     if (banner) { banner.textContent = 'LOADING...'; banner.style.color = 'var(--muted)'; }
     try {
-      // Fetch real market data via backend proxy (avoids CORS)
+      // Try backend proxy first (works on Emergent / same-domain deploy)
+      let priceData, histData;
       const apiBase = window.location.origin + '/api';
-      const [priceRes, histRes] = await Promise.all([
-        fetch(`${apiBase}/coingecko/price?ids=${t.id}&vs_currencies=usd`),
-        fetch(`${apiBase}/coingecko/chart?id=${t.id}&days=30`)
-      ]);
-      const priceData = await priceRes.json();
-      const histData = await histRes.json();
+      try {
+        const [priceRes, histRes] = await Promise.all([
+          fetch(`${apiBase}/coingecko/price?ids=${t.id}&vs_currencies=usd`, { signal: AbortSignal.timeout(5000) }),
+          fetch(`${apiBase}/coingecko/chart?id=${t.id}&days=30`, { signal: AbortSignal.timeout(5000) })
+        ]);
+        priceData = await priceRes.json();
+        histData = await histRes.json();
+      } catch(proxyErr) {
+        // Fallback: call CoinGecko directly (standalone HTML deploy)
+        const [priceRes2, histRes2] = await Promise.all([
+          fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${t.id}&vs_currencies=usd&include_24hr_vol=true&include_24hr_change=true`, { signal: AbortSignal.timeout(8000) }),
+          fetch(`https://api.coingecko.com/api/v3/coins/${t.id}/market_chart?vs_currency=usd&days=30`, { signal: AbortSignal.timeout(8000) })
+        ]);
+        priceData = await priceRes2.json();
+        histData = await histRes2.json();
+      }
 
       // Check for rate limit or error responses
       if (!priceData[t.id] || !histData.prices) {
