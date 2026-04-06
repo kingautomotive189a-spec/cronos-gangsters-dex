@@ -5060,18 +5060,20 @@ function toggleNavMenu() {
 
     <!-- Trade History — Trading 212 Style -->
     <div class="card" style="margin-bottom:14px;border-color:rgba(255,255,255,0.06);">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(235,235,245,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(235,235,245,0.7);letter-spacing:2px;">TRADE HISTORY</span>
-        </div>
-        <div id="historyTotalPnl" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);">$0.00</div>
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);letter-spacing:3px;">History</div>
       </div>
       <!-- Tabs -->
-      <div style="display:flex;gap:0;margin-bottom:14px;border-bottom:1px solid var(--border);">
-        <button id="histTabResults" onclick="switchHistTab('results')" style="flex:1;padding:10px;background:transparent;border:none;border-bottom:2px solid #ff8c00;color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;">RESULTS</button>
-        <button id="histTabOrders" onclick="switchHistTab('orders')" style="flex:1;padding:10px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;">ORDERS</button>
-        <button id="histTabFees" onclick="switchHistTab('fees')" style="flex:1;padding:10px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;">FEES</button>
+      <div style="display:flex;gap:0;margin-bottom:6px;border-bottom:1px solid var(--border);">
+        <button id="histTabResults" onclick="switchHistTab('results')" style="flex:1;padding:12px;background:transparent;border:none;border-bottom:2px solid #4fc3f7;color:#4fc3f7;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;cursor:pointer;">Result</button>
+        <button id="histTabOrders" onclick="switchHistTab('orders')" style="flex:1;padding:12px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;cursor:pointer;">Orders</button>
+        <button id="histTabFees" onclick="switchHistTab('fees')" style="flex:1;padding:12px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;cursor:pointer;">Fees</button>
+        <button id="histTabLiquidations" onclick="switchHistTab('liquidations')" style="flex:1;padding:12px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;cursor:pointer;">Liquidations</button>
+      </div>
+      <!-- Total PnL -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--muted);">Total</span>
+        <span id="historyTotalPnl" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--green);">$0.00</span>
       </div>
       <div id="futuresHistory" data-testid="futures-history">
         <div style="font-family:'Space Grotesk',sans-serif;color:rgba(235,235,245,0.25);text-align:center;padding:16px;font-size:13px;font-weight:400;">No trades yet</div>
@@ -22792,10 +22794,6 @@ function _forceCloseFuturesPosition(id, reason) {
 var _histTab = 'results';
 function switchHistTab(tab) {
   _histTab = tab;
-  ['results','orders','fees'].forEach(t => {
-    const btn = document.getElementById('histTab' + t.charAt(0).toUpperCase() + t.slice(1));
-    if (btn) { btn.style.borderBottomColor = t === tab ? '#ff8c00' : 'transparent'; btn.style.color = t === tab ? '#ff8c00' : 'var(--muted)'; }
-  });
   renderFuturesHistory();
 }
 
@@ -22843,27 +22841,83 @@ function renderFuturesHistory() {
   // Update total PnL
   const totalPnl = myHistory.reduce((s, h) => s + (h.pnl || 0), 0);
   const totalEl = document.getElementById('historyTotalPnl');
-  if (totalEl) { totalEl.textContent = (totalPnl >= 0 ? '+' : '') + '$' + totalPnl.toFixed(2); totalEl.style.color = totalPnl >= 0 ? 'var(--green)' : 'var(--red)'; }
+  if (totalEl) { totalEl.textContent = (totalPnl >= 0 ? '+' : '') + totalPnl.toFixed(2) + ' CRO'; totalEl.style.color = totalPnl >= 0 ? '#27ae60' : '#e74c3c'; }
+
+  // Update tab styling
+  var tabs = ['Results','Orders','Fees','Liquidations'];
+  var tabKeys = ['results','orders','fees','liquidations'];
+  tabKeys.forEach(function(k, i) {
+    var btn = document.getElementById('histTab' + tabs[i]);
+    if (btn) {
+      if (k === _histTab) { btn.style.borderBottom = '2px solid #4fc3f7'; btn.style.color = '#4fc3f7'; }
+      else { btn.style.borderBottom = '2px solid transparent'; btn.style.color = 'var(--muted)'; }
+    }
+  });
 
   if (_histTab === 'fees') {
     const totalFees = myHistory.reduce((s, h) => s + (h.fee || h.amount * 0.003), 0);
-    el.innerHTML = '<div style="text-align:center;padding:20px;"><div style="font-size:10px;color:var(--muted);letter-spacing:1px;">TOTAL FEES PAID (CRO)</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:32px;color:#e74c3c;margin-top:6px;">' + totalFees.toFixed(4) + ' CRO</div><div style="font-size:11px;color:var(--muted);margin-top:4px;">across ' + myHistory.length + ' trades</div></div>';
+    el.innerHTML = '<div style="text-align:center;padding:30px 0;"><div style="font-size:12px;color:var(--muted);letter-spacing:1px;margin-bottom:8px;">TOTAL FEES PAID (CRO)</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:36px;color:#e74c3c;">' + totalFees.toFixed(4) + ' CRO</div><div style="font-size:12px;color:var(--muted);margin-top:6px;">across ' + myHistory.length + ' trades</div></div>';
     return;
   }
+
+  if (_histTab === 'liquidations') {
+    const liqs = myHistory.filter(h => h.closeReason === 'LIQUIDATED');
+    if (liqs.length === 0) { el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:30px 0;font-size:14px;">No liquidations — keep it that way!</div>'; return; }
+    el.innerHTML = liqs.map(function(h) {
+      var pairInfo = FUTURES_PAIRS[h.pair] || {};
+      var name = pairInfo.name || h.pair;
+      var logo = pairInfo.logo || '';
+      var curr = h.currency || 'GANG';
+      return '<div style="padding:16px 0;border-bottom:1px solid rgba(255,68,68,0.1);">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+          '<div>' +
+            '<div style="font-size:16px;color:var(--text);font-weight:600;">' + name + '</div>' +
+            '<div style="font-size:13px;color:#e74c3c;font-weight:600;margin-top:3px;">' + h.side.toUpperCase() + ' ' + (h.amount||0).toFixed(4) + ' @ ' + h.leverage + 'x</div>' +
+          '</div>' +
+          '<div style="text-align:right;">' +
+            '<div style="font-family:\'Space Mono\',monospace;font-size:16px;color:#e74c3c;font-weight:700;">-' + Math.abs(h.pnl||0).toFixed(2) + ' ' + curr + '</div>' +
+            '<div style="font-size:11px;color:var(--muted);margin-top:2px;">LIQUIDATED</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="margin-top:8px;font-size:12px;color:var(--muted);">' +
+          '<span>AVERAGE PRICE: <strong style="color:var(--text);">$' + _fmtPrice(h.entryPrice||0) + '</strong></span>' +
+          '<span style="margin-left:16px;">CLOSE PRICE: <strong style="color:#e74c3c;">$' + _fmtPrice(h.closePrice||0) + '</strong></span>' +
+        '</div>' +
+        '<div style="font-size:11px;color:var(--muted);margin-top:4px;">' + (h.closedAt ? new Date(h.closedAt).toLocaleString() : '') + '</div>' +
+      '</div>';
+    }).join('');
+    return;
+  }
+
   if (_histTab === 'orders') {
-    const orders = myHistory.slice(0, 20);
-    if (orders.length === 0) { el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:16px;">No orders</div>'; return; }
-    el.innerHTML = orders.map(h => {
-      const sc = h.side === 'long' ? '#27ae60' : '#e74c3c';
-      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><div><span style="font-size:13px;color:var(--text);font-weight:600;">' + (FUTURES_PAIRS[h.pair]?.name || h.pair) + '</span><span style="font-size:10px;margin-left:8px;padding:2px 6px;border-radius:4px;background:' + sc + '22;color:' + sc + ';font-weight:700;">' + h.side.toUpperCase() + '</span></div><div style="text-align:right;"><div style="font-size:11px;color:var(--text);">' + (h.amount||0).toFixed(2) + ' @ $' + _fmtPrice(h.entryPrice||0) + '</div><div style="font-size:9px;color:var(--muted);">' + (h.closedAt ? new Date(h.closedAt).toLocaleDateString() : '') + '</div></div></div>';
+    const orders = myHistory.slice(0, 30);
+    if (orders.length === 0) { el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:30px 0;font-size:14px;">No orders yet</div>'; return; }
+    el.innerHTML = orders.map(function(h) {
+      var pairInfo = FUTURES_PAIRS[h.pair] || {};
+      var name = pairInfo.name || h.pair;
+      var sc = h.side === 'long' ? '#27ae60' : '#e74c3c';
+      var curr = h.currency || 'GANG';
+      return '<div style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04);">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+          '<div>' +
+            '<div style="font-size:15px;color:var(--text);font-weight:600;">' + name + '</div>' +
+            '<div style="font-size:13px;color:' + sc + ';font-weight:600;margin-top:3px;">' + h.side.toUpperCase() + ' ' + (h.amount||0).toFixed(4) + '</div>' +
+          '</div>' +
+          '<div style="text-align:right;font-size:12px;color:var(--muted);">' +
+            '<div>AVERAGE PRICE: <strong style="color:var(--text);">$' + _fmtPrice(h.entryPrice||0) + '</strong></div>' +
+            '<div style="margin-top:2px;">CLOSE PRICE: <strong style="color:var(--text);">$' + _fmtPrice(h.closePrice||h.entryPrice||0) + '</strong></div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="font-size:11px;color:var(--muted);margin-top:4px;">' + (h.closedAt ? new Date(h.closedAt).toLocaleString() : '') + '</div>' +
+      '</div>';
     }).join('');
     return;
   }
 
   // Results tab — group by date like Trading 212
-  const shown = myHistory.slice(0, 30);
+  const shown = myHistory.slice(0, 50);
   if (shown.length === 0) {
-    el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No trades yet</div>';
+    el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:30px 0;font-size:14px;">No trades yet</div>';
     return;
   }
   // Group by date
@@ -22876,43 +22930,31 @@ function renderFuturesHistory() {
 
   let html = '';
   Object.keys(groups).forEach(date => {
-    const dayPnl = groups[date].reduce((s, h) => s + (h.pnl || 0), 0);
-    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;margin-top:6px;border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-family:\'Space Grotesk\',sans-serif;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:0.5px;">' + date + '</span><span style="font-size:12px;font-weight:700;color:' + (dayPnl >= 0 ? 'var(--green)' : 'var(--red)') + ';">' + (dayPnl >= 0 ? '+' : '') + dayPnl.toFixed(2) + '</span></div>';
+    // Date header — bold, large, like Trading 212
+    html += '<div style="padding:18px 0 8px 0;"><div style="font-family:\'Space Grotesk\',sans-serif;font-size:16px;color:var(--text);font-weight:700;">' + date + '</div></div>';
+
     groups[date].forEach(function(h) {
-      const color = h.pnl >= 0 ? 'var(--green)' : 'var(--red)';
+      const color = h.pnl >= 0 ? '#27ae60' : '#e74c3c';
       const sideColor = h.side === 'long' ? '#27ae60' : '#e74c3c';
       const curr = h.currency || 'GANG';
       const entryP = h.entryPrice || 0;
       const closeP = h.closePrice || entryP;
       var closeReason = h.closeReason || 'MANUAL';
-      var reasonColor = closeReason === 'TP HIT' ? 'var(--green)' : closeReason === 'LIQUIDATED' ? '#ff4444' : closeReason === 'SL HIT' ? '#ff8800' : 'var(--muted)';
       const pairInfo = FUTURES_PAIRS[h.pair] || {};
-      const logo = pairInfo.logo || '';
       const name = pairInfo.name || h.pair;
 
-      html += '<div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.03);">' +
-        '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-          '<div style="display:flex;align-items:center;gap:10px;">' +
-            '<div style="width:30px;height:30px;border-radius:50%;overflow:hidden;background:' + (pairInfo.badgeColor || '#ff8c00') + ';display:flex;align-items:center;justify-content:center;flex-shrink:0;">' +
-              (logo ? '<img src="' + logo + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'">' : '<span style="font-size:11px;color:#fff;">' + (pairInfo.badge || h.pair.slice(0,2)) + '</span>') +
-            '</div>' +
-            '<div>' +
-              '<div style="font-size:13px;color:var(--text);font-weight:600;">' + name + '</div>' +
-              '<div style="display:flex;gap:4px;align-items:center;margin-top:2px;">' +
-                '<span style="font-size:9px;padding:1px 5px;border-radius:3px;background:' + sideColor + '22;color:' + sideColor + ';font-weight:700;">' + h.side.toUpperCase() + ' ' + h.leverage + 'x</span>' +
-                '<span style="font-size:9px;padding:1px 5px;border-radius:3px;background:' + reasonColor + '22;color:' + reasonColor + ';font-weight:600;">' + closeReason + '</span>' +
-              '</div>' +
-            '</div>' +
+      // Trading 212 style: Name on left, PnL on right. Below: side+amount on left, prices on right
+      html += '<div style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04);">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;">' +
+          '<div>' +
+            '<div style="font-size:16px;color:var(--text);font-weight:600;">' + name + (closeReason === 'LIQUIDATED' ? ' <span style="font-size:10px;color:#ff4444;font-weight:700;">LIQUIDATED</span>' : '') + '</div>' +
+            '<div style="font-size:13px;color:' + sideColor + ';font-weight:600;margin-top:4px;">' + h.side.toUpperCase() + ' ' + (h.amount||0).toFixed(6) + '</div>' +
           '</div>' +
           '<div style="text-align:right;">' +
-            '<div style="font-family:\'Space Mono\',monospace;font-size:14px;color:' + color + ';font-weight:700;">' + (h.pnl >= 0 ? '+' : '') + h.pnl.toFixed(2) + '</div>' +
+            '<div style="font-family:\'Space Mono\',monospace;font-size:16px;color:' + color + ';font-weight:700;">' + (h.pnl >= 0 ? '+' : '') + h.pnl.toFixed(2) + ' ' + curr + '</div>' +
+            '<div style="font-size:12px;color:var(--muted);margin-top:4px;">AVERAGE PRICE: <strong style="color:var(--text);">$' + _fmtPrice(entryP) + '</strong></div>' +
+            '<div style="font-size:12px;color:var(--muted);margin-top:1px;">CLOSE PRICE: <strong style="color:var(--text);">$' + _fmtPrice(closeP) + '</strong></div>' +
           '</div>' +
-        '</div>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;margin-left:40px;font-size:10px;color:var(--muted);">' +
-          '<div>AVG PRICE <span style="color:var(--text);font-weight:600;">$' + _fmtPrice(entryP) + '</span></div>' +
-          '<div>CLOSE PRICE <span style="color:' + color + ';font-weight:600;">$' + _fmtPrice(closeP) + '</span></div>' +
-          '<div>SIZE <span style="color:var(--text);">' + (h.amount||0).toFixed(2) + ' ' + curr + '</span></div>' +
-          '<div>FEE <span style="color:#e74c3c;">' + (h.fee || h.amount * 0.003).toFixed(4) + ' CRO</span></div>' +
         '</div>' +
       '</div>';
     });
