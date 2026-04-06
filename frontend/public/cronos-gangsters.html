@@ -7403,6 +7403,13 @@ function toggleNavMenu() {
           <div style="font-size:12px;color:var(--muted);">No active bonds. Purchase a bond below to start earning discounted $GANG.</div>
         </div>
       </div>
+      <!-- WITHDRAW / CLAIM section — always visible -->
+      <div style="margin-top:12px;background:linear-gradient(135deg,rgba(39,174,96,0.06),rgba(39,174,96,0.02));border:1px solid rgba(39,174,96,0.25);border-radius:14px;padding:16px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);letter-spacing:2px;margin-bottom:8px;">WITHDRAW VESTED BONDS</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6;">When your bond finishes its 5-day vesting period, the <strong style="color:var(--green);">CLAIM VESTED GANG</strong> button will appear above on your active bond. Click it to withdraw your discounted $GANG to your wallet via MetaMask.</div>
+        <button onclick="claimAllVestedBonds()" data-testid="claim-all-bonds-btn" style="width:100%;padding:14px;border-radius:10px;background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;box-shadow:0 2px 8px rgba(39,174,96,0.3);transition:all .2s;" onmouseover="this.style.transform='scale(1.01)'" onmouseout="this.style.transform='scale(1)'">CLAIM ALL VESTED BONDS</button>
+        <div id="bondClaimStatus" style="font-size:11px;margin-top:6px;min-height:14px;text-align:center;"></div>
+      </div>
     </div>
 
     <div style="display:grid;gap:12px;margin-bottom:20px;" id="bondsGrid" data-testid="bonds-grid">
@@ -26264,6 +26271,40 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
   function getState() { try { return JSON.parse(localStorage.getItem(BD_KEY) || '{"bonds":[],"totalBonded":0,"totalDistributed":0}'); } catch { return {bonds:[],totalBonded:0,totalDistributed:0}; } }
   function saveState(s) { localStorage.setItem(BD_KEY, JSON.stringify(s)); }
+
+  window.claimAllVestedBonds = async function() {
+    const s = getState();
+    const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
+    if (!addr) { showToast('Connect wallet first', 'error'); return; }
+    const userBonds = s.bonds.filter(b => b.user === addr);
+    const vestedBonds = userBonds.filter(b => {
+      const elapsed = Date.now() - b.purchaseTime;
+      const vestMs = b.vestDays * 86400000;
+      return (elapsed / vestMs) >= 1;
+    });
+    const statusEl = document.getElementById('bondClaimStatus');
+    if (vestedBonds.length === 0) {
+      showToast('No fully vested bonds to claim', 'error');
+      if (statusEl) { statusEl.style.color = 'var(--muted)'; statusEl.textContent = userBonds.length > 0 ? 'Your bonds are still vesting. Check back in a few days.' : 'No bonds purchased yet.'; }
+      return;
+    }
+    let totalClaimed = 0;
+    for (const bond of vestedBonds) {
+      try {
+        if (typeof window.vaultWithdraw === 'function' && bond.onChain) {
+          await window.vaultWithdraw('bonds_' + bond.pair, bond.lpValue, bond.pair + ' Bond Claim');
+        }
+        totalClaimed += bond.gangReceived;
+        s.bonds = s.bonds.filter(b => b !== bond);
+      } catch(e) { showToast('Claim failed for ' + bond.pair + ': ' + e.message, 'error'); }
+    }
+    saveState(s);
+    renderBonds();
+    if (totalClaimed > 0) {
+      showToast('Claimed ' + totalClaimed.toFixed(2) + ' GANG from ' + vestedBonds.length + ' bond(s)!', 'success');
+      if (statusEl) { statusEl.style.color = 'var(--green)'; statusEl.textContent = 'Claimed ' + totalClaimed.toFixed(2) + ' GANG!'; }
+    }
+  };
 
   function renderBonds() {
     const s = getState();
