@@ -688,7 +688,8 @@
       <button class="nav-btn" data-page="token"><span class="nav-icon"><img loading="lazy" src="/gang-logo.png" style="width:18px;height:18px;border-radius:50%;"></span>$GANG</button>
       <button class="nav-btn" data-page="portfolio"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.22-8.56"/><path d="M21 3v9h-9"/></svg></span>Portfolio</button>
       <button class="nav-btn" data-page="tracker" data-testid="nav-tracker-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></span>Gang Tracker</button>
-      <button class="nav-btn" data-page="nfts" data-testid="nav-nfts-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>NFTs</button>
+      <button class="nav-btn" data-page="nfts" data-testid="nav-nfts-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>Mint Gangster NFTs</button>
+      <button class="nav-btn" data-page="nfts" data-testid="nav-nftstaking-btn" onclick="setTimeout(function(){const el=document.getElementById('nftStakingSection');if(el)el.scrollIntoView({behavior:'smooth'})},300)"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1"/><path d="M7 17l5-5 5 5"/></svg></span>NFT Staking<span class="nav-desc">Stake NFTs</span></button>
       <button class="nav-btn" data-page="market" data-testid="nav-market-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Marketplace</button>
       <div class="nav-divider"></div>
 
@@ -23394,7 +23395,31 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
     const tokenAddr = TOKEN_ADDRESSES[token];
     if (!tokenAddr || tokenAddr === 'native') {
-      showToast('Wrap CRO to WCRO first for repayment.', 'info');
+      // CRO repayment: send native CRO to vault via MetaMask
+      try {
+        const userAddr = await state.signer.getAddress();
+        const croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
+        if (croBal < amount) {
+          showToast('Insufficient CRO! You have ' + croBal.toFixed(4) + ' CRO but need ' + amount + ' to repay', 'error');
+          return;
+        }
+        const weiHex = '0x' + BigInt(ethers.parseEther(amount.toString())).toString(16);
+        showToast('Repaying ' + amount + ' CRO to lending pool via MetaMask...', 'info');
+        const rawP = state._rawProvider || window.ethereum;
+        const txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: vaultAddr, value: weiHex, gas: '0x' + (60000).toString(16) }] });
+        for (let i = 0; i < 40; i++) {
+          await new Promise(r => setTimeout(r, 4000));
+          const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] });
+          if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; }
+        }
+        if (amtInput) amtInput.value = '';
+        showToast(amount + ' CRO repaid on-chain!', 'success');
+        const s2 = initLendState();
+        s2.userBorrowed[token] = Math.max(0, (s2.userBorrowed[token] || 0) - amount);
+        s2.pools[token].totalBorrowed = Math.max(0, (s2.pools[token].totalBorrowed || 0) - amount);
+        saveLendState(s2);
+        updateLendingUI();
+      } catch(e) { showToast('CRO repay failed: ' + e.message, 'error'); }
       return;
     }
 
@@ -23889,15 +23914,27 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   // --- PREDICTION MARKETS ---
   window.placePredBet = async function(marketId, side) {
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('predBetAmt');
+    const amtEl = document.getElementById('predBet_' + marketId);
     const amount = parseFloat(amtEl?.value);
     if (!amount || amount <= 0) { showToast('Enter bet amount', 'error'); return; }
     try {
       await vaultDeposit('predictions', amount, 'Prediction Bet');
-      // Track locally for UI
-      const origFn = window._origPlacePredBet;
-      if (origFn) origFn(marketId, side);
+      // Update local UI state
+      if (typeof initPredState === 'function') {
+        const s = initPredState();
+        const market = s.markets.find(function(m) { return m.id === marketId; });
+        if (market) {
+          if (side === 'A') market.poolA = (market.poolA || 0) + amount;
+          else market.poolB = (market.poolB || 0) + amount;
+          const addr = state.address ? state.address.toLowerCase() : '';
+          if (!market.bets) market.bets = [];
+          market.bets.push({ user: addr, side: side, amount: amount, time: Date.now() });
+          savePredState(s);
+          if (typeof renderPredictions === 'function') renderPredictions();
+        }
+      }
       if (amtEl) amtEl.value = '';
+      showToast('Bet placed on-chain! ' + amount + ' GANG deposited.', 'success');
     } catch(e) { showToast('Bet failed: ' + e.message, 'error'); }
   };
   window.predOwnerCollect = async function() { try { await vaultCollectFees('Prediction'); } catch(e) { showToast(e.message, 'error'); } };
@@ -23922,7 +23959,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   // --- INSURANCE ---
   window.buyInsurance = async function() {
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('insCoverAmount');
+    const amtEl = document.getElementById('insCoverageAmount');
     const amount = parseFloat(amtEl?.value);
     if (!amount || amount <= 0) { showToast('Enter cover amount', 'error'); return; }
     const premium = amount * 0.03;
@@ -23954,7 +23991,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   // --- COPY TRADING ---
   window.executeCopyTrade = async function() {
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('copyTradeAmount') || document.getElementById('ctAmtInput');
+    const amtEl = document.getElementById('ctAmount');
     const amount = parseFloat(amtEl?.value);
     if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
     const fee = amount * 0.003;

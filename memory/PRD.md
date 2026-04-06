@@ -22,38 +22,53 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - GANG Staking: `0x03c3C706F0D2F4754755988A686a70E661e6925F`
 
 ## What's Been Implemented (Complete)
-1. All core DeFi features (Swap, Farm, Vault, Staking, Lending, Bonds)
-2. Leverage Trading with real on-chain collateral
-3. Premium typography (Bebas Neue + Space Grotesk)
-4. All 6 contract addresses hardcoded for cross-device support
-5. Auto-cleanup of legacy localStorage "fake" data
-6. Strict real token balance checks before all transactions
-7. Real MetaMask wallet confirmations for ALL features
-8. Revenue dashboard with ADD FUNDS for all pools
 
-## Critical Fixes Applied (2026-04-06)
-- **GANG_ADDR -> GANG_TOKEN**: Fixed 4 broken references in IIFE scope that caused "GANG_ADDR is not defined" across Revenue Staking, Perpetual DEX, all vaultDeposit calls, and Bonds
-- **Flash Loan input ID**: Fixed wrong input element ID (flashLoanAmount -> flashAmount)
-- **DEX Aggregator input ID**: Fixed wrong input element ID (aggSwapAmount -> aggAmount)
-- **CRO Lending Supply**: No longer blocks CRO — sends native CRO via MetaMask
-- **vaultDeposit/vaultWithdraw/vaultCollectFees exposed globally**: External IIFEs (Competitions, Squads) can now call real on-chain vault functions
-- **Daily Check-in**: Now triggers real MetaMask self-tx for confirmation
-- **Squad Creation**: Now requires MetaMask confirmation or vault deposit
-- **confirmTx() async support**: TX confirmation modal now properly awaits async callbacks
-- **Leverage Owner Pool Deposit/Withdraw**: Converted from fake localStorage to real on-chain (seedLiquidity/withdrawCollateral)
-- **Lending Owner Fee Collection**: Converted from fake to real on-chain via vaultCollectFees
+### Core DeFi Features
+- Swap, Farm, Vault, Staking, Lending, Bonds
+- Leverage Trading with real on-chain collateral
+- All 6 contract addresses hardcoded for cross-device support
+- Auto-cleanup of legacy localStorage "fake" data
+- Premium typography (Bebas Neue + Space Grotesk)
 
-## All Features Using Real On-Chain (MetaMask Required)
-- Leverage Trading, Owner Pool Deposit/Withdraw
-- Lending (supply/withdraw/borrow/repay for ALL tokens including CRO)
-- Revenue Staking (stake/unstake)
-- Predictions, Flash Loans, Insurance, DEX Aggregator
-- Copy Trading, Limit Orders, Perpetual DEX, OTC Trading
-- DAO Governance (propose/vote), Bonds
-- Daily Check-in, Squad Create/Join, Trading Competitions
-- All Fee Collections, Revenue Seed Fund
+### On-Chain Real MetaMask Confirmations — ALL Features (2026-04-06)
+Every feature now requires MetaMask wallet confirmation:
+- **Leverage Trading**: open/close positions, owner pool deposit (seedLiquidity) / withdraw (withdrawCollateral)
+- **Lending**: supply/withdraw/borrow/repay for ALL tokens including CRO (native CRO via direct tx)
+- **Predictions**: place bets via Protocol Vault
+- **Flash Loans**: execute + fee payment via Protocol Vault
+- **Insurance**: buy coverage via Protocol Vault
+- **DEX Aggregator**: swap fees via Protocol Vault
+- **Copy Trading**: fees via Protocol Vault
+- **Revenue Staking**: stake/unstake via Protocol Vault
+- **Limit Orders**: escrow via Protocol Vault
+- **Perpetual DEX**: margin via Protocol Vault
+- **OTC Trading**: escrow via Protocol Vault
+- **DAO Governance**: propose/vote fees via Protocol Vault
+- **Bonds**: buy bonds via Protocol Vault
+- **Daily Check-in**: MetaMask self-tx confirmation
+- **Squad Creation/Join**: MetaMask or vault deposit confirmation
+- **Trading Competitions**: entry fee via Protocol Vault
+- **All Fee Collections**: via Protocol Vault collectFees()
+- **Revenue Seed Fund**: add funds to any pool via Protocol Vault
 
-## Wallet Balance Labels (IN PROGRESS from previous session)
+### Critical Bug Fixes Applied (2026-04-06)
+1. `GANG_ADDR → GANG_TOKEN` in IIFE scope (4 places) — was breaking Revenue Staking, Perp DEX, all vault deposits, Bonds
+2. Flash Loan input ID: `flashLoanAmount → flashAmount`
+3. DEX Aggregator input ID: `aggSwapAmount → aggAmount`
+4. Insurance input ID: `insCoverAmount → insCoverageAmount`
+5. Predictions input ID: `predBetAmt → predBet_${marketId}` (dynamic)
+6. Copy Trading input ID: `copyTradeAmount → ctAmount`
+7. CRO Lending Supply: sends native CRO via MetaMask (was blocking)
+8. CRO Lending Repay: sends native CRO via MetaMask (was blocking)
+9. `vaultDeposit/vaultWithdraw/vaultCollectFees` exposed globally via `window.*`
+10. Daily Check-in: now requires MetaMask self-tx
+11. Squad Creation: now requires MetaMask/vault deposit
+12. `confirmTx()` now properly `await`s async callbacks
+13. Leverage Owner Pool deposit/withdraw converted to real on-chain
+14. Lending Owner Fee Collection converted to real on-chain
+15. NFT Staking added to hamburger navigation menu
+
+## Wallet Balance Labels (Pending from earlier session)
 - Completed: Leverage, Lending, OTC, Limit Orders, Perp, Insurance
 - Remaining: Predictions, DAO, Bonds, Flash Loans, Revenue Seed Fund
 
