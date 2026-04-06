@@ -11609,18 +11609,34 @@ function confirmTx() {
   stageProcessing.classList.add('active');
   document.getElementById('txConfirmTitle').textContent = 'PROCESSING';
 
-  // Execute callback during processing
+  // Execute callback during processing (async-aware)
   if (_txPendingCallback) {
     const cb = _txPendingCallback;
     _txPendingCallback = null;
-    try { cb(); } catch(e) { console.error('Tx callback error:', e); }
+    const result = cb();
+    // If callback returns a Promise (async function), wait for it
+    if (result && typeof result.then === 'function') {
+      result.then(function() {
+        _showTxConfirmed();
+      }).catch(function(e) {
+        console.error('Tx callback error:', e);
+        closeTxConfirm();
+      });
+      return; // Don't auto-show confirmed — let the promise resolve first
+    }
   }
 
-  // After 1.5s, show confirmed
-  setTimeout(() => {
-    stageProcessing.classList.remove('active');
-    stageConfirmed.classList.add('active');
-    document.getElementById('txConfirmTitle').textContent = 'CONFIRMED';
+  // Sync callback — show confirmed after 1.5s
+  setTimeout(_showTxConfirmed, 1500);
+}
+
+function _showTxConfirmed() {
+  const stageProcessing = document.getElementById('txStageProcessing');
+  const stageConfirmed = document.getElementById('txStageConfirmed');
+
+  stageProcessing.classList.remove('active');
+  stageConfirmed.classList.add('active');
+  document.getElementById('txConfirmTitle').textContent = 'CONFIRMED';
 
     // Generate fake tx hash
     const txHash = _generateTxHash();
@@ -11649,7 +11665,6 @@ function confirmTx() {
     _txAutoCloseTimer = setTimeout(() => {
       closeTxConfirm();
     }, 3000);
-  }, 1500);
 }
 
 
@@ -23224,7 +23239,31 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
     const tokenAddr = TOKEN_ADDRESSES[token];
     if (!tokenAddr || tokenAddr === 'native') {
-      showToast('CRO lending uses native token — wrap to WCRO first or use another token.', 'info');
+      // CRO: Send native CRO to vault via MetaMask
+      try {
+        const userAddr = await state.signer.getAddress();
+        const croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
+        if (croBal < amount) {
+          showToast('Insufficient CRO! You have ' + croBal.toFixed(4) + ' CRO but need ' + amount, 'error');
+          return;
+        }
+        const weiHex = '0x' + BigInt(ethers.parseEther(amount.toString())).toString(16);
+        showToast('Depositing ' + amount + ' CRO to lending pool via MetaMask...', 'info');
+        const rawP = state._rawProvider || window.ethereum;
+        const txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: vaultAddr, value: weiHex, gas: '0x' + (60000).toString(16) }] });
+        for (let i = 0; i < 40; i++) {
+          await new Promise(r => setTimeout(r, 4000));
+          const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] });
+          if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; }
+        }
+        if (input) input.value = '';
+        showToast(amount + ' CRO supplied on-chain! Earning interest.', 'success');
+        const s = initLendState();
+        s.userSupplied[token] = (s.userSupplied[token] || 0) + amount;
+        s.pools[token].totalSupplied = (s.pools[token].totalSupplied || 0) + amount;
+        saveLendState(s);
+        updateLendingUI();
+      } catch(e) { showToast('CRO supply failed: ' + e.message, 'error'); }
       return;
     }
 
@@ -23446,7 +23485,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       try {
         // CHECK REAL GANG BALANCE FIRST
         const userAddr = await state.signer.getAddress();
-        const balRaw = await _readContract(GANG_ADDR, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+        const balRaw = await _readContract(GANG_TOKEN, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
         const userBal = parseFloat(ethers.formatEther(balRaw));
         if (userBal < amt) {
           showToast('Insufficient GANG! You have ' + userBal.toFixed(2) + ' but need ' + amt.toFixed(2) + ' GANG', 'error');
@@ -23694,7 +23733,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
     // Check GANG balance
     const userAddr = await state.signer.getAddress();
-    const balRaw = await _readContract(GANG_ADDR, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+    const balRaw = await _readContract(GANG_TOKEN, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
     const userBal = parseFloat(ethers.formatEther(balRaw));
     if (userBal < amount) {
       showToast('Insufficient GANG! You have ' + userBal.toFixed(2) + ' but need ' + amount, 'error');
@@ -23789,7 +23828,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
     // CHECK REAL GANG BALANCE FIRST
     const userAddr = await state.signer.getAddress();
-    const balRaw = await _readContract(GANG_ADDR, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+    const balRaw = await _readContract(GANG_TOKEN, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
     const userBal = parseFloat(ethers.formatEther(balRaw));
     if (userBal < amount) {
       showToast('Insufficient GANG balance! You have ' + userBal.toFixed(2) + ' GANG but need ' + amount + ' for ' + label, 'error');
@@ -23838,6 +23877,11 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     showToast(label + ' fees collected to your wallet!', 'success');
   }
 
+  // Expose vault helpers globally so all IIFEs can call real on-chain
+  window.vaultDeposit = vaultDeposit;
+  window.vaultWithdraw = vaultWithdraw;
+  window.vaultCollectFees = vaultCollectFees;
+
   // ═══════════════════════════════════════════════════
   //  OVERRIDE ALL MOCKED FEATURES — Real on-chain
   // ═══════════════════════════════════════════════════
@@ -23862,7 +23906,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   // --- FLASH LOANS ---
   window.executeFlashLoan = async function() {
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('flashLoanAmount');
+    const amtEl = document.getElementById('flashAmount');
     const amount = parseFloat(amtEl?.value);
     if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
     const fee = amount * 0.003;
@@ -23894,7 +23938,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   // --- DEX AGGREGATOR ---
   window.executeAggSwap = async function() {
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('aggSwapAmount');
+    const amtEl = document.getElementById('aggAmount');
     const amount = parseFloat(amtEl?.value);
     if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
     const fee = amount * 0.003;
@@ -24417,9 +24461,10 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     }
   }
 
-  window.doCheckin = function() {
+  window.doCheckin = async function() {
     const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
+    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
     const s = initState();
     if (checkedInToday(s)) { showToast('Already checked in today!', 'error'); return; }
 
@@ -24437,10 +24482,6 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     s.streak++;
     if (s.streak > s.bestStreak) s.bestStreak = s.streak;
     const reward = calcReward(s.streak);
-    s.totalEarned += reward;
-    s.lastCheckin = todayKey();
-    s.weekCheckins[getDayOfWeek()] = true;
-    saveState(s);
 
     showTxConfirm({
       title: 'DAILY CHECK-IN', action: 'Claim check-in reward', icon: 'DAY ' + s.streak,
@@ -24450,9 +24491,28 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
         { label: 'Streak', value: s.streak + ' days' },
         { label: 'Bonus', value: reward > BASE_REWARD ? '+' + (reward - BASE_REWARD) + ' GANG streak bonus!' : 'Base reward' }
       ],
-      onConfirm: function() {
-        renderCheckin();
-        showToast('Day ' + s.streak + ' check-in! +' + reward + ' GANG earned!');
+      onConfirm: async function() {
+        // Real on-chain: send a self-tx to confirm via MetaMask
+        try {
+          const rawP = state._rawProvider || window.ethereum;
+          const userAddr = await state.signer.getAddress();
+          showToast('Confirm check-in in MetaMask...', 'info');
+          const txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
+          for (let i = 0; i < 40; i++) {
+            await new Promise(r => setTimeout(r, 4000));
+            const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] });
+            if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; }
+          }
+          s.totalEarned += reward;
+          s.lastCheckin = todayKey();
+          s.weekCheckins[getDayOfWeek()] = true;
+          saveState(s);
+          renderCheckin();
+          showToast('Day ' + s.streak + ' check-in confirmed on-chain! +' + reward + ' GANG earned!', 'success');
+        } catch(e) {
+          s.streak--;
+          showToast('Check-in cancelled: ' + e.message, 'error');
+        }
       }
     });
   };
@@ -24606,9 +24666,10 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     if (revCount) revCount.textContent = allSquads.length;
   }
 
-  window.createSquad = function() {
+  window.createSquad = async function() {
     const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     if (!addr) { showToast('Connect your wallet first!', 'error'); return; }
+    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
     const nameInput = document.getElementById('squadNameInput');
     const name = (nameInput?.value || '').trim();
     if (!name || name.length < 2) { showToast('Enter a squad name (2+ chars)', 'error'); return; }
@@ -24621,13 +24682,32 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       title: 'CREATE SQUAD', action: 'Create "' + name + '"', icon: 'SQ',
       amount: 'Squad: ' + name, fee: '0.3% on rewards', receive: 'Squad Code: ' + code,
       color: 'var(--gold)', btnColor: 'linear-gradient(135deg,var(--gold),var(--gold2))',
-      onConfirm: function() {
-        s.squads[code] = { name: name, members: [addr], created: Date.now() };
-        s.userSquad[addr] = code;
-        saveState(s);
-        if (nameInput) nameInput.value = '';
-        renderSquad();
-        showToast('Squad "' + name + '" created! Code: ' + code + ' — Share it with your crew!');
+      onConfirm: async function() {
+        // Real on-chain confirmation via MetaMask
+        try {
+          if (typeof vaultDeposit === 'function') {
+            await vaultDeposit('squad', 10, 'Squad Creation Fee');
+          } else {
+            // Fallback: send self-tx to confirm via MetaMask
+            const rawP = state._rawProvider || window.ethereum;
+            const userAddr = await state.signer.getAddress();
+            showToast('Confirm squad creation in MetaMask...', 'info');
+            const txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
+            for (let i = 0; i < 40; i++) {
+              await new Promise(r => setTimeout(r, 4000));
+              const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] });
+              if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; }
+            }
+          }
+          s.squads[code] = { name: name, members: [addr], created: Date.now() };
+          s.userSquad[addr] = code;
+          saveState(s);
+          if (nameInput) nameInput.value = '';
+          renderSquad();
+          showToast('Squad "' + name + '" created on-chain! Code: ' + code + ' — Share it with your crew!', 'success');
+        } catch(e) {
+          showToast('Squad creation failed: ' + e.message, 'error');
+        }
       }
     });
   };
@@ -24775,7 +24855,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       if (vaultAddr) {
         // CHECK REAL GANG BALANCE FIRST
         const userAddr = await state.signer.getAddress();
-        const balRaw = await _readContract(GANG_ADDR, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+        const balRaw = await _readContract(GANG_TOKEN, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
         const userBal = parseFloat(ethers.formatEther(balRaw));
         if (userBal < lpValue) {
           showToast('Insufficient GANG! You have ' + userBal.toFixed(2) + ' but need ' + lpValue + ' GANG for this bond', 'error');

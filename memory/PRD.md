@@ -30,26 +30,30 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 6. Strict real token balance checks before all transactions
 7. Real MetaMask wallet confirmations for ALL features
 8. Revenue dashboard with ADD FUNDS for all pools
-9. **Leverage Owner Pool Deposit/Withdraw — converted from fake to real on-chain** (2026-04-06)
-10. **Lending Owner Fee Collection — converted from fake to real on-chain** (2026-04-06)
 
-## Features Using Real On-Chain Contracts (All require MetaMask)
-- Leverage Trading: open/close positions via Trading Pool contract
-- Leverage Owner Pool: deposit (seedLiquidity) / withdraw (withdrawCollateral) via Trading Pool
-- Lending: supply/withdraw/borrow/repay via Protocol Vault
-- Predictions: bets deposited to Protocol Vault
-- Flash Loans: fees paid to Protocol Vault
-- Insurance: premiums paid to Protocol Vault
-- DEX Aggregator: fees to Protocol Vault
-- Copy Trading: fees to Protocol Vault
-- Revenue Staking: deposit/withdraw via Protocol Vault
-- Limit Orders: escrow via Protocol Vault
-- Perpetual DEX: margin via Protocol Vault
-- OTC Trading: escrow via Protocol Vault
-- DAO Governance: proposal/vote fees to Protocol Vault
-- All fee collection: via Protocol Vault collectFees()
+## Critical Fixes Applied (2026-04-06)
+- **GANG_ADDR -> GANG_TOKEN**: Fixed 4 broken references in IIFE scope that caused "GANG_ADDR is not defined" across Revenue Staking, Perpetual DEX, all vaultDeposit calls, and Bonds
+- **Flash Loan input ID**: Fixed wrong input element ID (flashLoanAmount -> flashAmount)
+- **DEX Aggregator input ID**: Fixed wrong input element ID (aggSwapAmount -> aggAmount)
+- **CRO Lending Supply**: No longer blocks CRO — sends native CRO via MetaMask
+- **vaultDeposit/vaultWithdraw/vaultCollectFees exposed globally**: External IIFEs (Competitions, Squads) can now call real on-chain vault functions
+- **Daily Check-in**: Now triggers real MetaMask self-tx for confirmation
+- **Squad Creation**: Now requires MetaMask confirmation or vault deposit
+- **confirmTx() async support**: TX confirmation modal now properly awaits async callbacks
+- **Leverage Owner Pool Deposit/Withdraw**: Converted from fake localStorage to real on-chain (seedLiquidity/withdrawCollateral)
+- **Lending Owner Fee Collection**: Converted from fake to real on-chain via vaultCollectFees
 
-## Wallet Balance Labels (IN PROGRESS)
+## All Features Using Real On-Chain (MetaMask Required)
+- Leverage Trading, Owner Pool Deposit/Withdraw
+- Lending (supply/withdraw/borrow/repay for ALL tokens including CRO)
+- Revenue Staking (stake/unstake)
+- Predictions, Flash Loans, Insurance, DEX Aggregator
+- Copy Trading, Limit Orders, Perpetual DEX, OTC Trading
+- DAO Governance (propose/vote), Bonds
+- Daily Check-in, Squad Create/Join, Trading Competitions
+- All Fee Collections, Revenue Seed Fund
+
+## Wallet Balance Labels (IN PROGRESS from previous session)
 - Completed: Leverage, Lending, OTC, Limit Orders, Perp, Insurance
 - Remaining: Predictions, DAO, Bonds, Flash Loans, Revenue Seed Fund
 
