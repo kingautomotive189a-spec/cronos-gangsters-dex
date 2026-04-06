@@ -23,57 +23,44 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 
 ## What's Been Implemented (Complete)
 
-### Core DeFi Features
-- Swap, Farm, Vault, Staking, Lending, Bonds
-- Leverage Trading with real on-chain collateral
-- All 6 contract addresses hardcoded for cross-device support
-- Auto-cleanup of legacy localStorage "fake" data
-- Premium typography (Bebas Neue + Space Grotesk)
+### Leverage Trading — 8 Token Pools (2026-04-06)
+Added 6 new trading pools alongside GANG and CRO:
+- BTC Pool (Bitcoin icon, orange theme)
+- ETH Pool (Ethereum icon, blue theme)
+- SOL Pool (Solana icon, green theme)
+- BNB Pool (BNB icon, yellow theme)
+- USDC Pool (USDC icon, blue theme)
+- USDT Pool (Tether icon, teal theme)
 
-### On-Chain Real MetaMask Confirmations — ALL Features (2026-04-06)
-Every feature now requires MetaMask wallet confirmation:
-- **Leverage Trading**: open/close positions, owner pool deposit (seedLiquidity) / withdraw (withdrawCollateral)
-- **Lending**: supply/withdraw/borrow/repay for ALL tokens including CRO (native CRO via direct tx)
-- **Predictions**: place bets via Protocol Vault
-- **Flash Loans**: execute + fee payment via Protocol Vault
-- **Insurance**: buy coverage via Protocol Vault
-- **DEX Aggregator**: swap fees via Protocol Vault
-- **Copy Trading**: fees via Protocol Vault
-- **Revenue Staking**: stake/unstake via Protocol Vault
-- **Limit Orders**: escrow via Protocol Vault
-- **Perpetual DEX**: margin via Protocol Vault
-- **OTC Trading**: escrow via Protocol Vault
-- **DAO Governance**: propose/vote fees via Protocol Vault
-- **Bonds**: buy bonds via Protocol Vault
-- **Daily Check-in**: MetaMask self-tx confirmation
-- **Squad Creation/Join**: MetaMask or vault deposit confirmation
-- **Trading Competitions**: entry fee via Protocol Vault
-- **All Fee Collections**: via Protocol Vault collectFees()
-- **Revenue Seed Fund**: add funds to any pool via Protocol Vault
+Each pool has:
+- Token icon from CoinGecko
+- Pool Balance + Profit display
+- Amount input field
+- DEPOSIT and WITHDRAW buttons
+- Real MetaMask confirmation (GANG/CRO via direct contracts, others via Protocol Vault)
+- State persistence in localStorage
+- Owner-only visibility
+
+### On-Chain Real MetaMask Confirmations — ALL Features
+Every feature requires MetaMask wallet confirmation. No fakes.
 
 ### Critical Bug Fixes Applied (2026-04-06)
-1. `GANG_ADDR → GANG_TOKEN` in IIFE scope (4 places) — was breaking Revenue Staking, Perp DEX, all vault deposits, Bonds
-2. Flash Loan input ID: `flashLoanAmount → flashAmount`
-3. DEX Aggregator input ID: `aggSwapAmount → aggAmount`
-4. Insurance input ID: `insCoverAmount → insCoverageAmount`
-5. Predictions input ID: `predBetAmt → predBet_${marketId}` (dynamic)
-6. Copy Trading input ID: `copyTradeAmount → ctAmount`
-7. CRO Lending Supply: sends native CRO via MetaMask (was blocking)
-8. CRO Lending Repay: sends native CRO via MetaMask (was blocking)
-9. `vaultDeposit/vaultWithdraw/vaultCollectFees` exposed globally via `window.*`
-10. Daily Check-in: now requires MetaMask self-tx
-11. Squad Creation: now requires MetaMask/vault deposit
-12. `confirmTx()` now properly `await`s async callbacks
-13. Leverage Owner Pool deposit/withdraw converted to real on-chain
-14. Lending Owner Fee Collection converted to real on-chain
-15. NFT Staking added to hamburger navigation menu
-
-## Wallet Balance Labels (Pending from earlier session)
-- Completed: Leverage, Lending, OTC, Limit Orders, Perp, Insurance
-- Remaining: Predictions, DAO, Bonds, Flash Loans, Revenue Seed Fund
+1. `GANG_ADDR → GANG_TOKEN` in IIFE scope (4 places)
+2. Flash Loan input ID fixed
+3. DEX Aggregator input ID fixed
+4. Insurance input ID fixed
+5. Predictions input ID fixed (dynamic per market)
+6. Copy Trading input ID fixed
+7. CRO Lending Supply/Repay — sends native CRO via MetaMask
+8. `vaultDeposit/vaultWithdraw/vaultCollectFees` exposed globally
+9. Daily Check-in requires MetaMask
+10. Squad Creation requires MetaMask
+11. `confirmTx()` properly awaits async callbacks
+12. NFT Staking added to hamburger navigation menu
+13. Better error messages for failed transactions (shows TX hash)
 
 ## Upcoming Tasks
-- P1: Finish wallet balance labels above remaining input fields
+- P1: Finish wallet balance labels (Predictions, DAO, Bonds, Flash Loans, Revenue Seed Fund)
 - P1: CEX listings
 - P1: Multi-chain expansion
 - P2: Mobile App

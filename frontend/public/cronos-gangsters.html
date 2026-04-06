@@ -4782,7 +4782,7 @@ function toggleNavMenu() {
         </div>
 
         <!-- CRO Pool -->
-        <div style="background:rgba(0,45,116,0.04);border:1px solid rgba(0,45,116,0.2);border-radius:12px;padding:14px;">
+        <div style="background:rgba(0,45,116,0.04);border:1px solid rgba(0,45,116,0.2);border-radius:12px;padding:14px;margin-bottom:10px;">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:18px;height:18px;border-radius:50%;box-shadow:0 0 8px rgba(0,45,116,0.3);"><span style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:#4a90d9;font-weight:700;letter-spacing:0.5px;">CRO POOL</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
             <div style="text-align:center;">
@@ -4798,6 +4798,126 @@ function toggleNavMenu() {
             <input class="swap-input" id="futuresDepositAmtCro" type="number" step="any" placeholder="CRO amount" style="flex:1;" />
             <button onclick="futuresOwnerDeposit('CRO')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">DEPOSIT</button>
             <button onclick="futuresOwnerWithdraw('CRO')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--gold);color:#000;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- BTC Pool -->
+        <div style="background:rgba(247,147,26,0.04);border:1px solid rgba(247,147,26,0.2);border-radius:12px;padding:14px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" style="width:18px;height:18px;border-radius:50%;box-shadow:0 0 8px rgba(247,147,26,0.3);"><span style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:#f7931a;font-weight:700;letter-spacing:0.5px;">BTC POOL</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL BAL</div>
+              <div id="futuresOwnerPoolBtc" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);">0</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">PROFIT</div>
+              <div id="futuresOwnerProfitBtc" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);">0</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:6px;">
+            <input class="swap-input" id="futuresDepositAmtBtc" type="number" step="any" placeholder="BTC amount" style="flex:1;" />
+            <button onclick="futuresOwnerDeposit('BTC')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">DEPOSIT</button>
+            <button onclick="futuresOwnerWithdraw('BTC')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--gold);color:#000;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- ETH Pool -->
+        <div style="background:rgba(98,126,234,0.04);border:1px solid rgba(98,126,234,0.2);border-radius:12px;padding:14px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" style="width:18px;height:18px;border-radius:50%;box-shadow:0 0 8px rgba(98,126,234,0.3);"><span style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:#627eea;font-weight:700;letter-spacing:0.5px;">ETH POOL</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL BAL</div>
+              <div id="futuresOwnerPoolEth" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);">0</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">PROFIT</div>
+              <div id="futuresOwnerProfitEth" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);">0</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:6px;">
+            <input class="swap-input" id="futuresDepositAmtEth" type="number" step="any" placeholder="ETH amount" style="flex:1;" />
+            <button onclick="futuresOwnerDeposit('ETH')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">DEPOSIT</button>
+            <button onclick="futuresOwnerWithdraw('ETH')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--gold);color:#000;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- SOL Pool -->
+        <div style="background:rgba(0,255,163,0.04);border:1px solid rgba(0,255,163,0.15);border-radius:12px;padding:14px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="https://assets.coingecko.com/coins/images/4128/small/solana.png" style="width:18px;height:18px;border-radius:50%;box-shadow:0 0 8px rgba(0,255,163,0.3);"><span style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:#00ffa3;font-weight:700;letter-spacing:0.5px;">SOL POOL</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL BAL</div>
+              <div id="futuresOwnerPoolSol" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);">0</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">PROFIT</div>
+              <div id="futuresOwnerProfitSol" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);">0</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:6px;">
+            <input class="swap-input" id="futuresDepositAmtSol" type="number" step="any" placeholder="SOL amount" style="flex:1;" />
+            <button onclick="futuresOwnerDeposit('SOL')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">DEPOSIT</button>
+            <button onclick="futuresOwnerWithdraw('SOL')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--gold);color:#000;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- BNB Pool -->
+        <div style="background:rgba(243,186,47,0.04);border:1px solid rgba(243,186,47,0.2);border-radius:12px;padding:14px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" style="width:18px;height:18px;border-radius:50%;box-shadow:0 0 8px rgba(243,186,47,0.3);"><span style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:#f3ba2f;font-weight:700;letter-spacing:0.5px;">BNB POOL</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL BAL</div>
+              <div id="futuresOwnerPoolBnb" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);">0</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">PROFIT</div>
+              <div id="futuresOwnerProfitBnb" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);">0</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:6px;">
+            <input class="swap-input" id="futuresDepositAmtBnb" type="number" step="any" placeholder="BNB amount" style="flex:1;" />
+            <button onclick="futuresOwnerDeposit('BNB')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">DEPOSIT</button>
+            <button onclick="futuresOwnerWithdraw('BNB')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--gold);color:#000;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- USDC Pool -->
+        <div style="background:rgba(39,117,202,0.04);border:1px solid rgba(39,117,202,0.2);border-radius:12px;padding:14px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="https://assets.coingecko.com/coins/images/6319/small/usdc.png" style="width:18px;height:18px;border-radius:50%;box-shadow:0 0 8px rgba(39,117,202,0.3);"><span style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:#2775ca;font-weight:700;letter-spacing:0.5px;">USDC POOL</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL BAL</div>
+              <div id="futuresOwnerPoolUsdc" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);">0</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">PROFIT</div>
+              <div id="futuresOwnerProfitUsdc" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);">0</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:6px;">
+            <input class="swap-input" id="futuresDepositAmtUsdc" type="number" step="any" placeholder="USDC amount" style="flex:1;" />
+            <button onclick="futuresOwnerDeposit('USDC')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">DEPOSIT</button>
+            <button onclick="futuresOwnerWithdraw('USDC')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--gold);color:#000;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">WITHDRAW</button>
+          </div>
+        </div>
+
+        <!-- USDT Pool -->
+        <div style="background:rgba(38,161,123,0.04);border:1px solid rgba(38,161,123,0.2);border-radius:12px;padding:14px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="https://assets.coingecko.com/coins/images/325/small/Tether.png" style="width:18px;height:18px;border-radius:50%;box-shadow:0 0 8px rgba(38,161,123,0.3);"><span style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:#26a17b;font-weight:700;letter-spacing:0.5px;">USDT POOL</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL BAL</div>
+              <div id="futuresOwnerPoolUsdt" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);">0</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">PROFIT</div>
+              <div id="futuresOwnerProfitUsdt" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);">0</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:6px;">
+            <input class="swap-input" id="futuresDepositAmtUsdt" type="number" step="any" placeholder="USDT amount" style="flex:1;" />
+            <button onclick="futuresOwnerDeposit('USDT')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--green);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">DEPOSIT</button>
+            <button onclick="futuresOwnerWithdraw('USDT')" style="padding:8px 14px;border-radius:8px;border:none;background:var(--gold);color:#000;font-family:'Bebas Neue',sans-serif;font-size:13px;cursor:pointer;">WITHDRAW</button>
           </div>
         </div>
       </div>
@@ -20738,7 +20858,19 @@ let futuresState = {
   poolBalance: 0,
   ownerDeposited: 0,
   poolBalanceCRO: 0,
-  ownerDepositedCRO: 0
+  ownerDepositedCRO: 0,
+  poolBalanceBTC: 0,
+  ownerDepositedBTC: 0,
+  poolBalanceETH: 0,
+  ownerDepositedETH: 0,
+  poolBalanceSOL: 0,
+  ownerDepositedSOL: 0,
+  poolBalanceBNB: 0,
+  ownerDepositedBNB: 0,
+  poolBalanceUSDC: 0,
+  ownerDepositedUSDC: 0,
+  poolBalanceUSDT: 0,
+  ownerDepositedUSDT: 0
 };
 
 // Load saved state
@@ -20751,6 +20883,10 @@ try {
   if (saved.poolBalanceCRO) futuresState.poolBalanceCRO = saved.poolBalanceCRO;
   if (saved.ownerDepositedCRO) futuresState.ownerDepositedCRO = saved.ownerDepositedCRO;
   if (saved.currency) futuresState.currency = saved.currency;
+  ['BTC','ETH','SOL','BNB','USDC','USDT'].forEach(function(t) {
+    if (saved['poolBalance'+t]) futuresState['poolBalance'+t] = saved['poolBalance'+t];
+    if (saved['ownerDeposited'+t]) futuresState['ownerDeposited'+t] = saved['ownerDeposited'+t];
+  });
 } catch {}
 
 // Auto-clear old fake positions (pre-contract era) — one-time cleanup
@@ -20783,7 +20919,7 @@ try {
 } catch {}
 
 function saveFuturesState() {
-  localStorage.setItem('gang_futures', JSON.stringify({
+  const obj = {
     positions: futuresState.positions,
     history: futuresState.history,
     poolBalance: futuresState.poolBalance,
@@ -20791,7 +20927,12 @@ function saveFuturesState() {
     poolBalanceCRO: futuresState.poolBalanceCRO,
     ownerDepositedCRO: futuresState.ownerDepositedCRO,
     currency: futuresState.currency
-  }));
+  };
+  ['BTC','ETH','SOL','BNB','USDC','USDT'].forEach(function(t) {
+    obj['poolBalance'+t] = futuresState['poolBalance'+t] || 0;
+    obj['ownerDeposited'+t] = futuresState['ownerDeposited'+t] || 0;
+  });
+  localStorage.setItem('gang_futures', JSON.stringify(obj));
 }
 
 function setFuturesCurrency(curr) {
@@ -21320,6 +21461,21 @@ function updateFuturesPool() {
     croProfitEl.textContent = (profit >= 0 ? '+' : '') + profit.toFixed(2);
     croProfitEl.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
   }
+
+  // Owner panels - BTC, ETH, SOL, BNB, USDC, USDT
+  ['BTC','ETH','SOL','BNB','USDC','USDT'].forEach(function(t) {
+    var suffix = t.charAt(0) + t.slice(1).toLowerCase();
+    var poolEl = document.getElementById('futuresOwnerPool' + suffix);
+    var profitEl = document.getElementById('futuresOwnerProfit' + suffix);
+    var bal = futuresState['poolBalance' + t] || 0;
+    var dep = futuresState['ownerDeposited' + t] || 0;
+    if (poolEl) poolEl.textContent = bal.toFixed(bal < 1 ? 6 : 2);
+    if (profitEl) {
+      var p = bal - dep;
+      profitEl.textContent = (p >= 0 ? '+' : '') + p.toFixed(p < 1 && p > -1 ? 6 : 2);
+      profitEl.style.color = p >= 0 ? 'var(--green)' : 'var(--red)';
+    }
+  });
 
   if (yourBal) yourBal.textContent = (curr === 'CRO' ? (state.balances?.CRO || 0) : (state.balances?.GANG || 0)).toFixed(2) + ' ' + curr;
 
@@ -24143,131 +24299,108 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
   // --- LEVERAGE OWNER POOL DEPOSIT/WITHDRAW (Real On-Chain) ---
   window._realFuturesOwnerDeposit = async function(curr) {
-    const inputId = curr === 'CRO' ? 'futuresDepositAmtCro' : 'futuresDepositAmtGang';
-    const amt = parseFloat(document.getElementById(inputId)?.value);
+    var inputMap = {GANG:'futuresDepositAmtGang',CRO:'futuresDepositAmtCro',BTC:'futuresDepositAmtBtc',ETH:'futuresDepositAmtEth',SOL:'futuresDepositAmtSol',BNB:'futuresDepositAmtBnb',USDC:'futuresDepositAmtUsdc',USDT:'futuresDepositAmtUsdt'};
+    var inputId = inputMap[curr] || 'futuresDepositAmtGang';
+    var amt = parseFloat(document.getElementById(inputId)?.value);
     if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
 
     if (curr === 'GANG') {
-      const poolAddr = getTradingPoolAddr();
+      var poolAddr = getTradingPoolAddr();
       if (!poolAddr) { showToast('Deploy Trading Pool from Revenue page first', 'error'); return; }
       try {
-        const userAddr = await state.signer.getAddress();
-        const balRaw = await _readContract(GANG_TOKEN, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
-        const userBal = parseFloat(ethers.formatEther(balRaw));
-        if (userBal < amt) {
-          showToast('Insufficient GANG! You have ' + userBal.toFixed(2) + ' but need ' + amt.toFixed(2), 'error');
-          return;
-        }
-        const weiAmt = ethers.parseEther(amt.toString());
+        var userAddr = await state.signer.getAddress();
+        var balRaw = await _readContract(GANG_TOKEN, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+        var userBal = parseFloat(ethers.formatEther(balRaw));
+        if (userBal < amt) { showToast('Insufficient GANG! You have ' + userBal.toFixed(2) + ' but need ' + amt.toFixed(2), 'error'); return; }
+        var weiAmt = ethers.parseEther(amt.toString());
         showToast('Approving GANG...', 'info');
         await _approveGANG(poolAddr, weiAmt);
         showToast('Depositing ' + amt.toFixed(2) + ' GANG to trading pool on-chain...', 'info');
         await _sendContractTx(poolAddr, TRADING_POOL_ABI, 'seedLiquidity', [weiAmt]);
         document.getElementById(inputId).value = '';
         showToast('Deposited ' + amt.toFixed(2) + ' GANG to pool on-chain!', 'success');
-        if (typeof futuresState !== 'undefined') {
-          futuresState.poolBalance += amt;
-          futuresState.ownerDeposited += amt;
-          saveFuturesState();
-          updateFuturesPool();
-        }
-      } catch(e) {
-        showToast('Deposit failed: ' + e.message, 'error');
-      }
-    } else {
-      // CRO — send native CRO to treasury via real MetaMask tx
+        futuresState.poolBalance += amt; futuresState.ownerDeposited += amt;
+        saveFuturesState(); updateFuturesPool();
+      } catch(e) { showToast('Deposit failed: ' + e.message, 'error'); }
+    } else if (curr === 'CRO') {
       try {
-        const userAddr = await state.signer.getAddress();
-        const croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
-        if (croBal < amt) {
-          showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' but need ' + amt.toFixed(2), 'error');
-          return;
-        }
-        const rawP = state._rawProvider || window.ethereum;
-        const weiHex = '0x' + BigInt(ethers.parseEther(amt.toString())).toString(16);
+        var userAddr = await state.signer.getAddress();
+        var croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
+        if (croBal < amt) { showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' but need ' + amt.toFixed(2), 'error'); return; }
+        var rawP = state._rawProvider || window.ethereum;
+        var weiHex = '0x' + BigInt(ethers.parseEther(amt.toString())).toString(16);
         showToast('Sending ' + amt.toFixed(2) + ' CRO on-chain via MetaMask...', 'info');
-        const txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: TREASURY_ADDR, value: weiHex, gas: '0x' + (21000).toString(16) }] });
-        for (let i = 0; i < 40; i++) {
-          await new Promise(r => setTimeout(r, 4000));
-          const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] });
-          if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; }
-        }
+        var txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: TREASURY_ADDR, value: weiHex, gas: '0x' + (21000).toString(16) }] });
+        for (var i = 0; i < 40; i++) { await new Promise(function(r){setTimeout(r,4000)}); var receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] }); if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; } }
         document.getElementById(inputId).value = '';
         showToast('Deposited ' + amt.toFixed(2) + ' CRO to pool on-chain!', 'success');
-        if (typeof futuresState !== 'undefined') {
-          futuresState.poolBalanceCRO += amt;
-          futuresState.ownerDepositedCRO += amt;
-          saveFuturesState();
-          updateFuturesPool();
-        }
-      } catch(e) {
-        showToast('CRO deposit failed: ' + e.message, 'error');
-      }
+        futuresState.poolBalanceCRO += amt; futuresState.ownerDepositedCRO += amt;
+        saveFuturesState(); updateFuturesPool();
+      } catch(e) { showToast('CRO deposit failed: ' + e.message, 'error'); }
+    } else {
+      // BTC, ETH, SOL, BNB, USDC, USDT — deposit via Protocol Vault
+      try {
+        await vaultDeposit('leverage_' + curr.toLowerCase(), amt, curr + ' Pool Deposit');
+        document.getElementById(inputId).value = '';
+        showToast('Deposited ' + amt + ' ' + curr + ' to pool on-chain!', 'success');
+        futuresState['poolBalance' + curr] = (futuresState['poolBalance' + curr] || 0) + amt;
+        futuresState['ownerDeposited' + curr] = (futuresState['ownerDeposited' + curr] || 0) + amt;
+        saveFuturesState(); updateFuturesPool();
+      } catch(e) { showToast(curr + ' deposit failed: ' + e.message, 'error'); }
     }
   };
 
   window._realFuturesOwnerWithdraw = async function(curr) {
-    const inputId = curr === 'CRO' ? 'futuresDepositAmtCro' : 'futuresDepositAmtGang';
-    const amt = parseFloat(document.getElementById(inputId)?.value);
+    var inputMap = {GANG:'futuresDepositAmtGang',CRO:'futuresDepositAmtCro',BTC:'futuresDepositAmtBtc',ETH:'futuresDepositAmtEth',SOL:'futuresDepositAmtSol',BNB:'futuresDepositAmtBnb',USDC:'futuresDepositAmtUsdc',USDT:'futuresDepositAmtUsdt'};
+    var inputId = inputMap[curr] || 'futuresDepositAmtGang';
+    var amt = parseFloat(document.getElementById(inputId)?.value);
     if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
 
     if (curr === 'GANG') {
-      const poolAddr = getTradingPoolAddr();
+      var poolAddr = getTradingPoolAddr();
       if (!poolAddr) { showToast('Deploy Trading Pool first', 'error'); return; }
       try {
-        const poolBal = await _readContract(poolAddr, TRADING_POOL_ABI, 'poolBalance', []);
-        const poolAmt = parseFloat(ethers.formatEther(poolBal));
-        if (poolAmt < amt) {
-          showToast('Pool only has ' + poolAmt.toFixed(2) + ' GANG on-chain. Cannot withdraw ' + amt.toFixed(2), 'error');
-          return;
-        }
-        const weiAmt = ethers.parseEther(amt.toString());
+        var poolBal = await _readContract(poolAddr, TRADING_POOL_ABI, 'poolBalance', []);
+        var poolAmt = parseFloat(ethers.formatEther(poolBal));
+        if (poolAmt < amt) { showToast('Pool only has ' + poolAmt.toFixed(2) + ' GANG on-chain. Cannot withdraw ' + amt.toFixed(2), 'error'); return; }
+        var weiAmt = ethers.parseEther(amt.toString());
         showToast('Withdrawing ' + amt.toFixed(2) + ' GANG from pool on-chain...', 'info');
         await _sendContractTx(poolAddr, TRADING_POOL_ABI, 'withdrawCollateral', [weiAmt]);
         document.getElementById(inputId).value = '';
         showToast('Withdrawn ' + amt.toFixed(2) + ' GANG from pool on-chain!', 'success');
-        if (typeof futuresState !== 'undefined') {
-          futuresState.poolBalance = Math.max(0, futuresState.poolBalance - amt);
-          futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt);
-          saveFuturesState();
-          updateFuturesPool();
-        }
-      } catch(e) {
-        showToast('Withdraw failed: ' + e.message, 'error');
-      }
-    } else {
-      // CRO — need to be the treasury owner to send CRO back
+        futuresState.poolBalance = Math.max(0, futuresState.poolBalance - amt);
+        futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt);
+        saveFuturesState(); updateFuturesPool();
+      } catch(e) { showToast('Withdraw failed: ' + e.message, 'error'); }
+    } else if (curr === 'CRO') {
       try {
-        const rawP = state._rawProvider || window.ethereum;
-        const userAddr = await state.signer.getAddress();
-        const croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
-        // For CRO pool withdraw, owner transfers from their own balance since CRO pool is tracked locally
-        const pool = typeof futuresState !== 'undefined' ? futuresState.poolBalanceCRO : 0;
-        if (amt > pool) {
-          showToast('Not enough CRO in pool. Pool has ' + pool.toFixed(2) + ' CRO', 'error');
-          return;
-        }
-        // Send a 0-value self-tx as confirmation proof through MetaMask
+        var rawP = state._rawProvider || window.ethereum;
+        var userAddr = await state.signer.getAddress();
+        var pool = futuresState.poolBalanceCRO || 0;
+        if (amt > pool) { showToast('Not enough CRO in pool. Pool has ' + pool.toFixed(2) + ' CRO', 'error'); return; }
         showToast('Confirm CRO pool withdrawal in MetaMask...', 'info');
-        const txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
-        for (let i = 0; i < 40; i++) {
-          await new Promise(r => setTimeout(r, 4000));
-          const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] });
-          if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; }
-        }
+        var txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
+        for (var i = 0; i < 40; i++) { await new Promise(function(r){setTimeout(r,4000)}); var receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] }); if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; } }
         document.getElementById(inputId).value = '';
         showToast('Withdrawn ' + amt.toFixed(2) + ' CRO from pool (confirmed on-chain)!', 'success');
-        if (typeof futuresState !== 'undefined') {
-          futuresState.poolBalanceCRO = Math.max(0, futuresState.poolBalanceCRO - amt);
-          futuresState.ownerDepositedCRO = Math.max(0, futuresState.ownerDepositedCRO - amt);
-          saveFuturesState();
-          updateFuturesPool();
-        }
-      } catch(e) {
-        showToast('CRO withdraw failed: ' + e.message, 'error');
-      }
+        futuresState.poolBalanceCRO = Math.max(0, futuresState.poolBalanceCRO - amt);
+        futuresState.ownerDepositedCRO = Math.max(0, futuresState.ownerDepositedCRO - amt);
+        saveFuturesState(); updateFuturesPool();
+      } catch(e) { showToast('CRO withdraw failed: ' + e.message, 'error'); }
+    } else {
+      // BTC, ETH, SOL, BNB, USDC, USDT — withdraw via Protocol Vault
+      try {
+        var pool = futuresState['poolBalance' + curr] || 0;
+        if (amt > pool) { showToast('Not enough ' + curr + ' in pool. Pool has ' + pool.toFixed(curr === 'USDC' || curr === 'USDT' ? 2 : 6) + ' ' + curr, 'error'); return; }
+        await vaultWithdraw('leverage_' + curr.toLowerCase(), amt, curr + ' Pool Withdrawal');
+        document.getElementById(inputId).value = '';
+        showToast('Withdrawn ' + amt + ' ' + curr + ' from pool on-chain!', 'success');
+        futuresState['poolBalance' + curr] = Math.max(0, (futuresState['poolBalance' + curr] || 0) - amt);
+        futuresState['ownerDeposited' + curr] = Math.max(0, (futuresState['ownerDeposited' + curr] || 0) - amt);
+        saveFuturesState(); updateFuturesPool();
+      } catch(e) { showToast(curr + ' withdraw failed: ' + e.message, 'error'); }
     }
   };
 
