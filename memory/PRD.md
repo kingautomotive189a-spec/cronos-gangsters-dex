@@ -114,9 +114,21 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 
 ## Completed (2026-04-06 — Leverage Trading MetaMask Fix)
 - **FIX**: Leverage Trading CRO deposits now directly trigger MetaMask wallet confirmation via `state.signer.sendTransaction`
-- **FIX**: Removed fragile `window._realDoOpenFuturesPosition` lookup pattern that silently fell back to mock `_doOpenFuturesPosition` when the IIFE failed to execute
-- **FIX**: `onConfirm` callback now inlines the real on-chain logic: CRO via `sendTransaction`, GANG via `vaultDeposit`, other tokens via vault
-- **FIX**: No wallet = error toast. No fallback to mock/demo. Every leverage trade requires MetaMask confirmation.
+- **FIX**: Removed fragile `window._realDoOpenFuturesPosition` lookup pattern that silently fell back to mock `_doOpenFuturesPosition`
+- **FIX**: Removed pool liquidity gate for CRO (was blocking MetaMask from ever opening because `poolBalanceCRO` started at 0)
+- **FIX**: `onConfirm` callback inlines real on-chain logic: CRO via `sendTransaction`, GANG via `vaultDeposit`, other tokens via vault
+
+## Completed (2026-04-06 — Fulcrom Finance Trade Panel Redesign)
+- **REDESIGN**: Leverage Trading trade panel completely redesigned to match Fulcrom Finance's professional layout
+- **NEW**: "You Pay" input section with CRO dropdown selector, wallet balance display, 25%/50%/100%/MAX buttons
+- **NEW**: USD equivalent under input field (~$X.XX)
+- **NEW**: Leverage display showing current multiplier (5.0x) next to selector buttons
+- **NEW**: TP/SL displayed side-by-side with "Not set" status labels
+- **NEW**: "To Long" / "To Short" position size section showing token amount + USD value
+- **NEW**: Fulcrom-style trade details list: Collateral In, Leverage, Allowed Slippage, Entry Price, Liq. Price, Fees, Borrow Rate, Position Size, Margin
+- **NEW**: Big "Long CRO" / "Short CRO" button with green/red gradient based on side
+- **CHANGED**: Default trading currency changed from GANG to CRO
+- **STYLE**: Deep navy theme with subtle blue accents (matches Fulcrom's dark-mode aesthetic)
 
 ## Upcoming Tasks
 - P1: CEX listings

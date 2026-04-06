@@ -4922,126 +4922,197 @@ function toggleNavMenu() {
       </div>
     </div>
 
-    <!-- Trade Panel -->
-    <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.3);">
-      <!-- Long / Short Toggle -->
-      <div style="display:flex;gap:0;margin-bottom:14px;background:var(--surface2);border-radius:12px;padding:4px;border:1px solid var(--border);">
-        <!-- Buy/Sell Spread (Full-width, big buttons) -->
-          <button id="futuresBtnShort" data-testid="futures-short-btn" onclick="setFuturesSide('short')" style="flex:1;padding:20px 12px;border:none;border-radius:10px;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .2s;background:rgba(229,57,53,0.15);text-align:center;margin-right:2px;">
-            <div style="font-size:14px;letter-spacing:3px;color:#e53935;font-weight:700;margin-bottom:4px;">SELL</div>
-            <div id="futuresSellPrice" style="font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#e53935;">$—</div>
-          </button>
-          <button id="futuresBtnLong" data-testid="futures-long-btn" onclick="setFuturesSide('long')" style="flex:1;padding:20px 12px;border:none;border-radius:10px;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .2s;background:rgba(39,174,96,0.15);text-align:center;margin-left:2px;">
-            <div style="font-size:14px;letter-spacing:3px;color:#27ae60;font-weight:700;margin-bottom:4px;">BUY</div>
-            <div id="futuresBuyPrice" style="font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#27ae60;">$—</div>
-          </button>
-      </div>
-
-      <!-- Leverage -->
-      <div style="margin-bottom:14px;">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;margin-bottom:6px;font-weight:500;">LEVERAGE</div>
-        <div style="display:flex;gap:4px;flex-wrap:wrap;" id="futuresLevBar">
-          <button class="lev-btn active" data-lev="5" onclick="setFuturesLev(5)">5x</button>
-          <button class="lev-btn" data-lev="10" onclick="setFuturesLev(10)">10x</button>
-          <button class="lev-btn" data-lev="20" onclick="setFuturesLev(20)">20x</button>
-          <button class="lev-btn" data-lev="50" onclick="setFuturesLev(50)">50x</button>
-          <button class="lev-btn" data-lev="75" onclick="setFuturesLev(75)">75x</button>
-          <button class="lev-btn" data-lev="100" onclick="setFuturesLev(100)">100x</button>
-        </div>
-        <style>.lev-btn{flex:1;padding:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;cursor:pointer;transition:all .2s;}.lev-btn.active{background:#ff8c00;color:#000;border-color:#ff8c00;}.lev-btn:hover{border-color:rgba(255,140,0,0.5);}</style>
-      </div>
-
-      <!-- Currency Toggle -->
-      <div style="margin-bottom:14px;">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;margin-bottom:6px;font-weight:500;">TRADE WITH</div>
-        <div style="display:flex;gap:0;background:var(--surface2);border-radius:10px;padding:3px;border:1px solid var(--border);flex-wrap:wrap;">
-          <button id="futuresCurrGang" data-testid="futures-curr-gang" onclick="setFuturesCurrency('GANG')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:#ff8c00;color:#000;display:flex;align-items:center;justify-content:center;gap:4px;"><img src="/gang-logo.png" style="width:16px;height:16px;border-radius:50%;">GANG</button>
-          <button id="futuresCurrCro" data-testid="futures-curr-cro" onclick="setFuturesCurrency('CRO')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:16px;height:16px;border-radius:50%;">CRO</button>
-          <button id="futuresCurrBtc" data-testid="futures-curr-btc" onclick="setFuturesCurrency('BTC')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" style="width:16px;height:16px;border-radius:50%;">BTC</button>
-          <button id="futuresCurrEth" data-testid="futures-curr-eth" onclick="setFuturesCurrency('ETH')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" style="width:16px;height:16px;border-radius:50%;">ETH</button>
-          <button id="futuresCurrSol" data-testid="futures-curr-sol" onclick="setFuturesCurrency('SOL')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/4128/small/solana.png" style="width:16px;height:16px;border-radius:50%;">SOL</button>
-          <button id="futuresCurrBnb" data-testid="futures-curr-bnb" onclick="setFuturesCurrency('BNB')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" style="width:16px;height:16px;border-radius:50%;">BNB</button>
-          <button id="futuresCurrUsdc" data-testid="futures-curr-usdc" onclick="setFuturesCurrency('USDC')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/6319/small/usdc.png" style="width:16px;height:16px;border-radius:50%;">USDC</button>
-          <button id="futuresCurrUsdt" data-testid="futures-curr-usdt" onclick="setFuturesCurrency('USDT')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/325/small/Tether.png" style="width:16px;height:16px;border-radius:50%;">USDT</button>
-        </div>
-      </div>
-
-      <!-- Amount -->
-      <div style="margin-bottom:14px;">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;margin-bottom:6px;font-weight:500;display:flex;justify-content:space-between;">
-          <span>AMOUNT (<span id="futuresCurrLabel">GANG</span>)</span>
-          <span style="color:var(--green);">Balance: <span id="futuresWalletBal" data-testid="futures-wallet-bal" style="color:var(--gold);font-weight:700;">--</span></span>
-        </div>
-        <div style="display:flex;gap:6px;">
-          <input class="swap-input" id="futuresAmount" data-testid="futures-amount" type="number" step="any" placeholder="Enter amount" style="flex:1;" />
-          <button onclick="document.getElementById('futuresAmount').value = _truncDec((futuresState.currency === 'CRO' ? ((state.balances?.CRO || 0) > 0.5 ? (state.balances?.CRO || 0) - 0.5 : 0) : (state.balances?.GANG || 0)), 2); updateFuturesPosInfo();" style="background:var(--surface2);border:1px solid var(--border);color:var(--gold);border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;">MAX</button>
-        </div>
-        <!-- Quick % buttons like Trading 212 -->
-        <div style="display:flex;gap:6px;margin-top:8px;">
-          <button onclick="_setFuturesAmtPct(0.25)" data-testid="futures-pct-25" style="flex:1;padding:7px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='#ff8c00';this.style.color='#ff8c00'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">25%</button>
-          <button onclick="_setFuturesAmtPct(0.50)" data-testid="futures-pct-50" style="flex:1;padding:7px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='#ff8c00';this.style.color='#ff8c00'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">50%</button>
-          <button onclick="_setFuturesAmtPct(0.75)" data-testid="futures-pct-75" style="flex:1;padding:7px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='#ff8c00';this.style.color='#ff8c00'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">75%</button>
-          <button onclick="_setFuturesAmtPct(1.00)" data-testid="futures-pct-100" style="flex:1;padding:7px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='#ff8c00';this.style.color='#ff8c00'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">100%</button>
-        </div>
-        <!-- Units & Position Info -->
-        <div style="text-align:center;margin-top:10px;padding:10px;background:var(--surface2);border-radius:10px;border:1px solid var(--border);">
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-bottom:4px;">VALUE</div>
-          <div id="futuresValueDisplay" style="font-family:'Space Mono',monospace;font-size:22px;color:var(--text);font-weight:700;margin-bottom:4px;">$0.00</div>
-          <div id="futuresUnitsDisplay" style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--muted);">~0.000000 units</div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px;">
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);">Position size: <span id="futuresPosSize" style="color:var(--gold);font-weight:600;">0</span></div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);text-align:right;">Liq. price: <span id="futuresLiqPrice" style="color:var(--red);font-weight:600;">$—</span></div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);">Margin: <span id="futuresMargin" style="color:var(--text);font-weight:600;">0</span></div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);text-align:right;">Open fee: <span id="futuresOpenFee" style="color:#e74c3c;font-weight:600;">0</span></div>
-        </div>
-      </div>
-
-      <!-- TP / SL Toggle Switches (Trading 212 style) -->
-      <div style="margin-bottom:14px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2"><polyline points="22,7 13.5,15.5 8.5,10.5 2,17"/><polyline points="16,7 22,7 22,13"/></svg>
-            <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--text);font-weight:500;">Take Profit</span>
-          </div>
-          <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;">
-            <input type="checkbox" id="futuresTPToggle" onchange="_toggleFuturesTP()" style="opacity:0;width:0;height:0;" />
-            <span style="position:absolute;inset:0;background:var(--surface2);border:1px solid var(--border);border-radius:24px;transition:all .3s;" class="tp-slider"></span>
-          </label>
-        </div>
-        <div id="futuresTPContainer" style="display:none;padding:8px 0;">
-          <input class="swap-input" id="futuresTP" type="number" step="any" placeholder="Take Profit price (USD)" style="width:100%;box-sizing:border-box;font-size:13px;" />
-          <div id="futuresTPPnl" style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--green);margin-top:4px;"></div>
-        </div>
-
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--text);font-weight:500;">Stop Loss</span>
-          </div>
-          <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;">
-            <input type="checkbox" id="futuresSLToggle" onchange="_toggleFuturesSL()" style="opacity:0;width:0;height:0;" />
-            <span style="position:absolute;inset:0;background:var(--surface2);border:1px solid var(--border);border-radius:24px;transition:all .3s;" class="sl-slider"></span>
-          </label>
-        </div>
-        <div id="futuresSLContainer" style="display:none;padding:8px 0;">
-          <input class="swap-input" id="futuresSL" type="number" step="any" placeholder="Stop Loss price (USD)" style="width:100%;box-sizing:border-box;font-size:13px;" />
-          <div id="futuresSLPnl" style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--red);margin-top:4px;"></div>
-        </div>
-      </div>
+    <!-- Trade Panel — Fulcrom-Style -->
+    <div class="card" style="margin-bottom:14px;border-color:rgba(100,120,255,0.25);background:linear-gradient(180deg,rgba(15,17,35,0.95),rgba(10,12,28,0.98));border-radius:16px;padding:0;overflow:hidden;">
       <style>
-        .tp-slider::before,.sl-slider::before{content:'';position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:var(--muted);transition:all .3s;}
-        #futuresTPToggle:checked+.tp-slider{background:#27ae60;border-color:#27ae60;}
+        .fulc-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;font-family:'Space Grotesk',sans-serif;font-size:13px;}
+        .fulc-label{color:rgba(180,190,220,0.6);}
+        .fulc-val{color:#e0e4f0;font-weight:600;}
+        .fulc-val.green{color:#00d4aa;}
+        .fulc-val.red{color:#ff4d6a;}
+        .fulc-val.gold{color:#ffb347;}
+        .fulc-dotted{border-bottom:1px dotted rgba(100,120,255,0.15);}
+        .fulc-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(100,120,255,0.15),transparent);margin:2px 0;}
+        .fulc-side-btn{flex:1;padding:14px 8px;border:none;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all .2s;}
+        .fulc-side-btn.long-active{background:rgba(0,212,170,0.15);color:#00d4aa;border:1px solid rgba(0,212,170,0.3);}
+        .fulc-side-btn.long-inactive{background:transparent;color:rgba(0,212,170,0.4);border:1px solid transparent;}
+        .fulc-side-btn.short-active{background:rgba(255,77,106,0.15);color:#ff4d6a;border:1px solid rgba(255,77,106,0.3);}
+        .fulc-side-btn.short-inactive{background:transparent;color:rgba(255,77,106,0.4);border:1px solid transparent;}
+        .fulc-pct-btn{flex:1;padding:6px;border-radius:6px;border:1px solid rgba(100,120,255,0.15);background:transparent;color:rgba(130,145,200,0.7);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;}
+        .fulc-pct-btn:hover{border-color:rgba(100,120,255,0.4);color:#a0b0ff;}
+        .fulc-curr-btn{padding:8px 14px;border-radius:10px;border:1px solid transparent;background:transparent;color:rgba(180,190,220,0.5);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;}
+        .fulc-curr-btn.active{background:rgba(100,120,255,0.12);border-color:rgba(100,120,255,0.3);color:#a0b0ff;}
+        .fulc-curr-btn:hover{border-color:rgba(100,120,255,0.2);}
+        .fulc-curr-btn img{width:16px;height:16px;border-radius:50%;}
+        .lev-btn{flex:1;padding:8px;border:1px solid rgba(100,120,255,0.12);background:transparent;color:rgba(180,190,220,0.5);border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;cursor:pointer;transition:all .2s;}
+        .lev-btn.active{background:rgba(100,120,255,0.15);color:#a0b0ff;border-color:rgba(100,120,255,0.4);}
+        .lev-btn:hover{border-color:rgba(100,120,255,0.3);}
+        .tp-slider::before,.sl-slider::before{content:'';position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:rgba(180,190,220,0.4);transition:all .3s;}
+        #futuresTPToggle:checked+.tp-slider{background:#00d4aa;border-color:#00d4aa;}
         #futuresTPToggle:checked+.tp-slider::before{transform:translateX(20px);background:#fff;}
-        #futuresSLToggle:checked+.sl-slider{background:#e74c3c;border-color:#e74c3c;}
+        #futuresSLToggle:checked+.sl-slider{background:#ff4d6a;border-color:#ff4d6a;}
         #futuresSLToggle:checked+.sl-slider::before{transform:translateX(20px);background:#fff;}
       </style>
 
-      <!-- Open Position Button -->
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--gold);text-align:center;margin-bottom:8px;font-weight:400;">Trading fee: 0.3% open + 0.3% close</div>
-      <button id="futuresOpenBtn" data-testid="futures-open-btn" onclick="openFuturesPosition()" style="width:100%;padding:16px;border-radius:12px;border:none;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;cursor:pointer;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;transition:all .2s;">
-        CONFIRM BUY
-      </button>
+      <!-- Long / Short Toggle -->
+      <div style="padding:16px 16px 0;">
+        <div style="display:flex;gap:6px;margin-bottom:16px;">
+          <button id="futuresBtnLong" data-testid="futures-long-btn" onclick="setFuturesSide('long')" class="fulc-side-btn long-active">
+            LONG
+          </button>
+          <button id="futuresBtnShort" data-testid="futures-short-btn" onclick="setFuturesSide('short')" class="fulc-side-btn short-inactive">
+            SHORT
+          </button>
+        </div>
+
+        <!-- You Pay Section -->
+        <div style="background:rgba(20,22,45,0.8);border:1px solid rgba(100,120,255,0.12);border-radius:14px;padding:14px;margin-bottom:14px;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(180,190,220,0.45);letter-spacing:1px;margin-bottom:8px;">You Pay</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="flex:1;">
+              <input class="swap-input" id="futuresAmount" data-testid="futures-amount" type="number" step="any" placeholder="0.0" oninput="updateFuturesPosInfo()" style="width:100%;background:transparent;border:none;font-family:'Space Mono',monospace;font-size:24px;color:#e0e4f0;padding:0;outline:none;" />
+              <div id="futuresUsdEquiv" style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(180,190,220,0.4);margin-top:2px;">~$0.00</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+              <select id="futuresCurrSelect" data-testid="futures-curr-select" onchange="setFuturesCurrency(this.value)" style="background:rgba(100,120,255,0.1);border:1px solid rgba(100,120,255,0.2);border-radius:10px;padding:8px 12px;color:#a0b0ff;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;appearance:none;-webkit-appearance:none;min-width:90px;text-align:center;">
+                <option value="CRO" style="background:#1a1c35;">CRO</option>
+                <option value="GANG" style="background:#1a1c35;">GANG</option>
+                <option value="BTC" style="background:#1a1c35;">BTC</option>
+                <option value="ETH" style="background:#1a1c35;">ETH</option>
+                <option value="SOL" style="background:#1a1c35;">SOL</option>
+                <option value="BNB" style="background:#1a1c35;">BNB</option>
+                <option value="USDC" style="background:#1a1c35;">USDC</option>
+                <option value="USDT" style="background:#1a1c35;">USDT</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(180,190,220,0.5);">Bal. <span id="futuresWalletBal" data-testid="futures-wallet-bal" style="color:#e0e4f0;font-weight:600;">0.0000</span> <span id="futuresCurrLabel">CRO</span></div>
+            <div style="display:flex;gap:6px;">
+              <button onclick="_setFuturesAmtPct(0.25)" data-testid="futures-pct-25" class="fulc-pct-btn">25%</button>
+              <button onclick="_setFuturesAmtPct(0.50)" data-testid="futures-pct-50" class="fulc-pct-btn">50%</button>
+              <button onclick="_setFuturesAmtPct(1.00)" data-testid="futures-pct-100" class="fulc-pct-btn">100%</button>
+              <button onclick="document.getElementById('futuresAmount').value = _truncDec((futuresState.currency === 'CRO' ? ((state.balances?.CRO || 0) > 0.5 ? (state.balances?.CRO || 0) - 0.5 : 0) : (state.balances?.GANG || 0)), 2); updateFuturesPosInfo();" class="fulc-pct-btn" style="color:#ffb347;border-color:rgba(255,179,71,0.2);">MAX</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Leverage -->
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(180,190,220,0.45);letter-spacing:1px;">Leverage</span>
+            <span id="futuresLevDisplay" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#a0b0ff;">5.0x</span>
+          </div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;" id="futuresLevBar">
+            <button class="lev-btn active" data-lev="5" onclick="setFuturesLev(5)">5x</button>
+            <button class="lev-btn" data-lev="10" onclick="setFuturesLev(10)">10x</button>
+            <button class="lev-btn" data-lev="20" onclick="setFuturesLev(20)">20x</button>
+            <button class="lev-btn" data-lev="50" onclick="setFuturesLev(50)">50x</button>
+            <button class="lev-btn" data-lev="75" onclick="setFuturesLev(75)">75x</button>
+            <button class="lev-btn" data-lev="100" onclick="setFuturesLev(100)">100x</button>
+          </div>
+        </div>
+
+        <!-- TP / SL — Fulcrom style inline -->
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;gap:8px;margin-bottom:6px;">
+            <div style="flex:1;background:rgba(20,22,45,0.8);border:1px solid rgba(100,120,255,0.1);border-radius:12px;padding:12px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="2"><polyline points="22,7 13.5,15.5 8.5,10.5 2,17"/><polyline points="16,7 22,7 22,13"/></svg>
+                  <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(180,190,220,0.6);">Take Profit at</span>
+                </div>
+                <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
+                  <input type="checkbox" id="futuresTPToggle" onchange="_toggleFuturesTP()" style="opacity:0;width:0;height:0;" />
+                  <span style="position:absolute;inset:0;background:rgba(50,55,80,0.8);border:1px solid rgba(100,120,255,0.15);border-radius:20px;transition:all .3s;" class="tp-slider"></span>
+                </label>
+              </div>
+              <div id="futuresTPContainer" style="display:none;">
+                <input class="swap-input" id="futuresTP" type="number" step="any" placeholder="TP Price" style="width:100%;box-sizing:border-box;font-size:13px;background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.15);border-radius:8px;padding:8px;color:#00d4aa;" />
+                <div id="futuresTPPnl" style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:#00d4aa;margin-top:4px;"></div>
+              </div>
+              <div id="futuresTPStatus" style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:#00d4aa;font-weight:600;">Not set</div>
+            </div>
+            <div style="flex:1;background:rgba(20,22,45,0.8);border:1px solid rgba(100,120,255,0.1);border-radius:12px;padding:12px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff4d6a" stroke-width="2"><polyline points="22,17 13.5,8.5 8.5,13.5 2,7"/><polyline points="16,17 22,17 22,11"/></svg>
+                  <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(180,190,220,0.6);">Stop Loss at</span>
+                </div>
+                <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
+                  <input type="checkbox" id="futuresSLToggle" onchange="_toggleFuturesSL()" style="opacity:0;width:0;height:0;" />
+                  <span style="position:absolute;inset:0;background:rgba(50,55,80,0.8);border:1px solid rgba(100,120,255,0.15);border-radius:20px;transition:all .3s;" class="sl-slider"></span>
+                </label>
+              </div>
+              <div id="futuresSLContainer" style="display:none;">
+                <input class="swap-input" id="futuresSL" type="number" step="any" placeholder="SL Price" style="width:100%;box-sizing:border-box;font-size:13px;background:rgba(255,77,106,0.05);border:1px solid rgba(255,77,106,0.15);border-radius:8px;padding:8px;color:#ff4d6a;" />
+                <div id="futuresSLPnl" style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:#ff4d6a;margin-top:4px;"></div>
+              </div>
+              <div id="futuresSLStatus" style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:#ff4d6a;font-weight:600;">Not set</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- To Long/Short Position Size -->
+        <div style="background:rgba(20,22,45,0.8);border:1px solid rgba(100,120,255,0.1);border-radius:14px;padding:14px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span id="futuresToLabel" style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:rgba(180,190,220,0.6);">To Long</span>
+            <div style="text-align:right;">
+              <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end;">
+                <span id="futuresValueDisplay" style="font-family:'Space Mono',monospace;font-size:20px;color:#e0e4f0;font-weight:700;">0.0000</span>
+                <span id="futuresPosCurrLabel" style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:rgba(180,190,220,0.5);font-weight:600;">CRO</span>
+              </div>
+              <div id="futuresUnitsDisplay" style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(180,190,220,0.35);">~$0.00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trade Details — Fulcrom style list -->
+        <div style="padding:0 0 4px;margin-bottom:14px;">
+          <div class="fulc-row fulc-dotted">
+            <span class="fulc-label">Collateral In</span>
+            <span class="fulc-val" id="futuresDetailColl">CRO</span>
+          </div>
+          <div class="fulc-row fulc-dotted">
+            <span class="fulc-label">Leverage</span>
+            <span class="fulc-val" id="futuresDetailLev">5.00x</span>
+          </div>
+          <div class="fulc-row fulc-dotted">
+            <span class="fulc-label">Allowed Slippage</span>
+            <span class="fulc-val">0.50%</span>
+          </div>
+          <div class="fulc-row fulc-dotted">
+            <span class="fulc-label">Entry Price</span>
+            <span class="fulc-val" id="futuresDetailEntry" style="border-bottom:1px dotted rgba(180,190,220,0.2);">$—</span>
+          </div>
+          <div class="fulc-row fulc-dotted">
+            <span class="fulc-label">Liq. Price</span>
+            <span class="fulc-val red" id="futuresLiqPrice">—</span>
+          </div>
+          <div class="fulc-row fulc-dotted">
+            <span class="fulc-label">Fees</span>
+            <span class="fulc-val" id="futuresOpenFee">0.00</span>
+          </div>
+          <div class="fulc-row fulc-dotted">
+            <span class="fulc-label">Borrow Rate</span>
+            <span class="fulc-val" style="border-bottom:1px dotted rgba(180,190,220,0.2);">0.0027 %/H</span>
+          </div>
+          <div class="fulc-row">
+            <span class="fulc-label">Position Size</span>
+            <span class="fulc-val gold" id="futuresPosSize">$0.00</span>
+          </div>
+          <div class="fulc-row">
+            <span class="fulc-label">Margin</span>
+            <span class="fulc-val" id="futuresMargin">0.00</span>
+          </div>
+        </div>
+
+        <!-- Open Position Button — Large Fulcrom-style -->
+        <button id="futuresOpenBtn" data-testid="futures-open-btn" onclick="openFuturesPosition()" style="width:100%;padding:18px;border-radius:14px;border:none;font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;letter-spacing:1px;cursor:pointer;background:linear-gradient(135deg,#00d4aa,#00b894);color:#0a0c1c;transition:all .2s;margin-bottom:4px;">
+          Long CRO
+        </button>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(180,190,220,0.35);text-align:center;padding:6px 0 12px;">Trading fee: 0.3% open + 0.3% close (all fees in CRO)</div>
+      </div>
     </div>
 
     <!-- Open Positions -->
@@ -21837,7 +21908,7 @@ let futuresState = {
   pair: 'BTC',
   side: 'long',
   leverage: 5,
-  currency: 'GANG',
+  currency: 'CRO',
   prices: {},
   positions: [],
   history: [],
@@ -21952,23 +22023,23 @@ function saveFuturesState() {
 
 function setFuturesCurrency(curr) {
   futuresState.currency = curr;
-  var allTokens = ['GANG','CRO','BTC','ETH','SOL','BNB','USDC','USDT'];
-  var colors = {GANG:'#ff8c00',CRO:'#002d74',BTC:'#f7931a',ETH:'#627eea',SOL:'#00ffa3',BNB:'#f3ba2f',USDC:'#2775ca',USDT:'#26a17b'};
-  var textColors = {GANG:'#000',CRO:'#fff',BTC:'#fff',ETH:'#fff',SOL:'#000',BNB:'#000',USDC:'#fff',USDT:'#fff'};
-  allTokens.forEach(function(t) {
-    var suffix = t.charAt(0) + t.slice(1).toLowerCase();
-    var btn = document.getElementById('futuresCurr' + suffix);
-    if (btn) {
-      if (t === curr) {
-        btn.style.background = colors[t]; btn.style.color = textColors[t];
-      } else {
-        btn.style.background = 'transparent'; btn.style.color = 'var(--muted)';
-      }
-    }
-  });
+  // Update dropdown select if exists
+  var sel = document.getElementById('futuresCurrSelect');
+  if (sel) sel.value = curr;
+  // Update labels
   var label = document.getElementById('futuresCurrLabel');
   if (label) label.textContent = curr;
-  document.getElementById('futuresAmount').placeholder = 'Enter ' + curr + ' amount';
+  var posLabel = document.getElementById('futuresPosCurrLabel');
+  if (posLabel) posLabel.textContent = curr;
+  var detailColl = document.getElementById('futuresDetailColl');
+  if (detailColl) detailColl.textContent = curr;
+  // Update button text
+  var openBtn = document.getElementById('futuresOpenBtn');
+  if (openBtn) {
+    var sideText = futuresState.side === 'long' ? 'Long' : 'Short';
+    openBtn.textContent = sideText + ' ' + curr;
+  }
+  document.getElementById('futuresAmount').placeholder = '0.0';
   updateFuturesPosInfo();
   updateFuturesPool();
   saveFuturesState();
@@ -22013,28 +22084,22 @@ function setFuturesSide(side) {
   const longBtn = document.getElementById('futuresBtnLong');
   const shortBtn = document.getElementById('futuresBtnShort');
   const openBtn = document.getElementById('futuresOpenBtn');
+  const toLabel = document.getElementById('futuresToLabel');
+  const curr = futuresState.currency || 'CRO';
   if (side === 'long') {
-    longBtn.style.background = 'rgba(39,174,96,0.3)';
-    longBtn.style.border = '2px solid #27ae60';
-    longBtn.querySelector('div:first-child').style.color = '#27ae60';
-    longBtn.querySelector('div:last-child').style.color = '#27ae60';
-    shortBtn.style.background = 'rgba(229,57,53,0.08)';
-    shortBtn.style.border = '2px solid transparent';
-    shortBtn.querySelector('div:first-child').style.color = 'rgba(229,57,53,0.5)';
-    shortBtn.querySelector('div:last-child').style.color = 'rgba(229,57,53,0.5)';
-    openBtn.style.background = 'linear-gradient(135deg,#27ae60,#2ecc71)';
-    openBtn.textContent = 'CONFIRM BUY';
+    longBtn.className = 'fulc-side-btn long-active';
+    shortBtn.className = 'fulc-side-btn short-inactive';
+    openBtn.style.background = 'linear-gradient(135deg,#00d4aa,#00b894)';
+    openBtn.style.color = '#0a0c1c';
+    openBtn.textContent = 'Long ' + curr;
+    if (toLabel) toLabel.textContent = 'To Long';
   } else {
-    shortBtn.style.background = 'rgba(229,57,53,0.3)';
-    shortBtn.style.border = '2px solid #e53935';
-    shortBtn.querySelector('div:first-child').style.color = '#e53935';
-    shortBtn.querySelector('div:last-child').style.color = '#e53935';
-    longBtn.style.background = 'rgba(39,174,96,0.08)';
-    longBtn.style.border = '2px solid transparent';
-    longBtn.querySelector('div:first-child').style.color = 'rgba(39,174,96,0.5)';
-    longBtn.querySelector('div:last-child').style.color = 'rgba(39,174,96,0.5)';
-    openBtn.style.background = 'linear-gradient(135deg,#e74c3c,#c0392b)';
-    openBtn.textContent = 'CONFIRM SELL';
+    shortBtn.className = 'fulc-side-btn short-active';
+    longBtn.className = 'fulc-side-btn long-inactive';
+    openBtn.style.background = 'linear-gradient(135deg,#ff4d6a,#e74c3c)';
+    openBtn.style.color = '#fff';
+    openBtn.textContent = 'Short ' + curr;
+    if (toLabel) toLabel.textContent = 'To Short';
   }
   updateFuturesPosInfo();
 }
@@ -22056,6 +22121,10 @@ function setFuturesLev(lev) {
   document.querySelectorAll('.lev-btn').forEach(b => {
     b.classList.toggle('active', parseInt(b.dataset.lev) === lev);
   });
+  var levDisplay = document.getElementById('futuresLevDisplay');
+  if (levDisplay) levDisplay.textContent = lev + '.0x';
+  var detailLev = document.getElementById('futuresDetailLev');
+  if (detailLev) detailLev.textContent = lev + '.00x';
   updateFuturesPosInfo();
 }
 
@@ -22260,38 +22329,77 @@ function updateFuturesPosInfo() {
   const posSize = amt * lev;
   const openFee = amt * 0.003;
   const margin = amt - openFee;
-  document.getElementById('futuresPosSize').textContent = posSize.toFixed(2) + ' ' + curr;
-  var marginEl = document.getElementById('futuresMargin');
-  if (marginEl) marginEl.textContent = margin.toFixed(2) + ' ' + curr;
-  var feeEl = document.getElementById('futuresOpenFee');
-  if (feeEl) feeEl.textContent = openFee.toFixed(4) + ' ' + curr;
-  // Value display
-  var valueEl = document.getElementById('futuresValueDisplay');
-  if (valueEl) {
+
+  // Position size
+  var posSizeEl = document.getElementById('futuresPosSize');
+  if (posSizeEl) {
     if (price > 0 && amt > 0) {
-      var val = posSize * price;
-      valueEl.textContent = '$' + val.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+      posSizeEl.textContent = '$' + (posSize * price).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
     } else {
-      valueEl.textContent = '$0.00';
+      posSizeEl.textContent = '$0.00';
     }
   }
-  // Units display
+
+  // Margin
+  var marginEl = document.getElementById('futuresMargin');
+  if (marginEl) marginEl.textContent = margin.toFixed(2) + ' ' + curr;
+
+  // Open fee
+  var feeEl = document.getElementById('futuresOpenFee');
+  if (feeEl) feeEl.textContent = openFee.toFixed(4) + ' ' + curr;
+
+  // Value display (position size in token units)
+  var valueEl = document.getElementById('futuresValueDisplay');
+  if (valueEl) {
+    valueEl.textContent = posSize > 0 ? posSize.toFixed(4) : '0.0000';
+  }
+
+  // USD equivalent under "You Pay"
+  var usdEquiv = document.getElementById('futuresUsdEquiv');
+  if (usdEquiv) {
+    if (price > 0 && amt > 0) {
+      usdEquiv.textContent = '~$' + (amt * price).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+    } else {
+      usdEquiv.textContent = '~$0.00';
+    }
+  }
+
+  // Units display under "To Long/Short"
   var unitsEl = document.getElementById('futuresUnitsDisplay');
   if (unitsEl) {
     if (price > 0 && posSize > 0) {
-      var units = posSize / price;
-      unitsEl.textContent = '~' + units.toFixed(6) + ' units of ' + futuresState.pair;
+      unitsEl.textContent = '~$' + (posSize * price).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
     } else {
-      unitsEl.textContent = '~0.000000 units';
+      unitsEl.textContent = '~$0.00';
     }
   }
+
+  // Entry price
+  var entryEl = document.getElementById('futuresDetailEntry');
+  if (entryEl) entryEl.textContent = price > 0 ? '$' + _fmtPrice(price) : '$—';
+
+  // Leverage detail
+  var detailLev = document.getElementById('futuresDetailLev');
+  if (detailLev) detailLev.textContent = lev + '.00x';
+
+  // Collateral
+  var detailColl = document.getElementById('futuresDetailColl');
+  if (detailColl) detailColl.textContent = curr;
+
   // Update bid/ask spread
   _updateSpreadPrices();
+
+  // Liq price
   if (price > 0 && amt > 0) {
     const liqMove = 1 / lev;
     const liqPrice = futuresState.side === 'long' ? price * (1 - liqMove) : price * (1 + liqMove);
-    document.getElementById('futuresLiqPrice').textContent = '$' + _fmtPrice(liqPrice);
+    var liqEl = document.getElementById('futuresLiqPrice');
+    if (liqEl) liqEl.textContent = '$' + _fmtPrice(liqPrice);
+  } else {
+    var liqEl2 = document.getElementById('futuresLiqPrice');
+    if (liqEl2) liqEl2.textContent = '—';
   }
+
   // TP/SL PnL estimates
   var tpVal = parseFloat(document.getElementById('futuresTP')?.value) || 0;
   var slVal = parseFloat(document.getElementById('futuresSL')?.value) || 0;
@@ -22302,14 +22410,14 @@ function updateFuturesPosInfo() {
     var tpPct = futuresState.side === 'long' ? tpDiff * lev : -tpDiff * lev;
     var tpAmt = margin * tpPct;
     tpPnlEl.textContent = 'Est. profit: ' + (tpAmt >= 0 ? '+' : '') + tpAmt.toFixed(2) + ' ' + curr + ' (' + (tpPct*100).toFixed(1) + '%)';
-    tpPnlEl.style.color = tpAmt >= 0 ? 'var(--green)' : 'var(--red)';
+    tpPnlEl.style.color = tpAmt >= 0 ? '#00d4aa' : '#ff4d6a';
   } else if (tpPnlEl) { tpPnlEl.textContent = ''; }
   if (slPnlEl && slVal > 0 && price > 0 && amt > 0) {
     var slDiff = (slVal - price) / price;
     var slPct = futuresState.side === 'long' ? slDiff * lev : -slDiff * lev;
     var slAmt = margin * slPct;
     slPnlEl.textContent = 'Est. loss: ' + (slAmt >= 0 ? '+' : '') + slAmt.toFixed(2) + ' ' + curr + ' (' + (slPct*100).toFixed(1) + '%)';
-    slPnlEl.style.color = slAmt >= 0 ? 'var(--green)' : 'var(--red)';
+    slPnlEl.style.color = slAmt >= 0 ? '#00d4aa' : '#ff4d6a';
   } else if (slPnlEl) { slPnlEl.textContent = ''; }
 }
 
@@ -22423,11 +22531,15 @@ window._setFuturesAmtPct = _setFuturesAmtPct;
 function _toggleFuturesTP() {
   var on = document.getElementById('futuresTPToggle').checked;
   document.getElementById('futuresTPContainer').style.display = on ? 'block' : 'none';
+  var status = document.getElementById('futuresTPStatus');
+  if (status) status.style.display = on ? 'none' : 'block';
   if (!on) document.getElementById('futuresTP').value = '';
 }
 function _toggleFuturesSL() {
   var on = document.getElementById('futuresSLToggle').checked;
   document.getElementById('futuresSLContainer').style.display = on ? 'block' : 'none';
+  var status = document.getElementById('futuresSLStatus');
+  if (status) status.style.display = on ? 'none' : 'block';
   if (!on) document.getElementById('futuresSL').value = '';
 }
 window._toggleFuturesTP = _toggleFuturesTP;
