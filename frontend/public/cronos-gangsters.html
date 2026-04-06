@@ -22676,21 +22676,9 @@ function updateFuturesPositions() {
       else duration = Math.floor(diffMin/1440) + 'd ' + Math.floor((diffMin%1440)/60) + 'h';
     }
 
-    // Check TP/SL — auto-execute, no wallet confirmation needed (user set these)
-    // Grace period: don't auto-close in the first 10 seconds after page load (prices may be stale)
-    const _pageAge = Date.now() - (window._futuresPageLoadTime || Date.now());
-    if (_pageAge > 10000) {
-      if (pos.tp && ((sideNorm === 'long' && currentPrice >= pos.tp) || (sideNorm === 'short' && currentPrice <= pos.tp))) {
-        if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'TP HIT'), 100); }
-      }
-      if (pos.sl && ((sideNorm === 'long' && currentPrice <= pos.sl) || (sideNorm === 'short' && currentPrice >= pos.sl))) {
-        if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'SL HIT'), 100); }
-      }
-      // Check liquidation — forced, no wallet confirmation (you lost everything)
-      if ((sideNorm === 'long' && priceDiff <= -liqMove) || (sideNorm === 'short' && priceDiff >= liqMove)) {
-        if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'LIQUIDATED'), 100); }
-      }
-    }
+    // TP/SL/Liquidation checks run in background position monitor
+    // Just flag visual warning if close to liquidation
+    const isNearLiq = distToLiq < 5;
 
     return `
     <div style="background:var(--surface2);border-left:3px solid ${sideColor};border-radius:12px;padding:14px;margin-bottom:8px;border:1px solid ${pnlGang >= 0 ? 'rgba(39,174,96,0.2)' : 'rgba(231,76,60,0.2)'};border-left:3px solid ${sideColor};">
@@ -22826,6 +22814,54 @@ function _forceCloseFuturesPosition(id, reason) {
   updateFuturesPool();
   renderFuturesHistory();
 }
+
+// === POSITION MONITOR — Runs every 5 seconds regardless of page ===
+// Checks ALL open positions for TP/SL/Liquidation and auto-closes them
+var _positionMonitorStarted = false;
+function startPositionMonitor() {
+  if (_positionMonitorStarted) return;
+  _positionMonitorStarted = true;
+  // Wait 10 seconds after page load to avoid stale price liquidations
+  setTimeout(function() {
+    setInterval(function() {
+      if (!futuresState || !futuresState.positions || futuresState.positions.length === 0) return;
+      const toClose = [];
+      futuresState.positions.forEach(function(pos) {
+        if (pos._autoClosing || pos.status === 'closed') return;
+        const currentPrice = futuresState.prices[pos.pair];
+        if (!currentPrice || currentPrice <= 0) return; // No price data yet
+        const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
+        const sideNorm = (pos.side || '').toLowerCase();
+        const liqMove = 1 / pos.leverage;
+
+        // Check LIQUIDATION — price moved past liquidation threshold
+        if ((sideNorm === 'long' && priceDiff <= -liqMove) || (sideNorm === 'short' && priceDiff >= liqMove)) {
+          pos._autoClosing = true;
+          toClose.push({ id: pos.id, reason: 'LIQUIDATED' });
+          return;
+        }
+        // Check TAKE PROFIT
+        if (pos.tp && ((sideNorm === 'long' && currentPrice >= pos.tp) || (sideNorm === 'short' && currentPrice <= pos.tp))) {
+          pos._autoClosing = true;
+          toClose.push({ id: pos.id, reason: 'TP HIT' });
+          return;
+        }
+        // Check STOP LOSS
+        if (pos.sl && ((sideNorm === 'long' && currentPrice <= pos.sl) || (sideNorm === 'short' && currentPrice >= pos.sl))) {
+          pos._autoClosing = true;
+          toClose.push({ id: pos.id, reason: 'SL HIT' });
+          return;
+        }
+      });
+      // Execute closures
+      toClose.forEach(function(item, i) {
+        setTimeout(function() { _forceCloseFuturesPosition(item.id, item.reason); }, i * 200);
+      });
+    }, 5000); // Check every 5 seconds
+  }, 10000); // 10 second grace period on page load
+}
+// Start monitor immediately
+startPositionMonitor();
 
 var _histTab = 'results';
 function switchHistTab(tab) {
