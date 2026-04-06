@@ -4870,7 +4870,7 @@ function toggleNavMenu() {
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
           <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff8c00;letter-spacing:2px;">OPEN POSITIONS</span>
         </div>
-        <button onclick="clearAllFuturesPositions()" data-testid="clear-old-positions-btn" style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;padding:5px 12px;border-radius:20px;background:rgba(231,76,60,0.1);color:#e74c3c;border:1px solid rgba(231,76,60,0.3);cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(231,76,60,0.2)'" onmouseout="this.style.background='rgba(231,76,60,0.1)'">CLEAR OLD POSITIONS</button>
+        <button onclick="clearAllFuturesPositions()" data-testid="clear-old-positions-btn" style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;padding:5px 12px;border-radius:20px;background:rgba(231,76,60,0.1);color:#e74c3c;border:1px solid rgba(231,76,60,0.3);cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(231,76,60,0.2)'" onmouseout="this.style.background='rgba(231,76,60,0.1)'">CLEAR HISTORY & OLD DATA</button>
       </div>
       <div id="futuresPositions" data-testid="futures-positions">
         <div style="font-family:'Space Grotesk',sans-serif;color:rgba(235,235,245,0.35);text-align:center;padding:16px;font-size:13px;font-weight:400;">No open positions</div>
@@ -24357,14 +24357,30 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
   // Clear ALL old/legacy positions from LocalStorage
   window.clearAllFuturesPositions = function() {
-    futuresState.positions = [];
+    // Only clear OLD positions (non-onChain legacy ones) and trade history
+    // NEVER touch active on-chain positions
+    const activeOnChain = futuresState.positions.filter(function(p) { return p.onChain; });
+    const oldPositions = futuresState.positions.filter(function(p) { return !p.onChain; });
+    
+    if (oldPositions.length === 0 && futuresState.history.length === 0) {
+      showToast('Nothing to clear — no old positions or history found.', 'info');
+      return;
+    }
+    
+    var msg = '';
+    if (oldPositions.length > 0) msg += oldPositions.length + ' old (pre-contract) positions';
+    if (futuresState.history.length > 0) msg += (msg ? ' and ' : '') + futuresState.history.length + ' trade history entries';
+    
+    if (!confirm('Clear ' + msg + '?\n\nYour ' + activeOnChain.length + ' active on-chain position(s) will NOT be touched.')) return;
+    
+    // Keep active on-chain positions, remove old ones
+    futuresState.positions = activeOnChain;
     futuresState.history = [];
     saveFuturesState();
     updateFuturesPositions();
     updateFuturesPool();
-    const histEl = document.getElementById('futuresHistory');
-    if (histEl) histEl.innerHTML = '<div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;">No trade history</div>';
-    showToast('All old positions & history cleared!', 'success');
+    renderFuturesHistory();
+    showToast('Cleared ' + msg + '. Active positions untouched.', 'success');
   };
 
   // ═══════════════════════════════════════════════════
