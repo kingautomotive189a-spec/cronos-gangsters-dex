@@ -14,21 +14,20 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - Trading Pool: `0xc7002e7c73d4910f0f83a66d187d2be951360619`
 - Protocol Vault: `0x7bed7483eeb27c7cd85ba76dfb141290156138ea`
 
-## Leverage Trading — 8 Token Pools (2026-04-06)
-**Tokens**: GANG, CRO, BTC, ETH, SOL, BNB, USDC, USDT
+## Leverage Trading — 33 Pairs (Crypto, Stocks, Indices, Commodities)
+**Crypto** (12): BTC, ETH, BNB, CRO, SOL, XRP, DOGE, ADA, AVAX, LINK, ARB, MATIC
+**Stocks** (14): AAPL, TSLA, NVDA, MSFT, AMZN, GOOGL, META, AMD, NFLX, COIN, DIS, PYPL, BA, JPM
+**Indices & Commodities** (7): NAS100, SP500, DJI, GOLD, SILVER, OIL, NATGAS
 
-Each pool has:
-- Token icon (CoinGecko), color-themed card
-- Pool Balance + Profit display
-- DEPOSIT and WITHDRAW buttons with MetaMask confirmation
-- "TRADE WITH" currency selector with all 8 tokens
+## Real-Time Price Feed System (2026-04-06)
+**Crypto Pairs** — 3-tier fallback:
+1. **Binance WebSocket** (`wss://stream.binance.com:9443`) — sub-second real-time streaming for all 12 crypto pairs (auto-mapped from FUTURES_PAIRS). LIVE badge pulses when active.
+2. **Backend Proxy** (CoinGecko + Yahoo Finance at `/api/futures/prices`) — 5s polling fallback. 10s crypto cache, 30s non-crypto cache.
+3. **Direct Binance/CoinGecko REST** from browser — when backend is unavailable.
 
-**Liquidity Protection**:
-- Non-GANG pools: Position blocked if pool has 0 liquidity
-- Position blocked if pool balance < position size (amount × leverage)
-- GANG pool exempt (backed by on-chain Trading Pool contract)
-- Trading automatically stops for tokens with no liquidity
-- Fee collection routes to correct pool per currency
+**Non-Crypto Pairs** — Backend Yahoo Finance proxy with Gaussian random walk simulation between polls for natural price movement.
+
+**Key Design**: ALL crypto prices are real market data. No simulated movement for any crypto pair. Non-crypto pairs use realistic Gaussian volatility with momentum bursts.
 
 ## All On-Chain Features (MetaMask Required)
 - Leverage Trading (8 tokens), Lending, Predictions, Flash Loans
@@ -38,15 +37,23 @@ Each pool has:
 - All Fee Collections, Revenue Seed Fund
 
 ## Completed (2026-04-06)
-- Wallet balance labels injected into ALL 8 missing UI locations: Predictions, DAO, Squads, Competitions, Bonds, Revenue Seed Fund, Locker, Flash Loans
-- All 16 balance display IDs verified present in HTML and wired to `updateAllWalletBalanceDisplays()`
-- E2E wallet flow audit: All critical financial features confirmed to have async on-chain `window.*` overrides using `vaultDeposit`/`vaultWithdraw`
-- No remaining fake localStorage-only transactions in user-facing financial flows
-- Fixed leverage trading deposit revert: Replaced hardcoded 300k gas with `eth_estimateGas` + 30% buffer; added contract token verification; switched to max-approval pattern to avoid repeated approve popups; made `onConfirm` callbacks `async` for proper error propagation
-- CRITICAL FIX: Rewired ALL 16+ showTxConfirm onConfirm callbacks across Lending, Predictions, Flash Loans, Insurance, Aggregator, Copy Trading, Limit Orders, Perp DEX, OTC, DAO, Squads, Competitions — every one now calls the `window.*` on-chain override to trigger MetaMask before updating state. Previously these bypassed MetaMask entirely.
-- Fixed vaultDeposit/vaultWithdraw to throw errors instead of returning false, preventing features from proceeding without on-chain confirmation
-- Removed all 28 fake showTxConfirm popups. Non-trading features (22) go straight to MetaMask. Trading features (6) now use new showTradeConfirm with real price-fetch flow: spinning "Fetching Live Price" → shows live price + trade details with 15s countdown → Cancel/Confirm → MetaMask. Applied to: Leverage Open/Close, DEX Aggregator Swap, Copy Trading, Perp DEX Open/Close, Limit Orders Place/Fill, OTC Create/Fill
-- Built and deployed Multi-Token Lending Vault smart contract — a real on-chain lending pool that holds ACTUAL tokens (GANG, CRO, USDC, WETH, WBTC, USDT, DAI). Supply deposits real tokens, Borrow sends real tokens to your wallet (if pool has liquidity), Repay takes tokens back. Liquidity-gated: if pool is empty, borrow is blocked.
+- Binance WebSocket real-time price feeds for ALL 12 crypto pairs (auto-built from FUTURES_PAIRS)
+- Fast reverse-lookup symbol mapping for WebSocket messages
+- LIVE badge on price display for crypto pairs with active WebSocket
+- PnL update throttling via requestAnimationFrame
+- Backend proxy upgraded: CoinGecko batch + Yahoo Finance fallback, separate crypto/non-crypto caching
+- Gaussian random walk with momentum bursts for non-crypto pair simulation
+- ZIP deployment file generated
+- Wallet balance labels in ALL 8 missing UI locations
+- All 16+ showTxConfirm callbacks rewired to on-chain functions
+- vaultDeposit/vaultWithdraw throw strict errors
+- Leverage Trading switched to Protocol Vault contract
+- Removed all 28 fake showTxConfirm popups
+- Built real price-fetch trade confirmation modal for 6 trading features
+- Multi-Token Lending Vault smart contract compiled and deployed
+- ADD POOL LIQUIDITY UI for Lending
+- 100% ON-CHAIN info panel and changelog in sidebar
+- Fixed closed position persistence bug in Leverage Trading
 
 ## Upcoming Tasks
 - P1: CEX listings

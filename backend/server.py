@@ -492,6 +492,8 @@ import time as _time
 # Yahoo Finance price proxy for stocks/indices/commodities
 _yahoo_cache = {}
 _yahoo_cache_ts = 0
+_crypto_cache = {}
+_crypto_cache_ts = 0
 
 YAHOO_SYMBOL_MAP = {
     # Stocks
@@ -509,24 +511,45 @@ YAHOO_SYMBOL_MAP = {
     'AVAX': 'AVAX-USD', 'LINK': 'LINK-USD', 'ARB': 'ARB11841-USD', 'MATIC': 'MATIC-USD'
 }
 
+COINGECKO_ID_MAP = {
+    'BTC': 'bitcoin', 'ETH': 'ethereum', 'BNB': 'binancecoin', 'CRO': 'crypto-com-chain',
+    'SOL': 'solana', 'XRP': 'ripple', 'DOGE': 'dogecoin', 'ADA': 'cardano',
+    'AVAX': 'avalanche-2', 'LINK': 'chainlink', 'ARB': 'arbitrum', 'MATIC': 'matic-network'
+}
+
 @api_router.get("/futures/prices")
 async def get_futures_prices(symbols: str = ""):
-    global _yahoo_cache, _yahoo_cache_ts
+    global _yahoo_cache, _yahoo_cache_ts, _crypto_cache, _crypto_cache_ts
     now = _time.time()
     requested = [s.strip() for s in symbols.split(',') if s.strip()]
     if not requested:
         return {"prices": {}}
     
-    # Return cache if fresh (30s)
-    if now - _yahoo_cache_ts < 30 and all(s in _yahoo_cache for s in requested):
-        return {"prices": {s: _yahoo_cache[s] for s in requested if s in _yahoo_cache}}
+    # Separate crypto from non-crypto (crypto needs fresher prices)
+    crypto_syms = [s for s in requested if s in COINGECKO_ID_MAP]
+    other_syms = [s for s in requested if s not in COINGECKO_ID_MAP]
     
     results = {}
+    
+    # Return cached non-crypto if fresh (30s)
+    for s in other_syms:
+        if s in _yahoo_cache and now - _yahoo_cache_ts < 30:
+            results[s] = _yahoo_cache[s]
+    uncached_other = [s for s in other_syms if s not in results]
+    
+    # Return cached crypto if fresh (10s - more aggressive for real-time feel)
+    for s in crypto_syms:
+        if s in _crypto_cache and now - _crypto_cache_ts < 10:
+            results[s] = _crypto_cache[s]
+    uncached_crypto = [s for s in crypto_syms if s not in results]
+    
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
     }
+    
     async with aiohttp.ClientSession() as session:
-        for sym in requested:
+        # Fetch non-crypto from Yahoo Finance
+        for sym in uncached_other:
             yahoo_sym = YAHOO_SYMBOL_MAP.get(sym, sym)
             try:
                 url = f"https://query2.finance.yahoo.com/v8/finance/chart/{yahoo_sym}?interval=1d&range=1d"
@@ -541,10 +564,52 @@ async def get_futures_prices(symbols: str = ""):
                             results[sym] = {"price": round(price, 4), "change": round(change, 2)}
                             _yahoo_cache[sym] = results[sym]
             except Exception as e:
-                logger.warning(f"Yahoo price fetch failed for {sym} ({yahoo_sym}): {e}")
+                logger.warning(f"Yahoo price fetch failed for {sym}: {e}")
+        
+        if uncached_other and any(s in results for s in uncached_other):
+            _yahoo_cache_ts = now
+        
+        # Fetch crypto: try CoinGecko batch first (faster), then Yahoo as fallback
+        if uncached_crypto:
+            cg_ids = [COINGECKO_ID_MAP[s] for s in uncached_crypto if s in COINGECKO_ID_MAP]
+            if cg_ids:
+                try:
+                    cg_url = f"https://api.coingecko.com/api/v3/simple/price?ids={','.join(cg_ids)}&vs_currencies=usd&include_24hr_change=true"
+                    async with session.get(cg_url, timeout=aiohttp.ClientTimeout(total=6)) as resp:
+                        if resp.status == 200:
+                            cg_data = await resp.json()
+                            for sym in uncached_crypto:
+                                cg_id = COINGECKO_ID_MAP.get(sym)
+                                if cg_id and cg_id in cg_data:
+                                    d = cg_data[cg_id]
+                                    if d.get('usd', 0) > 0:
+                                        results[sym] = {"price": round(d['usd'], 6), "change": round(d.get('usd_24h_change', 0), 2)}
+                                        _crypto_cache[sym] = results[sym]
+                except Exception as e:
+                    logger.warning(f"CoinGecko batch fetch failed: {e}")
+            
+            # Fallback: Yahoo Finance for any crypto still missing
+            still_missing = [s for s in uncached_crypto if s not in results]
+            for sym in still_missing:
+                yahoo_sym = YAHOO_SYMBOL_MAP.get(sym, f"{sym}-USD")
+                try:
+                    url = f"https://query2.finance.yahoo.com/v8/finance/chart/{yahoo_sym}?interval=1d&range=1d"
+                    async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=8)) as resp:
+                        if resp.status == 200:
+                            data = await resp.json()
+                            meta = data.get("chart", {}).get("result", [{}])[0].get("meta", {})
+                            price = meta.get("regularMarketPrice", 0)
+                            prev = meta.get("chartPreviousClose", price)
+                            change = ((price - prev) / prev * 100) if prev and prev > 0 else 0
+                            if price and price > 0:
+                                results[sym] = {"price": round(price, 6), "change": round(change, 2)}
+                                _crypto_cache[sym] = results[sym]
+                except Exception as e:
+                    logger.warning(f"Yahoo crypto fallback failed for {sym}: {e}")
+            
+            if any(s in results for s in uncached_crypto):
+                _crypto_cache_ts = now
     
-    if results:
-        _yahoo_cache_ts = now
     return {"prices": results}
 
 # Include the router in the main app

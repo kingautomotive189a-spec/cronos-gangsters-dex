@@ -396,6 +396,7 @@
   .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(212,160,23,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px;}
   @keyframes spin{to{transform:rotate(360deg);}}
   @keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.4}}
+  @keyframes livePulse{0%,100%{opacity:1}50%{opacity:.5}}
   /* removed tickerScroll */
 
   /* ── REFERRAL ── */
@@ -4781,7 +4782,10 @@ function toggleNavMenu() {
         </div>
         <div style="text-align:right;">
           <div id="futuresPairPrice" data-testid="futures-pair-price" style="font-family:'Space Mono',monospace;font-size:18px;color:var(--green);">$—</div>
-          <div id="futuresPairChange" style="font-size:13px;font-weight:700;color:var(--green);">—</div>
+          <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;">
+            <span id="futuresLiveBadge" style="display:none;font-size:9px;font-weight:700;color:#00ff88;background:rgba(0,255,136,0.15);padding:2px 6px;border-radius:4px;letter-spacing:1px;animation:livePulse 2s infinite;">LIVE</span>
+            <span id="futuresPairChange" style="font-size:13px;font-weight:700;color:var(--green);">—</span>
+          </div>
         </div>
       </div>
       <div id="futuresChart" style="height:300px;background:#101420;">
@@ -21356,6 +21360,9 @@ function selectFuturesPair(pair) {
   // Update type badge
   const typeEl = document.getElementById('futuresPairType');
   if (typeEl) typeEl.textContent = p.type.toUpperCase();
+  // Show LIVE badge for crypto pairs with WebSocket feed
+  const liveBadge = document.getElementById('futuresLiveBadge');
+  if (liveBadge) liveBadge.style.display = BINANCE_PAIR_MAP[pair] ? 'inline-block' : 'none';
   loadFuturesChart(pair);
   updateFuturesPrice();
 }
@@ -21442,12 +21449,18 @@ function loadFuturesChart(pair) {
 function setFuturesPriceDisplay(pair, price, change) {
   futuresState.prices[pair] = price;
   _futuresLastApiPrice[pair] = price; // anchor for micro-volatility
-  document.getElementById('futuresPairPrice').textContent = '$' + price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: price > 100 ? 2 : 6 });
+  const priceEl = document.getElementById('futuresPairPrice');
+  if (priceEl) {
+    priceEl.textContent = '$' + price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: price > 100 ? 2 : 6 });
+    // Pulse the price color briefly on update
+    priceEl.style.color = change >= 0 ? 'var(--green)' : 'var(--red)';
+  }
   const changeEl = document.getElementById('futuresPairChange');
-  // Show REAL change — positive or negative
-  const prefix = change >= 0 ? '+' : '';
-  changeEl.textContent = prefix + change.toFixed(2) + '%';
-  changeEl.style.color = change >= 0 ? 'var(--green)' : 'var(--red)';
+  if (changeEl) {
+    const prefix = change >= 0 ? '+' : '';
+    changeEl.textContent = prefix + change.toFixed(2) + '%';
+    changeEl.style.color = change >= 0 ? 'var(--green)' : 'var(--red)';
+  }
 }
 
 async function fetchNonCryptoPrice(pair, p) {
@@ -21492,6 +21505,11 @@ async function updateFuturesPrice() {
   const pair = futuresState.pair;
   const p = FUTURES_PAIRS[pair];
 
+  // If WebSocket is delivering live data for this crypto pair, skip API polling entirely
+  if (BINANCE_PAIR_MAP[pair] && _wsPriceReceived[pair] && _binanceWS && _binanceWS.readyState === WebSocket.OPEN) {
+    return; // Real-time WebSocket is active — no need for API fallback
+  }
+
   // Try backend proxy first (works for all asset types, no CORS issues)
   let priceLoaded = false;
   try {
@@ -21506,7 +21524,7 @@ async function updateFuturesPrice() {
     }
   } catch {}
 
-  // Fallback for crypto: Binance API (works on user's actual domain)
+  // Fallback for crypto: Binance REST API (when WebSocket is down)
   if (!priceLoaded && p.type === 'crypto') {
     try {
       const resp = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + p.symbol);
@@ -21970,8 +21988,8 @@ setTimeout(() => {
   renderFuturesHistory();
   // Connect to Binance WebSocket for real-time prices
   connectBinanceWS();
-  // Fallback: Fetch price from API every 10 seconds in case WebSocket drops
-  setInterval(updateFuturesPrice, 10000);
+  // Fallback: Fetch price from API every 5 seconds in case WebSocket drops
+  setInterval(updateFuturesPrice, 5000);
   // Update position PnL display every 1.5s
   setInterval(function() { updateFuturesPosInfo(); }, 1500);
 }, 2000);
@@ -21979,33 +21997,32 @@ setTimeout(() => {
 // ─── REAL-TIME PRICE FEED via Binance WebSocket ───
 let _binanceWS = null;
 let _binanceReconnectTimer = null;
-const BINANCE_PAIR_MAP = {
-  GANG: null, // No Binance feed — use CoinGecko
-  CRO: 'crousdt',
-  BTC: 'btcusdt',
-  ETH: 'ethusdt',
-  SOL: 'solusdt',
-  BNB: 'bnbusdt',
-  USDC: null, // Stablecoin — stays at $1
-  USDT: null, // Stablecoin — stays at $1
-  GOLD: null,
-  OIL: null,
-  SPX: null,
-  TSLA: null,
-  AAPL: null,
-  NVDA: null,
-};
+// Auto-build Binance map from FUTURES_PAIRS — every crypto pair gets a live feed
+const BINANCE_PAIR_MAP = {};
+const _binanceSymToKey = {}; // reverse lookup: 'btcusdt' -> 'BTC'
+(function() {
+  for (const [key, fp] of Object.entries(FUTURES_PAIRS)) {
+    if (fp.type === 'crypto' && fp.symbol && fp.symbol.endsWith('USDT')) {
+      const binSym = fp.symbol.toLowerCase(); // e.g. 'btcusdt'
+      BINANCE_PAIR_MAP[key] = binSym;
+      _binanceSymToKey[binSym] = key;
+    }
+  }
+  // Exclude GANG (no Binance pair — uses CoinGecko)
+  delete BINANCE_PAIR_MAP['GANG'];
+  delete _binanceSymToKey['gangusdt'];
+})();
 let _lastBinancePrice = {};
 let _prev24hPrice = {};
+let _wsPriceReceived = {}; // track which pairs have received at least one WS tick
 
 function connectBinanceWS() {
-  // Build stream list for pairs that have Binance feeds
-  const streams = Object.values(BINANCE_PAIR_MAP).filter(Boolean).map(s => s + '@ticker');
+  const streams = Object.values(BINANCE_PAIR_MAP).map(s => s + '@ticker');
   if (streams.length === 0) return;
   const wsUrl = 'wss://stream.binance.com:9443/stream?streams=' + streams.join('/');
   
   try {
-    if (_binanceWS) { _binanceWS.close(); _binanceWS = null; }
+    if (_binanceWS) { try { _binanceWS.close(); } catch(x){} _binanceWS = null; }
     _binanceWS = new WebSocket(wsUrl);
     
     _binanceWS.onmessage = function(event) {
@@ -22013,83 +22030,95 @@ function connectBinanceWS() {
         const msg = JSON.parse(event.data);
         if (!msg.data) return;
         const d = msg.data;
-        const symbol = (d.s || '').toLowerCase();
-        const price = parseFloat(d.c); // Current price
-        const open24h = parseFloat(d.o); // 24h open price
-        const change24h = parseFloat(d.P); // 24h change %
+        const symbol = (d.s || '').toLowerCase(); // e.g. 'btcusdt'
+        const price = parseFloat(d.c);
+        const change24h = parseFloat(d.P);
+        const open24h = parseFloat(d.o);
         
         if (!price || isNaN(price)) return;
         
-        // Map Binance symbol back to our pair name
-        for (const [pair, binSym] of Object.entries(BINANCE_PAIR_MAP)) {
-          if (binSym && binSym + 'usdt' === symbol + 'usdt' || binSym === symbol) {
-            _lastBinancePrice[pair] = price;
-            _prev24hPrice[pair] = open24h;
-            futuresState.prices[pair] = price;
-            
-            // Update display if this is the currently selected pair
-            if (futuresState.pair === pair) {
-              setFuturesPriceDisplay(pair, price, change24h);
-            }
-            
-            // Update PnL for any open positions in this pair
-            updateFuturesPosInfo();
-            break;
-          }
+        // Fast reverse lookup
+        const pair = _binanceSymToKey[symbol];
+        if (!pair) return;
+        
+        _lastBinancePrice[pair] = price;
+        _prev24hPrice[pair] = open24h;
+        _wsPriceReceived[pair] = true;
+        futuresState.prices[pair] = price;
+        
+        // Update display if this pair is currently viewed
+        if (futuresState.pair === pair) {
+          setFuturesPriceDisplay(pair, price, change24h);
+        }
+        
+        // Update PnL for open positions (throttled)
+        if (!_pnlThrottled) {
+          _pnlThrottled = true;
+          requestAnimationFrame(function() { updateFuturesPosInfo(); _pnlThrottled = false; });
         }
       } catch(e) { /* ignore parse errors */ }
     };
     
     _binanceWS.onopen = function() {
-      console.log('Binance WebSocket connected — live prices active');
+      console.log('[LIVE] Binance WebSocket connected — ' + streams.length + ' crypto pairs streaming');
     };
     
     _binanceWS.onclose = function() {
-      console.log('Binance WebSocket closed — reconnecting in 5s');
+      console.log('[LIVE] Binance WebSocket closed — reconnecting in 5s');
       clearTimeout(_binanceReconnectTimer);
       _binanceReconnectTimer = setTimeout(connectBinanceWS, 5000);
     };
     
     _binanceWS.onerror = function() {
-      console.log('Binance WebSocket error — will reconnect');
-      _binanceWS.close();
+      console.log('[LIVE] Binance WebSocket error — will reconnect');
+      try { _binanceWS.close(); } catch(x){}
     };
   } catch(e) {
     console.error('WebSocket init failed:', e);
-    // Fallback to polling
     clearTimeout(_binanceReconnectTimer);
     _binanceReconnectTimer = setTimeout(connectBinanceWS, 10000);
   }
 }
+let _pnlThrottled = false;
 
 // Keep the API fallback for non-Binance pairs (GANG, GOLD, OIL, stocks)
 let _futuresLastApiPrice = {};
 
 function simulateFuturesTick() {
-  // Only simulate non-Binance pairs (GANG, GOLD, OIL, stocks)
-  // Binance pairs get real prices via WebSocket
+  // Only simulate non-crypto pairs (stocks, indices, commodities)
+  // ALL crypto pairs get REAL prices from Binance WebSocket
   const allPairs = Object.keys(FUTURES_PAIRS);
 
   for (const pair of allPairs) {
-    // Skip pairs with Binance WebSocket feed
+    // Skip ALL crypto pairs — they use Binance WebSocket for real prices
     if (BINANCE_PAIR_MAP[pair]) continue;
+    // Also skip crypto pairs without Binance feed (like GANG if it existed)
+    const fp = FUTURES_PAIRS[pair];
+    if (fp && fp.type === 'crypto') continue;
     
     const basePrice = futuresState.prices[pair];
     if (!basePrice || basePrice <= 0) continue;
 
-    // Simple random walk for non-crypto pairs
-    const fp = FUTURES_PAIRS[pair];
+    // Realistic random walk with momentum + mean reversion
     const assetType = fp ? fp.type : 'other';
-    let vol = assetType === 'commodity' ? 0.0006 : 0.0008;
+    // Higher volatility for more realistic movement
+    let vol = assetType === 'commodity' ? 0.0012 : assetType === 'index' ? 0.0008 : 0.0015;
     
-    const move = (Math.random() - 0.5) * vol * 2;
+    // Add random momentum bursts (10% chance of a bigger move)
+    if (Math.random() < 0.10) vol *= 3;
+    
+    // Gaussian-ish random using Box-Muller for more natural distribution
+    const u1 = Math.random();
+    const u2 = Math.random();
+    const gaussian = Math.sqrt(-2 * Math.log(u1 || 0.001)) * Math.cos(2 * Math.PI * u2);
+    const move = gaussian * vol;
     let newPrice = basePrice * (1 + move);
     
-    // Mean-revert to anchor
+    // Soft mean-reversion toward last known API price
     const anchor = _futuresLastApiPrice[pair] || basePrice;
     const drift = (newPrice - anchor) / anchor;
-    if (Math.abs(drift) > 0.004) {
-      newPrice = newPrice * (1 + (drift > 0 ? -0.0003 : 0.0003));
+    if (Math.abs(drift) > 0.008) {
+      newPrice = newPrice * (1 + (drift > 0 ? -0.0005 : 0.0005));
     }
     
     futuresState.prices[pair] = newPrice;
@@ -22098,7 +22127,7 @@ function simulateFuturesTick() {
   // Update display
   if (getActivePage() === 'futures') {
     const viewedPair = futuresState.pair;
-    // Only update display for non-Binance pairs (Binance updates via WebSocket)
+    // Only update display for non-WebSocket pairs (crypto pairs update in real-time via WebSocket)
     if (!BINANCE_PAIR_MAP[viewedPair]) {
       const viewedPrice = futuresState.prices[viewedPair];
       if (viewedPrice) {
