@@ -4813,6 +4813,35 @@ function toggleNavMenu() {
       </div>
     </div>
 
+    <!-- ══ ACCOUNT OVERVIEW — Trading 212 Style ══ -->
+    <div data-testid="futures-account-overview" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+      <div style="background:var(--surface);border:1px solid rgba(255,140,0,0.2);border-radius:14px;padding:16px;text-align:center;">
+        <div style="font-size:9px;color:var(--muted);letter-spacing:1.5px;font-weight:600;">ACCOUNT VALUE</div>
+        <div id="futuresAccValue" style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#fff;margin-top:4px;">$0.00</div>
+        <div id="futuresAccPnl" style="font-size:11px;color:var(--green);font-weight:700;margin-top:2px;">$0.00 (0.00%)</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid rgba(255,140,0,0.2);border-radius:14px;padding:16px;text-align:center;">
+        <div style="font-size:9px;color:var(--muted);letter-spacing:1.5px;font-weight:600;">MARGIN HEALTH</div>
+        <div id="futuresHealthGauge" style="position:relative;width:60px;height:60px;margin:6px auto 0;">
+          <svg viewBox="0 0 36 36" style="transform:rotate(-90deg);">
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3"/>
+            <path id="healthArc" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--green)" stroke-width="3" stroke-dasharray="100, 100" stroke-linecap="round"/>
+          </svg>
+          <div id="healthPct" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);">100%</div>
+        </div>
+      </div>
+      <div style="background:var(--surface);border:1px solid rgba(39,174,96,0.15);border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:9px;color:var(--muted);letter-spacing:1.5px;font-weight:600;">USED MARGIN</div>
+        <div id="futuresUsedMargin" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff8c00;margin-top:4px;">0.00</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px;">across <span id="futuresOpenCount" style="color:var(--text);">0</span> positions</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid rgba(39,174,96,0.15);border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:9px;color:var(--muted);letter-spacing:1.5px;font-weight:600;">FREE MARGIN</div>
+        <div id="futuresFreeMargin" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);margin-top:4px;">0.00</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px;">available to trade</div>
+      </div>
+    </div>
+
     <!-- Asset Browser — Trading 212 Style -->
     <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.15);padding:0;overflow:hidden;">
       <!-- Category Tabs -->
@@ -5032,11 +5061,20 @@ function toggleNavMenu() {
       </div>
     </div>
 
-    <!-- Trade History -->
+    <!-- Trade History — Trading 212 Style -->
     <div class="card" style="margin-bottom:14px;border-color:rgba(255,255,255,0.06);">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(235,235,245,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(235,235,245,0.4);letter-spacing:2px;">TRADE HISTORY</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(235,235,245,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(235,235,245,0.7);letter-spacing:2px;">TRADE HISTORY</span>
+        </div>
+        <div id="historyTotalPnl" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);">$0.00</div>
+      </div>
+      <!-- Tabs -->
+      <div style="display:flex;gap:0;margin-bottom:14px;border-bottom:1px solid var(--border);">
+        <button id="histTabResults" onclick="switchHistTab('results')" style="flex:1;padding:10px;background:transparent;border:none;border-bottom:2px solid #ff8c00;color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;">RESULTS</button>
+        <button id="histTabOrders" onclick="switchHistTab('orders')" style="flex:1;padding:10px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;">ORDERS</button>
+        <button id="histTabFees" onclick="switchHistTab('fees')" style="flex:1;padding:10px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;">FEES</button>
       </div>
       <div id="futuresHistory" data-testid="futures-history">
         <div style="font-family:'Space Grotesk',sans-serif;color:rgba(235,235,245,0.25);text-align:center;padding:16px;font-size:13px;font-weight:400;">No trades yet</div>
@@ -22084,6 +22122,7 @@ async function updateFuturesPrice() {
 
   updateFuturesPosInfo();
   updateFuturesPositions();
+  if (typeof updateAccountOverview === 'function') updateAccountOverview();
 }
 
 function updateFuturesPosInfo() {
@@ -22465,6 +22504,7 @@ function _doCloseFuturesPosition(id) {
   const emoji = netPnl >= 0 ? 'WIN' : 'LOSS';
   showToast(`${emoji} — Closed ${pos.pair} ${pos.side.toUpperCase()} — ${netPnl >= 0 ? '+' : ''}${netPnl.toFixed(2)} ${curr} (fee: ${closingFee.toFixed(2)})`, netPnl >= 0 ? 'success' : 'error');
   updateFuturesPositions();
+  updateAccountOverview();
   renderFuturesHistory();
   updateFuturesPool();
 }
@@ -22530,30 +22570,62 @@ function updateFuturesPositions() {
     }
 
     return `
-    <div style="background:var(--surface2);border:1px solid ${pnlGang >= 0 ? 'rgba(39,174,96,0.25)' : 'rgba(231,76,60,0.25)'};border-radius:12px;padding:14px;margin-bottom:8px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff8c00;">${pos.pair}/USD</span>
-          <span style="font-size:10px;padding:3px 8px;border-radius:4px;background:${sideColor}22;color:${sideColor};font-weight:700;">${pos.side.toUpperCase()} ${pos.leverage}x</span>
-          ${duration ? '<span style="font-size:9px;color:var(--muted);">' + duration + '</span>' : ''}
+    <div style="background:var(--surface2);border-left:3px solid ${sideColor};border-radius:12px;padding:14px;margin-bottom:8px;border:1px solid ${pnlGang >= 0 ? 'rgba(39,174,96,0.2)' : 'rgba(231,76,60,0.2)'};border-left:3px solid ${sideColor};">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;background:${FUTURES_PAIRS[pos.pair]?.badgeColor || '#ff8c00'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            ${FUTURES_PAIRS[pos.pair]?.logo
+              ? '<img src="' + FUTURES_PAIRS[pos.pair].logo + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<span style=font-family:Bebas_Neue,sans-serif;font-size:13px;color:#fff>' + (FUTURES_PAIRS[pos.pair]?.badge || pos.pair.slice(0,2)) + '</span>\'">'
+              : '<span style="font-family:\'Bebas Neue\',sans-serif;font-size:13px;color:#fff;">' + (FUTURES_PAIRS[pos.pair]?.badge || pos.pair.slice(0,2)) + '</span>'
+            }
+          </div>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;letter-spacing:1px;">${FUTURES_PAIRS[pos.pair]?.name || pos.pair}</div>
+            <div style="display:flex;gap:6px;align-items:center;margin-top:2px;">
+              <span style="font-size:10px;padding:2px 8px;border-radius:4px;background:${sideColor}22;color:${sideColor};font-weight:700;">${pos.side.toUpperCase()}</span>
+              <span style="font-size:10px;color:var(--muted);">${pos.leverage}x</span>
+              ${duration ? '<span style="font-size:9px;color:var(--muted);">' + duration + '</span>' : ''}
+            </div>
+          </div>
         </div>
         <div style="text-align:right;">
-          <div style="font-size:16px;color:${color};font-weight:700;">${arrow} ${pnlGang >= 0 ? '+' : ''}${pnlGang.toFixed(2)} ${curr}</div>
-          <div style="font-size:11px;color:${color};">ROE: ${roe >= 0 ? '+' : ''}${roe.toFixed(2)}%</div>
+          <div style="font-family:'Space Mono',monospace;font-size:18px;color:${color};font-weight:700;">${pnlGang >= 0 ? '+' : ''}${pnlGang.toFixed(2)}</div>
+          <div style="font-size:11px;color:${color};font-weight:600;">${roe >= 0 ? '+' : ''}${roe.toFixed(2)}%</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px 10px;font-size:10px;color:var(--muted);margin-bottom:10px;">
-        <div>Entry <span style="color:var(--text);font-weight:600;">$${_fmtPrice(pos.entryPrice)}</span></div>
-        <div>Mark <span style="color:${color};font-weight:600;">$${_fmtPrice(currentPrice)}</span></div>
-        <div>Liq. <span style="color:var(--red);font-weight:600;">$${_fmtPrice(liqPrice)}</span></div>
-        <div>Deposited <span style="color:var(--text);font-weight:600;">${pos.amount.toFixed(2)}</span></div>
-        <div>Value <span style="color:${liveColor};font-weight:700;">${liveValue.toFixed(2)} ${curr}</span></div>
-        <div>Margin <span style="color:${marginColor};font-weight:600;">${distToLiq.toFixed(1)}%</span></div>
-        ${pos.tp ? '<div>TP <span style="color:var(--green);font-weight:600;">$' + _fmtPrice(pos.tp) + '</span></div>' : '<div></div>'}
-        ${pos.sl ? '<div>SL <span style="color:var(--red);font-weight:600;">$' + _fmtPrice(pos.sl) + '</span></div>' : '<div></div>'}
-        <div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:8px;text-align:center;">
+          <div style="font-size:8px;color:var(--muted);letter-spacing:1px;">ENTRY</div>
+          <div style="font-size:12px;color:var(--text);font-weight:600;margin-top:2px;">$${_fmtPrice(pos.entryPrice)}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:8px;text-align:center;">
+          <div style="font-size:8px;color:var(--muted);letter-spacing:1px;">MARK</div>
+          <div style="font-size:12px;color:${color};font-weight:600;margin-top:2px;">$${_fmtPrice(currentPrice)}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:8px;text-align:center;">
+          <div style="font-size:8px;color:var(--muted);letter-spacing:1px;">LIQ. PRICE</div>
+          <div style="font-size:12px;color:var(--red);font-weight:600;margin-top:2px;">$${_fmtPrice(liqPrice)}</div>
+        </div>
       </div>
-      <button onclick="closeFuturesPosition(${pos.id})" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--red);background:rgba(231,76,60,0.1);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(231,76,60,0.25)'" onmouseout="this.style.background='rgba(231,76,60,0.1)'">CLOSE POSITION</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:8px;text-align:center;">
+          <div style="font-size:8px;color:var(--muted);letter-spacing:1px;">MARGIN</div>
+          <div style="font-size:12px;color:var(--text);font-weight:600;margin-top:2px;">${pos.amount.toFixed(2)} ${curr}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:8px;text-align:center;">
+          <div style="font-size:8px;color:var(--muted);letter-spacing:1px;">VALUE</div>
+          <div style="font-size:12px;color:${liveColor};font-weight:700;margin-top:2px;">${liveValue.toFixed(2)} ${curr}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:8px;text-align:center;">
+          <div style="font-size:8px;color:var(--muted);letter-spacing:1px;">MARGIN HEALTH</div>
+          <div style="font-size:12px;color:${marginColor};font-weight:700;margin-top:2px;">${distToLiq.toFixed(1)}%</div>
+        </div>
+      </div>
+      ${pos.tp || pos.sl ? '<div style="display:flex;gap:10px;margin-bottom:10px;">' +
+        (pos.tp ? '<div style="flex:1;background:rgba(39,174,96,0.06);border:1px solid rgba(39,174,96,0.15);border-radius:8px;padding:6px;text-align:center;"><div style="font-size:8px;color:var(--green);letter-spacing:1px;">TAKE PROFIT</div><div style="font-size:12px;color:var(--green);font-weight:600;margin-top:2px;">$' + _fmtPrice(pos.tp) + '</div></div>' : '') +
+        (pos.sl ? '<div style="flex:1;background:rgba(231,76,60,0.06);border:1px solid rgba(231,76,60,0.15);border-radius:8px;padding:6px;text-align:center;"><div style="font-size:8px;color:var(--red);letter-spacing:1px;">STOP LOSS</div><div style="font-size:12px;color:var(--red);font-weight:600;margin-top:2px;">$' + _fmtPrice(pos.sl) + '</div></div>' : '') +
+      '</div>' : ''}
+      <button onclick="closeFuturesPosition(${pos.id})" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--red);background:rgba(231,76,60,0.08);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(231,76,60,0.2)'" onmouseout="this.style.background='rgba(231,76,60,0.08)'">CLOSE POSITION</button>
     </div>`;
   }).join('');
 }
@@ -22632,77 +22704,135 @@ function _forceCloseFuturesPosition(id, reason) {
   renderFuturesHistory();
 }
 
+var _histTab = 'results';
+function switchHistTab(tab) {
+  _histTab = tab;
+  ['results','orders','fees'].forEach(t => {
+    const btn = document.getElementById('histTab' + t.charAt(0).toUpperCase() + t.slice(1));
+    if (btn) { btn.style.borderBottomColor = t === tab ? '#ff8c00' : 'transparent'; btn.style.color = t === tab ? '#ff8c00' : 'var(--muted)'; }
+  });
+  renderFuturesHistory();
+}
+
+function updateAccountOverview() {
+  const myWallet = (state.address || 'demo').toLowerCase();
+  const myPositions = futuresState.positions.filter(p => p.wallet === myWallet && p.status !== 'closed');
+  let totalMargin = 0, totalPnl = 0, worstHealth = 100;
+  myPositions.forEach(pos => {
+    const cp = futuresState.prices[pos.pair] || pos.entryPrice;
+    const pd = (cp - pos.entryPrice) / pos.entryPrice;
+    const sn = (pos.side || '').toLowerCase();
+    const pnl = pos.amount * (sn === 'long' ? pd * pos.leverage : -pd * pos.leverage);
+    totalMargin += pos.amount;
+    totalPnl += pnl;
+    const lm = 1 / pos.leverage;
+    const dtl = sn === 'long' ? ((cp - pos.entryPrice * (1 - lm)) / cp * 100) : ((pos.entryPrice * (1 + lm) - cp) / cp * 100);
+    if (dtl < worstHealth) worstHealth = dtl;
+  });
+  const accVal = totalMargin + totalPnl;
+  const pnlPct = totalMargin > 0 ? (totalPnl / totalMargin * 100) : 0;
+  const el1 = document.getElementById('futuresAccValue');
+  if (el1) el1.textContent = '$' + accVal.toFixed(2);
+  const el2 = document.getElementById('futuresAccPnl');
+  if (el2) { el2.textContent = (totalPnl >= 0 ? '+' : '') + '$' + totalPnl.toFixed(2) + ' (' + (pnlPct >= 0 ? '+' : '') + pnlPct.toFixed(2) + '%)'; el2.style.color = totalPnl >= 0 ? 'var(--green)' : 'var(--red)'; }
+  const el3 = document.getElementById('futuresUsedMargin');
+  if (el3) el3.textContent = totalMargin.toFixed(2);
+  const el4 = document.getElementById('futuresOpenCount');
+  if (el4) el4.textContent = myPositions.length;
+  const el5 = document.getElementById('futuresFreeMargin');
+  if (el5) el5.textContent = Math.max(0, accVal - totalMargin).toFixed(2);
+  const health = myPositions.length > 0 ? Math.max(0, Math.min(100, worstHealth)) : 100;
+  const arc = document.getElementById('healthArc');
+  if (arc) { arc.style.strokeDasharray = health + ', 100'; arc.style.stroke = health > 50 ? 'var(--green)' : health > 25 ? '#f39c12' : 'var(--red)'; }
+  const hpct = document.getElementById('healthPct');
+  if (hpct) { hpct.textContent = health.toFixed(0) + '%'; hpct.style.color = health > 50 ? 'var(--green)' : health > 25 ? '#f39c12' : 'var(--red)'; }
+}
+
 function renderFuturesHistory() {
   const el = document.getElementById('futuresHistory');
   if (!el) return;
   const historyWallet = (state.address || 'demo').toLowerCase();
   const myHistory = futuresState.history.filter(h => h.wallet === historyWallet);
-  // Sort newest first
   myHistory.sort(function(a, b) { return new Date(b.closedAt || 0) - new Date(a.closedAt || 0); });
+
+  // Update total PnL
+  const totalPnl = myHistory.reduce((s, h) => s + (h.pnl || 0), 0);
+  const totalEl = document.getElementById('historyTotalPnl');
+  if (totalEl) { totalEl.textContent = (totalPnl >= 0 ? '+' : '') + '$' + totalPnl.toFixed(2); totalEl.style.color = totalPnl >= 0 ? 'var(--green)' : 'var(--red)'; }
+
+  if (_histTab === 'fees') {
+    const totalFees = myHistory.reduce((s, h) => s + (h.fee || h.amount * 0.003), 0);
+    el.innerHTML = '<div style="text-align:center;padding:20px;"><div style="font-size:10px;color:var(--muted);letter-spacing:1px;">TOTAL FEES PAID</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:32px;color:#e74c3c;margin-top:6px;">' + totalFees.toFixed(4) + '</div><div style="font-size:11px;color:var(--muted);margin-top:4px;">across ' + myHistory.length + ' trades</div></div>';
+    return;
+  }
+  if (_histTab === 'orders') {
+    const orders = myHistory.slice(0, 20);
+    if (orders.length === 0) { el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:16px;">No orders</div>'; return; }
+    el.innerHTML = orders.map(h => {
+      const sc = h.side === 'long' ? '#27ae60' : '#e74c3c';
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><div><span style="font-size:13px;color:var(--text);font-weight:600;">' + (FUTURES_PAIRS[h.pair]?.name || h.pair) + '</span><span style="font-size:10px;margin-left:8px;padding:2px 6px;border-radius:4px;background:' + sc + '22;color:' + sc + ';font-weight:700;">' + h.side.toUpperCase() + '</span></div><div style="text-align:right;"><div style="font-size:11px;color:var(--text);">' + (h.amount||0).toFixed(2) + ' @ $' + _fmtPrice(h.entryPrice||0) + '</div><div style="font-size:9px;color:var(--muted);">' + (h.closedAt ? new Date(h.closedAt).toLocaleDateString() : '') + '</div></div></div>';
+    }).join('');
+    return;
+  }
+
+  // Results tab — group by date like Trading 212
   const shown = myHistory.slice(0, 30);
   if (shown.length === 0) {
     el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No trades yet</div>';
     return;
   }
-  el.innerHTML = shown.map(function(h, i) {
-    const color = h.pnl >= 0 ? 'var(--green)' : 'var(--red)';
-    const sideColor = h.side === 'long' ? '#27ae60' : '#e74c3c';
-    const curr = h.currency || 'GANG';
-    const entryP = h.entryPrice || 0;
-    const closeP = h.closePrice || entryP;
-    const priceMoved = entryP > 0 ? ((closeP - entryP) / entryP * 100) : 0;
-    const fee = h.fee || (h.amount * 0.003);
-    const pnlPct = h.pnlPct || (h.pnl && h.amount ? (h.pnl / h.amount * 100) : 0);
-    const openDate = h.openedAt ? new Date(h.openedAt) : null;
-    const closeDate = h.closedAt ? new Date(h.closedAt) : null;
-    var duration = '';
-    if (openDate && closeDate) {
-      var diffMs = closeDate - openDate;
-      var diffMin = Math.floor(diffMs / 60000);
-      if (diffMin < 1) duration = '<1m';
-      else if (diffMin < 60) duration = diffMin + 'm';
-      else if (diffMin < 1440) duration = Math.floor(diffMin/60) + 'h ' + (diffMin%60) + 'm';
-      else duration = Math.floor(diffMin/1440) + 'd ' + Math.floor((diffMin%1440)/60) + 'h';
-    }
-    // Determine close reason — use stored reason first, then detect from prices
-    var closeReason = h.closeReason || '';
-    if (!closeReason) {
-      if (h.tp && closeP >= h.tp && h.side === 'long') closeReason = 'TP HIT';
-      else if (h.tp && closeP <= h.tp && h.side === 'short') closeReason = 'TP HIT';
-      else if (h.sl && closeP <= h.sl && h.side === 'long') closeReason = 'SL HIT';
-      else if (h.sl && closeP >= h.sl && h.side === 'short') closeReason = 'SL HIT';
-      else if (h.pnl <= -(h.amount || 0)) closeReason = 'LIQUIDATED';
-      else closeReason = 'MANUAL';
-    }
+  // Group by date
+  const groups = {};
+  shown.forEach(h => {
+    const d = h.closedAt ? new Date(h.closedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Unknown';
+    if (!groups[d]) groups[d] = [];
+    groups[d].push(h);
+  });
 
-    var reasonColor = closeReason === 'TP HIT' ? 'var(--green)' : closeReason === 'LIQUIDATED' ? '#ff4444' : closeReason === 'SL HIT' ? '#ff8800' : 'var(--muted)';
+  let html = '';
+  Object.keys(groups).forEach(date => {
+    const dayPnl = groups[date].reduce((s, h) => s + (h.pnl || 0), 0);
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;margin-top:6px;border-bottom:1px solid rgba(255,255,255,0.06);"><span style="font-family:\'Space Grotesk\',sans-serif;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:0.5px;">' + date + '</span><span style="font-size:12px;font-weight:700;color:' + (dayPnl >= 0 ? 'var(--green)' : 'var(--red)') + ';">' + (dayPnl >= 0 ? '+' : '') + dayPnl.toFixed(2) + '</span></div>';
+    groups[date].forEach(function(h) {
+      const color = h.pnl >= 0 ? 'var(--green)' : 'var(--red)';
+      const sideColor = h.side === 'long' ? '#27ae60' : '#e74c3c';
+      const curr = h.currency || 'GANG';
+      const entryP = h.entryPrice || 0;
+      const closeP = h.closePrice || entryP;
+      var closeReason = h.closeReason || 'MANUAL';
+      var reasonColor = closeReason === 'TP HIT' ? 'var(--green)' : closeReason === 'LIQUIDATED' ? '#ff4444' : closeReason === 'SL HIT' ? '#ff8800' : 'var(--muted)';
+      const pairInfo = FUTURES_PAIRS[h.pair] || {};
+      const logo = pairInfo.logo || '';
+      const name = pairInfo.name || h.pair;
 
-    return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:6px;">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
-        '<div style="display:flex;align-items:center;gap:8px;">' +
-          '<span style="font-family:\'Bebas Neue\',sans-serif;font-size:16px;color:#ff8c00;">' + h.pair + '/USD</span>' +
-          '<span style="font-size:10px;padding:2px 6px;border-radius:4px;background:' + sideColor + '22;color:' + sideColor + ';font-weight:700;">' + h.side.toUpperCase() + ' ' + h.leverage + 'x</span>' +
-          '<span style="font-size:9px;padding:2px 6px;border-radius:4px;background:' + reasonColor + '22;color:' + reasonColor + ';font-weight:700;">' + closeReason + '</span>' +
+      html += '<div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.03);">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+          '<div style="display:flex;align-items:center;gap:10px;">' +
+            '<div style="width:30px;height:30px;border-radius:50%;overflow:hidden;background:' + (pairInfo.badgeColor || '#ff8c00') + ';display:flex;align-items:center;justify-content:center;flex-shrink:0;">' +
+              (logo ? '<img src="' + logo + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'">' : '<span style="font-size:11px;color:#fff;">' + (pairInfo.badge || h.pair.slice(0,2)) + '</span>') +
+            '</div>' +
+            '<div>' +
+              '<div style="font-size:13px;color:var(--text);font-weight:600;">' + name + '</div>' +
+              '<div style="display:flex;gap:4px;align-items:center;margin-top:2px;">' +
+                '<span style="font-size:9px;padding:1px 5px;border-radius:3px;background:' + sideColor + '22;color:' + sideColor + ';font-weight:700;">' + h.side.toUpperCase() + ' ' + h.leverage + 'x</span>' +
+                '<span style="font-size:9px;padding:1px 5px;border-radius:3px;background:' + reasonColor + '22;color:' + reasonColor + ';font-weight:600;">' + closeReason + '</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="text-align:right;">' +
+            '<div style="font-family:\'Space Mono\',monospace;font-size:14px;color:' + color + ';font-weight:700;">' + (h.pnl >= 0 ? '+' : '') + h.pnl.toFixed(2) + '</div>' +
+          '</div>' +
         '</div>' +
-        '<div style="text-align:right;">' +
-          '<div style="font-size:15px;color:' + color + ';font-weight:700;">' + (h.pnl >= 0 ? '+' : '') + h.pnl.toFixed(2) + ' ' + curr + '</div>' +
-          '<div style="font-size:10px;color:' + color + ';">' + (pnlPct >= 0 ? '+' : '') + pnlPct.toFixed(2) + '%</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px;margin-left:40px;font-size:10px;color:var(--muted);">' +
+          '<div>AVG PRICE <span style="color:var(--text);font-weight:600;">$' + _fmtPrice(entryP) + '</span></div>' +
+          '<div>CLOSE PRICE <span style="color:' + color + ';font-weight:600;">$' + _fmtPrice(closeP) + '</span></div>' +
+          '<div>SIZE <span style="color:var(--text);">' + (h.amount||0).toFixed(2) + ' ' + curr + '</span></div>' +
+          '<div>FEE <span style="color:#e74c3c;">' + (h.fee || h.amount * 0.003).toFixed(4) + '</span></div>' +
         '</div>' +
-      '</div>' +
-      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;font-size:10px;color:var(--muted);">' +
-        '<div>Entry: <span style="color:var(--text);">$' + _fmtPrice(entryP) + '</span></div>' +
-        '<div>Close: <span style="color:' + color + ';">$' + _fmtPrice(closeP) + '</span></div>' +
-        '<div>Size: <span style="color:var(--text);">' + (h.amount||0).toFixed(2) + ' ' + curr + '</span></div>' +
-        '<div>Fee: <span style="color:#e74c3c;">' + fee.toFixed(4) + ' ' + curr + '</span></div>' +
-      '</div>' +
-      '<div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:4px;">' +
-        '<span>Opened: ' + (openDate ? openDate.toLocaleString() : '—') + '</span>' +
-        '<span>Closed: ' + (closeDate ? closeDate.toLocaleString() : '—') + '</span>' +
-        (duration ? '<span>Duration: ' + duration + '</span>' : '') +
-        '<span>Price move: <span style="color:' + (priceMoved>=0?'var(--green)':'var(--red)') + ';">' + (priceMoved>=0?'+':'') + priceMoved.toFixed(2) + '%</span></span>' +
-      '</div>' +
-    '</div>';
-  }).join('');
+      '</div>';
+    });
+  });
+  el.innerHTML = html;
 }
 
 function updateFuturesPool() {
