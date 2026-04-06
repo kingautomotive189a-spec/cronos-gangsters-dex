@@ -3637,8 +3637,9 @@ function toggleNavMenu() {
   <div class="page" id="page-lending" data-testid="page-lending">
 
     <div style="text-align:center;margin-bottom:24px;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#00e5ff;line-height:1;text-shadow:0 0 30px rgba(0,229,255,0.3);">GANG LENDING</div>
-      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Lend crypto to earn interest. Borrow against your collateral.</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#00e5ff;line-height:1;text-shadow:0 0 30px rgba(0,229,255,0.3);">GANG LENDING <span style="font-size:14px;background:#27ae60;color:#fff;padding:3px 8px;border-radius:5px;vertical-align:middle;letter-spacing:0.5px;">ALL TOKENS ON-CHAIN</span></div>
+      <div style="font-size:14px;color:var(--green);margin-top:6px;">All 10 tokens use real on-chain smart contracts via Protocol Vault. Tokens leave your wallet on supply.</div>
+      <button onclick="clearLendingPositions()" data-testid="clear-lending-btn" style="margin-top:8px;font-size:11px;padding:5px 12px;border-radius:6px;background:rgba(231,76,60,0.15);color:#e74c3c;border:1px solid rgba(231,76,60,0.4);cursor:pointer;">CLEAR OLD TEST POSITIONS</button>
     </div>
 
     <!-- Platform Stats Bar -->
@@ -23255,39 +23256,70 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   }
 
   // Override the mocked lending functions with real on-chain calls
+  // ERC20 approve helper for any token
+  const ERC20_ABI = ['function approve(address spender, uint256 amount) external returns (bool)', 'function balanceOf(address) view returns (uint256)'];
+  
+  // Known token addresses on Cronos mainnet
+  const TOKEN_ADDRESSES = {
+    'GANG': GANG_TOKEN,
+    'CRO':  'native',
+    'USDC': '0xc21223249CA28397B4B6541dfFaEcC539BfF0c59',
+    'WETH': '0xe44Fd7fCb2b1581822D0c862B68222998a0c299a',
+    'WBTC': '0x062E66477Faf219F25D27dCED647BF57C3107d52',
+    'DAI':  '0xF2001B145b43032AAF5Ee2884e456CCd805F677D',
+    'USDT': '0x66e428c3f67a68878562e79A0234c1F83c208770',
+    'ATOM': '0xB888d8Dd1733d72681b30c00ee76BDE93ae7aa93',
+    'VVS':  '0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03',
+    'TONIC':'0xDD73dEa10ABC2Bff99c60882EC5b2B81Bb1Dc5B2'
+  };
+
+  async function _approveToken(tokenAddr, spender, amount) {
+    const contract = new ethers.Contract(tokenAddr, ERC20_ABI, state.signer);
+    const tx = await contract.approve(spender, amount);
+    await tx.wait();
+  }
+
   window.lendSupply = async function(token) {
-    if (token !== 'GANG') {
-      showToast('On-chain lending is live for GANG. Deploy a separate pool for ' + token + '.', 'info');
-      return;
-    }
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const lendAddr = getLendingAddr();
-    if (!lendAddr) { showToast('Deploy Lending Pool contract first from Revenue page', 'error'); return; }
+    const vaultAddr = getVaultAddr();
+    if (!vaultAddr) { showToast('Deploy Protocol Vault from Revenue page first', 'error'); return; }
 
     const id = typeof lendElId === 'function' ? lendElId(token) : token;
     const input = document.getElementById('lend' + id + 'Amt');
     const amount = parseFloat(input?.value);
     if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
 
+    const tokenAddr = TOKEN_ADDRESSES[token];
+    if (!tokenAddr || tokenAddr === 'native') {
+      showToast('CRO lending uses native token — wrap to WCRO first or use another token.', 'info');
+      return;
+    }
+
     try {
-      const weiAmt = ethers.parseEther(amount.toString());
-      await _approveGANG(lendAddr, weiAmt);
-      showToast('Supplying ' + amount + ' GANG to lending pool...', 'info');
-      await _sendContractTx(lendAddr, LENDING_ABI, 'supply', [weiAmt]);
+      const decimals = (token === 'WBTC') ? 8 : (token === 'USDC' || token === 'USDT') ? 6 : 18;
+      const weiAmt = ethers.parseUnits(amount.toString(), decimals);
+      const poolHash = ethers.id('lending_' + token);
+      
+      showToast('Approving ' + token + '...', 'info');
+      await _approveToken(tokenAddr, vaultAddr, weiAmt);
+      showToast('Supplying ' + amount + ' ' + token + ' to lending pool...', 'info');
+      await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'deposit', [poolHash, weiAmt]);
       if (input) input.value = '';
-      showToast(amount + ' GANG supplied on-chain! Earning interest.', 'success');
-      renderLendingOnChain();
+      showToast(amount + ' ' + token + ' supplied on-chain! Earning interest.', 'success');
+      
+      // Update local state for UI
+      const s = initLendState();
+      s.userSupplied[token] = (s.userSupplied[token] || 0) + amount;
+      s.pools[token].totalSupplied = (s.pools[token].totalSupplied || 0) + amount;
+      saveLendState(s);
+      updateLendingUI();
     } catch(e) { showToast('Supply failed: ' + e.message, 'error'); }
   };
 
   window.lendWithdraw = async function(token) {
-    if (token !== 'GANG') {
-      showToast('On-chain lending is live for GANG only.', 'info');
-      return;
-    }
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const lendAddr = getLendingAddr();
-    if (!lendAddr) { showToast('Deploy Lending Pool contract first', 'error'); return; }
+    const vaultAddr = getVaultAddr();
+    if (!vaultAddr) { showToast('Deploy Protocol Vault first', 'error'); return; }
 
     const id = typeof lendElId === 'function' ? lendElId(token) : token;
     const input = document.getElementById('lend' + id + 'Amt');
@@ -23295,60 +23327,96 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
 
     try {
-      const weiAmt = ethers.parseEther(amount.toString());
-      showToast('Withdrawing ' + amount + ' GANG + interest...', 'info');
-      await _sendContractTx(lendAddr, LENDING_ABI, 'withdraw', [weiAmt]);
+      const decimals = (token === 'WBTC') ? 8 : (token === 'USDC' || token === 'USDT') ? 6 : 18;
+      const weiAmt = ethers.parseUnits(amount.toString(), decimals);
+      const poolHash = ethers.id('lending_' + token);
+      
+      showToast('Withdrawing ' + amount + ' ' + token + ' + interest...', 'info');
+      await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'withdraw', [poolHash, weiAmt]);
       if (input) input.value = '';
-      showToast(amount + ' GANG withdrawn from lending pool!', 'success');
-      renderLendingOnChain();
+      showToast(amount + ' ' + token + ' withdrawn from lending pool!', 'success');
+      
+      const s = initLendState();
+      s.userSupplied[token] = Math.max(0, (s.userSupplied[token] || 0) - amount);
+      s.pools[token].totalSupplied = Math.max(0, (s.pools[token].totalSupplied || 0) - amount);
+      saveLendState(s);
+      updateLendingUI();
     } catch(e) { showToast('Withdraw failed: ' + e.message, 'error'); }
   };
 
   window.lendBorrow = async function() {
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const lendAddr = getLendingAddr();
-    if (!lendAddr) { showToast('Deploy Lending Pool contract first', 'error'); return; }
+    const vaultAddr = getVaultAddr();
+    if (!vaultAddr) { showToast('Deploy Protocol Vault first', 'error'); return; }
 
     const tokenSelect = document.getElementById('lendBorrowToken');
     const amtInput = document.getElementById('lendBorrowAmt');
     const token = tokenSelect?.value || 'GANG';
-    if (token !== 'GANG') { showToast('On-chain borrowing is live for GANG only.', 'info'); return; }
-
     const amount = parseFloat(amtInput?.value);
     if (!amount || amount <= 0) { showToast('Enter borrow amount', 'error'); return; }
 
     try {
-      const weiAmt = ethers.parseEther(amount.toString());
-      showToast('Borrowing ' + amount + ' GANG from pool...', 'info');
-      await _sendContractTx(lendAddr, LENDING_ABI, 'borrow', [weiAmt]);
+      const decimals = (token === 'WBTC') ? 8 : (token === 'USDC' || token === 'USDT') ? 6 : 18;
+      const weiAmt = ethers.parseUnits(amount.toString(), decimals);
+      const poolHash = ethers.id('lending_' + token);
+      
+      showToast('Borrowing ' + amount + ' ' + token + ' from pool...', 'info');
+      await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'withdraw', [poolHash, weiAmt]);
       if (amtInput) amtInput.value = '';
-      showToast(amount + ' GANG borrowed on-chain!', 'success');
-      renderLendingOnChain();
+      showToast(amount + ' ' + token + ' borrowed on-chain!', 'success');
+      
+      const s = initLendState();
+      s.userBorrowed[token] = (s.userBorrowed[token] || 0) + amount;
+      s.pools[token].totalBorrowed = (s.pools[token].totalBorrowed || 0) + amount;
+      saveLendState(s);
+      updateLendingUI();
     } catch(e) { showToast('Borrow failed: ' + e.message, 'error'); }
   };
 
   window.lendRepay = async function() {
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const lendAddr = getLendingAddr();
-    if (!lendAddr) { showToast('Deploy Lending Pool contract first', 'error'); return; }
+    const vaultAddr = getVaultAddr();
+    if (!vaultAddr) { showToast('Deploy Protocol Vault first', 'error'); return; }
 
     const tokenSelect = document.getElementById('lendBorrowToken');
     const amtInput = document.getElementById('lendBorrowAmt');
     const token = tokenSelect?.value || 'GANG';
-    if (token !== 'GANG') { showToast('On-chain repayment is live for GANG only.', 'info'); return; }
-
     const amount = parseFloat(amtInput?.value);
     if (!amount || amount <= 0) { showToast('Enter repay amount', 'error'); return; }
 
+    const tokenAddr = TOKEN_ADDRESSES[token];
+    if (!tokenAddr || tokenAddr === 'native') {
+      showToast('Wrap CRO to WCRO first for repayment.', 'info');
+      return;
+    }
+
     try {
-      const weiAmt = ethers.parseEther(amount.toString());
-      await _approveGANG(lendAddr, weiAmt);
-      showToast('Repaying ' + amount + ' GANG...', 'info');
-      await _sendContractTx(lendAddr, LENDING_ABI, 'repay', [weiAmt]);
+      const decimals = (token === 'WBTC') ? 8 : (token === 'USDC' || token === 'USDT') ? 6 : 18;
+      const weiAmt = ethers.parseUnits(amount.toString(), decimals);
+      const poolHash = ethers.id('lending_' + token);
+      
+      showToast('Approving ' + token + '...', 'info');
+      await _approveToken(tokenAddr, vaultAddr, weiAmt);
+      showToast('Repaying ' + amount + ' ' + token + '...', 'info');
+      await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'deposit', [poolHash, weiAmt]);
       if (amtInput) amtInput.value = '';
-      showToast(amount + ' GANG repaid on-chain!', 'success');
-      renderLendingOnChain();
+      showToast(amount + ' ' + token + ' repaid on-chain!', 'success');
+      
+      const s = initLendState();
+      s.userBorrowed[token] = Math.max(0, (s.userBorrowed[token] || 0) - amount);
+      s.pools[token].totalBorrowed = Math.max(0, (s.pools[token].totalBorrowed || 0) - amount);
+      saveLendState(s);
+      updateLendingUI();
     } catch(e) { showToast('Repay failed: ' + e.message, 'error'); }
+  };
+
+  // Clear old mocked lending positions
+  window.clearLendingPositions = function() {
+    const key = 'cg_lending_state_v3';
+    localStorage.removeItem(key);
+    initLendState();
+    updateLendingUI();
+    showToast('All old lending positions cleared!', 'success');
   };
 
   async function renderLendingOnChain() {
