@@ -7403,12 +7403,10 @@ function toggleNavMenu() {
           <div style="font-size:12px;color:var(--muted);">No active bonds. Purchase a bond below to start earning discounted $GANG.</div>
         </div>
       </div>
-      <!-- WITHDRAW / CLAIM section — always visible -->
+      <!-- WITHDRAW section — always visible -->
       <div style="margin-top:12px;background:linear-gradient(135deg,rgba(39,174,96,0.06),rgba(39,174,96,0.02));border:1px solid rgba(39,174,96,0.25);border-radius:14px;padding:16px;">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);letter-spacing:2px;margin-bottom:8px;">WITHDRAW VESTED BONDS</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6;">When your bond finishes its 5-day vesting period, the <strong style="color:var(--green);">CLAIM VESTED GANG</strong> button will appear above on your active bond. Click it to withdraw your discounted $GANG to your wallet via MetaMask.</div>
-        <button onclick="claimAllVestedBonds()" data-testid="claim-all-bonds-btn" style="width:100%;padding:14px;border-radius:10px;background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;box-shadow:0 2px 8px rgba(39,174,96,0.3);transition:all .2s;" onmouseover="this.style.transform='scale(1.01)'" onmouseout="this.style.transform='scale(1)'">CLAIM ALL VESTED BONDS</button>
-        <div id="bondClaimStatus" style="font-size:11px;margin-top:6px;min-height:14px;text-align:center;"></div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6;">Each bond vests independently over 5 days. When a bond is fully vested, its own <strong style="color:var(--green);">CLAIM</strong> button appears. Each claim triggers MetaMask for on-chain withdrawal to your wallet.</div>
       </div>
     </div>
 
@@ -26322,24 +26320,26 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
         const pct = Math.min(100, (elapsed / vestMs) * 100);
         const vested = pct >= 100;
         const claimable = vested ? b.gangReceived : (b.gangReceived * pct / 100);
-        const timeLeft = vested ? 'READY' : ((vestMs - elapsed) > 86400000 ? Math.ceil((vestMs - elapsed) / 86400000) + 'd left' : Math.ceil((vestMs - elapsed) / 3600000) + 'h left');
-        return `<div style="background:var(--surface);border:1px solid ${vested ? 'rgba(39,174,96,0.4)' : 'rgba(212,160,23,0.25)'};border-radius:16px;padding:16px;">
+        const timeLeft = vested ? 'READY TO CLAIM' : ((vestMs - elapsed) > 86400000 ? Math.ceil((vestMs - elapsed) / 86400000) + 'd left' : Math.ceil((vestMs - elapsed) / 3600000) + 'h left');
+        return `<div style="background:var(--surface);border:1px solid ${vested ? 'rgba(39,174,96,0.5)' : 'rgba(212,160,23,0.25)'};border-radius:16px;padding:16px;${vested ? 'box-shadow:0 0 15px rgba(39,174,96,0.1);' : ''}">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
             <div style="font-weight:700;color:var(--text);font-size:14px;">${b.pair} Bond</div>
-            <div style="font-size:11px;padding:3px 8px;border-radius:6px;font-weight:700;background:${vested ? 'rgba(39,174,96,0.15)' : 'rgba(255,152,0,0.15)'};color:${vested ? 'var(--green)' : '#ff9800'};">${vested ? 'FULLY VESTED' : timeLeft}</div>
+            <div style="font-size:11px;padding:3px 10px;border-radius:6px;font-weight:700;background:${vested ? 'rgba(39,174,96,0.2)' : 'rgba(255,152,0,0.15)'};color:${vested ? 'var(--green)' : '#ff9800'};">${timeLeft}</div>
           </div>
           <div style="background:var(--surface2);border-radius:6px;height:8px;overflow:hidden;margin-bottom:10px;">
             <div style="height:100%;background:${vested ? 'var(--green)' : 'var(--gold)'};width:${pct}%;border-radius:6px;transition:width .3s;"></div>
           </div>
-          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;">
-            <span>Deposited: <strong style="color:var(--text);">${b.lpValue.toFixed(2)} GANG</strong></span>
-            <span>Vesting: <strong style="color:var(--gold);">${pct.toFixed(0)}%</strong></span>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:10px;">
+            <div style="font-size:12px;color:var(--muted);">Deposited: <strong style="color:var(--text);">${b.lpValue.toFixed(2)} GANG</strong></div>
+            <div style="font-size:12px;color:var(--muted);text-align:right;">Vesting: <strong style="color:var(--gold);">${pct.toFixed(0)}%</strong></div>
+            <div style="font-size:12px;color:var(--muted);">Claimable: <strong style="color:var(--green);">${claimable.toFixed(2)} GANG</strong></div>
+            <div style="font-size:12px;color:var(--muted);text-align:right;">Total: <strong style="color:var(--gold);">${b.gangReceived.toFixed(2)} GANG</strong></div>
           </div>
-          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);">
-            <span>Claimable: <strong style="color:var(--green);">${claimable.toFixed(2)} GANG</strong></span>
-            <span>Total: <strong style="color:var(--gold);">${b.gangReceived.toFixed(2)} GANG</strong></span>
-          </div>
-          ${vested ? '<button onclick="claimBond(' + i + ')" data-testid="claim-bond-' + i + '" style="width:100%;margin-top:10px;padding:12px;border-radius:10px;background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;font-family:\'Bebas Neue\',sans-serif;font-size:15px;letter-spacing:1.5px;cursor:pointer;box-shadow:0 2px 8px rgba(39,174,96,0.3);">CLAIM VESTED GANG</button>' : '<div style="margin-top:8px;padding:8px;border-radius:8px;background:rgba(255,152,0,0.08);text-align:center;font-size:11px;color:#ff9800;">Vesting in progress — ' + timeLeft + '</div>'}
+          ${vested ?
+            '<button onclick="claimBond(' + i + ')" data-testid="claim-bond-' + i + '" style="width:100%;padding:14px;border-radius:10px;background:linear-gradient(135deg,var(--green),#1a8a4a);color:#fff;border:none;font-family:\'Bebas Neue\',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;box-shadow:0 2px 8px rgba(39,174,96,0.3);transition:all .2s;" onmouseover="this.style.transform=\'scale(1.01)\'" onmouseout="this.style.transform=\'scale(1)\'">CLAIM ' + b.gangReceived.toFixed(2) + ' GANG</button>'
+            :
+            '<div style="width:100%;padding:12px;border-radius:10px;background:rgba(255,152,0,0.08);border:1px solid rgba(255,152,0,0.2);text-align:center;font-family:\'Bebas Neue\',sans-serif;font-size:13px;letter-spacing:1px;color:#ff9800;">VESTING — ' + timeLeft + '</div>'
+          }
         </div>`;
       }).join('');
     }
