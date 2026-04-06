@@ -37,7 +37,16 @@ Core DeFi, Advanced DeFi, World Domination (6 features), Dynamic Copy Trading, A
 - **Telegram Bot menu**: Added "KYC & Audit" button to main inline keyboard menu
 - **ZIP delivered** for GoDaddy deployment
 
-## Changes (Feb 2026 — Session 2)
+## Changes (Feb 2026 — Session 3)
+- **Mining Hub Games Overhaul**: Replaced all old button-tap games (coin flip, dice, RPS, horse racing, car racing) with 4 new interactive canvas-based games:
+  - **Road Racer**: Pseudo-3D perspective road, dodge traffic, collect GANG coins, multiplier increases with distance
+  - **Shooting Gallery**: Tap ring targets, 30-second timer, streak tracking, pulsing animations
+  - **Premium Slots**: 3-reel slot machine with animated spin, $G/7/Diamond/Cherry/Bar/Star symbols, backend-powered fairness
+  - **Drift Racer**: Top-down oval track, 3 AI opponents, 3-lap race, position tracking, tire mark particles
+- Games tab now shows "ARCADE GAMES" with game cards
+- Racing tab now shows "RACING GAMES" with game cards
+- All games use Canvas API with 60fps game loops, touch-friendly controls, proper HUD
+- All games tie into backend API for fair bet/payout processing
 - **Bot Dashboard API Fix**: Fixed `dashboard.html` API routing for GoDaddy deployment. Replaced hardcoded `window.location.origin` with configurable `BACKEND_URL` constant.
 - **NFT Staking (JS Logic)**: Full stake/unstake/claim with rarity multipliers (Legendary 3x, Epic 2x, Rare 1.5x, Common 1x). 0.3% fee on claim. Live reward ticking. "Your NFTs Available to Stake" grid with quick-stake.
 - **Auto-Buyback & Burn (JS Logic)**: Manual buyback trigger, deflationary stats (4.2M GANG burned, 12.7K CRO spent), auto 10% of all platform fees routed to buyback.

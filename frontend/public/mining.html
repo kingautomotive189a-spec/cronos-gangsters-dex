@@ -90,6 +90,17 @@ h1{text-align:center;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-s
 .footer{display:flex;justify-content:center;gap:20px;padding:14px;border-top:1px solid #333;margin-top:10px;}
 .footer a{color:var(--muted);text-decoration:none;font-size:18px;}
 .back-link{display:block;text-align:center;color:var(--gold);text-decoration:none;font-size:14px;padding:10px;font-weight:600;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+.game-overlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:#0a0a12;display:none;flex-direction:column;touch-action:none;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;}
+.game-overlay.active{display:flex;}
+.game-overlay canvas{flex:1;width:100%;display:block;}
+.game-exit-btn{position:absolute;top:10px;right:10px;z-index:10001;background:rgba(180,0,0,0.8);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+.game-card{background:linear-gradient(135deg,rgba(26,26,46,0.9),rgba(10,22,40,0.9));border:1px solid rgba(255,215,0,0.15);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .15s,border-color .15s;}
+.game-card:active{transform:scale(0.97);border-color:var(--gold);}
+.game-card-img{height:110px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.game-card-info{padding:10px;text-align:center;}
+.game-card-title{font-family:'Bebas Neue',sans-serif;color:var(--gold);font-size:17px;letter-spacing:2px;}
+.game-card-desc{font-size:10px;color:var(--muted);margin-top:2px;}
+.game-card-play{display:inline-block;margin-top:6px;background:linear-gradient(90deg,var(--gold),var(--orange));color:#000;border:none;padding:8px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;font-size:13px;}
 </style>
 </head>
 <body>
@@ -396,28 +407,25 @@ function renderMineTab() {
 }
 
 function renderGamesTab() {
-  var html = '<div class="panel"><h2>MINI GAMES</h2>';
+  var html = '<div class="panel"><h2>ARCADE GAMES</h2>';
   html += '<div class="bet-row"><span>Bet:</span><input type="number" class="bet-input" value="'+betAmount+'" onchange="betAmount=Math.max(1,+this.value)" data-testid="bet-input"/><span>$GANG</span></div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">';
 
-  html += '<h3>Coin Flip (2x)</h3><div class="game-grid"><button class="game-btn" onclick="doAction(\'/game/coinflip\',{amount:betAmount,choice:\'heads\'})" data-testid="coinflip-heads">HEADS</button><button class="game-btn" onclick="doAction(\'/game/coinflip\',{amount:betAmount,choice:\'tails\'})" data-testid="coinflip-tails">TAILS</button></div>';
+  // Shooting Gallery
+  html += '<div class="game-card" onclick="launchGame(\'shoot\')" data-testid="launch-shooting">';
+  html += '<div class="game-card-img" style="background:linear-gradient(135deg,#1a0a28,#0a1a2e);"><div style="width:60px;height:60px;border-radius:50%;border:4px solid #e74c3c;display:flex;align-items:center;justify-content:center;"><div style="width:20px;height:20px;border-radius:50%;background:#e74c3c;"></div></div></div>';
+  html += '<div class="game-card-info"><div class="game-card-title">SHOOTING GALLERY</div><div class="game-card-desc">Hit targets, build streaks, 30s timer</div><div class="game-card-play">PLAY</div></div></div>';
 
-  html += '<h3>Dice (6x)</h3><div class="dice-grid">';
-  for(var i=1;i<=6;i++) html += '<button class="dice-btn" onclick="doAction(\'/game/dice\',{amount:betAmount,choice:\''+i+'\'})">'+i+'</button>';
-  html += '</div>';
+  // Premium Slots
+  html += '<div class="game-card" onclick="launchGame(\'slots\')" data-testid="launch-slots">';
+  html += '<div class="game-card-img" style="background:linear-gradient(135deg,#1a0a2e,#2a1a3e);"><div style="display:flex;gap:6px;">';
+  html += '<div style="width:36px;height:50px;border-radius:6px;background:#222;border:1px solid #ffd700;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#ffd700;">7</div>';
+  html += '<div style="width:36px;height:50px;border-radius:6px;background:#222;border:1px solid #ffd700;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#e74c3c;">7</div>';
+  html += '<div style="width:36px;height:50px;border-radius:6px;background:#222;border:1px solid #ffd700;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#ffd700;">7</div>';
+  html += '</div></div>';
+  html += '<div class="game-card-info"><div class="game-card-title">PREMIUM SLOTS</div><div class="game-card-desc">Spin the reels, up to 100x payout</div><div class="game-card-play">PLAY</div></div></div>';
 
-  html += '<h3>Rock Paper Scissors (2x)</h3><div class="game-grid" style="grid-template-columns:1fr 1fr 1fr"><button class="game-btn" onclick="doAction(\'/game/rps\',{amount:betAmount,choice:\'rock\'})">ROCK</button><button class="game-btn" onclick="doAction(\'/game/rps\',{amount:betAmount,choice:\'paper\'})">PAPER</button><button class="game-btn" onclick="doAction(\'/game/rps\',{amount:betAmount,choice:\'scissors\'})">SCISSORS</button></div>';
-
-  html += '<h3>Higher or Lower (2x)</h3><div class="game-grid"><button class="game-btn green" onclick="doAction(\'/game/highlow\',{amount:betAmount,choice:\'high\'})">HIGH</button><button class="game-btn red" onclick="doAction(\'/game/highlow\',{amount:betAmount,choice:\'low\'})">LOW</button></div>';
-
-  html += '<h3>Blackjack (2x)</h3><button class="action-btn" onclick="doAction(\'/game/blackjack\',{amount:betAmount})" data-testid="play-blackjack">PLAY BLACKJACK</button>';
-
-  html += '<h3>Roulette (2x-36x)</h3><div class="game-grid" style="grid-template-columns:1fr 1fr"><button class="game-btn red" onclick="doAction(\'/game/roulette\',{amount:betAmount,choice:\'red\'})" data-testid="roulette-red">RED</button><button class="game-btn" style="background:#222;color:#fff" onclick="doAction(\'/game/roulette\',{amount:betAmount,choice:\'black\'})">BLACK</button></div><div class="game-grid" style="grid-template-columns:1fr 1fr;margin-top:6px"><button class="game-btn purple" onclick="doAction(\'/game/roulette\',{amount:betAmount,choice:\'odd\'})">ODD</button><button class="game-btn purple" onclick="doAction(\'/game/roulette\',{amount:betAmount,choice:\'even\'})">EVEN</button></div>';
-
-  html += '<h3>Baccarat (2x / 8x tie)</h3><div class="game-grid" style="grid-template-columns:1fr 1fr 1fr"><button class="game-btn green" onclick="doAction(\'/game/baccarat\',{amount:betAmount,choice:\'player\'})" data-testid="baccarat-player">PLAYER</button><button class="game-btn" style="background:var(--gold);color:#000" onclick="doAction(\'/game/baccarat\',{amount:betAmount,choice:\'tie\'})">TIE 8x</button><button class="game-btn red" onclick="doAction(\'/game/baccarat\',{amount:betAmount,choice:\'banker\'})">BANKER</button></div>';
-
-  html += '<h3>Video Poker (up to 250x)</h3><button class="action-btn" onclick="doAction(\'/game/videopoker\',{amount:betAmount})" data-testid="play-videopoker">DEAL CARDS</button>';
-
-  html += '</div>';
+  html += '</div></div>';
   return html;
 }
 
@@ -451,21 +459,19 @@ function renderCasinoTab() {
 function renderRacingTab() {
   var html = '<div class="panel"><h2>RACING GAMES</h2>';
   html += '<div class="bet-row"><span>Bet:</span><input type="number" class="bet-input" value="'+betAmount+'" onchange="betAmount=Math.max(1,+this.value)"/><span>$GANG</span></div>';
-  html += '<h3>Horse Racing (4x)</h3><p style="color:var(--muted);font-size:12px;margin-bottom:8px">Pick a horse. Fastest wins!</p>';
-  html += '<div class="game-grid">';
-  html += '<button class="game-btn" style="background:#c0392b;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'1\'})" data-testid="horse-1">HORSE 1</button>';
-  html += '<button class="game-btn" style="background:#2980b9;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'2\'})">HORSE 2</button>';
-  html += '<button class="game-btn" style="background:#27ae60;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'3\'})">HORSE 3</button>';
-  html += '<button class="game-btn" style="background:#8e44ad;color:#fff" onclick="doAction(\'/game/horseracing\',{amount:betAmount,choice:\'4\'})">HORSE 4</button>';
-  html += '</div>';
-  html += '<h3 style="margin-top:16px">Car Racing (4x)</h3><p style="color:var(--muted);font-size:12px;margin-bottom:8px">Pick a car. Fastest wins!</p>';
-  html += '<div class="game-grid">';
-  html += '<button class="game-btn" style="background:#e74c3c;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'1\'})" data-testid="car-1">CAR 1</button>';
-  html += '<button class="game-btn" style="background:#3498db;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'2\'})">CAR 2</button>';
-  html += '<button class="game-btn" style="background:#2ecc71;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'3\'})">CAR 3</button>';
-  html += '<button class="game-btn" style="background:#f39c12;color:#fff" onclick="doAction(\'/game/carracing\',{amount:betAmount,choice:\'4\'})">CAR 4</button>';
-  html += '</div>';
-  html += '</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">';
+
+  // Road Racer
+  html += '<div class="game-card" onclick="launchGame(\'road\')" data-testid="launch-road-racer">';
+  html += '<div class="game-card-img" style="background:linear-gradient(180deg,#050510,#1a1a3a);position:relative;"><div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:60%;height:100%;background:linear-gradient(180deg,transparent,#222238);clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);"></div><div style="position:absolute;bottom:15px;left:50%;transform:translateX(-50%);width:20px;height:30px;background:#ffd700;border-radius:4px 4px 0 0;"></div></div>';
+  html += '<div class="game-card-info"><div class="game-card-title">ROAD RACER</div><div class="game-card-desc">Dodge traffic, collect GANG coins</div><div class="game-card-play">PLAY</div></div></div>';
+
+  // Drift Racer
+  html += '<div class="game-card" onclick="launchGame(\'drift\')" data-testid="launch-drift-racer">';
+  html += '<div class="game-card-img" style="background:#0a1a0a;display:flex;align-items:center;justify-content:center;"><div style="width:80px;height:60px;border:4px solid #fff;border-radius:50%;position:relative;"><div style="position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:12px;height:12px;border-radius:50%;background:#ffd700;border:2px solid #b8860b;"></div></div></div>';
+  html += '<div class="game-card-info"><div class="game-card-title">DRIFT RACER</div><div class="game-card-desc">3 laps, beat opponents, win big</div><div class="game-card-play">PLAY</div></div></div>';
+
+  html += '</div></div>';
   return html;
 }
 
@@ -537,5 +543,548 @@ if(window.ethereum) {
   });
 }
 </script>
+<!-- Game Overlay -->
+<div class="game-overlay" id="gameOverlay">
+  <canvas id="gameCanvas"></canvas>
+  <button class="game-exit-btn" onclick="exitGame()" data-testid="game-exit-btn">EXIT</button>
+</div>
+
+<script>
+var gameActive = false, gameCanvas, gameCtx, gameAnimFrame, gameTouchHandler;
+
+function launchGame(type) {
+  if (!wallet) { showToast('Connect wallet first!'); return; }
+  if (betAmount < 1) { showToast('Set bet amount!'); return; }
+  var overlay = document.getElementById('gameOverlay');
+  overlay.classList.add('active');
+  gameCanvas = document.getElementById('gameCanvas');
+  gameCtx = gameCanvas.getContext('2d');
+  gameCanvas.width = overlay.clientWidth;
+  gameCanvas.height = overlay.clientHeight;
+  gameActive = true;
+  if (type === 'road') startRoadRacer();
+  else if (type === 'shoot') startShootingGallery();
+  else if (type === 'slots') startPremiumSlots();
+  else if (type === 'drift') startDriftRacer();
+}
+
+function exitGame() {
+  gameActive = false;
+  if (gameAnimFrame) cancelAnimationFrame(gameAnimFrame);
+  if (gameTouchHandler) { gameCanvas.removeEventListener('touchstart', gameTouchHandler); gameCanvas.removeEventListener('click', gameTouchHandler); gameTouchHandler = null; }
+  gameCanvas.onclick = null;
+  document.getElementById('gameOverlay').classList.remove('active');
+}
+
+function gameOverScreen(ctx, w, h, title, subtitle, lines, color) {
+  ctx.fillStyle = 'rgba(0,0,0,0.75)';
+  ctx.fillRect(0, 0, w, h);
+  ctx.textAlign = 'center';
+  ctx.font = '52px "Bebas Neue", sans-serif';
+  ctx.fillStyle = color || '#ff4444';
+  ctx.fillText(title, w/2, h/2 - 80);
+  ctx.font = '26px "Bebas Neue", sans-serif';
+  ctx.fillStyle = '#ffd700';
+  ctx.fillText(subtitle, w/2, h/2 - 30);
+  lines.forEach(function(ln, i) {
+    ctx.font = '18px "Barlow Condensed", sans-serif';
+    ctx.fillStyle = '#ccc';
+    ctx.fillText(ln, w/2, h/2 + 20 + i * 30);
+  });
+  ctx.fillStyle = 'rgba(255,215,0,0.15)';
+  ctx.fillRect(w/2 - 80, h/2 + 20 + lines.length * 30 + 10, 160, 40);
+  ctx.font = '18px "Bebas Neue", sans-serif';
+  ctx.fillStyle = '#ffd700';
+  ctx.fillText('TAP TO CONTINUE', w/2, h/2 + 20 + lines.length * 30 + 36);
+  gameCanvas.onclick = function() { gameCanvas.onclick = null; exitGame(); fetchUser(); };
+}
+
+// ═══════════════════════ ROAD RACER ═══════════════════════
+function startRoadRacer() {
+  var c = gameCanvas, ctx = gameCtx, w = c.width, h = c.height;
+  var playerLane = 1, playerX = w/2, targetX = w/2;
+  var speed = 3, dist = 0, mult = 1, gangCoins = 0, alive = true, frame = 0, stripeOff = 0;
+  var obs = [], coins = [], sparks = [];
+  var roadL = w*0.15, roadR = w*0.85, lw = (roadR-roadL)/3;
+  var lanes = [roadL+lw*0.5, roadL+lw*1.5, roadL+lw*2.5];
+  targetX = lanes[1]; playerX = targetX;
+  var stars = [];
+  for (var si=0;si<60;si++) stars.push({x:Math.random()*w,y:Math.random()*h*0.4,s:Math.random()*1.5+0.5});
+
+  gameTouchHandler = function(e) {
+    if (!alive) return;
+    var tx = e.touches ? e.touches[0].clientX : e.clientX;
+    if (tx < w/3) playerLane = Math.max(0, playerLane-1);
+    else if (tx > w*2/3) playerLane = Math.min(2, playerLane+1);
+    targetX = lanes[playerLane];
+    e.preventDefault();
+  };
+  c.addEventListener('touchstart', gameTouchHandler);
+  c.addEventListener('click', gameTouchHandler);
+
+  function tick() {
+    if (!gameActive) return;
+    frame++;
+    speed = 3 + dist/2500;
+    dist += speed;
+    mult = 1 + dist/1200;
+    stripeOff = (stripeOff + speed*2) % 60;
+    playerX += (targetX - playerX) * 0.15;
+
+    // Spawn
+    if (frame % Math.max(18, 55-Math.floor(speed*3)) === 0) {
+      var ln = Math.floor(Math.random()*3);
+      obs.push({x:lanes[ln], y:-80, lane:ln, w:lw*0.55, h:65, color:['#c0392b','#2980b9','#27ae60','#8e44ad','#e67e22'][Math.floor(Math.random()*5)]});
+    }
+    if (frame%40===0) {
+      var cl = Math.floor(Math.random()*3);
+      var occ = obs.filter(function(o){return o.lane===cl&&o.y<80;});
+      if(!occ.length) coins.push({x:lanes[cl],y:-25,alive:true});
+    }
+
+    // Update
+    for (var i=obs.length-1;i>=0;i--) {
+      obs[i].y += speed*2.5;
+      if (obs[i].y > h+100) {obs.splice(i,1);continue;}
+      if (alive && Math.abs(obs[i].x-playerX)<lw*0.42 && obs[i].y>h-155 && obs[i].y<h-45) {
+        alive = false;
+        for(var p=0;p<25;p++) sparks.push({x:playerX,y:h-105,vx:(Math.random()-.5)*10,vy:(Math.random()-.5)*10,life:25+Math.random()*20,c:Math.random()<.5?'#ff4444':'#ffaa00'});
+      }
+    }
+    for (var j=coins.length-1;j>=0;j--) {
+      coins[j].y += speed*2.2;
+      if (coins[j].y>h+40){coins.splice(j,1);continue;}
+      if (alive&&coins[j].alive&&Math.abs(coins[j].x-playerX)<28&&Math.abs(coins[j].y-(h-105))<30) {
+        coins[j].alive=false;gangCoins++;coins.splice(j,1);
+      }
+    }
+    for (var k=sparks.length-1;k>=0;k--) {sparks[k].x+=sparks[k].vx;sparks[k].y+=sparks[k].vy;sparks[k].life--;if(sparks[k].life<=0)sparks.splice(k,1);}
+
+    // === DRAW ===
+    // Sky
+    var sky=ctx.createLinearGradient(0,0,0,h*0.45);sky.addColorStop(0,'#050510');sky.addColorStop(1,'#0a1628');
+    ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
+    // Stars
+    ctx.fillStyle='#fff';
+    stars.forEach(function(s){ctx.globalAlpha=0.4+Math.sin(frame*0.02+s.x)*0.3;ctx.fillRect(s.x,s.y,s.s,s.s);});
+    ctx.globalAlpha=1;
+    // Road
+    ctx.fillStyle='#1c1c30';
+    ctx.beginPath();ctx.moveTo(w/2-25,0);ctx.lineTo(roadL,h);ctx.lineTo(roadR,h);ctx.lineTo(w/2+25,0);ctx.fill();
+    var rg=ctx.createLinearGradient(0,0,0,h);rg.addColorStop(0,'#222238');rg.addColorStop(1,'#2a2a44');
+    ctx.fillStyle=rg;ctx.beginPath();ctx.moveTo(w/2-25,0);ctx.lineTo(roadL,h);ctx.lineTo(roadR,h);ctx.lineTo(w/2+25,0);ctx.fill();
+    // Stripes
+    ctx.strokeStyle='rgba(255,215,0,0.5)';ctx.lineWidth=2;ctx.setLineDash([20,25]);ctx.lineDashOffset=-stripeOff;
+    ctx.beginPath();ctx.moveTo(w/2-8,0);ctx.lineTo(roadL+lw,h);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(w/2+8,0);ctx.lineTo(roadL+lw*2,h);ctx.stroke();
+    ctx.setLineDash([]);
+    // Edge lines
+    ctx.strokeStyle='#fff';ctx.lineWidth=3;
+    ctx.beginPath();ctx.moveTo(w/2-25,0);ctx.lineTo(roadL,h);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(w/2+25,0);ctx.lineTo(roadR,h);ctx.stroke();
+
+    // Obstacles
+    obs.forEach(function(o){
+      var sc=0.3+(o.y/h)*0.7, dw=o.w*sc, dh=o.h*sc;
+      var dx=w/2+(o.x-w/2)*sc*1.5;
+      ctx.fillStyle=o.color;
+      ctx.beginPath();ctx.moveTo(dx-dw/2+4,o.y);ctx.lineTo(dx-dw/2,o.y-dh);ctx.lineTo(dx+dw/2,o.y-dh);ctx.lineTo(dx+dw/2-4,o.y);ctx.fill();
+      ctx.fillStyle='rgba(100,200,255,0.35)';ctx.fillRect(dx-dw*0.3,o.y-dh*0.85,dw*0.6,dh*0.25);
+      ctx.fillStyle='#ff0';ctx.fillRect(dx-dw*0.38,o.y-4,dw*0.12,3);ctx.fillRect(dx+dw*0.26,o.y-4,dw*0.12,3);
+    });
+    // Coins
+    coins.forEach(function(cn){
+      if(!cn.alive)return;
+      var sc=0.4+(cn.y/h)*0.6,dx=w/2+(cn.x-w/2)*sc*1.5;
+      ctx.beginPath();ctx.arc(dx,cn.y,14*sc,0,Math.PI*2);
+      ctx.fillStyle='#ffd700';ctx.fill();ctx.strokeStyle='#b8860b';ctx.lineWidth=2;ctx.stroke();
+      ctx.fillStyle='#000';ctx.font='bold '+Math.floor(10*sc)+'px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('G',dx,cn.y);
+    });
+    // Player car
+    if (alive) {
+      var cw=48,ch=78,cy=h-120;
+      ctx.fillStyle='#ffd700';
+      ctx.beginPath();ctx.moveTo(playerX-cw/2,cy+ch/2);ctx.lineTo(playerX-cw/2+6,cy-ch/2);ctx.lineTo(playerX+cw/2-6,cy-ch/2);ctx.lineTo(playerX+cw/2,cy+ch/2);ctx.fill();
+      ctx.fillStyle='#4fc3f7';ctx.fillRect(playerX-14,cy-26,28,14);
+      ctx.fillStyle='#b8860b';ctx.fillRect(playerX-2,cy-ch/2,4,ch);
+      ctx.fillStyle='#ff0000';ctx.fillRect(playerX-18,cy+ch/2-6,10,5);ctx.fillRect(playerX+8,cy+ch/2-6,10,5);
+    }
+    // Sparks
+    sparks.forEach(function(s){ctx.globalAlpha=s.life/45;ctx.fillStyle=s.c;ctx.fillRect(s.x-3,s.y-3,6,6);});
+    ctx.globalAlpha=1;
+    // HUD
+    ctx.fillStyle='rgba(0,0,0,0.65)';ctx.fillRect(0,0,w,48);
+    ctx.font='20px "Bebas Neue",sans-serif';ctx.textAlign='left';ctx.fillStyle='#ffd700';
+    ctx.fillText(Math.floor(speed*15)+' MPH',12,34);
+    ctx.textAlign='center';ctx.fillStyle='#fff';ctx.fillText(mult.toFixed(2)+'x',w/2,34);
+    ctx.textAlign='right';ctx.fillStyle='#0f8';ctx.fillText('+'+gangCoins+' GANG',w-12,34);
+    // Bottom hint
+    if (frame<180){ctx.globalAlpha=1-frame/180;ctx.font='16px "Barlow Condensed",sans-serif';ctx.textAlign='center';ctx.fillStyle='#ffd700';ctx.fillText('TAP LEFT / RIGHT TO STEER',w/2,h-30);ctx.globalAlpha=1;}
+
+    if (!alive) {
+      doAction('/game/crash',{amount:betAmount,auto_cashout:mult}).then(function(r){
+        var payout = r&&r.payout?r.payout:0;
+        gameOverScreen(ctx,w,h,'CRASHED!',mult.toFixed(2)+'x MULTIPLIER',['Distance: '+Math.floor(dist),'GANG Collected: '+gangCoins,'Bet: '+betAmount+' | Payout: '+payout+' $GANG'],'#ff4444');
+      });
+      return;
+    }
+    gameAnimFrame = requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+// ═══════════════════════ SHOOTING GALLERY ═══════════════════════
+function startShootingGallery() {
+  var c = gameCanvas, ctx = gameCtx, w = c.width, h = c.height;
+  var timeLeft = 30, score = 0, misses = 0, streak = 0, bestStreak = 0, frame = 0;
+  var targets = [], pops = [];
+  var startTime = Date.now();
+
+  function spawnTarget() {
+    var size = 30 + Math.random()*25;
+    targets.push({x:40+Math.random()*(w-80),y:100+Math.random()*(h-200),size:size,life:80+Math.random()*60,maxLife:80+Math.random()*60,hit:false,color:['#e74c3c','#e67e22','#9b59b6','#1abc9c'][Math.floor(Math.random()*4)]});
+  }
+
+  gameTouchHandler = function(e) {
+    var rect = c.getBoundingClientRect();
+    var tx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    var ty = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    var hitAny = false;
+    targets.forEach(function(t) {
+      if (t.hit) return;
+      var dx = tx-t.x, dy = ty-t.y;
+      if (Math.sqrt(dx*dx+dy*dy) < t.size) {
+        t.hit = true; hitAny = true; score++; streak++;
+        if (streak > bestStreak) bestStreak = streak;
+        for (var i=0;i<8;i++) pops.push({x:t.x,y:t.y,vx:(Math.random()-.5)*8,vy:(Math.random()-.5)*8,life:20,c:t.color});
+      }
+    });
+    if (!hitAny) { misses++; streak = 0; pops.push({x:tx,y:ty,vx:0,vy:0,life:15,c:'#ff4444',txt:'MISS'}); }
+    e.preventDefault();
+  };
+  c.addEventListener('touchstart', gameTouchHandler);
+  c.addEventListener('click', gameTouchHandler);
+
+  function tick() {
+    if (!gameActive) return;
+    frame++;
+    timeLeft = 30 - (Date.now() - startTime) / 1000;
+    if (timeLeft <= 0) timeLeft = 0;
+
+    // Spawn targets
+    if (frame % Math.max(12, 30-score) === 0 && targets.filter(function(t){return !t.hit;}).length < 5) spawnTarget();
+    // Update
+    targets.forEach(function(t){t.life--;});
+    targets = targets.filter(function(t){if(!t.hit&&t.life<=0){misses++;streak=0;}return t.life>0||t.hit;});
+    targets = targets.filter(function(t){return !t.hit || t.life > -10;});
+    for (var i=pops.length-1;i>=0;i--){pops[i].x+=pops[i].vx;pops[i].y+=pops[i].vy;pops[i].life--;if(pops[i].life<=0)pops.splice(i,1);}
+
+    // Draw
+    var bg = ctx.createLinearGradient(0,0,0,h);bg.addColorStop(0,'#0a1628');bg.addColorStop(1,'#0a0a12');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+    // Grid lines
+    ctx.strokeStyle='rgba(255,215,0,0.04)';ctx.lineWidth=1;
+    for(var gx=0;gx<w;gx+=40){ctx.beginPath();ctx.moveTo(gx,0);ctx.lineTo(gx,h);ctx.stroke();}
+    for(var gy=0;gy<h;gy+=40){ctx.beginPath();ctx.moveTo(0,gy);ctx.lineTo(w,gy);ctx.stroke();}
+
+    // Targets
+    targets.forEach(function(t) {
+      if (t.hit) return;
+      var pulse = 1 + Math.sin(frame*0.1)*0.08;
+      var alpha = Math.min(1, t.life / 20);
+      ctx.globalAlpha = alpha;
+      // Outer ring
+      ctx.beginPath();ctx.arc(t.x,t.y,t.size*pulse,0,Math.PI*2);
+      ctx.fillStyle=t.color+'33';ctx.fill();
+      ctx.strokeStyle=t.color;ctx.lineWidth=3;ctx.stroke();
+      // Inner ring
+      ctx.beginPath();ctx.arc(t.x,t.y,t.size*0.6*pulse,0,Math.PI*2);
+      ctx.strokeStyle=t.color;ctx.lineWidth=2;ctx.stroke();
+      // Bullseye
+      ctx.beginPath();ctx.arc(t.x,t.y,t.size*0.25*pulse,0,Math.PI*2);
+      ctx.fillStyle=t.color;ctx.fill();
+      // Timer arc
+      var pct = t.life/t.maxLife;
+      ctx.beginPath();ctx.arc(t.x,t.y,t.size+6,-Math.PI/2,-Math.PI/2+pct*Math.PI*2);
+      ctx.strokeStyle=pct>0.3?'#0f8':'#f44';ctx.lineWidth=2;ctx.stroke();
+      ctx.globalAlpha=1;
+    });
+    // Pops
+    pops.forEach(function(p){
+      ctx.globalAlpha=p.life/20;ctx.fillStyle=p.c;
+      if(p.txt){ctx.font='bold 16px "Bebas Neue",sans-serif';ctx.textAlign='center';ctx.fillText(p.txt,p.x,p.y);}
+      else{ctx.fillRect(p.x-3,p.y-3,6,6);}
+    });
+    ctx.globalAlpha=1;
+    // HUD
+    ctx.fillStyle='rgba(0,0,0,0.65)';ctx.fillRect(0,0,w,52);
+    ctx.font='22px "Bebas Neue",sans-serif';ctx.textAlign='left';ctx.fillStyle='#ffd700';
+    ctx.fillText('HITS: '+score,12,36);
+    ctx.textAlign='center';
+    ctx.fillStyle=timeLeft<10?'#ff4444':'#0f8';
+    ctx.fillText(Math.ceil(timeLeft)+'s',w/2,36);
+    ctx.textAlign='right';ctx.fillStyle='#ffd700';
+    ctx.fillText('STREAK: '+streak,w-12,36);
+
+    if (timeLeft <= 0) {
+      var m = 1 + score * 0.3;
+      doAction('/game/tower',{amount:betAmount,choice:String(Math.min(score,10))}).then(function(r){
+        var payout=r&&r.payout?r.payout:0;
+        gameOverScreen(ctx,w,h,'TIME UP!',score+' TARGETS HIT',['Best Streak: '+bestStreak,'Misses: '+misses,'Bet: '+betAmount+' | Payout: '+payout+' $GANG'],'#e67e22');
+      });
+      return;
+    }
+    gameAnimFrame = requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+// ═══════════════════════ PREMIUM SLOTS ═══════════════════════
+function startPremiumSlots() {
+  var c = gameCanvas, ctx = gameCtx, w = c.width, h = c.height;
+  var symbols = ['G','7','D','C','B','S'];
+  var symColors = {'G':'#ffd700','7':'#e74c3c','D':'#4fc3f7','C':'#2ecc71','B':'#9b59b6','S':'#e67e22'};
+  var symNames = {'G':'GANG','7':'SEVEN','D':'DIAMOND','C':'CHERRY','B':'BAR','S':'STAR'};
+  var reelOffsets = [0,0,0], reelSpeeds = [0,0,0], reelResults = [0,0,0];
+  var spinning = false, done = false, spinStart = 0;
+  var apiResult = null;
+
+  function drawSlotMachine() {
+    // Background
+    var bg = ctx.createRadialGradient(w/2,h/2,50,w/2,h/2,w);
+    bg.addColorStop(0,'#1a0a2e');bg.addColorStop(1,'#0a0a12');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+    // Machine frame
+    var mx=w*0.08, my=h*0.2, mw=w*0.84, mh=h*0.5;
+    ctx.fillStyle='#1a1a2e';ctx.strokeStyle='#ffd700';ctx.lineWidth=3;
+    ctx.beginPath();ctx.roundRect?ctx.roundRect(mx,my,mw,mh,16):ctx.rect(mx,my,mw,mh);ctx.fill();ctx.stroke();
+    // Title
+    ctx.font='36px "Bebas Neue",sans-serif';ctx.textAlign='center';ctx.fillStyle='#ffd700';
+    ctx.fillText('GANG SLOTS',w/2,my-20);
+    ctx.font='14px "Barlow Condensed",sans-serif';ctx.fillStyle='#888';
+    ctx.fillText('BET: '+betAmount+' $GANG',w/2,my-2);
+    // Reel windows
+    var reelW = mw*0.28, reelH = mh*0.7, reelGap = (mw-reelW*3)/4;
+    for (var r=0;r<3;r++) {
+      var rx = mx + reelGap + r*(reelW+reelGap);
+      var ry = my + (mh-reelH)/2;
+      ctx.fillStyle='#0a0a18';ctx.fillRect(rx,ry,reelW,reelH);
+      ctx.strokeStyle='rgba(255,215,0,0.3)';ctx.lineWidth=1;ctx.strokeRect(rx,ry,reelW,reelH);
+      // Draw symbol
+      ctx.save();ctx.beginPath();ctx.rect(rx,ry,reelW,reelH);ctx.clip();
+      var off = reelOffsets[r] % (symbols.length * 80);
+      for (var s=0;s<symbols.length+2;s++) {
+        var sy = ry + reelH/2 - 30 + s*80 - off;
+        var si = (s + Math.floor(off/80)) % symbols.length;
+        if (si < 0) si += symbols.length;
+        var sym = symbols[si];
+        if (sy > ry-80 && sy < ry+reelH+80) {
+          ctx.font='bold 44px "Bebas Neue",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+          ctx.fillStyle=symColors[sym]||'#fff';
+          ctx.fillText(sym==='G'?'$G':sym==='D'?'\u2666':sym==='C'?'\u2663':sym==='S'?'\u2605':sym==='B'?'\u2588':sym, rx+reelW/2, sy+30);
+          ctx.font='10px "Barlow Condensed",sans-serif';ctx.fillStyle='#666';
+          ctx.fillText(symNames[sym],rx+reelW/2,sy+55);
+        }
+      }
+      ctx.restore();
+      // Reel shine
+      var shine=ctx.createLinearGradient(rx,ry,rx,ry+reelH);
+      shine.addColorStop(0,'rgba(255,255,255,0.08)');shine.addColorStop(0.5,'rgba(0,0,0,0)');shine.addColorStop(1,'rgba(255,255,255,0.05)');
+      ctx.fillStyle=shine;ctx.fillRect(rx,ry,reelW,reelH);
+    }
+    // Win line
+    ctx.strokeStyle='rgba(255,215,0,0.4)';ctx.lineWidth=2;ctx.setLineDash([6,4]);
+    ctx.beginPath();ctx.moveTo(mx+10,my+mh/2);ctx.lineTo(mx+mw-10,my+mh/2);ctx.stroke();
+    ctx.setLineDash([]);
+    // Spin button
+    var btnY = my+mh+30;
+    if (!spinning && !done) {
+      ctx.fillStyle='linear-gradient(#ffd700,#b8860b)';
+      ctx.fillStyle='#ffd700';
+      ctx.beginPath();ctx.roundRect?ctx.roundRect(w/2-80,btnY,160,50,12):ctx.rect(w/2-80,btnY,160,50);ctx.fill();
+      ctx.font='24px "Bebas Neue",sans-serif';ctx.fillStyle='#000';ctx.textAlign='center';
+      ctx.fillText('SPIN',w/2,btnY+34);
+    } else if (spinning) {
+      ctx.fillStyle='#333';ctx.beginPath();ctx.roundRect(w/2-80,btnY,160,50,12);ctx.fill();
+      ctx.font='24px "Bebas Neue",sans-serif';ctx.fillStyle='#888';ctx.textAlign='center';
+      ctx.fillText('SPINNING...',w/2,btnY+34);
+    }
+    // Payout display
+    if (done && apiResult) {
+      var isWin = apiResult.payout > 0;
+      ctx.font='28px "Bebas Neue",sans-serif';ctx.textAlign='center';
+      ctx.fillStyle = isWin ? '#0f8' : '#f44';
+      ctx.fillText(isWin ? 'WIN! +'+apiResult.payout+' $GANG' : 'NO WIN', w/2, btnY+100);
+      if (apiResult.reels) {
+        ctx.font='18px "Barlow Condensed",sans-serif';ctx.fillStyle='#888';
+        ctx.fillText(apiResult.reels.join(' | '), w/2, btnY+130);
+      }
+      ctx.fillStyle='rgba(255,215,0,0.12)';ctx.fillRect(w/2-60,btnY+145,120,32);
+      ctx.font='16px "Bebas Neue",sans-serif';ctx.fillStyle='#ffd700';
+      ctx.fillText('TAP TO EXIT',w/2,btnY+166);
+    }
+  }
+
+  function tick() {
+    if (!gameActive) return;
+    if (spinning) {
+      var elapsed = Date.now() - spinStart;
+      for (var r=0;r<3;r++) {
+        var stopTime = 1000 + r*600;
+        if (elapsed < stopTime) { reelOffsets[r] += reelSpeeds[r]; reelSpeeds[r] *= 0.995; }
+        else { reelOffsets[r] = reelResults[r] * 80; }
+      }
+      if (elapsed > 2800) { spinning = false; done = true; }
+    }
+    drawSlotMachine();
+    gameAnimFrame = requestAnimationFrame(tick);
+  }
+
+  gameTouchHandler = function(e) {
+    if (done) { exitGame(); fetchUser(); return; }
+    if (spinning) return;
+    // Start spin
+    spinning = true; spinStart = Date.now();
+    reelSpeeds = [18+Math.random()*8, 20+Math.random()*8, 22+Math.random()*8];
+    doAction('/game/slots',{amount:betAmount}).then(function(r) {
+      apiResult = r;
+      // Map results to reel positions
+      if (r && r.reels) {
+        for (var i=0;i<3;i++) {
+          var idx = symbols.indexOf(r.reels[i] && r.reels[i][0] ? r.reels[i][0] : 'G');
+          if (idx < 0) idx = Math.floor(Math.random()*symbols.length);
+          reelResults[i] = idx + Math.floor(reelOffsets[i]/80/symbols.length)*symbols.length + symbols.length;
+        }
+      }
+    });
+    e.preventDefault();
+  };
+  c.addEventListener('touchstart', gameTouchHandler);
+  c.addEventListener('click', gameTouchHandler);
+  drawSlotMachine();
+  tick();
+}
+
+// ═══════════════════════ DRIFT RACER ═══════════════════════
+function startDriftRacer() {
+  var c = gameCanvas, ctx = gameCtx, w = c.width, h = c.height;
+  var cx = w/2, cy = h/2;
+  var trackRx = w*0.38, trackRy = h*0.3;
+  var angle = 0, speed = 0, playerAngle = -Math.PI/2;
+  var px, py, lapCount = 0, lastLapAngle = 0, raceTime = 0, started = false;
+  var opponents = [{angle:-Math.PI/2+1,speed:0.012,color:'#e74c3c'},{angle:-Math.PI/2+2.5,speed:0.014,color:'#2980b9'},{angle:-Math.PI/2+4,speed:0.011,color:'#27ae60'}];
+  var steering = 0; // -1 left, 0 none, 1 right
+  var frame = 0, finished = false;
+  var startTime = 0;
+  var particles = [];
+
+  function getTrackPos(a) { return {x:cx+Math.cos(a)*trackRx, y:cy+Math.sin(a)*trackRy}; }
+
+  gameTouchHandler = function(e) {
+    if (finished) return;
+    if (!started) { started = true; startTime = Date.now(); return; }
+    var tx = e.touches ? e.touches[0].clientX : e.clientX;
+    steering = tx < w/2 ? -1 : 1;
+    e.preventDefault();
+  };
+  c.addEventListener('touchstart', gameTouchHandler);
+  c.addEventListener('click', gameTouchHandler);
+
+  function tick() {
+    if (!gameActive) return;
+    frame++;
+    if (started && !finished) {
+      raceTime = (Date.now() - startTime) / 1000;
+      speed = 0.018 + 0.002 * Math.min(lapCount, 3);
+      playerAngle += speed + steering * 0.004;
+      // Normalize angle
+      if (playerAngle > Math.PI) playerAngle -= Math.PI*2;
+      if (playerAngle < -Math.PI) playerAngle += Math.PI*2;
+      // Lap detection
+      if (lastLapAngle < -Math.PI*0.4 && playerAngle > -Math.PI*0.6 && playerAngle < -Math.PI*0.3) {
+        // crossed start line
+      }
+      var diff = playerAngle - lastLapAngle;
+      if (diff > Math.PI) diff -= Math.PI*2;
+      if (diff < -Math.PI) diff += Math.PI*2;
+      if (diff > Math.PI*1.9) { lapCount++; lastLapAngle = playerAngle; }
+      // Check finish
+      if (lapCount >= 3) { finished = true; }
+      // Drift particles
+      if (Math.abs(steering)>0 && frame%3===0) {
+        var pp = getTrackPos(playerAngle);
+        particles.push({x:pp.x,y:pp.y,life:20,alpha:0.5});
+      }
+      // Update opponents
+      opponents.forEach(function(op) { op.angle += op.speed + Math.sin(frame*0.01)*0.002; });
+      steering = 0;
+    }
+    // Update particles
+    for (var i=particles.length-1;i>=0;i--){particles[i].life--;particles[i].alpha*=0.92;if(particles[i].life<=0)particles.splice(i,1);}
+
+    // Draw
+    ctx.fillStyle='#0a1218';ctx.fillRect(0,0,w,h);
+    // Grass texture
+    ctx.fillStyle='#0a1a0a';ctx.fillRect(0,0,w,h);
+    // Track (outer)
+    ctx.beginPath();ctx.ellipse(cx,cy,trackRx+30,trackRy+30,0,0,Math.PI*2);ctx.fillStyle='#1a1a1a';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+    // Track inner (cutout)
+    ctx.beginPath();ctx.ellipse(cx,cy,trackRx-30,trackRy-30,0,0,Math.PI*2);ctx.fillStyle='#0a1a0a';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+    // Track surface
+    ctx.beginPath();ctx.ellipse(cx,cy,trackRx+28,trackRy+28,0,0,Math.PI*2);
+    ctx.strokeStyle='#333';ctx.lineWidth=56;ctx.stroke();
+    // Start/finish line
+    var sl = getTrackPos(-Math.PI/2);
+    ctx.fillStyle='#ffd700';ctx.fillRect(sl.x-3,sl.y-20,6,40);
+    // Particles (tire marks)
+    particles.forEach(function(p){ctx.globalAlpha=p.alpha;ctx.fillStyle='#555';ctx.fillRect(p.x-2,p.y-2,4,4);});
+    ctx.globalAlpha=1;
+    // Opponents
+    opponents.forEach(function(op) {
+      var op_pos = getTrackPos(op.angle);
+      ctx.fillStyle=op.color;ctx.beginPath();ctx.arc(op_pos.x,op_pos.y,10,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.stroke();
+    });
+    // Player car
+    var pp = getTrackPos(playerAngle);
+    px = pp.x; py = pp.y;
+    ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(px,py,12,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#b8860b';ctx.lineWidth=2;ctx.stroke();
+    ctx.fillStyle='#000';ctx.font='bold 10px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('P',px,py);
+    // Direction indicator
+    var dirA = playerAngle + Math.PI/2;
+    ctx.strokeStyle='#ffd700';ctx.lineWidth=2;ctx.beginPath();
+    ctx.moveTo(px,py);ctx.lineTo(px+Math.cos(dirA)*18,py+Math.sin(dirA)*18);ctx.stroke();
+
+    // HUD
+    ctx.fillStyle='rgba(0,0,0,0.65)';ctx.fillRect(0,0,w,52);
+    ctx.font='22px "Bebas Neue",sans-serif';ctx.textAlign='left';ctx.fillStyle='#ffd700';
+    ctx.fillText('LAP '+Math.min(lapCount+1,3)+'/3',12,36);
+    ctx.textAlign='center';ctx.fillStyle='#fff';ctx.fillText(raceTime.toFixed(1)+'s',w/2,36);
+    ctx.textAlign='right';ctx.fillStyle='#0f8';
+    var pos = 1; opponents.forEach(function(op){if(op.angle>playerAngle)pos++;});
+    ctx.fillText('P'+pos+'/4',w-12,36);
+    // Bottom controls hint
+    if (!started) {
+      ctx.font='20px "Bebas Neue",sans-serif';ctx.textAlign='center';ctx.fillStyle='#ffd700';
+      ctx.fillText('TAP TO START RACE',w/2,h-40);
+    } else if (frame<120) {
+      ctx.globalAlpha=1-frame/120;ctx.font='14px "Barlow Condensed",sans-serif';ctx.textAlign='center';ctx.fillStyle='#888';
+      ctx.fillText('TAP LEFT/RIGHT TO STEER',w/2,h-30);ctx.globalAlpha=1;
+    }
+
+    if (finished) {
+      doAction('/game/carracing',{amount:betAmount,choice:String(pos)}).then(function(r) {
+        var payout=r&&r.payout?r.payout:0;
+        gameOverScreen(ctx,w,h,pos===1?'1ST PLACE!':'FINISHED P'+pos,raceTime.toFixed(1)+' SECONDS',['Position: '+pos+'/4','Laps: 3','Bet: '+betAmount+' | Payout: '+payout+' $GANG'],pos===1?'#ffd700':'#4fc3f7');
+      });
+      return;
+    }
+    gameAnimFrame = requestAnimationFrame(tick);
+  }
+  tick();
+}
+</script>
+
 </body>
 </html>
