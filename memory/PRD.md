@@ -9,69 +9,47 @@ Build a comprehensive Web3 DApp for the Cronos blockchain. Single HTML file for 
 - Mining Hub (`mining.html`) with 4 Canvas games
 - ZIP delivery for GoDaddy
 
-## Smart Contracts — 6 Total
+## Smart Contracts — 6 Deployed on Cronos Mainnet
 
-| Contract | Purpose | Fees |
-|----------|---------|------|
-| GANGNFTStaking | Stake NFTs, earn GANG | 0.3% claim fee |
-| GANGBuybackBurn | Auto-buy + burn GANG | Burns 10% of fees |
-| GANGLendingPool | Supply/withdraw/borrow/repay | 20% interest + 0.3% origination |
-| GANGTradingPool | Leverage trading collateral | 0.3% open + close |
-| GANGBondDepository | LP bonding with 5-day vesting | 0.3% per bond |
-| GANGProtocolVault | Universal vault for all features | 0.3% per deposit |
-
-## Revenue Flow — How You Get Paid
-
-| Feature | Fee | Where It Goes | How to Collect |
-|---------|-----|--------------|----------------|
-| **Swaps** | 0.3% | Treasury wallet (auto) | Already in your wallet! |
-| **Leverage Trading** | 0.3% open/close | Trading Pool contract | "Collect Trading Fees" button |
-| **NFT Staking** | 0.3% on claims | Treasury wallet (auto) | Already in your wallet! |
-| **Lending** | 20% interest, 0.3% origination | Lending Pool contract | "Collect Lending Fees" |
-| **Predictions** | 5% of pot | Protocol Vault | "Collect Prediction Fees" |
-| **Flash Loans** | 0.3% per loan | Protocol Vault | "Collect Flash Fees" |
-| **Insurance** | 2-5% premiums | Protocol Vault | "Collect Insurance Fees" |
-| **DEX Aggregator** | 0.3% routing | Protocol Vault | "Collect Aggregator Fees" |
-| **Copy Trading** | 0.3% per copy | Protocol Vault | "Collect Copy Fees" |
-| **Revenue Staking** | 0.3% management | Protocol Vault | "Collect RS Fees" |
-| **Limit Orders** | 0.3% per fill | Protocol Vault | "Collect LO Fees" |
-| **Perp DEX** | 0.3% per trade | Protocol Vault | "Collect Perp Fees" |
-| **OTC Trading** | 0.3% per deal | Protocol Vault | "Collect OTC Fees" |
-| **DAO** | 100 GANG/proposal | Protocol Vault | "Collect DAO Fees" |
-| **POL Bonds** | 0.3% per bond | Protocol Vault | "Collect Bond Fees" |
-| **Competitions** | Entry fees | Protocol Vault | "Collect Comp Fees" |
-| **Squad Farming** | 0.3% on rewards | Protocol Vault | "Collect Squad Fees" |
+| Contract | Address | Purpose |
+|----------|---------|---------|
+| NFT Staking | `0x2027031e4967c5a5cfc1e2f966507bbebcfa3d73` | Stake NFTs, earn GANG |
+| Buyback & Burn | `0x7ab767ce485290cc134b84ea7f2fc16537dcfa67` | Auto-buy + burn GANG |
+| Lending Pool | `0x48350cb22e119617e35c70c739e3b0df4c50c4e7` | Supply/withdraw/borrow/repay |
+| Trading Pool | `0xc7002e7c73d4910f0f83a66d187d2be951360619` | Leverage trading collateral |
+| Bond Depository | `0x99fbe23cfc531d4501e160c84797425ea0a62be8` | LP bonding with 5-day vesting |
+| Protocol Vault | `0x7bed7483eeb27c7cd85ba76dfb141290156138ea` | Universal vault for all features |
 
 ## Completed Work
 
+### Apr 6, 2026 — Contract Addresses Hardcoded
+- ALL 6 contract addresses now hardcoded in CONTRACTS object — works on every device/browser without localStorage
+- Added "SHOW MY DEPLOYED ADDRESSES" button to Revenue page
+- Added "IMPORT ADDRESSES (NEW DEVICE)" feature for manual address transfer
+- Fixed localStorage key mismatches (GANG_LENDING_ADDR, GANG_BOND_DEPOSITORY_ADDR)
+
 ### Apr 6, 2026 — Lending Page UI Redesign
-- Replaced all 🏦 (bank/house) emoji icons on the Lending page with custom SVG icons (stacked coins, dollar sign, heartbeat pulse, download arrow, monitor, question circle, shield)
-- Upgraded typography with a mixture approach: Bebas Neue for impact headers + Space Grotesk (new Google Font) for body text, labels, descriptions
-- Enhanced visual polish: glassmorphic stat boxes, gradient pill badges, token glow effects, hover states on pool cards, input focus transitions
-- Updated nav bar icon from generic credit card SVG to stacked coins SVG
-- Updated marquee/ticker from 🏦 emoji to inline SVG icon
+- Replaced house/bank emoji icons with custom SVG icons (stacked coins, dollar sign, etc.)
+- Upgraded typography: Bebas Neue headers + Space Grotesk body text
+- Enhanced visual polish: glassmorphic backgrounds, token glow effects, hover states
 
 ### Previous Work
-- Replaced mocked POL Bonds with real GANGBondDepository contract (8 bond pairs with CoinGecko logos)
-- Redirected swap fees (0.3%) to GANGProtocolVault, Revenue banners show real on-chain fees
+- Replaced mocked POL Bonds with real GANGBondDepository contract (8 bond pairs)
+- Redirected swap fees (0.3%) to GANGProtocolVault
 - Enforced real token balance checks before Mining Hub Canvas games
 - Added "CLEAR OLD POSITIONS" buttons for Leverage/Lending pages
-- Rewrote lending overrides to support all 10 tokens on-chain via Protocol Vault
-- Fixed broken token logos (VVS, TONIC) using correct CoinGecko/CMC URLs
+- Rewrote lending overrides to support all 10 tokens on-chain
 
-## Bond Pairs (8 total)
-CRO-GANG (8%), USDC-GANG (6%), WETH-GANG (10%), WBTC-GANG (12%), DAI-GANG (7%), ATOM-GANG (9%), USDT-GANG (5%), VVS-GANG (11%)
+## Fonts Used
+- Bebas Neue — Display/impact headers
+- Space Grotesk — Body text, labels, descriptions
+- Barlow Condensed — General body
+- Space Mono — Monospace for values/addresses
 
 ## Key Files
 - `/app/frontend/public/cronos-gangsters.html` (~24.7k lines)
 - `/app/frontend/public/mining.html`
 - `/app/backend/server.py`
-
-## Fonts Used
-- Bebas Neue — Display/impact headers, stat values, APY numbers
-- Space Grotesk — Body text, labels, descriptions (added Apr 6)
-- Barlow Condensed — General body text
-- Space Mono — Monospace for swap values, addresses
 
 ## Backlog
 - P1: CEX listings

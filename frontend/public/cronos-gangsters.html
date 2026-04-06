@@ -7636,7 +7636,12 @@ const CONTRACTS = {
   LOCKER: localStorage.getItem('GANG_LOCKER_ADDR') || "",
   MINING_REWARDS: "0xBdAaDDb1cd25758aa40F38c273C355cA943e1c8F",
   // ── Deployed DeFi Contracts (hardcoded for all devices) ──
-  PROTOCOL_VAULT: "0xa718b3f49e308ea40ae8fa3cead7097ad06dcec3",
+  NFT_STAKING: "0x2027031e4967c5a5cfc1e2f966507bbebcfa3d73",
+  BUYBACK: "0x7ab767ce485290cc134b84ea7f2fc16537dcfa67",
+  LENDING_POOL: "0x48350cb22e119617e35c70c739e3b0df4c50c4e7",
+  TRADING_POOL: "0xc7002e7c73d4910f0f83a66d187d2be951360619",
+  BOND_DEP: "0x99fbe23cfc531d4501e160c84797425ea0a62be8",
+  PROTOCOL_VAULT: "0x7bed7483eeb27c7cd85ba76dfb141290156138ea",
 };
 // Restore V2 vault address from localStorage if a newer one was deployed
 (function() {
@@ -23273,7 +23278,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   //  LENDING POOL — Real on-chain interaction
   // ═══════════════════════════════════════════════════
 
-  function getLendingAddr() { return getSavedAddr(LS_LENDING) || (CONTRACTS && CONTRACTS.LENDING) || ''; }
+  function getLendingAddr() { return getSavedAddr(LS_LENDING) || (CONTRACTS && CONTRACTS.LENDING_POOL) || ''; }
   function getTradingPoolAddr() { return getSavedAddr(LS_TRADING_POOL) || (CONTRACTS && CONTRACTS.TRADING_POOL) || ''; }
 
   const ERC20_APPROVE_ABI = ['function approve(address spender, uint256 amount) external returns (bool)'];
@@ -23681,10 +23686,10 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const keys = [
       ['GANG_TRADING_POOL_ADDR', 'Trading Pool'],
       ['GANG_PROTOCOL_VAULT_ADDR', 'Protocol Vault'],
-      ['GANG_BOND_DEP_ADDR', 'Bond Depository'],
+      ['GANG_BOND_DEPOSITORY_ADDR', 'Bond Depository'],
       ['GANG_NFT_STAKING_ADDR', 'NFT Staking'],
       ['GANG_BUYBACK_ADDR', 'Buyback & Burn'],
-      ['GANG_LENDING_POOL_ADDR', 'Lending Pool'],
+      ['GANG_LENDING_ADDR', 'Lending Pool'],
       ['GANG_LAUNCHPAD_ADDR', 'Launchpad'],
       ['GANG_LOCKER_ADDR', 'Locker'],
       ['GANG_VAULT_V2_ADDR', 'Vault V2']
@@ -23712,7 +23717,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   };
 
   window.copyDeployedAddresses = function() {
-    const keys = ['GANG_TRADING_POOL_ADDR','GANG_PROTOCOL_VAULT_ADDR','GANG_BOND_DEP_ADDR','GANG_NFT_STAKING_ADDR','GANG_BUYBACK_ADDR','GANG_LENDING_POOL_ADDR','GANG_LAUNCHPAD_ADDR','GANG_LOCKER_ADDR','GANG_VAULT_V2_ADDR'];
+    const keys = ['GANG_TRADING_POOL_ADDR','GANG_PROTOCOL_VAULT_ADDR','GANG_BOND_DEPOSITORY_ADDR','GANG_NFT_STAKING_ADDR','GANG_BUYBACK_ADDR','GANG_LENDING_ADDR','GANG_LAUNCHPAD_ADDR','GANG_LOCKER_ADDR','GANG_VAULT_V2_ADDR'];
     let text = '';
     keys.forEach(function(k) {
       const v = localStorage.getItem(k);
