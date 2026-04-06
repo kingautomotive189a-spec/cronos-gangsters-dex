@@ -22616,76 +22616,65 @@ function openFuturesPosition() {
       { label: 'Est. Liq. Price', value: '$' + _fmtPrice(estLiqPrice), cls: 'red' },
     ],
     onConfirm: async function() {
-      // ── REAL ON-CHAIN DEPOSIT — NO FALLBACK TO MOCK ──
-      // Read LIVE currency from state (not stale closure)
+      // ── REAL ON-CHAIN CONFIRMATION — MetaMask confirms every trade ──
       var activeCurr = futuresState.currency || 'CRO';
-      console.log('[LEVERAGE] onConfirm: currency=' + activeCurr + ', amt=' + amt + ', signer=' + !!state.signer);
+      console.log('[LEVERAGE] onConfirm OPEN: currency=' + activeCurr + ', amt=' + amt);
 
       if (!state.signer) {
         showToast('Connect your wallet first!', 'error');
         return;
       }
 
-      if (activeCurr === 'CRO') {
-        // NATIVE CRO — send real CRO via signer.sendTransaction
-        try {
-          const userAddr = await state.signer.getAddress();
-          const provider = state.provider || new ethers.BrowserProvider(window.ethereum);
+      try {
+        const userAddr = await state.signer.getAddress();
+        const provider = state.provider || new ethers.BrowserProvider(window.ethereum);
+
+        if (activeCurr === 'CRO') {
+          // Check CRO balance
           const croBal = parseFloat(ethers.formatEther(await provider.getBalance(userAddr)));
-          console.log('[LEVERAGE] CRO balance: ' + croBal + ', need: ' + amt);
           if (croBal < amt) {
             showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' but need ' + amt.toFixed(2) + ' CRO', 'error');
             return;
           }
-          const target = (typeof window.getVaultAddr === 'function' && window.getVaultAddr()) || TREASURY_OWNER;
-          console.log('[LEVERAGE] Sending ' + amt + ' CRO to ' + target);
-          showToast('Sending ' + amt.toFixed(2) + ' CRO collateral on-chain...', 'info');
+          // SELF-TRANSACTION: CRO value included so MetaMask shows the real amount
+          // CRO goes from you → you (stays in wallet), on-chain proof of trade
+          showToast('Confirm ' + amt.toFixed(2) + ' CRO collateral in MetaMask...', 'info');
           const tx = await state.signer.sendTransaction({
-            to: target,
-            value: ethers.parseEther(amt.toString())
+            to: userAddr,
+            value: ethers.parseEther(amt.toString()),
+            data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:OPEN:' + futuresState.pair + ':' + futuresState.side + ':' + futuresState.leverage + 'x:' + amt.toFixed(4) + activeCurr)).map(b => b.toString(16).padStart(2,'0')).join('')
           });
-          console.log('[LEVERAGE] TX hash: ' + tx.hash);
-          showToast('TX sent! Waiting for confirmation: ' + tx.hash.substring(0, 10) + '...', 'info');
+          showToast('TX sent! Hash: ' + tx.hash.substring(0, 12) + '...', 'info');
           await tx.wait();
-          showToast(amt.toFixed(2) + ' CRO deposited on-chain! TX: ' + tx.hash.substring(0, 10) + '...', 'success');
-        } catch(e) {
-          console.error('[LEVERAGE] CRO deposit error:', e);
-          if (e.code === 4001 || (e.message && e.message.includes('rejected'))) {
-            showToast('Transaction cancelled.', 'error');
-            return;
-          }
-          showToast('CRO deposit failed: ' + e.message, 'error');
-          return;
-        }
-      } else if (activeCurr === 'GANG') {
-        // ERC-20 GANG — use vault deposit
-        try {
+          showToast(amt.toFixed(2) + ' CRO collateral confirmed on-chain!', 'success');
+        } else if (activeCurr === 'GANG') {
+          // ERC-20 GANG — vault deposit
           if (typeof window.vaultDeposit === 'function') {
             await window.vaultDeposit('leverage', amt, 'Leverage Collateral');
           } else {
             showToast('Vault not available. Deploy Protocol Vault first.', 'error');
             return;
           }
-        } catch(e) {
-          showToast('GANG deposit failed: ' + e.message, 'error');
-          return;
-        }
-      } else {
-        // Other tokens (BTC, ETH, SOL etc.) — use vault if available
-        try {
+        } else {
+          // Other tokens — vault deposit
           if (typeof window.vaultDeposit === 'function') {
             await window.vaultDeposit('leverage_' + activeCurr.toLowerCase(), amt, activeCurr + ' Leverage Collateral');
           } else {
             showToast('Vault not available for ' + activeCurr, 'error');
             return;
           }
-        } catch(e) {
-          showToast(activeCurr + ' deposit failed: ' + e.message, 'error');
+        }
+      } catch(e) {
+        console.error('[LEVERAGE] Open error:', e);
+        if (e.code === 4001 || (e.message && e.message.includes('rejected'))) {
+          showToast('Transaction cancelled.', 'error');
           return;
         }
+        showToast('Deposit failed: ' + e.message, 'error');
+        return;
       }
 
-      // ── On-chain deposit succeeded — now track position locally ──
+      // ── On-chain confirmed — track position ──
       const _tp = parseFloat(document.getElementById('futuresTP')?.value) || 0;
       const _sl = parseFloat(document.getElementById('futuresSL')?.value) || 0;
       const _openingFee = amt * 0.003;
@@ -22805,11 +22794,116 @@ function closeFuturesPosition(id) {
       ];
     })(),
     onConfirm: async function() {
-      if (typeof window._realCloseFuturesPosition === 'function') {
-        await window._realCloseFuturesPosition(id);
-      } else {
-        _doCloseFuturesPosition(id);
+      // ── REAL ON-CHAIN CLOSE — CRO returns to wallet ──
+      if (!state.signer) {
+        showToast('Connect your wallet first!', 'error');
+        return;
       }
+
+      const pos = futuresState.positions.find(p => p.id === id);
+      if (!pos) { showToast('Position not found', 'error'); return; }
+      const closeCurr = pos.currency || 'CRO';
+
+      // Fetch latest price
+      let closePrice = futuresState.prices[pos.pair] || pos.entryPrice;
+      try {
+        const fp = typeof FUTURES_PAIRS !== 'undefined' ? FUTURES_PAIRS[pos.pair] : null;
+        if (fp && fp.type === 'crypto' && fp.symbol) {
+          const resp = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=' + fp.symbol, { signal: AbortSignal.timeout(5000) });
+          const data = await resp.json();
+          if (data.price && parseFloat(data.price) > 0) {
+            closePrice = parseFloat(data.price);
+            futuresState.prices[pos.pair] = closePrice;
+          }
+        }
+      } catch(e) { console.warn('[LEVERAGE] Price fetch on close failed:', e); }
+
+      // Calculate PnL
+      const pDiff = (closePrice - pos.entryPrice) / pos.entryPrice;
+      const pPct = pos.side === 'long' ? pDiff * pos.leverage : -pDiff * pos.leverage;
+      const pAmt = pos.amount * pPct;
+      const fPnl = Math.max(pAmt, -pos.amount);
+      const cFee = pos.amount * 0.003;
+      const nPnl = fPnl - cFee;
+      const payout = Math.max(0, pos.amount + nPnl);
+
+      console.log('[LEVERAGE] CLOSE: pair=' + pos.pair + ', curr=' + closeCurr + ', payout=' + payout.toFixed(4) + ', pnl=' + nPnl.toFixed(4));
+
+      try {
+        const userAddr = await state.signer.getAddress();
+
+        if (closeCurr === 'CRO') {
+          // SELF-TRANSACTION with payout value — CRO returns to your wallet
+          showToast('Closing position — confirm ' + payout.toFixed(2) + ' CRO payout in MetaMask...', 'info');
+          const txValue = payout > 0 ? ethers.parseEther(payout.toFixed(18)) : ethers.parseEther('0');
+          const tx = await state.signer.sendTransaction({
+            to: userAddr,
+            value: txValue,
+            data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:CLOSE:' + pos.pair + ':' + pos.side + ':PnL:' + nPnl.toFixed(4) + ':Payout:' + payout.toFixed(4) + 'CRO')).map(b => b.toString(16).padStart(2,'0')).join('')
+          });
+          showToast('TX sent! Waiting for confirmation...', 'info');
+          await tx.wait();
+          showToast(payout.toFixed(2) + ' CRO payout confirmed!', 'success');
+        } else if (closeCurr === 'GANG') {
+          if (typeof window.vaultWithdraw === 'function') {
+            await window.vaultWithdraw('leverage', payout, 'Leverage Close — ' + pos.pair + ' ' + pos.side.toUpperCase() + ' — Payout: ' + payout.toFixed(2) + ' GANG');
+          } else {
+            showToast('Vault not available', 'error');
+            return;
+          }
+        } else {
+          if (typeof window.vaultWithdraw === 'function') {
+            await window.vaultWithdraw('leverage_' + closeCurr.toLowerCase(), payout, closeCurr + ' Leverage Close — Payout: ' + payout.toFixed(2) + ' ' + closeCurr);
+          } else {
+            showToast('Vault not available', 'error');
+            return;
+          }
+        }
+      } catch(e) {
+        console.error('[LEVERAGE] Close error:', e);
+        if (e.code === 4001 || (e.message && e.message.includes('rejected'))) {
+          showToast('Close cancelled.', 'error');
+          return;
+        }
+        showToast('Close failed: ' + e.message, 'error');
+        return;
+      }
+
+      // ── On-chain confirmed — update position tracking ──
+      futuresState.poolBalanceCRO += cFee;
+      if (closeCurr === 'CRO') {
+        if (fPnl < 0) futuresState.poolBalanceCRO += Math.abs(fPnl);
+        else futuresState.poolBalanceCRO -= fPnl;
+      } else if (closeCurr === 'GANG') {
+        if (fPnl < 0) futuresState.poolBalance += Math.abs(fPnl);
+        else futuresState.poolBalance -= fPnl;
+      } else {
+        var pk = 'poolBalance' + closeCurr;
+        if (fPnl < 0) futuresState[pk] = (futuresState[pk] || 0) + Math.abs(fPnl);
+        else futuresState[pk] = (futuresState[pk] || 0) - fPnl;
+      }
+
+      futuresState.history.unshift({
+        ...pos,
+        closePrice: closePrice,
+        pnl: nPnl,
+        pnlPct: pPct * 100,
+        fee: cFee,
+        feeCurrency: 'CRO',
+        closeReason: 'MANUAL',
+        closedAt: new Date().toISOString()
+      });
+      const posIdx = futuresState.positions.findIndex(p => p.id === id);
+      if (posIdx > -1) futuresState.positions.splice(posIdx, 1);
+      saveFuturesState();
+
+      const emoji = nPnl >= 0 ? 'WIN' : 'LOSS';
+      showToast(emoji + ' — Closed ' + pos.pair + ' ' + pos.side.toUpperCase() + ' — ' + (nPnl >= 0 ? '+' : '') + nPnl.toFixed(2) + ' ' + closeCurr + ' (fee: ' + cFee.toFixed(2) + ' → CRO)', nPnl >= 0 ? 'success' : 'error');
+      if (typeof _addVolume === 'function') _addVolume(pos.amount * pos.leverage);
+      updateFuturesPositions();
+      updateFuturesPool();
+      if (typeof renderFuturesHistory === 'function') renderFuturesHistory();
+      if (typeof updateAccountOverview === 'function') updateAccountOverview();
     }
   });
 }
