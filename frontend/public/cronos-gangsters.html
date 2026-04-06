@@ -21271,10 +21271,10 @@ try {
 
 // Auto-clear old fake positions (pre-contract era) — one-time cleanup
 try {
-  if (!localStorage.getItem('gang_futures_cleaned_v2')) {
+  if (!localStorage.getItem('gang_futures_cleaned_v3')) {
     futuresState.positions = [];
     futuresState.history = [];
-    localStorage.setItem('gang_futures_cleaned_v2', '1');
+    localStorage.setItem('gang_futures_cleaned_v3', '1');
     // Clear ALL old fake localStorage positions across every feature
     localStorage.removeItem('gang_lending_positions');
     localStorage.removeItem('gang_lending_borrows');
@@ -21507,20 +21507,43 @@ async function updateFuturesPrice() {
 
   // If WebSocket is delivering live data for this crypto pair, skip API polling entirely
   if (BINANCE_PAIR_MAP[pair] && _wsPriceReceived[pair] && _binanceWS && _binanceWS.readyState === WebSocket.OPEN) {
-    return; // Real-time WebSocket is active — no need for API fallback
+    // Still need to update prices for pairs with OPEN POSITIONS that aren't on WebSocket
+    _updateOpenPositionPrices();
+    return;
   }
 
-  // Try backend proxy first (works for all asset types, no CORS issues)
+  // Build list of all pairs that need price updates: current pair + any open position pairs
+  const pairsToFetch = new Set([pair]);
+  if (futuresState.positions && futuresState.positions.length > 0) {
+    futuresState.positions.forEach(function(pos) {
+      if (pos.pair && FUTURES_PAIRS[pos.pair]) pairsToFetch.add(pos.pair);
+    });
+  }
+
+  // Try backend proxy — batch fetch ALL needed pairs
   let priceLoaded = false;
   try {
     const backendUrl = window.location.origin;
-    const sym = p.yahoo || p.symbol || pair;
-    const resp = await fetch(backendUrl + '/api/futures/prices?symbols=' + sym, { signal: AbortSignal.timeout(6000) });
+    const syms = [];
+    pairsToFetch.forEach(function(pr) {
+      const fp = FUTURES_PAIRS[pr];
+      if (fp) syms.push(fp.yahoo || fp.symbol || pr);
+    });
+    const resp = await fetch(backendUrl + '/api/futures/prices?symbols=' + syms.join(','), { signal: AbortSignal.timeout(8000) });
     const data = await resp.json();
-    const priceData = data.prices?.[sym] || data.prices?.[pair];
-    if (priceData && priceData.price > 0) {
-      setFuturesPriceDisplay(pair, priceData.price, priceData.change || 0);
-      priceLoaded = true;
+    if (data.prices) {
+      pairsToFetch.forEach(function(pr) {
+        const fp = FUTURES_PAIRS[pr];
+        const sym = fp ? (fp.yahoo || fp.symbol || pr) : pr;
+        const priceData = data.prices[sym] || data.prices[pr];
+        if (priceData && priceData.price > 0) {
+          futuresState.prices[pr] = priceData.price;
+          if (pr === pair) {
+            setFuturesPriceDisplay(pr, priceData.price, priceData.change || 0);
+          }
+          priceLoaded = true;
+        }
+      });
     }
   } catch {}
 
@@ -21686,27 +21709,44 @@ function closeFuturesPosition(id) {
   }
 
   const curr = pos.currency || 'GANG';
-  const currentPrice = futuresState.prices[pos.pair] || pos.entryPrice;
-  const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
-  const pnlPct = pos.side === 'long' ? priceDiff * pos.leverage : -priceDiff * pos.leverage;
-  const pnlAmt = pos.amount * pnlPct;
-  const finalPnl = Math.max(pnlAmt, -pos.amount);
-  const closingFee = pos.amount * 0.003;
-  const netPnl = finalPnl - closingFee;
 
   showTradeConfirm({
     title: 'CLOSE ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD',
-    priceFetcher: async function() { return futuresState.prices[pos.pair] || currentPrice; },
+    priceFetcher: async function() {
+      // Fetch LIVE price from backend to avoid stale cached price
+      try {
+        const backendUrl = window.location.origin;
+        const fp = FUTURES_PAIRS[pos.pair];
+        const sym = fp ? (fp.yahoo || fp.symbol || pos.pair) : pos.pair;
+        const resp = await fetch(backendUrl + '/api/futures/prices?symbols=' + sym, { signal: AbortSignal.timeout(8000) });
+        const data = await resp.json();
+        const priceData = data.prices?.[sym] || data.prices?.[pos.pair];
+        if (priceData && priceData.price > 0) {
+          futuresState.prices[pos.pair] = priceData.price;
+          return priceData.price;
+        }
+      } catch(e) {}
+      return futuresState.prices[pos.pair] || pos.entryPrice;
+    },
     btnText: 'CLOSE POSITION',
     btnColor: 'linear-gradient(135deg,#e74c3c,#c0392b)',
-    details: [
-      { label: 'Position', value: pos.amount.toFixed(2) + ' ' + curr, cls: 'gold' },
-      { label: 'Side', value: pos.side.toUpperCase(), cls: pos.side === 'long' ? 'green' : 'red' },
-      { label: 'Entry Price', value: '$' + pos.entryPrice.toFixed(2) },
-      { label: 'Leverage', value: pos.leverage + 'x' },
-      { label: 'Closing Fee (0.3%)', value: closingFee.toFixed(4) + ' ' + curr, cls: 'red' },
-      { label: 'Net PnL', value: (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, cls: netPnl >= 0 ? 'green' : 'red' },
-    ],
+    details: (function() {
+      var currentPrice = futuresState.prices[pos.pair] || pos.entryPrice;
+      var priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
+      var pnlPct = pos.side === 'long' ? priceDiff * pos.leverage : -priceDiff * pos.leverage;
+      var pnlAmt = pos.amount * pnlPct;
+      var finalPnl = Math.max(pnlAmt, -pos.amount);
+      var closingFee = pos.amount * 0.003;
+      var netPnl = finalPnl - closingFee;
+      return [
+        { label: 'Position', value: pos.amount.toFixed(2) + ' ' + curr, cls: 'gold' },
+        { label: 'Side', value: pos.side.toUpperCase(), cls: pos.side === 'long' ? 'green' : 'red' },
+        { label: 'Entry Price', value: '$' + pos.entryPrice.toFixed(2) },
+        { label: 'Leverage', value: pos.leverage + 'x' },
+        { label: 'Closing Fee (0.3%)', value: closingFee.toFixed(4) + ' ' + curr, cls: 'red' },
+        { label: 'Est. PnL', value: (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, cls: netPnl >= 0 ? 'green' : 'red' },
+      ];
+    })(),
     onConfirm: async function() {
       if (typeof window._realCloseFuturesPosition === 'function') {
         await window._realCloseFuturesPosition(id);
@@ -22080,6 +22120,36 @@ function connectBinanceWS() {
   }
 }
 let _pnlThrottled = false;
+
+// Background price updater for open positions (runs when WS is active for crypto but non-crypto positions need updates)
+async function _updateOpenPositionPrices() {
+  if (!futuresState.positions || futuresState.positions.length === 0) return;
+  const nonWsPairs = new Set();
+  futuresState.positions.forEach(function(pos) {
+    if (pos.pair && !BINANCE_PAIR_MAP[pos.pair]) nonWsPairs.add(pos.pair);
+  });
+  if (nonWsPairs.size === 0) return;
+  try {
+    const backendUrl = window.location.origin;
+    const syms = [];
+    nonWsPairs.forEach(function(pr) {
+      const fp = FUTURES_PAIRS[pr];
+      if (fp) syms.push(fp.yahoo || fp.symbol || pr);
+    });
+    const resp = await fetch(backendUrl + '/api/futures/prices?symbols=' + syms.join(','), { signal: AbortSignal.timeout(8000) });
+    const data = await resp.json();
+    if (data.prices) {
+      nonWsPairs.forEach(function(pr) {
+        const fp = FUTURES_PAIRS[pr];
+        const sym = fp ? (fp.yahoo || fp.symbol || pr) : pr;
+        const priceData = data.prices[sym] || data.prices[pr];
+        if (priceData && priceData.price > 0) {
+          futuresState.prices[pr] = priceData.price;
+        }
+      });
+    }
+  } catch(e) {}
+}
 
 // Keep the API fallback for non-Binance pairs (GANG, GOLD, OIL, stocks)
 let _futuresLastApiPrice = {};
@@ -24048,7 +24118,40 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     if (idx === -1) return;
     const pos = futuresState.positions[idx];
     const curr = pos.currency || 'GANG';
-    const currentPrice = futuresState.prices[pos.pair] || pos.entryPrice;
+
+    // FORCE fetch the latest price for this pair before calculating PnL
+    let livePrice = futuresState.prices[pos.pair];
+    try {
+      const backendUrl = window.location.origin;
+      const fp = FUTURES_PAIRS[pos.pair];
+      const sym = fp ? (fp.yahoo || fp.symbol || pos.pair) : pos.pair;
+      const resp = await fetch(backendUrl + '/api/futures/prices?symbols=' + sym, { signal: AbortSignal.timeout(8000) });
+      const data = await resp.json();
+      const priceData = data.prices?.[sym] || data.prices?.[pos.pair];
+      if (priceData && priceData.price > 0) {
+        livePrice = priceData.price;
+        futuresState.prices[pos.pair] = livePrice;
+      }
+    } catch(e) {
+      console.warn('Price fetch on close failed, using cached price:', e);
+    }
+
+    // Fallback: try Binance REST directly
+    if (!livePrice || livePrice === pos.entryPrice) {
+      const fp = FUTURES_PAIRS[pos.pair];
+      if (fp && fp.type === 'crypto' && fp.symbol) {
+        try {
+          const resp = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=' + fp.symbol, { signal: AbortSignal.timeout(5000) });
+          const data = await resp.json();
+          if (data.price && parseFloat(data.price) > 0) {
+            livePrice = parseFloat(data.price);
+            futuresState.prices[pos.pair] = livePrice;
+          }
+        } catch(e) {}
+      }
+    }
+
+    const currentPrice = livePrice || pos.entryPrice;
     const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
     const pnlPct = pos.side === 'long' ? priceDiff * pos.leverage : -priceDiff * pos.leverage;
     const pnlAmt = pos.amount * pnlPct;
@@ -24071,22 +24174,31 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     pos.closePrice = currentPrice;
     pos.pnl = netPnl;
     pos.status = 'closed';
+
+    // Update pool balance for the correct currency
     if (curr === 'CRO') {
       futuresState.poolBalanceCRO += closingFee;
       if (netPnl < 0) futuresState.poolBalanceCRO += Math.abs(netPnl);
       else futuresState.poolBalanceCRO -= netPnl;
-    } else {
+    } else if (curr === 'GANG') {
       futuresState.poolBalance += closingFee;
       if (netPnl < 0) futuresState.poolBalance += Math.abs(netPnl);
       else futuresState.poolBalance -= netPnl;
+    } else {
+      // BTC, ETH, SOL, BNB, USDC, USDT — use correct currency pool
+      var poolKey = 'poolBalance' + curr;
+      futuresState[poolKey] = (futuresState[poolKey] || 0) + closingFee;
+      if (netPnl < 0) futuresState[poolKey] = (futuresState[poolKey] || 0) + Math.abs(netPnl);
+      else futuresState[poolKey] = (futuresState[poolKey] || 0) - netPnl;
     }
+
     // REMOVE from open positions array — prevents re-closing
     if (!futuresState.history) futuresState.history = [];
     futuresState.history.push(Object.assign({}, pos));
     const posIdx = futuresState.positions.indexOf(pos);
     if (posIdx > -1) futuresState.positions.splice(posIdx, 1);
     saveFuturesState();
-    showToast('Closed ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD — PnL: ' + (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, netPnl >= 0 ? 'success' : 'error');
+    showToast('Closed ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD @ $' + currentPrice.toLocaleString(undefined,{maximumFractionDigits:2}) + ' — PnL: ' + (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, netPnl >= 0 ? 'success' : 'error');
     updateFuturesPositions();
     updateFuturesPool();
   };

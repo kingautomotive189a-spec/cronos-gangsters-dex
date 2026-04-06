@@ -37,6 +37,11 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - All Fee Collections, Revenue Seed Fund
 
 ## Completed (2026-04-06)
+- **CRITICAL FIX**: Close position now FORCE fetches live price from API before calculating PnL — positions no longer close at entry price
+- **CRITICAL FIX**: Fee routing fixed for BTC/ETH/SOL/BNB/USDC/USDT — fees now credit correct currency pool, not GANG pool
+- **CRITICAL FIX**: Price polling now batch-fetches ALL pairs with open positions (not just the currently selected pair)
+- Close confirmation popup fetches live price from backend API before showing PnL estimate
+- localStorage cleanup version bumped to v3 (clears stale positions on next load)
 - Binance WebSocket real-time price feeds for ALL 12 crypto pairs (auto-built from FUTURES_PAIRS)
 - Fast reverse-lookup symbol mapping for WebSocket messages
 - LIVE badge on price display for crypto pairs with active WebSocket
