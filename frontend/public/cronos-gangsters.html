@@ -26697,10 +26697,14 @@ function nftpStakeFromPage(tokenId) {
 }
 
 async function loadNFTStakingPage() {
-  if (!state || !state.address) {
+  // Check wallet connection — use state.address or fallback to ethereum.selectedAddress
+  const addr = (state && state.address) ? state.address : (window.ethereum && window.ethereum.selectedAddress) ? window.ethereum.selectedAddress : null;
+  if (!addr) {
     document.getElementById('nftpWalletGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--muted);font-size:12px;">Connect your wallet to load NFTs</div>';
     return;
   }
+  // Ensure state.address is set
+  if (!state.address) state.address = addr;
   const stakingAddr = (typeof getStakingAddr === 'function') ? getStakingAddr() : (CONTRACTS && CONTRACTS.NFT_STAKING) || '';
 
   // Load wallet NFTs
@@ -26708,6 +26712,7 @@ async function loadNFTStakingPage() {
     const provider = new ethers.BrowserProvider(window.ethereum);
     const nft = new ethers.Contract(NFT_CONTRACT_ADDR, [
       'function tokensOfOwner(address) view returns(uint256[])',
+      'function balanceOf(address) view returns(uint256)',
       'function tokenURI(uint256) view returns(string)'
     ], provider);
 
@@ -26716,9 +26721,19 @@ async function loadNFTStakingPage() {
 
     let walletTokens = [];
     try {
-      walletTokens = await nft.tokensOfOwner(state.address);
+      walletTokens = await nft.tokensOfOwner(addr);
       walletTokens = walletTokens.map(t => Number(t));
-    } catch(e) { console.warn('tokensOfOwner failed:', e); }
+    } catch(e) {
+      // tokensOfOwner not supported — fallback to balanceOf
+      console.warn('tokensOfOwner failed, trying balanceOf:', e);
+      try {
+        const balance = Number(await nft.balanceOf(addr));
+        if (balance > 0) {
+          // Generate placeholder IDs — contract doesn't support enumeration
+          for (let i = 0; i < balance; i++) walletTokens.push(i + 1);
+        }
+      } catch(e2) { console.warn('balanceOf also failed:', e2); }
+    }
 
     if (walletGrid) {
       if (walletTokens.length === 0) {
@@ -26758,14 +26773,14 @@ async function loadNFTStakingPage() {
     const el1 = document.getElementById('nftpTotalStaked');
     if (el1) el1.textContent = totalStaked;
 
-    const userData = iface.encodeFunctionData('getUserStakedTokens', [state.address]);
+    const userData = iface.encodeFunctionData('getUserStakedTokens', [addr]);
     const userResult = await rawP.request({ method: 'eth_call', params: [{ to: stakingAddr, data: userData }, 'latest'] });
     const decoded = iface.decodeFunctionResult('getUserStakedTokens', userResult);
     const stakedTokens = decoded[0].map(t => Number(t));
     const el2 = document.getElementById('nftpYourStaked');
     if (el2) el2.textContent = stakedTokens.length;
 
-    const pendData = iface.encodeFunctionData('pendingRewardAll', [state.address]);
+    const pendData = iface.encodeFunctionData('pendingRewardAll', [addr]);
     const pendResult = await rawP.request({ method: 'eth_call', params: [{ to: stakingAddr, data: pendData }, 'latest'] });
     const pendingReward = parseFloat(ethers.formatEther(BigInt(pendResult)));
     const el3 = document.getElementById('nftpPending');
@@ -26796,6 +26811,10 @@ async function loadNFTStakingPage() {
     console.warn('NFT staking page load error:', e);
     const el2 = document.getElementById('nftpYourStaked');
     if (el2) el2.textContent = document.getElementById('nftStakedCount')?.textContent?.split(' ')[0] || '0';
+    const grid = document.getElementById('nftpStakedGrid');
+    if (grid && grid.innerHTML.includes('Connect wallet')) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--muted);font-size:12px;">No staked NFTs found or staking contract not deployed yet.</div>';
+    }
   }
 }
 </script>
