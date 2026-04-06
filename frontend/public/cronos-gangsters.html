@@ -12122,15 +12122,50 @@ let _toastTimer;
 let _txPendingCallback = null;
 
 function showTxConfirm(opts) {
-  // SKIP fake popup — go straight to MetaMask (real on-chain confirmation)
-  if (opts.onConfirm) {
-    const result = opts.onConfirm();
-    if (result && typeof result.then === 'function') {
-      result.catch(function(e) {
-        console.error('Transaction error:', e);
-      });
-    }
+  // Show a real confirmation modal before triggering MetaMask
+  const existing = document.getElementById('txConfirmOverlay');
+  if (existing) existing.remove();
+
+  let detailsHtml = '';
+  if (opts.details && opts.details.length) {
+    opts.details.forEach(function(d) {
+      const clsStyle = d.cls === 'red' ? 'color:#e74c3c;' : d.cls === 'green' ? 'color:#27ae60;' : d.cls === 'gold' ? 'color:var(--gold);' : 'color:var(--text);';
+      detailsHtml += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;"><span style="color:var(--muted);">' + d.label + '</span><span style="' + clsStyle + 'font-weight:600;">' + d.value + '</span></div>';
+    });
   }
+
+  const overlay = document.createElement('div');
+  overlay.id = 'txConfirmOverlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML = '<div style="background:var(--surface);border:1px solid var(--border);border-radius:20px;max-width:420px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,0.5);">' +
+    '<div style="text-align:center;margin-bottom:16px;">' +
+      '<div style="width:52px;height:52px;border-radius:50%;background:' + (opts.color || 'var(--gold)') + ';display:inline-flex;align-items:center;justify-content:center;font-family:\'Bebas Neue\',sans-serif;font-size:18px;color:#000;font-weight:bold;">' + (opts.icon || 'TX') + '</div>' +
+      '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:var(--text);margin-top:8px;letter-spacing:2px;">' + (opts.title || 'CONFIRM TRANSACTION') + '</div>' +
+    '</div>' +
+    '<div style="background:var(--surface2);border-radius:12px;padding:14px;margin-bottom:16px;">' +
+      '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;"><span style="color:var(--muted);">Amount</span><span style="color:var(--text);font-weight:700;">' + (opts.amount || '--') + '</span></div>' +
+      '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;"><span style="color:var(--muted);">Fee</span><span style="color:#e74c3c;font-weight:600;">' + (opts.fee || 'No fee') + '</span></div>' +
+      '<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;"><span style="color:var(--muted);">You Receive</span><span style="color:var(--green);font-weight:700;">' + (opts.receive || '--') + '</span></div>' +
+    '</div>' +
+    (detailsHtml ? '<div style="background:var(--surface2);border-radius:12px;padding:14px;margin-bottom:16px;">' + detailsHtml + '</div>' : '') +
+    '<div style="display:flex;gap:10px;">' +
+      '<button id="txConfirmCancelBtn" style="flex:1;padding:14px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);font-family:\'Bebas Neue\',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;">CANCEL</button>' +
+      '<button id="txConfirmOkBtn" style="flex:1;padding:14px;border-radius:12px;background:' + (opts.btnColor || 'linear-gradient(135deg,var(--gold),var(--gold2))') + ';border:none;color:#fff;font-family:\'Bebas Neue\',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;font-weight:bold;">CONFIRM</button>' +
+    '</div>' +
+  '</div>';
+  document.body.appendChild(overlay);
+
+  document.getElementById('txConfirmCancelBtn').onclick = function() { overlay.remove(); };
+  overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+  document.getElementById('txConfirmOkBtn').onclick = function() {
+    overlay.remove();
+    if (opts.onConfirm) {
+      const result = opts.onConfirm();
+      if (result && typeof result.then === 'function') {
+        result.catch(function(e) { console.error('Transaction error:', e); });
+      }
+    }
+  };
 }
 
 // ── Trade Confirm Modal: Real price-fetch flow for trading features ──
@@ -26402,26 +26437,45 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const gangWithDiscount = gangAtMarket * (1 + config.discount / 100);
     const fee = lpValue * 0.003;
 
-    // Use Protocol Vault for real on-chain bond deposit
-    try {
-      const vaultAddr = (typeof getVaultAddr === 'function' ? getVaultAddr() : '') || (typeof CONTRACTS !== 'undefined' && CONTRACTS.PROTOCOL_VAULT ? CONTRACTS.PROTOCOL_VAULT : '') || localStorage.getItem('GANG_PROTOCOL_VAULT_ADDR') || '';
-      if (vaultAddr && typeof window.vaultDeposit === 'function') {
-        showToast('Bonding ' + pair + ' LP on-chain... MetaMask will confirm.', 'info');
-        await window.vaultDeposit('bonds_' + pair, lpValue, pair + ' Bond Purchase');
-        showToast('Bond deposited on-chain! ' + gangWithDiscount.toFixed(0) + ' GANG vesting over ' + config.vestDays + ' days.', 'success');
-        if (amtInput) amtInput.value = '';
-      } else {
-        showToast('Connect wallet first for on-chain bonds.', 'error');
-        return;
+    showTxConfirm({
+      title: 'BOND ' + pair,
+      action: 'Bond ' + pair + ' LP Tokens',
+      icon: 'BD',
+      amount: lpValue.toFixed(4) + ' CRO',
+      fee: fee.toFixed(4) + ' CRO (0.3%)',
+      receive: gangWithDiscount.toFixed(0) + ' GANG (vests ' + config.vestDays + ' days)',
+      color: '#4fc3f7',
+      btnColor: 'linear-gradient(135deg,var(--gold),var(--gold2))',
+      details: [
+        { label: 'Bond Pair', value: pair },
+        { label: 'Discount', value: config.discount + '%', cls: 'green' },
+        { label: 'Vesting', value: config.vestDays + ' days' },
+        { label: 'GANG at Market', value: gangAtMarket.toFixed(0) + ' GANG' },
+        { label: 'GANG with Discount', value: gangWithDiscount.toFixed(0) + ' GANG', cls: 'gold' },
+        { label: 'Fee (0.3% → CRO)', value: fee.toFixed(4) + ' CRO', cls: 'red' },
+      ],
+      onConfirm: async function() {
+        try {
+          const vaultAddr = (typeof getVaultAddr === 'function' ? getVaultAddr() : '') || (typeof CONTRACTS !== 'undefined' && CONTRACTS.PROTOCOL_VAULT ? CONTRACTS.PROTOCOL_VAULT : '') || localStorage.getItem('GANG_PROTOCOL_VAULT_ADDR') || '';
+          if (vaultAddr && typeof window.vaultDeposit === 'function') {
+            showToast('Bonding ' + pair + ' LP on-chain... MetaMask will confirm.', 'info');
+            await window.vaultDeposit('bonds_' + pair, lpValue, pair + ' Bond Purchase');
+            showToast('Bond deposited on-chain! ' + gangWithDiscount.toFixed(0) + ' GANG vesting over ' + config.vestDays + ' days. Fee: ' + fee.toFixed(4) + ' CRO', 'success');
+            if (amtInput) amtInput.value = '';
+          } else {
+            showToast('Connect wallet first for on-chain bonds.', 'error');
+            return;
+          }
+          // Track locally for UI
+          const s = getState();
+          s.bonds.push({ pair, user: addr, gangReceived: gangWithDiscount, purchaseTime: Date.now(), vestDays: config.vestDays, lpValue, onChain: !!vaultAddr });
+          s.totalBonded += lpValue; s.totalDistributed += gangWithDiscount;
+          saveState(s);
+          _trackBondFee(fee);
+          renderBonds();
+        } catch(e) { showToast('Bond failed: ' + e.message, 'error'); }
       }
-      // Track locally for UI
-      const s = getState();
-      s.bonds.push({ pair, user: addr, gangReceived: gangWithDiscount, purchaseTime: Date.now(), vestDays: config.vestDays, lpValue, onChain: !!vaultAddr });
-      s.totalBonded += lpValue; s.totalDistributed += gangWithDiscount;
-      saveState(s);
-      _trackBondFee(fee);
-      renderBonds();
-    } catch(e) { showToast('Bond failed: ' + e.message, 'error'); }
+    });
   };
 
   window.claimBond = async function(idx) {

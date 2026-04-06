@@ -78,6 +78,12 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - **NEW**: Live price updates in chart header every 3s tick
 - **UPGRADE**: Perpetual DEX page header with "FULLY ON-CHAIN | CRONOS MAINNET" badge and professional copy
 
+## Completed (2026-04-06 — Bond WITHDRAW + Confirmation Modal)
+- **ADDED**: Red WITHDRAW button on all 8 bond cards (CRO, USDC, WETH, WBTC, DAI, ATOM, USDT, VVS)
+- **ADDED**: `withdrawBond()` function — triggers MetaMask via `vaultWithdraw`, removes bonds from state
+- **ADDED**: `buyBond()` now shows confirmation popup before MetaMask with fee breakdown (CRO)
+- **UPGRADED**: `showTxConfirm()` — now shows a real confirmation modal (Amount/Fee/Receive + CONFIRM/CANCEL) instead of skipping straight to MetaMask. Affects ALL features using it.
+
 ## Completed (2026-04-06 — ALL Fees → CRO Conversion)
 - **CHANGE**: Converted ALL platform fees across the entire app to be collected exclusively in CRO
 - **Features updated**: Leverage Trading, Swaps, Flash Loans, DEX Aggregator, Copy Trading, Lending, NFT Staking, Trading Competitions (100 GANG → 100 CRO), Squad Farming, Auto-Compound Vault
