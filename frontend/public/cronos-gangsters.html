@@ -7394,6 +7394,17 @@ function toggleNavMenu() {
         <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#4fc3f7;margin-top:6px;" data-testid="bonds-discount">8%</div>
       </div>
     </div>
+
+    <!-- YOUR ACTIVE BONDS — always visible at top -->
+    <div style="margin-bottom:16px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:10px;">YOUR ACTIVE BONDS</div>
+      <div id="userBondsTop" data-testid="user-bonds-top" style="display:grid;gap:10px;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;">
+          <div style="font-size:12px;color:var(--muted);">No active bonds. Purchase a bond below to start earning discounted $GANG.</div>
+        </div>
+      </div>
+    </div>
+
     <div style="display:grid;gap:12px;margin-bottom:20px;" id="bondsGrid" data-testid="bonds-grid">
       <!-- CRO-GANG -->
       <div style="background:linear-gradient(135deg,var(--surface),rgba(39,174,96,0.05));border:1px solid rgba(39,174,96,0.3);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;">
@@ -7478,16 +7489,6 @@ function toggleNavMenu() {
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;">
       <div style="font-size:11px;color:var(--muted);">When you bond LP tokens, you receive $GANG at a discount. Your GANG vests over 5 days. 0.3% fee on bond purchase.</div>
-    </div>
-
-    <!-- YOUR ACTIVE BONDS -->
-    <div style="margin-top:16px;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;margin-bottom:10px;text-align:center;">YOUR ACTIVE BONDS</div>
-      <div id="userBondsContainer" data-testid="user-bonds-container" style="display:grid;gap:10px;">
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;">
-          <div style="font-size:12px;color:var(--muted);">No active bonds. Purchase a bond above to start earning discounted $GANG.</div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -25496,37 +25497,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   window.revCollectCopyFees = async function() { try { await vaultCollectFees('Copy Trading'); } catch(e) { showToast(e.message, 'error'); } };
 
   // --- REVENUE STAKING ---
-  window.rsStake = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('rsStakeAmount');
-    const amount = parseFloat(amtEl?.value);
-    if (!amount || amount <= 0) { showToast('Enter stake amount', 'error'); return; }
-    try {
-      await vaultDeposit('revstaking', amount, 'Revenue Staking');
-      const s = initRSState();
-      s.userStake = (s.userStake || 0) + amount;
-      s.totalStaked = (s.totalStaked || 0) + amount;
-      saveRSState(s); updateRSStats();
-      if (amtEl) amtEl.value = '';
-    } catch(e) { showToast('Stake failed: ' + e.message, 'error'); }
-  };
-  window.rsUnstake = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('rsStakeAmount');
-    const amount = parseFloat(amtEl?.value);
-    if (!amount || amount <= 0) { showToast('Enter unstake amount', 'error'); return; }
-    try {
-      await vaultWithdraw('revstaking', amount, 'Revenue Staking');
-      const s = initRSState();
-      s.userStake = Math.max(0, (s.userStake || 0) - amount);
-      s.totalStaked = Math.max(0, (s.totalStaked || 0) - amount);
-      saveRSState(s); updateRSStats();
-      if (amtEl) amtEl.value = '';
-    } catch(e) { showToast('Unstake failed: ' + e.message, 'error'); }
-  };
-  window.rsClaim = async function() {
-    showToast('Revenue share rewards are claimed when you unstake. Your staked GANG earns proportional fees.', 'info');
-  };
+  // --- REVENUE STAKING (on-chain wired inline via original functions) ---
   window.rsOwnerCollect = async function() { try { await vaultCollectFees('Revenue Staking'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectRsFees = async function() { try { await vaultCollectFees('Revenue Staking'); } catch(e) { showToast(e.message, 'error'); } };
 
@@ -26217,7 +26188,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const s = getState();
     const addr = (typeof state !== 'undefined' && state.address) ? state.address.toLowerCase() : null;
     const userBonds = s.bonds.filter(b => b.user === addr);
-    const container = document.getElementById('userBondsContainer');
+    const container = document.getElementById('userBondsTop');
     if (!container) return;
 
     if (userBonds.length === 0) {
