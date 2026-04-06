@@ -21728,6 +21728,7 @@ function closeFuturesPosition(id) {
       var finalPnl = Math.max(pnlAmt, -pos.amount);
       var closingFee = pos.amount * 0.003;
       var netPnl = finalPnl - closingFee;
+      var payout = Math.max(0, pos.amount + netPnl);
       return [
         { label: 'Position', value: pos.amount.toFixed(2) + ' ' + curr, cls: 'gold' },
         { label: 'Side', value: pos.side.toUpperCase(), cls: pos.side === 'long' ? 'green' : 'red' },
@@ -21735,6 +21736,7 @@ function closeFuturesPosition(id) {
         { label: 'Leverage', value: pos.leverage + 'x' },
         { label: 'Closing Fee (0.3%)', value: closingFee.toFixed(4) + ' ' + curr, cls: 'red' },
         { label: 'Est. PnL', value: (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, cls: netPnl >= 0 ? 'green' : 'red' },
+        { label: 'YOU RECEIVE', value: payout.toFixed(2) + ' ' + curr, cls: payout > 0 ? 'green' : 'red' },
       ];
     })(),
     onConfirm: async function() {
@@ -24267,14 +24269,15 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const closingFee = pos.amount * 0.003;
     const netPnl = finalPnl - closingFee;
 
+    // Calculate what the trader should ACTUALLY receive back
+    // Payout = original collateral + net PnL (can be negative for losses)
+    const traderPayout = Math.max(0, pos.amount + netPnl);
+
     // Trigger MetaMask wallet confirmation for ALL currencies
     if (state.signer) {
       try {
-        const withdrawAmt = Math.max(0, pos.amount);
-        if (curr === 'GANG') {
-          await vaultWithdraw('leverage', withdrawAmt, 'Leverage Close — ' + pos.pair + ' ' + pos.side.toUpperCase());
-        } else if (curr === 'CRO') {
-          // CRO: send a small on-chain tx to confirm the close via MetaMask
+        if (traderPayout <= 0) {
+          // Total loss — still need MetaMask to confirm the loss (0-value tx as acknowledgment)
           const userAddr = await state.signer.getAddress();
           const rawP = state._rawProvider || window.ethereum;
           await rawP.request({
@@ -24283,12 +24286,27 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
               from: userAddr,
               to: userAddr,
               value: '0x0',
-              data: '0x' + Array.from(new TextEncoder().encode('CLOSE:' + pos.pair + ':' + pos.side + ':' + pos.amount.toFixed(2))).map(b => b.toString(16).padStart(2,'0')).join('')
+              data: '0x' + Array.from(new TextEncoder().encode('LOSS:' + pos.pair + ':' + pos.side + ':' + pos.amount.toFixed(2) + ':PnL:' + netPnl.toFixed(2))).map(b => b.toString(16).padStart(2,'0')).join('')
+            }]
+          });
+        } else if (curr === 'GANG') {
+          await vaultWithdraw('leverage', traderPayout, 'Leverage Close — ' + pos.pair + ' ' + pos.side.toUpperCase() + ' — Payout: ' + traderPayout.toFixed(2) + ' GANG');
+        } else if (curr === 'CRO') {
+          // CRO: on-chain tx to confirm the close with payout data embedded
+          const userAddr = await state.signer.getAddress();
+          const rawP = state._rawProvider || window.ethereum;
+          await rawP.request({
+            method: 'eth_sendTransaction',
+            params: [{
+              from: userAddr,
+              to: userAddr,
+              value: '0x0',
+              data: '0x' + Array.from(new TextEncoder().encode('CLOSE:' + pos.pair + ':' + pos.side + ':Payout:' + traderPayout.toFixed(2) + curr)).map(b => b.toString(16).padStart(2,'0')).join('')
             }]
           });
         } else {
-          // BTC, ETH, SOL, BNB, USDC, USDT — use vault withdraw
-          await vaultWithdraw('leverage_' + curr.toLowerCase(), withdrawAmt, curr + ' Leverage Close — ' + pos.pair + ' ' + pos.side.toUpperCase());
+          // BTC, ETH, SOL, BNB, USDC, USDT — vault withdraw with correct payout
+          await vaultWithdraw('leverage_' + curr.toLowerCase(), traderPayout, curr + ' Leverage Close — ' + pos.pair + ' — Payout: ' + traderPayout.toFixed(2) + ' ' + curr);
         }
       } catch(e) {
         if (e.code === 4001 || (e.message && e.message.includes('rejected'))) {
