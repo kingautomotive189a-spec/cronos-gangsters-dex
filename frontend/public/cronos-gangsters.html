@@ -22441,9 +22441,9 @@ function openFuturesPosition() {
   const price = futuresState.prices[futuresState.pair];
   if (!price) { showToast('Price not loaded yet', 'error'); return; }
 
-  // LIQUIDITY CHECK — block if pool has no funds (GANG exempt — backed by on-chain contract)
-  if (curr !== 'GANG') {
-    var poolKey = curr === 'CRO' ? 'poolBalanceCRO' : 'poolBalance' + curr;
+  // LIQUIDITY CHECK — CRO and GANG are exempt (real on-chain native transfers)
+  if (curr !== 'GANG' && curr !== 'CRO') {
+    var poolKey = 'poolBalance' + curr;
     var poolBal = futuresState[poolKey] || 0;
     if (poolBal <= 0) {
       showToast('No ' + curr + ' liquidity available. Pool needs funding first.', 'error');
