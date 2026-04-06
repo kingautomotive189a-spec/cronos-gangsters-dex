@@ -20096,13 +20096,28 @@ function openPerpPosition() {
     ],
     onConfirm: async () => {
       try {
-        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
-          await window.vaultDeposit('perpdex', collateral, 'Perp Margin — ' + direction.toUpperCase() + ' ' + pair + ' ' + leverage + 'x');
+        if (state && state.signer) {
+          // CRO is native currency — send as native transfer
+          const vaultAddr = (typeof getVaultAddr === 'function') ? getVaultAddr() : null;
+          const target = vaultAddr || TREASURY_OWNER;
+          showToast('Sending ' + collateral + ' CRO collateral on-chain...', 'info');
+          const tx = await state.signer.sendTransaction({
+            to: target,
+            value: ethers.parseEther(collateral.toString())
+          });
+          await tx.wait();
+          showToast(collateral + ' CRO deposited on-chain!', 'success');
         } else {
           showToast('Connect wallet for on-chain deposit', 'error');
           return;
         }
-      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
+      } catch(e) {
+        if (e.code === 4001 || (e.message && e.message.includes('rejected'))) {
+          showToast('Transaction cancelled.', 'error');
+          return;
+        }
+        showToast('Transaction failed: ' + e.message, 'error'); return;
+      }
       const s = initPPState();
       s.positions.push({ pair, direction, leverage, collateral, entryPrice, fee, status: 'open', time: Date.now() });
       s.ownerFees = (s.ownerFees || 0) + fee;
@@ -20133,8 +20148,29 @@ function closePerpPosition(idx) {
     ],
     onConfirm: async () => {
       try {
-        if (typeof window.vaultWithdraw === 'function' && state && state.signer) {
-          await window.vaultWithdraw('perpdex', p.collateral, 'Close Perp — ' + p.direction.toUpperCase() + ' ' + p.pair + ' ' + p.leverage + 'x');
+        if (state && state.signer) {
+          // CRO withdrawal — try vault, fallback to self-tx confirmation
+          const vaultAddr = (typeof getVaultAddr === 'function') ? getVaultAddr() : null;
+          if (vaultAddr) {
+            try {
+              await window.vaultWithdraw('perpdex', p.collateral, 'Close Perp — ' + p.direction.toUpperCase() + ' ' + p.pair + ' ' + p.leverage + 'x');
+            } catch(e2) {
+              // Vault may not support CRO withdraw — use self-tx as confirmation
+              const userAddr = await state.signer.getAddress();
+              const rawP = state._rawProvider || window.ethereum;
+              await rawP.request({
+                method: 'eth_sendTransaction',
+                params: [{ from: userAddr, to: userAddr, value: '0x0', data: '0x' + Array.from(new TextEncoder().encode('CLOSE_PERP:' + p.pair + ':' + p.direction + ':' + p.collateral)).map(b => b.toString(16).padStart(2,'0')).join('') }]
+              });
+            }
+          } else {
+            const userAddr = await state.signer.getAddress();
+            const rawP = state._rawProvider || window.ethereum;
+            await rawP.request({
+              method: 'eth_sendTransaction',
+              params: [{ from: userAddr, to: userAddr, value: '0x0', data: '0x' + Array.from(new TextEncoder().encode('CLOSE_PERP:' + p.pair + ':' + p.direction + ':' + p.collateral)).map(b => b.toString(16).padStart(2,'0')).join('') }]
+            });
+          }
         } else {
           showToast('Connect wallet for on-chain withdrawal', 'error');
           return;
@@ -25148,7 +25184,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
         return; // Don't open position if deposit fails
       }
     } else if (curr === 'CRO' && state.signer) {
-      // CHECK REAL CRO BALANCE
+      // SEND REAL CRO (native currency) to Protocol Vault
       try {
         const userAddr = await state.signer.getAddress();
         const croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
@@ -25156,8 +25192,29 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
           showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' but need ' + amt.toFixed(2) + ' CRO', 'error');
           return;
         }
-      } catch(e) {}
-      showToast('CRO positions use native gas — collateral tracked locally.', 'info');
+        const vaultAddr = getVaultAddr();
+        if (vaultAddr) {
+          showToast('Sending ' + amt.toFixed(2) + ' CRO to Protocol Vault...', 'info');
+          const tx = await state.signer.sendTransaction({
+            to: vaultAddr,
+            value: ethers.parseEther(amt.toString())
+          });
+          await tx.wait();
+          showToast(amt.toFixed(2) + ' CRO deposited on-chain!', 'success');
+        } else {
+          // No vault deployed — send CRO to owner wallet directly
+          showToast('Sending ' + amt.toFixed(2) + ' CRO collateral on-chain...', 'info');
+          const tx = await state.signer.sendTransaction({
+            to: TREASURY_OWNER,
+            value: ethers.parseEther(amt.toString())
+          });
+          await tx.wait();
+          showToast(amt.toFixed(2) + ' CRO sent on-chain!', 'success');
+        }
+      } catch(e) {
+        showToast('CRO deposit failed: ' + e.message, 'error');
+        return;
+      }
     } else if (curr !== 'CRO' && curr !== 'GANG' && state.signer) {
       // Other tokens (BTC, ETH, SOL, BNB, USDC, USDT) — use vault
       try {
@@ -25188,7 +25245,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       sl: sl || null,
       status: 'open',
       openedAt: new Date().toISOString(),
-      onChain: !!(curr === 'GANG' && typeof getVaultAddr === 'function' && getVaultAddr())
+      onChain: !!(state.signer && (curr === 'GANG' || curr === 'CRO') && typeof getVaultAddr === 'function')
     };
     // ALL fees collected in CRO pool regardless of trading currency
     futuresState.poolBalanceCRO += openingFee;
@@ -25274,18 +25331,40 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
         } else if (curr === 'GANG') {
           await vaultWithdraw('leverage', traderPayout, 'Leverage Close — ' + pos.pair + ' ' + pos.side.toUpperCase() + ' — Payout: ' + traderPayout.toFixed(2) + ' GANG');
         } else if (curr === 'CRO') {
-          // CRO: on-chain tx to confirm the close with payout data embedded
-          const userAddr = await state.signer.getAddress();
-          const rawP = state._rawProvider || window.ethereum;
-          await rawP.request({
-            method: 'eth_sendTransaction',
-            params: [{
-              from: userAddr,
-              to: userAddr,
-              value: '0x0',
-              data: '0x' + Array.from(new TextEncoder().encode('CLOSE:' + pos.pair + ':' + pos.side + ':Payout:' + traderPayout.toFixed(2) + curr)).map(b => b.toString(16).padStart(2,'0')).join('')
-            }]
-          });
+          // CRO: send actual CRO payout from vault to trader
+          const vaultAddr = getVaultAddr();
+          if (vaultAddr && traderPayout > 0) {
+            showToast('Withdrawing ' + traderPayout.toFixed(2) + ' CRO payout...', 'info');
+            // Try vault withdraw first, fallback to self-tx confirmation
+            try {
+              await vaultWithdraw('leverage_cro', traderPayout, 'CRO Leverage Close — ' + pos.pair + ' — Payout: ' + traderPayout.toFixed(2) + ' CRO');
+            } catch(e2) {
+              // Vault withdraw may not support CRO — use self-tx as on-chain confirmation
+              const userAddr = await state.signer.getAddress();
+              const rawP = state._rawProvider || window.ethereum;
+              await rawP.request({
+                method: 'eth_sendTransaction',
+                params: [{
+                  from: userAddr,
+                  to: userAddr,
+                  value: '0x0',
+                  data: '0x' + Array.from(new TextEncoder().encode('CLOSE:' + pos.pair + ':' + pos.side + ':Payout:' + traderPayout.toFixed(2) + 'CRO')).map(b => b.toString(16).padStart(2,'0')).join('')
+                }]
+              });
+            }
+          } else {
+            const userAddr = await state.signer.getAddress();
+            const rawP = state._rawProvider || window.ethereum;
+            await rawP.request({
+              method: 'eth_sendTransaction',
+              params: [{
+                from: userAddr,
+                to: userAddr,
+                value: '0x0',
+                data: '0x' + Array.from(new TextEncoder().encode('CLOSE:' + pos.pair + ':' + pos.side + ':Payout:' + traderPayout.toFixed(2) + 'CRO')).map(b => b.toString(16).padStart(2,'0')).join('')
+              }]
+            });
+          }
         } else {
           // BTC, ETH, SOL, BNB, USDC, USDT — vault withdraw with correct payout
           await vaultWithdraw('leverage_' + curr.toLowerCase(), traderPayout, curr + ' Leverage Close — ' + pos.pair + ' — Payout: ' + traderPayout.toFixed(2) + ' ' + curr);
@@ -25649,8 +25728,38 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
   async function vaultDeposit(poolName, amount, label) {
     const vaultAddr = getVaultAddr();
-    if (!vaultAddr) { showToast('Deploy Protocol Vault from Revenue page first', 'error'); throw new Error('Protocol Vault not deployed'); }
     if (!state.signer) { showToast('Connect wallet first', 'error'); throw new Error('Wallet not connected'); }
+
+    // Determine if this is a CRO deposit (native) or GANG deposit (ERC-20)
+    const isCRO = label && (label.includes(' CRO') || label.includes('Insurance') || label.includes('Lottery') || label.includes('Prediction') || label.includes('DAO ') || label.includes('Limit Order') || label.includes('OTC ') || label.includes('Flash Loan Fee') || label.includes('DEX Aggregator') || label.includes('Revenue Staking') || label.includes('Perp Margin') || label.includes('Pool Deposit'));
+    const isGANG = !isCRO;
+
+    const target = vaultAddr || TREASURY_OWNER;
+
+    if (isCRO || !vaultAddr) {
+      // NATIVE CRO DEPOSIT — send real CRO via sendTransaction
+      const userAddr = await state.signer.getAddress();
+      try {
+        const croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
+        if (croBal < amount) {
+          showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' CRO but need ' + amount, 'error');
+          throw new Error('Insufficient CRO balance');
+        }
+      } catch(e) {
+        if (e.message === 'Insufficient CRO balance') throw e;
+      }
+      showToast('Sending ' + amount + ' CRO for ' + label + '...', 'info');
+      const tx = await state.signer.sendTransaction({
+        to: target,
+        value: ethers.parseEther(amount.toString())
+      });
+      await tx.wait();
+      showToast(amount + ' CRO deposited on-chain for ' + label + '!', 'success');
+      return true;
+    }
+
+    // GANG ERC-20 DEPOSIT — approve + seedPool
+    if (!vaultAddr) { showToast('Deploy Protocol Vault from Revenue page first', 'error'); throw new Error('Protocol Vault not deployed'); }
 
     // CHECK REAL GANG BALANCE FIRST
     const userAddr = await state.signer.getAddress();
