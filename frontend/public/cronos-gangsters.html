@@ -21545,6 +21545,7 @@ let futuresState = {
   totalVolume: 0,
   totalTrades: 0
 };
+window._futuresPageLoadTime = Date.now();
 
 // Load saved state
 try {
@@ -21562,32 +21563,17 @@ try {
   });
 } catch {}
 
-// Auto-clear old fake positions (pre-contract era) — one-time cleanup
+// Auto-clear old fake positions (pre-contract era) — DISABLED to prevent data loss
+// Previous cleanup already ran for users with gang_futures_cleaned_v3 flag
 try {
   if (!localStorage.getItem('gang_futures_cleaned_v3')) {
-    futuresState.positions = [];
-    futuresState.history = [];
+    // Only clear if there are no on-chain positions (i.e., no wallet-linked trades)
+    const hasRealPositions = futuresState.positions && futuresState.positions.some(p => p.wallet && p.wallet !== 'demo');
+    if (!hasRealPositions) {
+      futuresState.positions = [];
+      futuresState.history = [];
+    }
     localStorage.setItem('gang_futures_cleaned_v3', '1');
-    // Clear ALL old fake localStorage positions across every feature
-    localStorage.removeItem('gang_lending_positions');
-    localStorage.removeItem('gang_lending_borrows');
-    localStorage.removeItem('gang_lending_loans');
-    localStorage.removeItem('gang_borrow_positions');
-    localStorage.removeItem('gangLendingState');
-    localStorage.removeItem('gangPredState');
-    localStorage.removeItem('gangFlashState');
-    localStorage.removeItem('gangInsState');
-    localStorage.removeItem('gangAggState');
-    localStorage.removeItem('gangCopyTradeState');
-    localStorage.removeItem('gangRevStakingState');
-    localStorage.removeItem('gangLimitOrderState');
-    localStorage.removeItem('gangPerpDexState');
-    localStorage.removeItem('gangOtcState');
-    localStorage.removeItem('gangDaoState');
-    localStorage.removeItem('gangSquadState');
-    localStorage.removeItem('gangCompState');
-    localStorage.removeItem('gangNFTStakingState');
-    localStorage.removeItem('gangBuybackState');
   }
 } catch {}
 
@@ -22367,15 +22353,19 @@ function updateFuturesPositions() {
     }
 
     // Check TP/SL — auto-execute, no wallet confirmation needed (user set these)
-    if (pos.tp && ((sideNorm === 'long' && currentPrice >= pos.tp) || (sideNorm === 'short' && currentPrice <= pos.tp))) {
-      if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'TP HIT'), 100); }
-    }
-    if (pos.sl && ((sideNorm === 'long' && currentPrice <= pos.sl) || (sideNorm === 'short' && currentPrice >= pos.sl))) {
-      if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'SL HIT'), 100); }
-    }
-    // Check liquidation — forced, no wallet confirmation (you lost everything)
-    if ((sideNorm === 'long' && priceDiff <= -liqMove) || (sideNorm === 'short' && priceDiff >= liqMove)) {
-      if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'LIQUIDATED'), 100); }
+    // Grace period: don't auto-close in the first 10 seconds after page load (prices may be stale)
+    const _pageAge = Date.now() - (window._futuresPageLoadTime || Date.now());
+    if (_pageAge > 10000) {
+      if (pos.tp && ((sideNorm === 'long' && currentPrice >= pos.tp) || (sideNorm === 'short' && currentPrice <= pos.tp))) {
+        if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'TP HIT'), 100); }
+      }
+      if (pos.sl && ((sideNorm === 'long' && currentPrice <= pos.sl) || (sideNorm === 'short' && currentPrice >= pos.sl))) {
+        if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'SL HIT'), 100); }
+      }
+      // Check liquidation — forced, no wallet confirmation (you lost everything)
+      if ((sideNorm === 'long' && priceDiff <= -liqMove) || (sideNorm === 'short' && priceDiff >= liqMove)) {
+        if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'LIQUIDATED'), 100); }
+      }
     }
 
     return `
