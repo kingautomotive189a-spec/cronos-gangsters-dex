@@ -20876,11 +20876,26 @@ try {
     futuresState.positions = [];
     futuresState.history = [];
     localStorage.setItem('gang_futures_cleaned_v2', '1');
-    // Also clear old lending positions
+    // Clear ALL old fake localStorage positions across every feature
     localStorage.removeItem('gang_lending_positions');
     localStorage.removeItem('gang_lending_borrows');
     localStorage.removeItem('gang_lending_loans');
     localStorage.removeItem('gang_borrow_positions');
+    localStorage.removeItem('gangLendingState');
+    localStorage.removeItem('gangPredState');
+    localStorage.removeItem('gangFlashState');
+    localStorage.removeItem('gangInsState');
+    localStorage.removeItem('gangAggState');
+    localStorage.removeItem('gangCopyTradeState');
+    localStorage.removeItem('gangRevStakingState');
+    localStorage.removeItem('gangLimitOrderState');
+    localStorage.removeItem('gangPerpDexState');
+    localStorage.removeItem('gangOtcState');
+    localStorage.removeItem('gangDaoState');
+    localStorage.removeItem('gangSquadState');
+    localStorage.removeItem('gangCompState');
+    localStorage.removeItem('gangNFTStakingState');
+    localStorage.removeItem('gangBuybackState');
   }
 } catch {}
 
@@ -23928,21 +23943,29 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   // --- REVENUE STAKING ---
   window.rsStake = async function() {
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('rsStakeAmt');
+    const amtEl = document.getElementById('rsStakeAmount');
     const amount = parseFloat(amtEl?.value);
     if (!amount || amount <= 0) { showToast('Enter stake amount', 'error'); return; }
     try {
       await vaultDeposit('revstaking', amount, 'Revenue Staking');
+      const s = initRSState();
+      s.userStake = (s.userStake || 0) + amount;
+      s.totalStaked = (s.totalStaked || 0) + amount;
+      saveRSState(s); updateRSStats();
       if (amtEl) amtEl.value = '';
     } catch(e) { showToast('Stake failed: ' + e.message, 'error'); }
   };
   window.rsUnstake = async function() {
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('rsUnstakeAmt');
+    const amtEl = document.getElementById('rsStakeAmount');
     const amount = parseFloat(amtEl?.value);
     if (!amount || amount <= 0) { showToast('Enter unstake amount', 'error'); return; }
     try {
       await vaultWithdraw('revstaking', amount, 'Revenue Staking');
+      const s = initRSState();
+      s.userStake = Math.max(0, (s.userStake || 0) - amount);
+      s.totalStaked = Math.max(0, (s.totalStaked || 0) - amount);
+      saveRSState(s); updateRSStats();
       if (amtEl) amtEl.value = '';
     } catch(e) { showToast('Unstake failed: ' + e.message, 'error'); }
   };
@@ -23970,7 +23993,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   // --- PERPETUAL DEX ---
   window.openPerpPosition = async function() {
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('ppMargin');
+    const amtEl = document.getElementById('ppCollateral');
     const amount = parseFloat(amtEl?.value);
     if (!amount || amount <= 0) { showToast('Enter margin amount', 'error'); return; }
     try {
