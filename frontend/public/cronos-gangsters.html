@@ -20048,10 +20048,10 @@ function fillOtcDeal(idx) {
     ],
     onConfirm: async () => {
       try {
-        if (typeof window.fillOtcDeal === 'function') {
-          await window.fillOtcDeal(idx);
-        }
-      } catch(e) { return; }
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('otctrading', d.sellAmount * d.price, 'Fill OTC — ' + d.sellAmount + ' ' + d.sellToken + ' @ $' + d.price);
+        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       s.deals[idx].status = 'filled';
       s.ownerFees = (s.ownerFees || 0) + d.fee;
       s.totalVolume = (s.totalVolume || 0) + (d.sellAmount * d.price);
@@ -20064,9 +20064,34 @@ function fillOtcDeal(idx) {
 function cancelOtcDeal(idx) {
   const s = initOtcState();
   if (!s.deals[idx] || s.deals[idx].status !== 'open') return;
-  s.deals[idx].status = 'cancelled';
-  saveOtcState(s); renderOtcDeals(); updateOtcStats();
-  showToast('OTC deal cancelled', 'success');
+  const d = s.deals[idx];
+  showTxConfirm({
+    title: 'CANCEL OTC DEAL',
+    action: 'Withdraw Escrowed ' + d.sellToken,
+    fromToken: d.sellToken,
+    icon: '🔓',
+    amount: d.sellAmount + ' ' + d.sellToken,
+    usdValue: 'Return escrowed tokens to your wallet',
+    fee: '0 CRO',
+    receive: d.sellAmount + ' ' + d.sellToken + ' returned',
+    color: '#e53935',
+    btnColor: 'linear-gradient(135deg,#e53935,#c62828)',
+    details: [
+      { label: 'Deal', value: d.sellAmount + ' ' + d.sellToken + ' → ' + d.buyToken },
+      { label: 'Escrowed', value: d.sellAmount + ' ' + d.sellToken, cls: 'gold' },
+      { label: 'Action', value: 'Cancel & Withdraw', cls: 'red' },
+    ],
+    onConfirm: async () => {
+      try {
+        if (typeof window.vaultWithdraw === 'function' && state && state.signer) {
+          await window.vaultWithdraw('otctrading', d.sellAmount, 'Cancel OTC — Withdraw ' + d.sellAmount + ' ' + d.sellToken);
+        } else { showToast('Connect wallet for withdrawal', 'error'); return; }
+      } catch(e) { showToast('Cancel failed: ' + e.message, 'error'); return; }
+      s.deals[idx].status = 'cancelled';
+      saveOtcState(s); renderOtcDeals(); updateOtcStats();
+      showToast('OTC deal cancelled — ' + d.sellAmount + ' ' + d.sellToken + ' returned to wallet', 'success');
+    }
+  });
 }
 function otcOwnerCollect() { if (window.otcOwnerCollect && window.otcOwnerCollect !== otcOwnerCollect) { window.otcOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
 function revCollectOtcFees() { if (window.revCollectOtcFees && window.revCollectOtcFees !== revCollectOtcFees) { window.revCollectOtcFees(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
@@ -25510,13 +25535,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
   // closePerpPosition is handled by the original function which calls vaultWithdraw inline
 
-  window.fillOtcDeal = async function(idx) {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    try {
-      await vaultDeposit('otctrading', 10, 'Fill OTC Deal');
-      showToast('OTC deal filled! GANG deposited on-chain.', 'success');
-    } catch(e) { showToast('Failed: ' + e.message, 'error'); }
-  };
+  // --- OTC FILL (on-chain wired inline) ---
 
   // --- LEVERAGE OWNER POOL DEPOSIT/WITHDRAW (Real On-Chain) ---
   window._realFuturesOwnerDeposit = async function(curr) {
