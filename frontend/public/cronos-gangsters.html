@@ -4120,6 +4120,29 @@ function toggleNavMenu() {
         </div>
         <button class="btn-primary" data-testid="lend-owner-collect-btn" onclick="lendOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT LENDING FEES</button>
       </div>
+
+      <!-- Add Liquidity Section -->
+      <div class="card" style="border-color:rgba(0,229,255,0.3);background:linear-gradient(145deg,rgba(0,229,255,0.03),transparent);margin-top:12px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <div class="card-title" style="color:#00e5ff;margin-bottom:0;">ADD POOL LIQUIDITY</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;">Seed the lending pool with tokens so users can borrow. Only the pool owner can add liquidity. The more you add, the more users can borrow.</div>
+        <div style="display:flex;gap:8px;margin-bottom:10px;">
+          <select id="lendLiqToken" data-testid="lend-liq-token" style="flex:0.6;padding:10px;border-radius:8px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:var(--text);font-size:13px;cursor:pointer;">
+            <option value="GANG">GANG</option>
+            <option value="CRO">WCRO</option>
+            <option value="USDC">USDC</option>
+            <option value="USDT">USDT</option>
+            <option value="WETH">WETH</option>
+            <option value="WBTC">WBTC</option>
+            <option value="DAI">DAI</option>
+          </select>
+          <input class="input-field" id="lendLiqAmount" data-testid="lend-liq-amount" type="number" step="any" placeholder="Amount" style="flex:1;">
+        </div>
+        <button class="btn-primary" data-testid="lend-add-liq-btn" onclick="doAddLendingLiquidity()" style="width:100%;background:linear-gradient(135deg,#00e5ff,#0090a0);">ADD LIQUIDITY</button>
+        <div id="lendLiqStatus" data-testid="lend-liq-status" style="font-size:11px;color:var(--muted);margin-top:8px;text-align:center;"></div>
+      </div>
     </div>
 
     <!-- How It Works -->
@@ -24017,6 +24040,173 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   function getLendingVaultAddr() {
     return localStorage.getItem(LS_LENDING_VAULT) || '';
   }
+
+  // Token addresses on Cronos for lending
+  const LENDING_TOKENS = {
+    GANG: GANG_TOKEN,
+    CRO: '0x5C7F8A570d578ED84E63fdFA7b1eE72dEae1AE23',
+    USDC: '0xc21223249CA28397B4B6541dfFaEcC539BfF0c59',
+    WETH: '0xe44Fd7fCb2b1581822D0c862B68222998a0c299a',
+    WBTC: '0x062E66477Faf219F25D27dCED647BF57C3107d52',
+    USDT: '0x66e428c3f67a68878562e79A0234c1F83c208770',
+    DAI: '0xF2001B145b43032AAF5Ee2884e456CCd805F677D',
+  };
+
+  // Deploy Lending Vault
+  window.deployLendingVault = async function() {
+    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+    try {
+      showToast('Deploying Multi-Token Lending Vault...', 'info');
+      const factory = new ethers.ContractFactory(LENDING_VAULT_ABI, LENDING_VAULT_BYTECODE, state.signer);
+      const contract = await factory.deploy();
+      await contract.waitForDeployment();
+      const addr = await contract.getAddress();
+      localStorage.setItem(LS_LENDING_VAULT, addr);
+      showToast('Lending Vault deployed at ' + addr.substring(0,10) + '...!', 'success');
+      return addr;
+    } catch(e) { showToast('Deploy failed: ' + e.message, 'error'); }
+  };
+
+  // Supply tokens to lending pool
+  window.lendSupply = async function(token) {
+    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+    let vaultAddr = getLendingVaultAddr();
+    if (!vaultAddr) {
+      showToast('Deploying Lending Vault first...', 'info');
+      vaultAddr = await window.deployLendingVault();
+      if (!vaultAddr) return;
+    }
+    const input = document.getElementById('lendInput_' + token);
+    const amount = parseFloat(input?.value);
+    if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
+    const tokenAddr = LENDING_TOKENS[token] || LENDING_TOKENS.GANG;
+    const weiAmt = ethers.parseEther(amount.toString());
+    try {
+      showToast('Approving ' + token + '...', 'info');
+      await _sendContractTx(tokenAddr, ['function approve(address,uint256) returns (bool)'], 'approve', [vaultAddr, weiAmt]);
+      showToast('Supplying ' + amount + ' ' + token + ' to Lending Pool...', 'info');
+      await _sendContractTx(vaultAddr, LENDING_VAULT_ABI, 'supply', [tokenAddr, weiAmt]);
+      showToast(amount + ' ' + token + ' supplied on-chain!', 'success');
+      if (input) input.value = '';
+      const s = initLendState();
+      s.pools[token].totalSupplied += amount;
+      s.userSupplied[token] = (s.userSupplied[token] || 0) + amount;
+      saveLendState(s);
+      updateLendingUI();
+    } catch(e) { showToast('Supply failed: ' + e.message, 'error'); }
+  };
+
+  // Withdraw supplied tokens
+  window.lendWithdraw = async function(token) {
+    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+    const vaultAddr = getLendingVaultAddr();
+    if (!vaultAddr) { showToast('No Lending Vault deployed', 'error'); return; }
+    const input = document.getElementById('lendInput_' + token);
+    const amount = parseFloat(input?.value);
+    if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
+    const tokenAddr = LENDING_TOKENS[token] || LENDING_TOKENS.GANG;
+    const weiAmt = ethers.parseEther(amount.toString());
+    try {
+      showToast('Withdrawing ' + amount + ' ' + token + '...', 'info');
+      await _sendContractTx(vaultAddr, LENDING_VAULT_ABI, 'withdraw', [tokenAddr, weiAmt]);
+      showToast(amount + ' ' + token + ' withdrawn to your wallet!', 'success');
+      if (input) input.value = '';
+      const s = initLendState();
+      s.pools[token].totalSupplied -= amount;
+      s.userSupplied[token] = Math.max(0, (s.userSupplied[token] || 0) - amount);
+      saveLendState(s);
+      updateLendingUI();
+    } catch(e) { showToast('Withdraw failed: ' + e.message, 'error'); }
+  };
+
+  // Borrow tokens — actual tokens sent to your wallet
+  window.lendBorrow = async function() {
+    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+    const vaultAddr = getLendingVaultAddr();
+    if (!vaultAddr) { showToast('No Lending Vault deployed', 'error'); return; }
+    const tokenSelect = document.getElementById('lendBorrowToken');
+    const amtInput = document.getElementById('lendBorrowAmt');
+    const token = tokenSelect?.value || 'GANG';
+    const amount = parseFloat(amtInput?.value);
+    if (!amount || amount <= 0) { showToast('Enter borrow amount', 'error'); return; }
+    const tokenAddr = LENDING_TOKENS[token] || LENDING_TOKENS.GANG;
+    const weiAmt = ethers.parseEther(amount.toString());
+    try {
+      const liq = await _readContract(vaultAddr, LENDING_VAULT_ABI, 'getAvailableLiquidity', [tokenAddr]);
+      const available = parseFloat(ethers.formatEther(liq));
+      if (available < amount) {
+        showToast('Insufficient pool liquidity! Only ' + available.toFixed(4) + ' ' + token + ' available.', 'error');
+        return;
+      }
+      showToast('Borrowing ' + amount + ' ' + token + ' → your wallet...', 'info');
+      await _sendContractTx(vaultAddr, LENDING_VAULT_ABI, 'borrow', [tokenAddr, weiAmt]);
+      showToast(amount + ' ' + token + ' sent to your wallet!', 'success');
+      if (amtInput) amtInput.value = '';
+      const s = initLendState();
+      s.userBorrowed[token] = (s.userBorrowed[token] || 0) + amount;
+      s.pools[token].totalBorrowed = (s.pools[token].totalBorrowed || 0) + amount;
+      saveLendState(s);
+      updateLendingUI();
+    } catch(e) { showToast('Borrow failed: ' + e.message, 'error'); }
+  };
+
+  // Repay borrowed tokens
+  window.lendRepay = async function() {
+    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+    const vaultAddr = getLendingVaultAddr();
+    if (!vaultAddr) { showToast('No Lending Vault deployed', 'error'); return; }
+    const tokenSelect = document.getElementById('lendRepayToken') || document.getElementById('lendBorrowToken');
+    const amtInput = document.getElementById('lendRepayAmt') || document.getElementById('lendBorrowAmt');
+    const token = tokenSelect?.value || 'GANG';
+    const amount = parseFloat(amtInput?.value);
+    if (!amount || amount <= 0) { showToast('Enter repay amount', 'error'); return; }
+    const tokenAddr = LENDING_TOKENS[token] || LENDING_TOKENS.GANG;
+    const weiAmt = ethers.parseEther(amount.toString());
+    try {
+      showToast('Approving ' + token + '...', 'info');
+      await _sendContractTx(tokenAddr, ['function approve(address,uint256) returns (bool)'], 'approve', [vaultAddr, weiAmt]);
+      showToast('Repaying ' + amount + ' ' + token + '...', 'info');
+      await _sendContractTx(vaultAddr, LENDING_VAULT_ABI, 'repay', [tokenAddr, weiAmt]);
+      showToast(amount + ' ' + token + ' repaid!', 'success');
+      if (amtInput) amtInput.value = '';
+      const s = initLendState();
+      s.userBorrowed[token] = Math.max(0, (s.userBorrowed[token] || 0) - amount);
+      s.pools[token].totalBorrowed = Math.max(0, (s.pools[token].totalBorrowed || 0) - amount);
+      saveLendState(s);
+      updateLendingUI();
+    } catch(e) { showToast('Repay failed: ' + e.message, 'error'); }
+  };
+
+  // Add Liquidity button handler
+  window.doAddLendingLiquidity = async function() {
+    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+    const tokenSelect = document.getElementById('lendLiqToken');
+    const amtInput = document.getElementById('lendLiqAmount');
+    const statusEl = document.getElementById('lendLiqStatus');
+    const token = tokenSelect?.value || 'GANG';
+    const amount = parseFloat(amtInput?.value);
+    if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
+    let vaultAddr = getLendingVaultAddr();
+    if (!vaultAddr) {
+      if (statusEl) statusEl.textContent = 'Deploying Lending Vault...';
+      vaultAddr = await window.deployLendingVault();
+      if (!vaultAddr) return;
+    }
+    const tokenAddr = LENDING_TOKENS[token] || LENDING_TOKENS.GANG;
+    const weiAmt = ethers.parseEther(amount.toString());
+    try {
+      if (statusEl) statusEl.textContent = 'Approving ' + token + '...';
+      await _sendContractTx(tokenAddr, ['function approve(address,uint256) returns (bool)'], 'approve', [vaultAddr, weiAmt]);
+      if (statusEl) statusEl.textContent = 'Adding ' + amount + ' ' + token + ' liquidity...';
+      await _sendContractTx(vaultAddr, LENDING_VAULT_ABI, 'addLiquidity', [tokenAddr, weiAmt]);
+      showToast(amount + ' ' + token + ' liquidity added!', 'success');
+      if (amtInput) amtInput.value = '';
+      if (statusEl) statusEl.innerHTML = '<span style="color:var(--green);">' + amount + ' ' + token + ' added to lending pool!</span>';
+    } catch(e) {
+      showToast('Add liquidity failed: ' + e.message, 'error');
+      if (statusEl) statusEl.innerHTML = '<span style="color:var(--red);">Failed: ' + e.message + '</span>';
+    }
+  };
 
   const PROTOCOL_VAULT_BIN = '608060405234801562000010575f80fd5b506040516200160a3803806200160a833981810160405281019062000036919062000129565b3360015f6101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550805f806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550601e6002819055505062000159565b5f80fd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f620000f382620000c8565b9050919050565b6200010581620000e7565b811462000110575f80fd5b50565b5f815190506200012381620000fa565b92915050565b5f60208284031215620001415762000140620000c4565b5b5f620001508482850162000113565b91505092915050565b6114a380620001675f395ff3fe608060405234801561000f575f80fd5b50600436106100f3575f3560e01c8063550e6ed111610095578063c879657211610064578063c87965721461026f578063dba6959514610279578063f2fde38b146102a9578063fc0c546a146102c5576100f3565b8063550e6ed1146101d557806372c27b6214610205578063809b1f38146102215780638da5cb5b14610251576100f3565b806313114a9d116100d157806313114a9d1461014d5780631de26e161461016b57806324a9d853146101875780634f1c2c31146101a5576100f3565b8063025d26bd146100f7578063040cf020146101135780630bf6cc081461012f575b5f80fd5b610111600480360381019061010c9190610ddb565b6102e3565b005b61012d60048036038101906101289190610e39565b610412565b005b610137610618565b6040516101449190610e86565b60405180910390f35b6101556106b6565b6040516101629190610e86565b60405180910390f35b61018560048036038101906101809190610e39565b6106bc565b005b61018f6108be565b60405161019c9190610e86565b60405180910390f35b6101bf60048036038101906101ba9190610ef9565b6108c4565b6040516101cc9190610e86565b60405180910390f35b6101ef60048036038101906101ea9190610f37565b6108e4565b6040516101fc9190610e86565b60405180910390f35b61021f600480360381019061021a9190610ddb565b6108fe565b005b61023b60048036038101906102369190610f37565b6109dc565b6040516102489190610e86565b60405180910390f35b6102596109f1565b6040516102669190610f71565b60405180910390f35b610277610a16565b005b610293600480360381019061028e9190610ef9565b610c22565b6040516102a09190610e86565b60405180910390f35b6102c360048036038101906102be9190610f8a565b610c78565b005b6102cd610d81565b6040516102da9190611010565b60405180910390f35b60015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610372576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161036990611083565b60405180910390fd5b5f8054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166323b872dd3330846040518463ffffffff1660e01b81526004016103ce939291906110a1565b6020604051808303815f875af11580156103ea573d5f803e3d5ffd5b505050506040513d601f19601f8201168201806040525081019061040e919061110b565b5050565b8060045f8481526020019081526020015f205f3373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f205410156104a1576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161049890611180565b60405180910390fd5b8060045f8481526020019081526020015f205f3373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f205f8282546104fc91906111cb565b925050819055508060055f8481526020019081526020015f205f82825461052391906111cb565b925050819055505f8054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663a9059cbb33836040518363ffffffff1660e01b81526004016105849291906111fe565b6020604051808303815f875af11580156105a0573d5f803e3d5ffd5b505050506040513d601f19601f820116820180604052508101906105c4919061110b565b503373ffffffffffffffffffffffffffffffffffffffff16827f04eda370f8b8612fa7266d7ebbd41af9d694e19793fe9d9ff31b3ddbd99b08e18360405161060c9190610e86565b60405180910390a35050565b5f805f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166370a08231306040518263ffffffff1660e01b81526004016106729190610f71565b602060405180830381865afa15801561068d573d5f803e3d5ffd5b505050506040513d601f19601f820116820180604052508101906106b19190611239565b905090565b60035481565b5f81116106fe576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016106f5906112ae565b60405180910390fd5b5f6127106002548361071091906112cc565b61071a919061133a565b90505f818361072991906111cb565b90505f8054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166323b872dd3330866040518463ffffffff1660e01b8152600401610787939291906110a1565b6020604051808303815f875af11580156107a3573d5f803e3d5ffd5b505050506040513d601f19601f820116820180604052508101906107c7919061110b565b508060045f8681526020019081526020015f205f3373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f205f828254610823919061136a565b925050819055508060055f8681526020019081526020015f205f82825461084a919061136a565b925050819055508160035f828254610862919061136a565b925050819055503373ffffffffffffffffffffffffffffffffffffffff16847f87d4c0b5e30d6808bc8a94ba1c4d839b29d664151551a31753387ee9ef48429b836040516108b09190610e86565b60405180910390a350505050565b60025481565b6004602052815f5260405f20602052805f5260405f205f91509150505481565b5f60055f8381526020019081526020015f20549050919050565b60015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161461098d576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161098490611083565b60405180910390fd5b6101f48111156109d2576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016109c9906113e7565b60405180910390fd5b8060028190555050565b6005602052805f5260405f205f915090505481565b60015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610aa5576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610a9c90611083565b60405180910390fd5b5f60035490505f8111610aed576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610ae49061144f565b60405180910390fd5b5f6003819055505f8054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663a9059cbb60015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff16836040518363ffffffff1660e01b8152600401610b6f9291906111fe565b6020604051808303815f875af1158015610b8b573d5f803e3d5ffd5b505050506040513d601f19601f82011682018060405250810190610baf919061110b565b5060015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff167f9dc46f23cfb5ddcad0ae7ea2be38d47fec07bb9382ec7e564efc69e036dd66ce82604051610c179190610e86565b60405180910390a250565b5f60045f8481526020019081526020015f205f8373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f2054905092915050565b60015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610d07576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610cfe90611083565b60405180910390fd5b5f73ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff1603610d3e575f80fd5b8060015f6101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b5f8054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b5f80fd5b5f819050919050565b610dba81610da8565b8114610dc4575f80fd5b50565b5f81359050610dd581610db1565b92915050565b5f60208284031215610df057610def610da4565b5b5f610dfd84828501610dc7565b91505092915050565b5f819050919050565b610e1881610e06565b8114610e22575f80fd5b50565b5f81359050610e3381610e0f565b92915050565b5f8060408385031215610e4f57610e4e610da4565b5b5f610e5c85828601610e25565b9250506020610e6d85828601610dc7565b9150509250929050565b610e8081610da8565b82525050565b5f602082019050610e995f830184610e77565b92915050565b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f610ec882610e9f565b9050919050565b610ed881610ebe565b8114610ee2575f80fd5b50565b5f81359050610ef381610ecf565b92915050565b5f8060408385031215610f0f57610f0e610da4565b5b5f610f1c85828601610e25565b9250506020610f2d85828601610ee5565b9150509250929050565b5f60208284031215610f4c57610f4b610da4565b5b5f610f5984828501610e25565b91505092915050565b610f6b81610ebe565b82525050565b5f602082019050610f845f830184610f62565b92915050565b5f60208284031215610f9f57610f9e610da4565b5b5f610fac84828501610ee5565b91505092915050565b5f819050919050565b5f610fd8610fd3610fce84610e9f565b610fb5565b610e9f565b9050919050565b5f610fe982610fbe565b9050919050565b5f610ffa82610fdf565b9050919050565b61100a81610ff0565b82525050565b5f6020820190506110235f830184611001565b92915050565b5f82825260208201905092915050565b7f216f776e657200000000000000000000000000000000000000000000000000005f82015250565b5f61106d600683611029565b915061107882611039565b602082019050919050565b5f6020820190508181035f83015261109a81611061565b9050919050565b5f6060820190506110b45f830186610f62565b6110c16020830185610f62565b6110ce6040830184610e77565b949350505050565b5f8115159050919050565b6110ea816110d6565b81146110f4575f80fd5b50565b5f81519050611105816110e1565b92915050565b5f602082840312156111205761111f610da4565b5b5f61112d848285016110f7565b91505092915050565b7f496e73756666696369656e7400000000000000000000000000000000000000005f82015250565b5f61116a600c83611029565b915061117582611136565b602082019050919050565b5f6020820190508181035f8301526111978161115e565b9050919050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260245ffd5b5f6111d582610da8565b91506111e083610da8565b92508282039050818111156111f8576111f761119e565b5b92915050565b5f6040820190506112115f830185610f62565b61121e6020830184610e77565b9392505050565b5f8151905061123381610db1565b92915050565b5f6020828403121561124e5761124d610da4565b5b5f61125b84828501611225565b91505092915050565b7f5a65726f000000000000000000000000000000000000000000000000000000005f82015250565b5f611298600483611029565b91506112a382611264565b602082019050919050565b5f6020820190508181035f8301526112c58161128c565b9050919050565b5f6112d682610da8565b91506112e183610da8565b92508282026112ef81610da8565b915082820484148315176113065761130561119e565b5b5092915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601260045260245ffd5b5f61134482610da8565b915061134f83610da8565b92508261135f5761135e61130d565b5b828204905092915050565b5f61137482610da8565b915061137f83610da8565b92508282019050808211156113975761139661119e565b5b92915050565b7f3e352500000000000000000000000000000000000000000000000000000000005f82015250565b5f6113d1600383611029565b91506113dc8261139d565b602082019050919050565b5f6020820190508181035f8301526113fe816113c5565b9050919050565b7f4e6f2066656573000000000000000000000000000000000000000000000000005f82015250565b5f611439600783611029565b915061144482611405565b602082019050919050565b5f6020820190508181035f8301526114668161142d565b905091905056fea2646970667358221220f3aba3b59751b661dc6d48f8219865c57553fac500afc20a320cfd5f4ed9366464736f6c63430008140033';
 
