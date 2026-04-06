@@ -4974,16 +4974,29 @@ function toggleNavMenu() {
               <div id="futuresUsdEquiv" style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(180,190,220,0.4);margin-top:2px;">~$0.00</div>
             </div>
             <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-              <select id="futuresCurrSelect" data-testid="futures-curr-select" onchange="setFuturesCurrency(this.value)" style="background:rgba(100,120,255,0.1);border:1px solid rgba(100,120,255,0.2);border-radius:10px;padding:8px 12px;color:#a0b0ff;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;appearance:none;-webkit-appearance:none;min-width:90px;text-align:center;">
-                <option value="CRO" style="background:#1a1c35;">CRO</option>
-                <option value="GANG" style="background:#1a1c35;">GANG</option>
-                <option value="BTC" style="background:#1a1c35;">BTC</option>
-                <option value="ETH" style="background:#1a1c35;">ETH</option>
-                <option value="SOL" style="background:#1a1c35;">SOL</option>
-                <option value="BNB" style="background:#1a1c35;">BNB</option>
-                <option value="USDC" style="background:#1a1c35;">USDC</option>
-                <option value="USDT" style="background:#1a1c35;">USDT</option>
-              </select>
+            <div style="position:relative;">
+              <button id="futuresCurrDropBtn" onclick="document.getElementById('futuresCurrDropdown').classList.toggle('open')" style="display:flex;align-items:center;gap:6px;background:rgba(100,120,255,0.1);border:1px solid rgba(100,120,255,0.2);border-radius:10px;padding:8px 12px;color:#a0b0ff;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;min-width:100px;justify-content:center;">
+                <img id="futuresCurrIcon" src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:18px;height:18px;border-radius:50%;">
+                <span id="futuresCurrBtnLabel">CRO</span>
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="#a0b0ff" stroke-width="1.5"/></svg>
+              </button>
+              <div id="futuresCurrDropdown" style="display:none;position:absolute;right:0;top:44px;background:rgba(15,17,35,0.98);border:1px solid rgba(100,120,255,0.25);border-radius:12px;padding:4px;z-index:999;min-width:130px;box-shadow:0 8px 32px rgba(0,0,0,0.5);">
+                <div class="fcurr-opt" onclick="_pickFuturesCurr('CRO','https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png')"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png">CRO</div>
+                <div class="fcurr-opt" onclick="_pickFuturesCurr('GANG','/gang-logo.png')"><img src="/gang-logo.png">GANG</div>
+                <div class="fcurr-opt" onclick="_pickFuturesCurr('BTC','https://assets.coingecko.com/coins/images/1/small/bitcoin.png')"><img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png">BTC</div>
+                <div class="fcurr-opt" onclick="_pickFuturesCurr('ETH','https://assets.coingecko.com/coins/images/279/small/ethereum.png')"><img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png">ETH</div>
+                <div class="fcurr-opt" onclick="_pickFuturesCurr('SOL','https://assets.coingecko.com/coins/images/4128/small/solana.png')"><img src="https://assets.coingecko.com/coins/images/4128/small/solana.png">SOL</div>
+                <div class="fcurr-opt" onclick="_pickFuturesCurr('BNB','https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png')"><img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png">BNB</div>
+                <div class="fcurr-opt" onclick="_pickFuturesCurr('USDC','https://assets.coingecko.com/coins/images/6319/small/usdc.png')"><img src="https://assets.coingecko.com/coins/images/6319/small/usdc.png">USDC</div>
+                <div class="fcurr-opt" onclick="_pickFuturesCurr('USDT','https://assets.coingecko.com/coins/images/325/small/Tether.png')"><img src="https://assets.coingecko.com/coins/images/325/small/Tether.png">USDT</div>
+              </div>
+              <style>
+                #futuresCurrDropdown.open{display:block!important;}
+                .fcurr-opt{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:#e0e4f0;transition:background .15s;}
+                .fcurr-opt:hover{background:rgba(100,120,255,0.12);}
+                .fcurr-opt img{width:20px;height:20px;border-radius:50%;}
+              </style>
+            </div>
             </div>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
@@ -18472,6 +18485,11 @@ document.addEventListener('click', function(e) {
   if (!e.target.closest('.custom-token-select')) {
     document.querySelectorAll('.token-dropdown-list').forEach(l => l.style.display = 'none');
   }
+  // Close futures currency dropdown when clicking outside
+  if (!e.target.closest('#futuresCurrDropBtn') && !e.target.closest('#futuresCurrDropdown')) {
+    var dd = document.getElementById('futuresCurrDropdown');
+    if (dd) dd.classList.remove('open');
+  }
 });
 
 function lendSupply(token) {
@@ -21962,16 +21980,20 @@ try {
 
 // Sync dropdown to loaded currency
 try {
-  var _currSel = document.getElementById('futuresCurrSelect');
-  if (_currSel) _currSel.value = futuresState.currency || 'CRO';
+  var _loadedCurr = futuresState.currency || 'CRO';
+  var _logos = {CRO:'https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png',GANG:'/gang-logo.png',BTC:'https://assets.coingecko.com/coins/images/1/small/bitcoin.png',ETH:'https://assets.coingecko.com/coins/images/279/small/ethereum.png',SOL:'https://assets.coingecko.com/coins/images/4128/small/solana.png',BNB:'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png',USDC:'https://assets.coingecko.com/coins/images/6319/small/usdc.png',USDT:'https://assets.coingecko.com/coins/images/325/small/Tether.png'};
+  var _btnLabel = document.getElementById('futuresCurrBtnLabel');
+  if (_btnLabel) _btnLabel.textContent = _loadedCurr;
+  var _icon = document.getElementById('futuresCurrIcon');
+  if (_icon && _logos[_loadedCurr]) _icon.src = _logos[_loadedCurr];
   var _currLabel = document.getElementById('futuresCurrLabel');
-  if (_currLabel) _currLabel.textContent = futuresState.currency || 'CRO';
+  if (_currLabel) _currLabel.textContent = _loadedCurr;
   var _posLabel = document.getElementById('futuresPosCurrLabel');
-  if (_posLabel) _posLabel.textContent = futuresState.currency || 'CRO';
+  if (_posLabel) _posLabel.textContent = _loadedCurr;
   var _detailColl = document.getElementById('futuresDetailColl');
-  if (_detailColl) _detailColl.textContent = futuresState.currency || 'CRO';
+  if (_detailColl) _detailColl.textContent = _loadedCurr;
   var _openBtn = document.getElementById('futuresOpenBtn');
-  if (_openBtn) _openBtn.textContent = (futuresState.side === 'long' ? 'Long ' : 'Short ') + (futuresState.currency || 'CRO');
+  if (_openBtn) _openBtn.textContent = (futuresState.side === 'long' ? 'Long ' : 'Short ') + _loadedCurr;
 } catch {}
 
 // Load volume/trade counters
@@ -22046,9 +22068,15 @@ function saveFuturesState() {
 
 function setFuturesCurrency(curr) {
   futuresState.currency = curr;
-  // Update dropdown select if exists
-  var sel = document.getElementById('futuresCurrSelect');
-  if (sel) sel.value = curr;
+  // Update button label + icon
+  var logos = {CRO:'https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png',GANG:'/gang-logo.png',BTC:'https://assets.coingecko.com/coins/images/1/small/bitcoin.png',ETH:'https://assets.coingecko.com/coins/images/279/small/ethereum.png',SOL:'https://assets.coingecko.com/coins/images/4128/small/solana.png',BNB:'https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png',USDC:'https://assets.coingecko.com/coins/images/6319/small/usdc.png',USDT:'https://assets.coingecko.com/coins/images/325/small/Tether.png'};
+  var btnLabel = document.getElementById('futuresCurrBtnLabel');
+  if (btnLabel) btnLabel.textContent = curr;
+  var icon = document.getElementById('futuresCurrIcon');
+  if (icon && logos[curr]) icon.src = logos[curr];
+  // Close dropdown
+  var dd = document.getElementById('futuresCurrDropdown');
+  if (dd) dd.classList.remove('open');
   // Update labels
   var label = document.getElementById('futuresCurrLabel');
   if (label) label.textContent = curr;
@@ -22068,6 +22096,8 @@ function setFuturesCurrency(curr) {
   saveFuturesState();
   if (typeof updateAllWalletBalanceDisplays === 'function') updateAllWalletBalanceDisplays();
 }
+function _pickFuturesCurr(curr, logo) { setFuturesCurrency(curr); }
+window._pickFuturesCurr = _pickFuturesCurr;
 
 function selectFuturesPair(pair) {
   if (!FUTURES_PAIRS[pair]) return;
@@ -22571,9 +22601,9 @@ window._toggleFuturesSL = _toggleFuturesSL;
 function openFuturesPosition() {
   const amt = parseFloat(document.getElementById('futuresAmount')?.value);
   if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
-  // Always read LIVE currency from dropdown or state
-  var selEl = document.getElementById('futuresCurrSelect');
-  if (selEl && selEl.value) futuresState.currency = selEl.value;
+  // Always read LIVE currency from dropdown button or state
+  var selEl = document.getElementById('futuresCurrBtnLabel');
+  if (selEl && selEl.textContent) futuresState.currency = selEl.textContent.trim();
   const curr = futuresState.currency;
   console.log('[LEVERAGE] openFuturesPosition: curr=' + curr + ', amt=' + amt);
 
