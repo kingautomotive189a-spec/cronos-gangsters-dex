@@ -4788,7 +4788,7 @@ function toggleNavMenu() {
           </div>
         </div>
       </div>
-      <div id="futuresChart" style="height:300px;background:#101420;">
+      <div id="futuresChart" style="height:420px;background:#101420;">
         <div id="tradingview_chart" style="width:100%;height:100%;"></div>
       </div>
     </div>
@@ -4804,11 +4804,13 @@ function toggleNavMenu() {
       <!-- Leverage -->
       <div style="margin-bottom:14px;">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;margin-bottom:6px;font-weight:500;">LEVERAGE</div>
-        <div style="display:flex;gap:4px;" id="futuresLevBar">
+        <div style="display:flex;gap:4px;flex-wrap:wrap;" id="futuresLevBar">
           <button class="lev-btn active" data-lev="5" onclick="setFuturesLev(5)">5x</button>
           <button class="lev-btn" data-lev="10" onclick="setFuturesLev(10)">10x</button>
-          <button class="lev-btn" data-lev="15" onclick="setFuturesLev(15)">15x</button>
           <button class="lev-btn" data-lev="20" onclick="setFuturesLev(20)">20x</button>
+          <button class="lev-btn" data-lev="50" onclick="setFuturesLev(50)">50x</button>
+          <button class="lev-btn" data-lev="75" onclick="setFuturesLev(75)">75x</button>
+          <button class="lev-btn" data-lev="100" onclick="setFuturesLev(100)">100x</button>
         </div>
         <style>.lev-btn{flex:1;padding:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;cursor:pointer;transition:all .2s;}.lev-btn.active{background:#ff8c00;color:#000;border-color:#ff8c00;}.lev-btn:hover{border-color:rgba(255,140,0,0.5);}</style>
       </div>
@@ -4841,6 +4843,10 @@ function toggleNavMenu() {
         <div style="display:flex;justify-content:space-between;margin-top:6px;">
           <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);font-weight:400;">Position size: <span id="futuresPosSize" style="color:var(--gold);font-weight:600;">0</span></span>
           <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);font-weight:400;">Liq. price: <span id="futuresLiqPrice" style="color:var(--red);font-weight:600;">$—</span></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);font-weight:400;">Margin: <span id="futuresMargin" style="color:var(--text);font-weight:600;">0</span></span>
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);font-weight:400;">Open fee: <span id="futuresOpenFee" style="color:#e74c3c;font-weight:600;">0</span></span>
         </div>
       </div>
 
@@ -21405,34 +21411,35 @@ function loadFuturesChart(pair) {
   script.innerHTML = JSON.stringify({
     autosize: true,
     symbol: p.tv,
-    interval: '15',
+    interval: '5',
     timezone: 'Etc/UTC',
     theme: 'dark',
     style: '1',
     locale: 'en',
     hide_top_toolbar: false,
-    hide_legend: true,
+    hide_legend: false,
     allow_symbol_change: false,
     save_image: false,
     backgroundColor: 'rgba(10,10,10,1)',
     gridColor: 'rgba(40,40,40,0.3)',
     hide_volume: false,
+    studies: ["RSI@tv-basicstudies", "MASimple@tv-basicstudies"],
     overrides: {
       "mainSeriesProperties.candleStyle.upColor": "#26a69a",
-      "mainSeriesProperties.candleStyle.downColor": "#26a69a",
+      "mainSeriesProperties.candleStyle.downColor": "#ef5350",
       "mainSeriesProperties.candleStyle.borderUpColor": "#26a69a",
-      "mainSeriesProperties.candleStyle.borderDownColor": "#26a69a",
+      "mainSeriesProperties.candleStyle.borderDownColor": "#ef5350",
       "mainSeriesProperties.candleStyle.wickUpColor": "#26a69a",
-      "mainSeriesProperties.candleStyle.wickDownColor": "#26a69a",
+      "mainSeriesProperties.candleStyle.wickDownColor": "#ef5350",
       "mainSeriesProperties.barStyle.upColor": "#26a69a",
-      "mainSeriesProperties.barStyle.downColor": "#26a69a",
+      "mainSeriesProperties.barStyle.downColor": "#ef5350",
       "mainSeriesProperties.hollowCandleStyle.upColor": "#26a69a",
-      "mainSeriesProperties.hollowCandleStyle.downColor": "#26a69a",
+      "mainSeriesProperties.hollowCandleStyle.downColor": "#ef5350",
       "mainSeriesProperties.hollowCandleStyle.borderUpColor": "#26a69a",
-      "mainSeriesProperties.hollowCandleStyle.borderDownColor": "#26a69a",
+      "mainSeriesProperties.hollowCandleStyle.borderDownColor": "#ef5350",
       "volumePaneSize": "small",
-      "volume.volume.color.0": "#26a69a80",
-      "volume.volume.color.1": "#26a69a"
+      "volume.volume.color.0": "#ef535080",
+      "volume.volume.color.1": "#26a69a80"
     }
   });
   const container = document.createElement('div');
@@ -21451,8 +21458,7 @@ function setFuturesPriceDisplay(pair, price, change) {
   _futuresLastApiPrice[pair] = price; // anchor for micro-volatility
   const priceEl = document.getElementById('futuresPairPrice');
   if (priceEl) {
-    priceEl.textContent = '$' + price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: price > 100 ? 2 : 6 });
-    // Pulse the price color briefly on update
+    priceEl.textContent = '$' + _fmtPrice(price);
     priceEl.style.color = change >= 0 ? 'var(--green)' : 'var(--red)';
   }
   const changeEl = document.getElementById('futuresPairChange');
@@ -21590,12 +21596,29 @@ function updateFuturesPosInfo() {
   const lev = futuresState.leverage;
   const curr = futuresState.currency;
   const price = futuresState.prices[futuresState.pair] || 0;
-  document.getElementById('futuresPosSize').textContent = (amt * lev).toFixed(2) + ' ' + curr;
+  const posSize = amt * lev;
+  const openFee = amt * 0.003;
+  const margin = amt - openFee;
+  document.getElementById('futuresPosSize').textContent = posSize.toFixed(2) + ' ' + curr;
+  var marginEl = document.getElementById('futuresMargin');
+  if (marginEl) marginEl.textContent = margin.toFixed(2) + ' ' + curr;
+  var feeEl = document.getElementById('futuresOpenFee');
+  if (feeEl) feeEl.textContent = openFee.toFixed(4) + ' ' + curr;
   if (price > 0 && amt > 0) {
     const liqMove = 1 / lev;
     const liqPrice = futuresState.side === 'long' ? price * (1 - liqMove) : price * (1 + liqMove);
-    document.getElementById('futuresLiqPrice').textContent = '$' + liqPrice.toFixed(price > 100 ? 2 : 6);
+    document.getElementById('futuresLiqPrice').textContent = '$' + _fmtPrice(liqPrice);
   }
+}
+
+// Smart price formatter — adapts decimals to asset price magnitude
+function _fmtPrice(p) {
+  if (!p || p <= 0) return '0.00';
+  if (p >= 10000) return p.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+  if (p >= 100) return p.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+  if (p >= 1) return p.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:4});
+  if (p >= 0.01) return p.toLocaleString(undefined, {minimumFractionDigits:4, maximumFractionDigits:6});
+  return p.toLocaleString(undefined, {minimumFractionDigits:6, maximumFractionDigits:8});
 }
 
 document.getElementById('futuresAmount')?.addEventListener('input', updateFuturesPosInfo);
@@ -21625,6 +21648,9 @@ function openFuturesPosition() {
   }
 
   const openingFee = amt * 0.003;
+  const netMargin = amt - openingFee;
+  const liqMove = 1 / futuresState.leverage;
+  const estLiqPrice = futuresState.side === 'long' ? price * (1 - liqMove) : price * (1 + liqMove);
 
   showTradeConfirm({
     title: futuresState.side.toUpperCase() + ' ' + futuresState.pair + '/USD',
@@ -21632,12 +21658,13 @@ function openFuturesPosition() {
     btnText: 'OPEN ' + futuresState.side.toUpperCase(),
     btnColor: futuresState.side === 'long' ? 'linear-gradient(135deg,#27ae60,#2ecc71)' : 'linear-gradient(135deg,#e74c3c,#c0392b)',
     details: [
-      { label: 'Amount', value: amt.toFixed(2) + ' ' + curr, cls: 'gold' },
+      { label: 'Collateral', value: amt.toFixed(2) + ' ' + curr, cls: 'gold' },
       { label: 'Side', value: futuresState.side.toUpperCase(), cls: futuresState.side === 'long' ? 'green' : 'red' },
       { label: 'Leverage', value: futuresState.leverage + 'x' },
       { label: 'Position Size', value: (amt * futuresState.leverage).toFixed(2) + ' ' + curr },
       { label: 'Opening Fee (0.3%)', value: openingFee.toFixed(4) + ' ' + curr, cls: 'red' },
-      { label: 'Net Position', value: (amt - openingFee).toFixed(2) + ' ' + curr, cls: 'green' },
+      { label: 'Net Margin', value: netMargin.toFixed(2) + ' ' + curr, cls: 'green' },
+      { label: 'Est. Liq. Price', value: '$' + _fmtPrice(estLiqPrice), cls: 'red' },
     ],
     onConfirm: async function() {
       if (typeof window._realDoOpenFuturesPosition === 'function') {
@@ -21730,12 +21757,11 @@ function closeFuturesPosition(id) {
       var netPnl = finalPnl - closingFee;
       var payout = Math.max(0, pos.amount + netPnl);
       return [
-        { label: 'Position', value: pos.amount.toFixed(2) + ' ' + curr, cls: 'gold' },
-        { label: 'Side', value: pos.side.toUpperCase(), cls: pos.side === 'long' ? 'green' : 'red' },
-        { label: 'Entry Price', value: '$' + pos.entryPrice.toFixed(2) },
-        { label: 'Leverage', value: pos.leverage + 'x' },
+        { label: 'Deposited', value: pos.amount.toFixed(2) + ' ' + curr, cls: 'gold' },
+        { label: 'Side', value: pos.side.toUpperCase() + ' ' + pos.leverage + 'x', cls: pos.side === 'long' ? 'green' : 'red' },
+        { label: 'Entry Price', value: '$' + _fmtPrice(pos.entryPrice) },
         { label: 'Closing Fee (0.3%)', value: closingFee.toFixed(4) + ' ' + curr, cls: 'red' },
-        { label: 'Est. PnL', value: (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, cls: netPnl >= 0 ? 'green' : 'red' },
+        { label: 'PnL', value: (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr + ' (' + (pnlPct*100 >= 0 ? '+' : '') + (pnlPct*100).toFixed(2) + '%)', cls: netPnl >= 0 ? 'green' : 'red' },
         { label: 'YOU RECEIVE', value: payout.toFixed(2) + ' ' + curr, cls: payout > 0 ? 'green' : 'red' },
       ];
     })(),
@@ -21782,6 +21808,7 @@ function _doCloseFuturesPosition(id) {
     pnl: netPnl,
     pnlPct: pnlPct * 100,
     fee: closingFee,
+    closeReason: 'MANUAL',
     closedAt: new Date().toISOString()
   });
 
@@ -21815,6 +21842,30 @@ function updateFuturesPositions() {
     const arrow = pnlGang >= 0 ? '&#9650;' : '&#9660;';
     const sideColor = sideNorm === 'long' ? '#27ae60' : '#e74c3c';
 
+    // Liquidation price
+    const liqMove = 1 / pos.leverage;
+    const liqPrice = sideNorm === 'long' ? pos.entryPrice * (1 - liqMove) : pos.entryPrice * (1 + liqMove);
+    // Margin ratio (distance to liquidation)
+    const distToLiq = sideNorm === 'long'
+      ? ((currentPrice - liqPrice) / currentPrice * 100)
+      : ((liqPrice - currentPrice) / currentPrice * 100);
+    const marginColor = distToLiq > 20 ? 'var(--green)' : distToLiq > 10 ? '#f39c12' : 'var(--red)';
+    // Live value
+    const liveValue = Math.max(0, pos.amount + pnlGang);
+    const liveColor = liveValue >= pos.amount ? 'var(--green)' : 'var(--red)';
+    // ROE (Return on Equity)
+    const roe = pnlPct * 100;
+    // Duration
+    var duration = '';
+    if (pos.openedAt) {
+      var diffMs = Date.now() - new Date(pos.openedAt).getTime();
+      var diffMin = Math.floor(diffMs / 60000);
+      if (diffMin < 1) duration = '<1m';
+      else if (diffMin < 60) duration = diffMin + 'm';
+      else if (diffMin < 1440) duration = Math.floor(diffMin/60) + 'h ' + (diffMin%60) + 'm';
+      else duration = Math.floor(diffMin/1440) + 'd ' + Math.floor((diffMin%1440)/60) + 'h';
+    }
+
     // Check TP/SL — auto-execute, no wallet confirmation needed (user set these)
     if (pos.tp && ((sideNorm === 'long' && currentPrice >= pos.tp) || (sideNorm === 'short' && currentPrice <= pos.tp))) {
       if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'TP HIT'), 100); }
@@ -21823,33 +21874,35 @@ function updateFuturesPositions() {
       if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'SL HIT'), 100); }
     }
     // Check liquidation — forced, no wallet confirmation (you lost everything)
-    const liqPct = 1 / pos.leverage;
-    if ((sideNorm === 'long' && priceDiff <= -liqPct) || (sideNorm === 'short' && priceDiff >= liqPct)) {
+    if ((sideNorm === 'long' && priceDiff <= -liqMove) || (sideNorm === 'short' && priceDiff >= liqMove)) {
       if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'LIQUIDATED'), 100); }
     }
 
-    const liveValue = Math.max(0, pos.amount + pnlGang);
-    const liveColor = liveValue >= pos.amount ? 'var(--green)' : 'var(--red)';
-
     return `
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+    <div style="background:var(--surface2);border:1px solid ${pnlGang >= 0 ? 'rgba(39,174,96,0.25)' : 'rgba(231,76,60,0.25)'};border-radius:12px;padding:14px;margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff8c00;">${pos.pair}/USD</span>
-          <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:${sideColor}22;color:${sideColor};font-weight:700;">${pos.side.toUpperCase()} ${pos.leverage}x</span>
+          <span style="font-size:10px;padding:3px 8px;border-radius:4px;background:${sideColor}22;color:${sideColor};font-weight:700;">${pos.side.toUpperCase()} ${pos.leverage}x</span>
+          ${duration ? '<span style="font-size:9px;color:var(--muted);">' + duration + '</span>' : ''}
         </div>
         <div style="text-align:right;">
           <div style="font-size:16px;color:${color};font-weight:700;">${arrow} ${pnlGang >= 0 ? '+' : ''}${pnlGang.toFixed(2)} ${curr}</div>
-          <div style="font-size:11px;color:${color};">${pnlPct >= 0 ? '+' : ''}${(pnlPct * 100).toFixed(2)}%</div>
+          <div style="font-size:11px;color:${color};">ROE: ${roe >= 0 ? '+' : ''}${roe.toFixed(2)}%</div>
         </div>
       </div>
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:10px;">
-        <span>Entry: $${pos.entryPrice.toLocaleString(undefined,{maximumFractionDigits:pos.entryPrice>100?2:6})}</span>
-        <span>Now: $${currentPrice.toLocaleString(undefined,{maximumFractionDigits:currentPrice>100?2:6})}</span>
-        <span>Deposited: ${pos.amount.toFixed(2)} ${curr}</span>
-        <span style="color:${liveColor};font-weight:700;">Value: ${liveValue.toFixed(2)} ${curr}</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px 10px;font-size:10px;color:var(--muted);margin-bottom:10px;">
+        <div>Entry <span style="color:var(--text);font-weight:600;">$${_fmtPrice(pos.entryPrice)}</span></div>
+        <div>Mark <span style="color:${color};font-weight:600;">$${_fmtPrice(currentPrice)}</span></div>
+        <div>Liq. <span style="color:var(--red);font-weight:600;">$${_fmtPrice(liqPrice)}</span></div>
+        <div>Deposited <span style="color:var(--text);font-weight:600;">${pos.amount.toFixed(2)}</span></div>
+        <div>Value <span style="color:${liveColor};font-weight:700;">${liveValue.toFixed(2)} ${curr}</span></div>
+        <div>Margin <span style="color:${marginColor};font-weight:600;">${distToLiq.toFixed(1)}%</span></div>
+        ${pos.tp ? '<div>TP <span style="color:var(--green);font-weight:600;">$' + _fmtPrice(pos.tp) + '</span></div>' : '<div></div>'}
+        ${pos.sl ? '<div>SL <span style="color:var(--red);font-weight:600;">$' + _fmtPrice(pos.sl) + '</span></div>' : '<div></div>'}
+        <div></div>
       </div>
-      <button onclick="closeFuturesPosition(${pos.id})" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--red);background:rgba(231,76,60,0.1);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;cursor:pointer;">CLOSE POSITION</button>
+      <button onclick="closeFuturesPosition(${pos.id})" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--red);background:rgba(231,76,60,0.1);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(231,76,60,0.25)'" onmouseout="this.style.background='rgba(231,76,60,0.1)'">CLOSE POSITION</button>
     </div>`;
   }).join('');
 }
@@ -21959,14 +22012,16 @@ function renderFuturesHistory() {
       else if (diffMin < 1440) duration = Math.floor(diffMin/60) + 'h ' + (diffMin%60) + 'm';
       else duration = Math.floor(diffMin/1440) + 'd ' + Math.floor((diffMin%1440)/60) + 'h';
     }
-    // Determine close reason
-    var closeReason = '';
-    if (h.tp && closeP >= h.tp && h.side === 'long') closeReason = 'TP HIT';
-    else if (h.tp && closeP <= h.tp && h.side === 'short') closeReason = 'TP HIT';
-    else if (h.sl && closeP <= h.sl && h.side === 'long') closeReason = 'SL HIT';
-    else if (h.sl && closeP >= h.sl && h.side === 'short') closeReason = 'SL HIT';
-    else if (h.pnl <= -(h.amount || 0)) closeReason = 'LIQUIDATED';
-    else closeReason = 'MANUAL';
+    // Determine close reason — use stored reason first, then detect from prices
+    var closeReason = h.closeReason || '';
+    if (!closeReason) {
+      if (h.tp && closeP >= h.tp && h.side === 'long') closeReason = 'TP HIT';
+      else if (h.tp && closeP <= h.tp && h.side === 'short') closeReason = 'TP HIT';
+      else if (h.sl && closeP <= h.sl && h.side === 'long') closeReason = 'SL HIT';
+      else if (h.sl && closeP >= h.sl && h.side === 'short') closeReason = 'SL HIT';
+      else if (h.pnl <= -(h.amount || 0)) closeReason = 'LIQUIDATED';
+      else closeReason = 'MANUAL';
+    }
 
     var reasonColor = closeReason === 'TP HIT' ? 'var(--green)' : closeReason === 'LIQUIDATED' ? '#ff4444' : closeReason === 'SL HIT' ? '#ff8800' : 'var(--muted)';
 
@@ -21983,8 +22038,8 @@ function renderFuturesHistory() {
         '</div>' +
       '</div>' +
       '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;font-size:10px;color:var(--muted);">' +
-        '<div>Entry: <span style="color:var(--text);">$' + entryP.toLocaleString(undefined,{maximumFractionDigits:entryP>100?2:6}) + '</span></div>' +
-        '<div>Close: <span style="color:' + color + ';">$' + closeP.toLocaleString(undefined,{maximumFractionDigits:closeP>100?2:6}) + '</span></div>' +
+        '<div>Entry: <span style="color:var(--text);">$' + _fmtPrice(entryP) + '</span></div>' +
+        '<div>Close: <span style="color:' + color + ';">$' + _fmtPrice(closeP) + '</span></div>' +
         '<div>Size: <span style="color:var(--text);">' + (h.amount||0).toFixed(2) + ' ' + curr + '</span></div>' +
         '<div>Fee: <span style="color:#e74c3c;">' + fee.toFixed(4) + ' ' + curr + '</span></div>' +
       '</div>' +
@@ -22317,7 +22372,7 @@ function simulateFuturesTick() {
       if (viewedPrice) {
         const priceEl = document.getElementById('futuresPairPrice');
         if (priceEl) {
-          const newText = '$' + viewedPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: viewedPrice > 100 ? 2 : 6 });
+          const newText = '$' + _fmtPrice(viewedPrice);
           priceEl.textContent = newText;
         }
       }
@@ -24328,6 +24383,9 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     pos.closedAt = new Date().toISOString();
     pos.closePrice = currentPrice;
     pos.pnl = netPnl;
+    pos.pnlPct = pnlPct * 100;
+    pos.fee = closingFee;
+    pos.closeReason = 'MANUAL';
     pos.status = 'closed';
 
     // Update pool balance for the correct currency

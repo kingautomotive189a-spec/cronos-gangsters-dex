@@ -37,28 +37,26 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - All Fee Collections, Revenue Seed Fund
 
 ## Completed (2026-04-06)
-- **CRITICAL FIX**: Close position now FORCE fetches live price from API before calculating PnL — positions no longer close at entry price
-- **CRITICAL FIX**: Fee routing fixed for BTC/ETH/SOL/BNB/USDC/USDT — fees now credit correct currency pool, not GANG pool
-- **CRITICAL FIX**: Price polling now batch-fetches ALL pairs with open positions (not just the currently selected pair)
-- Close confirmation popup fetches live price from backend API before showing PnL estimate
-- localStorage cleanup version bumped to v3 (clears stale positions on next load)
-- Binance WebSocket real-time price feeds for ALL 12 crypto pairs (auto-built from FUTURES_PAIRS)
-- Fast reverse-lookup symbol mapping for WebSocket messages
-- LIVE badge on price display for crypto pairs with active WebSocket
-- PnL update throttling via requestAnimationFrame
-- Backend proxy upgraded: CoinGecko batch + Yahoo Finance fallback, separate crypto/non-crypto caching
-- Gaussian random walk with momentum bursts for non-crypto pair simulation
-- ZIP deployment file generated
-- Wallet balance labels in ALL 8 missing UI locations
-- All 16+ showTxConfirm callbacks rewired to on-chain functions
-- vaultDeposit/vaultWithdraw throw strict errors
-- Leverage Trading switched to Protocol Vault contract
-- Removed all 28 fake showTxConfirm popups
-- Built real price-fetch trade confirmation modal for 6 trading features
-- Multi-Token Lending Vault smart contract compiled and deployed
-- ADD POOL LIQUIDITY UI for Lending
-- 100% ON-CHAIN info panel and changelog in sidebar
-- Fixed closed position persistence bug in Leverage Trading
+- **UPGRADE**: TradingView chart — proper red/green candles, RSI indicator, Moving Average overlay, 5m timeframe, taller 420px chart
+- **UPGRADE**: Leverage options expanded from 4 to 6 levels (5x/10x/20x/50x/75x/100x)
+- **UPGRADE**: Smart price formatter `_fmtPrice()` — adapts decimal places based on asset price magnitude
+- **UPGRADE**: Position cards show: liquidation price, margin ratio (%), ROE, live value, duration, TP/SL targets, border color changes with PnL
+- **UPGRADE**: Trade info panel shows: margin, open fee, position size, liq price — all calculated live as you type
+- **UPGRADE**: Open confirmation shows estimated liquidation price
+- **UPGRADE**: Close confirmation shows PnL with %, payout amount clearly labeled
+- **UPGRADE**: Trade history stores `closeReason` field (MANUAL/TP HIT/SL HIT/LIQUIDATED)
+- **FIX**: Close payout calculation — traders receive `collateral + PnL - fees` (not flat collateral amount)
+- **FIX**: MetaMask required for ALL currencies on close (not just GANG)
+- **FIX**: Liquidation/TP/SL auto-closes bypass MetaMask (can't dodge liquidation)
+- **FIX**: "Clear History & Old Data" only removes legacy positions + history, never active on-chain trades, with confirmation dialog
+- **FIX**: Position value updates live with price movement (not stuck at deposit amount)
+- **FIX**: Close position force-fetches live price before PnL calculation
+- **FIX**: Price polling batch-fetches ALL pairs with open positions
+- **FIX**: Fee routing corrected for all 8 currencies
+- Binance WebSocket real-time price feeds for ALL 12 crypto pairs
+- Backend proxy: CoinGecko batch + Yahoo Finance fallback, separate caching
+- Gaussian random walk with momentum bursts for non-crypto simulation
+- All previous on-chain features remain intact
 
 ## Upcoming Tasks
 - P1: CEX listings
