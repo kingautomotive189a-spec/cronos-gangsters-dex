@@ -16135,64 +16135,65 @@ async function deployLottery() {
 // Load current lottery state
 async function loadLotteryState() {
   if (!CONTRACTS.LOTTERY) {
-    console.warn('Lottery contract not configured');
-    return;
+    console.warn('Lottery contract not configured — using local state');
   }
   
   const rawP = state._rawProvider || window.ethereum;
-  if (!rawP) return;
-  const iface = new ethers.Interface(LOTTERY_ABI);
+  const iface = rawP && CONTRACTS.LOTTERY ? new ethers.Interface(LOTTERY_ABI) : null;
 
-  try {
-    // Get current round
-    const roundData = iface.encodeFunctionData('currentRound');
-    const roundResult = await rawP.request({ method: 'eth_call', params: [{ to: CONTRACTS.LOTTERY, data: roundData }, 'latest'] });
-    const currentRound = parseInt(roundResult, 16);
+  let loadedFromChain = false;
+  if (iface && rawP) {
+    try {
+      const roundData = iface.encodeFunctionData('currentRound');
+      const roundResult = await rawP.request({ method: 'eth_call', params: [{ to: CONTRACTS.LOTTERY, data: roundData }, 'latest'] });
+      const currentRound = parseInt(roundResult, 16);
 
-    // Get ticket price
-    const priceData = iface.encodeFunctionData('ticketPrice');
-    const priceResult = await rawP.request({ method: 'eth_call', params: [{ to: CONTRACTS.LOTTERY, data: priceData }, 'latest'] });
-    _lotteryTicketPrice = parseFloat(ethers.formatEther(BigInt(priceResult)));
-    document.getElementById('lotteryTotalCost').textContent = _lotteryTicketPrice + ' CRO';
+      const priceData = iface.encodeFunctionData('ticketPrice');
+      const priceResult = await rawP.request({ method: 'eth_call', params: [{ to: CONTRACTS.LOTTERY, data: priceData }, 'latest'] });
+      _lotteryTicketPrice = parseFloat(ethers.formatEther(BigInt(priceResult)));
+      document.getElementById('lotteryTotalCost').textContent = _lotteryTicketPrice + ' CRO';
 
-    if (currentRound > 0) {
-      // Get round info
-      const infoData = iface.encodeFunctionData('getRoundInfo', [currentRound]);
-      const infoResult = await rawP.request({ method: 'eth_call', params: [{ to: CONTRACTS.LOTTERY, data: infoData }, 'latest'] });
-      const decoded = iface.decodeFunctionResult('getRoundInfo', infoResult);
-      
-      const endTime = Number(decoded[1]);
-      const totalPot = parseFloat(ethers.formatEther(decoded[2]));
-      const ticketsSold = Number(decoded[3]);
-      const winner = decoded[4];
-      const finalized = decoded[5];
+      if (currentRound > 0) {
+        const infoData = iface.encodeFunctionData('getRoundInfo', [currentRound]);
+        const infoResult = await rawP.request({ method: 'eth_call', params: [{ to: CONTRACTS.LOTTERY, data: infoData }, 'latest'] });
+        const decoded = iface.decodeFunctionResult('getRoundInfo', infoResult);
+        
+        const endTime = Number(decoded[1]);
+        const totalPot = parseFloat(ethers.formatEther(decoded[2]));
+        const ticketsSold = Number(decoded[3]);
+        const finalized = decoded[5];
 
-      document.getElementById('lotteryPot').textContent = totalPot.toFixed(2) + ' CRO';
-      document.getElementById('lotteryTickets').textContent = ticketsSold.toString();
+        document.getElementById('lotteryPot').textContent = totalPot.toFixed(2) + ' CRO';
+        document.getElementById('lotteryTickets').textContent = ticketsSold.toString();
 
-      // Timer
-      if (!finalized) {
-        startLotteryCountdown(endTime);
-      } else {
-        document.getElementById('lotteryTimer').textContent = 'ENDED';
-        document.getElementById('lotteryTimer').style.color = 'var(--muted)';
+        if (!finalized) { startLotteryCountdown(endTime); } else {
+          document.getElementById('lotteryTimer').textContent = 'ENDED';
+          document.getElementById('lotteryTimer').style.color = 'var(--muted)';
+        }
+
+        if (state.address) {
+          const myData = iface.encodeFunctionData('getMyTickets', [currentRound, state.address]);
+          const myResult = await rawP.request({ method: 'eth_call', params: [{ to: CONTRACTS.LOTTERY, data: myData }, 'latest'] });
+          document.getElementById('lotteryMyTickets').textContent = parseInt(myResult, 16).toString();
+        }
+        loadPastWinners(currentRound, iface, rawP);
+        loadedFromChain = true;
       }
+      checkLotteryOwner();
+    } catch(e) { console.warn('Lottery contract load error, using local state:', e); }
+  }
 
-      // My tickets
-      if (state.address) {
-        const myData = iface.encodeFunctionData('getMyTickets', [currentRound, state.address]);
-        const myResult = await rawP.request({ method: 'eth_call', params: [{ to: CONTRACTS.LOTTERY, data: myData }, 'latest'] });
-        document.getElementById('lotteryMyTickets').textContent = parseInt(myResult, 16).toString();
-      }
-
-      // Load past winners
-      loadPastWinners(currentRound, iface, rawP);
+  // Fallback: show local state if chain data unavailable
+  if (!loadedFromChain) {
+    const ls = JSON.parse(localStorage.getItem('gang_lottery_local') || '{"pot":0,"tickets":0,"myTickets":0}');
+    document.getElementById('lotteryPot').textContent = ls.pot.toFixed(2) + ' CRO';
+    document.getElementById('lotteryTickets').textContent = ls.tickets.toString();
+    document.getElementById('lotteryMyTickets').textContent = ls.myTickets.toString();
+    if (ls.tickets === 0) {
+      document.getElementById('lotteryTimer').textContent = 'ACTIVE';
+      document.getElementById('lotteryTimer').style.color = 'var(--green)';
     }
-
-    // Show owner controls
-    checkLotteryOwner();
-  } catch(e) {
-    console.warn('Lottery load error:', e);
+    document.getElementById('lotteryTotalCost').textContent = (_lotteryTicketPrice * parseInt(document.getElementById('lotteryBuyCount')?.value || '1')) + ' CRO';
   }
 }
 
@@ -16266,34 +16267,62 @@ function checkLotteryOwner() {
 
 // Buy tickets
 async function buyLotteryTickets() {
-  if (!state.signer || !requireCronos() || !CONTRACTS.LOTTERY) { showToast('Connect wallet', 'error'); return; }
+  if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
   const count = parseInt(document.getElementById('lotteryBuyCount')?.value || '1');
   if (count < 1 || count > 100) { showToast('Enter 1-100 tickets', 'error'); return; }
 
-  const totalCost = ethers.parseEther((_lotteryTicketPrice * count).toString());
+  const totalCost = _lotteryTicketPrice * count;
   const statusEl = document.getElementById('buyTicketStatus');
   if (statusEl) { statusEl.style.display = 'block'; statusEl.style.color = 'var(--gold)'; statusEl.textContent = 'Confirm in your wallet...'; }
 
   try {
-    const rawP = state._rawProvider || window.ethereum;
-    const iface = new ethers.Interface(LOTTERY_ABI);
-    const data = iface.encodeFunctionData('buyTickets', [count]);
-    const tx = await rawP.request({
-      method: 'eth_sendTransaction',
-      params: [{ from: state.address, to: CONTRACTS.LOTTERY, data, value: '0x' + totalCost.toString(16), gas: '0x' + (300000).toString(16) }]
-    });
-    if (statusEl) statusEl.textContent = 'Transaction sent...';
-    for (let i = 0; i < 30; i++) {
-      await new Promise(r => setTimeout(r, 3000));
-      const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [tx] });
-      if (receipt) { if (receipt.status === '0x0') throw new Error('TX failed'); break; }
+    // Try real lottery contract first
+    if (CONTRACTS.LOTTERY && requireCronos()) {
+      const totalCostWei = ethers.parseEther(totalCost.toString());
+      const rawP = state._rawProvider || window.ethereum;
+      const iface = new ethers.Interface(LOTTERY_ABI);
+      const data = iface.encodeFunctionData('buyTickets', [count]);
+      const tx = await rawP.request({
+        method: 'eth_sendTransaction',
+        params: [{ from: state.address, to: CONTRACTS.LOTTERY, data, value: '0x' + totalCostWei.toString(16), gas: '0x' + (300000).toString(16) }]
+      });
+      if (statusEl) statusEl.textContent = 'Transaction sent...';
+      for (let i = 0; i < 30; i++) {
+        await new Promise(r => setTimeout(r, 3000));
+        const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [tx] });
+        if (receipt) { if (receipt.status === '0x0') throw new Error('TX failed'); break; }
+      }
+    } else {
+      // Fallback to Protocol Vault
+      await window.vaultDeposit('lottery', totalCost, 'Lottery — ' + count + ' ticket(s)');
     }
+
+    // Track locally
+    const ls = JSON.parse(localStorage.getItem('gang_lottery_local') || '{"pot":0,"tickets":0,"myTickets":0}');
+    ls.pot += totalCost;
+    ls.tickets += count;
+    ls.myTickets += count;
+    localStorage.setItem('gang_lottery_local', JSON.stringify(ls));
+
     showToast(count + ' ticket(s) bought!', 'success');
     if (statusEl) { statusEl.style.color = 'var(--green)'; statusEl.textContent = count + ' ticket(s) purchased!'; }
     loadLotteryState();
   } catch(e) {
-    showToast('Buy failed: ' + (e?.message || 'Unknown').slice(0, 80), 'error');
-    if (statusEl) { statusEl.style.color = 'var(--red)'; statusEl.textContent = (e?.message || 'Failed').slice(0, 100); }
+    // If contract fails, fallback to vault
+    try {
+      await window.vaultDeposit('lottery', totalCost, 'Lottery — ' + count + ' ticket(s)');
+      const ls = JSON.parse(localStorage.getItem('gang_lottery_local') || '{"pot":0,"tickets":0,"myTickets":0}');
+      ls.pot += totalCost;
+      ls.tickets += count;
+      ls.myTickets += count;
+      localStorage.setItem('gang_lottery_local', JSON.stringify(ls));
+      showToast(count + ' ticket(s) bought via vault!', 'success');
+      if (statusEl) { statusEl.style.color = 'var(--green)'; statusEl.textContent = count + ' ticket(s) purchased!'; }
+      loadLotteryState();
+    } catch(e2) {
+      showToast('Buy failed: ' + (e2?.message || 'Unknown').slice(0, 80), 'error');
+      if (statusEl) { statusEl.style.color = 'var(--red)'; statusEl.textContent = (e2?.message || 'Failed').slice(0, 100); }
+    }
   }
 }
 
