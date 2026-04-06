@@ -4687,9 +4687,15 @@ function toggleNavMenu() {
       <!-- Currency Toggle -->
       <div style="margin-bottom:14px;">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;margin-bottom:6px;font-weight:500;">TRADE WITH</div>
-        <div style="display:flex;gap:0;background:var(--surface2);border-radius:10px;padding:3px;border:1px solid var(--border);">
-          <button id="futuresCurrGang" data-testid="futures-curr-gang" onclick="setFuturesCurrency('GANG')" style="flex:1;padding:10px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;transition:all .2s;background:#ff8c00;color:#000;display:flex;align-items:center;justify-content:center;gap:6px;"><img src="/gang-logo.png" style="width:18px;height:18px;border-radius:50%;">GANG</button>
-          <button id="futuresCurrCro" data-testid="futures-curr-cro" onclick="setFuturesCurrency('CRO')" style="flex:1;padding:10px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px;"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:18px;height:18px;border-radius:50%;">CRO</button>
+        <div style="display:flex;gap:0;background:var(--surface2);border-radius:10px;padding:3px;border:1px solid var(--border);flex-wrap:wrap;">
+          <button id="futuresCurrGang" data-testid="futures-curr-gang" onclick="setFuturesCurrency('GANG')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:#ff8c00;color:#000;display:flex;align-items:center;justify-content:center;gap:4px;"><img src="/gang-logo.png" style="width:16px;height:16px;border-radius:50%;">GANG</button>
+          <button id="futuresCurrCro" data-testid="futures-curr-cro" onclick="setFuturesCurrency('CRO')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:16px;height:16px;border-radius:50%;">CRO</button>
+          <button id="futuresCurrBtc" data-testid="futures-curr-btc" onclick="setFuturesCurrency('BTC')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" style="width:16px;height:16px;border-radius:50%;">BTC</button>
+          <button id="futuresCurrEth" data-testid="futures-curr-eth" onclick="setFuturesCurrency('ETH')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" style="width:16px;height:16px;border-radius:50%;">ETH</button>
+          <button id="futuresCurrSol" data-testid="futures-curr-sol" onclick="setFuturesCurrency('SOL')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/4128/small/solana.png" style="width:16px;height:16px;border-radius:50%;">SOL</button>
+          <button id="futuresCurrBnb" data-testid="futures-curr-bnb" onclick="setFuturesCurrency('BNB')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/825/small/bnb-icon2_2x.png" style="width:16px;height:16px;border-radius:50%;">BNB</button>
+          <button id="futuresCurrUsdc" data-testid="futures-curr-usdc" onclick="setFuturesCurrency('USDC')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/6319/small/usdc.png" style="width:16px;height:16px;border-radius:50%;">USDC</button>
+          <button id="futuresCurrUsdt" data-testid="futures-curr-usdt" onclick="setFuturesCurrency('USDT')" style="flex:1;min-width:70px;padding:8px 4px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:4px;"><img src="https://assets.coingecko.com/coins/images/325/small/Tether.png" style="width:16px;height:16px;border-radius:50%;">USDT</button>
         </div>
       </div>
 
@@ -20937,16 +20943,21 @@ function saveFuturesState() {
 
 function setFuturesCurrency(curr) {
   futuresState.currency = curr;
-  const gangBtn = document.getElementById('futuresCurrGang');
-  const croBtn = document.getElementById('futuresCurrCro');
-  const label = document.getElementById('futuresCurrLabel');
-  if (curr === 'GANG') {
-    gangBtn.style.background = '#ff8c00'; gangBtn.style.color = '#000';
-    croBtn.style.background = 'transparent'; croBtn.style.color = 'var(--muted)';
-  } else {
-    croBtn.style.background = '#002d74'; croBtn.style.color = '#fff';
-    gangBtn.style.background = 'transparent'; gangBtn.style.color = 'var(--muted)';
-  }
+  var allTokens = ['GANG','CRO','BTC','ETH','SOL','BNB','USDC','USDT'];
+  var colors = {GANG:'#ff8c00',CRO:'#002d74',BTC:'#f7931a',ETH:'#627eea',SOL:'#00ffa3',BNB:'#f3ba2f',USDC:'#2775ca',USDT:'#26a17b'};
+  var textColors = {GANG:'#000',CRO:'#fff',BTC:'#fff',ETH:'#fff',SOL:'#000',BNB:'#000',USDC:'#fff',USDT:'#fff'};
+  allTokens.forEach(function(t) {
+    var suffix = t.charAt(0) + t.slice(1).toLowerCase();
+    var btn = document.getElementById('futuresCurr' + suffix);
+    if (btn) {
+      if (t === curr) {
+        btn.style.background = colors[t]; btn.style.color = textColors[t];
+      } else {
+        btn.style.background = 'transparent'; btn.style.color = 'var(--muted)';
+      }
+    }
+  });
+  var label = document.getElementById('futuresCurrLabel');
   if (label) label.textContent = curr;
   document.getElementById('futuresAmount').placeholder = 'Enter ' + curr + ' amount';
   updateFuturesPosInfo();
@@ -21185,6 +21196,22 @@ function openFuturesPosition() {
   const price = futuresState.prices[futuresState.pair];
   if (!price) { showToast('Price not loaded yet', 'error'); return; }
 
+  // LIQUIDITY CHECK — block if pool has no funds (GANG exempt — backed by on-chain contract)
+  if (curr !== 'GANG') {
+    var poolKey = curr === 'CRO' ? 'poolBalanceCRO' : 'poolBalance' + curr;
+    var poolBal = futuresState[poolKey] || 0;
+    if (poolBal <= 0) {
+      showToast('No ' + curr + ' liquidity available. Pool needs funding first.', 'error');
+      return;
+    }
+    // Check if pool can cover potential payout (position size)
+    var positionSize = amt * futuresState.leverage;
+    if (positionSize > poolBal) {
+      showToast('Not enough ' + curr + ' liquidity. Pool has ' + poolBal.toFixed(curr === 'USDC' || curr === 'USDT' ? 2 : 6) + ' ' + curr + ' but your position needs ' + positionSize.toFixed(2) + ' ' + curr + '.', 'error');
+      return;
+    }
+  }
+
   const openingFee = amt * 0.003;
 
   showTxConfirm({
@@ -21240,8 +21267,11 @@ function _doOpenFuturesPosition(amt, curr, price) {
   position.amount = amt - openingFee;
   if (curr === 'CRO') {
     futuresState.poolBalanceCRO += openingFee;
-  } else {
+  } else if (curr === 'GANG') {
     futuresState.poolBalance += openingFee;
+  } else {
+    // BTC, ETH, SOL, BNB, USDC, USDT
+    futuresState['poolBalance' + curr] = (futuresState['poolBalance' + curr] || 0) + openingFee;
   }
 
   futuresState.positions.push(position);
@@ -21327,8 +21357,11 @@ function _doCloseFuturesPosition(id) {
   // Update pool: pool pays winners, collects from losers + fees
   if (curr === 'CRO') {
     futuresState.poolBalanceCRO -= netPnl;
-  } else {
+  } else if (curr === 'GANG') {
     futuresState.poolBalance -= netPnl;
+  } else {
+    // BTC, ETH, SOL, BNB, USDC, USDT
+    futuresState['poolBalance' + curr] = (futuresState['poolBalance' + curr] || 0) - netPnl;
   }
 
   futuresState.history.unshift({
@@ -21438,8 +21471,11 @@ function updateFuturesPool() {
   
   const gangPool = futuresState.poolBalance;
   const croPool = futuresState.poolBalanceCRO;
-  const activePool = curr === 'CRO' ? croPool : gangPool;
-  const fmtPool = activePool >= 1e6 ? (activePool/1e6).toFixed(2)+'M' : activePool >= 1e3 ? (activePool/1e3).toFixed(1)+'K' : activePool.toFixed(2);
+  var activePool;
+  if (curr === 'CRO') activePool = croPool;
+  else if (curr === 'GANG') activePool = gangPool;
+  else activePool = futuresState['poolBalance' + curr] || 0;
+  const fmtPool = activePool >= 1e6 ? (activePool/1e6).toFixed(2)+'M' : activePool >= 1e3 ? (activePool/1e3).toFixed(1)+'K' : activePool.toFixed(activePool < 1 ? 6 : 2);
   if (pool) pool.textContent = fmtPool + ' ' + curr;
 
   // Owner panel - GANG
