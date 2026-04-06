@@ -19043,19 +19043,30 @@ function updateRSStats() {
 function rsStake() {
   const amount = parseFloat(document.getElementById('rsStakeAmount').value);
   if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
+  if (!state || !state.signer) { showToast('Connect wallet first', 'error'); return; }
   showTxConfirm({
     title: 'Stake GANG',
     iconHtml: '<div style="font-size:48px;">💎</div>',
-    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Stake Amount:</span><span style="color:#9c27b0;font-weight:700;">${amount.toLocaleString()} GANG</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Revenue Share:</span><span>Proportional to stake</span></div></div>`,
-    onConfirm: () => {
-      const s = initRSState();
-      s.userStake = (s.userStake || 0) + amount;
-      s.totalStaked = (s.totalStaked || 0) + amount;
-      const reward = (s.revPool || 0) * (amount / s.totalStaked) * 0.1;
-      s.pendingRewards = (s.pendingRewards || 0) + reward;
-      saveRSState(s); updateRSStats(); updateRevRsFees();
-      showToast(`Staked ${amount.toLocaleString()} GANG for revenue sharing!`, 'success');
-      document.getElementById('rsStakeAmount').value = '';
+    detailsHtml: '<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Stake Amount:</span><span style="color:#9c27b0;font-weight:700;">' + amount.toLocaleString() + ' GANG</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Revenue Share:</span><span>Proportional to stake</span></div></div>',
+    onConfirm: async function() {
+      try {
+        if (typeof window.vaultDeposit === 'function') {
+          await window.vaultDeposit('revstaking', amount, 'Revenue Staking');
+        } else {
+          var rawP = state._rawProvider || window.ethereum;
+          var userAddr = await state.signer.getAddress();
+          var txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
+          for (var i = 0; i < 40; i++) { await new Promise(function(r){setTimeout(r,4000)}); var rcpt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] }); if (rcpt) { if (rcpt.status === '0x0') throw new Error('TX reverted'); break; } }
+        }
+        var s = initRSState();
+        s.userStake = (s.userStake || 0) + amount;
+        s.totalStaked = (s.totalStaked || 0) + amount;
+        var reward = (s.revPool || 0) * (amount / s.totalStaked) * 0.1;
+        s.pendingRewards = (s.pendingRewards || 0) + reward;
+        saveRSState(s); updateRSStats(); updateRevRsFees();
+        showToast('Staked ' + amount.toLocaleString() + ' GANG for revenue sharing!', 'success');
+        document.getElementById('rsStakeAmount').value = '';
+      } catch(e) { showToast('Stake failed: ' + e.message, 'error'); }
     }
   });
 }
@@ -19063,34 +19074,56 @@ function rsUnstake() {
   const amount = parseFloat(document.getElementById('rsStakeAmount').value);
   const s = initRSState();
   if (!amount || amount <= 0 || amount > (s.userStake || 0)) { showToast('Invalid unstake amount', 'error'); return; }
+  if (!state || !state.signer) { showToast('Connect wallet first', 'error'); return; }
   showTxConfirm({
     title: 'Unstake GANG',
     iconHtml: '<div style="font-size:48px;">💎</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Unstake Amount</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:#e53935;">${amount.toLocaleString()} GANG</div></div>`,
-    onConfirm: () => {
-      s.userStake -= amount;
-      s.totalStaked = Math.max(0, (s.totalStaked || 0) - amount);
-      saveRSState(s); updateRSStats();
-      showToast(`Unstaked ${amount.toLocaleString()} GANG`, 'success');
-      document.getElementById('rsStakeAmount').value = '';
+    detailsHtml: '<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Unstake Amount</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:#e53935;">' + amount.toLocaleString() + ' GANG</div></div>',
+    onConfirm: async function() {
+      try {
+        if (typeof window.vaultWithdraw === 'function') {
+          await window.vaultWithdraw('revstaking', amount, 'Revenue Unstake');
+        } else {
+          var rawP = state._rawProvider || window.ethereum;
+          var userAddr = await state.signer.getAddress();
+          var txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
+          for (var i = 0; i < 40; i++) { await new Promise(function(r){setTimeout(r,4000)}); var rcpt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] }); if (rcpt) { if (rcpt.status === '0x0') throw new Error('TX reverted'); break; } }
+        }
+        s.userStake -= amount;
+        s.totalStaked = Math.max(0, (s.totalStaked || 0) - amount);
+        saveRSState(s); updateRSStats();
+        showToast('Unstaked ' + amount.toLocaleString() + ' GANG', 'success');
+        document.getElementById('rsStakeAmount').value = '';
+      } catch(e) { showToast('Unstake failed: ' + e.message, 'error'); }
     }
   });
 }
 function rsClaim() {
   const s = initRSState();
   if (!s.pendingRewards || s.pendingRewards <= 0) { showToast('No rewards to claim', 'error'); return; }
+  if (!state || !state.signer) { showToast('Connect wallet first', 'error'); return; }
   const amt = s.pendingRewards;
   const mgmtFee = amt * 0.003;
   showTxConfirm({
     title: 'Claim Revenue Rewards',
     iconHtml: '<div style="font-size:48px;">💎</div>',
-    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Rewards:</span><span style="color:var(--green);font-weight:700;">${amt.toFixed(4)} CRO</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Mgmt Fee (0.3%):</span><span style="color:#9c27b0;">${mgmtFee.toFixed(4)} CRO</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">You Receive:</span><span style="color:var(--green);">${(amt - mgmtFee).toFixed(4)} CRO</span></div></div>`,
-    onConfirm: () => {
-      s.pendingRewards = 0;
-      s.ownerFees = (s.ownerFees || 0) + mgmtFee;
-      s.distributions = (s.distributions || 0) + 1;
-      saveRSState(s); updateRSStats(); updateRevRsFees();
-      showToast(`Claimed ${(amt - mgmtFee).toFixed(4)} CRO in revenue rewards!`, 'success');
+    detailsHtml: '<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Rewards:</span><span style="color:var(--green);font-weight:700;">' + amt.toFixed(4) + ' CRO</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Mgmt Fee (0.3%):</span><span style="color:#9c27b0;">' + mgmtFee.toFixed(4) + ' CRO</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">You Receive:</span><span style="color:var(--green);">' + (amt - mgmtFee).toFixed(4) + ' CRO</span></div></div>',
+    onConfirm: async function() {
+      try {
+        if (typeof window.vaultCollectFees === 'function') {
+          await window.vaultCollectFees('Revenue Rewards');
+        } else {
+          var rawP = state._rawProvider || window.ethereum;
+          var userAddr = await state.signer.getAddress();
+          var txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
+          for (var i = 0; i < 40; i++) { await new Promise(function(r){setTimeout(r,4000)}); var rcpt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] }); if (rcpt) { if (rcpt.status === '0x0') throw new Error('TX reverted'); break; } }
+        }
+        s.pendingRewards = 0;
+        s.ownerFees = (s.ownerFees || 0) + mgmtFee;
+        s.distributions = (s.distributions || 0) + 1;
+        saveRSState(s); updateRSStats(); updateRevRsFees();
+        showToast('Claimed ' + (amt - mgmtFee).toFixed(4) + ' CRO in revenue rewards!', 'success');
+      } catch(e) { showToast('Claim failed: ' + e.message, 'error'); }
     }
   });
 }
