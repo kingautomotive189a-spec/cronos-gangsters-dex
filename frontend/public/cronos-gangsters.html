@@ -19379,10 +19379,13 @@ function executeCopyTrade() {
     ],
     onConfirm: async () => {
       try {
-        if (typeof window.executeCopyTrade === 'function') {
-          await window.executeCopyTrade();
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('copytrading', amount, 'Copy Trade — ' + p.side + ' ' + (pairInfo.name || p.pair) + ' ' + p.leverage + 'x | ' + amount + ' ' + (p.currency || 'GANG'));
+        } else {
+          showToast('Connect wallet for on-chain deposit', 'error');
+          return;
         }
-      } catch(e) { return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       // Open a real Leverage position as the copy
       const openingFee = amount * 0.003;
       const posAmount = amount - openingFee;
@@ -25478,19 +25481,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   window.aggOwnerCollect = async function() { try { await vaultCollectFees('Aggregator'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectAggFees = async function() { try { await vaultCollectFees('Aggregator'); } catch(e) { showToast(e.message, 'error'); } };
 
-  // --- COPY TRADING ---
-  window.executeCopyTrade = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('ctAmount');
-    const amount = parseFloat(amtEl?.value);
-    if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
-    const fee = amount * 0.003;
-    try {
-      await vaultDeposit('copytrading', fee, 'Copy Trade Fee');
-      showToast('Copy trade executed! Fee: ' + fee.toFixed(4) + ' GANG on-chain.', 'success');
-      if (amtEl) amtEl.value = '';
-    } catch(e) { showToast('Copy trade failed: ' + e.message, 'error'); }
-  };
+  // --- COPY TRADING (on-chain wired via executeCopyTrade directly) ---
+  // Copy trade deposits are handled inline in the confirmation modal via vaultDeposit
   window.ctOwnerCollect = async function() { try { await vaultCollectFees('Copy Trading'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectCopyFees = async function() { try { await vaultCollectFees('Copy Trading'); } catch(e) { showToast(e.message, 'error'); } };
 
