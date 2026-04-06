@@ -18519,10 +18519,11 @@ function placePredBet(marketId, side) {
       { label: 'Odds', value: odds + '%' },
     ],
     onConfirm: async function() {
-      if (typeof window.placePredBet === 'function') {
-        try { await window.placePredBet(marketId, side); } catch(e) {}
-        return;
-      }
+      try {
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('predictions', amount, 'Prediction Bet — ' + optName);
+        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       _doPlacePredBet(marketId, side, amount);
     }
   });
@@ -18606,10 +18607,10 @@ function createPredMarket() {
     ],
     onConfirm: async function() {
       try {
-        if (typeof window.createPredMarket === 'function') {
-          await window.createPredMarket();
-        }
-      } catch(e) { return; }
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('predictions', 50, 'Create Prediction Market');
+        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       let s = initPredState();
       const id = 'custom_' + Date.now();
       s.markets.push({ id, question, optA, optB, category, endDate, poolA: 0, poolB: 0, status: 'active', bets: [] });
@@ -18760,10 +18761,10 @@ function executeFlashLoan() {
     warning: 'Flash loan must be repaid within the same transaction block.',
     onConfirm: async function() {
       try {
-        if (typeof window.executeFlashLoan === 'function') {
-          await window.executeFlashLoan();
-        }
-      } catch(e) { return; }
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('flashloans', fee, 'Flash Loan Fee — ' + amount + ' ' + token);
+        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       _doFlashLoan(token, amount, fee, strategy, stratNames);
     }
   });
@@ -19139,10 +19140,10 @@ function executeAggSwap() {
     ],
     onConfirm: async function() {
       try {
-        if (typeof window.executeAggSwap === 'function') {
-          await window.executeAggSwap();
-        }
-      } catch(e) { return; }
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('aggregator', fee, 'DEX Aggregator — ' + amount + ' ' + fromToken + ' to ' + toToken);
+        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       _doAggSwap(fromToken, toToken, amount, fee, bestRate, bestDex, toAmount);
     }
   });
@@ -19639,10 +19640,10 @@ function placeLimitOrder() {
     ],
     onConfirm: async () => {
       try {
-        if (typeof window.placeLimitOrder === 'function') {
-          await window.placeLimitOrder();
-        }
-      } catch(e) { return; }
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('limitorders', amount, 'Limit Order — ' + type + ' ' + token + ' @ $' + price);
+        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       const s = initLOState();
       s.orders.push({ type, token, price, amount, fee, status: 'open', time: Date.now() });
       s.orderCount = (s.orderCount || 0) + 1;
@@ -19976,10 +19977,10 @@ function createOtcDeal() {
     ],
     onConfirm: async () => {
       try {
-        if (typeof window.createOtcDeal === 'function') {
-          await window.createOtcDeal();
-        }
-      } catch(e) { return; }
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('otctrading', sellAmount, 'OTC Deal — ' + sellAmount + ' ' + sellToken + ' for ' + buyToken);
+        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       const s = initOtcState();
       s.deals.push({ sellToken, buyToken, sellAmount, price, fee, status: 'open', time: Date.now() });
       saveOtcState(s); renderOtcDeals(); updateOtcStats();
@@ -20110,10 +20111,10 @@ function createDaoProposal() {
     detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Title:</span><span style="font-weight:700;">${title}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Category:</span><span>${category}</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Proposal Fee:</span><span style="color:#78909c;font-weight:700;">1 CRO</span></div></div>`,
     onConfirm: async () => {
       try {
-        if (typeof window.createDaoProposal === 'function') {
-          await window.createDaoProposal();
-        }
-      } catch(e) { return; }
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('dao', 1, 'DAO Proposal Fee — ' + title);
+        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       const s = initDaoState();
       s.proposals.push({ title, description, category, votesFor: 0, votesAgainst: 0, status: 'active', time: Date.now() });
       s.ownerFees = (s.ownerFees || 0) + 1;
@@ -20135,10 +20136,10 @@ function voteDao(idx, vote) {
     detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Vote ${vote.toUpperCase()} on:</div><div style="font-weight:700;margin-bottom:6px;">${s.proposals[idx].title}</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:${vote==='for'?'var(--green)':'#e53935'};">${gangVotes} GANG</div></div>`,
     onConfirm: async () => {
       try {
-        if (typeof window.voteDao === 'function') {
-          await window.voteDao(idx, vote);
-        }
-      } catch(e) { return; }
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('dao', 10, 'DAO Vote — ' + vote.toUpperCase() + ' on ' + s.proposals[idx].title);
+        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       if (vote === 'for') s.proposals[idx].votesFor = (s.proposals[idx].votesFor || 0) + gangVotes;
       else s.proposals[idx].votesAgainst = (s.proposals[idx].votesAgainst || 0) + gangVotes;
       s.totalVotes = (s.totalVotes || 0) + gangVotes;
@@ -25411,47 +25412,11 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   // ═══════════════════════════════════════════════════
 
   // --- PREDICTION MARKETS ---
-  window.placePredBet = async function(marketId, side) {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('predBet_' + marketId);
-    const amount = parseFloat(amtEl?.value);
-    if (!amount || amount <= 0) { showToast('Enter bet amount', 'error'); return; }
-    try {
-      await vaultDeposit('predictions', amount, 'Prediction Bet');
-      // Update local UI state
-      if (typeof initPredState === 'function') {
-        const s = initPredState();
-        const market = s.markets.find(function(m) { return m.id === marketId; });
-        if (market) {
-          if (side === 'A') market.poolA = (market.poolA || 0) + amount;
-          else market.poolB = (market.poolB || 0) + amount;
-          const addr = state.address ? state.address.toLowerCase() : '';
-          if (!market.bets) market.bets = [];
-          market.bets.push({ user: addr, side: side, amount: amount, time: Date.now() });
-          savePredState(s);
-          if (typeof renderPredictions === 'function') renderPredictions();
-        }
-      }
-      if (amtEl) amtEl.value = '';
-      showToast('Bet placed on-chain! ' + amount + ' GANG deposited.', 'success');
-    } catch(e) { showToast('Bet failed: ' + e.message, 'error'); }
-  };
+  // --- PREDICTIONS (on-chain wired inline) ---
   window.predOwnerCollect = async function() { try { await vaultCollectFees('Prediction'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectPredFees = async function() { try { await vaultCollectFees('Prediction'); } catch(e) { showToast(e.message, 'error'); } };
 
-  // --- FLASH LOANS ---
-  window.executeFlashLoan = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('flashAmount');
-    const amount = parseFloat(amtEl?.value);
-    if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
-    const fee = amount * 0.003;
-    try {
-      await vaultDeposit('flashloans', fee, 'Flash Loan Fee');
-      showToast('Flash loan executed! Fee: ' + fee.toFixed(4) + ' GANG paid on-chain.', 'success');
-      if (amtEl) amtEl.value = '';
-    } catch(e) { showToast('Flash loan failed: ' + e.message, 'error'); }
-  };
+  // --- FLASH LOANS (on-chain wired inline) ---
   window.flashOwnerCollect = async function() { try { await vaultCollectFees('Flash Loans'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectFlashFees = async function() { try { await vaultCollectFees('Flash Loans'); } catch(e) { showToast(e.message, 'error'); } };
 
@@ -25471,19 +25436,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   window.insOwnerCollect = async function() { try { await vaultCollectFees('Insurance'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectInsuranceFees = async function() { try { await vaultCollectFees('Insurance'); } catch(e) { showToast(e.message, 'error'); } };
 
-  // --- DEX AGGREGATOR ---
-  window.executeAggSwap = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('aggAmount');
-    const amount = parseFloat(amtEl?.value);
-    if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
-    const fee = amount * 0.003;
-    try {
-      await vaultDeposit('aggregator', fee, 'Aggregator Fee');
-      showToast('Aggregator swap executed! Fee: ' + fee.toFixed(4) + ' GANG on-chain.', 'success');
-      if (amtEl) amtEl.value = '';
-    } catch(e) { showToast('Swap failed: ' + e.message, 'error'); }
-  };
+  // --- DEX AGGREGATOR (on-chain wired inline) ---
   window.aggOwnerCollect = async function() { try { await vaultCollectFees('Aggregator'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectAggFees = async function() { try { await vaultCollectFees('Aggregator'); } catch(e) { showToast(e.message, 'error'); } };
 
@@ -25527,18 +25480,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   window.rsOwnerCollect = async function() { try { await vaultCollectFees('Revenue Staking'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectRsFees = async function() { try { await vaultCollectFees('Revenue Staking'); } catch(e) { showToast(e.message, 'error'); } };
 
-  // --- LIMIT ORDERS ---
-  window.placeLimitOrder = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('loAmount');
-    const amount = parseFloat(amtEl?.value);
-    if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
-    try {
-      await vaultDeposit('limitorders', amount, 'Limit Order');
-      showToast('Limit order placed! ' + amount + ' GANG locked on-chain.', 'success');
-      if (amtEl) amtEl.value = '';
-    } catch(e) { showToast('Order failed: ' + e.message, 'error'); }
-  };
+  // --- LIMIT ORDERS (on-chain wired inline) ---
   window.loOwnerCollect = async function() { try { await vaultCollectFees('Limit Orders'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectLoFees = async function() { try { await vaultCollectFees('Limit Orders'); } catch(e) { showToast(e.message, 'error'); } };
 
@@ -25547,55 +25489,15 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   window.ppOwnerCollect = async function() { try { await vaultCollectFees('Perp DEX'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectPpFees = async function() { try { await vaultCollectFees('Perp DEX'); } catch(e) { showToast(e.message, 'error'); } };
 
-  // --- OTC TRADING ---
-  window.createOtcDeal = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('otcSellAmount');
-    const amount = parseFloat(amtEl?.value);
-    if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
-    try {
-      await vaultDeposit('otctrading', amount, 'OTC Deal');
-      showToast('OTC deal created! ' + amount + ' GANG escrowed on-chain.', 'success');
-      if (amtEl) amtEl.value = '';
-    } catch(e) { showToast('OTC failed: ' + e.message, 'error'); }
-  };
+  // --- OTC TRADING (on-chain wired inline) ---
   window.otcOwnerCollect = async function() { try { await vaultCollectFees('OTC Trading'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectOtcFees = async function() { try { await vaultCollectFees('OTC Trading'); } catch(e) { showToast(e.message, 'error'); } };
 
-  // --- DAO GOVERNANCE ---
-  window.createDaoProposal = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    try {
-      await vaultDeposit('dao', 100, 'DAO Proposal Fee');
-      showToast('Proposal created! 100 GANG fee paid on-chain.', 'success');
-    } catch(e) { showToast('Proposal failed: ' + e.message, 'error'); }
-  };
-  window.voteDao = async function(idx, vote) {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    try {
-      await vaultDeposit('dao', 10, 'DAO Vote');
-      showToast('Vote cast! 10 GANG locked on-chain.', 'success');
-    } catch(e) { showToast('Vote failed: ' + e.message, 'error'); }
-  };
+  // --- DAO GOVERNANCE (on-chain wired inline) ---
   window.daoOwnerCollect = async function() { try { await vaultCollectFees('DAO'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectDaoFees = async function() { try { await vaultCollectFees('DAO'); } catch(e) { showToast(e.message, 'error'); } };
 
-  // --- REMAINING OVERRIDES ---
-  window.createPredMarket = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    try {
-      await vaultDeposit('predictions', 50, 'Create Prediction Market');
-      showToast('Prediction market created! 50 GANG creation fee paid on-chain.', 'success');
-    } catch(e) { showToast('Failed: ' + e.message, 'error'); }
-  };
-
-  window.fillLimitOrder = async function(idx) {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    try {
-      await vaultDeposit('limitorders', 5, 'Fill Limit Order Fee');
-      showToast('Limit order filled! Fee paid on-chain.', 'success');
-    } catch(e) { showToast('Failed: ' + e.message, 'error'); }
-  };
+  // --- REMAINING OVERRIDES (on-chain wired inline) ---
 
   // closePerpPosition is handled by the original function which calls vaultWithdraw inline
 
