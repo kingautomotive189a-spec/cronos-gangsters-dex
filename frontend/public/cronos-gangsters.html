@@ -18335,10 +18335,11 @@ function lendSupply(token) {
       { label: 'Can be withdrawn', value: 'Anytime' },
     ],
     onConfirm: async function() {
-      if (typeof window.lendSupply === 'function') {
-        try { await window.lendSupply(token); } catch(e) {}
-        return;
-      }
+      try {
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('lending', amount, 'Lending Supply — ' + amount.toFixed(4) + ' ' + token);
+        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
+      } catch(e) { showToast('Supply failed: ' + e.message, 'error'); return; }
       let s = initLendState();
       s.pools[token].totalSupplied += amount;
       s.userSupplied[token] = (s.userSupplied[token] || 0) + amount;
@@ -18388,10 +18389,11 @@ function lendWithdraw(token) {
       { label: 'Remaining Supply', value: (userSup - amount).toFixed(4) + ' ' + token },
     ],
     onConfirm: async function() {
-      if (typeof window.lendWithdraw === 'function') {
-        try { await window.lendWithdraw(token); } catch(e) {}
-        return;
-      }
+      try {
+        if (typeof window.vaultWithdraw === 'function' && state && state.signer) {
+          await window.vaultWithdraw('lending', amount, 'Lending Withdraw — ' + amount.toFixed(4) + ' ' + token);
+        } else { showToast('Connect wallet for on-chain withdrawal', 'error'); return; }
+      } catch(e) { showToast('Withdraw failed: ' + e.message, 'error'); return; }
       let s2 = initLendState();
       s2.pools[token].totalSupplied -= amount;
       s2.userSupplied[token] -= amount;
@@ -18451,10 +18453,11 @@ function lendBorrow() {
       { label: 'Collateral Used', value: '$' + (totalBorrow + newBorrowUSD).toFixed(2) + ' / $' + totalCollateral.toFixed(2) },
     ],
     onConfirm: async function() {
-      if (typeof window.lendBorrow === 'function') {
-        try { await window.lendBorrow(); } catch(e) {}
-        return;
-      }
+      try {
+        if (typeof window.vaultWithdraw === 'function' && state && state.signer) {
+          await window.vaultWithdraw('lending', amount, 'Lending Borrow — ' + amount.toFixed(4) + ' ' + token);
+        } else { showToast('Connect wallet', 'error'); return; }
+      } catch(e) { showToast('Borrow failed: ' + e.message, 'error'); return; }
       let s2 = initLendState();
       const origFee2 = amount * (LEND_ORIGINATION_FEE / 100);
       s2.ownerFees.origination = (s2.ownerFees.origination || 0) + origFee2 * price;
@@ -18496,10 +18499,11 @@ function lendRepay() {
       { label: 'Remaining After', value: (borrowed - repayAmt).toFixed(4) + ' ' + token, cls: 'green' },
     ],
     onConfirm: async function() {
-      if (typeof window.lendRepay === 'function') {
-        try { await window.lendRepay(); } catch(e) {}
-        return;
-      }
+      try {
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('lending', amount, 'Lending Repay — ' + amount.toFixed(4) + ' ' + token);
+        } else { showToast('Connect wallet', 'error'); return; }
+      } catch(e) { showToast('Repay failed: ' + e.message, 'error'); return; }
       let s2 = initLendState();
       const interestPaid = repayAmt * 0.01;
       s2.ownerFees.interest = (s2.ownerFees.interest || 0) + interestPaid * getTokenPrice(token) * (LEND_OWNER_FEE_PERCENT / 100);
@@ -25350,115 +25354,9 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     } catch(e) { showToast('Deploy failed: ' + e.message, 'error'); }
   };
 
-  // Supply tokens to lending pool
-  window.lendSupply = async function(token) {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    let vaultAddr = getLendingVaultAddr();
-    if (!vaultAddr) {
-      showToast('Deploying Lending Vault first...', 'info');
-      vaultAddr = await window.deployLendingVault();
-      if (!vaultAddr) return;
-    }
-    const input = document.getElementById('lendInput_' + token);
-    const amount = parseFloat(input?.value);
-    if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
-    const tokenAddr = LENDING_TOKENS[token] || LENDING_TOKENS.GANG;
-    const weiAmt = ethers.parseEther(amount.toString());
-    try {
-      showToast('Approving ' + token + '...', 'info');
-      await _sendContractTx(tokenAddr, ['function approve(address,uint256) returns (bool)'], 'approve', [vaultAddr, weiAmt]);
-      showToast('Supplying ' + amount + ' ' + token + ' to Lending Pool...', 'info');
-      await _sendContractTx(vaultAddr, LENDING_VAULT_ABI, 'supply', [tokenAddr, weiAmt]);
-      showToast(amount + ' ' + token + ' supplied on-chain!', 'success');
-      if (input) input.value = '';
-      const s = initLendState();
-      s.pools[token].totalSupplied += amount;
-      s.userSupplied[token] = (s.userSupplied[token] || 0) + amount;
-      saveLendState(s);
-      updateLendingUI();
-    } catch(e) { showToast('Supply failed: ' + e.message, 'error'); }
-  };
-
-  // Withdraw supplied tokens
-  window.lendWithdraw = async function(token) {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const vaultAddr = getLendingVaultAddr();
-    if (!vaultAddr) { showToast('No Lending Vault deployed', 'error'); return; }
-    const input = document.getElementById('lendInput_' + token);
-    const amount = parseFloat(input?.value);
-    if (!amount || amount <= 0) { showToast('Enter amount', 'error'); return; }
-    const tokenAddr = LENDING_TOKENS[token] || LENDING_TOKENS.GANG;
-    const weiAmt = ethers.parseEther(amount.toString());
-    try {
-      showToast('Withdrawing ' + amount + ' ' + token + '...', 'info');
-      await _sendContractTx(vaultAddr, LENDING_VAULT_ABI, 'withdraw', [tokenAddr, weiAmt]);
-      showToast(amount + ' ' + token + ' withdrawn to your wallet!', 'success');
-      if (input) input.value = '';
-      const s = initLendState();
-      s.pools[token].totalSupplied -= amount;
-      s.userSupplied[token] = Math.max(0, (s.userSupplied[token] || 0) - amount);
-      saveLendState(s);
-      updateLendingUI();
-    } catch(e) { showToast('Withdraw failed: ' + e.message, 'error'); }
-  };
-
-  // Borrow tokens — actual tokens sent to your wallet
-  window.lendBorrow = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const vaultAddr = getLendingVaultAddr();
-    if (!vaultAddr) { showToast('No Lending Vault deployed', 'error'); return; }
-    const tokenSelect = document.getElementById('lendBorrowToken');
-    const amtInput = document.getElementById('lendBorrowAmt');
-    const token = tokenSelect?.value || 'GANG';
-    const amount = parseFloat(amtInput?.value);
-    if (!amount || amount <= 0) { showToast('Enter borrow amount', 'error'); return; }
-    const tokenAddr = LENDING_TOKENS[token] || LENDING_TOKENS.GANG;
-    const weiAmt = ethers.parseEther(amount.toString());
-    try {
-      const liq = await _readContract(vaultAddr, LENDING_VAULT_ABI, 'getAvailableLiquidity', [tokenAddr]);
-      const available = parseFloat(ethers.formatEther(liq));
-      if (available < amount) {
-        showToast('Insufficient pool liquidity! Only ' + available.toFixed(4) + ' ' + token + ' available.', 'error');
-        return;
-      }
-      showToast('Borrowing ' + amount + ' ' + token + ' → your wallet...', 'info');
-      await _sendContractTx(vaultAddr, LENDING_VAULT_ABI, 'borrow', [tokenAddr, weiAmt]);
-      showToast(amount + ' ' + token + ' sent to your wallet!', 'success');
-      if (amtInput) amtInput.value = '';
-      const s = initLendState();
-      s.userBorrowed[token] = (s.userBorrowed[token] || 0) + amount;
-      s.pools[token].totalBorrowed = (s.pools[token].totalBorrowed || 0) + amount;
-      saveLendState(s);
-      updateLendingUI();
-    } catch(e) { showToast('Borrow failed: ' + e.message, 'error'); }
-  };
-
-  // Repay borrowed tokens
-  window.lendRepay = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const vaultAddr = getLendingVaultAddr();
-    if (!vaultAddr) { showToast('No Lending Vault deployed', 'error'); return; }
-    const tokenSelect = document.getElementById('lendRepayToken') || document.getElementById('lendBorrowToken');
-    const amtInput = document.getElementById('lendRepayAmt') || document.getElementById('lendBorrowAmt');
-    const token = tokenSelect?.value || 'GANG';
-    const amount = parseFloat(amtInput?.value);
-    if (!amount || amount <= 0) { showToast('Enter repay amount', 'error'); return; }
-    const tokenAddr = LENDING_TOKENS[token] || LENDING_TOKENS.GANG;
-    const weiAmt = ethers.parseEther(amount.toString());
-    try {
-      showToast('Approving ' + token + '...', 'info');
-      await _sendContractTx(tokenAddr, ['function approve(address,uint256) returns (bool)'], 'approve', [vaultAddr, weiAmt]);
-      showToast('Repaying ' + amount + ' ' + token + '...', 'info');
-      await _sendContractTx(vaultAddr, LENDING_VAULT_ABI, 'repay', [tokenAddr, weiAmt]);
-      showToast(amount + ' ' + token + ' repaid!', 'success');
-      if (amtInput) amtInput.value = '';
-      const s = initLendState();
-      s.userBorrowed[token] = Math.max(0, (s.userBorrowed[token] || 0) - amount);
-      s.pools[token].totalBorrowed = Math.max(0, (s.pools[token].totalBorrowed || 0) - amount);
-      saveLendState(s);
-      updateLendingUI();
-    } catch(e) { showToast('Repay failed: ' + e.message, 'error'); }
-  };
+  // --- LENDING SUPPLY/WITHDRAW/BORROW/REPAY (on-chain wired inline via vaultDeposit/vaultWithdraw) ---
+  window.lendOwnerCollect = async function() { try { await vaultCollectFees('Lending'); } catch(e) { showToast(e.message, 'error'); } };
+  window.revCollectLendFees = async function() { try { await vaultCollectFees('Lending'); } catch(e) { showToast(e.message, 'error'); } };
 
   // Add Liquidity button handler
   window.doAddLendingLiquidity = async function() {
