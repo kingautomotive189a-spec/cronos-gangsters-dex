@@ -23428,6 +23428,14 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const amount = parseFloat(input?.value);
     if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
 
+    // Check user has enough supplied
+    const s = initLendState();
+    const supplied = s.userSupplied[token] || 0;
+    if (amount > supplied) {
+      showToast('You only have ' + supplied.toFixed(4) + ' ' + token + ' supplied. Cannot withdraw ' + amount, 'error');
+      return;
+    }
+
     try {
       const decimals = (token === 'WBTC') ? 8 : (token === 'USDC' || token === 'USDT') ? 6 : 18;
       const weiAmt = ethers.parseUnits(amount.toString(), decimals);
@@ -23456,6 +23464,24 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const token = tokenSelect?.value || 'GANG';
     const amount = parseFloat(amtInput?.value);
     if (!amount || amount <= 0) { showToast('Enter borrow amount', 'error'); return; }
+
+    // Check collateral value and borrow limit
+    const s = initLendState();
+    let totalCollateral = 0;
+    const prices = { CRO: 0.095, GANG: 0.003, USDC: 1, WETH: 3200, WBTC: 97000, DAI: 1, USDT: 1, ATOM: 7.5, VVS: 0.000004, TONIC: 0.0000002 };
+    Object.keys(s.userSupplied || {}).forEach(function(t) {
+      totalCollateral += (s.userSupplied[t] || 0) * (prices[t] || 0);
+    });
+    const borrowLimit = totalCollateral * 0.75;
+    let currentBorrows = 0;
+    Object.keys(s.userBorrowed || {}).forEach(function(t) {
+      currentBorrows += (s.userBorrowed[t] || 0) * (prices[t] || 0);
+    });
+    const borrowValue = amount * (prices[token] || 0);
+    if (currentBorrows + borrowValue > borrowLimit) {
+      showToast('Exceeds borrow limit! Collateral: $' + totalCollateral.toFixed(2) + ', Limit: $' + borrowLimit.toFixed(2) + ', Current borrows: $' + currentBorrows.toFixed(2), 'error');
+      return;
+    }
 
     try {
       const decimals = (token === 'WBTC') ? 8 : (token === 'USDC' || token === 'USDT') ? 6 : 18;
@@ -23887,6 +23913,18 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const vaultAddr = getVaultAddr();
     if (!vaultAddr) { showToast('Deploy Protocol Vault first', 'error'); return false; }
     if (!state.signer) { showToast('Connect wallet first', 'error'); return false; }
+
+    // Check pool balance before attempting withdrawal
+    try {
+      const poolHash = ethers.id(poolName);
+      const poolBal = await _readContract(vaultAddr, PROTOCOL_VAULT_ABI, 'getPoolBalance', [poolHash]);
+      const poolAmt = parseFloat(ethers.formatEther(poolBal));
+      if (poolAmt < amount) {
+        showToast('Insufficient balance in ' + label + ' pool. Pool has ' + poolAmt.toFixed(2) + ' GANG but you tried to withdraw ' + amount, 'error');
+        return false;
+      }
+    } catch(e) { /* Pool balance check failed, proceed anyway and let contract revert */ }
+
     const weiAmt = ethers.parseEther(amount.toString());
     const poolHash = ethers.id(poolName);
     showToast('Withdrawing ' + amount + ' GANG from ' + label + '...', 'info');
@@ -24703,6 +24741,14 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     try {
       const vaultAddr = typeof getVaultAddr === 'function' ? getVaultAddr() : '';
       if (vaultAddr) {
+        // CHECK REAL GANG BALANCE FIRST
+        const userAddr = await state.signer.getAddress();
+        const balRaw = await _readContract(GANG_ADDR, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+        const userBal = parseFloat(ethers.formatEther(balRaw));
+        if (userBal < lpValue) {
+          showToast('Insufficient GANG! You have ' + userBal.toFixed(2) + ' but need ' + lpValue + ' GANG for this bond', 'error');
+          return;
+        }
         const weiAmt = ethers.parseEther(lpValue.toString());
         const poolHash = ethers.id('bonds_' + pair);
         await _approveGANG(vaultAddr, weiAmt);
