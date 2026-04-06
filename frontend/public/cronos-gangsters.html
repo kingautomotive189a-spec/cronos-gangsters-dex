@@ -273,6 +273,37 @@
   #txConfirmModal .tx-custom-details{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:14px;margin-bottom:18px;}
   .modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
   #txConfirmModal{z-index:9999;}
+  /* ── Trade Confirm Modal (real price-fetch) ── */
+  #tradeConfirmModal{z-index:9998;}
+  #tradeConfirmModal .tc-modal{max-width:400px;width:92%;background:linear-gradient(180deg,#1a1d2e 0%,#141625 100%);border:1px solid rgba(212,160,23,0.25);border-radius:16px;padding:0;box-shadow:0 20px 60px rgba(0,0,0,0.6),0 0 40px rgba(212,160,23,0.08);}
+  #tradeConfirmModal .tc-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.06);}
+  #tradeConfirmModal .tc-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold);}
+  #tradeConfirmModal .tc-network{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:4px 12px;font-size:10px;color:var(--muted);letter-spacing:1px;}
+  #tradeConfirmModal .tc-net-dot{width:6px;height:6px;border-radius:50%;background:#27ae60;animation:txPulse 1.5s ease infinite;}
+  #tradeConfirmModal .tc-body{padding:20px;}
+  #tradeConfirmModal .tc-fetch{text-align:center;padding:30px 20px;}
+  #tradeConfirmModal .tc-fetch-spinner{width:48px;height:48px;border:3px solid rgba(255,255,255,0.08);border-top:3px solid var(--gold);border-radius:50%;animation:txSpin 0.8s linear infinite;margin:0 auto 16px;}
+  #tradeConfirmModal .tc-fetch-text{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--gold);margin-bottom:6px;}
+  #tradeConfirmModal .tc-fetch-sub{font-size:11px;color:var(--muted);}
+  #tradeConfirmModal .tc-details{background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:14px;margin-bottom:16px;}
+  #tradeConfirmModal .tc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+  #tradeConfirmModal .tc-row:last-child{border-bottom:none;}
+  #tradeConfirmModal .tc-label{font-size:12px;color:var(--muted);letter-spacing:0.5px;}
+  #tradeConfirmModal .tc-value{font-size:13px;color:var(--text);font-weight:600;text-align:right;}
+  #tradeConfirmModal .tc-value.green{color:var(--green);}
+  #tradeConfirmModal .tc-value.red{color:#e53935;}
+  #tradeConfirmModal .tc-value.gold{color:var(--gold);}
+  #tradeConfirmModal .tc-price-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.2);border-radius:10px;margin-bottom:16px;}
+  #tradeConfirmModal .tc-price-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:txPulse 1s ease infinite;}
+  #tradeConfirmModal .tc-price-label{font-size:11px;color:var(--green);letter-spacing:1px;text-transform:uppercase;}
+  #tradeConfirmModal .tc-price-val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);}
+  #tradeConfirmModal .tc-btns{display:flex;gap:10px;}
+  #tradeConfirmModal .tc-cancel{flex:1;padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:var(--text);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;transition:all .2s;}
+  #tradeConfirmModal .tc-cancel:hover{border-color:rgba(255,255,255,0.3);}
+  #tradeConfirmModal .tc-confirm{flex:1.5;padding:14px;border-radius:10px;border:none;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;font-weight:700;transition:all .2s;}
+  #tradeConfirmModal .tc-confirm:hover{filter:brightness(1.15);transform:translateY(-1px);}
+  #tradeConfirmModal .tc-footer{text-align:center;padding:10px;font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:1px;border-top:1px solid rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;gap:6px;}
+  #tradeConfirmModal .tc-countdown{font-size:10px;color:var(--muted);text-align:center;margin-top:8px;}
   .modal-overlay.open{display:flex;}
   .modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;width:100%;max-width:400px;margin:14px;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
   .modal-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--gold);margin-bottom:16px;display:flex;justify-content:space-between;}
@@ -7737,6 +7768,42 @@ function toggleNavMenu() {
   </div>
 </div>
 
+<!-- ── Trade Confirm Modal (real price-fetch flow) ── -->
+<div class="modal-overlay" id="tradeConfirmModal" data-testid="trade-confirm-modal">
+  <div class="tc-modal">
+    <div class="tc-header">
+      <div class="tc-title" id="tcTitle">CONFIRM TRADE</div>
+      <div class="tc-network"><div class="tc-net-dot"></div>CRONOS</div>
+    </div>
+    <div class="tc-body">
+      <!-- Fetching stage -->
+      <div id="tcFetchStage" class="tc-fetch">
+        <div class="tc-fetch-spinner"></div>
+        <div class="tc-fetch-text">FETCHING LIVE PRICE</div>
+        <div class="tc-fetch-sub">Getting best execution price from Cronos...</div>
+      </div>
+      <!-- Details stage (hidden initially) -->
+      <div id="tcDetailsStage" style="display:none;">
+        <div class="tc-price-bar">
+          <div class="tc-price-dot"></div>
+          <div class="tc-price-label">LIVE PRICE</div>
+          <div class="tc-price-val" id="tcLivePrice">$0.00</div>
+        </div>
+        <div class="tc-details" id="tcDetailsRows"></div>
+        <div class="tc-countdown" id="tcCountdown">Price valid for 15s</div>
+        <div class="tc-btns">
+          <button class="tc-cancel" data-testid="tc-cancel-btn" onclick="closeTradeConfirm()">CANCEL</button>
+          <button class="tc-confirm" data-testid="tc-confirm-btn" id="tcConfirmBtn" onclick="executeTradeConfirm()">CONFIRM TRADE</button>
+        </div>
+      </div>
+    </div>
+    <div class="tc-footer">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      LIVE ON-CHAIN EXECUTION VIA CRONOS
+    </div>
+  </div>
+</div>
+
 <!-- ── Harvest Confirm Modal ── -->
 <div class="modal-overlay" id="harvestConfirmModal">
   <div class="modal" style="max-width:420px">
@@ -11648,6 +11715,85 @@ function showTxConfirm(opts) {
         console.error('Transaction error:', e);
       });
     }
+  }
+}
+
+// ── Trade Confirm Modal: Real price-fetch flow for trading features ──
+let _tcCallback = null;
+let _tcCountdownTimer = null;
+let _tcCountdownSec = 15;
+
+function showTradeConfirm(opts) {
+  // opts: { title, priceFetcher (async fn returning price), details (array of {label,value,cls}), btnText, btnColor, onConfirm (async fn) }
+  const modal = document.getElementById('tradeConfirmModal');
+  const fetchStage = document.getElementById('tcFetchStage');
+  const detailsStage = document.getElementById('tcDetailsStage');
+
+  document.getElementById('tcTitle').textContent = opts.title || 'CONFIRM TRADE';
+  fetchStage.style.display = 'block';
+  detailsStage.style.display = 'none';
+  _tcCallback = opts.onConfirm || null;
+
+  if (opts.btnColor) document.getElementById('tcConfirmBtn').style.background = opts.btnColor;
+  if (opts.btnText) document.getElementById('tcConfirmBtn').textContent = opts.btnText;
+
+  modal.classList.add('open');
+
+  // Fetch price
+  const fetcher = opts.priceFetcher || (async () => 0);
+  fetcher().then(function(price) {
+    // Show price
+    document.getElementById('tcLivePrice').textContent = '$' + parseFloat(price).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:6});
+
+    // Build detail rows
+    let html = '';
+    if (opts.details && opts.details.length) {
+      opts.details.forEach(function(d) {
+        html += '<div class="tc-row"><span class="tc-label">' + d.label + '</span><span class="tc-value' + (d.cls ? ' ' + d.cls : '') + '">' + d.value + '</span></div>';
+      });
+    }
+    document.getElementById('tcDetailsRows').innerHTML = html;
+
+    // Switch to details
+    fetchStage.style.display = 'none';
+    detailsStage.style.display = 'block';
+
+    // Countdown
+    _tcCountdownSec = 15;
+    clearInterval(_tcCountdownTimer);
+    document.getElementById('tcCountdown').textContent = 'Price valid for 15s';
+    _tcCountdownTimer = setInterval(function() {
+      _tcCountdownSec--;
+      document.getElementById('tcCountdown').textContent = 'Price valid for ' + _tcCountdownSec + 's';
+      if (_tcCountdownSec <= 0) {
+        clearInterval(_tcCountdownTimer);
+        document.getElementById('tcCountdown').textContent = 'Price expired — re-fetching...';
+        // Re-fetch
+        setTimeout(function() { closeTradeConfirm(); showTradeConfirm(opts); }, 500);
+      }
+    }, 1000);
+  }).catch(function(e) {
+    document.getElementById('tcFetchStage').innerHTML = '<div style="color:#e53935;font-size:14px;padding:20px;">Price fetch failed: ' + e.message + '</div><div class="tc-btns" style="margin-top:12px;"><button class="tc-cancel" onclick="closeTradeConfirm()">CLOSE</button></div>';
+  });
+}
+
+function closeTradeConfirm() {
+  document.getElementById('tradeConfirmModal').classList.remove('open');
+  clearInterval(_tcCountdownTimer);
+  _tcCallback = null;
+  // Reset fetch stage
+  document.getElementById('tcFetchStage').innerHTML = '<div class="tc-fetch-spinner"></div><div class="tc-fetch-text">FETCHING LIVE PRICE</div><div class="tc-fetch-sub">Getting best execution price from Cronos...</div>';
+}
+
+function executeTradeConfirm() {
+  if (!_tcCallback) return;
+  const cb = _tcCallback;
+  _tcCallback = null;
+  clearInterval(_tcCountdownTimer);
+  closeTradeConfirm();
+  const result = cb();
+  if (result && typeof result.then === 'function') {
+    result.catch(function(e) { console.error('Trade execution error:', e); });
   }
 }
 
@@ -18699,20 +18845,17 @@ function executeAggSwap() {
   });
   const toAmount = (amount - fee) * bestRate;
 
-  showTxConfirm({
-    title: 'CONFIRM AGGREGATED SWAP',
-    action: 'Swap via ' + bestDex.name,
-    fromToken: fromToken.charAt(0),
-    toToken: toToken.charAt(0),
-    amount: amount.toLocaleString() + ' ' + fromToken,
-    fee: fee.toFixed(4) + ' ' + fromToken + ' (0.3%)',
-    receive: toAmount.toFixed(4) + ' ' + toToken,
-    color: '#ff6ec7',
+  showTradeConfirm({
+    title: 'SWAP ' + fromToken + ' → ' + toToken,
+    priceFetcher: async function() { return bestRate; },
+    btnText: 'CONFIRM SWAP',
     btnColor: 'linear-gradient(135deg,#ff6ec7,#cc58a0)',
     details: [
+      { label: 'You Pay', value: amount.toLocaleString() + ' ' + fromToken, cls: 'gold' },
+      { label: 'You Receive', value: toAmount.toFixed(4) + ' ' + toToken, cls: 'green' },
       { label: 'Best Route', value: bestDex.name, cls: 'green' },
       { label: 'Rate', value: '1 ' + fromToken + ' = ' + bestRate.toFixed(6) + ' ' + toToken },
-      { label: 'Routing Fee', value: '0.3%', cls: 'fee' },
+      { label: 'Fee (0.3%)', value: fee.toFixed(4) + ' ' + fromToken, cls: 'red' },
       { label: 'Min. Received', value: (toAmount * 0.995).toFixed(4) + ' ' + toToken },
     ],
     onConfirm: async function() {
@@ -18943,16 +19086,18 @@ function executeCopyTrade() {
   const shortWallet = wallet.length > 10 ? wallet.substring(0, 6) + '...' + wallet.substring(wallet.length - 4) : wallet;
   const pairInfo = _ctGetPairInfo(p.pair);
 
-  showTxConfirm({
-    title: 'Copy Leverage Trade',
-    iconHtml: pairInfo.logo ? `<img src="${pairInfo.logo}" style="width:56px;height:56px;border-radius:50%;border:3px solid ${pairInfo.color};object-fit:cover;" onerror="this.outerHTML='<div style=\\'font-size:48px;\\'>&#x1f4c8;</div>'">` : '<div style="font-size:48px;">&#x1f4c8;</div>',
-    detailsHtml: `<div style="text-align:left;font-size:13px;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Copying from:</span><span style="color:#e91e63;font-weight:700;">${shortWallet}</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Position:</span><span style="color:${p.side==='LONG'?'var(--green)':'#e53935'};font-weight:700;">${p.side} ${pairInfo.name || p.pair} ${p.leverage}x</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Entry Price:</span><span>$${p.entryPrice.toLocaleString()}</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Your Amount:</span><span>${amount} ${p.currency || 'GANG'}</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Copy Fee (0.3%):</span><span style="color:#e91e63;">${fee.toFixed(4)} ${p.currency || 'GANG'}</span></div>
-    </div>`,
+  showTradeConfirm({
+    title: 'COPY ' + p.side + ' ' + (pairInfo.name || p.pair) + ' ' + p.leverage + 'x',
+    priceFetcher: async function() { return futuresState.prices[p.pair] || p.entryPrice; },
+    btnText: 'COPY TRADE',
+    btnColor: 'linear-gradient(135deg,#e91e63,#c2185b)',
+    details: [
+      { label: 'Copying From', value: shortWallet, cls: 'gold' },
+      { label: 'Position', value: p.side + ' ' + (pairInfo.name || p.pair) + ' ' + p.leverage + 'x', cls: p.side === 'LONG' ? 'green' : 'red' },
+      { label: 'Your Amount', value: amount + ' ' + (p.currency || 'GANG'), cls: 'gold' },
+      { label: 'Copy Fee (0.3%)', value: fee.toFixed(4) + ' ' + (p.currency || 'GANG'), cls: 'red' },
+      { label: 'Net Position', value: (amount - fee).toFixed(2) + ' ' + (p.currency || 'GANG'), cls: 'green' },
+    ],
     onConfirm: async () => {
       try {
         if (typeof window.executeCopyTrade === 'function') {
@@ -19198,10 +19343,18 @@ function placeLimitOrder() {
   const amount = parseFloat(document.getElementById('loAmount').value);
   if (!price || !amount || amount <= 0) { showToast('Fill in all fields', 'error'); return; }
   const fee = amount * 0.003;
-  showTxConfirm({
-    title: 'Place Limit Order',
-    iconHtml: '<div style="font-size:48px;">📋</div>',
-    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Type:</span><span style="color:${type==='buy'?'var(--green)':'#e53935'};font-weight:700;">${type.toUpperCase()}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Token:</span><span>${token}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Price:</span><span>$${price}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Amount:</span><span>${amount}</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Exec Fee (0.3%):</span><span style="color:#42a5f5;">${fee.toFixed(4)} CRO</span></div></div>`,
+  showTradeConfirm({
+    title: type.toUpperCase() + ' ' + token + ' @ $' + price,
+    priceFetcher: async function() { return getTokenPrice(token) || price; },
+    btnText: 'PLACE ' + type.toUpperCase() + ' ORDER',
+    btnColor: type === 'buy' ? 'linear-gradient(135deg,#27ae60,#2ecc71)' : 'linear-gradient(135deg,#e74c3c,#c0392b)',
+    details: [
+      { label: 'Type', value: type.toUpperCase(), cls: type === 'buy' ? 'green' : 'red' },
+      { label: 'Token', value: token },
+      { label: 'Limit Price', value: '$' + price },
+      { label: 'Amount', value: amount + ' ' + token, cls: 'gold' },
+      { label: 'Exec Fee (0.3%)', value: fee.toFixed(4) + ' CRO', cls: 'red' },
+    ],
     onConfirm: async () => {
       try {
         if (typeof window.placeLimitOrder === 'function') {
@@ -19222,10 +19375,18 @@ function fillLimitOrder(idx) {
   const s = initLOState();
   if (!s.orders[idx] || s.orders[idx].status !== 'open') return;
   const o = s.orders[idx];
-  showTxConfirm({
-    title: 'Fill Limit Order',
-    iconHtml: '<div style="font-size:48px;">📋</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Filling ${o.type.toUpperCase()} ${o.token} @ $${o.price}</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:var(--green);">${o.amount} ${o.token}</div></div>`,
+  showTradeConfirm({
+    title: 'FILL ' + o.type.toUpperCase() + ' ' + o.token,
+    priceFetcher: async function() { return o.price; },
+    btnText: 'FILL ORDER',
+    btnColor: 'linear-gradient(135deg,#42a5f5,#1e88e5)',
+    details: [
+      { label: 'Type', value: o.type.toUpperCase(), cls: o.type === 'buy' ? 'green' : 'red' },
+      { label: 'Token', value: o.token },
+      { label: 'Amount', value: o.amount + ' ' + o.token, cls: 'gold' },
+      { label: 'Fill Price', value: '$' + o.price },
+      { label: 'Fee', value: o.fee.toFixed(4) + ' CRO', cls: 'red' },
+    ],
     onConfirm: async () => {
       try {
         if (typeof window.fillLimitOrder === 'function') {
@@ -19328,10 +19489,18 @@ function openPerpPosition() {
   const fee = collateral * 0.003;
   const notional = collateral * leverage;
   const entryPrice = PP_PRICES[pair] || 100;
-  showTxConfirm({
-    title: 'Open Perp Position',
-    iconHtml: '<div style="font-size:48px;">📊</div>',
-    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Pair:</span><span style="font-weight:700;">${pair}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Direction:</span><span style="color:${direction==='long'?'var(--green)':'#e53935'};font-weight:700;">${direction.toUpperCase()}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Leverage:</span><span>${leverage}x</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Collateral:</span><span>${collateral} CRO</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Notional:</span><span>${notional.toLocaleString()} CRO</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Fee (0.3%):</span><span style="color:#f44336;">${fee.toFixed(4)} CRO</span></div></div>`,
+  showTradeConfirm({
+    title: direction.toUpperCase() + ' ' + pair + ' ' + leverage + 'x',
+    priceFetcher: async function() { return PP_PRICES[pair] || entryPrice; },
+    btnText: 'OPEN ' + direction.toUpperCase(),
+    btnColor: direction === 'long' ? 'linear-gradient(135deg,#27ae60,#2ecc71)' : 'linear-gradient(135deg,#e74c3c,#c0392b)',
+    details: [
+      { label: 'Collateral', value: collateral + ' CRO', cls: 'gold' },
+      { label: 'Direction', value: direction.toUpperCase(), cls: direction === 'long' ? 'green' : 'red' },
+      { label: 'Leverage', value: leverage + 'x' },
+      { label: 'Notional Size', value: notional.toLocaleString() + ' CRO' },
+      { label: 'Fee (0.3%)', value: fee.toFixed(4) + ' CRO', cls: 'red' },
+    ],
     onConfirm: async () => {
       try {
         if (typeof window.openPerpPosition === 'function') {
@@ -19354,10 +19523,18 @@ function closePerpPosition(idx) {
   if (!s.positions[idx] || s.positions[idx].status !== 'open') return;
   const p = s.positions[idx];
   const closeFee = p.collateral * 0.003;
-  showTxConfirm({
-    title: 'Close Perp Position',
-    iconHtml: '<div style="font-size:48px;">📊</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Close ${p.direction.toUpperCase()} ${p.pair} ${p.leverage}x</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:var(--text);">${p.collateral} CRO</div><div style="color:#f44336;font-size:12px;margin-top:4px;">Close fee: ${closeFee.toFixed(4)} CRO</div></div>`,
+  const curPrice = PP_PRICES[p.pair] || p.entryPrice;
+  showTradeConfirm({
+    title: 'CLOSE ' + p.direction.toUpperCase() + ' ' + p.pair,
+    priceFetcher: async function() { return curPrice; },
+    btnText: 'CLOSE POSITION',
+    btnColor: 'linear-gradient(135deg,#e74c3c,#c0392b)',
+    details: [
+      { label: 'Position', value: p.direction.toUpperCase() + ' ' + p.pair + ' ' + p.leverage + 'x' },
+      { label: 'Collateral', value: p.collateral + ' CRO', cls: 'gold' },
+      { label: 'Entry Price', value: '$' + p.entryPrice.toFixed(2) },
+      { label: 'Close Fee (0.3%)', value: closeFee.toFixed(4) + ' CRO', cls: 'red' },
+    ],
     onConfirm: async () => {
       try {
         if (typeof window.closePerpPosition === 'function') {
@@ -19442,10 +19619,18 @@ function createOtcDeal() {
   const price = parseFloat(document.getElementById('otcPrice').value);
   if (!sellAmount || !price || sellAmount <= 0) { showToast('Fill in all fields', 'error'); return; }
   const fee = sellAmount * 0.003;
-  showTxConfirm({
-    title: 'Create OTC Deal',
-    iconHtml: '<div style="font-size:48px;">🤝</div>',
-    detailsHtml: `<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Selling:</span><span style="font-weight:700;">${sellAmount} ${sellToken}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Buying:</span><span style="font-weight:700;">${buyToken}</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Price per token:</span><span>${price}</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">OTC Fee (0.3%):</span><span style="color:#8d6e63;">${fee.toFixed(4)} CRO</span></div></div>`,
+  showTradeConfirm({
+    title: 'OTC: SELL ' + sellAmount + ' ' + sellToken,
+    priceFetcher: async function() { return getTokenPrice(sellToken) || price; },
+    btnText: 'CREATE DEAL',
+    btnColor: 'linear-gradient(135deg,#8d6e63,#6d4c41)',
+    details: [
+      { label: 'Selling', value: sellAmount + ' ' + sellToken, cls: 'gold' },
+      { label: 'Buying', value: buyToken, cls: 'green' },
+      { label: 'Price Per Token', value: '$' + price },
+      { label: 'Total Value', value: '$' + (sellAmount * price).toFixed(2) },
+      { label: 'OTC Fee (0.3%)', value: fee.toFixed(4) + ' CRO', cls: 'red' },
+    ],
     onConfirm: async () => {
       try {
         if (typeof window.createOtcDeal === 'function') {
@@ -19465,10 +19650,18 @@ function fillOtcDeal(idx) {
   const s = initOtcState();
   if (!s.deals[idx] || s.deals[idx].status !== 'open') return;
   const d = s.deals[idx];
-  showTxConfirm({
-    title: 'Fill OTC Deal',
-    iconHtml: '<div style="font-size:48px;">🤝</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Buy ${d.sellAmount} ${d.sellToken} @ ${d.price}/ea</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:var(--green);">${d.sellAmount} ${d.sellToken}</div><div style="color:#8d6e63;font-size:12px;margin-top:4px;">Fee: ${d.fee.toFixed(4)} CRO</div></div>`,
+  showTradeConfirm({
+    title: 'FILL OTC: ' + d.sellAmount + ' ' + d.sellToken,
+    priceFetcher: async function() { return d.price; },
+    btnText: 'FILL DEAL',
+    btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
+    details: [
+      { label: 'You Get', value: d.sellAmount + ' ' + d.sellToken, cls: 'green' },
+      { label: 'You Pay', value: d.buyToken, cls: 'gold' },
+      { label: 'Price', value: '$' + d.price + '/ea' },
+      { label: 'Total', value: '$' + (d.sellAmount * d.price).toFixed(2) },
+      { label: 'Fee', value: d.fee.toFixed(4) + ' CRO', cls: 'red' },
+    ],
     onConfirm: async () => {
       try {
         if (typeof window.fillOtcDeal === 'function') {
@@ -21299,26 +21492,20 @@ function openFuturesPosition() {
 
   const openingFee = amt * 0.003;
 
-  showTxConfirm({
-    title: 'CONFIRM LEVERAGE POSITION',
-    action: futuresState.side.toUpperCase() + ' ' + futuresState.pair + '/USD',
-    fromToken: futuresState.side === 'long' ? '📈' : '📉',
-    icon: futuresState.side === 'long' ? '📈' : '📉',
-    amount: amt.toFixed(2) + ' ' + curr,
-    fee: openingFee.toFixed(4) + ' ' + curr + ' (0.3%)',
-    receive: 'Position: ' + (amt - openingFee).toFixed(2) + ' ' + curr + ' @ ' + futuresState.leverage + 'x',
-    color: futuresState.side === 'long' ? '#27ae60' : '#e74c3c',
+  showTradeConfirm({
+    title: futuresState.side.toUpperCase() + ' ' + futuresState.pair + '/USD',
+    priceFetcher: async function() { return futuresState.prices[futuresState.pair] || price; },
+    btnText: 'OPEN ' + futuresState.side.toUpperCase(),
     btnColor: futuresState.side === 'long' ? 'linear-gradient(135deg,#27ae60,#2ecc71)' : 'linear-gradient(135deg,#e74c3c,#c0392b)',
     details: [
-      { label: 'Pair', value: futuresState.pair + '/USD' },
-      { label: 'Side', value: futuresState.side.toUpperCase(), cls: futuresState.side === 'long' ? 'green' : '' },
+      { label: 'Amount', value: amt.toFixed(2) + ' ' + curr, cls: 'gold' },
+      { label: 'Side', value: futuresState.side.toUpperCase(), cls: futuresState.side === 'long' ? 'green' : 'red' },
       { label: 'Leverage', value: futuresState.leverage + 'x' },
-      { label: 'Entry Price', value: '$' + price.toFixed(2) },
-      { label: 'Opening Fee', value: '0.3%', cls: 'fee' },
+      { label: 'Position Size', value: (amt * futuresState.leverage).toFixed(2) + ' ' + curr },
+      { label: 'Opening Fee (0.3%)', value: openingFee.toFixed(4) + ' ' + curr, cls: 'red' },
+      { label: 'Net Position', value: (amt - openingFee).toFixed(2) + ' ' + curr, cls: 'green' },
     ],
-    warning: 'Leveraged trading carries high risk. You can lose your entire position.',
     onConfirm: async function() {
-      // Use real on-chain version if available, otherwise fallback
       if (typeof window._realDoOpenFuturesPosition === 'function') {
         await window._realDoOpenFuturesPosition(amt, curr, price);
       } else {
@@ -21396,21 +21583,18 @@ function closeFuturesPosition(id) {
   const closingFee = pos.amount * 0.003;
   const netPnl = finalPnl - closingFee;
 
-  showTxConfirm({
-    title: 'CONFIRM CLOSE POSITION',
-    action: 'Close ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD',
-    fromToken: netPnl >= 0 ? 'W' : 'L',
-    icon: 'GANG',
-    amount: pos.amount.toFixed(2) + ' ' + curr,
-    fee: closingFee.toFixed(4) + ' ' + curr + ' (0.3%)',
-    receive: (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr,
-    color: netPnl >= 0 ? '#27ae60' : '#e74c3c',
+  showTradeConfirm({
+    title: 'CLOSE ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD',
+    priceFetcher: async function() { return futuresState.prices[pos.pair] || currentPrice; },
+    btnText: 'CLOSE POSITION',
     btnColor: 'linear-gradient(135deg,#e74c3c,#c0392b)',
     details: [
+      { label: 'Position', value: pos.amount.toFixed(2) + ' ' + curr, cls: 'gold' },
+      { label: 'Side', value: pos.side.toUpperCase(), cls: pos.side === 'long' ? 'green' : 'red' },
       { label: 'Entry Price', value: '$' + pos.entryPrice.toFixed(2) },
-      { label: 'Current Price', value: '$' + currentPrice.toFixed(2) },
-      { label: 'PnL', value: (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, cls: netPnl >= 0 ? 'green' : '' },
-      { label: 'Closing Fee', value: '0.3%', cls: 'fee' },
+      { label: 'Leverage', value: pos.leverage + 'x' },
+      { label: 'Closing Fee (0.3%)', value: closingFee.toFixed(4) + ' ' + curr, cls: 'red' },
+      { label: 'Net PnL', value: (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, cls: netPnl >= 0 ? 'green' : 'red' },
     ],
     onConfirm: async function() {
       if (typeof window._realCloseFuturesPosition === 'function') {
