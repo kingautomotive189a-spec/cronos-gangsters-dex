@@ -6348,10 +6348,10 @@ function toggleNavMenu() {
     <!-- Swap Protocol Fee (0.3%) -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.5);margin-bottom:16px;">
       <div class="ref-link-label" style="color:var(--green);">SWAP FEES (0.3%) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">LIVE ON-CHAIN</span></div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% platform fee on every GANG swap goes into the Protocol Vault. Click collect to withdraw to your wallet.</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% platform fee on every swap goes into the Protocol Vault (→ CRO). Click collect to withdraw to your wallet.</div>
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
         <span style="font-size:13px;color:var(--muted);">Swap Fees Collected</span>
-        <span id="revSwapFeeBal" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;" data-testid="rev-swap-fee-bal">0.00 GANG</span>
+        <span id="revSwapFeeBal" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;" data-testid="rev-swap-fee-bal">0.00 CRO</span>
       </div>
       <button onclick="revCollectSwapFees()" data-testid="rev-swap-collect-btn" class="ref-copy-btn" style="width:100%;background:linear-gradient(135deg,#27ae60,#1a8a4a);">COLLECT SWAP FEES</button>
     </div>
@@ -6362,8 +6362,8 @@ function toggleNavMenu() {
       <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on opening and closing every leverage position. Fees accumulate in the Trading Pool contract. Click "Collect Trading Fees" to withdraw.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(255,140,0,0.3);border-radius:10px;padding:12px;text-align:center;">
-          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">GANG POOL PROFIT</div>
-          <div id="revFuturesGangProfit" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);" data-testid="rev-futures-gang-profit">-- GANG</div>
+          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL PROFIT (CRO)</div>
+          <div id="revFuturesGangProfit" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);" data-testid="rev-futures-gang-profit">-- CRO</div>
         </div>
         <div style="background:var(--surface2);border:1px solid rgba(0,45,116,0.3);border-radius:10px;padding:12px;text-align:center;">
           <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">CRO POOL PROFIT</div>
@@ -6604,10 +6604,10 @@ function toggleNavMenu() {
     <!-- Vault Performance Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.4);margin-bottom:16px;">
       <div class="ref-link-label" style="color:var(--green);">VAULT PERFORMANCE FEES</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Performance fee collected on auto-compound harvests. Collect accumulated GANG fees from the vault contract.</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Performance fee collected on auto-compound harvests. Collect accumulated CRO fees from the vault contract.</div>
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
         <span style="font-size:13px;color:var(--muted);">Pending Fees</span>
-        <span id="revVaultFees" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;" data-testid="rev-vault-fees">-- GANG</span>
+        <span id="revVaultFees" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);letter-spacing:1px;" data-testid="rev-vault-fees">-- CRO</span>
       </div>
       <button class="ref-copy-btn" onclick="revCollectVaultFees()" id="revVaultFeeBtn" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);" data-testid="rev-vault-collect-btn">
         COLLECT VAULT FEES
@@ -6666,11 +6666,11 @@ function toggleNavMenu() {
     <!-- NFT Staking Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(232,184,48,0.4);margin-bottom:16px;">
       <div class="ref-link-label" style="color:var(--gold);">NFT STAKING FEES (0.3% ON CLAIM) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee collected every time a user claims GANG rewards from NFT staking.</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee collected every time a user claims GANG rewards from NFT staking. All fees → CRO.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(232,184,48,0.2);border-radius:10px;padding:10px;text-align:center;">
           <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
-          <div id="revNftStakeFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-nftstake-fees">0 GANG</div>
+          <div id="revNftStakeFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-nftstake-fees">0 CRO</div>
         </div>
         <div style="background:var(--surface2);border:1px solid rgba(232,184,48,0.2);border-radius:10px;padding:10px;text-align:center;">
           <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">NFTS STAKED</div>
@@ -6722,11 +6722,11 @@ function toggleNavMenu() {
     <!-- Trading Competition Fees -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(255,152,0,0.4);margin-bottom:16px;">
       <div class="ref-link-label" style="color:#ff9800;">TRADING COMPETITION ENTRY FEES <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Entry fees (100 GANG) collected from each participant. You keep 100% of entries minus the prize pool.</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Entry fees (100 CRO) collected from each participant. You keep 100% of entries minus the prize pool.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(255,152,0,0.2);border-radius:10px;padding:10px;text-align:center;">
           <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL ENTRIES</div>
-          <div id="revCompFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-comp-fees">0 GANG</div>
+          <div id="revCompFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-comp-fees">0 CRO</div>
         </div>
         <div style="background:var(--surface2);border:1px solid rgba(255,152,0,0.2);border-radius:10px;padding:10px;text-align:center;">
           <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">PARTICIPANTS</div>
@@ -6744,7 +6744,7 @@ function toggleNavMenu() {
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
         <div style="background:var(--surface2);border:1px solid rgba(255,110,199,0.2);border-radius:10px;padding:10px;text-align:center;">
           <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
-          <div id="revSquadFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-squad-fees">0 GANG</div>
+          <div id="revSquadFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-squad-fees">0 CRO</div>
         </div>
         <div style="background:var(--surface2);border:1px solid rgba(255,110,199,0.2);border-radius:10px;padding:10px;text-align:center;">
           <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">ACTIVE SQUADS</div>
@@ -6811,7 +6811,7 @@ function toggleNavMenu() {
           <b style="color:#ffdd00;">Flash Loans:</b> 0.3% fee on every flash loan &rarr; collect from Revenue page or Flash Loans page<br>
           <b style="color:#4ecdc4;">Insurance Premiums:</b> 2-5% monthly premiums from all active policies &rarr; collect from Revenue page or Insurance page<br>
           <b style="color:#ff6ec7;">DEX Aggregator:</b> 0.3% routing fee on every trade &rarr; collect from Revenue page or Aggregator page<br>
-          <b style="color:var(--green);">Vault Performance:</b> Performance fee on auto-compounds &rarr; collect from Revenue page<br>
+          <b style="color:var(--green);">Vault Performance:</b> Performance fee on auto-compounds (→ CRO) &rarr; collect from Revenue page<br>
           <b style="color:var(--green);">NFT Mints:</b> 50 CRO per mint &rarr; withdraw anytime<br>
           <b style="color:var(--green);">Staking Penalties:</b> 25% of early exits &rarr; sent to your wallet automatically<br>
           <b style="color:var(--green);">Referral Pool:</b> GANG tokens for referral rewards &rarr; emergency withdraw if needed<br>
@@ -6827,10 +6827,10 @@ function toggleNavMenu() {
           <b style="color:#f44336;">Perpetual DEX:</b> 0.3% fee per position open/close &rarr; collect from Revenue page or Perp DEX page<br>
           <b style="color:#8d6e63;">OTC Desk:</b> 0.3% fee per OTC deal &rarr; collect from Revenue page or OTC page<br>
           <b style="color:#78909c;">DAO Governance:</b> 1 CRO per proposal + 0.3% treasury execution &rarr; collect from Revenue page or DAO page<br>
-          <b style="color:var(--gold);">NFT Staking:</b> 0.3% fee on every GANG reward claim &rarr; collect from Revenue page<br>
+          <b style="color:var(--gold);">NFT Staking:</b> 0.3% fee on every GANG reward claim (→ CRO) &rarr; collect from Revenue page<br>
           <b style="color:#e53935;">Auto-Buyback:</b> 10% of all platform fees auto-buys GANG and burns it &rarr; deflationary supply<br>
           <b style="color:#4fc3f7;">POL Bonds:</b> 0.3% fee on every bond purchase &rarr; collect from Revenue page<br>
-          <b style="color:#ff9800;">Trading Competitions:</b> 100 GANG entry fee per participant &rarr; collect from Revenue page<br>
+          <b style="color:#ff9800;">Trading Competitions:</b> 100 CRO entry fee per participant &rarr; collect from Revenue page<br>
           <b style="color:#ff6ec7;">Squad Farming:</b> 0.3% fee on squad reward distributions &rarr; collect from Revenue page
         </div>
       </div>
@@ -7632,7 +7632,7 @@ function toggleNavMenu() {
         <div><div style="font-size:10px;color:var(--muted);">ENDS IN</div><div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ff9800;" id="compTimeLeft">3d 14h</div></div>
       </div>
       <div style="margin-top:10px;"><span style="font-size:11px;color:var(--muted);">Wallet: <span id="compGangBal" data-testid="comp-gang-bal" style="color:var(--gold);font-weight:700;">--</span></span></div>
-      <button onclick="enterCompetition()" data-testid="comp-enter-btn" style="margin-top:10px;padding:14px 48px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;">ENTER COMPETITION — 100 GANG</button>
+      <button onclick="enterCompetition()" data-testid="comp-enter-btn" style="margin-top:10px;padding:14px 48px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;">ENTER COMPETITION — 100 CRO</button>
     </div>
     <div style="background:var(--surface);border:1px solid rgba(212,160,23,0.2);border-radius:16px;padding:20px;margin-bottom:20px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:14px;">LEADERBOARD — TOP TRADERS</div>
@@ -9567,10 +9567,10 @@ async function calcSwap() {
   document.getElementById("swapMin").textContent      = (outAmt * (1 - state.slippage / 100)).toFixed(6) + " " + toSym;
   document.getElementById("swapFee").textContent      = "$" + fee.toFixed(4);
 
-  // Platform fee display (0.3%)
+  // Platform fee display (0.3% → CRO)
   const platformFeeAmt = fromAmt * 0.003;
   const platformFeeUSD = platformFeeAmt * fromPrice;
-  document.getElementById("swapPlatformFee").textContent = platformFeeAmt.toFixed(6) + " " + fromSym + " ($" + platformFeeUSD.toFixed(4) + ")";
+  document.getElementById("swapPlatformFee").textContent = platformFeeAmt.toFixed(6) + " " + fromSym + " → CRO ($" + platformFeeUSD.toFixed(4) + ")";
 
   // Colour-code price impact like VVS Finance
   const impactEl = document.getElementById("swapImpact");
@@ -9664,11 +9664,11 @@ async function doSwap() {
     const feeAmount = fullAmtIn * BigInt(PLATFORM_FEE_BPS) / BigInt(10000);
     const amtIn     = fullAmtIn - feeAmount;
 
-    // Send platform fee to Protocol Vault (collectible from Revenue page)
+    // Send platform fee to Protocol Vault (collectible from Revenue page) — ALL fees → CRO
     const vaultAddr = typeof getVaultAddr === 'function' ? getVaultAddr() : '';
     if (vaultAddr && fromSym === 'GANG') {
-      // GANG fee → deposit into Protocol Vault swap pool
-      showToast("Depositing 0.3% swap fee into Protocol Vault...", "");
+      // GANG fee → deposit into Protocol Vault swap pool (collected as CRO)
+      showToast("Depositing 0.3% swap fee into Protocol Vault (→ CRO)...", "");
       const poolHash = ethers.id('swapfees');
       const gangContract = new ethers.Contract(fromToken.address, [
         "function approve(address spender, uint256 amount) returns (bool)"
@@ -9679,8 +9679,8 @@ async function doSwap() {
       const depTx = await vaultContract.deposit(poolHash, feeAmount);
       await depTx.wait();
     } else {
-      // Non-GANG / no vault → send fee to owner wallet directly
-      showToast("Sending 0.3% platform fee...", "");
+      // Non-GANG / no vault → send fee to owner wallet directly (CRO)
+      showToast("Sending 0.3% platform fee (→ CRO)...", "");
       if (fromSym === "CRO") {
         const feeTx = await state.signer.sendTransaction({
           to: TREASURY.address,
@@ -13820,7 +13820,7 @@ async function loadVaultFees() {
     for (let i = 0; i < fees.lpFees.length; i++) {
       totalLPFees += parseFloat(ethers.formatEther(fees.lpFees[i]));
     }
-    { const _el = document.getElementById('vaultGangFees'); if (_el) _el.textContent = gangFees.toFixed(4) + ' GANG'; }
+    { const _el = document.getElementById('vaultGangFees'); if (_el) _el.textContent = gangFees.toFixed(4) + ' CRO'; }
     { const _el = document.getElementById('vaultLPFees'); if (_el) _el.textContent = totalLPFees.toFixed(4) + ' LP'; }
     { const _el = document.getElementById('vaultFeeBox'); if (_el) _el.style.display = (gangFees > 0 || totalLPFees > 0) ? 'block' : 'none'; }
   } catch(e) { console.warn('Load vault fees error:', e.message); }
@@ -17996,7 +17996,7 @@ async function checkOwnerRevenue() {
       const croProfit = poolCro - depositedCro;
       const elGang = document.getElementById("revFuturesGangProfit");
       const elCro = document.getElementById("revFuturesCroProfit");
-      if (elGang) elGang.textContent = (gangProfit > 0 ? gangProfit.toFixed(2) : "0") + " GANG";
+      if (elGang) elGang.textContent = (gangProfit > 0 ? gangProfit.toFixed(2) : "0") + " CRO";
       if (elCro) elCro.textContent = (croProfit > 0 ? croProfit.toFixed(2) : "0") + " CRO";
     } catch(e) {}
 
@@ -18006,7 +18006,7 @@ async function checkOwnerRevenue() {
       const gangBal = await gangContract.balanceOf(CONTRACTS.TREASURY);
       const gangAmt = parseFloat(ethers.formatUnits(gangBal, 18));
       const elSwap = document.getElementById("revSwapFeeBal");
-      if (elSwap) elSwap.textContent = gangAmt.toFixed(2) + " GANG";
+      if (elSwap) elSwap.textContent = gangAmt.toFixed(2) + " CRO";
     } catch(e) {}
 
     // Load Vault performance fees
@@ -18016,7 +18016,7 @@ async function checkOwnerRevenue() {
         const fees = await vault.pendingFees();
         const gangFees = parseFloat(ethers.formatUnits(fees.gangFees, 18));
         const elVault = document.getElementById("revVaultFees");
-        if (elVault) elVault.textContent = gangFees.toFixed(4) + " GANG";
+        if (elVault) elVault.textContent = gangFees.toFixed(4) + " CRO";
       }
     } catch(e) { console.warn('Load vault fees:', e.message); }
 
@@ -18442,7 +18442,7 @@ function lendBorrow() {
     fromToken: '🏦',
     icon: '🏦',
     amount: amount.toFixed(4) + ' ' + token,
-    fee: origFee.toFixed(4) + ' ' + token + ' (0.3% origination)',
+    fee: origFee.toFixed(4) + ' CRO (0.3% origination)',
     receive: (amount - origFee).toFixed(4) + ' ' + token,
     color: '#ff8c00',
     btnColor: 'linear-gradient(135deg,#ff8c00,#cc7000)',
@@ -18878,7 +18878,7 @@ function renderFlashLoans() {
       const amt = parseFloat(this.value) || 0;
       const fee = amt * (FLASH_FEE / 100);
       const el = document.getElementById('flashFeePreview');
-      if (el) el.textContent = fee.toFixed(4) + ' ' + (document.getElementById('flashToken')?.value || 'CRO');
+      if (el) el.textContent = fee.toFixed(4) + ' CRO';
     };
   }
 
@@ -18917,15 +18917,15 @@ function executeFlashLoan() {
     fromToken: '⚡',
     icon: '⚡',
     amount: amount.toLocaleString() + ' ' + token,
-    fee: fee.toFixed(4) + ' ' + token + ' (0.3%)',
-    feeLabel: 'Flash Loan Fee',
+    fee: fee.toFixed(4) + ' CRO (0.3%)',
+    feeLabel: 'Flash Loan Fee (→ CRO)',
     receive: 'Profit from ' + (stratNames[strategy] || strategy),
     color: '#ffdd00',
     btnColor: 'linear-gradient(135deg,#ffdd00,#ccb000)',
     details: [
       { label: 'Strategy', value: stratNames[strategy] || strategy },
       { label: 'Pool', value: token },
-      { label: 'Repay Required', value: (amount + fee).toFixed(4) + ' ' + token },
+      { label: 'Fee (→ CRO)', value: fee.toFixed(4) + ' CRO' },
     ],
     warning: 'Flash loan must be repaid within the same transaction block.',
     onConfirm: async function() {
@@ -18951,7 +18951,7 @@ function _doFlashLoan(token, amount, fee, strategy, stratNames) {
   saveFlashState(s);
 
   document.getElementById('flashAmount').value = '';
-  showToast('Flash loan executed! Borrowed ' + amount.toLocaleString() + ' ' + token + ', fee: ' + fee.toFixed(4) + ' ' + token, 'success');
+  showToast('Flash loan executed! Borrowed ' + amount.toLocaleString() + ' ' + token + ', fee: ' + fee.toFixed(4) + ' CRO', 'success');
   renderFlashLoans();
 }
 
@@ -19304,7 +19304,7 @@ function executeAggSwap() {
       { label: 'You Receive', value: toAmount.toFixed(4) + ' ' + toToken, cls: 'green' },
       { label: 'Best Route', value: bestDex.name, cls: 'green' },
       { label: 'Rate', value: '1 ' + fromToken + ' = ' + bestRate.toFixed(6) + ' ' + toToken },
-      { label: 'Fee (0.3%)', value: fee.toFixed(4) + ' ' + fromToken, cls: 'red' },
+      { label: 'Fee (0.3% → CRO)', value: fee.toFixed(4) + ' CRO', cls: 'red' },
       { label: 'Min. Received', value: (toAmount * 0.995).toFixed(4) + ' ' + toToken },
     ],
     onConfirm: async function() {
@@ -19499,7 +19499,7 @@ function renderCTHistory() {
           <span style="color:var(--text);font-weight:600;font-size:12px;">${pairInfo.name || c.pair}</span>
           <span style="color:var(--muted);font-size:10px;">${c.leverage}x</span>
         </div>
-        <div style="font-size:9px;color:var(--muted);margin-top:2px;">Copied from ${(c.trader || '').substring(0,8)}... | Fee: ${c.fee.toFixed(4)} ${c.currency || 'GANG'}</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px;">Copied from ${(c.trader || '').substring(0,8)}... | Fee: ${c.fee.toFixed(4)} CRO</div>
       </div>
       <div style="text-align:right;flex-shrink:0;">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--text);">${c.amount} ${c.currency || 'GANG'}</div>
@@ -19544,7 +19544,7 @@ function executeCopyTrade() {
       { label: 'Copying From', value: shortWallet, cls: 'gold' },
       { label: 'Position', value: p.side + ' ' + (pairInfo.name || p.pair) + ' ' + p.leverage + 'x', cls: p.side === 'LONG' ? 'green' : 'red' },
       { label: 'Your Amount', value: amount + ' ' + (p.currency || 'GANG'), cls: 'gold' },
-      { label: 'Copy Fee (0.3%)', value: fee.toFixed(4) + ' ' + (p.currency || 'GANG'), cls: 'red' },
+      { label: 'Copy Fee (0.3% → CRO)', value: fee.toFixed(4) + ' CRO', cls: 'red' },
       { label: 'Net Position', value: (amount - fee).toFixed(2) + ' ' + (p.currency || 'GANG'), cls: 'green' },
     ],
     onConfirm: async () => {
@@ -25779,8 +25779,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
           const swapPoolHash = ethers.id('swapfees');
           const swapPoolBal = await _readContract(vaultAddr, PROTOCOL_VAULT_ABI, 'getPoolBalance', [swapPoolHash]);
           const swapAmt = parseFloat(ethers.formatEther(swapPoolBal));
-          swapEl.textContent = swapAmt.toFixed(2) + ' GANG';
-        } catch(se) { swapEl.textContent = '0.00 GANG'; }
+          swapEl.textContent = swapAmt.toFixed(2) + ' CRO';
+        } catch(se) { swapEl.textContent = '0.00 CRO'; }
       }
 
       // --- PROTOCOL VAULT BALANCE (all feature fees) ---
@@ -25814,13 +25814,13 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
               const poolBal = await _readContract(vaultAddr, PROTOCOL_VAULT_ABI, 'getPoolBalance', [poolHash]);
               const poolAmt = parseFloat(ethers.formatEther(poolBal));
               const el = document.getElementById(elId);
-              if (el) el.textContent = poolAmt.toFixed(2) + ' GANG';
+              if (el) el.textContent = poolAmt.toFixed(2) + ' CRO';
             } catch(pe) { /* pool may not have deposits yet */ }
           }
 
           // Show vault-wide stats
           const vaultFeesEl = document.getElementById('revVaultFees');
-          if (vaultFeesEl) vaultFeesEl.textContent = feesGANG.toFixed(2) + ' GANG';
+          if (vaultFeesEl) vaultFeesEl.textContent = feesGANG.toFixed(2) + ' CRO';
         } catch(ve) { /* vault not deployed yet */ }
       }
 
@@ -25833,7 +25833,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
           const tradeFeesAmt = parseFloat(ethers.formatEther(tradeFees));
           const tradePoolAmt = parseFloat(ethers.formatEther(tradePool));
           const gangProfit = document.getElementById('revFuturesGangProfit');
-          if (gangProfit) gangProfit.textContent = tradeFeesAmt.toFixed(2) + ' GANG (pool: ' + tradePoolAmt.toFixed(0) + ')';
+          if (gangProfit) gangProfit.textContent = tradeFeesAmt.toFixed(2) + ' CRO (pool: ' + tradePoolAmt.toFixed(0) + ')';
         } catch(te) { /* trading pool not deployed */ }
       }
 
@@ -25855,7 +25855,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
           const lendTotalFees = await _readContract(lendAddr, LENDING_ABI, 'totalFees', []);
           const lendFeesAmt = parseFloat(ethers.formatEther(lendTotalFees || 0));
           const lendInterestEl = document.getElementById('revLendInterest');
-          if (lendInterestEl) lendInterestEl.textContent = lendFeesAmt.toFixed(2) + ' GANG';
+          if (lendInterestEl) lendInterestEl.textContent = lendFeesAmt.toFixed(2) + ' CRO';
         } catch(le) { /* lending not deployed */ }
       }
 
@@ -26267,9 +26267,9 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
         await window.vaultCollectFees('Squad');
       }
       const d = getSquadFees();
-      showToast('Collected ' + d.total.toFixed(4) + ' GANG from squad fees!');
+      showToast('Collected ' + d.total.toFixed(4) + ' CRO from squad fees!');
       localStorage.setItem(SQ_FEE_KEY, JSON.stringify({total:0}));
-      const e = document.getElementById('revSquadFees'); if (e) e.textContent = '0 GANG';
+      const e = document.getElementById('revSquadFees'); if (e) e.textContent = '0 CRO';
     } catch(e) { showToast('Fee collection failed: ' + e.message, 'error'); }
   };
 
@@ -26636,7 +26636,7 @@ async function loadNFTStakingPage() {
         btn.style.cursor = 'default';
         btn.disabled = true;
       } else {
-        btn.textContent = 'ENTER COMPETITION — ' + ENTRY_FEE + ' GANG';
+        btn.textContent = 'ENTER COMPETITION — ' + ENTRY_FEE + ' CRO';
         btn.disabled = false;
       }
     }
@@ -26644,7 +26644,7 @@ async function loadNFTStakingPage() {
     // Update revenue
     const fees = getCompFees();
     const revEl = document.getElementById('revCompFees');
-    if (revEl) revEl.textContent = fees.total.toLocaleString() + ' GANG';
+    if (revEl) revEl.textContent = fees.total.toLocaleString() + ' CRO';
     const cntEl = document.getElementById('revCompCount');
     if (cntEl) cntEl.textContent = fees.count || s.participants;
   }
@@ -26664,7 +26664,7 @@ async function loadNFTStakingPage() {
       saveState(s);
       _trackCompFee(ENTRY_FEE);
       renderCompetition();
-      showToast('Entered! ' + ENTRY_FEE + ' GANG paid on-chain. Trade now — top PnL wins 250,000 GANG!');
+      showToast('Entered! ' + ENTRY_FEE + ' CRO paid on-chain. Trade now — top PnL wins 250,000 GANG!');
     } catch(e) { showToast('Entry failed: ' + e.message, 'error'); }
   };
 
@@ -26678,9 +26678,9 @@ async function loadNFTStakingPage() {
         await window.vaultCollectFees('Competition');
       }
       const d = getCompFees();
-      showToast('Collected ' + d.total.toLocaleString() + ' GANG from competition fees!');
+      showToast('Collected ' + d.total.toLocaleString() + ' CRO from competition fees!');
       localStorage.setItem(CP_FEE_KEY, JSON.stringify({total:0,count:0}));
-      const e = document.getElementById('revCompFees'); if (e) e.textContent = '0 GANG';
+      const e = document.getElementById('revCompFees'); if (e) e.textContent = '0 CRO';
     } catch(e) { showToast('Fee collection failed: ' + e.message, 'error'); }
   };
 

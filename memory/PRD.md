@@ -78,6 +78,13 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - **NEW**: Live price updates in chart header every 3s tick
 - **UPGRADE**: Perpetual DEX page header with "FULLY ON-CHAIN | CRONOS MAINNET" badge and professional copy
 
+## Completed (2026-04-06 — ALL Fees → CRO Conversion)
+- **CHANGE**: Converted ALL platform fees across the entire app to be collected exclusively in CRO
+- **Features updated**: Leverage Trading, Swaps, Flash Loans, DEX Aggregator, Copy Trading, Lending, NFT Staking, Trading Competitions (100 GANG → 100 CRO), Squad Farming, Auto-Compound Vault
+- **Revenue Page**: All fee displays changed from GANG to CRO (Swap Fees, Vault Performance, Pool Profit, NFT Staking, Competition, Squad, Lending Interest)
+- **UI**: All fee labels, toast messages, confirmation popups, and info sections updated to show CRO
+- **Info section**: "How You Earn" list updated for NFT Staking (→ CRO), Vault Performance (→ CRO), Competition (100 CRO)
+
 ## Completed (2026-04-06 — CRO-Only Fee Collection)
 - **CHANGE**: All leverage trading fees (opening 0.3% + closing 0.3%) now collected exclusively in CRO pool regardless of trading currency
 - **UPDATED**: 6 functions modified: `openFuturesPosition`, `_doOpenFuturesPosition`, `_doCloseFuturesPosition`, `_forceCloseFuturesPosition`, `_realDoOpenFuturesPosition`, `_realCloseFuturesPosition`
