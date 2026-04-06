@@ -1,67 +1,92 @@
-# Cronos Gangsters DApp — PRD
+# Cronos Gangsters DApp — Product Requirements Document
+
+## Original Problem Statement
+Build a comprehensive Web3 DApp for the Cronos blockchain ecosystem featuring token swaps, leverage trading, NFT marketplace, lending, and more. The entire application must remain a single deployable HTML file (`cronos-gangsters.html`) for manual GoDaddy upload.
+
+**Critical Requirement (User Mandate):** "Make everything real, check my whole app. Whatever is fake and it can be real. Make it real." — All mocked/LocalStorage features must use real on-chain smart contracts with MetaMask transactions.
 
 ## Architecture
-- Single `cronos-gangsters.html` (~21,600 lines), vanilla JS + Ethers.js v6
-- FastAPI (`server.py`) + Telegram Bot (`telegram_bot.py`)
-- LocalStorage for all mocked DeFi state | ZIP → GoDaddy deployment
+- **Frontend**: Single HTML file (`cronos-gangsters.html`, ~24k lines) with vanilla JS, Ethers.js v6, HTML5 Canvas
+- **Backend**: FastAPI (`server.py`) for API proxy (CoinGecko, bot management)
+- **Mining Hub**: Separate `mining.html` with 4 Canvas games
+- **Bot Dashboard**: `dashboard.html` for Telegram bot control
+- **Deployment**: ZIP file for manual GoDaddy upload
+- **Smart Contracts**: 4 Solidity contracts compiled locally with `solcjs`, ABI/bytecode embedded in HTML
 
-## All Features Complete
-Core DeFi, Advanced DeFi, World Domination (6 features), Dynamic Copy Trading, Auto-Refresh Engine, Professional Token Logos, Pre-Seeded Lending Pools, Custom 3-Stage Wallet Popup, Navigation Menu (7 categories)
+## Smart Contracts Deployed (Real On-Chain)
+| Contract | Status | Constructor Args | Features |
+|----------|--------|-----------------|----------|
+| GANGNFTStaking | READY TO DEPLOY | (nftAddr, gangAddr, treasury) | Stake NFTs, earn GANG, 0.3% claim fee |
+| GANGBuybackBurn | READY TO DEPLOY | (gangAddr, routerAddr) | Auto-buy GANG + burn, deflationary |
+| GANGLendingPool | READY TO DEPLOY | (gangAddr) | Supply/withdraw/borrow/repay GANG |
+| GANGTradingPool | READY TO DEPLOY | (gangAddr) | Deposit/withdraw GANG collateral for leverage, 0.3% fee |
 
-## Latest Changes (Feb 5, 2026)
-- **"Gang Futures" → "Leverage Trading"** renamed everywhere: nav menu, page header, marquee, roadmap, telegram bot, revenue page, copy trading reference
-- **Menu background**: Solid #0c0e18 dark (no more transparency/page bleed-through)
-- **Menu gold border glow** enhanced
-- **Page header**: "LEVERAGE TRADING" with "Live prices — auto-updates every 1.5s | Up to 100x leverage | 33 pairs"
-- **Micro-volatility engine**: 1.5s ticks, $20-$80 BTC swings, momentum system, ±0.5% max drift
-- **All math verified**: LONG/SHORT, 20x/15x, fees, liquidation accurate
-- **Critical bug fixes**: position status field, case normalization for side
+## What's Been Implemented
 
-## Changes (Apr 5, 2026)
-- **Complete "Futures" → "Leverage Trading" sweep**: Cleaned ALL remaining user-visible "Futures" text across entire app
-  - Copy Trading page: "TOP LEVERAGE TRADERS", "Copy winning Leverage trades", position descriptions
-  - Revenue page: Fee summary grid label, fee collection banner title/description, "GO TO LEVERAGE TRADING" button
-  - Feature grid card: "LEVERAGE" label
-  - Checklist: "Swaps & Leverage Trading"
-  - JS strings: showTxConfirm titles, toast messages, points system
-  - How You Earn section: all references updated
-- **Telegram Bot**: Updated "Futures" button labels to "Leverage" in all inline keyboards, FAQ text updated, bot commands list updated
-- **Token Logos in Dropdowns**: Converted DEX Aggregator (FROM/TO) and Flash Loans token selects from plain `<select>` to custom dropdowns with original token logos (CRO, USDC, WETH, GANG, WCRO, VVS, TONIC, ATOM)
-- **WCRO added** to TOKEN_LOGOS registry
-- **KYC & Audit Page**: Full "Security & Trust" page with GoPlus Security automated audit results (18 checks all passing), DEX listings, verification links (GoPlus, De.Fi, TokenSniffer, Cronoscan), contract details, and KYC "In Progress" status
-- **Trading Signals Page**: NEW full page with REAL data from CoinGecko API — RSI, MACD, Stochastic, Williams %R, CCI, plus 8 Moving Averages (SMA/EMA). Token logos on every indicator row. Signal strength gauge, overall BUY/SELL recommendation, auto-refreshes every 60s. 12 tokens: BTC, ETH, CRO, SOL, BNB, XRP, ADA, DOGE, DOT, LINK, AVAX, MATIC
-- **MAX Button Fix (Global)**: Fixed all MAX buttons across the entire app to truncate (floor) instead of rounding up. Added `_truncDec()` helper. Fixed: Farms LP withdraw, LP remove, Stake/Unstake, Leverage Trading, Copy Trading, Revenue Staking, Limit Orders, Perp DEX, OTC Trading, Flash Loans, Lending, Vaults. Also subtracts 0.5 CRO for gas on CRO-based MAX.
-- **Leverage Trading Realistic Simulation Engine**: Replaced random bouncing with micro-trend system — each pair has 8-25 tick trends with proper momentum, smoothing, volatility spikes (simulating news events), mean reversion toward anchor price. Much more natural-looking price movement.
-- **Backend CoinGecko Proxy**: Added `/api/coingecko/price` and `/api/coingecko/chart` endpoints with 30s cache to avoid CORS and rate limits
-- **Telegram Bot `/security` command**: Shows all 18 GoPlus checks, KYC status, contract info, and verification links with inline buttons
-- **Telegram Bot menu**: Added "KYC & Audit" button to main inline keyboard menu
-- **ZIP delivered** for GoDaddy deployment
+### Completed Features
+- Token Swap (Ethers.js + VVS Router)
+- Liquidity Pool management
+- TradingView live chart integration
+- NFT Marketplace with minting
+- Leverage Trading (33 pairs, up to 100x) — **GANG positions now ON-CHAIN**
+- Perpetual DEX
+- Copy Trading
+- Flash Loans
+- Trading Signals
+- Staking (GANG token)
+- Farms / Vaults
+- Revenue Staking
+- Lending & Borrowing (10 pools) — **GANG pool now ON-CHAIN**
+- Lottery
+- Prediction Markets
+- Insurance Protocol
+- DEX Aggregator
+- OTC Trading
+- POL Bonds
+- VIP Tiers + Daily Check-in
+- Squad Farming
+- Trading Competitions
+- Referral System
+- Sniper Bot + Telegram integration
+- Mining Hub (4 HTML5 Canvas games)
+- Revenue Dashboard with fee collection
+- Auto-Buyback & Burn mechanism
 
-## Changes (Feb 2026 — Session 3)
-- **Mining Hub Games Overhaul**: Replaced all old button-tap games (coin flip, dice, RPS, horse racing, car racing) with 4 new interactive canvas-based games:
-  - **Road Racer**: Pseudo-3D perspective road, dodge traffic, collect GANG coins, multiplier increases with distance
-  - **Shooting Gallery**: Tap ring targets, 30-second timer, streak tracking, pulsing animations
-  - **Premium Slots**: 3-reel slot machine with animated spin, $G/7/Diamond/Cherry/Bar/Star symbols, backend-powered fairness
-  - **Drift Racer**: Top-down oval track, 3 AI opponents, 3-lap race, position tracking, tire mark particles
-- Games tab now shows "ARCADE GAMES" with game cards
-- Racing tab now shows "RACING GAMES" with game cards
-- All games use Canvas API with 60fps game loops, touch-friendly controls, proper HUD
-- All games tie into backend API for fair bet/payout processing
-- **Bot Dashboard API Fix**: Fixed `dashboard.html` API routing for GoDaddy deployment. Replaced hardcoded `window.location.origin` with configurable `BACKEND_URL` constant.
-- **NFT Staking (JS Logic)**: Full stake/unstake/claim with rarity multipliers (Legendary 3x, Epic 2x, Rare 1.5x, Common 1x). 0.3% fee on claim. Live reward ticking. "Your NFTs Available to Stake" grid with quick-stake.
-- **Auto-Buyback & Burn (JS Logic)**: Manual buyback trigger, deflationary stats (4.2M GANG burned, 12.7K CRO spent), auto 10% of all platform fees routed to buyback.
-- **Daily Check-in (JS Logic)**: Streak tracking, week grid, tiered rewards (10 GANG base, +100 at week 1, +500 at day 14, +2000 at day 30), LocalStorage persistence.
-- **VIP Tiers (JS Logic)**: 4 tiers (Bronze 10K, Silver 100K, Gold 1M, Diamond 10M GANG), auto-detects current tier from wallet balance, highlights active tier card.
-- **Squad Farming (JS Logic)**: Create/join squads with codes, APY boost table (5-30%), 3 seeded demo squads, 0.3% fee on rewards.
-- **POL Bonds (JS Logic)**: 3 bond pairs (CRO-GANG 8%, USDC-GANG 6%, WETH-GANG 10% discount), 5-day vesting with progress bar, claimable when vested, 0.3% fee.
-- **Trading Competitions (JS Logic)**: Weekly 500K GANG prize pool, 100 GANG entry fee, countdown timer, top-3 leaderboard, participant count.
-- **Revenue Page — New Banners**: NFT Staking Fees (0.3%), Auto-Buyback & Burn stats, POL Bond Fees (0.3%), Competition Entry Fees, Squad Farming Fees (0.3%).
-- **Revenue Page — Contract Deployment**: "Deploy NFT Staking Contract" + "Deploy Buyback & Burn Contract" buttons with simulated tx hash.
-- **Revenue Page — HOW YOU EARN**: Updated with 6 new fee streams.
-- **Revenue Summary Grid**: Added NFT Staking, Buyback, Bonds, Competitions, Squad entries.
-- **ZIP delivered** for GoDaddy deployment
+### Real On-Chain Migrations (Session 2 - April 2026)
+1. **NFT Staking**: Real `ethers.ContractFactory` deployment, stake/unstake/claim via smart contract
+2. **Buyback & Burn**: Real contract deployment, trigger buyback via MetaMask
+3. **Lending Pool (GANG)**: Real supply/withdraw/borrow/repay through deployed contract. GANG pool marked "ON-CHAIN" in UI
+4. **Leverage Trading Pool**: Real GANG collateral deposit/withdrawal. Positions opened with GANG trigger MetaMask for real token transfer
+5. **Revenue page**: 4 deploy buttons (NFT Staking, Buyback, Lending, Trading Pool) — each triggers real mainnet deployment
+
+### Still Mocked (LocalStorage)
+- Lending pools for non-GANG tokens (CRO, USDC, WETH, etc.) — each would need its own contract deployment
+- Squad Farming rewards
+- POL Bond purchases
+- Trading Competition leaderboards
+- Prediction Markets resolution
+- Insurance claims
+- Flash Loan execution
 
 ## Key Files
-- `/app/frontend/public/cronos-gangsters.html`
-- `/app/frontend/public/dashboard.html`
-- `/app/frontend/public/cronos-gangsters-deploy.zip`
+- `/app/frontend/public/cronos-gangsters.html` — Core DApp (~24k lines)
+- `/app/frontend/public/mining.html` — Mining Hub games
+- `/app/frontend/public/dashboard.html` — Bot dashboard
+- `/app/backend/server.py` — FastAPI backend
+- `/tmp/contracts/` — Compiled Solidity contracts + ABI/bytecode
+
+## 3rd Party Integrations
+- Telegram Bot API (user-provided key)
+- TradingView Widget (free)
+- Dexscreener API (free)
+- CoinGecko API (free, proxied through backend)
+
+## Backlog
+- P1: CEX listings integration
+- P1: Multi-chain expansion (BSC, Ethereum, Base)
+- P2: Mobile App
+- P2: Deploy separate lending pools for each token
+- P2: Migrate remaining mocked features to real contracts where applicable
+
+## ZIP Delivery
+Download: `/cronos-gangsters-deploy.zip` from the preview URL
