@@ -24342,23 +24342,14 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
 
     if (curr === 'GANG') {
-      var poolAddr = getTradingPoolAddr();
-      if (!poolAddr) { showToast('Deploy Trading Pool from Revenue page first', 'error'); return; }
+      // GANG — deposit via Protocol Vault (same as all other tokens)
       try {
-        var userAddr = await state.signer.getAddress();
-        var balRaw = await _readContract(GANG_TOKEN, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
-        var userBal = parseFloat(ethers.formatEther(balRaw));
-        if (userBal < amt) { showToast('Insufficient GANG! You have ' + userBal.toFixed(2) + ' but need ' + amt.toFixed(2), 'error'); return; }
-        var weiAmt = ethers.parseEther(amt.toString());
-        showToast('Approving GANG...', 'info');
-        await _approveGANG(poolAddr, weiAmt);
-        showToast('Depositing ' + amt.toFixed(2) + ' GANG to trading pool on-chain...', 'info');
-        await _sendContractTx(poolAddr, TRADING_POOL_ABI, 'seedLiquidity', [weiAmt]);
+        await vaultDeposit('leverage', amt, 'GANG Pool Deposit');
         document.getElementById(inputId).value = '';
         showToast('Deposited ' + amt.toFixed(2) + ' GANG to pool on-chain!', 'success');
         futuresState.poolBalance += amt; futuresState.ownerDeposited += amt;
         saveFuturesState(); updateFuturesPool();
-      } catch(e) { showToast('Deposit failed: ' + e.message, 'error'); }
+      } catch(e) { showToast('GANG deposit failed: ' + e.message, 'error'); }
     } else if (curr === 'CRO') {
       try {
         var userAddr = await state.signer.getAddress();
@@ -24395,21 +24386,17 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
 
     if (curr === 'GANG') {
-      var poolAddr = getTradingPoolAddr();
-      if (!poolAddr) { showToast('Deploy Trading Pool first', 'error'); return; }
+      // GANG — withdraw via Protocol Vault
       try {
-        var poolBal = await _readContract(poolAddr, TRADING_POOL_ABI, 'poolBalance', []);
-        var poolAmt = parseFloat(ethers.formatEther(poolBal));
-        if (poolAmt < amt) { showToast('Pool only has ' + poolAmt.toFixed(2) + ' GANG on-chain. Cannot withdraw ' + amt.toFixed(2), 'error'); return; }
-        var weiAmt = ethers.parseEther(amt.toString());
-        showToast('Withdrawing ' + amt.toFixed(2) + ' GANG from pool on-chain...', 'info');
-        await _sendContractTx(poolAddr, TRADING_POOL_ABI, 'withdrawCollateral', [weiAmt]);
+        var pool = futuresState.poolBalance || 0;
+        if (amt > pool) { showToast('Not enough GANG in pool. Pool has ' + pool.toFixed(2) + ' GANG', 'error'); return; }
+        await vaultWithdraw('leverage', amt, 'GANG Pool Withdrawal');
         document.getElementById(inputId).value = '';
         showToast('Withdrawn ' + amt.toFixed(2) + ' GANG from pool on-chain!', 'success');
         futuresState.poolBalance = Math.max(0, futuresState.poolBalance - amt);
         futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt);
         saveFuturesState(); updateFuturesPool();
-      } catch(e) { showToast('Withdraw failed: ' + e.message, 'error'); }
+      } catch(e) { showToast('GANG withdraw failed: ' + e.message, 'error'); }
     } else if (curr === 'CRO') {
       try {
         var rawP = state._rawProvider || window.ethereum;
