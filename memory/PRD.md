@@ -42,6 +42,7 @@ Each pool has:
 - All 16 balance display IDs verified present in HTML and wired to `updateAllWalletBalanceDisplays()`
 - E2E wallet flow audit: All critical financial features confirmed to have async on-chain `window.*` overrides using `vaultDeposit`/`vaultWithdraw`
 - No remaining fake localStorage-only transactions in user-facing financial flows
+- Fixed leverage trading deposit revert: Replaced hardcoded 300k gas with `eth_estimateGas` + 30% buffer; added contract token verification; switched to max-approval pattern to avoid repeated approve popups; made `onConfirm` callbacks `async` for proper error propagation
 
 ## Upcoming Tasks
 - P1: CEX listings
