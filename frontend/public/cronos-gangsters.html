@@ -18089,17 +18089,11 @@ function predOwnerCollect() {
 }
 
 function revCollectPredFees() {
-  let s = initPredState();
-  if ((s.ownerFees || 0) <= 0) { showToast('No prediction fees to collect', 'error'); return; }
-  showTxConfirm({
-    title: 'COLLECT PREDICTION FEES', action: 'Withdraw prediction fees', fromToken: '🔮', icon: '🔮',
-    amount: s.ownerFees.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerFees.toFixed(2) + ' CRO to wallet',
-    color: '#a855f7', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
-    onConfirm: function() {
-      let s2 = initPredState(); showToast('Collected ' + s2.ownerFees.toFixed(2) + ' CRO!', 'success');
-      s2.ownerFees = 0; savePredState(s2); updateRevPredFees();
-    }
-  });
+  // On-chain override will replace this — calls Protocol Vault collectFees()
+  if (typeof window.revCollectPredFees === 'function' && window.revCollectPredFees !== revCollectPredFees) {
+    window.revCollectPredFees(); return;
+  }
+  showToast('Connect wallet and wait for on-chain override to load', 'info');
 }
 
 function updateRevPredFees() {
@@ -18241,17 +18235,10 @@ function flashOwnerCollect() {
 }
 
 function revCollectFlashFees() {
-  let s = initFlashState();
-  if ((s.ownerFees || 0) <= 0) { showToast('No flash loan fees to collect', 'error'); return; }
-  showTxConfirm({
-    title: 'COLLECT FLASH LOAN FEES', action: 'Withdraw flash loan fees', fromToken: '⚡', icon: '⚡',
-    amount: s.ownerFees.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerFees.toFixed(2) + ' CRO to wallet',
-    color: '#ffdd00', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
-    onConfirm: function() {
-      let s2 = initFlashState(); showToast('Collected ' + s2.ownerFees.toFixed(2) + ' CRO!', 'success');
-      s2.ownerFees = 0; saveFlashState(s2); updateRevFlashFees();
-    }
-  });
+  if (typeof window.revCollectFlashFees === 'function' && window.revCollectFlashFees !== revCollectFlashFees) {
+    window.revCollectFlashFees(); return;
+  }
+  showToast('Connect wallet and wait for on-chain override to load', 'info');
 }
 
 function updateRevFlashFees() {
@@ -18408,33 +18395,9 @@ function _doBuyInsurance(type, amount, duration, premium, typeName) {
   renderInsurance();
 }
 
-function insOwnerCollect() {
-  let s = initInsState();
-  if ((s.ownerPremiums || 0) <= 0) { showToast('No premiums to collect', 'error'); return; }
-  showTxConfirm({
-    title: 'COLLECT INSURANCE PREMIUMS', action: 'Withdraw insurance premiums', fromToken: '🛡', icon: '🛡',
-    amount: s.ownerPremiums.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerPremiums.toFixed(2) + ' CRO to wallet',
-    color: '#4ecdc4', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
-    onConfirm: function() {
-      let s2 = initInsState(); showToast('Collected ' + s2.ownerPremiums.toFixed(2) + ' CRO!', 'success');
-      s2.ownerPremiums = 0; saveInsState(s2); renderInsurance(); updateRevInsuranceFees();
-    }
-  });
-}
+function insOwnerCollect() { if (window.insOwnerCollect && window.insOwnerCollect !== insOwnerCollect) { window.insOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
 
-function revCollectInsuranceFees() {
-  let s = initInsState();
-  if ((s.ownerPremiums || 0) <= 0) { showToast('No insurance premiums to collect', 'error'); return; }
-  showTxConfirm({
-    title: 'COLLECT INSURANCE PREMIUMS', action: 'Withdraw insurance premiums', fromToken: '🛡', icon: '🛡',
-    amount: s.ownerPremiums.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerPremiums.toFixed(2) + ' CRO to wallet',
-    color: '#4ecdc4', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
-    onConfirm: function() {
-      let s2 = initInsState(); showToast('Collected ' + s2.ownerPremiums.toFixed(2) + ' CRO!', 'success');
-      s2.ownerPremiums = 0; saveInsState(s2); updateRevInsuranceFees();
-    }
-  });
-}
+function revCollectInsuranceFees() { if (window.revCollectInsuranceFees && window.revCollectInsuranceFees !== revCollectInsuranceFees) { window.revCollectInsuranceFees(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
 
 function updateRevInsuranceFees() {
   const s = getInsState();
@@ -18621,33 +18584,9 @@ function _doAggSwap(fromToken, toToken, amount, fee, bestRate, bestDex, toAmount
   renderAggregator();
 }
 
-function aggOwnerCollect() {
-  let s = initAggState();
-  if ((s.ownerFees || 0) <= 0) { showToast('No fees to collect', 'error'); return; }
-  showTxConfirm({
-    title: 'COLLECT AGGREGATOR FEES', action: 'Withdraw aggregator fees', fromToken: '🔀', icon: '🔀',
-    amount: s.ownerFees.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerFees.toFixed(2) + ' CRO to wallet',
-    color: '#ff6ec7', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
-    onConfirm: function() {
-      let s2 = initAggState(); showToast('Collected ' + s2.ownerFees.toFixed(2) + ' CRO!', 'success');
-      s2.ownerFees = 0; saveAggState(s2); renderAggregator(); updateRevAggFees();
-    }
-  });
-}
+function aggOwnerCollect() { if (window.aggOwnerCollect && window.aggOwnerCollect !== aggOwnerCollect) { window.aggOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
 
-function revCollectAggFees() {
-  let s = initAggState();
-  if ((s.ownerFees || 0) <= 0) { showToast('No aggregator fees to collect', 'error'); return; }
-  showTxConfirm({
-    title: 'COLLECT AGGREGATOR FEES', action: 'Withdraw aggregator fees', fromToken: '🔀', icon: '🔀',
-    amount: s.ownerFees.toFixed(2) + ' CRO', fee: 'No fee', receive: s.ownerFees.toFixed(2) + ' CRO to wallet',
-    color: '#ff6ec7', btnColor: 'linear-gradient(135deg,#27ae60,#2ecc71)',
-    onConfirm: function() {
-      let s2 = initAggState(); showToast('Collected ' + s2.ownerFees.toFixed(2) + ' CRO!', 'success');
-      s2.ownerFees = 0; saveAggState(s2); updateRevAggFees();
-    }
-  });
-}
+function revCollectAggFees() { if (window.revCollectAggFees && window.revCollectAggFees !== revCollectAggFees) { window.revCollectAggFees(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
 
 function updateRevAggFees() {
   const s = getAggState();
@@ -18891,34 +18830,8 @@ function executeCopyTrade() {
     }
   });
 }
-function ctOwnerCollect() {
-  const s = initCTState();
-  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No copy fees to collect', 'error'); return; }
-  const amt = s.ownerFees;
-  showTxConfirm({
-    title: 'Collect Copy Fees',
-    iconHtml: '<div style="font-size:48px;">👥</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Total Copy Trading Fees</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
-      s.ownerFees = 0; saveCTState(s); updateCTStats(); updateRevCopyFees();
-      showToast('Copy trading fees collected: ' + amt.toFixed(4) + ' CRO', 'success');
-    }
-  });
-}
-function revCollectCopyFees() {
-  const s = initCTState();
-  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No copy fees to collect', 'error'); return; }
-  const amt = s.ownerFees;
-  showTxConfirm({
-    title: 'Collect Copy Fees',
-    iconHtml: '<div style="font-size:48px;">👥</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Copy Trading Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
-      s.ownerFees = 0; saveCTState(s); updateCTStats(); updateRevCopyFees();
-      showToast('Copy trading fees collected!', 'success');
-    }
-  });
-}
+function ctOwnerCollect() { if (window.ctOwnerCollect && window.ctOwnerCollect !== ctOwnerCollect) { window.ctOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
+function revCollectCopyFees() { if (window.revCollectCopyFees && window.revCollectCopyFees !== revCollectCopyFees) { window.revCollectCopyFees(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
 function updateRevCopyFees() {
   const s = getCTState();
   const elFees = document.getElementById('revCopyFees');
@@ -19023,34 +18936,8 @@ function rsClaim() {
     }
   });
 }
-function rsOwnerCollect() {
-  const s = initRSState();
-  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No management fees to collect', 'error'); return; }
-  const amt = s.ownerFees;
-  showTxConfirm({
-    title: 'Collect Staking Mgmt Fees',
-    iconHtml: '<div style="font-size:48px;">💎</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Management Fees</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
-      s.ownerFees = 0; saveRSState(s); updateRSStats(); updateRevRsFees();
-      showToast('Staking management fees collected: ' + amt.toFixed(4) + ' CRO', 'success');
-    }
-  });
-}
-function revCollectRsFees() {
-  const s = initRSState();
-  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No staking fees to collect', 'error'); return; }
-  const amt = s.ownerFees;
-  showTxConfirm({
-    title: 'Collect Staking Fees',
-    iconHtml: '<div style="font-size:48px;">💎</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Revenue Staking Mgmt Fees</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
-      s.ownerFees = 0; saveRSState(s); updateRSStats(); updateRevRsFees();
-      showToast('Staking management fees collected!', 'success');
-    }
-  });
-}
+function rsOwnerCollect() { if (window.rsOwnerCollect && window.rsOwnerCollect !== rsOwnerCollect) { window.rsOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
+function revCollectRsFees() { if (window.revCollectRsFees && window.revCollectRsFees !== revCollectRsFees) { window.revCollectRsFees(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
 function updateRevRsFees() {
   const s = getRSState();
   const elFees = document.getElementById('revRsFees');
@@ -19154,34 +19041,8 @@ function cancelLimitOrder(idx) {
   saveLOState(s); renderLOOrders(); updateLOStats();
   showToast('Order cancelled', 'success');
 }
-function loOwnerCollect() {
-  const s = initLOState();
-  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No limit order fees to collect', 'error'); return; }
-  const amt = s.ownerFees;
-  showTxConfirm({
-    title: 'Collect Limit Order Fees',
-    iconHtml: '<div style="font-size:48px;">📋</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Limit Order Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
-      s.ownerFees = 0; saveLOState(s); updateLOStats(); updateRevLoFees();
-      showToast('Limit order fees collected: ' + amt.toFixed(4) + ' CRO', 'success');
-    }
-  });
-}
-function revCollectLoFees() {
-  const s = initLOState();
-  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No limit order fees to collect', 'error'); return; }
-  const amt = s.ownerFees;
-  showTxConfirm({
-    title: 'Collect Limit Order Fees',
-    iconHtml: '<div style="font-size:48px;">📋</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Limit Order Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
-      s.ownerFees = 0; saveLOState(s); updateLOStats(); updateRevLoFees();
-      showToast('Limit order fees collected!', 'success');
-    }
-  });
-}
+function loOwnerCollect() { if (window.loOwnerCollect && window.loOwnerCollect !== loOwnerCollect) { window.loOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
+function revCollectLoFees() { if (window.revCollectLoFees && window.revCollectLoFees !== revCollectLoFees) { window.revCollectLoFees(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
 function updateRevLoFees() {
   const s = getLOState();
   const elFees = document.getElementById('revLoFees');
@@ -19294,34 +19155,8 @@ function closePerpPosition(idx) {
     }
   });
 }
-function ppOwnerCollect() {
-  const s = initPPState();
-  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No perp fees to collect', 'error'); return; }
-  const amt = s.ownerFees;
-  showTxConfirm({
-    title: 'Collect Perp DEX Fees',
-    iconHtml: '<div style="font-size:48px;">📊</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Perpetual DEX Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
-      s.ownerFees = 0; savePPState(s); updatePPStats(); updateRevPpFees();
-      showToast('Perp DEX fees collected: ' + amt.toFixed(4) + ' CRO', 'success');
-    }
-  });
-}
-function revCollectPpFees() {
-  const s = initPPState();
-  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No perp fees to collect', 'error'); return; }
-  const amt = s.ownerFees;
-  showTxConfirm({
-    title: 'Collect Perp DEX Fees',
-    iconHtml: '<div style="font-size:48px;">📊</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Perpetual DEX Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
-      s.ownerFees = 0; savePPState(s); updatePPStats(); updateRevPpFees();
-      showToast('Perp DEX fees collected!', 'success');
-    }
-  });
-}
+function ppOwnerCollect() { if (window.ppOwnerCollect && window.ppOwnerCollect !== ppOwnerCollect) { window.ppOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
+function revCollectPpFees() { if (window.revCollectPpFees && window.revCollectPpFees !== revCollectPpFees) { window.revCollectPpFees(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
 function updateRevPpFees() {
   const s = getPPState();
   const elFees = document.getElementById('revPpFees');
@@ -19430,34 +19265,8 @@ function cancelOtcDeal(idx) {
   saveOtcState(s); renderOtcDeals(); updateOtcStats();
   showToast('OTC deal cancelled', 'success');
 }
-function otcOwnerCollect() {
-  const s = initOtcState();
-  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No OTC fees to collect', 'error'); return; }
-  const amt = s.ownerFees;
-  showTxConfirm({
-    title: 'Collect OTC Fees',
-    iconHtml: '<div style="font-size:48px;">🤝</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">OTC Trading Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
-      s.ownerFees = 0; saveOtcState(s); updateOtcStats(); updateRevOtcFees();
-      showToast('OTC fees collected: ' + amt.toFixed(4) + ' CRO', 'success');
-    }
-  });
-}
-function revCollectOtcFees() {
-  const s = initOtcState();
-  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No OTC fees to collect', 'error'); return; }
-  const amt = s.ownerFees;
-  showTxConfirm({
-    title: 'Collect OTC Fees',
-    iconHtml: '<div style="font-size:48px;">🤝</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">OTC Trading Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
-      s.ownerFees = 0; saveOtcState(s); updateOtcStats(); updateRevOtcFees();
-      showToast('OTC fees collected!', 'success');
-    }
-  });
-}
+function otcOwnerCollect() { if (window.otcOwnerCollect && window.otcOwnerCollect !== otcOwnerCollect) { window.otcOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
+function revCollectOtcFees() { if (window.revCollectOtcFees && window.revCollectOtcFees !== revCollectOtcFees) { window.revCollectOtcFees(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
 function updateRevOtcFees() {
   const s = getOtcState();
   const elFees = document.getElementById('revOtcFees');
@@ -19571,34 +19380,8 @@ function voteDao(idx, vote) {
     }
   });
 }
-function daoOwnerCollect() {
-  const s = initDaoState();
-  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No DAO fees to collect', 'error'); return; }
-  const amt = s.ownerFees;
-  showTxConfirm({
-    title: 'Collect DAO Fees',
-    iconHtml: '<div style="font-size:48px;">🏛</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">DAO Governance Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
-      s.ownerFees = 0; saveDaoState(s); updateDaoStats(); updateRevDaoFees();
-      showToast('DAO fees collected: ' + amt.toFixed(4) + ' CRO', 'success');
-    }
-  });
-}
-function revCollectDaoFees() {
-  const s = initDaoState();
-  if (!s.ownerFees || s.ownerFees <= 0) { showToast('No DAO fees to collect', 'error'); return; }
-  const amt = s.ownerFees;
-  showTxConfirm({
-    title: 'Collect DAO Fees',
-    iconHtml: '<div style="font-size:48px;">🏛</div>',
-    detailsHtml: `<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">DAO Governance Revenue</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--green);">${amt.toFixed(4)} CRO</div></div>`,
-    onConfirm: () => {
-      s.ownerFees = 0; saveDaoState(s); updateDaoStats(); updateRevDaoFees();
-      showToast('DAO fees collected!', 'success');
-    }
-  });
-}
+function daoOwnerCollect() { if (window.daoOwnerCollect && window.daoOwnerCollect !== daoOwnerCollect) { window.daoOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
+function revCollectDaoFees() { if (window.revCollectDaoFees && window.revCollectDaoFees !== revCollectDaoFees) { window.revCollectDaoFees(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
 function updateRevDaoFees() {
   const s = getDaoState();
   const elFees = document.getElementById('revDaoFees');
