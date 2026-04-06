@@ -5284,8 +5284,8 @@ function toggleNavMenu() {
         <div style="background:rgba(255,140,0,0.08);border:1px solid rgba(255,140,0,0.25);border-radius:10px;padding:14px;">
           <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:#ff8c00;letter-spacing:1px;margin-bottom:6px;">FEES & LIMITS</div>
           <div style="font-size:12px;color:var(--text);line-height:1.6;">
-            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Opening Fee</span><span>0.3%</span></div>
-            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Closing Fee</span><span>0.3%</span></div>
+            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Opening Fee</span><span>0.3% <span style="color:var(--gold);font-size:10px;">(→ CRO)</span></span></div>
+            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Closing Fee</span><span>0.3% <span style="color:var(--gold);font-size:10px;">(→ CRO)</span></span></div>
             <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Max Leverage</span><span>20x</span></div>
             <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Max Payout</span><span>20x margin</span></div>
             <div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--muted);">Liquidation</span><span>When losses exceed margin</span></div>
@@ -19559,6 +19559,8 @@ function executeCopyTrade() {
       // Open a real Leverage position as the copy
       const openingFee = amount * 0.003;
       const posAmount = amount - openingFee;
+      // ALL leverage fees collected in CRO pool
+      futuresState.poolBalanceCRO += openingFee;
       futuresState.positions.push({
         pair: p.pair,
         side: p.side,
@@ -22359,7 +22361,7 @@ function openFuturesPosition() {
       { label: 'Side', value: futuresState.side.toUpperCase(), cls: futuresState.side === 'long' ? 'green' : 'red' },
       { label: 'Leverage', value: futuresState.leverage + 'x' },
       { label: 'Position Size', value: (amt * futuresState.leverage).toFixed(2) + ' ' + curr },
-      { label: 'Opening Fee (0.3%)', value: openingFee.toFixed(4) + ' ' + curr, cls: 'red' },
+      { label: 'Opening Fee (0.3% → CRO)', value: openingFee.toFixed(4) + ' ' + curr, cls: 'red' },
       { label: 'Net Margin', value: netMargin.toFixed(2) + ' ' + curr, cls: 'green' },
       { label: 'Est. Liq. Price', value: '$' + _fmtPrice(estLiqPrice), cls: 'red' },
     ],
@@ -22395,14 +22397,8 @@ function _doOpenFuturesPosition(amt, curr, price) {
 
   const openingFee = amt * 0.003;
   position.amount = amt - openingFee;
-  if (curr === 'CRO') {
-    futuresState.poolBalanceCRO += openingFee;
-  } else if (curr === 'GANG') {
-    futuresState.poolBalance += openingFee;
-  } else {
-    // BTC, ETH, SOL, BNB, USDC, USDT
-    futuresState['poolBalance' + curr] = (futuresState['poolBalance' + curr] || 0) + openingFee;
-  }
+  // ALL fees collected in CRO pool regardless of trading currency
+  futuresState.poolBalanceCRO += openingFee;
 
   futuresState.positions.push(position);
   // Track volume (position size * price = USD value)
@@ -22414,7 +22410,7 @@ function _doOpenFuturesPosition(amt, curr, price) {
   document.getElementById('futuresTP').value = '';
   document.getElementById('futuresSL').value = '';
 
-  showToast(`Opened ${futuresState.side.toUpperCase()} ${futuresState.pair}/USD ${futuresState.leverage}x — ${position.amount.toFixed(2)} ${curr} (fee: ${openingFee.toFixed(2)})`, 'success');
+  showToast(`Opened ${futuresState.side.toUpperCase()} ${futuresState.pair}/USD ${futuresState.leverage}x — ${position.amount.toFixed(2)} ${curr} (fee: ${openingFee.toFixed(2)} → CRO)`, 'success');
   if (typeof addPoints === 'function') addPoints(10, 'Leverage trade');
   updateFuturesPositions();
   updateFuturesPool();
@@ -22460,7 +22456,7 @@ function closeFuturesPosition(id) {
         { label: 'Deposited', value: pos.amount.toFixed(2) + ' ' + curr, cls: 'gold' },
         { label: 'Side', value: pos.side.toUpperCase() + ' ' + pos.leverage + 'x', cls: pos.side === 'long' ? 'green' : 'red' },
         { label: 'Entry Price', value: '$' + _fmtPrice(pos.entryPrice) },
-        { label: 'Closing Fee (0.3%)', value: closingFee.toFixed(4) + ' ' + curr, cls: 'red' },
+        { label: 'Closing Fee (0.3% → CRO)', value: closingFee.toFixed(4) + ' ' + curr, cls: 'red' },
         { label: 'PnL', value: (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr + ' (' + (pnlPct*100 >= 0 ? '+' : '') + (pnlPct*100).toFixed(2) + '%)', cls: netPnl >= 0 ? 'green' : 'red' },
         { label: 'YOU RECEIVE', value: payout.toFixed(2) + ' ' + curr, cls: payout > 0 ? 'green' : 'red' },
       ];
@@ -22488,18 +22484,19 @@ function _doCloseFuturesPosition(id) {
   // Cap loss at position amount (liquidation)
   const finalPnl = Math.max(pnlAmt, -pos.amount);
 
-  // Closing fee: 0.3% of position amount goes to pool
+  // Closing fee: 0.3% of position amount — ALL fees collected in CRO
   const closingFee = pos.amount * 0.003;
   const netPnl = finalPnl - closingFee;
 
-  // Update pool: pool pays winners, collects from losers + fees
+  // Fee ALWAYS goes to CRO pool
+  futuresState.poolBalanceCRO += closingFee;
+  // PnL settlement in the trading currency's pool (using finalPnl, not netPnl)
   if (curr === 'CRO') {
-    futuresState.poolBalanceCRO -= netPnl;
+    futuresState.poolBalanceCRO -= finalPnl;
   } else if (curr === 'GANG') {
-    futuresState.poolBalance -= netPnl;
+    futuresState.poolBalance -= finalPnl;
   } else {
-    // BTC, ETH, SOL, BNB, USDC, USDT
-    futuresState['poolBalance' + curr] = (futuresState['poolBalance' + curr] || 0) - netPnl;
+    futuresState['poolBalance' + curr] = (futuresState['poolBalance' + curr] || 0) - finalPnl;
   }
 
   futuresState.history.unshift({
@@ -22508,6 +22505,7 @@ function _doCloseFuturesPosition(id) {
     pnl: netPnl,
     pnlPct: pnlPct * 100,
     fee: closingFee,
+    feeCurrency: 'CRO',
     closeReason: 'MANUAL',
     closedAt: new Date().toISOString()
   });
@@ -22516,7 +22514,7 @@ function _doCloseFuturesPosition(id) {
   saveFuturesState();
 
   const emoji = netPnl >= 0 ? 'WIN' : 'LOSS';
-  showToast(`${emoji} — Closed ${pos.pair} ${pos.side.toUpperCase()} — ${netPnl >= 0 ? '+' : ''}${netPnl.toFixed(2)} ${curr} (fee: ${closingFee.toFixed(2)})`, netPnl >= 0 ? 'success' : 'error');
+  showToast(`${emoji} — Closed ${pos.pair} ${pos.side.toUpperCase()} — ${netPnl >= 0 ? '+' : ''}${netPnl.toFixed(2)} ${curr} (fee: ${closingFee.toFixed(2)} → CRO)`, netPnl >= 0 ? 'success' : 'error');
   updateFuturesPositions();
   updateAccountOverview();
   renderFuturesHistory();
@@ -22662,20 +22660,19 @@ function _forceCloseFuturesPosition(id, reason) {
   const closingFee = isLiquidation ? 0 : pos.amount * 0.003;
   const netPnl = finalPnl - closingFee;
 
-  // Update pool
+  // Fee ALWAYS goes to CRO pool
+  futuresState.poolBalanceCRO += closingFee;
+  // PnL settlement in the trading currency's pool
   if (curr === 'CRO') {
-    futuresState.poolBalanceCRO += closingFee;
-    if (netPnl < 0) futuresState.poolBalanceCRO += Math.abs(netPnl);
-    else futuresState.poolBalanceCRO -= netPnl;
+    if (finalPnl < 0) futuresState.poolBalanceCRO += Math.abs(finalPnl);
+    else futuresState.poolBalanceCRO -= finalPnl;
   } else if (curr === 'GANG') {
-    futuresState.poolBalance += closingFee;
-    if (netPnl < 0) futuresState.poolBalance += Math.abs(netPnl);
-    else futuresState.poolBalance -= netPnl;
+    if (finalPnl < 0) futuresState.poolBalance += Math.abs(finalPnl);
+    else futuresState.poolBalance -= finalPnl;
   } else {
     var poolKey = 'poolBalance' + curr;
-    futuresState[poolKey] = (futuresState[poolKey] || 0) + closingFee;
-    if (netPnl < 0) futuresState[poolKey] = (futuresState[poolKey] || 0) + Math.abs(netPnl);
-    else futuresState[poolKey] = (futuresState[poolKey] || 0) - netPnl;
+    if (finalPnl < 0) futuresState[poolKey] = (futuresState[poolKey] || 0) + Math.abs(finalPnl);
+    else futuresState[poolKey] = (futuresState[poolKey] || 0) - finalPnl;
   }
 
   // Record in history
@@ -22695,6 +22692,7 @@ function _forceCloseFuturesPosition(id, reason) {
     pnl: netPnl,
     pnlPct: pnlPct * 100,
     fee: closingFee,
+    feeCurrency: 'CRO',
     closeReason: reason,
     openedAt: pos.openedAt,
     closedAt: new Date().toISOString(),
@@ -22710,7 +22708,7 @@ function _forceCloseFuturesPosition(id, reason) {
     showToast('LIQUIDATED — ' + pos.pair + ' ' + pos.side.toUpperCase() + ' ' + pos.leverage + 'x — Lost ' + pos.amount.toFixed(2) + ' ' + curr + '. Position wiped.', 'error');
   } else {
     var tpsl = reason === 'TP HIT' ? 'Take Profit hit!' : 'Stop Loss triggered!';
-    showToast(tpsl + ' — ' + pos.pair + ' ' + pos.side.toUpperCase() + ' @ $' + currentPrice.toLocaleString(undefined,{maximumFractionDigits:2}) + ' — PnL: ' + (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, netPnl >= 0 ? 'success' : 'error');
+    showToast(tpsl + ' — ' + pos.pair + ' ' + pos.side.toUpperCase() + ' @ $' + currentPrice.toLocaleString(undefined,{maximumFractionDigits:2}) + ' — PnL: ' + (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr + ' (fee → CRO)', netPnl >= 0 ? 'success' : 'error');
   }
 
   updateFuturesPositions();
@@ -22776,7 +22774,7 @@ function renderFuturesHistory() {
 
   if (_histTab === 'fees') {
     const totalFees = myHistory.reduce((s, h) => s + (h.fee || h.amount * 0.003), 0);
-    el.innerHTML = '<div style="text-align:center;padding:20px;"><div style="font-size:10px;color:var(--muted);letter-spacing:1px;">TOTAL FEES PAID</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:32px;color:#e74c3c;margin-top:6px;">' + totalFees.toFixed(4) + '</div><div style="font-size:11px;color:var(--muted);margin-top:4px;">across ' + myHistory.length + ' trades</div></div>';
+    el.innerHTML = '<div style="text-align:center;padding:20px;"><div style="font-size:10px;color:var(--muted);letter-spacing:1px;">TOTAL FEES PAID (CRO)</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:32px;color:#e74c3c;margin-top:6px;">' + totalFees.toFixed(4) + ' CRO</div><div style="font-size:11px;color:var(--muted);margin-top:4px;">across ' + myHistory.length + ' trades</div></div>';
     return;
   }
   if (_histTab === 'orders') {
@@ -22841,7 +22839,7 @@ function renderFuturesHistory() {
           '<div>AVG PRICE <span style="color:var(--text);font-weight:600;">$' + _fmtPrice(entryP) + '</span></div>' +
           '<div>CLOSE PRICE <span style="color:' + color + ';font-weight:600;">$' + _fmtPrice(closeP) + '</span></div>' +
           '<div>SIZE <span style="color:var(--text);">' + (h.amount||0).toFixed(2) + ' ' + curr + '</span></div>' +
-          '<div>FEE <span style="color:#e74c3c;">' + (h.fee || h.amount * 0.003).toFixed(4) + '</span></div>' +
+          '<div>FEE <span style="color:#e74c3c;">' + (h.fee || h.amount * 0.003).toFixed(4) + ' CRO</span></div>' +
         '</div>' +
       '</div>';
     });
@@ -25077,17 +25075,14 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       openedAt: new Date().toISOString(),
       onChain: !!(curr === 'GANG' && typeof getVaultAddr === 'function' && getVaultAddr())
     };
-    if (curr === 'CRO') {
-      futuresState.poolBalanceCRO += openingFee;
-    } else {
-      futuresState.poolBalance += openingFee;
-    }
+    // ALL fees collected in CRO pool regardless of trading currency
+    futuresState.poolBalanceCRO += openingFee;
     futuresState.positions.push(position);
     saveFuturesState();
     document.getElementById('futuresAmount').value = '';
     document.getElementById('futuresTP').value = '';
     document.getElementById('futuresSL').value = '';
-    showToast('Opened ' + futuresState.side.toUpperCase() + ' ' + futuresState.pair + '/USD ' + futuresState.leverage + 'x — ' + position.amount.toFixed(2) + ' ' + curr + ' (fee: ' + openingFee.toFixed(2) + ')', 'success');
+    showToast('Opened ' + futuresState.side.toUpperCase() + ' ' + futuresState.pair + '/USD ' + futuresState.leverage + 'x — ' + position.amount.toFixed(2) + ' ' + curr + ' (fee: ' + openingFee.toFixed(2) + ' → CRO)', 'success');
     if (typeof addPoints === 'function') addPoints(10, 'Leverage trade');
     updateFuturesPositions();
     updateFuturesPool();
@@ -25198,24 +25193,24 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     pos.pnl = netPnl;
     pos.pnlPct = pnlPct * 100;
     pos.fee = closingFee;
+    pos.feeCurrency = 'CRO';
     pos.closeReason = 'MANUAL';
     pos.status = 'closed';
 
-    // Update pool balance for the correct currency
+    // Fee ALWAYS goes to CRO pool
+    futuresState.poolBalanceCRO += closingFee;
+    // PnL settlement in the trading currency's pool
     if (curr === 'CRO') {
-      futuresState.poolBalanceCRO += closingFee;
-      if (netPnl < 0) futuresState.poolBalanceCRO += Math.abs(netPnl);
-      else futuresState.poolBalanceCRO -= netPnl;
+      if (finalPnl < 0) futuresState.poolBalanceCRO += Math.abs(finalPnl);
+      else futuresState.poolBalanceCRO -= finalPnl;
     } else if (curr === 'GANG') {
-      futuresState.poolBalance += closingFee;
-      if (netPnl < 0) futuresState.poolBalance += Math.abs(netPnl);
-      else futuresState.poolBalance -= netPnl;
+      if (finalPnl < 0) futuresState.poolBalance += Math.abs(finalPnl);
+      else futuresState.poolBalance -= finalPnl;
     } else {
-      // BTC, ETH, SOL, BNB, USDC, USDT — use correct currency pool
+      // BTC, ETH, SOL, BNB, USDC, USDT — PnL in correct currency pool
       var poolKey = 'poolBalance' + curr;
-      futuresState[poolKey] = (futuresState[poolKey] || 0) + closingFee;
-      if (netPnl < 0) futuresState[poolKey] = (futuresState[poolKey] || 0) + Math.abs(netPnl);
-      else futuresState[poolKey] = (futuresState[poolKey] || 0) - netPnl;
+      if (finalPnl < 0) futuresState[poolKey] = (futuresState[poolKey] || 0) + Math.abs(finalPnl);
+      else futuresState[poolKey] = (futuresState[poolKey] || 0) - finalPnl;
     }
 
     // REMOVE from open positions array — prevents re-closing
@@ -25225,7 +25220,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     if (posIdx > -1) futuresState.positions.splice(posIdx, 1);
     _addVolume(pos.amount * pos.leverage);
     saveFuturesState();
-    showToast('Closed ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD @ $' + currentPrice.toLocaleString(undefined,{maximumFractionDigits:2}) + ' — PnL: ' + (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, netPnl >= 0 ? 'success' : 'error');
+    showToast('Closed ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD @ $' + currentPrice.toLocaleString(undefined,{maximumFractionDigits:2}) + ' — PnL: ' + (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr + ' (fee → CRO)', netPnl >= 0 ? 'success' : 'error');
     updateFuturesPositions();
     updateFuturesPool();
     renderFuturesHistory();

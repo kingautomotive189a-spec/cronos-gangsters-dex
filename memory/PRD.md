@@ -78,6 +78,15 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - **NEW**: Live price updates in chart header every 3s tick
 - **UPGRADE**: Perpetual DEX page header with "FULLY ON-CHAIN | CRONOS MAINNET" badge and professional copy
 
+## Completed (2026-04-06 — CRO-Only Fee Collection)
+- **CHANGE**: All leverage trading fees (opening 0.3% + closing 0.3%) now collected exclusively in CRO pool regardless of trading currency
+- **UPDATED**: 6 functions modified: `openFuturesPosition`, `_doOpenFuturesPosition`, `_doCloseFuturesPosition`, `_forceCloseFuturesPosition`, `_realDoOpenFuturesPosition`, `_realCloseFuturesPosition`
+- **UPDATED**: Copy Trading leverage fee also routes to CRO pool
+- **UI**: Fee labels show "→ CRO" indicator in confirmation popups, toasts, history, and Fees & Limits section
+- **UI**: Total Fees Paid tab now labeled "(CRO)" with CRO suffix on amounts
+- **DATA**: History entries tagged with `feeCurrency: 'CRO'`
+- **ACCOUNTING**: Fee accumulation → CRO pool; PnL settlement → trading currency's pool (clean separation)
+
 ## Completed (2026-04-06 — Stock/Forex Icons)
 - **NEW**: Real company logos for all 29 stock assets via Clearbit CDN
 - **NEW**: Country flag icons for all 7 forex pairs via FlagCDN
