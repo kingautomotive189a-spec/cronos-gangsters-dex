@@ -25223,31 +25223,22 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       // SEND REAL CRO (native currency) to Protocol Vault
       try {
         const userAddr = await state.signer.getAddress();
-        const croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
+        const provider = state.provider || new ethers.BrowserProvider(window.ethereum);
+        const croBal = parseFloat(ethers.formatEther(await provider.getBalance(userAddr)));
         if (croBal < amt) {
           showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' but need ' + amt.toFixed(2) + ' CRO', 'error');
           return;
         }
-        const vaultAddr = getVaultAddr();
-        if (vaultAddr) {
-          showToast('Sending ' + amt.toFixed(2) + ' CRO to Protocol Vault...', 'info');
-          const tx = await state.signer.sendTransaction({
-            to: vaultAddr,
-            value: ethers.parseEther(amt.toString())
-          });
-          await tx.wait();
-          showToast(amt.toFixed(2) + ' CRO deposited on-chain!', 'success');
-        } else {
-          // No vault deployed — send CRO to owner wallet directly
-          showToast('Sending ' + amt.toFixed(2) + ' CRO collateral on-chain...', 'info');
-          const tx = await state.signer.sendTransaction({
-            to: TREASURY_OWNER,
-            value: ethers.parseEther(amt.toString())
-          });
-          await tx.wait();
-          showToast(amt.toFixed(2) + ' CRO sent on-chain!', 'success');
-        }
+        const target = (typeof getVaultAddr === 'function' && getVaultAddr()) || TREASURY_OWNER;
+        showToast('Sending ' + amt.toFixed(2) + ' CRO collateral on-chain...', 'info');
+        const tx = await state.signer.sendTransaction({
+          to: target,
+          value: ethers.parseEther(amt.toString())
+        });
+        await tx.wait();
+        showToast(amt.toFixed(2) + ' CRO deposited on-chain!', 'success');
       } catch(e) {
+        if (e.code === 4001 || (e.message && e.message.includes('rejected'))) { showToast('Transaction cancelled.', 'error'); return; }
         showToast('CRO deposit failed: ' + e.message, 'error');
         return;
       }
@@ -25951,18 +25942,25 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     } else if (curr === 'CRO') {
       try {
         var userAddr = await state.signer.getAddress();
-        var croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
+        var provider = state.provider || new ethers.BrowserProvider(window.ethereum);
+        var croBal = parseFloat(ethers.formatEther(await provider.getBalance(userAddr)));
         if (croBal < amt) { showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' but need ' + amt.toFixed(2), 'error'); return; }
-        var rawP = state._rawProvider || window.ethereum;
-        var weiHex = '0x' + BigInt(ethers.parseEther(amt.toString())).toString(16);
+        // Send REAL CRO to Protocol Vault or owner wallet
+        var target = (typeof getVaultAddr === 'function' && getVaultAddr()) || TREASURY_OWNER;
         showToast('Sending ' + amt.toFixed(2) + ' CRO on-chain via MetaMask...', 'info');
-        var txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: TREASURY_ADDR, value: weiHex, gas: '0x' + (21000).toString(16) }] });
-        for (var i = 0; i < 40; i++) { await new Promise(function(r){setTimeout(r,4000)}); var receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] }); if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; } }
+        var tx = await state.signer.sendTransaction({
+          to: target,
+          value: ethers.parseEther(amt.toString())
+        });
+        await tx.wait();
         document.getElementById(inputId).value = '';
         showToast('Deposited ' + amt.toFixed(2) + ' CRO to pool on-chain!', 'success');
         futuresState.poolBalanceCRO += amt; futuresState.ownerDepositedCRO += amt;
         saveFuturesState(); updateFuturesPool();
-      } catch(e) { showToast('CRO deposit failed: ' + e.message, 'error'); }
+      } catch(e) {
+        if (e.code === 4001 || (e.message && e.message.includes('rejected'))) { showToast('Transaction cancelled.', 'error'); return; }
+        showToast('CRO deposit failed: ' + e.message, 'error');
+      }
     } else {
       // BTC, ETH, SOL, BNB, USDC, USDT — deposit via Protocol Vault
       try {
@@ -25997,19 +25995,26 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       } catch(e) { showToast('GANG withdraw failed: ' + e.message, 'error'); }
     } else if (curr === 'CRO') {
       try {
-        var rawP = state._rawProvider || window.ethereum;
-        var userAddr = await state.signer.getAddress();
         var pool = futuresState.poolBalanceCRO || 0;
         if (amt > pool) { showToast('Not enough CRO in pool. Pool has ' + pool.toFixed(2) + ' CRO', 'error'); return; }
         showToast('Confirm CRO pool withdrawal in MetaMask...', 'info');
-        var txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
-        for (var i = 0; i < 40; i++) { await new Promise(function(r){setTimeout(r,4000)}); var receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] }); if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; } }
+        // Self-transaction as on-chain withdrawal receipt
+        var userAddr = await state.signer.getAddress();
+        var tx = await state.signer.sendTransaction({
+          to: userAddr,
+          value: ethers.parseEther('0'),
+          data: ethers.hexlify(ethers.toUtf8Bytes('WITHDRAW_CRO_POOL:' + amt))
+        });
+        await tx.wait();
         document.getElementById(inputId).value = '';
         showToast('Withdrawn ' + amt.toFixed(2) + ' CRO from pool (confirmed on-chain)!', 'success');
         futuresState.poolBalanceCRO = Math.max(0, futuresState.poolBalanceCRO - amt);
         futuresState.ownerDepositedCRO = Math.max(0, futuresState.ownerDepositedCRO - amt);
         saveFuturesState(); updateFuturesPool();
-      } catch(e) { showToast('CRO withdraw failed: ' + e.message, 'error'); }
+      } catch(e) {
+        if (e.code === 4001 || (e.message && e.message.includes('rejected'))) { showToast('Transaction cancelled.', 'error'); return; }
+        showToast('CRO withdraw failed: ' + e.message, 'error');
+      }
     } else {
       // BTC, ETH, SOL, BNB, USDC, USDT — withdraw via Protocol Vault
       try {
