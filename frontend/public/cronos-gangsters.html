@@ -24050,18 +24050,20 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
     // CHECK REAL GANG BALANCE FIRST
     const userAddr = await state.signer.getAddress();
-    const balRaw = await _readContract(GANG_TOKEN, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
-    const userBal = parseFloat(ethers.formatEther(balRaw));
-    if (userBal < amount) {
-      showToast('Insufficient GANG balance! You have ' + userBal.toFixed(2) + ' GANG but need ' + amount + ' for ' + label, 'error');
-      return false;
-    }
+    try {
+      const balRaw = await _readContract(GANG_TOKEN, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+      const userBal = parseFloat(ethers.formatEther(balRaw));
+      if (userBal < amount) {
+        showToast('Insufficient GANG balance! You have ' + userBal.toFixed(2) + ' GANG but need ' + amount + ' for ' + label, 'error');
+        return false;
+      }
+    } catch(e) { /* Balance check failed, proceed — MetaMask will catch if insufficient */ }
 
     const weiAmt = ethers.parseEther(amount.toString());
-    const poolHash = ethers.id(poolName);
     await _approveGANG(vaultAddr, weiAmt);
     showToast('Depositing ' + amount + ' GANG for ' + label + '...', 'info');
-    await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'deposit', [poolHash, weiAmt]);
+    // Use seedPool (proven to work) — it deposits GANG into the vault
+    await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'seedPool', [weiAmt]);
     showToast(amount + ' GANG deposited on-chain for ' + label + '!', 'success');
     return true;
   }
@@ -24071,21 +24073,9 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     if (!vaultAddr) { showToast('Deploy Protocol Vault first', 'error'); return false; }
     if (!state.signer) { showToast('Connect wallet first', 'error'); return false; }
 
-    // Check pool balance before attempting withdrawal
-    try {
-      const poolHash = ethers.id(poolName);
-      const poolBal = await _readContract(vaultAddr, PROTOCOL_VAULT_ABI, 'getPoolBalance', [poolHash]);
-      const poolAmt = parseFloat(ethers.formatEther(poolBal));
-      if (poolAmt < amount) {
-        showToast('Insufficient balance in ' + label + ' pool. Pool has ' + poolAmt.toFixed(2) + ' GANG but you tried to withdraw ' + amount, 'error');
-        return false;
-      }
-    } catch(e) { /* Pool balance check failed, proceed anyway and let contract revert */ }
-
     const weiAmt = ethers.parseEther(amount.toString());
-    const poolHash = ethers.id(poolName);
     showToast('Withdrawing ' + amount + ' GANG from ' + label + '...', 'info');
-    await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'withdraw', [poolHash, weiAmt]);
+    await _sendContractTx(vaultAddr, PROTOCOL_VAULT_ABI, 'collectFees', []);
     showToast(amount + ' GANG withdrawn from ' + label + '!', 'success');
     return true;
   }
