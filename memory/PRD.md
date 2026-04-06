@@ -65,6 +65,11 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - Gaussian random walk with momentum bursts for non-crypto simulation
 - All previous on-chain features remain intact
 
+## Completed (2026-04-06 — Perpetual DEX On-Chain Fix)
+- **FIX**: Perpetual DEX open/close positions now trigger real MetaMask wallet approval via `vaultDeposit`/`vaultWithdraw`
+- **FIX**: Removed conflicting `window.openPerpPosition`/`window.closePerpPosition` overrides that short-circuited the confirmation modal flow
+- **FIX**: Close position now withdraws actual collateral amount (not hardcoded 10 GANG)
+
 ## Upcoming Tasks
 - P1: CEX listings
 - P1: Multi-chain expansion

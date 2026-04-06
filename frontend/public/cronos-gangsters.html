@@ -19651,10 +19651,13 @@ function openPerpPosition() {
     ],
     onConfirm: async () => {
       try {
-        if (typeof window.openPerpPosition === 'function') {
-          await window.openPerpPosition();
+        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
+          await window.vaultDeposit('perpdex', collateral, 'Perp Margin — ' + direction.toUpperCase() + ' ' + pair + ' ' + leverage + 'x');
+        } else {
+          showToast('Connect wallet for on-chain deposit', 'error');
+          return;
         }
-      } catch(e) { return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       const s = initPPState();
       s.positions.push({ pair, direction, leverage, collateral, entryPrice, fee, status: 'open', time: Date.now() });
       s.ownerFees = (s.ownerFees || 0) + fee;
@@ -19685,10 +19688,13 @@ function closePerpPosition(idx) {
     ],
     onConfirm: async () => {
       try {
-        if (typeof window.closePerpPosition === 'function') {
-          await window.closePerpPosition(idx);
+        if (typeof window.vaultWithdraw === 'function' && state && state.signer) {
+          await window.vaultWithdraw('perpdex', p.collateral, 'Close Perp — ' + p.direction.toUpperCase() + ' ' + p.pair + ' ' + p.leverage + 'x');
+        } else {
+          showToast('Connect wallet for on-chain withdrawal', 'error');
+          return;
         }
-      } catch(e) { return; }
+      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
       s.positions[idx].status = 'closed';
       s.ownerFees = (s.ownerFees || 0) + closeFee;
       savePPState(s); renderPPPositions(); updatePPStats(); updateRevPpFees();
@@ -25348,18 +25354,8 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   window.loOwnerCollect = async function() { try { await vaultCollectFees('Limit Orders'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectLoFees = async function() { try { await vaultCollectFees('Limit Orders'); } catch(e) { showToast(e.message, 'error'); } };
 
-  // --- PERPETUAL DEX ---
-  window.openPerpPosition = async function() {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    const amtEl = document.getElementById('ppCollateral');
-    const amount = parseFloat(amtEl?.value);
-    if (!amount || amount <= 0) { showToast('Enter margin amount', 'error'); return; }
-    try {
-      await vaultDeposit('perpdex', amount, 'Perp Margin');
-      showToast('Perp position opened! ' + amount + ' GANG margin locked on-chain.', 'success');
-      if (amtEl) amtEl.value = '';
-    } catch(e) { showToast('Position failed: ' + e.message, 'error'); }
-  };
+  // --- PERPETUAL DEX (on-chain wired via openPerpPosition/closePerpPosition directly) ---
+  // openPerpPosition is handled by the original function which calls vaultDeposit inline
   window.ppOwnerCollect = async function() { try { await vaultCollectFees('Perp DEX'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectPpFees = async function() { try { await vaultCollectFees('Perp DEX'); } catch(e) { showToast(e.message, 'error'); } };
 
@@ -25413,14 +25409,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     } catch(e) { showToast('Failed: ' + e.message, 'error'); }
   };
 
-  window.closePerpPosition = async function(idx) {
-    if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
-    try {
-      showToast('Closing perp position and withdrawing margin...', 'info');
-      await vaultWithdraw('perpdex', 10, 'Close Perp Position');
-      showToast('Perp position closed! Margin returned on-chain.', 'success');
-    } catch(e) { showToast('Failed: ' + e.message, 'error'); }
-  };
+  // closePerpPosition is handled by the original function which calls vaultWithdraw inline
 
   window.fillOtcDeal = async function(idx) {
     if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
