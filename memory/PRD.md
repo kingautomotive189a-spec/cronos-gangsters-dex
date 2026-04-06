@@ -4,7 +4,7 @@
 Build a comprehensive Web3 DApp for the Cronos blockchain. Single HTML file for manual GoDaddy upload. **All features must be real on-chain with MetaMask transactions. No fakes.**
 
 ## Architecture
-- Single HTML file (~24.5k lines) + Ethers.js v6
+- Single HTML file (~24.7k lines) + Ethers.js v6
 - FastAPI backend for API proxy
 - Mining Hub (`mining.html`) with 4 Canvas games
 - ZIP delivery for GoDaddy
@@ -42,21 +42,36 @@ Build a comprehensive Web3 DApp for the Cronos blockchain. Single HTML file for 
 | **Competitions** | Entry fees | Protocol Vault | "Collect Comp Fees" |
 | **Squad Farming** | 0.3% on rewards | Protocol Vault | "Collect Squad Fees" |
 
-## Revenue Dashboard Features
-- Live on-chain treasury balance (GANG + CRO)
-- Per-feature fee balances read from Protocol Vault
-- "COLLECT ALL PROTOCOL VAULT FEES" master button
-- All banners show ON-CHAIN badge
-- "HOW YOU EARN" breakdown section
+## Completed Work
+
+### Apr 6, 2026 — Lending Page UI Redesign
+- Replaced all 🏦 (bank/house) emoji icons on the Lending page with custom SVG icons (stacked coins, dollar sign, heartbeat pulse, download arrow, monitor, question circle, shield)
+- Upgraded typography with a mixture approach: Bebas Neue for impact headers + Space Grotesk (new Google Font) for body text, labels, descriptions
+- Enhanced visual polish: glassmorphic stat boxes, gradient pill badges, token glow effects, hover states on pool cards, input focus transitions
+- Updated nav bar icon from generic credit card SVG to stacked coins SVG
+- Updated marquee/ticker from 🏦 emoji to inline SVG icon
+
+### Previous Work
+- Replaced mocked POL Bonds with real GANGBondDepository contract (8 bond pairs with CoinGecko logos)
+- Redirected swap fees (0.3%) to GANGProtocolVault, Revenue banners show real on-chain fees
+- Enforced real token balance checks before Mining Hub Canvas games
+- Added "CLEAR OLD POSITIONS" buttons for Leverage/Lending pages
+- Rewrote lending overrides to support all 10 tokens on-chain via Protocol Vault
+- Fixed broken token logos (VVS, TONIC) using correct CoinGecko/CMC URLs
 
 ## Bond Pairs (8 total)
 CRO-GANG (8%), USDC-GANG (6%), WETH-GANG (10%), WBTC-GANG (12%), DAI-GANG (7%), ATOM-GANG (9%), USDT-GANG (5%), VVS-GANG (11%)
 
 ## Key Files
-- `/app/frontend/public/cronos-gangsters.html` (~24.5k lines)
+- `/app/frontend/public/cronos-gangsters.html` (~24.7k lines)
 - `/app/frontend/public/mining.html`
-- `/app/frontend/public/dashboard.html`
 - `/app/backend/server.py`
+
+## Fonts Used
+- Bebas Neue — Display/impact headers, stat values, APY numbers
+- Space Grotesk — Body text, labels, descriptions (added Apr 6)
+- Barlow Condensed — General body text
+- Space Mono — Monospace for swap values, addresses
 
 ## Backlog
 - P1: CEX listings

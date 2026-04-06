@@ -36,7 +36,7 @@
 <link rel="dns-prefetch" href="https://evm.cronos.org" />
 <link rel="dns-prefetch" href="https://cronos-evm.publicnode.com" />
 <link rel="dns-prefetch" href="https://assets.coingecko.com" />
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.9.0/ethers.umd.min.js"></script>
 
 <style>
@@ -668,7 +668,7 @@
       <button class="nav-btn" data-page="farms"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c4-4 8-7.5 8-12a8 8 0 1 0-16 0c0 4.5 4 8 8 12z"/><path d="M12 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></span>Farms</button>
       <button class="nav-btn" data-page="vaults" data-testid="nav-vaults-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="12" cy="12" r="4"/><line x1="12" y1="8" x2="12" y2="12"/></svg></span>Vaults</button>
       <button class="nav-btn" data-page="revstaking" data-testid="nav-revstaking-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>Revenue Staking<span class="nav-desc">Earn fees</span></button>
-      <button class="nav-btn" data-page="lending" data-testid="nav-lending-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M6 14h4"/><path d="M14 14h4"/></svg></span>Lend & Borrow</button>
+      <button class="nav-btn" data-page="lending" data-testid="nav-lending-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v4c0 1.657 3.582 3 8 3s8-1.343 8-3V6"/><path d="M4 10v4c0 1.657 3.582 3 8 3s8-1.343 8-3v-4"/><path d="M4 14v4c0 1.657 3.582 3 8 3s8-1.343 8-3v-4"/></svg></span>Lend & Borrow</button>
       <button class="nav-btn" data-page="lottery" data-testid="nav-lottery-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="12" y1="4" x2="12" y2="20"/></svg></span>Lottery</button>
       <button class="nav-btn" data-page="checkin" data-testid="nav-checkin-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M9 16l2 2 4-4"/></svg></span>Daily Check-in<span class="nav-desc">Streaks</span></button>
       <button class="nav-btn" data-page="viptiers" data-testid="nav-viptiers-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>VIP Tiers<span class="nav-desc">GANG Holder</span></button>
@@ -836,7 +836,7 @@ function toggleNavMenu() {
       <div style="display:flex;gap:28px;padding:0 14px;flex-shrink:0;">
         <span onclick="showPage('futures')" style="cursor:pointer;color:#ff8c00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📈 LEVERAGE TRADING — 33 PAIRS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span onclick="showPage('lending')" style="cursor:pointer;color:#00e5ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏦 LEND & BORROW — EARN INTEREST</span>
+        <span onclick="showPage('lending')" style="cursor:pointer;color:#00e5ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v4c0 1.657 3.582 3 8 3s8-1.343 8-3V6"/><path d="M4 10v4c0 1.657 3.582 3 8 3s8-1.343 8-3v-4"/></svg> LEND & BORROW — EARN INTEREST</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('predict')" style="cursor:pointer;color:#a855f7;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔮 PREDICTION MARKETS — BET & WIN</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
@@ -899,7 +899,7 @@ function toggleNavMenu() {
       <div style="display:flex;gap:28px;padding:0 14px;flex-shrink:0;">
         <span onclick="showPage('futures')" style="cursor:pointer;color:#ff8c00;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📈 LEVERAGE TRADING — 33 PAIRS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span onclick="showPage('lending')" style="cursor:pointer;color:#00e5ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏦 LEND & BORROW — EARN INTEREST</span>
+        <span onclick="showPage('lending')" style="cursor:pointer;color:#00e5ff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v4c0 1.657 3.582 3 8 3s8-1.343 8-3V6"/><path d="M4 10v4c0 1.657 3.582 3 8 3s8-1.343 8-3v-4"/></svg> LEND & BORROW — EARN INTEREST</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('predict')" style="cursor:pointer;color:#a855f7;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🔮 PREDICTION MARKETS — BET & WIN</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
@@ -1209,7 +1209,7 @@ function toggleNavMenu() {
           <div style="font-size:9px;color:var(--muted);margin-top:2px;">Multi-chain</div>
         </div>
         <div class="card" onclick="showPage('lending')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(0,229,255,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#00e5ff'" onmouseout="this.style.borderColor='rgba(0,229,255,0.3)'">
-          <div style="font-size:22px;margin-bottom:4px;">🏦</div>
+          <div style="margin-bottom:4px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v4c0 1.657 3.582 3 8 3s8-1.343 8-3V6"/><path d="M4 10v4c0 1.657 3.582 3 8 3s8-1.343 8-3v-4"/><path d="M4 14v4c0 1.657 3.582 3 8 3s8-1.343 8-3v-4"/></svg></div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#00e5ff;letter-spacing:1px;">LEND</div>
           <div style="font-size:9px;color:var(--muted);margin-top:2px;">Earn interest</div>
         </div>
@@ -3636,357 +3636,363 @@ function toggleNavMenu() {
   ══════════════════════════════════════ -->
   <div class="page" id="page-lending" data-testid="page-lending">
 
-    <div style="text-align:center;margin-bottom:24px;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#00e5ff;line-height:1;text-shadow:0 0 30px rgba(0,229,255,0.3);">GANG LENDING <span style="font-size:14px;background:#27ae60;color:#fff;padding:3px 8px;border-radius:5px;vertical-align:middle;letter-spacing:0.5px;">ALL TOKENS ON-CHAIN</span></div>
-      <div style="font-size:14px;color:var(--green);margin-top:6px;">All 10 tokens use real on-chain smart contracts via Protocol Vault. Tokens leave your wallet on supply.</div>
-      <button onclick="clearLendingPositions()" data-testid="clear-lending-btn" style="margin-top:8px;font-size:11px;padding:5px 12px;border-radius:6px;background:rgba(231,76,60,0.15);color:#e74c3c;border:1px solid rgba(231,76,60,0.4);cursor:pointer;">CLEAR OLD TEST POSITIONS</button>
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v4c0 1.657 3.582 3 8 3s8-1.343 8-3V6"/><path d="M4 10v4c0 1.657 3.582 3 8 3s8-1.343 8-3v-4"/><path d="M4 14v4c0 1.657 3.582 3 8 3s8-1.343 8-3v-4"/></svg>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:5px;color:#fff;line-height:1;text-shadow:0 0 40px rgba(0,229,255,0.25);">GANG <span style="color:#00e5ff;">LENDING</span></div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:8px;align-items:center;margin-top:6px;">
+        <span style="font-size:13px;background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#fff;padding:3px 10px;border-radius:20px;letter-spacing:0.5px;font-family:'Space Grotesk',sans-serif;font-weight:600;">ALL TOKENS ON-CHAIN</span>
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:rgba(235,235,245,0.5);margin-top:8px;font-weight:400;letter-spacing:0.2px;">All 10 tokens use real on-chain smart contracts via Protocol Vault. Tokens leave your wallet on supply.</div>
+      <button onclick="clearLendingPositions()" data-testid="clear-lending-btn" style="margin-top:10px;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:500;padding:5px 14px;border-radius:20px;background:rgba(231,76,60,0.1);color:#e74c3c;border:1px solid rgba(231,76,60,0.3);cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(231,76,60,0.2)'" onmouseout="this.style.background='rgba(231,76,60,0.1)'">CLEAR OLD TEST POSITIONS</button>
     </div>
 
     <!-- Platform Stats Bar -->
-    <div class="stats-bar" style="margin-bottom:20px;" data-testid="lending-stats-bar">
+    <div class="stats-bar" style="margin-bottom:20px;background:linear-gradient(135deg,rgba(0,229,255,0.04),rgba(0,229,255,0.01));border:1px solid rgba(0,229,255,0.12);border-radius:14px;padding:16px 12px;" data-testid="lending-stats-bar">
       <div class="stat-item">
-        <div class="stat-label">TOTAL SUPPLIED</div>
-        <div class="stat-value" id="lendTotalSupplied" data-testid="lend-total-supplied">$0</div>
+        <div class="stat-label" style="font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:10px;letter-spacing:1.5px;color:rgba(235,235,245,0.4);">TOTAL SUPPLIED</div>
+        <div class="stat-value" id="lendTotalSupplied" data-testid="lend-total-supplied" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#00e5ff;">$0</div>
       </div>
       <div class="stat-item">
-        <div class="stat-label">TOTAL BORROWED</div>
-        <div class="stat-value" id="lendTotalBorrowed" data-testid="lend-total-borrowed">$0</div>
+        <div class="stat-label" style="font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:10px;letter-spacing:1.5px;color:rgba(235,235,245,0.4);">TOTAL BORROWED</div>
+        <div class="stat-value" id="lendTotalBorrowed" data-testid="lend-total-borrowed" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ff8c00;">$0</div>
       </div>
       <div class="stat-item">
-        <div class="stat-label">YOUR DEPOSITS</div>
-        <div class="stat-value" id="lendYourDeposits" data-testid="lend-your-deposits">$0</div>
+        <div class="stat-label" style="font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:10px;letter-spacing:1.5px;color:rgba(235,235,245,0.4);">YOUR DEPOSITS</div>
+        <div class="stat-value" id="lendYourDeposits" data-testid="lend-your-deposits" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);">$0</div>
       </div>
       <div class="stat-item">
-        <div class="stat-label">YOUR BORROWS</div>
-        <div class="stat-value" id="lendYourBorrows" data-testid="lend-your-borrows">$0</div>
+        <div class="stat-label" style="font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:10px;letter-spacing:1.5px;color:rgba(235,235,245,0.4);">YOUR BORROWS</div>
+        <div class="stat-value" id="lendYourBorrows" data-testid="lend-your-borrows" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--red);">$0</div>
       </div>
     </div>
 
     <!-- Health Factor -->
-    <div class="card" style="margin-bottom:16px;border-color:rgba(0,229,255,0.3);" data-testid="lending-health-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#00e5ff;letter-spacing:2px;">HEALTH FACTOR</div>
-        <div id="lendHealthFactor" data-testid="lend-health-factor" style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--green);">--</div>
+    <div class="card" style="margin-bottom:16px;border-color:rgba(0,229,255,0.2);background:linear-gradient(145deg,rgba(0,229,255,0.03),transparent);" data-testid="lending-health-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:rgba(235,235,245,0.7);letter-spacing:1.5px;">HEALTH FACTOR</div>
+        </div>
+        <div id="lendHealthFactor" data-testid="lend-health-factor" style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--green);text-shadow:0 0 20px rgba(39,174,96,0.3);">--</div>
       </div>
-      <div style="background:var(--surface2);border-radius:8px;height:8px;overflow:hidden;">
-        <div id="lendHealthBar" data-testid="lend-health-bar" style="height:100%;width:100%;background:linear-gradient(90deg,var(--red),#ff8c00,var(--green));border-radius:8px;transition:width .3s;"></div>
+      <div style="background:rgba(255,255,255,0.05);border-radius:10px;height:8px;overflow:hidden;">
+        <div id="lendHealthBar" data-testid="lend-health-bar" style="height:100%;width:100%;background:linear-gradient(90deg,#e74c3c,#ff8c00 40%,#27ae60);border-radius:10px;transition:width .4s ease;"></div>
       </div>
-      <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:var(--muted);">
-        <span>LIQUIDATION</span>
-        <span>SAFE</span>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;font-family:'Space Grotesk',sans-serif;font-weight:500;">
+        <span style="color:var(--red);">LIQUIDATION</span>
+        <span style="color:var(--green);">SAFE</span>
       </div>
     </div>
 
     <!-- Lending Pools -->
     <div class="card" style="margin-bottom:16px;" data-testid="lending-supply-card">
-      <div class="card-title" style="color:#00e5ff;">SUPPLY MARKETS — EARN INTEREST</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Deposit your tokens to earn passive interest. Your deposits also serve as collateral for borrowing.</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <div class="card-title" style="color:#00e5ff;margin-bottom:0;">SUPPLY MARKETS</div>
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.4);margin-bottom:16px;font-weight:400;line-height:1.5;">Deposit your tokens to earn passive interest. Your deposits also serve as collateral for borrowing.</div>
 
       <div id="lendingPoolsGrid" data-testid="lending-pools-grid" style="display:grid;gap:10px;">
 
         <!-- CRO Pool -->
-        <div class="card" style="padding:14px;border-color:rgba(0,45,116,0.3);" data-testid="lend-pool-cro">
+        <div class="card" style="padding:14px;border-color:rgba(0,45,116,0.3);transition:all .2s;" data-testid="lend-pool-cro" onmouseover="this.style.borderColor='rgba(0,45,116,0.6)'" onmouseout="this.style.borderColor='rgba(0,45,116,0.3)'">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:30px;height:30px;border-radius:50%;box-shadow:0 0 10px rgba(0,45,116,0.3);" loading="lazy">
               <div>
-                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">CRO</div>
-                <div style="font-size:10px;color:var(--muted);">Cronos</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text);letter-spacing:0.5px;">CRO</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);font-weight:400;">Cronos</div>
               </div>
             </div>
             <div style="text-align:right;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendCroApy" data-testid="lend-cro-apy">4.2% APY</div>
-              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);letter-spacing:1px;" id="lendCroApy" data-testid="lend-cro-apy">4.2% APY</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);font-weight:500;letter-spacing:0.5px;">Supply APY</div>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
-              <div style="color:var(--muted);font-size:9px;">POOL SIZE</div>
-              <div id="lendCroPool" data-testid="lend-cro-pool" style="color:var(--text);">0 CRO</div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;">
+              <div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">POOL SIZE</div>
+              <div id="lendCroPool" data-testid="lend-cro-pool" style="color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 CRO</div>
             </div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
-              <div style="color:var(--muted);font-size:9px;">UTILIZATION</div>
-              <div id="lendCroUtil" data-testid="lend-cro-util" style="color:#ff8c00;">0%</div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;">
+              <div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div>
+              <div id="lendCroUtil" data-testid="lend-cro-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div>
             </div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
-              <div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div>
-              <div id="lendCroYours" data-testid="lend-cro-yours" style="color:var(--green);">0 CRO</div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;">
+              <div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div>
+              <div id="lendCroYours" data-testid="lend-cro-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 CRO</div>
             </div>
           </div>
           <div style="display:flex;gap:6px;">
-            <input type="number" id="lendCroAmt" data-testid="lend-cro-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
-            <button class="btn-primary" data-testid="lend-cro-supply-btn" onclick="lendSupply('CRO')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
-            <button class="btn-secondary" data-testid="lend-cro-withdraw-btn" onclick="lendWithdraw('CRO')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+            <input type="number" id="lendCroAmt" data-testid="lend-cro-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+            <button class="btn-primary" data-testid="lend-cro-supply-btn" onclick="lendSupply('CRO')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-cro-withdraw-btn" onclick="lendWithdraw('CRO')" style="padding:9px 14px;font-size:11px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:rgba(235,235,245,0.6);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">WITHDRAW</button>
           </div>
         </div>
 
         <!-- GANG Pool — ON-CHAIN -->
-        <div class="card" style="padding:14px;border-color:rgba(39,174,96,0.6);box-shadow:0 0 12px rgba(39,174,96,0.15);" data-testid="lend-pool-gang">
+        <div class="card" style="padding:14px;border-color:rgba(39,174,96,0.5);box-shadow:0 0 16px rgba(39,174,96,0.1);transition:all .2s;" data-testid="lend-pool-gang" onmouseover="this.style.borderColor='rgba(39,174,96,0.8)'" onmouseout="this.style.borderColor='rgba(39,174,96,0.5)'">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <img src="/gang-logo.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="/gang-logo.png" style="width:30px;height:30px;border-radius:50%;box-shadow:0 0 10px rgba(39,174,96,0.3);" loading="lazy">
               <div>
-                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">GANG <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;letter-spacing:0.5px;vertical-align:middle;">ON-CHAIN</span></div>
-                <div style="font-size:10px;color:var(--green);">Real smart contract — tokens leave wallet</div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text);letter-spacing:0.5px;">GANG</span>
+                  <span style="font-size:8px;background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#fff;padding:2px 7px;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">ON-CHAIN</span>
+                </div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(39,174,96,0.7);font-weight:400;">Real smart contract</div>
               </div>
             </div>
             <div style="text-align:right;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendGangApy" data-testid="lend-gang-apy">8.5% APY</div>
-              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);letter-spacing:1px;" id="lendGangApy" data-testid="lend-gang-apy">8.5% APY</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);font-weight:500;letter-spacing:0.5px;">Supply APY</div>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
-              <div style="color:var(--muted);font-size:9px;">POOL SIZE</div>
-              <div id="lendGangPool" data-testid="lend-gang-pool" style="color:var(--text);">0 GANG</div>
+            <div style="background:rgba(39,174,96,0.05);border-radius:8px;padding:7px;text-align:center;">
+              <div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">POOL SIZE</div>
+              <div id="lendGangPool" data-testid="lend-gang-pool" style="color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 GANG</div>
             </div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
-              <div style="color:var(--muted);font-size:9px;">UTILIZATION</div>
-              <div id="lendGangUtil" data-testid="lend-gang-util" style="color:#ff8c00;">0%</div>
+            <div style="background:rgba(39,174,96,0.05);border-radius:8px;padding:7px;text-align:center;">
+              <div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div>
+              <div id="lendGangUtil" data-testid="lend-gang-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div>
             </div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
-              <div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div>
-              <div id="lendGangYours" data-testid="lend-gang-yours" style="color:var(--green);">0 GANG</div>
+            <div style="background:rgba(39,174,96,0.05);border-radius:8px;padding:7px;text-align:center;">
+              <div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div>
+              <div id="lendGangYours" data-testid="lend-gang-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 GANG</div>
             </div>
           </div>
           <div style="display:flex;gap:6px;">
-            <input type="number" id="lendGangAmt" data-testid="lend-gang-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
-            <button class="btn-primary" data-testid="lend-gang-supply-btn" onclick="lendSupply('GANG')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
-            <button class="btn-secondary" data-testid="lend-gang-withdraw-btn" onclick="lendWithdraw('GANG')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+            <input type="number" id="lendGangAmt" data-testid="lend-gang-amount" placeholder="Amount" style="flex:1;background:rgba(39,174,96,0.05);border:1px solid rgba(39,174,96,0.15);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(39,174,96,0.5)'" onblur="this.style.borderColor='rgba(39,174,96,0.15)'">
+            <button class="btn-primary" data-testid="lend-gang-supply-btn" onclick="lendSupply('GANG')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-gang-withdraw-btn" onclick="lendWithdraw('GANG')" style="padding:9px 14px;font-size:11px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:rgba(235,235,245,0.6);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">WITHDRAW</button>
           </div>
         </div>
 
         <!-- USDC Pool -->
-        <div class="card" style="padding:14px;border-color:rgba(38,117,255,0.3);" data-testid="lend-pool-usdc">
+        <div class="card" style="padding:14px;border-color:rgba(38,117,255,0.3);transition:all .2s;" data-testid="lend-pool-usdc" onmouseover="this.style.borderColor='rgba(38,117,255,0.6)'" onmouseout="this.style.borderColor='rgba(38,117,255,0.3)'">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <img src="https://assets.coingecko.com/coins/images/6319/small/usdc.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="https://assets.coingecko.com/coins/images/6319/small/usdc.png" style="width:30px;height:30px;border-radius:50%;box-shadow:0 0 10px rgba(38,117,255,0.3);" loading="lazy">
               <div>
-                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">USDC</div>
-                <div style="font-size:10px;color:var(--muted);">USD Coin</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text);letter-spacing:0.5px;">USDC</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);font-weight:400;">USD Coin</div>
               </div>
             </div>
             <div style="text-align:right;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendUsdcApy" data-testid="lend-usdc-apy">3.8% APY</div>
-              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);letter-spacing:1px;" id="lendUsdcApy" data-testid="lend-usdc-apy">3.8% APY</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);font-weight:500;letter-spacing:0.5px;">Supply APY</div>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
-              <div style="color:var(--muted);font-size:9px;">POOL SIZE</div>
-              <div id="lendUsdcPool" data-testid="lend-usdc-pool" style="color:var(--text);">0 USDC</div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;">
+              <div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">POOL SIZE</div>
+              <div id="lendUsdcPool" data-testid="lend-usdc-pool" style="color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 USDC</div>
             </div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
-              <div style="color:var(--muted);font-size:9px;">UTILIZATION</div>
-              <div id="lendUsdcUtil" data-testid="lend-usdc-util" style="color:#ff8c00;">0%</div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;">
+              <div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div>
+              <div id="lendUsdcUtil" data-testid="lend-usdc-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div>
             </div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
-              <div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div>
-              <div id="lendUsdcYours" data-testid="lend-usdc-yours" style="color:var(--green);">0 USDC</div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;">
+              <div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div>
+              <div id="lendUsdcYours" data-testid="lend-usdc-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 USDC</div>
             </div>
           </div>
           <div style="display:flex;gap:6px;">
-            <input type="number" id="lendUsdcAmt" data-testid="lend-usdc-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
-            <button class="btn-primary" data-testid="lend-usdc-supply-btn" onclick="lendSupply('USDC')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
-            <button class="btn-secondary" data-testid="lend-usdc-withdraw-btn" onclick="lendWithdraw('USDC')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+            <input type="number" id="lendUsdcAmt" data-testid="lend-usdc-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+            <button class="btn-primary" data-testid="lend-usdc-supply-btn" onclick="lendSupply('USDC')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-usdc-withdraw-btn" onclick="lendWithdraw('USDC')" style="padding:9px 14px;font-size:11px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:rgba(235,235,245,0.6);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">WITHDRAW</button>
           </div>
         </div>
 
         <!-- WETH Pool -->
-        <div class="card" style="padding:14px;border-color:rgba(98,126,234,0.3);" data-testid="lend-pool-weth">
+        <div class="card" style="padding:14px;border-color:rgba(98,126,234,0.3);transition:all .2s;" data-testid="lend-pool-weth" onmouseover="this.style.borderColor='rgba(98,126,234,0.6)'" onmouseout="this.style.borderColor='rgba(98,126,234,0.3)'">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" style="width:30px;height:30px;border-radius:50%;box-shadow:0 0 10px rgba(98,126,234,0.3);" loading="lazy">
               <div>
-                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">WETH</div>
-                <div style="font-size:10px;color:var(--muted);">Wrapped Ether</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text);letter-spacing:0.5px;">WETH</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);font-weight:400;">Wrapped Ether</div>
               </div>
             </div>
             <div style="text-align:right;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendWethApy" data-testid="lend-weth-apy">2.1% APY</div>
-              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);letter-spacing:1px;" id="lendWethApy" data-testid="lend-weth-apy">2.1% APY</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);font-weight:500;letter-spacing:0.5px;">Supply APY</div>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
-              <div style="color:var(--muted);font-size:9px;">POOL SIZE</div>
-              <div id="lendWethPool" data-testid="lend-weth-pool" style="color:var(--text);">0 WETH</div>
-            </div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
-              <div style="color:var(--muted);font-size:9px;">UTILIZATION</div>
-              <div id="lendWethUtil" data-testid="lend-weth-util" style="color:#ff8c00;">0%</div>
-            </div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;">
-              <div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div>
-              <div id="lendWethYours" data-testid="lend-weth-yours" style="color:var(--green);">0 WETH</div>
-            </div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">POOL SIZE</div><div id="lendWethPool" data-testid="lend-weth-pool" style="color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 WETH</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendWethUtil" data-testid="lend-weth-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendWethYours" data-testid="lend-weth-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 WETH</div></div>
           </div>
           <div style="display:flex;gap:6px;">
-            <input type="number" id="lendWethAmt" data-testid="lend-weth-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
-            <button class="btn-primary" data-testid="lend-weth-supply-btn" onclick="lendSupply('WETH')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
-            <button class="btn-secondary" data-testid="lend-weth-withdraw-btn" onclick="lendWithdraw('WETH')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+            <input type="number" id="lendWethAmt" data-testid="lend-weth-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+            <button class="btn-primary" data-testid="lend-weth-supply-btn" onclick="lendSupply('WETH')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-weth-withdraw-btn" onclick="lendWithdraw('WETH')" style="padding:9px 14px;font-size:11px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:rgba(235,235,245,0.6);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">WITHDRAW</button>
           </div>
         </div>
 
         <!-- WBTC Pool -->
-        <div class="card" style="padding:14px;border-color:rgba(247,147,26,0.3);" data-testid="lend-pool-wbtc">
+        <div class="card" style="padding:14px;border-color:rgba(247,147,26,0.3);transition:all .2s;" data-testid="lend-pool-wbtc" onmouseover="this.style.borderColor='rgba(247,147,26,0.6)'" onmouseout="this.style.borderColor='rgba(247,147,26,0.3)'">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <img src="https://assets.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="https://assets.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png" style="width:30px;height:30px;border-radius:50%;box-shadow:0 0 10px rgba(247,147,26,0.3);" loading="lazy">
               <div>
-                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">WBTC</div>
-                <div style="font-size:10px;color:var(--muted);">Wrapped Bitcoin</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text);letter-spacing:0.5px;">WBTC</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);font-weight:400;">Wrapped Bitcoin</div>
               </div>
             </div>
             <div style="text-align:right;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendWbtcApy" data-testid="lend-wbtc-apy">1.8% APY</div>
-              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);letter-spacing:1px;" id="lendWbtcApy" data-testid="lend-wbtc-apy">1.8% APY</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);font-weight:500;letter-spacing:0.5px;">Supply APY</div>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">POOL SIZE</div><div id="lendWbtcPool" data-testid="lend-wbtc-pool" style="color:var(--text);">0 WBTC</div></div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">UTILIZATION</div><div id="lendWbtcUtil" data-testid="lend-wbtc-util" style="color:#ff8c00;">0%</div></div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div><div id="lendWbtcYours" data-testid="lend-wbtc-yours" style="color:var(--green);">0 WBTC</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">POOL SIZE</div><div id="lendWbtcPool" data-testid="lend-wbtc-pool" style="color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 WBTC</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendWbtcUtil" data-testid="lend-wbtc-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendWbtcYours" data-testid="lend-wbtc-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 WBTC</div></div>
           </div>
           <div style="display:flex;gap:6px;">
-            <input type="number" id="lendWbtcAmt" data-testid="lend-wbtc-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
-            <button class="btn-primary" data-testid="lend-wbtc-supply-btn" onclick="lendSupply('WBTC')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
-            <button class="btn-secondary" data-testid="lend-wbtc-withdraw-btn" onclick="lendWithdraw('WBTC')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+            <input type="number" id="lendWbtcAmt" data-testid="lend-wbtc-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+            <button class="btn-primary" data-testid="lend-wbtc-supply-btn" onclick="lendSupply('WBTC')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-wbtc-withdraw-btn" onclick="lendWithdraw('WBTC')" style="padding:9px 14px;font-size:11px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:rgba(235,235,245,0.6);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">WITHDRAW</button>
           </div>
         </div>
 
         <!-- DAI Pool -->
-        <div class="card" style="padding:14px;border-color:rgba(251,176,52,0.3);" data-testid="lend-pool-dai">
+        <div class="card" style="padding:14px;border-color:rgba(251,176,52,0.3);transition:all .2s;" data-testid="lend-pool-dai" onmouseover="this.style.borderColor='rgba(251,176,52,0.6)'" onmouseout="this.style.borderColor='rgba(251,176,52,0.3)'">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <img src="https://assets.coingecko.com/coins/images/9956/small/Badge_Dai.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="https://assets.coingecko.com/coins/images/9956/small/Badge_Dai.png" style="width:30px;height:30px;border-radius:50%;box-shadow:0 0 10px rgba(251,176,52,0.3);" loading="lazy">
               <div>
-                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">DAI</div>
-                <div style="font-size:10px;color:var(--muted);">Dai Stablecoin</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text);letter-spacing:0.5px;">DAI</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);font-weight:400;">Dai Stablecoin</div>
               </div>
             </div>
             <div style="text-align:right;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendDaiApy" data-testid="lend-dai-apy">3.5% APY</div>
-              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);letter-spacing:1px;" id="lendDaiApy" data-testid="lend-dai-apy">3.5% APY</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);font-weight:500;letter-spacing:0.5px;">Supply APY</div>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">POOL SIZE</div><div id="lendDaiPool" data-testid="lend-dai-pool" style="color:var(--text);">0 DAI</div></div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">UTILIZATION</div><div id="lendDaiUtil" data-testid="lend-dai-util" style="color:#ff8c00;">0%</div></div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div><div id="lendDaiYours" data-testid="lend-dai-yours" style="color:var(--green);">0 DAI</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">POOL SIZE</div><div id="lendDaiPool" data-testid="lend-dai-pool" style="color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 DAI</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendDaiUtil" data-testid="lend-dai-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendDaiYours" data-testid="lend-dai-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 DAI</div></div>
           </div>
           <div style="display:flex;gap:6px;">
-            <input type="number" id="lendDaiAmt" data-testid="lend-dai-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
-            <button class="btn-primary" data-testid="lend-dai-supply-btn" onclick="lendSupply('DAI')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
-            <button class="btn-secondary" data-testid="lend-dai-withdraw-btn" onclick="lendWithdraw('DAI')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+            <input type="number" id="lendDaiAmt" data-testid="lend-dai-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+            <button class="btn-primary" data-testid="lend-dai-supply-btn" onclick="lendSupply('DAI')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-dai-withdraw-btn" onclick="lendWithdraw('DAI')" style="padding:9px 14px;font-size:11px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:rgba(235,235,245,0.6);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">WITHDRAW</button>
           </div>
         </div>
 
         <!-- USDT Pool -->
-        <div class="card" style="padding:14px;border-color:rgba(38,161,123,0.3);" data-testid="lend-pool-usdt">
+        <div class="card" style="padding:14px;border-color:rgba(38,161,123,0.3);transition:all .2s;" data-testid="lend-pool-usdt" onmouseover="this.style.borderColor='rgba(38,161,123,0.6)'" onmouseout="this.style.borderColor='rgba(38,161,123,0.3)'">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <img src="https://assets.coingecko.com/coins/images/325/small/Tether.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="https://assets.coingecko.com/coins/images/325/small/Tether.png" style="width:30px;height:30px;border-radius:50%;box-shadow:0 0 10px rgba(38,161,123,0.3);" loading="lazy">
               <div>
-                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">USDT</div>
-                <div style="font-size:10px;color:var(--muted);">Tether</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text);letter-spacing:0.5px;">USDT</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);font-weight:400;">Tether</div>
               </div>
             </div>
             <div style="text-align:right;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendUsdtApy" data-testid="lend-usdt-apy">4.0% APY</div>
-              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);letter-spacing:1px;" id="lendUsdtApy" data-testid="lend-usdt-apy">4.0% APY</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);font-weight:500;letter-spacing:0.5px;">Supply APY</div>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">POOL SIZE</div><div id="lendUsdtPool" data-testid="lend-usdt-pool" style="color:var(--text);">0 USDT</div></div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">UTILIZATION</div><div id="lendUsdtUtil" data-testid="lend-usdt-util" style="color:#ff8c00;">0%</div></div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div><div id="lendUsdtYours" data-testid="lend-usdt-yours" style="color:var(--green);">0 USDT</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">POOL SIZE</div><div id="lendUsdtPool" data-testid="lend-usdt-pool" style="color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 USDT</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendUsdtUtil" data-testid="lend-usdt-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendUsdtYours" data-testid="lend-usdt-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 USDT</div></div>
           </div>
           <div style="display:flex;gap:6px;">
-            <input type="number" id="lendUsdtAmt" data-testid="lend-usdt-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
-            <button class="btn-primary" data-testid="lend-usdt-supply-btn" onclick="lendSupply('USDT')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
-            <button class="btn-secondary" data-testid="lend-usdt-withdraw-btn" onclick="lendWithdraw('USDT')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+            <input type="number" id="lendUsdtAmt" data-testid="lend-usdt-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+            <button class="btn-primary" data-testid="lend-usdt-supply-btn" onclick="lendSupply('USDT')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-usdt-withdraw-btn" onclick="lendWithdraw('USDT')" style="padding:9px 14px;font-size:11px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:rgba(235,235,245,0.6);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">WITHDRAW</button>
           </div>
         </div>
 
         <!-- ATOM Pool -->
-        <div class="card" style="padding:14px;border-color:rgba(108,108,229,0.3);" data-testid="lend-pool-atom">
+        <div class="card" style="padding:14px;border-color:rgba(108,108,229,0.3);transition:all .2s;" data-testid="lend-pool-atom" onmouseover="this.style.borderColor='rgba(108,108,229,0.6)'" onmouseout="this.style.borderColor='rgba(108,108,229,0.3)'">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <img src="https://assets.coingecko.com/coins/images/1481/small/cosmos_hub.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="https://assets.coingecko.com/coins/images/1481/small/cosmos_hub.png" style="width:30px;height:30px;border-radius:50%;box-shadow:0 0 10px rgba(108,108,229,0.3);" loading="lazy">
               <div>
-                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">ATOM</div>
-                <div style="font-size:10px;color:var(--muted);">Cosmos</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text);letter-spacing:0.5px;">ATOM</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);font-weight:400;">Cosmos</div>
               </div>
             </div>
             <div style="text-align:right;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendAtomApy" data-testid="lend-atom-apy">5.2% APY</div>
-              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);letter-spacing:1px;" id="lendAtomApy" data-testid="lend-atom-apy">5.2% APY</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);font-weight:500;letter-spacing:0.5px;">Supply APY</div>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">POOL SIZE</div><div id="lendAtomPool" data-testid="lend-atom-pool" style="color:var(--text);">0 ATOM</div></div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">UTILIZATION</div><div id="lendAtomUtil" data-testid="lend-atom-util" style="color:#ff8c00;">0%</div></div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div><div id="lendAtomYours" data-testid="lend-atom-yours" style="color:var(--green);">0 ATOM</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">POOL SIZE</div><div id="lendAtomPool" data-testid="lend-atom-pool" style="color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 ATOM</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendAtomUtil" data-testid="lend-atom-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendAtomYours" data-testid="lend-atom-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 ATOM</div></div>
           </div>
           <div style="display:flex;gap:6px;">
-            <input type="number" id="lendAtomAmt" data-testid="lend-atom-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
-            <button class="btn-primary" data-testid="lend-atom-supply-btn" onclick="lendSupply('ATOM')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
-            <button class="btn-secondary" data-testid="lend-atom-withdraw-btn" onclick="lendWithdraw('ATOM')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+            <input type="number" id="lendAtomAmt" data-testid="lend-atom-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+            <button class="btn-primary" data-testid="lend-atom-supply-btn" onclick="lendSupply('ATOM')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-atom-withdraw-btn" onclick="lendWithdraw('ATOM')" style="padding:9px 14px;font-size:11px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:rgba(235,235,245,0.6);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">WITHDRAW</button>
           </div>
         </div>
 
         <!-- VVS Pool -->
-        <div class="card" style="padding:14px;border-color:rgba(86,204,242,0.3);" data-testid="lend-pool-vvs">
+        <div class="card" style="padding:14px;border-color:rgba(86,204,242,0.3);transition:all .2s;" data-testid="lend-pool-vvs" onmouseover="this.style.borderColor='rgba(86,204,242,0.6)'" onmouseout="this.style.borderColor='rgba(86,204,242,0.3)'">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <img src="https://coin-images.coingecko.com/coins/images/20210/small/8glAYOTM_400x400.jpg" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="https://coin-images.coingecko.com/coins/images/20210/small/8glAYOTM_400x400.jpg" style="width:30px;height:30px;border-radius:50%;box-shadow:0 0 10px rgba(86,204,242,0.3);" loading="lazy">
               <div>
-                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">VVS</div>
-                <div style="font-size:10px;color:var(--muted);">VVS Finance</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text);letter-spacing:0.5px;">VVS</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);font-weight:400;">VVS Finance</div>
               </div>
             </div>
             <div style="text-align:right;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendVvsApy" data-testid="lend-vvs-apy">12.0% APY</div>
-              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);letter-spacing:1px;" id="lendVvsApy" data-testid="lend-vvs-apy">12.0% APY</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);font-weight:500;letter-spacing:0.5px;">Supply APY</div>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">POOL SIZE</div><div id="lendVvsPool" data-testid="lend-vvs-pool" style="color:var(--text);">0 VVS</div></div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">UTILIZATION</div><div id="lendVvsUtil" data-testid="lend-vvs-util" style="color:#ff8c00;">0%</div></div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div><div id="lendVvsYours" data-testid="lend-vvs-yours" style="color:var(--green);">0 VVS</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">POOL SIZE</div><div id="lendVvsPool" data-testid="lend-vvs-pool" style="color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 VVS</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendVvsUtil" data-testid="lend-vvs-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendVvsYours" data-testid="lend-vvs-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 VVS</div></div>
           </div>
           <div style="display:flex;gap:6px;">
-            <input type="number" id="lendVvsAmt" data-testid="lend-vvs-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
-            <button class="btn-primary" data-testid="lend-vvs-supply-btn" onclick="lendSupply('VVS')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
-            <button class="btn-secondary" data-testid="lend-vvs-withdraw-btn" onclick="lendWithdraw('VVS')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+            <input type="number" id="lendVvsAmt" data-testid="lend-vvs-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+            <button class="btn-primary" data-testid="lend-vvs-supply-btn" onclick="lendSupply('VVS')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-vvs-withdraw-btn" onclick="lendWithdraw('VVS')" style="padding:9px 14px;font-size:11px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:rgba(235,235,245,0.6);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">WITHDRAW</button>
           </div>
         </div>
 
         <!-- TONIC Pool -->
-        <div class="card" style="padding:14px;border-color:rgba(78,186,147,0.3);" data-testid="lend-pool-tonic">
+        <div class="card" style="padding:14px;border-color:rgba(78,186,147,0.3);transition:all .2s;" data-testid="lend-pool-tonic" onmouseover="this.style.borderColor='rgba(78,186,147,0.6)'" onmouseout="this.style.borderColor='rgba(78,186,147,0.3)'">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <img src="https://s2.coinmarketcap.com/static/img/coins/128x128/17709.png" style="width:28px;height:28px;border-radius:50%;" loading="lazy">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <img src="https://s2.coinmarketcap.com/static/img/coins/128x128/17709.png" style="width:30px;height:30px;border-radius:50%;box-shadow:0 0 10px rgba(78,186,147,0.3);" loading="lazy">
               <div>
-                <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;">TONIC</div>
-                <div style="font-size:10px;color:var(--muted);">Tectonic</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text);letter-spacing:0.5px;">TONIC</div>
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.35);font-weight:400;">Tectonic</div>
               </div>
             </div>
             <div style="text-align:right;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" id="lendTonicApy" data-testid="lend-tonic-apy">15.0% APY</div>
-              <div style="font-size:10px;color:var(--muted);">Supply APY</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);letter-spacing:1px;" id="lendTonicApy" data-testid="lend-tonic-apy">15.0% APY</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);font-weight:500;letter-spacing:0.5px;">Supply APY</div>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;font-size:11px;">
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">POOL SIZE</div><div id="lendTonicPool" data-testid="lend-tonic-pool" style="color:var(--text);">0 TONIC</div></div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">UTILIZATION</div><div id="lendTonicUtil" data-testid="lend-tonic-util" style="color:#ff8c00;">0%</div></div>
-            <div style="background:var(--surface2);border-radius:6px;padding:6px;text-align:center;"><div style="color:var(--muted);font-size:9px;">YOUR SUPPLY</div><div id="lendTonicYours" data-testid="lend-tonic-yours" style="color:var(--green);">0 TONIC</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">POOL SIZE</div><div id="lendTonicPool" data-testid="lend-tonic-pool" style="color:var(--text);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 TONIC</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">UTILIZATION</div><div id="lendTonicUtil" data-testid="lend-tonic-util" style="color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-weight:600;">0%</div></div>
+            <div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px;text-align:center;"><div style="color:rgba(235,235,245,0.3);font-size:9px;font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:0.5px;">YOUR SUPPLY</div><div id="lendTonicYours" data-testid="lend-tonic-yours" style="color:var(--green);font-family:'Space Grotesk',sans-serif;font-weight:600;">0 TONIC</div></div>
           </div>
           <div style="display:flex;gap:6px;">
-            <input type="number" id="lendTonicAmt" data-testid="lend-tonic-amount" placeholder="Amount" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:14px;outline:none;">
-            <button class="btn-primary" data-testid="lend-tonic-supply-btn" onclick="lendSupply('TONIC')" style="padding:8px 16px;font-size:14px;border-radius:8px;">SUPPLY</button>
-            <button class="btn-secondary" data-testid="lend-tonic-withdraw-btn" onclick="lendWithdraw('TONIC')" style="padding:8px 12px;font-size:12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">WITHDRAW</button>
+            <input type="number" id="lendTonicAmt" data-testid="lend-tonic-amount" placeholder="Amount" style="flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='rgba(0,229,255,0.4)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+            <button class="btn-primary" data-testid="lend-tonic-supply-btn" onclick="lendSupply('TONIC')" style="padding:9px 18px;font-size:13px;border-radius:10px;margin-top:0;letter-spacing:1.5px;">SUPPLY</button>
+            <button class="btn-secondary" data-testid="lend-tonic-withdraw-btn" onclick="lendWithdraw('TONIC')" style="padding:9px 14px;font-size:11px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);color:rgba(235,235,245,0.6);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">WITHDRAW</button>
           </div>
         </div>
 
@@ -3994,18 +4000,21 @@ function toggleNavMenu() {
     </div>
 
     <!-- Borrow Section -->
-    <div class="card" style="margin-bottom:16px;border-color:rgba(255,140,0,0.3);" data-testid="lending-borrow-card">
-      <div class="card-title" style="color:#ff8c00;">BORROW — USE COLLATERAL</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Borrow against your supplied collateral. Keep health factor above 1.0 to avoid liquidation. Collateral factor: 75%.</div>
+    <div class="card" style="margin-bottom:16px;border-color:rgba(255,140,0,0.2);background:linear-gradient(145deg,rgba(255,140,0,0.03),transparent);" data-testid="lending-borrow-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        <div class="card-title" style="color:#ff8c00;margin-bottom:0;">BORROW</div>
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.4);margin-bottom:16px;font-weight:400;line-height:1.5;">Borrow against your supplied collateral. Keep health factor above 1.0 to avoid liquidation. Collateral factor: 75%.</div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
-        <div style="background:var(--surface2);border:1px solid rgba(255,140,0,0.2);border-radius:10px;padding:12px;text-align:center;">
-          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">COLLATERAL VALUE</div>
-          <div id="lendCollateralVal" data-testid="lend-collateral-val" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">$0.00</div>
+        <div style="background:rgba(39,174,96,0.05);border:1px solid rgba(39,174,96,0.15);border-radius:12px;padding:14px;text-align:center;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;font-weight:500;">COLLATERAL VALUE</div>
+          <div id="lendCollateralVal" data-testid="lend-collateral-val" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--green);margin-top:4px;">$0.00</div>
         </div>
-        <div style="background:var(--surface2);border:1px solid rgba(255,140,0,0.2);border-radius:10px;padding:12px;text-align:center;">
-          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">BORROW LIMIT</div>
-          <div id="lendBorrowLimit" data-testid="lend-borrow-limit" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff8c00;">$0.00</div>
+        <div style="background:rgba(255,140,0,0.05);border:1px solid rgba(255,140,0,0.15);border-radius:12px;padding:14px;text-align:center;">
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;font-weight:500;">BORROW LIMIT</div>
+          <div id="lendBorrowLimit" data-testid="lend-borrow-limit" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ff8c00;margin-top:4px;">$0.00</div>
         </div>
       </div>
 
@@ -4029,36 +4038,42 @@ function toggleNavMenu() {
         <button class="btn-primary" data-testid="lend-borrow-btn" onclick="lendBorrow()" style="flex:1;font-size:16px;border-radius:10px;background:linear-gradient(135deg,#ff8c00,#cc7000);">BORROW</button>
         <button class="btn-secondary" data-testid="lend-repay-btn" onclick="lendRepay()" style="flex:1;padding:10px;font-size:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;">REPAY</button>
       </div>
-      <div style="margin-top:8px;font-size:11px;color:var(--muted);text-align:center;">
-        Borrow APR: <span id="lendBorrowApr" data-testid="lend-borrow-apr" style="color:#ff8c00;">6-15%</span> (variable based on utilization) | Origination fee: <span style="color:var(--gold);">0.3%</span>
+      <div style="margin-top:10px;font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);text-align:center;font-weight:400;">
+        Borrow APR: <span id="lendBorrowApr" data-testid="lend-borrow-apr" style="color:#ff8c00;font-weight:600;">6-15%</span> (variable based on utilization) | Origination fee: <span style="color:var(--gold);font-weight:600;">0.3%</span>
       </div>
     </div>
 
     <!-- Your Active Loans -->
     <div class="card" style="margin-bottom:16px;" data-testid="lending-loans-card">
-      <div class="card-title">YOUR ACTIVE LOANS</div>
-      <div id="lendActiveLoans" data-testid="lend-active-loans" style="font-size:13px;color:var(--muted);text-align:center;padding:16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <div class="card-title" style="margin-bottom:0;">YOUR ACTIVE LOANS</div>
+      </div>
+      <div id="lendActiveLoans" data-testid="lend-active-loans" style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:rgba(235,235,245,0.35);text-align:center;padding:20px;font-weight:400;">
         No active loans. Supply collateral and borrow above.
       </div>
     </div>
 
     <!-- Owner Panel (hidden unless owner) -->
     <div id="lendOwnerPanel" data-testid="lend-owner-panel" style="display:none;">
-      <div class="card" style="border-color:rgba(39,174,96,0.4);">
-        <div class="card-title" style="color:var(--green);">OWNER — LENDING REVENUE</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">You earn 20% of all interest paid by borrowers + 0.3% origination fee on every loan + 5% liquidation penalty.</div>
+      <div class="card" style="border-color:rgba(39,174,96,0.3);background:linear-gradient(145deg,rgba(39,174,96,0.03),transparent);">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div class="card-title" style="color:var(--green);margin-bottom:0;">OWNER — LENDING REVENUE</div>
+        </div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.4);margin-bottom:14px;font-weight:400;">You earn 20% of all interest paid by borrowers + 0.3% origination fee on every loan + 5% liquidation penalty.</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
-            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">INTEREST EARNED</div>
-            <div id="lendOwnerInterest" data-testid="lend-owner-interest" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);">0</div>
+          <div style="background:rgba(39,174,96,0.05);border:1px solid rgba(39,174,96,0.15);border-radius:12px;padding:12px;text-align:center;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:500;">INTEREST EARNED</div>
+            <div id="lendOwnerInterest" data-testid="lend-owner-interest" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);margin-top:4px;">0</div>
           </div>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
-            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">ORIGINATION FEES</div>
-            <div id="lendOwnerOrigFees" data-testid="lend-owner-orig-fees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);">0</div>
+          <div style="background:rgba(212,160,23,0.05);border:1px solid rgba(212,160,23,0.15);border-radius:12px;padding:12px;text-align:center;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:500;">ORIGINATION FEES</div>
+            <div id="lendOwnerOrigFees" data-testid="lend-owner-orig-fees" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);margin-top:4px;">0</div>
           </div>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
-            <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">LIQUIDATION FEES</div>
-            <div id="lendOwnerLiqFees" data-testid="lend-owner-liq-fees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--red);">0</div>
+          <div style="background:rgba(231,76,60,0.05);border:1px solid rgba(231,76,60,0.15);border-radius:12px;padding:12px;text-align:center;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:500;">LIQUIDATION FEES</div>
+            <div id="lendOwnerLiqFees" data-testid="lend-owner-liq-fees" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--red);margin-top:4px;">0</div>
           </div>
         </div>
         <button class="btn-primary" data-testid="lend-owner-collect-btn" onclick="lendOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT LENDING FEES</button>
@@ -4066,35 +4081,38 @@ function toggleNavMenu() {
     </div>
 
     <!-- How It Works -->
-    <div class="card" style="margin-top:16px;">
-      <div class="card-title">HOW LENDING & BORROWING WORKS</div>
-      <div style="display:grid;gap:12px;">
-        <div style="display:flex;gap:10px;align-items:flex-start;">
-          <div style="background:#00e5ff;color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">1</div>
+    <div class="card" style="margin-top:16px;border-color:rgba(255,255,255,0.06);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div class="card-title" style="margin-bottom:0;">HOW IT WORKS</div>
+      </div>
+      <div style="display:grid;gap:14px;">
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:linear-gradient(135deg,#00e5ff,#0090a0);color:#000;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;font-family:'Space Grotesk',sans-serif;">1</div>
           <div>
-            <div style="font-weight:700;color:var(--text);font-size:13px;">SUPPLY tokens to earn interest</div>
-            <div style="font-size:11px;color:var(--muted);">Deposit CRO, GANG, USDC, or WETH. You earn APY automatically — interest accrues every block.</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--text);font-size:13px;letter-spacing:0.3px;">SUPPLY tokens to earn interest</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);margin-top:3px;font-weight:400;line-height:1.5;">Deposit CRO, GANG, USDC, or WETH. You earn APY automatically — interest accrues every block.</div>
           </div>
         </div>
-        <div style="display:flex;gap:10px;align-items:flex-start;">
-          <div style="background:#ff8c00;color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">2</div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:linear-gradient(135deg,#ff8c00,#cc7000);color:#000;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;font-family:'Space Grotesk',sans-serif;">2</div>
           <div>
-            <div style="font-weight:700;color:var(--text);font-size:13px;">BORROW against your collateral</div>
-            <div style="font-size:11px;color:var(--muted);">Use your deposits as collateral to borrow other tokens. 75% collateral factor — deposit $100, borrow up to $75.</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--text);font-size:13px;letter-spacing:0.3px;">BORROW against your collateral</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);margin-top:3px;font-weight:400;line-height:1.5;">Use your deposits as collateral to borrow other tokens. 75% collateral factor — deposit $100, borrow up to $75.</div>
           </div>
         </div>
-        <div style="display:flex;gap:10px;align-items:flex-start;">
-          <div style="background:var(--green);color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">3</div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#000;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;font-family:'Space Grotesk',sans-serif;">3</div>
           <div>
-            <div style="font-weight:700;color:var(--text);font-size:13px;">REPAY your loan anytime</div>
-            <div style="font-size:11px;color:var(--muted);">No lock period. Repay your borrow + interest at any time. Your collateral is unlocked when you repay.</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--text);font-size:13px;letter-spacing:0.3px;">REPAY your loan anytime</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);margin-top:3px;font-weight:400;line-height:1.5;">No lock period. Repay your borrow + interest at any time. Your collateral is unlocked when you repay.</div>
           </div>
         </div>
-        <div style="display:flex;gap:10px;align-items:flex-start;">
-          <div style="background:var(--red);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">!</div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;font-family:'Space Grotesk',sans-serif;">!</div>
           <div>
-            <div style="font-weight:700;color:var(--red);font-size:13px;">LIQUIDATION WARNING</div>
-            <div style="font-size:11px;color:var(--muted);">If your health factor drops below 1.0, your collateral can be liquidated. 5% penalty goes to the protocol. Keep health factor above 1.5 to be safe.</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--red);font-size:13px;letter-spacing:0.3px;">LIQUIDATION WARNING</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);margin-top:3px;font-weight:400;line-height:1.5;">If your health factor drops below 1.0, your collateral can be liquidated. 5% penalty goes to the protocol. Keep health factor above 1.5 to be safe.</div>
           </div>
         </div>
       </div>
