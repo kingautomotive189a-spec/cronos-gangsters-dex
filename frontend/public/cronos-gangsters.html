@@ -21813,17 +21813,17 @@ function updateFuturesPositions() {
     const arrow = pnlGang >= 0 ? '&#9650;' : '&#9660;';
     const sideColor = sideNorm === 'long' ? '#27ae60' : '#e74c3c';
 
-    // Check TP/SL
+    // Check TP/SL — auto-execute, no wallet confirmation needed (user set these)
     if (pos.tp && ((sideNorm === 'long' && currentPrice >= pos.tp) || (sideNorm === 'short' && currentPrice <= pos.tp))) {
-      setTimeout(() => closeFuturesPosition(pos.id), 100);
+      if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'TP HIT'), 100); }
     }
     if (pos.sl && ((sideNorm === 'long' && currentPrice <= pos.sl) || (sideNorm === 'short' && currentPrice >= pos.sl))) {
-      setTimeout(() => closeFuturesPosition(pos.id), 100);
+      if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'SL HIT'), 100); }
     }
-    // Check liquidation
+    // Check liquidation — forced, no wallet confirmation (you lost everything)
     const liqPct = 1 / pos.leverage;
     if ((sideNorm === 'long' && priceDiff <= -liqPct) || (sideNorm === 'short' && priceDiff >= liqPct)) {
-      setTimeout(() => closeFuturesPosition(pos.id), 100);
+      if (!pos._autoClosing) { pos._autoClosing = true; setTimeout(() => _forceCloseFuturesPosition(pos.id, 'LIQUIDATED'), 100); }
     }
 
     return `
@@ -21846,6 +21846,79 @@ function updateFuturesPositions() {
       <button onclick="closeFuturesPosition(${pos.id})" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--red);background:rgba(231,76,60,0.1);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;cursor:pointer;">CLOSE POSITION</button>
     </div>`;
   }).join('');
+}
+
+// Force-close a position (liquidation, TP, SL) — NO wallet confirmation, automatic
+function _forceCloseFuturesPosition(id, reason) {
+  const idx = futuresState.positions.findIndex(p => p.id === id);
+  if (idx === -1) return;
+  const pos = futuresState.positions[idx];
+  const curr = pos.currency || 'GANG';
+  const currentPrice = futuresState.prices[pos.pair] || pos.entryPrice;
+  const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
+  const sideNorm = (pos.side || '').toLowerCase();
+  const pnlPct = sideNorm === 'long' ? priceDiff * pos.leverage : -priceDiff * pos.leverage;
+  const pnlAmt = pos.amount * pnlPct;
+
+  // Liquidation = full loss
+  const isLiquidation = reason === 'LIQUIDATED';
+  const finalPnl = isLiquidation ? -pos.amount : Math.max(pnlAmt, -pos.amount);
+  const closingFee = isLiquidation ? 0 : pos.amount * 0.003;
+  const netPnl = finalPnl - closingFee;
+
+  // Update pool
+  if (curr === 'CRO') {
+    futuresState.poolBalanceCRO += closingFee;
+    if (netPnl < 0) futuresState.poolBalanceCRO += Math.abs(netPnl);
+    else futuresState.poolBalanceCRO -= netPnl;
+  } else if (curr === 'GANG') {
+    futuresState.poolBalance += closingFee;
+    if (netPnl < 0) futuresState.poolBalance += Math.abs(netPnl);
+    else futuresState.poolBalance -= netPnl;
+  } else {
+    var poolKey = 'poolBalance' + curr;
+    futuresState[poolKey] = (futuresState[poolKey] || 0) + closingFee;
+    if (netPnl < 0) futuresState[poolKey] = (futuresState[poolKey] || 0) + Math.abs(netPnl);
+    else futuresState[poolKey] = (futuresState[poolKey] || 0) - netPnl;
+  }
+
+  // Record in history
+  if (!futuresState.history) futuresState.history = [];
+  futuresState.history.push({
+    id: pos.id,
+    wallet: pos.wallet,
+    pair: pos.pair,
+    side: pos.side,
+    leverage: pos.leverage,
+    currency: curr,
+    amount: pos.amount,
+    entryPrice: pos.entryPrice,
+    closePrice: currentPrice,
+    tp: pos.tp,
+    sl: pos.sl,
+    pnl: netPnl,
+    pnlPct: pnlPct * 100,
+    fee: closingFee,
+    closeReason: reason,
+    openedAt: pos.openedAt,
+    closedAt: new Date().toISOString(),
+    status: 'closed'
+  });
+
+  futuresState.positions.splice(idx, 1);
+  saveFuturesState();
+
+  // Show notification
+  if (isLiquidation) {
+    showToast('LIQUIDATED — ' + pos.pair + ' ' + pos.side.toUpperCase() + ' ' + pos.leverage + 'x — Lost ' + pos.amount.toFixed(2) + ' ' + curr + '. Position wiped.', 'error');
+  } else {
+    var tpsl = reason === 'TP HIT' ? 'Take Profit hit!' : 'Stop Loss triggered!';
+    showToast(tpsl + ' — ' + pos.pair + ' ' + pos.side.toUpperCase() + ' @ $' + currentPrice.toLocaleString(undefined,{maximumFractionDigits:2}) + ' — PnL: ' + (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, netPnl >= 0 ? 'success' : 'error');
+  }
+
+  updateFuturesPositions();
+  updateFuturesPool();
+  renderFuturesHistory();
 }
 
 function renderFuturesHistory() {
