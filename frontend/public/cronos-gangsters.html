@@ -21828,7 +21828,7 @@ window._futuresPageLoadTime = Date.now();
 
 // Load saved state
 try {
-  const saved = JSON.parse(localStorage.getItem('gang_futures') || '{}');
+  const saved = JSON.parse(localStorage.getItem('gang_futures_v2') || localStorage.getItem('gang_futures') || '{}');
   if (saved.positions) futuresState.positions = saved.positions;
   if (saved.history) futuresState.history = saved.history;
   if (saved.poolBalance) futuresState.poolBalance = saved.poolBalance;
