@@ -4544,29 +4544,32 @@ function toggleNavMenu() {
 
     <!-- Header -->
     <div style="text-align:center;margin-bottom:16px;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#ff8c00;line-height:1;text-shadow:0 0 30px rgba(255,140,0,0.3);">LEVERAGE TRADING</div>
-      <div style="font-size:13px;color:var(--muted);letter-spacing:1px;margin-top:4px;"><span class="live-dot"></span>Live prices — auto-updates every 1.5s | Up to 100x leverage | 33 pairs | <span style="color:#27ae60;font-weight:700;">GANG = ON-CHAIN</span></div>
+      <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:5px;color:#fff;line-height:1;text-shadow:0 0 40px rgba(255,140,0,0.25);">LEVERAGE <span style="color:#ff8c00;">TRADING</span></div>
+      </div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.45);letter-spacing:0.3px;margin-top:4px;font-weight:400;"><span class="live-dot"></span>Live prices — auto-updates every 1.5s | Up to 100x leverage | 33 pairs | <span style="color:#27ae60;font-weight:700;">ON-CHAIN</span></div>
       <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,#ff8c00,transparent);margin:10px auto 0;"></div>
     </div>
 
     <!-- Pool Info Bar -->
     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
-      <div style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
-        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL BALANCE</div>
-        <div id="futuresPoolBalance" data-testid="futures-pool-balance" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);">0 GANG</div>
+      <div style="flex:1;background:rgba(39,174,96,0.04);border:1px solid rgba(39,174,96,0.15);border-radius:12px;padding:12px;text-align:center;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;font-weight:500;">POOL BALANCE</div>
+        <div id="futuresPoolBalance" data-testid="futures-pool-balance" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);margin-top:2px;">0 GANG</div>
       </div>
-      <div style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
-        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">YOUR BALANCE</div>
-        <div id="futuresYourBalance" data-testid="futures-your-balance" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);">0 GANG</div>
+      <div style="flex:1;background:rgba(255,140,0,0.04);border:1px solid rgba(255,140,0,0.15);border-radius:12px;padding:12px;text-align:center;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;font-weight:500;">YOUR BALANCE</div>
+        <div id="futuresYourBalance" data-testid="futures-your-balance" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);margin-top:2px;">0 GANG</div>
       </div>
-      <div style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
-        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">24H VOLUME</div>
-        <div id="futures24hVol" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#ff8c00;">0</div>
+      <div style="flex:1;background:rgba(255,140,0,0.04);border:1px solid rgba(255,140,0,0.15);border-radius:12px;padding:12px;text-align:center;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;font-weight:500;">24H VOLUME</div>
+        <div id="futures24hVol" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff8c00;margin-top:2px;">0</div>
       </div>
     </div>
 
     <!-- Token Pair Selector -->
-    <div style="font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;font-size:14px;">CRYPTO</div>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;font-weight:600;">CRYPTO</div>
     <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none;" id="futuresPairBar">
       <button class="futures-pair active" data-pair="BTC" onclick="selectFuturesPair('BTC')"><img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" class="fp-logo" onerror="this.style.display='none'"/>BTC</button>
       <button class="futures-pair" data-pair="ETH" onclick="selectFuturesPair('ETH')"><img src="https://assets.coingecko.com/coins/images/279/small/ethereum.png" class="fp-logo" onerror="this.style.display='none'"/>ETH</button>
@@ -4581,7 +4584,7 @@ function toggleNavMenu() {
       <button class="futures-pair" data-pair="ARB" onclick="selectFuturesPair('ARB')"><img src="https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg" class="fp-logo" onerror="this.style.display='none'"/>ARB</button>
       <button class="futures-pair" data-pair="MATIC" onclick="selectFuturesPair('MATIC')"><img src="https://assets.coingecko.com/coins/images/4713/small/polygon.png" class="fp-logo" onerror="this.style.display='none'"/>MATIC</button>
     </div>
-    <div style="font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;font-size:14px;">STOCKS</div>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;font-weight:600;">STOCKS</div>
     <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;scrollbar-width:none;">
       <button class="futures-pair" data-pair="AAPL" onclick="selectFuturesPair('AAPL')"><img src="https://s3-symbol-logo.tradingview.com/apple--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#a2aaad>A</span>'"/>AAPL</button>
       <button class="futures-pair" data-pair="TSLA" onclick="selectFuturesPair('TSLA')"><img src="https://s3-symbol-logo.tradingview.com/tesla--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#cc0000>T</span>'"/>TSLA</button>
@@ -4598,7 +4601,7 @@ function toggleNavMenu() {
       <button class="futures-pair" data-pair="BA" onclick="selectFuturesPair('BA')"><img src="https://s3-symbol-logo.tradingview.com/boeing--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0033a0>B</span>'"/>BA</button>
       <button class="futures-pair" data-pair="JPM" onclick="selectFuturesPair('JPM')"><img src="https://s3-symbol-logo.tradingview.com/jpmorgan-chase--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0b6eaa>JP</span>'"/>JPM</button>
     </div>
-    <div style="font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;font-family:'Bebas Neue',sans-serif;font-size:14px;">INDICES &amp; COMMODITIES</div>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:6px;font-weight:600;">INDICES &amp; COMMODITIES</div>
     <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:14px;scrollbar-width:none;">
       <button class="futures-pair" data-pair="NAS100" onclick="selectFuturesPair('NAS100')"><img src="https://s3-symbol-logo.tradingview.com/country/US--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#0096d6>NDX</span>'"/>NASDAQ 100</button>
       <button class="futures-pair" data-pair="SP500" onclick="selectFuturesPair('SP500')"><img src="https://s3-symbol-logo.tradingview.com/country/US--big.svg" class="fp-logo" onerror="this.outerHTML='<span class=fp-badge style=background:#ef3e42>500</span>'"/>S&amp;P 500</button>
@@ -4660,7 +4663,7 @@ function toggleNavMenu() {
 
       <!-- Leverage -->
       <div style="margin-bottom:14px;">
-        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">LEVERAGE</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;margin-bottom:6px;font-weight:500;">LEVERAGE</div>
         <div style="display:flex;gap:4px;" id="futuresLevBar">
           <button class="lev-btn active" data-lev="5" onclick="setFuturesLev(5)">5x</button>
           <button class="lev-btn" data-lev="10" onclick="setFuturesLev(10)">10x</button>
@@ -4672,7 +4675,7 @@ function toggleNavMenu() {
 
       <!-- Currency Toggle -->
       <div style="margin-bottom:14px;">
-        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">TRADE WITH</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;margin-bottom:6px;font-weight:500;">TRADE WITH</div>
         <div style="display:flex;gap:0;background:var(--surface2);border-radius:10px;padding:3px;border:1px solid var(--border);">
           <button id="futuresCurrGang" data-testid="futures-curr-gang" onclick="setFuturesCurrency('GANG')" style="flex:1;padding:10px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;transition:all .2s;background:#ff8c00;color:#000;display:flex;align-items:center;justify-content:center;gap:6px;"><img src="/gang-logo.png" style="width:18px;height:18px;border-radius:50%;">GANG</button>
           <button id="futuresCurrCro" data-testid="futures-curr-cro" onclick="setFuturesCurrency('CRO')" style="flex:1;padding:10px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px;"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:18px;height:18px;border-radius:50%;">CRO</button>
@@ -4681,71 +4684,80 @@ function toggleNavMenu() {
 
       <!-- Amount -->
       <div style="margin-bottom:14px;">
-        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;">AMOUNT (<span id="futuresCurrLabel">GANG</span>)</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;margin-bottom:6px;font-weight:500;">AMOUNT (<span id="futuresCurrLabel">GANG</span>)</div>
         <div style="display:flex;gap:6px;">
           <input class="swap-input" id="futuresAmount" data-testid="futures-amount" type="number" step="any" placeholder="Enter amount" style="flex:1;" />
           <button onclick="document.getElementById('futuresAmount').value = _truncDec((futuresState.currency === 'CRO' ? ((state.balances?.CRO || 0) > 0.5 ? (state.balances?.CRO || 0) - 0.5 : 0) : (state.balances?.GANG || 0)), 2)" style="background:var(--surface2);border:1px solid var(--border);color:var(--gold);border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;">MAX</button>
         </div>
         <div style="display:flex;justify-content:space-between;margin-top:6px;">
-          <span style="font-size:11px;color:var(--muted);">Position size: <span id="futuresPosSize" style="color:var(--gold);">0</span></span>
-          <span style="font-size:11px;color:var(--muted);">Liq. price: <span id="futuresLiqPrice" style="color:var(--red);">$—</span></span>
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);font-weight:400;">Position size: <span id="futuresPosSize" style="color:var(--gold);font-weight:600;">0</span></span>
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(235,235,245,0.35);font-weight:400;">Liq. price: <span id="futuresLiqPrice" style="color:var(--red);font-weight:600;">$—</span></span>
         </div>
       </div>
 
       <!-- TP / SL -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
         <div>
-          <div style="font-size:10px;color:var(--green);letter-spacing:1px;margin-bottom:4px;">TAKE PROFIT (USD)</div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--green);letter-spacing:1px;margin-bottom:4px;font-weight:500;">TAKE PROFIT (USD)</div>
           <input class="swap-input" id="futuresTP" type="number" step="any" placeholder="Optional" style="width:100%;box-sizing:border-box;font-size:13px;" />
         </div>
         <div>
-          <div style="font-size:10px;color:var(--red);letter-spacing:1px;margin-bottom:4px;">STOP LOSS (USD)</div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--red);letter-spacing:1px;margin-bottom:4px;font-weight:500;">STOP LOSS (USD)</div>
           <input class="swap-input" id="futuresSL" type="number" step="any" placeholder="Optional" style="width:100%;box-sizing:border-box;font-size:13px;" />
         </div>
       </div>
 
       <!-- Open Position Button -->
-      <div style="font-size:11px;color:var(--gold);text-align:center;margin-bottom:8px;">Trading fee: 0.3% open + 0.3% close</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--gold);text-align:center;margin-bottom:8px;font-weight:400;">Trading fee: 0.3% open + 0.3% close</div>
       <button id="futuresOpenBtn" data-testid="futures-open-btn" onclick="openFuturesPosition()" style="width:100%;padding:16px;border-radius:12px;border:none;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;cursor:pointer;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;transition:all .2s;">
         OPEN LONG POSITION
       </button>
     </div>
 
     <!-- Open Positions -->
-    <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.2);">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff8c00;letter-spacing:2px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
-        OPEN POSITIONS
-        <button onclick="clearAllFuturesPositions()" data-testid="clear-old-positions-btn" style="font-size:10px;padding:4px 10px;border-radius:6px;background:rgba(231,76,60,0.2);color:#e74c3c;border:1px solid rgba(231,76,60,0.4);cursor:pointer;font-family:inherit;letter-spacing:0.5px;">CLEAR OLD POSITIONS</button>
+    <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.15);background:linear-gradient(145deg,rgba(255,140,0,0.03),transparent);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff8c00;letter-spacing:2px;">OPEN POSITIONS</span>
+        </div>
+        <button onclick="clearAllFuturesPositions()" data-testid="clear-old-positions-btn" style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;padding:5px 12px;border-radius:20px;background:rgba(231,76,60,0.1);color:#e74c3c;border:1px solid rgba(231,76,60,0.3);cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(231,76,60,0.2)'" onmouseout="this.style.background='rgba(231,76,60,0.1)'">CLEAR OLD POSITIONS</button>
       </div>
       <div id="futuresPositions" data-testid="futures-positions">
-        <div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No open positions</div>
+        <div style="font-family:'Space Grotesk',sans-serif;color:rgba(235,235,245,0.35);text-align:center;padding:16px;font-size:13px;font-weight:400;">No open positions</div>
       </div>
     </div>
 
     <!-- Trade History -->
-    <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.1);">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--muted);letter-spacing:2px;margin-bottom:12px;">TRADE HISTORY</div>
+    <div class="card" style="margin-bottom:14px;border-color:rgba(255,255,255,0.06);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(235,235,245,0.4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:rgba(235,235,245,0.4);letter-spacing:2px;">TRADE HISTORY</span>
+      </div>
       <div id="futuresHistory" data-testid="futures-history">
-        <div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No trades yet</div>
+        <div style="font-family:'Space Grotesk',sans-serif;color:rgba(235,235,245,0.25);text-align:center;padding:16px;font-size:13px;font-weight:400;">No trades yet</div>
       </div>
     </div>
 
     <!-- Owner Pool Controls (hidden for non-owners) -->
     <div id="futuresOwnerPanel" data-testid="futures-owner-panel" style="display:none;">
-      <div class="card" style="border-color:rgba(39,174,96,0.4);background:linear-gradient(135deg,rgba(39,174,96,0.05),rgba(255,140,0,0.03));">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);letter-spacing:2px;margin-bottom:12px;">OWNER POOL CONTROLS</div>
+      <div class="card" style="border-color:rgba(39,174,96,0.3);background:linear-gradient(145deg,rgba(39,174,96,0.04),rgba(255,140,0,0.02));">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);letter-spacing:2px;">OWNER POOL CONTROLS</span>
+        </div>
 
         <!-- GANG Pool -->
-        <div style="background:var(--surface2);border:1px solid rgba(255,140,0,0.3);border-radius:10px;padding:14px;margin-bottom:10px;">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="/gang-logo.png" style="width:18px;height:18px;border-radius:50%;"><span style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:#ff8c00;letter-spacing:1px;">GANG POOL</span></div>
+        <div style="background:rgba(255,140,0,0.04);border:1px solid rgba(255,140,0,0.15);border-radius:12px;padding:14px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="/gang-logo.png" style="width:18px;height:18px;border-radius:50%;box-shadow:0 0 8px rgba(255,140,0,0.3);"><span style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:#ff8c00;font-weight:700;letter-spacing:0.5px;">GANG POOL</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
             <div style="text-align:center;">
-              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL BAL</div>
-              <div id="futuresOwnerPoolGang" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--green);">0</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:500;">POOL BAL</div>
+              <div id="futuresOwnerPoolGang" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);margin-top:2px;">0</div>
             </div>
             <div style="text-align:center;">
-              <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">PROFIT</div>
-              <div id="futuresOwnerProfitGang" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);">0</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:500;">PROFIT</div>
+              <div id="futuresOwnerProfitGang" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);margin-top:2px;">0</div>
             </div>
           </div>
           <div style="display:flex;gap:6px;margin-bottom:6px;">
@@ -4756,8 +4768,8 @@ function toggleNavMenu() {
         </div>
 
         <!-- CRO Pool -->
-        <div style="background:var(--surface2);border:1px solid rgba(0,45,116,0.4);border-radius:10px;padding:14px;">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:18px;height:18px;border-radius:50%;"><span style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:#002d74;letter-spacing:1px;">CRO POOL</span></div>
+        <div style="background:rgba(0,45,116,0.04);border:1px solid rgba(0,45,116,0.2);border-radius:12px;padding:14px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;"><img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:18px;height:18px;border-radius:50%;box-shadow:0 0 8px rgba(0,45,116,0.3);"><span style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:#4a90d9;font-weight:700;letter-spacing:0.5px;">CRO POOL</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
             <div style="text-align:center;">
               <div style="font-size:10px;color:var(--muted);letter-spacing:1px;">POOL BAL</div>
@@ -6221,15 +6233,33 @@ function toggleNavMenu() {
 
     <!-- Contract Deployment Buttons -->
     <div class="ref-link-box" style="max-width:520px;border-color:rgba(39,174,96,0.5);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:var(--green);">CONTRACT DEPLOYMENT — CRONOS MAINNET</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Deploy real smart contracts on Cronos chain. Each button triggers MetaMask for a real mainnet transaction.</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <button class="ref-copy-btn" onclick="deployNFTStakingContract()" style="background:linear-gradient(135deg,var(--gold),#b8860b);" data-testid="deploy-nft-staking-btn">DEPLOY NFT STAKING CONTRACT</button>
-        <button class="ref-copy-btn" onclick="deployBuybackContract()" style="background:linear-gradient(135deg,#e53935,#b71c1c);" data-testid="deploy-buyback-btn">DEPLOY BUYBACK & BURN CONTRACT</button>
-        <button class="ref-copy-btn" onclick="deployLendingContract()" style="background:linear-gradient(135deg,#00e5ff,#0090a0);" data-testid="deploy-lending-btn">DEPLOY LENDING POOL CONTRACT</button>
-        <button class="ref-copy-btn" onclick="deployTradingPoolContract()" style="background:linear-gradient(135deg,#ff8c00,#cc7000);" data-testid="deploy-trading-pool-btn">DEPLOY LEVERAGE TRADING POOL</button>
-        <button class="ref-copy-btn" onclick="deployBondDepositoryContract()" style="background:linear-gradient(135deg,#4fc3f7,#0288d1);" data-testid="deploy-bond-btn">DEPLOY BOND DEPOSITORY</button>
-        <button class="ref-copy-btn" onclick="deployProtocolVaultContract()" style="background:linear-gradient(135deg,#ab47bc,#7b1fa2);" data-testid="deploy-vault-btn">DEPLOY PROTOCOL VAULT</button>
+      <div class="ref-link-label" style="color:var(--green);">DEPLOYED CONTRACTS — CRONOS MAINNET</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">All smart contracts are live on Cronos mainnet. Addresses are hardcoded and work on every device.</div>
+      <div style="display:grid;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(39,174,96,0.06);border:1px solid rgba(39,174,96,0.2);border-radius:10px;padding:10px 14px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);">NFT Staking</span>
+          <span style="font-size:10px;background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#fff;padding:3px 10px;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">DEPLOYED</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(39,174,96,0.06);border:1px solid rgba(39,174,96,0.2);border-radius:10px;padding:10px 14px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);">Buyback & Burn</span>
+          <span style="font-size:10px;background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#fff;padding:3px 10px;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">DEPLOYED</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(39,174,96,0.06);border:1px solid rgba(39,174,96,0.2);border-radius:10px;padding:10px 14px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);">Lending Pool</span>
+          <span style="font-size:10px;background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#fff;padding:3px 10px;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">DEPLOYED</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(39,174,96,0.06);border:1px solid rgba(39,174,96,0.2);border-radius:10px;padding:10px 14px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);">Leverage Trading Pool</span>
+          <span style="font-size:10px;background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#fff;padding:3px 10px;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">DEPLOYED</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(39,174,96,0.06);border:1px solid rgba(39,174,96,0.2);border-radius:10px;padding:10px 14px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);">Bond Depository</span>
+          <span style="font-size:10px;background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#fff;padding:3px 10px;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">DEPLOYED</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(39,174,96,0.06);border:1px solid rgba(39,174,96,0.2);border-radius:10px;padding:10px 14px;">
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);">Protocol Vault</span>
+          <span style="font-size:10px;background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#fff;padding:3px 10px;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:0.5px;">DEPLOYED</span>
+        </div>
       </div>
       <div id="deployContractStatus" data-testid="deploy-contract-status" style="margin-top:8px;font-size:12px;min-height:16px;text-align:center;"></div>
       <button onclick="showMyDeployedAddresses()" style="margin-top:12px;width:100%;padding:12px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;background:linear-gradient(135deg,#27ae60,#1a8a4a);color:#fff;border:none;border-radius:10px;cursor:pointer;" data-testid="show-addresses-btn">SHOW MY DEPLOYED ADDRESSES</button>
@@ -20838,6 +20868,20 @@ try {
   if (saved.poolBalanceCRO) futuresState.poolBalanceCRO = saved.poolBalanceCRO;
   if (saved.ownerDepositedCRO) futuresState.ownerDepositedCRO = saved.ownerDepositedCRO;
   if (saved.currency) futuresState.currency = saved.currency;
+} catch {}
+
+// Auto-clear old fake positions (pre-contract era) — one-time cleanup
+try {
+  if (!localStorage.getItem('gang_futures_cleaned_v2')) {
+    futuresState.positions = [];
+    futuresState.history = [];
+    localStorage.setItem('gang_futures_cleaned_v2', '1');
+    // Also clear old lending positions
+    localStorage.removeItem('gang_lending_positions');
+    localStorage.removeItem('gang_lending_borrows');
+    localStorage.removeItem('gang_lending_loans');
+    localStorage.removeItem('gang_borrow_positions');
+  }
 } catch {}
 
 function saveFuturesState() {
