@@ -23390,6 +23390,16 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     try {
       const decimals = (token === 'WBTC') ? 8 : (token === 'USDC' || token === 'USDT') ? 6 : 18;
       const weiAmt = ethers.parseUnits(amount.toString(), decimals);
+
+      // CHECK REAL BALANCE FIRST
+      const userAddr = await state.signer.getAddress();
+      const balRaw = await _readContract(tokenAddr, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+      const userBal = parseFloat(ethers.formatUnits(balRaw, decimals));
+      if (userBal < amount) {
+        showToast('Insufficient ' + token + ' balance! You have ' + userBal.toFixed(4) + ' ' + token + ' but tried to supply ' + amount, 'error');
+        return;
+      }
+
       const poolHash = ethers.id('lending_' + token);
       
       showToast('Approving ' + token + '...', 'info');
@@ -23485,6 +23495,16 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     try {
       const decimals = (token === 'WBTC') ? 8 : (token === 'USDC' || token === 'USDT') ? 6 : 18;
       const weiAmt = ethers.parseUnits(amount.toString(), decimals);
+
+      // CHECK REAL BALANCE FIRST
+      const userAddr = await state.signer.getAddress();
+      const balRaw = await _readContract(tokenAddr, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+      const userBal = parseFloat(ethers.formatUnits(balRaw, decimals));
+      if (userBal < amount) {
+        showToast('Insufficient ' + token + '! You have ' + userBal.toFixed(4) + ' but need ' + amount + ' to repay', 'error');
+        return;
+      }
+
       const poolHash = ethers.id('lending_' + token);
       
       showToast('Approving ' + token + '...', 'info');
@@ -23557,6 +23577,14 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     // If trading pool is deployed and currency is GANG, do real on-chain deposit
     if (poolAddr && curr === 'GANG' && state.signer) {
       try {
+        // CHECK REAL GANG BALANCE FIRST
+        const userAddr = await state.signer.getAddress();
+        const balRaw = await _readContract(GANG_ADDR, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+        const userBal = parseFloat(ethers.formatEther(balRaw));
+        if (userBal < amt) {
+          showToast('Insufficient GANG! You have ' + userBal.toFixed(2) + ' but need ' + amt.toFixed(2) + ' GANG', 'error');
+          return;
+        }
         const weiAmt = ethers.parseEther(amt.toString());
         await _approveGANG(poolAddr, weiAmt);
         showToast('Depositing ' + amt.toFixed(2) + ' GANG collateral on-chain...', 'info');
@@ -23567,6 +23595,17 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
         return; // Don't open position if deposit fails
       }
     } else if (poolAddr && curr === 'CRO') {
+      // CHECK REAL CRO BALANCE
+      if (state.signer) {
+        try {
+          const userAddr = await state.signer.getAddress();
+          const croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
+          if (croBal < amt) {
+            showToast('Insufficient CRO! You have ' + croBal.toFixed(2) + ' but need ' + amt.toFixed(2) + ' CRO', 'error');
+            return;
+          }
+        } catch(e) {}
+      }
       showToast('CRO positions use native gas — collateral tracked locally.', 'info');
     } else if (!poolAddr && curr === 'GANG') {
       showToast('Deploy Trading Pool from Revenue page for real on-chain collateral.', 'info');
@@ -23825,6 +23864,16 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const vaultAddr = getVaultAddr();
     if (!vaultAddr) { showToast('Deploy Protocol Vault from Revenue page first', 'error'); return false; }
     if (!state.signer) { showToast('Connect wallet first', 'error'); return false; }
+
+    // CHECK REAL GANG BALANCE FIRST
+    const userAddr = await state.signer.getAddress();
+    const balRaw = await _readContract(GANG_ADDR, ['function balanceOf(address) view returns (uint256)'], 'balanceOf', [userAddr]);
+    const userBal = parseFloat(ethers.formatEther(balRaw));
+    if (userBal < amount) {
+      showToast('Insufficient GANG balance! You have ' + userBal.toFixed(2) + ' GANG but need ' + amount + ' for ' + label, 'error');
+      return false;
+    }
+
     const weiAmt = ethers.parseEther(amount.toString());
     const poolHash = ethers.id(poolName);
     await _approveGANG(vaultAddr, weiAmt);

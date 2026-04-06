@@ -4,10 +4,10 @@
 Build a comprehensive Web3 DApp for the Cronos blockchain. Single HTML file for manual GoDaddy upload. **All features must be real on-chain with MetaMask transactions. No fakes.**
 
 ## Architecture
-- Single HTML file (~24.7k lines) + Ethers.js v6
+- Single HTML file (~25k lines) + Ethers.js v6
 - FastAPI backend for API proxy
 - Mining Hub (`mining.html`) with 4 Canvas games
-- ZIP delivery for GoDaddy
+- ZIP delivery or Emergent Deploy
 
 ## Smart Contracts — 6 Deployed on Cronos Mainnet
 
@@ -22,32 +22,26 @@ Build a comprehensive Web3 DApp for the Cronos blockchain. Single HTML file for 
 
 ## Completed Work
 
+### Apr 6, 2026 — Critical Balance Check Fix
+- Added real on-chain token balance verification BEFORE every deposit/supply/stake across ALL features
+- Fixed: Users could previously "supply" tokens they didn't own (USDC, WETH etc.) — now blocked with "Insufficient balance" error
+- Balance checks added to: Lending Supply, Lending Repay, Leverage Trading (GANG + CRO), vaultDeposit (Revenue Staking, Limit Orders, Perp DEX, OTC, DAO)
+
+### Apr 6, 2026 — Deploy Banners & Fake Position Cleanup
+- Replaced deploy buttons with clean "DEPLOYED" green badges for all 6 contracts
+- Applied Space Grotesk typography to Leverage Trading page
+- Auto-clear ALL fake localStorage positions on first load (leverage, lending, revenue staking, predictions, etc.)
+- Fixed input ID mismatches: rsStakeAmount, ppCollateral (were rsStakeAmt, ppMargin)
+
 ### Apr 6, 2026 — Contract Addresses Hardcoded
-- ALL 6 contract addresses now hardcoded in CONTRACTS object — works on every device/browser without localStorage
-- Added "SHOW MY DEPLOYED ADDRESSES" button to Revenue page
-- Added "IMPORT ADDRESSES (NEW DEVICE)" feature for manual address transfer
-- Fixed localStorage key mismatches (GANG_LENDING_ADDR, GANG_BOND_DEPOSITORY_ADDR)
+- ALL 6 contract addresses hardcoded in CONTRACTS object — works on every device/browser
 
 ### Apr 6, 2026 — Lending Page UI Redesign
-- Replaced house/bank emoji icons with custom SVG icons (stacked coins, dollar sign, etc.)
-- Upgraded typography: Bebas Neue headers + Space Grotesk body text
-- Enhanced visual polish: glassmorphic backgrounds, token glow effects, hover states
-
-### Previous Work
-- Replaced mocked POL Bonds with real GANGBondDepository contract (8 bond pairs)
-- Redirected swap fees (0.3%) to GANGProtocolVault
-- Enforced real token balance checks before Mining Hub Canvas games
-- Added "CLEAR OLD POSITIONS" buttons for Leverage/Lending pages
-- Rewrote lending overrides to support all 10 tokens on-chain
-
-## Fonts Used
-- Bebas Neue — Display/impact headers
-- Space Grotesk — Body text, labels, descriptions
-- Barlow Condensed — General body
-- Space Mono — Monospace for values/addresses
+- Replaced house/bank emoji icons with SVG icons
+- Upgraded typography: Bebas Neue headers + Space Grotesk body
 
 ## Key Files
-- `/app/frontend/public/cronos-gangsters.html` (~24.7k lines)
+- `/app/frontend/public/cronos-gangsters.html` (~25k lines)
 - `/app/frontend/public/mining.html`
 - `/app/backend/server.py`
 
