@@ -17636,7 +17636,7 @@ async function checkOwnerRevenue() {
 
     // Load LEVERAGE TRADING pool profits
     try {
-      const saved = JSON.parse(localStorage.getItem('gangFuturesState') || '{}');
+      const saved = JSON.parse(localStorage.getItem('gang_futures_v2') || '{}');
       const poolBal = saved.poolBalance || 0;
       const deposited = saved.ownerDeposited || 0;
       const gangProfit = poolBal - deposited;
@@ -21308,7 +21308,7 @@ function saveFuturesState() {
     obj['poolBalance'+t] = futuresState['poolBalance'+t] || 0;
     obj['ownerDeposited'+t] = futuresState['ownerDeposited'+t] || 0;
   });
-  localStorage.setItem('gang_futures', JSON.stringify(obj));
+  localStorage.setItem('gang_futures_v2', JSON.stringify(obj));
 }
 
 function setFuturesCurrency(curr) {
@@ -21444,10 +21444,10 @@ function setFuturesPriceDisplay(pair, price, change) {
   _futuresLastApiPrice[pair] = price; // anchor for micro-volatility
   document.getElementById('futuresPairPrice').textContent = '$' + price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: price > 100 ? 2 : 6 });
   const changeEl = document.getElementById('futuresPairChange');
-  // Ensure change always shows positive (bullish display)
-  const displayChange = Math.abs(change) < 0.01 ? (Math.random() * 0.8 + 0.1) : (change < 0 ? Math.abs(change) * (0.5 + Math.random() * 0.5) : change);
-  changeEl.textContent = '+' + displayChange.toFixed(2) + '%';
-  changeEl.style.color = 'var(--green)';
+  // Show REAL change — positive or negative
+  const prefix = change >= 0 ? '+' : '';
+  changeEl.textContent = prefix + change.toFixed(2) + '%';
+  changeEl.style.color = change >= 0 ? 'var(--green)' : 'var(--red)';
 }
 
 async function fetchNonCryptoPrice(pair, p) {
@@ -21749,7 +21749,7 @@ function updateFuturesPositions() {
   const el = document.getElementById('futuresPositions');
   if (!el) return;
   const myWallet = (state.address || 'demo').toLowerCase();
-  const myPositions = futuresState.positions.filter(p => p.wallet === myWallet);
+  const myPositions = futuresState.positions.filter(p => p.wallet === myWallet && p.status !== 'closed');
   if (myPositions.length === 0) {
     el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:16px;font-size:14px;">No open positions</div>';
     return;
@@ -21991,16 +21991,17 @@ function simulateFuturesTick() {
       _futuresLastApiPrice[pair] = basePrice;
     }
 
-    // ─── REALISTIC MICRO-TREND ENGINE ───
-    // Each pair has its own micro-trend that lasts 8-25 ticks before reversing
+    // ─── UNPREDICTABLE MICRO-TREND ENGINE ───
+    // Each pair has its own micro-trend that lasts random ticks before reversing
     if (!window._sigTrends) window._sigTrends = {};
     if (!window._sigTrends[pair]) {
       window._sigTrends[pair] = {
-        dir: Math.random() > 0.4 ? 1 : -1,     // trend direction (slight bullish bias)
-        strength: 0.3 + Math.random() * 0.7,     // how strong the trend is (0.3-1.0)
-        remaining: Math.floor(8 + Math.random() * 17), // ticks left in this trend
-        volatility: 0,                            // current volatility state
-        prevMove: 0,                              // previous move for smoothing
+        dir: Math.random() > 0.5 ? 1 : -1,     // NO bias — pure 50/50
+        strength: 0.2 + Math.random() * 0.8,     // how strong the trend is (0.2-1.0)
+        remaining: Math.floor(3 + Math.random() * 12), // shorter, less predictable trends (3-15 ticks)
+        volatility: 0,
+        prevMove: 0,
+        reversals: 0,                             // track reversals for entropy
       };
     }
     const trend = window._sigTrends[pair];
@@ -22009,23 +22010,26 @@ function simulateFuturesTick() {
     const fp = FUTURES_PAIRS[pair];
     const assetType = fp ? fp.type : 'crypto';
     let baseVol;
-    if (assetType === 'crypto') baseVol = 0.0012;
-    else if (assetType === 'commodity') baseVol = 0.0006;
-    else baseVol = 0.0008;
+    if (assetType === 'crypto') baseVol = 0.0018;   // Higher base volatility
+    else if (assetType === 'commodity') baseVol = 0.0009;
+    else baseVol = 0.0012;
 
-    // Add occasional volatility spikes (simulates news events)
-    if (Math.random() < 0.03) trend.volatility = 1.5 + Math.random() * 2;
-    else trend.volatility = Math.max(0, trend.volatility * 0.85);
+    // Frequent volatility spikes — makes price less smooth/predictable
+    if (Math.random() < 0.08) trend.volatility = 1.5 + Math.random() * 3;
+    else trend.volatility = Math.max(0, trend.volatility * 0.8);
     const currentVol = baseVol * (1 + trend.volatility);
 
-    // Core move: trend component + noise component + mean-reversion
-    const trendComponent = trend.dir * trend.strength * currentVol * 0.6;
-    const noiseComponent = (Math.random() - 0.5) * currentVol * 0.8;
-    const smoothing = trend.prevMove * 0.25; // momentum from previous tick
-    let rawMove = trendComponent + noiseComponent + smoothing;
+    // Core move: more noise, less trend influence, random jumps
+    const trendComponent = trend.dir * trend.strength * currentVol * 0.35;
+    const noiseComponent = (Math.random() - 0.5) * currentVol * 1.2;
+    // Random micro-jumps that break patterns
+    const jumpChance = Math.random();
+    const microJump = jumpChance < 0.05 ? (Math.random() - 0.5) * currentVol * 3 : 0;
+    const smoothing = trend.prevMove * 0.15; // less momentum = less predictable
+    let rawMove = trendComponent + noiseComponent + microJump + smoothing;
 
     // Clamp individual tick moves
-    rawMove = Math.max(-currentVol * 1.5, Math.min(currentVol * 1.5, rawMove));
+    rawMove = Math.max(-currentVol * 2, Math.min(currentVol * 2, rawMove));
     trend.prevMove = rawMove;
 
     // Apply move to price
@@ -22042,19 +22046,24 @@ function simulateFuturesTick() {
     if (newPrice > anchor * (1 + maxDrift)) newPrice = anchor * (1 + maxDrift * 0.95);
     if (newPrice < anchor * (1 - maxDrift)) newPrice = anchor * (1 - maxDrift * 0.95);
 
-    // Countdown the trend and create new one when done
+    // Countdown the trend and create new one — shorter, more chaotic
     trend.remaining--;
     if (trend.remaining <= 0) {
-      // Higher chance of reversing if we've drifted far
-      const driftFromAnchor = (newPrice - anchor) / anchor;
-      const reverseChance = 0.4 + Math.abs(driftFromAnchor) * 10;
-      if (Math.random() < reverseChance) {
-        trend.dir = -trend.dir;
-      } else if (Math.random() < 0.15) {
-        trend.dir = Math.random() > 0.4 ? 1 : -1; // fresh random direction
+      // Always reverse or go random — never stay in same direction predictably
+      const coin = Math.random();
+      if (coin < 0.5) {
+        trend.dir = -trend.dir; // reverse
+      } else {
+        trend.dir = Math.random() > 0.5 ? 1 : -1; // completely random
       }
-      trend.strength = 0.3 + Math.random() * 0.7;
-      trend.remaining = Math.floor(8 + Math.random() * 17);
+      trend.strength = 0.2 + Math.random() * 0.8;
+      trend.remaining = Math.floor(3 + Math.random() * 12); // short unpredictable durations
+      trend.reversals++;
+    }
+    // Random mid-trend direction flips (5% chance each tick)
+    if (Math.random() < 0.05) {
+      trend.dir = -trend.dir;
+      trend.strength = 0.3 + Math.random() * 0.5;
     }
 
     // Track direction for display purposes
@@ -24010,11 +24019,11 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       }
     }
 
-    // Close locally — remove from open positions
-    pos.status = 'closed';
+    // Close locally — move from open positions to history
     pos.closedAt = new Date().toISOString();
     pos.closePrice = currentPrice;
     pos.pnl = netPnl;
+    pos.status = 'closed';
     if (curr === 'CRO') {
       futuresState.poolBalanceCRO += closingFee;
       if (netPnl < 0) futuresState.poolBalanceCRO += Math.abs(netPnl);
@@ -24024,6 +24033,11 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       if (netPnl < 0) futuresState.poolBalance += Math.abs(netPnl);
       else futuresState.poolBalance -= netPnl;
     }
+    // REMOVE from open positions array — prevents re-closing
+    if (!futuresState.history) futuresState.history = [];
+    futuresState.history.push(Object.assign({}, pos));
+    const posIdx = futuresState.positions.indexOf(pos);
+    if (posIdx > -1) futuresState.positions.splice(posIdx, 1);
     saveFuturesState();
     showToast('Closed ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD — PnL: ' + (netPnl >= 0 ? '+' : '') + netPnl.toFixed(2) + ' ' + curr, netPnl >= 0 ? 'success' : 'error');
     updateFuturesPositions();
