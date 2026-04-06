@@ -294,6 +294,19 @@ async function connectWallet() {
 
 async function doAction(endpoint, body) {
   try {
+    if (!wallet) { showToast('Connect wallet first!'); return null; }
+    // Client-side balance validation
+    if (body && body.amount !== undefined) {
+      var userBal = userData ? (userData.balance || 0) : 0;
+      if (body.amount > userBal) {
+        showToast('Insufficient balance! You have ' + userBal.toFixed(2) + ' $GANG but trying to use ' + body.amount);
+        return null;
+      }
+      if (body.amount <= 0) {
+        showToast('Enter a valid amount greater than 0');
+        return null;
+      }
+    }
     gameResult = null;
     var r = await fetch(API+'/mining'+endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({wallet_address:wallet},body||{}))});
     var d = await r.json();
@@ -408,7 +421,7 @@ function renderMineTab() {
 
 function renderGamesTab() {
   var html = '<div class="panel"><h2>ARCADE GAMES</h2>';
-  html += '<div class="bet-row"><span>Bet:</span><input type="number" class="bet-input" value="'+betAmount+'" onchange="betAmount=Math.max(1,+this.value)" data-testid="bet-input"/><span>$GANG</span></div>';
+  html += '<div class="bet-row"><span>Bet:</span><input type="number" class="bet-input" value="'+betAmount+'" onchange="betAmount=Math.max(1,Math.min(userData?userData.balance:9999,+this.value))" data-testid="bet-input"/><span>$GANG</span><span style="color:var(--muted);font-size:11px;margin-left:6px;">(bal: '+(userData?userData.balance.toFixed(0):'?')+')</span></div>';
   html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">';
 
   // Shooting Gallery
