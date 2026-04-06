@@ -21697,19 +21697,9 @@ function closeFuturesPosition(id) {
   const idx = futuresState.positions.findIndex(p => p.id === id);
   if (idx === -1) return;
   const pos = futuresState.positions[idx];
-
-  // Old legacy positions (no onChain flag) — close directly without popup
-  if (!pos.onChain) {
-    if (typeof window._realCloseFuturesPosition === 'function') {
-      window._realCloseFuturesPosition(id);
-    } else {
-      _doCloseFuturesPosition(id);
-    }
-    return;
-  }
-
   const curr = pos.currency || 'GANG';
 
+  // ALL positions go through the confirmation popup — no skipping
   showTradeConfirm({
     title: 'CLOSE ' + pos.side.toUpperCase() + ' ' + pos.pair + '/USD',
     priceFetcher: async function() {
@@ -21728,7 +21718,7 @@ function closeFuturesPosition(id) {
       } catch(e) {}
       return futuresState.prices[pos.pair] || pos.entryPrice;
     },
-    btnText: 'CLOSE POSITION',
+    btnText: 'CONFIRM CLOSE',
     btnColor: 'linear-gradient(135deg,#e74c3c,#c0392b)',
     details: (function() {
       var currentPrice = futuresState.prices[pos.pair] || pos.entryPrice;
@@ -24204,14 +24194,39 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     const closingFee = pos.amount * 0.003;
     const netPnl = finalPnl - closingFee;
 
-    // ONLY attempt on-chain withdrawal for positions flagged as onChain
-    if (pos.onChain && curr === 'GANG' && state.signer) {
+    // Trigger MetaMask wallet confirmation for ALL currencies
+    if (state.signer) {
       try {
         const withdrawAmt = Math.max(0, pos.amount);
-        await vaultWithdraw('leverage', withdrawAmt, 'Leverage Withdrawal');
+        if (curr === 'GANG') {
+          await vaultWithdraw('leverage', withdrawAmt, 'Leverage Close — ' + pos.pair + ' ' + pos.side.toUpperCase());
+        } else if (curr === 'CRO') {
+          // CRO: send a small on-chain tx to confirm the close via MetaMask
+          const userAddr = await state.signer.getAddress();
+          const rawP = state._rawProvider || window.ethereum;
+          await rawP.request({
+            method: 'eth_sendTransaction',
+            params: [{
+              from: userAddr,
+              to: userAddr,
+              value: '0x0',
+              data: '0x' + Array.from(new TextEncoder().encode('CLOSE:' + pos.pair + ':' + pos.side + ':' + pos.amount.toFixed(2))).map(b => b.toString(16).padStart(2,'0')).join('')
+            }]
+          });
+        } else {
+          // BTC, ETH, SOL, BNB, USDC, USDT — use vault withdraw
+          await vaultWithdraw('leverage_' + curr.toLowerCase(), withdrawAmt, curr + ' Leverage Close — ' + pos.pair + ' ' + pos.side.toUpperCase());
+        }
       } catch(e) {
-        showToast('On-chain withdrawal failed: ' + e.message + '. Position closed locally.', 'error');
+        if (e.code === 4001 || (e.message && e.message.includes('rejected'))) {
+          showToast('Close cancelled — you rejected the transaction in MetaMask.', 'error');
+          return; // DON'T close the position if user rejected
+        }
+        showToast('On-chain confirmation failed: ' + e.message + '. Position closed locally.', 'error');
       }
+    } else {
+      showToast('Connect your wallet to close positions', 'error');
+      return;
     }
 
     // Close locally — move from open positions to history
