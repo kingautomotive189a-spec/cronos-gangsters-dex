@@ -22375,17 +22375,39 @@ window._futuresPageLoadTime = Date.now();
 // Load saved state
 try {
   const saved = JSON.parse(localStorage.getItem('gang_futures_v2') || localStorage.getItem('gang_futures') || '{}');
-  if (saved.positions) futuresState.positions = saved.positions;
-  if (saved.history) futuresState.history = saved.history;
-  if (saved.poolBalance) futuresState.poolBalance = saved.poolBalance;
-  if (saved.ownerDeposited) futuresState.ownerDeposited = saved.ownerDeposited;
-  if (saved.poolBalanceCRO) futuresState.poolBalanceCRO = saved.poolBalanceCRO;
-  if (saved.ownerDepositedCRO) futuresState.ownerDepositedCRO = saved.ownerDepositedCRO;
-  if (saved.currency) futuresState.currency = saved.currency;
-  ['BTC','ETH','SOL','BNB','USDC','USDT'].forEach(function(t) {
-    if (saved['poolBalance'+t]) futuresState['poolBalance'+t] = saved['poolBalance'+t];
-    if (saved['ownerDeposited'+t]) futuresState['ownerDeposited'+t] = saved['ownerDeposited'+t];
-  });
+  // Check if we switched to new vault — clear old fake pool balances
+  var currentVault = getTradingVaultAddr();
+  var savedVault = saved._vaultAddr || '';
+  if (savedVault !== currentVault) {
+    // New vault — reset pool balances to 0 (will be read from chain)
+    futuresState.poolBalance = 0;
+    futuresState.ownerDeposited = 0;
+    futuresState.poolBalanceCRO = 0;
+    futuresState.ownerDepositedCRO = 0;
+    ['BTC','ETH','SOL','BNB','USDC','USDT'].forEach(function(t) {
+      futuresState['poolBalance'+t] = 0;
+      futuresState['ownerDeposited'+t] = 0;
+    });
+    // Keep positions and history
+    if (saved.positions) futuresState.positions = saved.positions;
+    if (saved.history) futuresState.history = saved.history;
+    if (saved.currency) futuresState.currency = saved.currency;
+    // Save new vault marker
+    futuresState._vaultAddr = currentVault;
+    saveFuturesState();
+  } else {
+    if (saved.positions) futuresState.positions = saved.positions;
+    if (saved.history) futuresState.history = saved.history;
+    if (saved.poolBalance) futuresState.poolBalance = saved.poolBalance;
+    if (saved.ownerDeposited) futuresState.ownerDeposited = saved.ownerDeposited;
+    if (saved.poolBalanceCRO) futuresState.poolBalanceCRO = saved.poolBalanceCRO;
+    if (saved.ownerDepositedCRO) futuresState.ownerDepositedCRO = saved.ownerDepositedCRO;
+    if (saved.currency) futuresState.currency = saved.currency;
+    ['BTC','ETH','SOL','BNB','USDC','USDT'].forEach(function(t) {
+      if (saved['poolBalance'+t]) futuresState['poolBalance'+t] = saved['poolBalance'+t];
+      if (saved['ownerDeposited'+t]) futuresState['ownerDeposited'+t] = saved['ownerDeposited'+t];
+    });
+  }
 } catch {}
 
 // Sync dropdown to loaded currency
