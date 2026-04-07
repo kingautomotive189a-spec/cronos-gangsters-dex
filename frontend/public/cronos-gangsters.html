@@ -4911,6 +4911,18 @@ function toggleNavMenu() {
       </div>
     </div>
 
+    <!-- Upgrade Vault Banner -->
+    <div id="vaultUpgradeBanner" data-testid="vault-upgrade-banner" style="margin-bottom:10px;background:rgba(255,140,0,0.08);border:1px solid rgba(255,140,0,0.3);border-radius:10px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:#ff8c00;letter-spacing:1.5px;">UPGRADE TRADING VAULT</div>
+        <div style="font-size:10px;color:rgba(235,235,245,0.6);margin-top:2px;">Deploy new vault to enable GANG token withdrawals on close</div>
+        <div style="font-size:9px;color:rgba(235,235,245,0.4);margin-top:2px;" id="currentVaultDisplay">Current: 0x68B1...a16d</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button id="deployTradingVaultBtn" data-testid="deploy-trading-vault-btn" onclick="deployTradingVault()" style="padding:8px 16px;border-radius:8px;border:none;background:linear-gradient(135deg,#ff8c00,#ff6600);color:#000;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1.5px;cursor:pointer;font-weight:700;white-space:nowrap;">DEPLOY NEW VAULT</button>
+      </div>
+    </div>
+
     <!-- Account Overview — Trading 212 Compact -->
     <div data-testid="futures-account-overview" style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
       <div style="min-width:130px;flex:1;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.35);border-radius:10px;padding:12px;text-align:center;">
@@ -22469,25 +22481,27 @@ function getTradingVaultAddr() {
 
 async function deployTradingVault() {
   if (!state.signer) { showToast('Connect wallet first!', 'error'); return; }
-  if (getTradingVaultAddr()) { showToast('Vault already deployed at ' + getTradingVaultAddr(), 'info'); return; }
   try {
     var btn = document.getElementById('deployTradingVaultBtn');
     if (btn) { btn.disabled = true; btn.textContent = 'DEPLOYING...'; }
-    showToast('Deploying Trading Vault on Cronos...', 'info');
+    showToast('Deploying upgraded Trading Vault on Cronos...', 'info');
     const factory = new ethers.ContractFactory(TRADING_VAULT_ABI, '0x' + TRADING_VAULT_BIN, state.signer);
     const contract = await factory.deploy();
     showToast('TX sent! Waiting for confirmation...', 'info');
     await contract.waitForDeployment();
     const addr = await contract.getAddress();
     localStorage.setItem(LS_TRADING_VAULT, addr);
-    showToast('Trading Vault deployed at ' + addr, 'success');
-    document.getElementById('vaultSetupModal').style.display = 'none';
-    if (btn) { btn.disabled = false; btn.textContent = 'DEPLOY NEW VAULT'; }
+    showToast('New Vault deployed at ' + addr + ' — GANG withdrawals now enabled!', 'success');
+    if (btn) { btn.disabled = false; btn.textContent = 'DEPLOYED'; }
+    var displayEl = document.getElementById('currentVaultDisplay');
+    if (displayEl) displayEl.textContent = 'Active: ' + addr.substring(0, 6) + '...' + addr.substring(38);
+    var bannerEl = document.getElementById('vaultUpgradeBanner');
+    if (bannerEl) bannerEl.style.borderColor = 'rgba(0,212,170,0.3)';
   } catch(e) {
     console.error('Vault deploy error:', e);
     showToast('Deploy failed: ' + (e.shortMessage || e.message), 'error');
     var btn2 = document.getElementById('deployTradingVaultBtn');
-    if (btn2) { btn2.disabled = false; btn2.textContent = 'DEPLOY TRADING VAULT'; }
+    if (btn2) { btn2.disabled = false; btn2.textContent = 'DEPLOY NEW VAULT'; }
   }
 }
 
