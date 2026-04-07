@@ -26376,29 +26376,19 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
   // Clear ALL old/legacy positions from LocalStorage
   window.clearAllFuturesPositions = function() {
-    if (!confirm('FULL RESET: Clear ALL positions, history, pool balances, and counters?\n\nThis cannot be undone.')) return;
+    // Only clear CLOSED history — never touch open positions or pool balances
+    var openCount = futuresState.positions.length;
+    var historyCount = futuresState.history.length;
+    if (historyCount === 0) {
+      showToast('No closed trade history to clear.', 'info');
+      return;
+    }
+    if (!confirm('Clear ' + historyCount + ' closed trade(s) from history?\n\nYour ' + openCount + ' open position(s) and pool balances will NOT be affected.')) return;
     
-    futuresState.positions = [];
     futuresState.history = [];
-    futuresState.poolBalance = 0;
-    futuresState.ownerDeposited = 0;
-    futuresState.poolBalanceCRO = 0;
-    futuresState.ownerDepositedCRO = 0;
-    futuresState.volume24h = 0;
-    futuresState.volume24hTimestamp = 0;
-    futuresState.totalVolume = 0;
-    futuresState.totalTrades = 0;
-    ['BTC','ETH','SOL','BNB','USDC','USDT'].forEach(function(t) {
-      futuresState['poolBalance'+t] = 0;
-      futuresState['ownerDeposited'+t] = 0;
-    });
     saveFuturesState();
-    localStorage.setItem('gang_futures_vol', '{}');
-    updateFuturesPositions();
-    updateFuturesPool();
     renderFuturesHistory();
-    if (typeof updateAccountOverview === 'function') updateAccountOverview();
-    showToast('Everything cleared. Fresh start!', 'success');
+    showToast('Trade history cleared. Open positions untouched.', 'success');
   };
 
   // ═══════════════════════════════════════════════════
