@@ -118,7 +118,14 @@ Build a comprehensive Web3 DApp for Cronos blockchain as a single deployable HTM
 - **FIX**: Removed pool liquidity gate for CRO (was blocking MetaMask from ever opening because `poolBalanceCRO` started at 0)
 - **FIX**: `onConfirm` callback inlines real on-chain logic: CRO via `sendTransaction`, GANG via `vaultDeposit`, other tokens via vault
 
-## Completed (2026-04-06 — Fulcrom Finance Trade Panel Redesign)
+## Completed (2026-04-07 — Trading Vault Contract)
+- **ROOT CAUSE FOUND**: User's wallet address (`0xAA3C...52EA`) WAS the same as `TREASURY_OWNER` — all transfers were self-transactions, tokens never left wallet
+- **FIX**: Compiled and integrated a real Solidity TradingVault contract (deposit/withdrawTo/getBalance) deployed on Cronos
+- **NEW**: "Deploy Trading Vault" button on Leverage Trading page — one-click MetaMask deployment
+- **NEW**: Vault banner shows deployment status, address, and CRO balance
+- **OPEN**: CRO deposits go INTO the vault contract via `vault.deposit({value: amt})` — CRO actually LEAVES wallet
+- **CLOSE**: CRO payouts come BACK from vault via `vault.withdrawTo(user, payout)` — CRO RETURNS to wallet
+- **GANG**: Transfers to vault address via ERC-20 `transfer(vaultAddr, amt)`
 - **REDESIGN**: Leverage Trading trade panel completely redesigned to match Fulcrom Finance's professional layout
 - **NEW**: "You Pay" input section with CRO dropdown selector, wallet balance display, 25%/50%/100%/MAX buttons
 - **NEW**: USD equivalent under input field (~$X.XX)

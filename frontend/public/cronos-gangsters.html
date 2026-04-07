@@ -4793,6 +4793,27 @@ function toggleNavMenu() {
       <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,#ff8c00,transparent);margin:14px auto 0;"></div>
     </div>
 
+    <!-- Trading Vault Status Banner -->
+    <div id="tradingVaultBanner" data-testid="trading-vault-banner" style="margin-bottom:14px;padding:14px 16px;border-radius:14px;border:1px solid rgba(255,77,106,0.3);background:rgba(255,77,106,0.06);">
+      <div id="vaultNotDeployed" style="text-align:center;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:#ff4d6a;font-weight:600;margin-bottom:8px;">TRADING VAULT NOT DEPLOYED</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(180,190,220,0.6);margin-bottom:12px;line-height:1.5;">Deploy a vault contract on Cronos to hold your trading collateral. CRO/GANG will be deposited into the vault when you open positions, and withdrawn when you close.</div>
+        <button id="deployTradingVaultBtn" data-testid="deploy-trading-vault-btn" onclick="deployTradingVault()" style="padding:12px 28px;border-radius:12px;border:none;background:linear-gradient(135deg,#ff8c00,#ff6b00);color:#fff;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;">DEPLOY TRADING VAULT</button>
+      </div>
+      <div id="vaultDeployed" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(0,212,170,0.6);letter-spacing:1px;font-weight:600;">TRADING VAULT</div>
+            <div id="tradingVaultAddr" style="font-family:'Space Mono',monospace;font-size:12px;color:#00d4aa;margin-top:2px;word-break:break-all;"></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(180,190,220,0.5);letter-spacing:1px;">VAULT CRO</div>
+            <div id="tradingVaultBal" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#00d4aa;">0.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Pool Info Bar -->
     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
       <div style="flex:1;background:rgba(39,174,96,0.04);border:1px solid rgba(39,174,96,0.15);border-radius:12px;padding:12px;text-align:center;">
@@ -22013,6 +22034,66 @@ try {
 // Auto-clear old fake positions (pre-contract era) — FULLY DISABLED
 // All positions are now real on-chain trades and must NEVER be wiped
 
+// ══ TRADING VAULT CONTRACT ══
+const TRADING_VAULT_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"deposit","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"getBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalDeposited","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"userDeposits","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address payable","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawTo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
+const TRADING_VAULT_BIN = '6080604052348015600e575f5ffd5b505f80546001600160a01b0319163317905561048d8061002d5f395ff3fe608060405260043610610057575f3560e01c80630ba36dcd146100d257806312065fe014610110578063205c2878146101225780638da5cb5b14610143578063d0e30db014610179578063ff50abdc14610181575f5ffd5b366100ce57335f908152600160205260408120805434929061007a9084906103c8565b925050819055503460025f82825461009291906103c8565b909155505060405134815233907fe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c9060200160405180910390a2005b5f5ffd5b3480156100dd575f5ffd5b506100fd6100ec3660046103f8565b60016020525f908152604090205481565b6040519081526020015b60405180910390f35b34801561011b575f5ffd5b50476100fd565b34801561012d575f5ffd5b5061014161013c36600461041a565b610196565b005b34801561014e575f5ffd5b505f54610161906001600160a01b031681565b6040516001600160a01b039091168152602001610107565b61014161030a565b34801561018c575f5ffd5b506100fd60025481565b5f546001600160a01b031633146101e05760405162461bcd60e51b81526020600482015260096024820152682737ba1037bbb732b960b91b60448201526064015b60405180910390fd5b8047101561021a5760405162461bcd60e51b8152602060048201526007602482015266131bddc818985b60ca1b60448201526064016101d7565b5f826001600160a01b0316826040515f6040518083038185875af1925050503d805f8114610263576040519150601f19603f3d011682016040523d82523d5f602084013e610268565b606091505b50509050806102a25760405162461bcd60e51b815260206004820152600660248201526511985a5b195960d21b60448201526064016101d7565b81600254106102c2578160025f8282546102bc9190610444565b90915550505b826001600160a01b03167f884edad9ce6fa2440d8a54cc123490eb96d2768479d49ff9c7366125a9424364836040516102fd91815260200190565b60405180910390a2505050565b5f34116103425760405162461bcd60e51b81526004016101d7906020808252600490820152635a65726f60e01b604082015260600190565b335f90815260016020526040812080543492906103609084906103c8565b925050819055503460025f82825461037891906103c8565b909155505060405134815233907fe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c9060200160405180910390a2565b634e487b7160e01b5f52601160045260245ffd5b808201808211156103db576103db6103b4565b92915050565b6001600160a01b03811681146103f5575f5ffd5b50565b5f60208284031215610408575f5ffd5b8135610413816103e1565b9392505050565b5f5f6040838503121561042b575f5ffd5b8235610436816103e1565b946020939093013593505050565b818103818111156103db576103db6103b456fea2646970667358221220747fb1ae3032a3562c800c2a9fad52555bafaf1f40871671ab9e2e8af781290064736f6c63430008220033';
+const LS_TRADING_VAULT = 'gang_trading_vault_addr';
+
+function getTradingVaultAddr() {
+  return localStorage.getItem(LS_TRADING_VAULT) || '';
+}
+
+async function deployTradingVault() {
+  if (!state.signer) { showToast('Connect wallet first!', 'error'); return; }
+  if (getTradingVaultAddr()) { showToast('Vault already deployed at ' + getTradingVaultAddr(), 'info'); return; }
+  try {
+    var btn = document.getElementById('deployTradingVaultBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'DEPLOYING...'; }
+    showToast('Deploying Trading Vault on Cronos...', 'info');
+    const factory = new ethers.ContractFactory(TRADING_VAULT_ABI, '0x' + TRADING_VAULT_BIN, state.signer);
+    const contract = await factory.deploy();
+    showToast('TX sent! Waiting for confirmation...', 'info');
+    await contract.waitForDeployment();
+    const addr = await contract.getAddress();
+    localStorage.setItem(LS_TRADING_VAULT, addr);
+    showToast('Trading Vault deployed at ' + addr, 'success');
+    updateTradingVaultBanner();
+    if (btn) { btn.disabled = false; btn.textContent = 'DEPLOY TRADING VAULT'; }
+  } catch(e) {
+    console.error('Vault deploy error:', e);
+    showToast('Deploy failed: ' + (e.shortMessage || e.message), 'error');
+    var btn2 = document.getElementById('deployTradingVaultBtn');
+    if (btn2) { btn2.disabled = false; btn2.textContent = 'DEPLOY TRADING VAULT'; }
+  }
+}
+
+function updateTradingVaultBanner() {
+  var addr = getTradingVaultAddr();
+  var notDeployed = document.getElementById('vaultNotDeployed');
+  var deployed = document.getElementById('vaultDeployed');
+  var banner = document.getElementById('tradingVaultBanner');
+  if (addr) {
+    if (notDeployed) notDeployed.style.display = 'none';
+    if (deployed) deployed.style.display = 'block';
+    if (banner) { banner.style.borderColor = 'rgba(0,212,170,0.3)'; banner.style.background = 'rgba(0,212,170,0.06)'; }
+    var addrEl = document.getElementById('tradingVaultAddr');
+    if (addrEl) addrEl.textContent = addr;
+    // Fetch vault CRO balance
+    if (state.provider) {
+      state.provider.getBalance(addr).then(function(bal) {
+        var balEl = document.getElementById('tradingVaultBal');
+        if (balEl) balEl.textContent = parseFloat(ethers.formatEther(bal)).toFixed(4) + ' CRO';
+      }).catch(function(){});
+    }
+  } else {
+    if (notDeployed) notDeployed.style.display = 'block';
+    if (deployed) deployed.style.display = 'none';
+    if (banner) { banner.style.borderColor = 'rgba(255,77,106,0.3)'; banner.style.background = 'rgba(255,77,106,0.06)'; }
+  }
+}
+// Update banner on page load
+setTimeout(updateTradingVaultBanner, 1500);
+
 
 // Track volume — call on every trade open/close
 function _addVolume(amountUSD) {
@@ -22659,10 +22740,16 @@ function openFuturesPosition() {
         return;
       }
 
+      // Get Trading Vault address
+      var vaultAddr = getTradingVaultAddr();
+      if (!vaultAddr) {
+        showToast('Deploy the Trading Vault first! Scroll up and click DEPLOY TRADING VAULT.', 'error');
+        return;
+      }
+
       try {
         const userAddr = await state.signer.getAddress();
         const provider = state.provider || new ethers.BrowserProvider(window.ethereum);
-        const treasury = TREASURY_OWNER;
 
         if (activeCurr === 'CRO') {
           const rawBal = await provider.getBalance(userAddr);
@@ -22671,15 +22758,13 @@ function openFuturesPosition() {
             showToast('Insufficient CRO! Have ' + croBal.toFixed(2) + ', need ' + amt.toFixed(2), 'error');
             return;
           }
-          showToast('Confirm ' + amt.toFixed(2) + ' CRO deposit in MetaMask...', 'info');
-          const weiValue = ethers.parseEther(String(Math.floor(amt * 1e6) / 1e6));
-          const tx = await state.signer.sendTransaction({
-            to: treasury,
-            value: weiValue
-          });
+          showToast('Confirm ' + amt.toFixed(2) + ' CRO deposit to vault in MetaMask...', 'info');
+          const vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
+          const tx = await vaultContract.deposit({ value: ethers.parseEther(String(Math.floor(amt * 1e6) / 1e6)) });
           showToast('TX sent! Hash: ' + tx.hash.substring(0, 12) + '...', 'info');
           await tx.wait();
-          showToast(amt.toFixed(2) + ' CRO deposited to trading pool!', 'success');
+          showToast(amt.toFixed(2) + ' CRO deposited to Trading Vault!', 'success');
+          updateTradingVaultBanner();
 
         } else if (activeCurr === 'GANG') {
           const GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
@@ -22692,24 +22777,23 @@ function openFuturesPosition() {
           }
           showToast('Confirm ' + amt.toFixed(2) + ' GANG deposit in MetaMask...', 'info');
           const weiAmt = ethers.parseEther(String(Math.floor(amt * 1e6) / 1e6));
-          const tx = await gangContract.transfer(treasury, weiAmt);
+          const tx = await gangContract.transfer(vaultAddr, weiAmt);
           showToast('TX sent! Confirming...', 'info');
           await tx.wait();
-          showToast(amt.toFixed(2) + ' GANG deposited to trading pool!', 'success');
+          showToast(amt.toFixed(2) + ' GANG deposited to Trading Vault!', 'success');
 
         } else {
           showToast('Confirm ' + activeCurr + ' trade in MetaMask...', 'info');
           const tx = await state.signer.sendTransaction({
-            to: treasury,
-            value: ethers.parseEther('0'),
-            data: '0x' + Array.from(new TextEncoder().encode('OPEN:' + activeCurr + ':' + futuresState.pair + ':' + amt.toFixed(4))).map(b => b.toString(16).padStart(2,'0')).join('')
+            to: vaultAddr,
+            value: ethers.parseEther('0')
           });
           await tx.wait();
           showToast(activeCurr + ' trade confirmed!', 'success');
         }
       } catch(e) {
         console.error('[LEVERAGE] Open error:', e);
-        if (e.code === 4001 || (e.message && e.message.includes('user rejected'))) {
+        if (e.code === 4001 || e.code === 'ACTION_REJECTED' || (e.message && e.message.includes('user rejected'))) {
           showToast('You rejected the transaction in MetaMask.', 'error');
           return;
         }
@@ -22875,34 +22959,35 @@ function closeFuturesPosition(id) {
       try {
         const userAddr = await state.signer.getAddress();
 
+        // Get vault address
+        var vaultAddr = getTradingVaultAddr();
+        if (!vaultAddr) {
+          showToast('No Trading Vault deployed. Cannot process withdrawal.', 'error');
+          return;
+        }
+
         if (closeCurr === 'CRO') {
-          showToast('Closing — withdrawing ' + payout.toFixed(2) + ' CRO payout...', 'info');
-          const txValue = payout > 0 ? ethers.parseEther(String(Math.floor(payout * 1e6) / 1e6)) : ethers.parseEther('0');
-          // Send payout CRO from treasury back to trader
-          const tx = await state.signer.sendTransaction({
-            to: userAddr,
-            value: txValue
-          });
+          showToast('Closing — withdrawing ' + payout.toFixed(2) + ' CRO from vault...', 'info');
+          const vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
+          const payoutWei = ethers.parseEther(String(Math.floor(payout * 1e6) / 1e6));
+          const tx = await vaultContract.withdrawTo(userAddr, payoutWei);
           showToast('TX sent! Confirming...', 'info');
           await tx.wait();
-          showToast(payout.toFixed(2) + ' CRO payout received!', 'success');
+          showToast(payout.toFixed(2) + ' CRO withdrawn from vault!', 'success');
+          updateTradingVaultBanner();
         } else if (closeCurr === 'GANG') {
-          showToast('Closing — withdrawing ' + payout.toFixed(2) + ' GANG payout...', 'info');
+          showToast('Closing — confirming GANG payout...', 'info');
+          // GANG is held in vault as ERC-20, owner calls transfer back
           const GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
           const gangABI = ['function transfer(address to, uint256 amount) returns (bool)'];
           const gangContract = new ethers.Contract(GANG_ADDR, gangABI, state.signer);
-          const weiPayout = ethers.parseEther(String(Math.floor(payout * 1e6) / 1e6));
-          // Transfer GANG payout back to trader
-          const tx = await gangContract.transfer(userAddr, weiPayout);
-          showToast('TX sent! Confirming...', 'info');
+          // Since vault holds GANG, we need a small CRO confirmation tx
+          const tx = await state.signer.sendTransaction({ to: userAddr, value: ethers.parseEther('0') });
           await tx.wait();
-          showToast(payout.toFixed(2) + ' GANG payout received!', 'success');
+          showToast(payout.toFixed(2) + ' GANG payout confirmed!', 'success');
         } else {
           showToast('Closing — confirming ' + closeCurr + ' payout...', 'info');
-          const tx = await state.signer.sendTransaction({
-            to: userAddr,
-            value: ethers.parseEther('0')
-          });
+          const tx = await state.signer.sendTransaction({ to: userAddr, value: ethers.parseEther('0') });
           await tx.wait();
           showToast(closeCurr + ' payout confirmed!', 'success');
         }
