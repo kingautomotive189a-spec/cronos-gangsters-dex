@@ -10527,8 +10527,11 @@ async function fetchDexScreenerStats() {
         if (pairVol && pairVol > 0) totalVol24h += pairVol;
       }
       if (totalLiqUSD > 0) {
-        const el = document.getElementById("statTVL");
-        if (el) el.textContent = "$" + _fmtTVL(totalLiqUSD);
+        // Only update TVL if on-chain LP reader hasn't set a value yet
+        if (!_onChainLPCache.totalLiq) {
+          const el = document.getElementById("statTVL");
+          if (el) el.textContent = "$" + _fmtTVL(totalLiqUSD);
+        }
       }
       if (totalVol24h > 0) {
         const el = document.getElementById("statVol");
@@ -10803,20 +10806,11 @@ function _updateMainStatsFromVault() {
       vaultUSD += (futuresState.poolBalanceETH || 0) * ethPrice;
       
       if (tvlEl && (tvlEl.textContent === '$—' || tvlEl.textContent === '$0') && !_onChainLPCache.totalLiq) {
-        if (vaultUSD > 0) {
-          tvlEl.textContent = '$' + _fmtTVL(vaultUSD);
-        } else if (vaultCRO > 0 || vaultGANG > 0) {
-          var parts = [];
-          if (vaultCRO > 0) parts.push(vaultCRO.toFixed(vaultCRO < 1 ? 4 : 2) + ' CRO');
-          if (vaultGANG > 0) parts.push(vaultGANG.toFixed(vaultGANG < 1 ? 4 : 2) + ' GANG');
-          tvlEl.textContent = parts.join(' + ');
-        }
+        // Don't overwrite with vault-only data — wait for on-chain LP reader
       }
       if (volEl && (volEl.textContent === '$—' || volEl.textContent === '$0')) {
-        var leverageVol = futuresState.totalVolume || 0;
-        if (leverageVol > 0) {
-          volEl.textContent = '$' + _fmtTVL(leverageVol);
-        }
+        // Only show REAL 24h volume from DexScreener — do NOT show accumulated localStorage totalVolume
+        // DexScreener updates statVol directly above, so this is a no-op fallback
       }
     }
     // Try to read vault balance directly from Cronos RPC (no wallet needed)
@@ -10846,13 +10840,10 @@ async function _readVaultBalancePublic() {
     if (gangFloat > 0 && typeof futuresState !== 'undefined') {
       futuresState.poolBalance = gangFloat;
     }
-    // Now update the display (only if on-chain LP total hasn't been set yet)
+    // Now update the display — ONLY if on-chain LP total hasn't been set (vault is a last resort fallback)
     var tvlEl = document.getElementById("statTVL");
     if (tvlEl && (tvlEl.textContent === '$—' || tvlEl.textContent === '$0') && !_onChainLPCache.totalLiq) {
-      var parts = [];
-      if (croFloat > 0) parts.push(croFloat.toFixed(croFloat < 1 ? 4 : 2) + ' CRO');
-      if (gangFloat > 0) parts.push(gangFloat.toFixed(gangFloat < 1 ? 4 : 2) + ' GANG');
-      if (parts.length > 0) tvlEl.textContent = parts.join(' + ');
+      // Don't display vault balance as TVL — it's misleading. Let on-chain LP reader handle it.
     }
     if (typeof updateVaultTotalLiquidity === 'function') updateVaultTotalLiquidity();
   } catch(e) { console.warn('Vault public read:', e.message); }
@@ -22765,15 +22756,16 @@ function renderChartPositionLines() {
     return p.wallet === myWallet && p.status !== 'closed' && p.pair === currentPair;
   });
   if (openPositions.length === 0) { overlay.innerHTML = ''; return; }
-  // TradingView chart: current price line sits at roughly 50% of the chart area
-  // The chart area spans from ~6% to ~78% of total height
+  // TradingView chart: the current price line typically sits around 45% of the visible chart area
+  // Chart area spans from ~6% (below toolbar) to ~78% (above time axis)
   var chartAreaTop = chartH * 0.06;
   var chartAreaBottom = chartH * 0.78;
   var chartAreaHeight = chartAreaBottom - chartAreaTop;
-  // Current price Y position = center of chart area (where TradingView renders the last price)
-  var currentPriceY = chartAreaTop + (chartAreaHeight * 0.5);
-  // Pixels per 1% price movement (estimated from TradingView 5min chart ~2.5% visible range)
-  var pxPerPercent = chartAreaHeight / 5.0; // 5% total range (±2.5%)
+  // Current price Y position — TradingView renders last price slightly above center
+  var currentPriceY = chartAreaTop + (chartAreaHeight * 0.45);
+  // Pixels per 1% price movement — scale depends on chart timeframe/zoom
+  // For a typical 5min chart, ~2-3% visible range
+  var pxPerPercent = chartAreaHeight / 4.0; // 4% total visible range (±2%)
   var html = '';
   for (var i = 0; i < openPositions.length; i++) {
     var pos = openPositions[i];

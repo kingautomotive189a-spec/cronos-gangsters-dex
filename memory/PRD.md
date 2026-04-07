@@ -33,7 +33,8 @@ Web3 DeFi DApp on Cronos blockchain. Single-file HTML deployment (~28K lines).
 - **PERFORMANCE FIX**: Parallelized ALL balance reads in `loadBalances()` — token balances, LP balances, and factory lookups now use `Promise.all` instead of sequential loops (was ~25 sequential RPC calls, now fires all at once)
 - Added `quickRefreshBalances()` function for instant targeted balance updates after swaps, add/remove liquidity, and leverage trades — only re-reads the 2 affected tokens instead of waiting for the full 15+ token refresh
 - **CRITICAL FIX — GANG WITHDRAWAL**: Upgraded Trading Vault contract to support ERC-20 token withdrawals via `withdrawTokenTo(token, to, amount)`. Old vault was CRO-only — GANG went in but never came out. Now closing a GANG leverage position calls `vaultContract.withdrawTokenTo(GANG_ADDR, userAddr, payoutWei)` to actually return GANG to the user's wallet.
-- **IMPORTANT**: User needs to deploy a new vault from the Leverage Trading page for this to work. The old vault at `0x68B1837b...` doesn't have `withdrawTokenTo`.
+- **CRITICAL FIX — INCONSISTENT STATS**: Fixed homepage showing random/different liquidity values every page load. Root cause: 3 competing sources (DexScreener, on-chain LP reader, vault fallback) were racing to overwrite `statTVL`. Now on-chain LP reader is the single authoritative source. Also removed fake $71K volume (was showing accumulated LIFETIME localStorage trades, not real 24h volume). Now only shows real DexScreener 24h volume.
+- **CHART LINE FIX**: Adjusted TradingView entry price line Y-position anchor from 50% to 45% chart area and widened the scale for better price-line alignment.
 - ZIP regenerated
 
 ## Upcoming (P1)
