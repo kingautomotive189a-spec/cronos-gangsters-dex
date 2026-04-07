@@ -4964,7 +4964,6 @@ function toggleNavMenu() {
         .fulc-side-btn.long-inactive{color:rgba(0,212,170,0.7);}
         .fulc-side-btn.short-inactive{color:rgba(255,77,106,0.7);}
       </style>
-    </div>
 
     <!-- Price + Chart -->
     <div class="card" style="margin-bottom:10px;padding:0;overflow:hidden;border-color:rgba(255,255,255,0.35);border-radius:12px;">
@@ -9565,9 +9564,10 @@ function updateSwapBalances() {
 document.querySelectorAll(".nav-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.querySelectorAll(".page").forEach(p => { p.classList.remove("active"); p.style.display = "none"; });
     btn.classList.add("active");
-    document.getElementById("page-" + btn.dataset.page).classList.add("active");
+    var targetPage = document.getElementById("page-" + btn.dataset.page);
+    if (targetPage) { targetPage.classList.add("active"); targetPage.style.display = "block"; }
     // Close hamburger menu after selecting a page
     const mainNav = document.getElementById('mainNav');
     const hamburger = document.getElementById('hamburgerBtn');
@@ -9622,9 +9622,9 @@ function showPage(pageName) {
   } else {
     // Fallback: directly switch pages
     document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.querySelectorAll(".page").forEach(p => { p.classList.remove("active"); p.style.display = "none"; });
     const pageEl = document.getElementById("page-" + pageName);
-    if (pageEl) pageEl.classList.add("active");
+    if (pageEl) { pageEl.classList.add("active"); pageEl.style.display = "block"; }
     // Show global header only on main page
     var ghe = document.getElementById('globalHeaderElements');
     if (ghe) ghe.style.display = (pageName === 'swap') ? 'block' : 'none';
