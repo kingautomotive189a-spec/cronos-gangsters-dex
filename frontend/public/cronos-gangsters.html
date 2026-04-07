@@ -1174,6 +1174,42 @@ function toggleNavMenu() {
         <span style="font-size:9px;color:#ff6b9d;background:rgba(255,107,157,0.08);padding:3px 8px;border-radius:4px;font-weight:600;">S&P500</span>
         <span style="font-size:9px;color:#ff8c00;background:rgba(255,140,0,0.1);padding:3px 8px;border-radius:4px;font-weight:700;cursor:pointer;">+47 more</span>
       </div>
+      <!-- Live Price Grid for Homepage -->
+      <div id="homeLevPriceGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px;"></div>
+    </div>
+
+    <!-- ── PROTOCOL TRUST + GANGSTER CARDS (below leverage showcase) ── -->
+    <div data-testid="protocol-trust" style="text-align:center;margin:28px 0 16px;padding:0 12px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;font-weight:800;color:var(--gold);letter-spacing:2px;">BUILT DIFFERENT. BUILT ON-CHAIN.</div>
+      <div style="max-width:480px;margin:8px auto 0;font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.45);line-height:1.7;letter-spacing:0.2px;">GANG DEX runs entirely on Cronos mainnet. Every position, every swap, every yield harvest is a verifiable blockchain transaction. No backend tricks, no simulated balances — just pure, transparent, decentralized finance secured by smart contracts you can audit on CronoScan.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="gang-img-card" onclick="showPage('futures')" style="cursor:pointer;">
+        <img src="/img/make_money.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
+        <div class="gang-img-caption">📈 LEVERAGE TRADING</div>
+      </div>
+      <div class="gang-img-card" onclick="showPage('tracker')" style="cursor:pointer;">
+        <img src="/img/the_boss.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
+        <div class="gang-img-caption">🔍 GANG TRACKER</div>
+      </div>
+      <div class="gang-img-card" onclick="showPage('farms')" style="cursor:pointer;">
+        <img src="/img/the_don.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
+        <div class="gang-img-caption">🌾 YIELD FARMS</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
+      <div class="gang-img-card" onclick="showPage('vaults')" style="cursor:pointer;">
+        <img src="/img/the_family.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
+        <div class="gang-img-caption">🏦 AUTO VAULTS</div>
+      </div>
+      <div class="gang-img-card" onclick="showPage('staking')" style="cursor:pointer;">
+        <img src="/img/stay_strapped.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
+        <div class="gang-img-caption">🔒 STAKING</div>
+      </div>
+      <div class="gang-img-card" onclick="showPage('lottery')" style="cursor:pointer;">
+        <img src="/img/street_style.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
+        <div class="gang-img-caption">🎰 LOTTERY</div>
+      </div>
     </div>
 
     <!-- ══ EARN HIGHLIGHTS ══ -->
@@ -1387,40 +1423,6 @@ function toggleNavMenu() {
             No transactions yet. Connect your wallet to swap!
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- ── PROTOCOL TRUST STATEMENT ── -->
-    <div data-testid="protocol-trust" style="text-align:center;margin:28px 0 16px;padding:0 12px;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;font-weight:800;color:var(--gold);letter-spacing:2px;">BUILT DIFFERENT. BUILT ON-CHAIN.</div>
-      <div style="max-width:480px;margin:8px auto 0;font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.45);line-height:1.7;letter-spacing:0.2px;">GANG DEX runs entirely on Cronos mainnet. Every position, every swap, every yield harvest is a verifiable blockchain transaction. No backend tricks, no simulated balances — just pure, transparent, decentralized finance secured by smart contracts you can audit on CronoScan.</div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
-      <div class="gang-img-card" onclick="showPage('futures')" style="cursor:pointer;">
-        <img src="/img/make_money.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
-        <div class="gang-img-caption">📈 LEVERAGE TRADING</div>
-      </div>
-      <div class="gang-img-card" onclick="showPage('tracker')" style="cursor:pointer;">
-        <img src="/img/the_boss.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
-        <div class="gang-img-caption">🔍 GANG TRACKER</div>
-      </div>
-      <div class="gang-img-card" onclick="showPage('farms')" style="cursor:pointer;">
-        <img src="/img/the_don.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
-        <div class="gang-img-caption">🌾 YIELD FARMS</div>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
-      <div class="gang-img-card" onclick="showPage('vaults')" style="cursor:pointer;">
-        <img src="/img/the_family.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
-        <div class="gang-img-caption">🏦 AUTO VAULTS</div>
-      </div>
-      <div class="gang-img-card" onclick="showPage('staking')" style="cursor:pointer;">
-        <img src="/img/stay_strapped.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
-        <div class="gang-img-caption">🔒 STAKING</div>
-      </div>
-      <div class="gang-img-card" onclick="showPage('lottery')" style="cursor:pointer;">
-        <img src="/img/street_style.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
-        <div class="gang-img-caption">🎰 LOTTERY</div>
       </div>
     </div>
 
@@ -10878,11 +10880,41 @@ async function fetchLivePrices() {
     if (fromAmt > 0) calcSwap();
 
     await calcLiqRatioOnChain();
+    // Render live prices on homepage leverage showcase
+    _renderHomeLevPrices();
   } catch(e) {
     setPriceStatus(false);
   } finally {
     _fetchInProgress = false;
   }
+}
+
+// ── Homepage Leverage Price Grid ──
+function _renderHomeLevPrices() {
+  var grid = document.getElementById('homeLevPriceGrid');
+  if (!grid) return;
+  // Show 12 key assets with live prices from FUTURES_PAIRS
+  var keys = ['BTC','ETH','BNB','SOL','CRO','XRP','AAPL','TSLA','NVDA','GOLD','NAS100','EURUSD'];
+  var html = '';
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i];
+    var fp = (typeof FUTURES_PAIRS !== 'undefined') ? FUTURES_PAIRS[k] : null;
+    if (!fp) continue;
+    var price = (typeof futuresState !== 'undefined' && futuresState.prices[k]) ? futuresState.prices[k] : 0;
+    // Fallback to TOKENS for crypto
+    if (price === 0 && TOKENS[k] && TOKENS[k].price > 0) price = TOKENS[k].price;
+    var chg = (typeof _lastBinancePrice !== 'undefined' && _prev24hPrice[k] && _lastBinancePrice[k]) ? ((_lastBinancePrice[k] - _prev24hPrice[k]) / _prev24hPrice[k] * 100) : 0;
+    var prFmt = price === 0 ? '—' : price >= 1000 ? '$' + price.toLocaleString('en-US',{maximumFractionDigits:2}) : price >= 1 ? '$' + price.toFixed(2) : '$' + price.toFixed(4);
+    var logoHtml = fp.logo ? '<img src="' + fp.logo + '" style="width:20px;height:20px;border-radius:50%;object-fit:cover;" onerror="this.style.display=\'none\'">' : '<span style="width:20px;height:20px;border-radius:50%;background:' + (fp.color||'#555') + ';display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;">' + (fp.badge||k.substring(0,2)) + '</span>';
+    var chgHtml = chg !== 0 ? '<span style="font-size:9px;color:' + (chg >= 0 ? '#00d4aa' : '#ff4444') + ';">' + (chg >= 0 ? '+' : '') + chg.toFixed(2) + '%</span>' : '';
+    html += '<div onclick="showPage(\'futures\')" style="cursor:pointer;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:8px;display:flex;align-items:center;gap:8px;transition:border-color .2s;" onmouseover="this.style.borderColor=\'rgba(255,140,0,0.4)\'" onmouseout="this.style.borderColor=\'rgba(255,255,255,0.15)\'">';
+    html += logoHtml;
+    html += '<div style="flex:1;min-width:0;">';
+    html += '<div style="font-family:\'Space Grotesk\',sans-serif;font-size:11px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + fp.name + '</div>';
+    html += '<div style="display:flex;align-items:center;gap:4px;"><span style="font-family:\'Space Mono\',monospace;font-size:10px;color:#ff8c00;font-weight:700;">' + prFmt + '</span>' + chgHtml + '</div>';
+    html += '</div></div>';
+  }
+  grid.innerHTML = html;
 }
 
 async function approveLiqToken(side) {
@@ -24039,6 +24071,8 @@ setTimeout(() => {
   _updateVolumeDisplay(); // Show existing volume
   // Connect to Binance WebSocket for real-time prices
   connectBinanceWS();
+  // Update homepage live price grid every 3 seconds
+  setInterval(_renderHomeLevPrices, 3000);
   // Fallback: Fetch price from API every 5 seconds in case WebSocket drops
   setInterval(updateFuturesPrice, 5000);
   // Update position PnL display every 1.5s
