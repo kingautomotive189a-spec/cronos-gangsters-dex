@@ -1,53 +1,38 @@
 # Cronos Gangsters DApp — Product Requirements
 
-## Original Problem Statement
-A massive 27,000+ line Web3 DApp deployed as a single HTML file (`cronos-gangsters.html`) on GoDaddy. The app is a fully on-chain DeFi platform on Cronos chain with 28+ features including leverage trading, swaps, staking, farms, vaults, flash loans, prediction markets, NFTs, and more.
+## Problem Statement
+Web3 DeFi DApp on Cronos blockchain. Single-file HTML deployment (~28K lines) for GoDaddy hosting. Real on-chain smart contract interactions via Trading Vault, VVS Finance LP pools, and custom contracts.
 
 ## Architecture
-- **Single file**: Everything lives in `/app/frontend/public/cronos-gangsters.html` (~27,760 lines)
-- **Stack**: Vanilla HTML/CSS/JS, Ethers.js v6, TradingView charts, Binance WebSocket
-- **Chain**: Cronos Mainnet
-- **Vault**: `0x68B1837b9360C661f954147f178DE7781026a16d` (Trading Vault smart contract)
-- **GANG Token**: `0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF`
-- **Delivery**: ZIP file (`cronos-gangsters-deploy.zip`) for manual GoDaddy upload
+- **Single file**: `/app/frontend/public/cronos-gangsters.html`
+- **Delivery**: `/app/frontend/public/cronos-gangsters-deploy.zip`
+- **Stack**: Vanilla HTML/JS, Ethers.js v6, no framework
+- **Data**: 100% on-chain (no database)
+- **APIs**: Binance WebSocket, CoinGecko, DexScreener (all free/no key)
 
-## What's Been Implemented
+## Completed Features
+- Trading 212 style Leverage Trading UI (100x, 69 pairs)
+- Arsenal (32 features) in collapsible `<details>` bar
+- Owner Pool Controls (8 features) in collapsible `<details>` bar
+- Global header isolation (stats bar, contract address, war room images only on homepage)
+- Mobile CSS contrast fixes for leverage trading page
+- 70+ asset pills on homepage leverage showcase
+- Aggressive cache-busting meta tags
+- **On-chain LP liquidity reader** — reads ALL 12 VVS LP pools (CRO/GANG, USDC/GANG, WBTC/GANG, WETH/GANG, USDT/GANG, ATOM/GANG, VVS/GANG, etc.) with dynamic token detection and fallback pricing. Displays real total liquidity (~$1.6K) and derives GANG price (~$0.0078) from CRO/GANG pool.
+- DexScreener chart iframe pointed to CRO/GANG LP pair (most liquid)
 
-### Session 1-N (Previous)
-- Full DApp with 28+ DeFi features
-- MetaMask wallet integration
-- TradingView charts for 69 tradeable assets
-- Binance WebSocket for live crypto prices
+## Key Technical Notes
+- **NEVER break into multiple files** — single HTML only
+- **Small search_replace chunks** — max 50-100 lines per edit
+- **Do NOT touch wallet logic** — `state.signer.sendTransaction` and MetaMask callbacks are verified working
+- **Always generate ZIP** after changes
+- **On-chain LP reader** uses sequential RPC calls (not parallel) to avoid Cronos RPC rate limits
+- **Dynamic token detection**: reads `token0()` and `token1()` from each LP, matches against TOKENS registry by address, reads decimals from chain if unknown
 
-### Current Session — Completed
-- [x] Deployed real Trading Vault smart contract on Cronos
-- [x] Rewrote `openFuturesPosition()` for real on-chain CRO/GANG transfers via MetaMask
-- [x] Rewrote `closeFuturesPosition()` for real on-chain vault withdrawals
-- [x] Rewrote `futuresOwnerDeposit()` / `futuresOwnerWithdraw()` for real vault operations
-- [x] Removed all fake mock fallback functions
-- [x] Auto-wipe script for clearing old fake localStorage data
-- [x] Cache-busting version numbers for wallet browser caching
-- [x] Real on-chain pool balance reads
-- [x] **Trading 212 UI Revamp** — Compact header, clean stats strip, horizontal account overview, cleaner asset browser, bottom nav bar, collapsible FAQ
-- [x] Replaced all debug `alert()` calls with clean `showToast()` notifications
-- [x] **Collapsible "THE FULL ARSENAL"** — 32 feature grid wrapped in expandable `<details>` button
-- [x] **Collapsible Owner Pool Controls** — 8 pool deposit/withdraw boxes wrapped in expandable `<details>` with total vault liquidity summary
-- [x] Total vault liquidity display showing real on-chain GANG + CRO balances
-- [x] **Global Header Elements** — Stats bar, war images, contract banner, promo ticker now ONLY show on the main page, hidden on all other pages
-- [x] ZIP file regenerated for deployment
-
-## Key Constraints
-- MUST remain a single HTML file (no React, no components)
-- All wallet transactions MUST be real on-chain (no mocks)
-- ZIP delivery after every change
-- Vault address hardcoded: `0x68B1837b9360C661f954147f178DE7781026a16d`
-
-## Backlog
-
-### P1 — Upcoming
-- Revamp rest of app UI to match Trading 212 styling (other pages)
-- CEX listings
+## Upcoming Tasks (P1)
+- Revamp rest of UI to match Trading 212 / Fulcrom Finance modern styling
+- CEX listings feature
 - Multi-chain expansion
 
-### P2 — Future
+## Backlog (P2)
 - Mobile App
