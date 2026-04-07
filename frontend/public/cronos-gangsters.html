@@ -10383,6 +10383,7 @@ async function calcVaultAPRsOnChain() {
 }
 
 // ── Fetch 24h volume from DexScreener ──────────────────────
+const GANG_WCRO_PAIR = '0x1f77938E1109E1Fc8e3dD697B95525303094Cb65';
 let _dexScreenerCache = { data: null, ts: 0 };
 async function fetchDexScreenerStats() {
   try {
@@ -10392,32 +10393,58 @@ async function fetchDexScreenerStats() {
     if (_dexScreenerCache.data && (now - _dexScreenerCache.ts) < 15000) {
       data = _dexScreenerCache.data;
     } else {
+      // Try token endpoint first
       const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${CONTRACTS.GANG}`);
-      if (!res.ok) return;
-      data = await res.json();
+      if (res.ok) {
+        data = await res.json();
+      }
+      // If no pairs, try search endpoint
+      if (!data?.pairs?.length) {
+        try {
+          const res2 = await fetch(`https://api.dexscreener.com/latest/dex/search?q=${CONTRACTS.GANG}`);
+          if (res2.ok) {
+            const d2 = await res2.json();
+            const cronPairs = (d2?.pairs || []).filter(p => p.chainId === 'cronos' && p.baseToken?.address?.toLowerCase() === CONTRACTS.GANG.toLowerCase());
+            if (cronPairs.length > 0) data = { pairs: cronPairs };
+          }
+        } catch(e2) {}
+      }
       _dexScreenerCache = { data, ts: now };
     }
     const allPairs = data?.pairs || [];
     const pair = allPairs[0];
-    if (!pair) return;
-    
-    // Update GANG price from DexScreener (most accurate)
-    const priceUsd = parseFloat(pair.priceUsd);
-    if (priceUsd > 0) {
-      TOKENS.GANG.price = priceUsd;
-      const gangPriceEl = document.getElementById("statPrice");
-      if (gangPriceEl) gangPriceEl.textContent = `$${priceUsd < 0.01 ? priceUsd.toFixed(6) : priceUsd.toFixed(4)}`;
-      const gangTokenPriceEl = document.getElementById("gangTokenPrice");
-      if (gangTokenPriceEl) gangTokenPriceEl.textContent = `$${priceUsd < 0.01 ? priceUsd.toFixed(6) : priceUsd.toFixed(4)}`;
+
+    // If DexScreener returns data, use it
+    if (pair) {
+      const priceUsd = parseFloat(pair.priceUsd);
+      if (priceUsd > 0) {
+        TOKENS.GANG.price = priceUsd;
+        const gangPriceEl = document.getElementById("statPrice");
+        if (gangPriceEl) gangPriceEl.textContent = `$${priceUsd < 0.01 ? priceUsd.toFixed(6) : priceUsd.toFixed(4)}`;
+        const gangTokenPriceEl = document.getElementById("gangTokenPrice");
+        if (gangTokenPriceEl) gangTokenPriceEl.textContent = `$${priceUsd < 0.01 ? priceUsd.toFixed(6) : priceUsd.toFixed(4)}`;
+      }
+      let totalLiqUSD = 0;
+      let totalVol24h = 0;
+      for (const p of allPairs) {
+        const pairLiq = p?.liquidity?.usd;
+        if (pairLiq && pairLiq > 0) totalLiqUSD += pairLiq;
+        const pairVol = p?.volume?.h24;
+        if (pairVol && pairVol > 0) totalVol24h += pairVol;
+      }
+      if (totalLiqUSD > 0) {
+        const el = document.getElementById("statTVL");
+        if (el) el.textContent = "$" + _fmtTVL(totalLiqUSD);
+      }
+      if (totalVol24h > 0) {
+        const el = document.getElementById("statVol");
+        if (el) el.textContent = "$" + _fmtTVL(totalVol24h);
+      }
     }
-    
-    // Update liquidity — sum ALL pairs for total DEX liquidity
-    let totalLiqUSD = 0;
-    let totalVol24h = 0;
-    for (const p of allPairs) {
-      const pairLiq = p?.liquidity?.usd;
-      if (pairLiq && pairLiq > 0) totalLiqUSD += pairLiq;
-      const pairVol = p?.volume?.h24;
+
+    // ALWAYS read on-chain LP pool to get real price + liquidity
+    _readGangPriceOnChain();
+    _updateMainStatsFromVault();
       if (pairVol && pairVol > 0) totalVol24h += pairVol;
     }
     if (totalLiqUSD > 0) {
