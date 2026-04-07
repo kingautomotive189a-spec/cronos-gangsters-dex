@@ -1401,12 +1401,27 @@ function toggleNavMenu() {
       </div>
     </div>
 
-    <!-- ── FEATURES GRID ── -->
+    <!-- ── FEATURES GRID (Collapsible) ── -->
     <div style="max-width:700px;margin:0 auto 28px;padding:0 8px;">
-      <div style="text-align:center;margin-bottom:16px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);letter-spacing:3px;">THE FULL ARSENAL</div>
-        <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">28+ on-chain features. Every transaction verified on Cronos mainnet.</div>
-      </div>
+      <details id="arsenalToggle" data-testid="arsenal-toggle">
+        <summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(212,160,23,0.08),rgba(255,140,0,0.04));border:1px solid rgba(212,160,23,0.2);border-radius:14px;padding:16px 20px;transition:all .3s;user-select:none;" onmouseover="this.style.borderColor='rgba(212,160,23,0.5)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,rgba(212,160,23,0.15),rgba(255,140,0,0.1));display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);letter-spacing:2px;line-height:1;">THE FULL ARSENAL</div>
+              <div style="font-size:11px;color:var(--muted);letter-spacing:0.5px;margin-top:2px;">28+ on-chain features — tap to explore</div>
+            </div>
+          </div>
+          <svg class="arsenal-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .3s;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <style>
+          #arsenalToggle[open] .arsenal-chevron{transform:rotate(180deg);}
+          #arsenalToggle summary::-webkit-details-marker{display:none;}
+          #arsenalToggle[open] > summary{border-radius:14px 14px 0 0;border-bottom-color:transparent;margin-bottom:0;}
+        </style>
+        <div style="border:1px solid rgba(212,160,23,0.2);border-top:none;border-radius:0 0 14px 14px;padding:12px;background:rgba(212,160,23,0.02);">
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" data-testid="feature-grid">
         <div class="card" onclick="showPage('futures')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(255,140,0,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#ff8c00'" onmouseout="this.style.borderColor='rgba(255,140,0,0.3)'">
           <div style="font-size:22px;margin-bottom:4px;">📈</div>
@@ -1573,7 +1588,9 @@ function toggleNavMenu() {
           <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--gold);letter-spacing:1px;">CONTRACTS</div>
           <div style="font-size:9px;color:var(--muted);margin-top:2px;">Verified</div>
         </div>
+        </div>
       </div>
+      </details>
     </div>
 
   </div>
