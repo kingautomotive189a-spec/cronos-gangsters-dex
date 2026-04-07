@@ -22814,17 +22814,44 @@ function renderChartPositionLines() {
     return p.wallet === myWallet && p.status !== 'closed' && p.pair === currentPair;
   });
   if (openPositions.length === 0) { overlay.innerHTML = ''; return; }
-  // TradingView chart: the current price line typically sits around 45% of the visible chart area
-  // Chart area spans from ~6% (below toolbar) to ~78% (above time axis)
-  var chartAreaTop = chartH * 0.06;
-  var chartAreaBottom = chartH * 0.78;
+
+  // Chart visible area (excluding TradingView toolbar at top and time axis at bottom)
+  var chartAreaTop = chartH * 0.08;
+  var chartAreaBottom = chartH * 0.82;
   var chartAreaHeight = chartAreaBottom - chartAreaTop;
-  // Current price Y position — TradingView renders last price slightly above center
-  var currentPriceY = chartAreaTop + (chartAreaHeight * 0.45);
-  // Pixels per 1% price movement — scale depends on chart timeframe/zoom
-  // For a typical 5min chart, ~2-3% visible range
-  var pxPerPercent = chartAreaHeight / 4.0; // 4% total visible range (±2%)
+
+  // Find the price range we need to display (current price + all entry prices + liq prices)
+  var allPrices = [currentPrice];
+  for (var i = 0; i < openPositions.length; i++) {
+    allPrices.push(openPositions[i].entryPrice);
+    var liqMove = 1 / openPositions[i].leverage;
+    var isLong = (openPositions[i].side || '').toLowerCase() === 'long';
+    allPrices.push(isLong ? openPositions[i].entryPrice * (1 - liqMove) : openPositions[i].entryPrice * (1 + liqMove));
+  }
+  var minPrice = Math.min.apply(null, allPrices);
+  var maxPrice = Math.max.apply(null, allPrices);
+  // Add 15% padding above and below so lines aren't at edges
+  var pricePadding = (maxPrice - minPrice) * 0.15;
+  if (pricePadding < currentPrice * 0.005) pricePadding = currentPrice * 0.005; // minimum 0.5% padding
+  var visibleMin = minPrice - pricePadding;
+  var visibleMax = maxPrice + pricePadding;
+  var priceRange = visibleMax - visibleMin;
+  if (priceRange <= 0) priceRange = 1;
+
+  // Convert price to Y position — higher price = lower Y (top of chart)
+  function priceToY(price) {
+    var ratio = (visibleMax - price) / priceRange;
+    return chartAreaTop + (ratio * chartAreaHeight);
+  }
+
   var html = '';
+
+  // Draw CURRENT PRICE line — this is the anchor
+  var currentY = priceToY(currentPrice);
+  html += '<div style="position:absolute;top:' + currentY + 'px;left:0;right:0;height:0;border-top:1px solid rgba(255,255,255,0.4);z-index:1;"></div>';
+  html += '<div style="position:absolute;top:' + (currentY - 10) + 'px;left:4px;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-family:\'Space Mono\',monospace;font-size:8px;padding:1px 5px;border-radius:2px;white-space:nowrap;">NOW $' + _fmtPrice(currentPrice) + '</div>';
+
+  // Draw entry price lines for each open position
   for (var i = 0; i < openPositions.length; i++) {
     var pos = openPositions[i];
     var entryPrice = pos.entryPrice;
@@ -22832,33 +22859,37 @@ function renderChartPositionLines() {
     var lineColor = isLong ? '#00d4aa' : '#ff4d6a';
     var bgColor = isLong ? 'rgba(0,212,170,0.15)' : 'rgba(255,77,106,0.15)';
     var sideLabel = isLong ? 'LONG' : 'SHORT';
-    // Calculate Y offset from current price
-    // If entry > current price, line is ABOVE current price (lower Y value)
-    // If entry < current price, line is BELOW current price (higher Y value)
-    var pctDiff = ((currentPrice - entryPrice) / currentPrice) * 100;
-    var yPos = currentPriceY - (pctDiff * pxPerPercent);
-    // Clamp to visible chart area
-    if (yPos < chartAreaTop) yPos = chartAreaTop;
-    if (yPos > chartAreaBottom) yPos = chartAreaBottom;
+
+    // Entry line Y position — calculated from same price scale as current price
+    var yPos = priceToY(entryPrice);
+
     // PnL
     var priceDiff = (currentPrice - entryPrice) / entryPrice;
     var pnlPct = isLong ? priceDiff * pos.leverage * 100 : -priceDiff * pos.leverage * 100;
     var pnlColor = pnlPct >= 0 ? '#00d4aa' : '#ff4d6a';
     var pnlSign = pnlPct >= 0 ? '+' : '';
+
     // Entry price dashed line
-    html += '<div style="position:absolute;top:' + yPos + 'px;left:0;right:0;height:0;border-top:2px dashed ' + lineColor + ';opacity:0.85;"></div>';
+    html += '<div style="position:absolute;top:' + yPos + 'px;left:0;right:0;height:0;border-top:2px dashed ' + lineColor + ';opacity:0.85;z-index:2;"></div>';
     // Price label on right
-    html += '<div style="position:absolute;top:' + (yPos - 12) + 'px;right:4px;background:' + lineColor + ';color:#000;font-family:\'Space Mono\',monospace;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;white-space:nowrap;">' + sideLabel + ' $' + _fmtPrice(entryPrice) + '</div>';
+    html += '<div style="position:absolute;top:' + (yPos - 12) + 'px;right:4px;background:' + lineColor + ';color:#000;font-family:\'Space Mono\',monospace;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;white-space:nowrap;z-index:3;">' + sideLabel + ' $' + _fmtPrice(entryPrice) + '</div>';
     // PnL badge below price label
-    html += '<div style="position:absolute;top:' + (yPos + 2) + 'px;right:4px;background:' + bgColor + ';color:' + pnlColor + ';font-family:\'Space Mono\',monospace;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;white-space:nowrap;">' + pnlSign + pnlPct.toFixed(2) + '%</div>';
+    html += '<div style="position:absolute;top:' + (yPos + 2) + 'px;right:4px;background:' + bgColor + ';color:' + pnlColor + ';font-family:\'Space Mono\',monospace;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;white-space:nowrap;z-index:3;">' + pnlSign + pnlPct.toFixed(2) + '%</div>';
+
+    // Shaded zone between current price and entry price
+    var zoneTop = Math.min(currentY, yPos);
+    var zoneHeight = Math.abs(currentY - yPos);
+    if (zoneHeight > 2) {
+      html += '<div style="position:absolute;top:' + zoneTop + 'px;left:0;right:0;height:' + zoneHeight + 'px;background:' + bgColor + ';opacity:0.3;z-index:0;"></div>';
+    }
+
     // Liquidation price line
     var liqMove = 1 / pos.leverage;
     var liqPrice = isLong ? entryPrice * (1 - liqMove) : entryPrice * (1 + liqMove);
-    var liqPctDiff = ((currentPrice - liqPrice) / currentPrice) * 100;
-    var liqY = currentPriceY - (liqPctDiff * pxPerPercent);
+    var liqY = priceToY(liqPrice);
     if (liqY >= chartAreaTop && liqY <= chartAreaBottom) {
-      html += '<div style="position:absolute;top:' + liqY + 'px;left:0;right:0;height:0;border-top:1px dotted #ff2222;opacity:0.5;"></div>';
-      html += '<div style="position:absolute;top:' + (liqY - 10) + 'px;right:4px;background:#ff2222;color:#fff;font-family:\'Space Mono\',monospace;font-size:8px;font-weight:700;padding:1px 4px;border-radius:2px;opacity:0.7;">LIQ $' + _fmtPrice(liqPrice) + '</div>';
+      html += '<div style="position:absolute;top:' + liqY + 'px;left:0;right:0;height:0;border-top:1px dotted #ff2222;opacity:0.5;z-index:1;"></div>';
+      html += '<div style="position:absolute;top:' + (liqY - 10) + 'px;right:4px;background:#ff2222;color:#fff;font-family:\'Space Mono\',monospace;font-size:8px;font-weight:700;padding:1px 4px;border-radius:2px;opacity:0.7;z-index:3;">LIQ $' + _fmtPrice(liqPrice) + '</div>';
     }
   }
   overlay.innerHTML = html;
