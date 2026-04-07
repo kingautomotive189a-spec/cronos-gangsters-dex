@@ -865,15 +865,15 @@ function toggleNavMenu() {
   <div class="stats-bar">
     <div class="stat-item">
       <div class="stat-label">Total Liquidity</div>
-      <div class="stat-value" id="statTVL">$—</div>
+      <div class="stat-value" id="statTVL">$0</div>
     </div>
     <div class="stat-item">
       <div class="stat-label">24H Volume</div>
-      <div class="stat-value" id="statVol">$—</div>
+      <div class="stat-value" id="statVol">$0</div>
     </div>
     <div class="stat-item">
       <div class="stat-label">$GANG Price</div>
-      <div class="stat-value" id="statPrice">$—</div>
+      <div class="stat-value" id="statPrice">$0</div>
     </div>
     <div class="stat-item">
       <div class="stat-label">Network</div>
@@ -10413,6 +10413,9 @@ async function fetchDexScreenerStats() {
       const el = document.getElementById("statVol");
       if (el) el.textContent = "$" + _fmtTVL(totalVol24h);
     }
+
+    // Always update vault liquidity into the stats (even if DexScreener has data)
+    _updateMainStatsFromVault();
     
     // Update 24h price change
     const priceChange = pair.priceChange?.h24;
@@ -10565,6 +10568,79 @@ function _fmtTVL(usd) {
   return usd.toFixed(2);
 }
 
+// Update main page stats from vault liquidity + leverage trading volume
+var _vaultStatsTimer = null;
+function _updateMainStatsFromVault() {
+  try {
+    var tvlEl = document.getElementById("statTVL");
+    var volEl = document.getElementById("statVol");
+    var croPrice = (typeof TOKENS !== 'undefined' && TOKENS.CRO) ? (TOKENS.CRO.price || 0) : 0;
+    var gangPrice = (typeof TOKENS !== 'undefined' && TOKENS.GANG) ? (TOKENS.GANG.price || 0) : 0;
+    if (typeof futuresState !== 'undefined') {
+      var vaultCRO = futuresState.poolBalanceCRO || 0;
+      var vaultGANG = futuresState.poolBalance || 0;
+      var vaultUSD = (vaultCRO * croPrice) + (vaultGANG * gangPrice);
+      var btcPrice = futuresState.prices && futuresState.prices['BTC'] || 0;
+      var ethPrice = futuresState.prices && futuresState.prices['ETH'] || 0;
+      vaultUSD += (futuresState.poolBalanceBTC || 0) * btcPrice;
+      vaultUSD += (futuresState.poolBalanceETH || 0) * ethPrice;
+      
+      if (tvlEl && (tvlEl.textContent === '$—' || tvlEl.textContent === '$0')) {
+        if (vaultUSD > 0) {
+          tvlEl.textContent = '$' + _fmtTVL(vaultUSD);
+        } else if (vaultCRO > 0 || vaultGANG > 0) {
+          var parts = [];
+          if (vaultCRO > 0) parts.push(vaultCRO.toFixed(vaultCRO < 1 ? 4 : 2) + ' CRO');
+          if (vaultGANG > 0) parts.push(vaultGANG.toFixed(vaultGANG < 1 ? 4 : 2) + ' GANG');
+          tvlEl.textContent = parts.join(' + ');
+        }
+      }
+      if (volEl && (volEl.textContent === '$—' || volEl.textContent === '$0')) {
+        var leverageVol = futuresState.totalVolume || 0;
+        if (leverageVol > 0) {
+          volEl.textContent = '$' + _fmtTVL(leverageVol);
+        }
+      }
+    }
+    // Try to read vault balance directly from Cronos RPC (no wallet needed)
+    if (typeof ethers !== 'undefined' && !_vaultStatsTimer) {
+      _vaultStatsTimer = true;
+      _readVaultBalancePublic();
+    }
+  } catch(e) {}
+}
+
+async function _readVaultBalancePublic() {
+  try {
+    var rpc = new ethers.JsonRpcProvider('https://evm.cronos.org');
+    var vaultAddr = typeof getTradingVaultAddr === 'function' ? getTradingVaultAddr() : '0x68B1837b9360C661f954147f178DE7781026a16d';
+    if (!vaultAddr) return;
+    var croBal = await rpc.getBalance(vaultAddr);
+    var croFloat = parseFloat(ethers.formatEther(croBal));
+    if (croFloat > 0 && typeof futuresState !== 'undefined') {
+      futuresState.poolBalanceCRO = croFloat;
+    }
+    // Read GANG balance from vault
+    var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+    var erc20Abi = ['function balanceOf(address) view returns (uint256)'];
+    var gangC = new ethers.Contract(GANG_ADDR, erc20Abi, rpc);
+    var gangBal = await gangC.balanceOf(vaultAddr);
+    var gangFloat = parseFloat(ethers.formatEther(gangBal));
+    if (gangFloat > 0 && typeof futuresState !== 'undefined') {
+      futuresState.poolBalance = gangFloat;
+    }
+    // Now update the display
+    var tvlEl = document.getElementById("statTVL");
+    if (tvlEl && (tvlEl.textContent === '$—' || tvlEl.textContent === '$0')) {
+      var parts = [];
+      if (croFloat > 0) parts.push(croFloat.toFixed(croFloat < 1 ? 4 : 2) + ' CRO');
+      if (gangFloat > 0) parts.push(gangFloat.toFixed(gangFloat < 1 ? 4 : 2) + ' GANG');
+      if (parts.length > 0) tvlEl.textContent = parts.join(' + ');
+    }
+    if (typeof updateVaultTotalLiquidity === 'function') updateVaultTotalLiquidity();
+  } catch(e) { console.warn('Vault public read:', e.message); }
+}
+
 // Check if user has enough balance for liquidity and show warning
 function _checkLiqBalanceWarning(symA, amtA, symB, amtB) {
   const liqBtn = document.querySelector('#liq-add .btn-primary');
@@ -10653,6 +10729,9 @@ async function fetchLivePrices() {
     if (gangPriceEl) gangPriceEl.textContent = `$${fmt6(TOKENS.GANG.price)}`;
     const gangTokenPriceEl = document.getElementById("gangTokenPrice");
     if (gangTokenPriceEl) gangTokenPriceEl.textContent = `$${fmt6(TOKENS.GANG.price)}`;
+
+    // Update vault liquidity stats on main page
+    _updateMainStatsFromVault();
 
     const fromAmt = parseFloat(document.getElementById("swapFrom")?.value);
     if (fromAmt > 0) calcSwap();
@@ -23599,6 +23678,7 @@ function updateFuturesPool() {
       futuresState.poolBalanceCRO = realCroBal;
       saveFuturesState();
       updateVaultTotalLiquidity();
+      _updateMainStatsFromVault();
     }).catch(function(){});
 
     // Also read GANG balance from vault
@@ -23822,6 +23902,8 @@ setTimeout(() => {
   setInterval(updateFuturesPrice, 5000);
   // Update position PnL display every 1.5s
   setInterval(function() { updateFuturesPosInfo(); }, 1500);
+  // Update main page stats with vault data
+  setTimeout(_updateMainStatsFromVault, 500);
 }, 2000);
 
 // ── Bottom Navigation Bar — show/hide based on active page ──
