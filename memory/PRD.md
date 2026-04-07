@@ -32,6 +32,8 @@ Web3 DeFi DApp on Cronos blockchain. Single-file HTML deployment (~28K lines).
 - Liquidity page: collapsible "ADD / REMOVE LIQUIDITY" and "YOUR POSITIONS & TOP POOLS" sections using `<details>`/`<summary>` tags, default collapsed, styled with teal/gold aesthetics matching the Arsenal pattern
 - **PERFORMANCE FIX**: Parallelized ALL balance reads in `loadBalances()` — token balances, LP balances, and factory lookups now use `Promise.all` instead of sequential loops (was ~25 sequential RPC calls, now fires all at once)
 - Added `quickRefreshBalances()` function for instant targeted balance updates after swaps, add/remove liquidity, and leverage trades — only re-reads the 2 affected tokens instead of waiting for the full 15+ token refresh
+- **CRITICAL FIX — GANG WITHDRAWAL**: Upgraded Trading Vault contract to support ERC-20 token withdrawals via `withdrawTokenTo(token, to, amount)`. Old vault was CRO-only — GANG went in but never came out. Now closing a GANG leverage position calls `vaultContract.withdrawTokenTo(GANG_ADDR, userAddr, payoutWei)` to actually return GANG to the user's wallet.
+- **IMPORTANT**: User needs to deploy a new vault from the Leverage Trading page for this to work. The old vault at `0x68B1837b...` doesn't have `withdrawTokenTo`.
 - ZIP regenerated
 
 ## Upcoming (P1)
