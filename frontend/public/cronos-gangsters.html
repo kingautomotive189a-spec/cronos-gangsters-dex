@@ -4793,38 +4793,6 @@ function toggleNavMenu() {
       <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,#ff8c00,transparent);margin:14px auto 0;"></div>
     </div>
 
-    <!-- Trading Vault Setup (hidden, shown only when needed) -->
-    <div id="tradingVaultBanner" style="display:none;"></div>
-    <div id="vaultNotDeployed" style="display:none;"></div>
-    <div id="vaultDeployed" style="display:none;"><div id="tradingVaultAddr"></div><div id="tradingVaultBal"></div></div>
-
-    <!-- Vault Setup Modal -->
-    <div id="vaultSetupModal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;padding:16px;">
-      <div style="background:linear-gradient(180deg,#1a1c35,#0e1020);border:1px solid rgba(100,120,255,0.2);border-radius:18px;padding:24px;max-width:400px;width:100%;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#ff8c00;letter-spacing:2px;text-align:center;margin-bottom:6px;">TRADING VAULT SETUP</div>
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(180,190,220,0.6);text-align:center;margin-bottom:20px;line-height:1.5;">A vault contract holds your CRO/GANG collateral. Set it up once — trades work forever after.</div>
-        
-        <div style="margin-bottom:16px;">
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(180,190,220,0.5);letter-spacing:1px;margin-bottom:6px;">OPTION 1: PASTE EXISTING VAULT ADDRESS</div>
-          <div style="display:flex;gap:6px;">
-            <input id="vaultAddrInput" type="text" placeholder="0x..." style="flex:1;background:rgba(20,22,45,0.9);border:1px solid rgba(100,120,255,0.2);border-radius:10px;padding:10px 12px;color:#e0e4f0;font-family:'Space Mono',monospace;font-size:12px;outline:none;" />
-            <button onclick="_saveVaultAddr()" style="padding:10px 16px;border-radius:10px;border:none;background:#00d4aa;color:#0a0c1c;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">SET</button>
-          </div>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(180,190,220,0.35);margin-top:4px;">Check MetaMask → Activity → Your latest "Contract Creation" tx → Copy the contract address</div>
-        </div>
-
-        <div style="text-align:center;font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(180,190,220,0.3);margin-bottom:16px;">— OR —</div>
-
-        <div style="margin-bottom:16px;">
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(180,190,220,0.5);letter-spacing:1px;margin-bottom:6px;">OPTION 2: DEPLOY NEW VAULT</div>
-          <button id="deployTradingVaultBtn" data-testid="deploy-trading-vault-btn" onclick="deployTradingVault()" style="width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#ff8c00,#ff6b00);color:#fff;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;">DEPLOY NEW VAULT</button>
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(180,190,220,0.35);margin-top:4px;">Deploys a new vault contract on Cronos (~small gas fee)</div>
-        </div>
-
-        <button onclick="document.getElementById('vaultSetupModal').style.display='none'" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(180,190,220,0.15);background:transparent;color:rgba(180,190,220,0.5);font-family:'Space Grotesk',sans-serif;font-size:12px;cursor:pointer;">Cancel</button>
-      </div>
-    </div>
-
     <!-- Pool Info Bar -->
     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
       <div style="flex:1;background:rgba(39,174,96,0.04);border:1px solid rgba(39,174,96,0.15);border-radius:12px;padding:12px;text-align:center;">
@@ -22049,9 +22017,10 @@ try {
 const TRADING_VAULT_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"deposit","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"getBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalDeposited","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"userDeposits","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address payable","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawTo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
 const TRADING_VAULT_BIN = '6080604052348015600e575f5ffd5b505f80546001600160a01b0319163317905561048d8061002d5f395ff3fe608060405260043610610057575f3560e01c80630ba36dcd146100d257806312065fe014610110578063205c2878146101225780638da5cb5b14610143578063d0e30db014610179578063ff50abdc14610181575f5ffd5b366100ce57335f908152600160205260408120805434929061007a9084906103c8565b925050819055503460025f82825461009291906103c8565b909155505060405134815233907fe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c9060200160405180910390a2005b5f5ffd5b3480156100dd575f5ffd5b506100fd6100ec3660046103f8565b60016020525f908152604090205481565b6040519081526020015b60405180910390f35b34801561011b575f5ffd5b50476100fd565b34801561012d575f5ffd5b5061014161013c36600461041a565b610196565b005b34801561014e575f5ffd5b505f54610161906001600160a01b031681565b6040516001600160a01b039091168152602001610107565b61014161030a565b34801561018c575f5ffd5b506100fd60025481565b5f546001600160a01b031633146101e05760405162461bcd60e51b81526020600482015260096024820152682737ba1037bbb732b960b91b60448201526064015b60405180910390fd5b8047101561021a5760405162461bcd60e51b8152602060048201526007602482015266131bddc818985b60ca1b60448201526064016101d7565b5f826001600160a01b0316826040515f6040518083038185875af1925050503d805f8114610263576040519150601f19603f3d011682016040523d82523d5f602084013e610268565b606091505b50509050806102a25760405162461bcd60e51b815260206004820152600660248201526511985a5b195960d21b60448201526064016101d7565b81600254106102c2578160025f8282546102bc9190610444565b90915550505b826001600160a01b03167f884edad9ce6fa2440d8a54cc123490eb96d2768479d49ff9c7366125a9424364836040516102fd91815260200190565b60405180910390a2505050565b5f34116103425760405162461bcd60e51b81526004016101d7906020808252600490820152635a65726f60e01b604082015260600190565b335f90815260016020526040812080543492906103609084906103c8565b925050819055503460025f82825461037891906103c8565b909155505060405134815233907fe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c9060200160405180910390a2565b634e487b7160e01b5f52601160045260245ffd5b808201808211156103db576103db6103b4565b92915050565b6001600160a01b03811681146103f5575f5ffd5b50565b5f60208284031215610408575f5ffd5b8135610413816103e1565b9392505050565b5f5f6040838503121561042b575f5ffd5b8235610436816103e1565b946020939093013593505050565b818103818111156103db576103db6103b456fea2646970667358221220747fb1ae3032a3562c800c2a9fad52555bafaf1f40871671ab9e2e8af781290064736f6c63430008220033';
 const LS_TRADING_VAULT = 'gang_trading_vault_addr';
+const HARDCODED_TRADING_VAULT = '0x68B1837b9360C661f954147f178DE7781026a16d';
 
 function getTradingVaultAddr() {
-  return localStorage.getItem(LS_TRADING_VAULT) || '';
+  return localStorage.getItem(LS_TRADING_VAULT) || HARDCODED_TRADING_VAULT;
 }
 
 async function deployTradingVault() {
@@ -22742,10 +22711,9 @@ function openFuturesPosition() {
         return;
       }
 
-      // Get Trading Vault address
       var vaultAddr = getTradingVaultAddr();
       if (!vaultAddr) {
-        _showVaultSetup();
+        showToast('Vault address not found. Contact support.', 'error');
         return;
       }
 
@@ -22963,7 +22931,7 @@ function closeFuturesPosition(id) {
 
         var vaultAddr = getTradingVaultAddr();
         if (!vaultAddr) {
-          _showVaultSetup();
+          showToast('Vault address not found.', 'error');
           return;
         }
 
