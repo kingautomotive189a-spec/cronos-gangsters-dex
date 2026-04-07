@@ -836,13 +836,15 @@
 <script>
 // ═══ FORCE WIPE ALL FAKE LEVERAGE DATA — RUNS IMMEDIATELY ═══
 (function(){
-  var k = 'gang_futures_vault_nuke_v2';
+  var k = 'gang_futures_vault_nuke_v3';
   if (!localStorage.getItem(k)) {
     localStorage.removeItem('gang_futures_v2');
     localStorage.removeItem('gang_futures');
     localStorage.removeItem('gang_futures_vol');
+    localStorage.removeItem('gang_futures_vault_nuke_v2');
+    localStorage.removeItem('gang_futures_vault_reset_v1');
     localStorage.setItem(k, Date.now());
-    console.log('[RESET] All fake leverage data wiped.');
+    console.log('[RESET] All leverage data wiped clean.');
   }
 })();
 
