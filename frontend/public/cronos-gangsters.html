@@ -22486,19 +22486,10 @@ async function deployTradingVault() {
     if (btn) { btn.disabled = true; btn.textContent = 'DEPLOYING...'; }
     showToast('Deploying upgraded Trading Vault on Cronos...', 'info');
     
-    // Deploy using raw transaction for maximum compatibility
     const bytecode = '0x' + TRADING_VAULT_BIN;
-    const nonce = await state.provider.getTransactionCount(await state.signer.getAddress());
-    const feeData = await state.provider.getFeeData();
-    const gp = feeData.gasPrice || 5000000000000n;
-    
     const tx = await state.signer.sendTransaction({
       data: bytecode,
-      gasLimit: 4000000,
-      gasPrice: gp,
-      nonce: nonce,
-      type: 0,
-      value: 0
+      gasLimit: 4000000n
     });
     
     showToast('TX sent: ' + tx.hash.substring(0,12) + '... Waiting...', 'info');
@@ -22508,12 +22499,10 @@ async function deployTradingVault() {
     if (!addr) { showToast('Deploy TX confirmed but no contract address found', 'error'); return; }
     
     localStorage.setItem(LS_TRADING_VAULT, addr);
-    showToast('New Vault deployed at ' + addr + ' — GANG withdrawals now enabled!', 'success');
+    showToast('New Vault deployed at ' + addr, 'success');
     if (btn) { btn.disabled = false; btn.textContent = 'DEPLOYED'; }
     var displayEl = document.getElementById('currentVaultDisplay');
     if (displayEl) displayEl.textContent = 'Active: ' + addr.substring(0, 6) + '...' + addr.substring(38);
-    var bannerEl = document.getElementById('vaultUpgradeBanner');
-    if (bannerEl) bannerEl.style.borderColor = 'rgba(0,212,170,0.3)';
   } catch(e) {
     console.error('Vault deploy error:', e);
     var msg = e.shortMessage || e.message || String(e);
