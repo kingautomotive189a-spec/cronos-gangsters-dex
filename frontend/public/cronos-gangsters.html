@@ -59,7 +59,8 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh;overflow-x:hidden;}
-  body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 70% 50% at 15% 10%,rgba(232,184,48,0.05) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 85% 85%,rgba(48,192,112,0.04) 0%,transparent 60%);pointer-events:none;}
+  html{overflow-x:hidden;}
+  .page{display:none;overflow-x:hidden;max-width:100vw;}.page.active{display:block;}  body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 70% 50% at 15% 10%,rgba(232,184,48,0.05) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 85% 85%,rgba(48,192,112,0.04) 0%,transparent 60%);pointer-events:none;}
 
   /* ── HEADER ── */
   header{position:sticky;top:0;z-index:100;background:rgba(21,24,32,0.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;background-image:url('/img/header-bg.png');background-size:cover;background-position:center center;background-repeat:no-repeat;}
@@ -95,8 +96,8 @@
   .wallet-btn.connected{background:var(--surface2)!important;color:var(--gold)!important;border:1px solid var(--border);box-shadow:none;}
 
   /* ── LAYOUT ── */
-  main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:20px 14px;}
-  .page{display:none;}.page.active{display:block;}
+  main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:20px 14px;overflow-x:hidden;}
+  .page{display:none;overflow-x:hidden;max-width:100vw;}.page.active{display:block;}
 
   /* ── STATS BAR ── */
   .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;}
@@ -4823,7 +4824,7 @@ function toggleNavMenu() {
   <!-- ══════════════════════════════════════
        LEVERAGE TRADING
   ══════════════════════════════════════ -->
-  <div class="page" id="page-futures" data-testid="page-futures">
+  <div class="page" id="page-futures" data-testid="page-futures" style="overflow-x:hidden;touch-action:pan-y;">
 
     <!-- Header — Trading 212 Compact -->
     <div data-testid="futures-hero" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.4);">

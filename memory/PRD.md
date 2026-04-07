@@ -15,25 +15,24 @@ Web3 DeFi DApp on Cronos blockchain. Single-file HTML deployment (~28K lines) fo
 - Arsenal (32 features) in collapsible `<details>` bar
 - Owner Pool Controls (8 features) in collapsible `<details>` bar
 - Global header isolation (stats bar, contract address, war room images only on homepage)
-- Mobile CSS contrast fixes for leverage trading page
+- Mobile CSS contrast fixes for leverage trading page (inline rgba values boosted)
 - 70+ asset pills on homepage leverage showcase
 - Aggressive cache-busting meta tags
-- **On-chain LP liquidity reader** — reads ALL 12 VVS LP pools (CRO/GANG, USDC/GANG, WBTC/GANG, WETH/GANG, USDT/GANG, ATOM/GANG, VVS/GANG, etc.) with dynamic token detection and fallback pricing. Displays real total liquidity (~$1.6K) and derives GANG price (~$0.0078) from CRO/GANG pool.
-- DexScreener chart iframe pointed to CRO/GANG LP pair (most liquid)
-- **CRITICAL FIX**: `futuresBottomNav` was a full-screen opaque overlay (`top:0; bottom:0`) covering the entire leverage trading page on mobile. Fixed by adding `top:auto` so it only docks at the bottom as intended.
-- All inline rgba colors in futures page boosted for mobile browser contrast (Crypto.com wallet browser compatibility)
+- On-chain LP liquidity reader — reads ALL 12 VVS LP pools with dynamic token detection. Total ~$1.6K shown on homepage.
+- DexScreener chart pointed to CRO/GANG LP pair (most liquid)
+- **FIXED**: `futuresBottomNav` full-screen overlay bug (added `top:auto`)
+- **FIXED**: Horizontal scroll/swipe bug on mobile (added `overflow-x:hidden` + `touch-action:pan-y` to page, main, html, body)
 
 ## Key Technical Notes
 - **NEVER break into multiple files** — single HTML only
 - **Small search_replace chunks** — max 50-100 lines per edit
-- **Do NOT touch wallet logic** — `state.signer.sendTransaction` and MetaMask callbacks are verified working
+- **Do NOT touch wallet logic** — verified working
 - **Always generate ZIP** after changes
-- **On-chain LP reader** uses sequential RPC calls to avoid Cronos RPC rate limits
-- **Dynamic token detection**: reads `token0()` and `token1()` from each LP contract
-- **`futuresBottomNav` MUST have `top:auto`** — without it, the fixed-position nav stretches full-screen and blocks the entire page on mobile
+- **`futuresBottomNav` MUST have `top:auto`**
+- **All `.page` divs need `overflow-x:hidden; max-width:100vw`**
 
 ## Upcoming Tasks (P1)
-- Revamp the rest of the UI to match the Trading 212 / Fulcrom Finance modern styling
+- Revamp rest of UI to match Trading 212 / Fulcrom Finance modern styling
 - CEX listings feature
 - Multi-chain expansion
 
