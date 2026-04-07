@@ -20249,10 +20249,11 @@ function rsStake() {
         if (typeof window.vaultDeposit === 'function') {
           await window.vaultDeposit('revstaking', amount, 'Revenue Staking');
         } else {
-          var rawP = state._rawProvider || window.ethereum;
-          var userAddr = await state.signer.getAddress();
-          var txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
-          for (var i = 0; i < 40; i++) { await new Promise(function(r){setTimeout(r,4000)}); var rcpt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] }); if (rcpt) { if (rcpt.status === '0x0') throw new Error('TX reverted'); break; } }
+          var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+          var gangContract = new ethers.Contract(GANG_ADDR, ['function transfer(address to, uint256 amount) returns (bool)'], state.signer);
+          var vaultAddr = getTradingVaultAddr();
+          var tx = await gangContract.transfer(vaultAddr, ethers.parseEther(String(amount)));
+          await tx.wait();
         }
         var s = initRSState();
         s.userStake = (s.userStake || 0) + amount;
@@ -20280,10 +20281,12 @@ function rsUnstake() {
         if (typeof window.vaultWithdraw === 'function') {
           await window.vaultWithdraw('revstaking', amount, 'Revenue Unstake');
         } else {
-          var rawP = state._rawProvider || window.ethereum;
+          var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+          var vaultAddr = getTradingVaultAddr();
+          var vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
           var userAddr = await state.signer.getAddress();
-          var txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
-          for (var i = 0; i < 40; i++) { await new Promise(function(r){setTimeout(r,4000)}); var rcpt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] }); if (rcpt) { if (rcpt.status === '0x0') throw new Error('TX reverted'); break; } }
+          var tx = await vaultContract.withdrawTokenTo(GANG_ADDR, userAddr, ethers.parseEther(String(amount)));
+          await tx.wait();
         }
         s.userStake -= amount;
         s.totalStaked = Math.max(0, (s.totalStaked || 0) - amount);
@@ -20309,10 +20312,12 @@ function rsClaim() {
         if (typeof window.vaultCollectFees === 'function') {
           await window.vaultCollectFees('Revenue Rewards');
         } else {
-          var rawP = state._rawProvider || window.ethereum;
+          var vaultAddr = getTradingVaultAddr();
+          var vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
           var userAddr = await state.signer.getAddress();
-          var txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
-          for (var i = 0; i < 40; i++) { await new Promise(function(r){setTimeout(r,4000)}); var rcpt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] }); if (rcpt) { if (rcpt.status === '0x0') throw new Error('TX reverted'); break; } }
+          var claimWei = ethers.parseEther(String(Math.floor((amt - mgmtFee) * 1e6) / 1e6));
+          var tx = await vaultContract.withdrawTo(userAddr, claimWei);
+          await tx.wait();
         }
         s.pendingRewards = 0;
         s.ownerFees = (s.ownerFees || 0) + mgmtFee;
@@ -20663,21 +20668,19 @@ function closePerpPosition(idx) {
             try {
               await window.vaultWithdraw('perpdex', p.collateral, 'Close Perp — ' + p.direction.toUpperCase() + ' ' + p.pair + ' ' + p.leverage + 'x');
             } catch(e2) {
-              // Vault may not support CRO withdraw — use self-tx as confirmation
+              // Use trading vault withdrawTo for CRO
+              const tradingVaultAddr = getTradingVaultAddr();
+              const vaultContract = new ethers.Contract(tradingVaultAddr, TRADING_VAULT_ABI, state.signer);
               const userAddr = await state.signer.getAddress();
-              const rawP = state._rawProvider || window.ethereum;
-              await rawP.request({
-                method: 'eth_sendTransaction',
-                params: [{ from: userAddr, to: userAddr, value: '0x0', data: '0x' + Array.from(new TextEncoder().encode('CLOSE_PERP:' + p.pair + ':' + p.direction + ':' + p.collateral)).map(b => b.toString(16).padStart(2,'0')).join('') }]
-              });
+              const tx = await vaultContract.withdrawTo(userAddr, ethers.parseEther(String(p.collateral)));
+              await tx.wait();
             }
           } else {
+            const tradingVaultAddr = getTradingVaultAddr();
+            const vaultContract = new ethers.Contract(tradingVaultAddr, TRADING_VAULT_ABI, state.signer);
             const userAddr = await state.signer.getAddress();
-            const rawP = state._rawProvider || window.ethereum;
-            await rawP.request({
-              method: 'eth_sendTransaction',
-              params: [{ from: userAddr, to: userAddr, value: '0x0', data: '0x' + Array.from(new TextEncoder().encode('CLOSE_PERP:' + p.pair + ':' + p.direction + ':' + p.collateral)).map(b => b.toString(16).padStart(2,'0')).join('') }]
-            });
+            const tx = await vaultContract.withdrawTo(userAddr, ethers.parseEther(String(p.collateral)));
+            await tx.wait();
           }
         } else {
           showToast('Connect wallet for on-chain withdrawal', 'error');
@@ -23325,13 +23328,18 @@ function openFuturesPosition() {
           showToast(amt + ' GANG deposited to vault!', 'success');
 
         } else {
-          showToast('Confirming ' + activeCurr + ' trade. Confirm in MetaMask...', 'info');
-          var tx = await state.signer.sendTransaction({
-            to: vaultAddr,
-            value: ethers.parseEther('0')
-          });
-          await tx.wait();
-          showToast(activeCurr + ' trade confirmed on-chain!', 'success');
+          // Other tokens (BTC/ETH/SOL/BNB/USDC/USDT) — deposit to vault via ERC-20 transfer
+          var tokInfo = TOKENS[activeCurr];
+          if (tokInfo && tokInfo.address && tokInfo.address !== 'native') {
+            showToast('Depositing ' + amt + ' ' + activeCurr + ' to vault...', 'info');
+            var tokContract = new ethers.Contract(tokInfo.address, ['function transfer(address to, uint256 amount) returns (bool)'], state.signer);
+            var tx = await tokContract.transfer(vaultAddr, ethers.parseUnits(String(amt), tokInfo.decimals));
+            await tx.wait();
+            showToast(activeCurr + ' deposited to vault!', 'success');
+          } else {
+            showToast(activeCurr + ' deposits not yet supported on-chain', 'error');
+            return;
+          }
         }
       } catch(e) {
         if (e.code === 4001 || e.code === 'ACTION_REJECTED' || (e.message && e.message.includes('rejected'))) {
@@ -23531,10 +23539,20 @@ function closeFuturesPosition(id) {
           quickRefreshBalances(['GANG']);
           updateTradingVaultBanner();
         } else {
-          showToast('Closing — confirming ' + closeCurr + ' payout...', 'info');
-          const tx = await state.signer.sendTransaction({ to: userAddr, value: ethers.parseEther('0') });
-          await tx.wait();
-          showToast(closeCurr + ' payout confirmed!', 'success');
+          // Other tokens — withdraw from vault via withdrawTokenTo
+          var tokInfo = TOKENS[closeCurr];
+          if (tokInfo && tokInfo.address && tokInfo.address !== 'native') {
+            showToast('Withdrawing ' + payout.toFixed(4) + ' ' + closeCurr + ' from vault...', 'info');
+            const vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
+            const payoutWei = ethers.parseUnits(String(Math.floor(payout * 1e6) / 1e6), tokInfo.decimals);
+            const tx = await vaultContract.withdrawTokenTo(tokInfo.address, userAddr, payoutWei);
+            await tx.wait();
+            showToast(payout.toFixed(4) + ' ' + closeCurr + ' withdrawn from vault!', 'success');
+            quickRefreshBalances([closeCurr]);
+          } else {
+            showToast(closeCurr + ' withdrawal not supported', 'error');
+            return;
+          }
         }
       } catch(e) {
         console.error('[LEVERAGE] Close error:', e);
@@ -24210,11 +24228,20 @@ async function futuresOwnerDeposit(curr) {
       futuresState.poolBalance += amt;
       futuresState.ownerDeposited += amt;
     } else {
-      // Other tokens — just send CRO confirmation
-      showToast('Depositing ' + curr + ' to vault...', 'info');
-      var tx = await state.signer.sendTransaction({ to: vaultAddr, value: ethers.parseEther('0') });
-      await tx.wait();
-      showToast(amt + ' ' + curr + ' pool deposit confirmed!', 'success');
+      // Other tokens — deposit ERC-20 to vault
+      var tokInfo = TOKENS[curr];
+      if (tokInfo && tokInfo.address && tokInfo.address !== 'native') {
+        showToast('Depositing ' + amt + ' ' + curr + ' to vault...', 'info');
+        var tokContract = new ethers.Contract(tokInfo.address, ['function transfer(address to, uint256 amount) returns (bool)'], state.signer);
+        var tx = await tokContract.transfer(vaultAddr, ethers.parseUnits(String(amt), tokInfo.decimals));
+        showToast('TX sent! Confirming...', 'info');
+        await tx.wait();
+        showToast(amt + ' ' + curr + ' deposited to vault!', 'success');
+        quickRefreshBalances([curr]);
+      } else {
+        showToast(curr + ' deposits not supported', 'error');
+        return;
+      }
       futuresState['poolBalance' + curr] = (futuresState['poolBalance' + curr] || 0) + amt;
       futuresState['ownerDeposited' + curr] = (futuresState['ownerDeposited' + curr] || 0) + amt;
     }
@@ -24263,10 +24290,21 @@ async function futuresOwnerWithdraw(curr) {
       futuresState.poolBalance = Math.max(0, futuresState.poolBalance - amt);
       futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt);
     } else {
-      showToast('Withdrawing ' + curr + '...', 'info');
-      var tx = await state.signer.sendTransaction({ to: await state.signer.getAddress(), value: ethers.parseEther('0') });
-      await tx.wait();
-      showToast(amt + ' ' + curr + ' withdrawn!', 'success');
+      // Other tokens — withdraw ERC-20 from vault
+      var tokInfo = TOKENS[curr];
+      if (tokInfo && tokInfo.address && tokInfo.address !== 'native') {
+        showToast('Withdrawing ' + amt + ' ' + curr + ' from vault...', 'info');
+        var vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
+        var userAddr = await state.signer.getAddress();
+        var tx = await vaultContract.withdrawTokenTo(tokInfo.address, userAddr, ethers.parseUnits(String(amt), tokInfo.decimals));
+        showToast('TX sent! Confirming...', 'info');
+        await tx.wait();
+        showToast(amt + ' ' + curr + ' withdrawn from vault!', 'success');
+        quickRefreshBalances([curr]);
+      } else {
+        showToast(curr + ' withdrawals not supported', 'error');
+        return;
+      }
       futuresState['poolBalance' + curr] = Math.max(0, (futuresState['poolBalance' + curr] || 0) - amt);
       futuresState['ownerDeposited' + curr] = Math.max(0, (futuresState['ownerDeposited' + curr] || 0) - amt);
     }
@@ -26501,58 +26539,39 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
     if (state.signer) {
       try {
         if (traderPayout <= 0) {
-          // Total loss — still need MetaMask to confirm the loss (0-value tx as acknowledgment)
-          const userAddr = await state.signer.getAddress();
-          const rawP = state._rawProvider || window.ethereum;
-          await rawP.request({
-            method: 'eth_sendTransaction',
-            params: [{
-              from: userAddr,
-              to: userAddr,
-              value: '0x0',
-              data: '0x' + Array.from(new TextEncoder().encode('LOSS:' + pos.pair + ':' + pos.side + ':' + pos.amount.toFixed(2) + ':PnL:' + netPnl.toFixed(2))).map(b => b.toString(16).padStart(2,'0')).join('')
-            }]
-          });
+          // Total loss — no withdrawal needed, position just closes
+          showToast('Position closed — total loss.', 'info');
         } else if (curr === 'GANG') {
-          await vaultWithdraw('leverage', traderPayout, 'Leverage Close — ' + pos.pair + ' ' + pos.side.toUpperCase() + ' — Payout: ' + traderPayout.toFixed(2) + ' GANG');
+          // GANG withdrawal from trading vault
+          var tradingVaultAddr = getTradingVaultAddr();
+          var vaultContract = new ethers.Contract(tradingVaultAddr, TRADING_VAULT_ABI, state.signer);
+          var userAddr = await state.signer.getAddress();
+          var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+          var tx = await vaultContract.withdrawTokenTo(GANG_ADDR, userAddr, ethers.parseEther(String(Math.floor(traderPayout * 1e6) / 1e6)));
+          await tx.wait();
+          showToast(traderPayout.toFixed(2) + ' GANG withdrawn!', 'success');
+          quickRefreshBalances(['GANG']);
         } else if (curr === 'CRO') {
-          // CRO: send actual CRO payout from vault to trader
-          const vaultAddr = getVaultAddr();
-          if (vaultAddr && traderPayout > 0) {
-            showToast('Withdrawing ' + traderPayout.toFixed(2) + ' CRO payout...', 'info');
-            // Try vault withdraw first, fallback to self-tx confirmation
-            try {
-              await vaultWithdraw('leverage_cro', traderPayout, 'CRO Leverage Close — ' + pos.pair + ' — Payout: ' + traderPayout.toFixed(2) + ' CRO');
-            } catch(e2) {
-              // Vault withdraw may not support CRO — use self-tx as on-chain confirmation
-              const userAddr = await state.signer.getAddress();
-              const rawP = state._rawProvider || window.ethereum;
-              await rawP.request({
-                method: 'eth_sendTransaction',
-                params: [{
-                  from: userAddr,
-                  to: userAddr,
-                  value: '0x0',
-                  data: '0x' + Array.from(new TextEncoder().encode('CLOSE:' + pos.pair + ':' + pos.side + ':Payout:' + traderPayout.toFixed(2) + 'CRO')).map(b => b.toString(16).padStart(2,'0')).join('')
-                }]
-              });
-            }
-          } else {
-            const userAddr = await state.signer.getAddress();
-            const rawP = state._rawProvider || window.ethereum;
-            await rawP.request({
-              method: 'eth_sendTransaction',
-              params: [{
-                from: userAddr,
-                to: userAddr,
-                value: '0x0',
-                data: '0x' + Array.from(new TextEncoder().encode('CLOSE:' + pos.pair + ':' + pos.side + ':Payout:' + traderPayout.toFixed(2) + 'CRO')).map(b => b.toString(16).padStart(2,'0')).join('')
-              }]
-            });
-          }
+          // CRO withdrawal from trading vault
+          var tradingVaultAddr = getTradingVaultAddr();
+          var vaultContract = new ethers.Contract(tradingVaultAddr, TRADING_VAULT_ABI, state.signer);
+          var userAddr = await state.signer.getAddress();
+          var tx = await vaultContract.withdrawTo(userAddr, ethers.parseEther(String(Math.floor(traderPayout * 1e6) / 1e6)));
+          await tx.wait();
+          showToast(traderPayout.toFixed(2) + ' CRO withdrawn!', 'success');
+          quickRefreshBalances(['CRO']);
         } else {
-          // BTC, ETH, SOL, BNB, USDC, USDT — vault withdraw with correct payout
-          await vaultWithdraw('leverage_' + curr.toLowerCase(), traderPayout, curr + ' Leverage Close — ' + pos.pair + ' — Payout: ' + traderPayout.toFixed(2) + ' ' + curr);
+          // Other tokens — withdraw ERC-20 from trading vault
+          var tokInfo = TOKENS[curr];
+          if (tokInfo && tokInfo.address && tokInfo.address !== 'native') {
+            var tradingVaultAddr = getTradingVaultAddr();
+            var vaultContract = new ethers.Contract(tradingVaultAddr, TRADING_VAULT_ABI, state.signer);
+            var userAddr = await state.signer.getAddress();
+            var tx = await vaultContract.withdrawTokenTo(tokInfo.address, userAddr, ethers.parseUnits(String(Math.floor(traderPayout * 1e6) / 1e6), tokInfo.decimals));
+            await tx.wait();
+            showToast(traderPayout.toFixed(2) + ' ' + curr + ' withdrawn!', 'success');
+            quickRefreshBalances([curr]);
+          }
         }
       } catch(e) {
         if (e.code === 4001 || (e.message && e.message.includes('rejected'))) {
@@ -26969,17 +26988,12 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       // CRO WITHDRAWAL — self-transaction as on-chain confirmation receipt
       const userAddr = await state.signer.getAddress();
       showToast('Withdrawing ' + amount + ' CRO — ' + label + '...', 'info');
-      const rawP = state._rawProvider || window.ethereum;
-      await rawP.request({
-        method: 'eth_sendTransaction',
-        params: [{
-          from: userAddr,
-          to: userAddr,
-          value: '0x0',
-          data: '0x' + Array.from(new TextEncoder().encode('WITHDRAW:' + poolName + ':' + amount + 'CRO')).map(b => b.toString(16).padStart(2,'0')).join('')
-        }]
-      });
+      var tradingVaultAddr = getTradingVaultAddr();
+      var vaultContract = new ethers.Contract(tradingVaultAddr, TRADING_VAULT_ABI, state.signer);
+      var tx = await vaultContract.withdrawTo(userAddr, ethers.parseEther(String(amount)));
+      await tx.wait();
       showToast(amount + ' CRO withdrawn — ' + label + '!', 'success');
+      quickRefreshBalances(['CRO']);
       return true;
     }
 
@@ -27144,17 +27158,15 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       try {
         var pool = futuresState.poolBalanceCRO || 0;
         if (amt > pool) { showToast('Not enough CRO in pool. Pool has ' + pool.toFixed(2) + ' CRO', 'error'); return; }
-        showToast('Confirm CRO pool withdrawal in MetaMask...', 'info');
-        // Self-transaction as on-chain withdrawal receipt
+        showToast('Withdrawing ' + amt.toFixed(2) + ' CRO from vault...', 'info');
+        var vaultAddr = getTradingVaultAddr();
+        var vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
         var userAddr = await state.signer.getAddress();
-        var tx = await state.signer.sendTransaction({
-          to: userAddr,
-          value: ethers.parseEther('0'),
-          data: ethers.hexlify(ethers.toUtf8Bytes('WITHDRAW_CRO_POOL:' + amt))
-        });
+        var tx = await vaultContract.withdrawTo(userAddr, ethers.parseEther(String(amt)));
         await tx.wait();
         document.getElementById(inputId).value = '';
-        showToast('Withdrawn ' + amt.toFixed(2) + ' CRO from pool (confirmed on-chain)!', 'success');
+        showToast('Withdrawn ' + amt.toFixed(2) + ' CRO from vault!', 'success');
+        quickRefreshBalances(['CRO']);
         futuresState.poolBalanceCRO = Math.max(0, futuresState.poolBalanceCRO - amt);
         futuresState.ownerDepositedCRO = Math.max(0, futuresState.ownerDepositedCRO - amt);
         saveFuturesState(); updateFuturesPool();
@@ -27505,17 +27517,15 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
         { label: 'Bonus', value: reward > BASE_REWARD ? '+' + (reward - BASE_REWARD) + ' GANG streak bonus!' : 'Base reward' }
       ],
       onConfirm: async function() {
-        // Real on-chain: send a self-tx to confirm via MetaMask
+        // On-chain check-in — deposit 0.001 CRO to vault as proof
         try {
-          const rawP = state._rawProvider || window.ethereum;
-          const userAddr = await state.signer.getAddress();
+          const vaultAddr = getTradingVaultAddr();
           showToast('Confirm check-in in MetaMask...', 'info');
-          const txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
-          for (let i = 0; i < 40; i++) {
-            await new Promise(r => setTimeout(r, 4000));
-            const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] });
-            if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; }
-          }
+          const tx = await state.signer.sendTransaction({
+            to: vaultAddr,
+            value: ethers.parseEther('0.001')
+          });
+          await tx.wait();
           s.totalEarned += reward;
           s.lastCheckin = todayKey();
           s.weekCheckins[getDayOfWeek()] = true;
@@ -27701,16 +27711,13 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
           if (typeof window.vaultDeposit === 'function') {
             await window.vaultDeposit('squad', 10, 'Squad Creation Fee');
           } else {
-            // Fallback: send self-tx to confirm via MetaMask
-            const rawP = state._rawProvider || window.ethereum;
-            const userAddr = await state.signer.getAddress();
+            // Squad creation fee: transfer 10 GANG to vault
+            var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+            var gangContract = new ethers.Contract(GANG_ADDR, ['function transfer(address to, uint256 amount) returns (bool)'], state.signer);
+            var vaultAddr = getTradingVaultAddr();
             showToast('Confirm squad creation in MetaMask...', 'info');
-            const txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
-            for (let i = 0; i < 40; i++) {
-              await new Promise(r => setTimeout(r, 4000));
-              const receipt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] });
-              if (receipt) { if (receipt.status === '0x0') throw new Error('TX reverted'); break; }
-            }
+            var tx = await gangContract.transfer(vaultAddr, ethers.parseEther('10'));
+            await tx.wait();
           }
           s.squads[code] = { name: name, members: [addr], created: Date.now() };
           s.userSquad[addr] = code;
