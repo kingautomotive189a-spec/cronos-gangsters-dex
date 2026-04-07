@@ -4786,104 +4786,98 @@ function toggleNavMenu() {
   ══════════════════════════════════════ -->
   <div class="page" id="page-futures" data-testid="page-futures">
 
-    <!-- Header -->
-    <div data-testid="futures-hero" style="text-align:center;margin-bottom:20px;padding:20px 12px;background:linear-gradient(180deg,rgba(255,140,0,0.06) 0%,transparent 100%);border-radius:16px;border:1px solid rgba(255,140,0,0.08);">
-      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,140,0,0.1);border:1px solid rgba(255,140,0,0.25);border-radius:20px;padding:5px 14px;margin-bottom:12px;">
-        <span style="width:8px;height:8px;border-radius:50%;background:#ff8c00;display:inline-block;animation:pulseDot 2s ease-in-out infinite;"></span>
-        <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:#ff8c00;letter-spacing:1.5px;font-weight:600;">FULLY ON-CHAIN | CRONOS MAINNET</span>
-      </div>
-      <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:6px;">
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:5px;color:#fff;line-height:1;text-shadow:0 0 40px rgba(255,140,0,0.25);">LEVERAGE <span style="color:#ff8c00;">TRADING</span></div>
-      </div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:rgba(235,235,245,0.5);letter-spacing:0.3px;margin-top:6px;font-weight:400;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.6;">
-        Trade crypto, stocks, forex, indices, and commodities with up to <span style="color:#ff8c00;font-weight:700;">100x leverage</span>. Every position is collateralized on-chain through the Protocol Vault. Real-time prices via Binance WebSocket and TradingView charts.
-      </div>
-      <div style="display:flex;justify-content:center;gap:6px;margin-top:14px;flex-wrap:wrap;">
-        <span style="font-size:10px;color:#27ae60;background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.2);padding:4px 10px;border-radius:6px;font-weight:600;letter-spacing:0.5px;">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2" style="vertical-align:middle;margin-right:3px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          MetaMask Secured
-        </span>
-        <span style="font-size:10px;color:#ff8c00;background:rgba(255,140,0,0.1);border:1px solid rgba(255,140,0,0.2);padding:4px 10px;border-radius:6px;font-weight:600;letter-spacing:0.5px;">69 Tradeable Assets</span>
-        <span style="font-size:10px;color:var(--gold);background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.2);padding:4px 10px;border-radius:6px;font-weight:600;letter-spacing:0.5px;">TP / SL Orders</span>
-        <span style="font-size:10px;color:#00d4ff;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);padding:4px 10px;border-radius:6px;font-weight:600;letter-spacing:0.5px;">8 Collateral Tokens</span>
-      </div>
-      <div style="width:80px;height:3px;background:linear-gradient(90deg,transparent,#ff8c00,transparent);margin:14px auto 0;"></div>
-    </div>
-
-    <!-- Pool Info Bar -->
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
-      <div style="flex:1;background:rgba(39,174,96,0.04);border:1px solid rgba(39,174,96,0.15);border-radius:12px;padding:12px;text-align:center;">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;font-weight:500;">POOL BALANCE</div>
-        <div id="futuresPoolBalance" data-testid="futures-pool-balance" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);margin-top:2px;">0 GANG</div>
-      </div>
-      <div style="flex:1;background:rgba(255,140,0,0.04);border:1px solid rgba(255,140,0,0.15);border-radius:12px;padding:12px;text-align:center;">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;font-weight:500;">YOUR BALANCE</div>
-        <div id="futuresYourBalance" data-testid="futures-your-balance" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);margin-top:2px;">0 GANG</div>
-      </div>
-      <div style="flex:1;background:rgba(255,140,0,0.04);border:1px solid rgba(255,140,0,0.15);border-radius:12px;padding:12px;text-align:center;">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;font-weight:500;">24H VOLUME</div>
-        <div id="futures24hVol" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff8c00;margin-top:2px;">$0</div>
-      </div>
-      <div style="flex:1;background:rgba(255,140,0,0.04);border:1px solid rgba(255,140,0,0.15);border-radius:12px;padding:12px;text-align:center;">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;font-weight:500;">TOTAL TRADES</div>
-        <div id="futuresTotalTrades" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);margin-top:2px;">0</div>
-      </div>
-    </div>
-
-    <!-- ══ ACCOUNT OVERVIEW — Trading 212 Style ══ -->
-    <div data-testid="futures-account-overview" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
-      <div style="background:var(--surface);border:1px solid rgba(255,140,0,0.2);border-radius:14px;padding:16px;text-align:center;">
-        <div style="font-size:9px;color:var(--muted);letter-spacing:1.5px;font-weight:600;">ACCOUNT VALUE</div>
-        <div id="futuresAccValue" style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#fff;margin-top:4px;">$0.00</div>
-        <div id="futuresAccPnl" style="font-size:11px;color:var(--green);font-weight:700;margin-top:2px;">$0.00 (0.00%)</div>
-      </div>
-      <div style="background:var(--surface);border:1px solid rgba(255,140,0,0.2);border-radius:14px;padding:16px;text-align:center;">
-        <div style="font-size:9px;color:var(--muted);letter-spacing:1.5px;font-weight:600;">MARGIN HEALTH</div>
-        <div id="futuresHealthGauge" style="position:relative;width:60px;height:60px;margin:6px auto 0;">
-          <svg viewBox="0 0 36 36" style="transform:rotate(-90deg);">
-            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3"/>
-            <path id="healthArc" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--green)" stroke-width="3" stroke-dasharray="100, 100" stroke-linecap="round"/>
-          </svg>
-          <div id="healthPct" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);">100%</div>
+    <!-- Header — Trading 212 Compact -->
+    <div data-testid="futures-hero" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff;line-height:1;">LEVERAGE TRADING</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:2px;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#00d4aa;display:inline-block;animation:pulseDot 2s ease-in-out infinite;"></span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.4);letter-spacing:1.5px;font-weight:600;">ON-CHAIN | CRONOS</span>
+          </div>
         </div>
       </div>
-      <div style="background:var(--surface);border:1px solid rgba(39,174,96,0.15);border-radius:14px;padding:14px;text-align:center;">
-        <div style="font-size:9px;color:var(--muted);letter-spacing:1.5px;font-weight:600;">USED MARGIN</div>
-        <div id="futuresUsedMargin" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff8c00;margin-top:4px;">0.00</div>
-        <div style="font-size:9px;color:var(--muted);margin-top:2px;">across <span id="futuresOpenCount" style="color:var(--text);">0</span> positions</div>
+      <div style="display:flex;gap:4px;">
+        <span style="font-size:9px;color:#00d4aa;background:rgba(0,212,170,0.08);padding:3px 8px;border-radius:4px;font-weight:600;">69 Assets</span>
+        <span style="font-size:9px;color:#ff8c00;background:rgba(255,140,0,0.08);padding:3px 8px;border-radius:4px;font-weight:600;">100x</span>
       </div>
-      <div style="background:var(--surface);border:1px solid rgba(39,174,96,0.15);border-radius:14px;padding:14px;text-align:center;">
-        <div style="font-size:9px;color:var(--muted);letter-spacing:1.5px;font-weight:600;">FREE MARGIN</div>
-        <div id="futuresFreeMargin" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);margin-top:4px;">0.00</div>
-        <div style="font-size:9px;color:var(--muted);margin-top:2px;">available to trade</div>
+    </div>
+
+    <!-- Pool Info — Compact Strip -->
+    <div style="display:flex;gap:2px;margin-bottom:10px;background:rgba(255,255,255,0.02);border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.05);">
+      <div style="flex:1;padding:10px 6px;text-align:center;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:600;">POOL</div>
+        <div id="futuresPoolBalance" data-testid="futures-pool-balance" style="font-family:'Space Mono',monospace;font-size:13px;color:#00d4aa;margin-top:2px;font-weight:700;">0 GANG</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,0.05);"></div>
+      <div style="flex:1;padding:10px 6px;text-align:center;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:600;">BALANCE</div>
+        <div id="futuresYourBalance" data-testid="futures-your-balance" style="font-family:'Space Mono',monospace;font-size:13px;color:#ffb347;margin-top:2px;font-weight:700;">0 GANG</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,0.05);"></div>
+      <div style="flex:1;padding:10px 6px;text-align:center;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:600;">24H VOL</div>
+        <div id="futures24hVol" style="font-family:'Space Mono',monospace;font-size:13px;color:#ff8c00;margin-top:2px;font-weight:700;">$0</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,0.05);"></div>
+      <div style="flex:1;padding:10px 6px;text-align:center;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:600;">TRADES</div>
+        <div id="futuresTotalTrades" style="font-family:'Space Mono',monospace;font-size:13px;color:#00d4aa;margin-top:2px;font-weight:700;">0</div>
+      </div>
+    </div>
+
+    <!-- Account Overview — Trading 212 Compact -->
+    <div data-testid="futures-account-overview" style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
+      <div style="min-width:130px;flex:1;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px;text-align:center;">
+        <div style="font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:600;">ACCOUNT VALUE</div>
+        <div id="futuresAccValue" style="font-family:'Space Mono',monospace;font-size:18px;color:#fff;margin-top:4px;font-weight:700;">$0.00</div>
+        <div id="futuresAccPnl" style="font-size:10px;color:#00d4aa;font-weight:700;margin-top:2px;">$0.00 (0.00%)</div>
+      </div>
+      <div style="min-width:100px;flex:0.8;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px;text-align:center;">
+        <div style="font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:600;">HEALTH</div>
+        <div id="futuresHealthGauge" style="position:relative;width:44px;height:44px;margin:4px auto 0;">
+          <svg viewBox="0 0 36 36" style="transform:rotate(-90deg);">
+            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="3"/>
+            <path id="healthArc" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#00d4aa" stroke-width="3" stroke-dasharray="100, 100" stroke-linecap="round"/>
+          </svg>
+          <div id="healthPct" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Space Mono',monospace;font-size:11px;color:#00d4aa;font-weight:700;">100%</div>
+        </div>
+      </div>
+      <div style="min-width:100px;flex:0.8;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px;text-align:center;">
+        <div style="font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:600;">USED MARGIN</div>
+        <div id="futuresUsedMargin" style="font-family:'Space Mono',monospace;font-size:16px;color:#ff8c00;margin-top:6px;font-weight:700;">0.00</div>
+        <div style="font-size:9px;color:rgba(235,235,245,0.3);margin-top:2px;"><span id="futuresOpenCount" style="color:rgba(235,235,245,0.6);">0</span> open</div>
+      </div>
+      <div style="min-width:100px;flex:0.8;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:12px;text-align:center;">
+        <div style="font-size:9px;color:rgba(235,235,245,0.35);letter-spacing:1px;font-weight:600;">FREE MARGIN</div>
+        <div id="futuresFreeMargin" style="font-family:'Space Mono',monospace;font-size:16px;color:#00d4aa;margin-top:6px;font-weight:700;">0.00</div>
+        <div style="font-size:9px;color:rgba(235,235,245,0.3);margin-top:2px;">available</div>
       </div>
     </div>
 
     <!-- Asset Browser — Trading 212 Style -->
-    <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.15);padding:0;overflow:hidden;">
+    <div class="card" style="margin-bottom:10px;border-color:rgba(255,255,255,0.06);padding:0;overflow:hidden;border-radius:12px;">
       <!-- Category Tabs -->
-      <div style="display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border);background:rgba(255,140,0,0.03);">
+      <div style="display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);">
         <button class="cat-tab active" data-cat="crypto" onclick="filterFuturesCat('crypto')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Crypto</button>
-        <button class="cat-tab" data-cat="bigtech" onclick="filterFuturesCat('bigtech')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Big Tech</button>
-        <button class="cat-tab" data-cat="stock" onclick="filterFuturesCat('stock')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg> All Stocks</button>
+        <button class="cat-tab" data-cat="bigtech" onclick="filterFuturesCat('bigtech')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Tech</button>
+        <button class="cat-tab" data-cat="stock" onclick="filterFuturesCat('stock')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg> Stocks</button>
         <button class="cat-tab" data-cat="forex" onclick="filterFuturesCat('forex')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg> Forex</button>
         <button class="cat-tab" data-cat="commodity" onclick="filterFuturesCat('commodity')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Commodities</button>
         <button class="cat-tab" data-cat="index" onclick="filterFuturesCat('index')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Indices</button>
-        <button class="cat-tab" data-cat="all" onclick="filterFuturesCat('all')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Browse All</button>
+        <button class="cat-tab" data-cat="all" onclick="filterFuturesCat('all')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> All</button>
       </div>
       <style>
-        .cat-tab{display:inline-flex;align-items:center;gap:5px;padding:12px 18px;border:none;background:transparent;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
-        .cat-tab:hover{color:var(--text);}
+        .cat-tab{display:inline-flex;align-items:center;gap:4px;padding:10px 14px;border:none;background:transparent;color:rgba(235,235,245,0.35);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.5px;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+        .cat-tab:hover{color:rgba(235,235,245,0.7);}
         .cat-tab.active{color:#ff8c00;border-bottom-color:#ff8c00;}
         .cat-tab svg{flex-shrink:0;}
       </style>
       <!-- Asset Cards Grid -->
-      <div id="futuresAssetGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:12px;max-height:320px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,140,0,0.3) transparent;"></div>
-      <!-- Quick Category Pills -->
-      <div style="padding:8px 12px 12px;border-top:1px solid var(--border);">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:var(--muted);letter-spacing:1.5px;margin-bottom:6px;">QUICK FILTERS</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      <div id="futuresAssetGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;padding:10px;max-height:260px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,140,0,0.2) transparent;"></div>
+      <!-- Compact Quick Filters -->
+      <div style="padding:6px 10px 8px;border-top:1px solid rgba(255,255,255,0.04);display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
           <button class="pill-btn" onclick="filterFuturesCat('bigtech')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4285f4" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Big Tech</button>
           <button class="pill-btn" onclick="filterFuturesCat('commodity')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2d2d2d" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15 15 0 010 20M2 12h20"/></svg> Oil &amp; Gas</button>
           <button class="pill-btn" onclick="filterFuturesCat('forex')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#003399" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg> Currencies</button>
@@ -4900,48 +4894,48 @@ function toggleNavMenu() {
         </div>
       </div>
       <style>
-        .pill-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
-        .pill-btn:hover{border-color:rgba(255,140,0,0.5);color:var(--text);background:rgba(255,140,0,0.08);}
+        .pill-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:16px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.03);color:rgba(235,235,245,0.4);font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
+        .pill-btn:hover{border-color:rgba(255,140,0,0.3);color:rgba(235,235,245,0.7);background:rgba(255,140,0,0.06);}
         .pill-btn svg{flex-shrink:0;}
-        .asset-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:6px;}
-        .asset-card:hover{border-color:rgba(255,140,0,0.5);background:rgba(255,140,0,0.05);transform:translateY(-1px);}
-        .asset-card.selected{border-color:#ff8c00;background:rgba(255,140,0,0.12);}
-        .asset-card .ac-logo{width:32px;height:32px;border-radius:50%;object-fit:cover;background:var(--surface2);}
-        .asset-card .ac-badge{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;}
+        .asset-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:4px;}
+        .asset-card:hover{border-color:rgba(255,140,0,0.3);background:rgba(255,140,0,0.04);transform:translateY(-1px);}
+        .asset-card.selected{border-color:#ff8c00;background:rgba(255,140,0,0.1);}
+        .asset-card .ac-logo{width:28px;height:28px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,0.03);}
+        .asset-card .ac-badge{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;}
         @media(max-width:480px){
-          #futuresAssetGrid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))!important;max-height:240px!important;}
-          .cat-tab{padding:10px 12px;font-size:11px;}
+          #futuresAssetGrid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr))!important;max-height:200px!important;}
+          .cat-tab{padding:8px 10px;font-size:10px;}
         }
       </style>
     </div>
 
     <!-- Price + Chart -->
-    <div class="card" style="margin-bottom:14px;padding:0;overflow:hidden;border-color:rgba(255,140,0,0.2);">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div id="futuresPairLogo" style="width:32px;height:32px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#f7931a;flex-shrink:0;">
+    <div class="card" style="margin-bottom:10px;padding:0;overflow:hidden;border-color:rgba(255,255,255,0.06);border-radius:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.015);">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div id="futuresPairLogo" style="width:28px;height:28px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#f7931a;flex-shrink:0;">
             <img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'"/>
           </div>
           <div>
-            <span id="futuresPairName" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#ff8c00;letter-spacing:2px;">BTC/USD</span>
-            <span id="futuresPairType" style="font-size:10px;color:var(--muted);margin-left:8px;letter-spacing:1px;background:rgba(255,140,0,0.1);padding:2px 6px;border-radius:4px;">CRYPTO</span>
+            <span id="futuresPairName" style="font-family:'Space Mono',monospace;font-size:15px;color:#fff;font-weight:700;letter-spacing:1px;">BTC/USD</span>
+            <span id="futuresPairType" style="font-size:9px;color:rgba(235,235,245,0.3);margin-left:6px;letter-spacing:1px;background:rgba(255,255,255,0.05);padding:2px 5px;border-radius:3px;">CRYPTO</span>
           </div>
         </div>
         <div style="text-align:right;">
-          <div id="futuresPairPrice" data-testid="futures-pair-price" style="font-family:'Space Mono',monospace;font-size:18px;color:var(--green);">$—</div>
-          <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;">
-            <span id="futuresLiveBadge" style="display:none;font-size:9px;font-weight:700;color:#00ff88;background:rgba(0,255,136,0.15);padding:2px 6px;border-radius:4px;letter-spacing:1px;animation:livePulse 2s infinite;">LIVE</span>
-            <span id="futuresPairChange" style="font-size:13px;font-weight:700;color:var(--green);">—</span>
+          <div id="futuresPairPrice" data-testid="futures-pair-price" style="font-family:'Space Mono',monospace;font-size:16px;color:#fff;font-weight:700;">$—</div>
+          <div style="display:flex;align-items:center;justify-content:flex-end;gap:5px;">
+            <span id="futuresLiveBadge" style="display:none;font-size:8px;font-weight:700;color:#00d4aa;background:rgba(0,212,170,0.1);padding:1px 5px;border-radius:3px;letter-spacing:0.5px;animation:livePulse 2s infinite;">LIVE</span>
+            <span id="futuresPairChange" style="font-size:12px;font-weight:700;color:#00d4aa;">—</span>
           </div>
         </div>
       </div>
-      <div id="futuresChart" style="height:420px;background:#101420;">
+      <div id="futuresChart" style="height:380px;background:#0a0c1c;">
         <div id="tradingview_chart" style="width:100%;height:100%;"></div>
       </div>
     </div>
 
-    <!-- Trade Panel — Fulcrom-Style -->
-    <div class="card" style="margin-bottom:14px;border-color:rgba(100,120,255,0.25);background:linear-gradient(180deg,rgba(15,17,35,0.95),rgba(10,12,28,0.98));border-radius:16px;padding:0;overflow:hidden;">
+    <!-- Trade Panel — Clean Modern -->
+    <div class="card" style="margin-bottom:10px;border-color:rgba(255,255,255,0.06);background:rgba(10,12,28,0.95);border-radius:12px;padding:0;overflow:hidden;">
       <style>
         .fulc-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;font-family:'Space Grotesk',sans-serif;font-size:13px;}
         .fulc-label{color:rgba(180,190,220,0.6);}
@@ -5147,35 +5141,35 @@ function toggleNavMenu() {
     </div>
 
     <!-- Open Positions -->
-    <div class="card" style="margin-bottom:14px;border-color:rgba(255,140,0,0.15);background:linear-gradient(145deg,rgba(255,140,0,0.03),transparent);">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ff8c00;letter-spacing:2px;">OPEN POSITIONS</span>
+    <div class="card" style="margin-bottom:10px;border-color:rgba(255,255,255,0.06);border-radius:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:#fff;font-weight:700;letter-spacing:0.5px;">Open Positions</span>
         </div>
-        <button onclick="clearAllFuturesPositions()" data-testid="clear-old-positions-btn" style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;padding:5px 12px;border-radius:20px;background:rgba(231,76,60,0.1);color:#e74c3c;border:1px solid rgba(231,76,60,0.3);cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(231,76,60,0.2)'" onmouseout="this.style.background='rgba(231,76,60,0.1)'">CLEAR HISTORY & OLD DATA</button>
+        <button onclick="clearAllFuturesPositions()" data-testid="clear-old-positions-btn" style="font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:600;padding:4px 10px;border-radius:16px;background:rgba(231,76,60,0.08);color:#e74c3c;border:1px solid rgba(231,76,60,0.15);cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(231,76,60,0.15)'" onmouseout="this.style.background='rgba(231,76,60,0.08)'">Clear History</button>
       </div>
       <div id="futuresPositions" data-testid="futures-positions">
         <div style="font-family:'Space Grotesk',sans-serif;color:rgba(235,235,245,0.35);text-align:center;padding:16px;font-size:13px;font-weight:400;">No open positions</div>
       </div>
     </div>
 
-    <!-- Trade History — Trading 212 Style -->
-    <div class="card" style="margin-bottom:14px;border-color:rgba(255,255,255,0.06);">
-      <div style="text-align:center;margin-bottom:16px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);letter-spacing:3px;">History</div>
+    <!-- Trade History -->
+    <div class="card" style="margin-bottom:10px;border-color:rgba(255,255,255,0.06);border-radius:12px;">
+      <div style="margin-bottom:12px;">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:#fff;font-weight:700;letter-spacing:0.5px;">History</div>
       </div>
       <!-- Tabs -->
-      <div style="display:flex;gap:0;margin-bottom:6px;border-bottom:1px solid var(--border);">
-        <button id="histTabResults" onclick="switchHistTab('results')" style="flex:1;padding:12px;background:transparent;border:none;border-bottom:2px solid #4fc3f7;color:#4fc3f7;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;cursor:pointer;">Result</button>
-        <button id="histTabOrders" onclick="switchHistTab('orders')" style="flex:1;padding:12px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;cursor:pointer;">Orders</button>
-        <button id="histTabFees" onclick="switchHistTab('fees')" style="flex:1;padding:12px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;cursor:pointer;">Fees</button>
-        <button id="histTabLiquidations" onclick="switchHistTab('liquidations')" style="flex:1;padding:12px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;cursor:pointer;">Liquidations</button>
+      <div style="display:flex;gap:0;margin-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <button id="histTabResults" onclick="switchHistTab('results')" style="flex:1;padding:10px;background:transparent;border:none;border-bottom:2px solid #ff8c00;color:#ff8c00;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.5px;cursor:pointer;">Result</button>
+        <button id="histTabOrders" onclick="switchHistTab('orders')" style="flex:1;padding:10px;background:transparent;border:none;border-bottom:2px solid transparent;color:rgba(235,235,245,0.3);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.5px;cursor:pointer;">Orders</button>
+        <button id="histTabFees" onclick="switchHistTab('fees')" style="flex:1;padding:10px;background:transparent;border:none;border-bottom:2px solid transparent;color:rgba(235,235,245,0.3);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.5px;cursor:pointer;">Fees</button>
+        <button id="histTabLiquidations" onclick="switchHistTab('liquidations')" style="flex:1;padding:10px;background:transparent;border:none;border-bottom:2px solid transparent;color:rgba(235,235,245,0.3);font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.5px;cursor:pointer;">Liquidations</button>
       </div>
       <!-- Total PnL -->
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
-        <span style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--muted);">Total</span>
-        <span id="historyTotalPnl" style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--green);">$0.00</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);">
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.4);">Total</span>
+        <span id="historyTotalPnl" style="font-family:'Space Mono',monospace;font-size:15px;font-weight:700;color:#00d4aa;">$0.00</span>
       </div>
       <div id="futuresHistory" data-testid="futures-history">
         <div style="font-family:'Space Grotesk',sans-serif;color:rgba(235,235,245,0.25);text-align:center;padding:16px;font-size:13px;font-weight:400;">No trades yet</div>
@@ -5184,10 +5178,10 @@ function toggleNavMenu() {
 
     <!-- Owner Pool Controls (hidden for non-owners) -->
     <div id="futuresOwnerPanel" data-testid="futures-owner-panel" style="display:none;">
-      <div class="card" style="border-color:rgba(39,174,96,0.3);background:linear-gradient(145deg,rgba(39,174,96,0.04),rgba(255,140,0,0.02));">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);letter-spacing:2px;">OWNER POOL CONTROLS</span>
+      <div class="card" style="border-color:rgba(0,212,170,0.15);border-radius:12px;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:#00d4aa;font-weight:700;letter-spacing:0.5px;">Owner Pool Controls</span>
         </div>
 
         <!-- GANG Pool -->
@@ -5352,48 +5346,66 @@ function toggleNavMenu() {
       </div>
     </div>
 
-    <!-- How to Trade FAQ -->
-    <div class="card" style="margin-top:14px;border-color:rgba(255,140,0,0.15);background:linear-gradient(135deg,rgba(255,140,0,0.03),transparent);">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#ff8c00;letter-spacing:2px;margin-bottom:16px;text-align:center;">HOW TO TRADE LEVERAGE</div>
-      <div style="display:flex;flex-direction:column;gap:12px;">
-
-        <div class="faq-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">1. SELECT YOUR PAIR</div>
-          <div style="font-size:13px;color:var(--text);line-height:1.5;">Choose from Crypto (BTC, ETH, SOL...), Stocks (AAPL, TSLA, NVDA...), or Commodities (Gold, Silver, Oil). Each pair shows a live TradingView chart and real-time price.</div>
-        </div>
-
-        <div class="faq-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">2. CHOOSE LONG OR SHORT</div>
-          <div style="font-size:13px;color:var(--text);line-height:1.5;"><span style="color:var(--green);font-weight:700;">LONG</span> = You profit when the price goes UP. <span style="color:var(--red);font-weight:700;">SHORT</span> = You profit when the price goes DOWN. Pick based on your market prediction.</div>
-        </div>
-
-        <div class="faq-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">3. SET YOUR LEVERAGE</div>
-          <div style="font-size:13px;color:var(--text);line-height:1.5;">Choose from 5x to 20x leverage. Higher leverage = bigger profits but also bigger risk. At 10x, a 1% price move gives you a 10% gain (or loss). <span style="color:var(--red);">Be careful with high leverage!</span></div>
-        </div>
-
-        <div class="faq-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">4. ENTER YOUR AMOUNT</div>
-          <div style="font-size:13px;color:var(--text);line-height:1.5;">Enter how many GANG tokens to use as margin. Your position size will be Amount x Leverage. You can set optional Take Profit and Stop Loss prices to auto-close.</div>
-        </div>
-
-        <div class="faq-item" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">5. OPEN & MANAGE POSITION</div>
-          <div style="font-size:13px;color:var(--text);line-height:1.5;">Hit the Open button to enter your trade. Your position appears below with live P&L tracking. Close anytime to take profit or cut losses. Payouts are in $GANG tokens from the liquidity pool.</div>
-        </div>
-
-        <div style="background:rgba(255,140,0,0.08);border:1px solid rgba(255,140,0,0.25);border-radius:10px;padding:14px;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:#ff8c00;letter-spacing:1px;margin-bottom:6px;">FEES & LIMITS</div>
-          <div style="font-size:12px;color:var(--text);line-height:1.6;">
-            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Opening Fee</span><span>0.3% <span style="color:var(--gold);font-size:10px;">(→ CRO)</span></span></div>
-            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Closing Fee</span><span>0.3% <span style="color:var(--gold);font-size:10px;">(→ CRO)</span></span></div>
-            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Max Leverage</span><span>20x</span></div>
-            <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="color:var(--muted);">Max Payout</span><span>20x margin</span></div>
-            <div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--muted);">Liquidation</span><span>When losses exceed margin</span></div>
+    <!-- How to Trade — Compact -->
+    <div class="card" style="margin-top:10px;margin-bottom:80px;border-color:rgba(255,255,255,0.06);border-radius:12px;">
+      <details style="cursor:pointer;">
+        <summary style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:#ff8c00;font-weight:700;letter-spacing:0.5px;list-style:none;display:flex;align-items:center;gap:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          How to Trade Leverage
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2" style="margin-left:auto;transition:transform .2s;"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">
+          <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:#ffb347;font-weight:700;margin-bottom:4px;">1. SELECT YOUR PAIR</div>
+            <div style="font-size:11px;color:rgba(235,235,245,0.5);line-height:1.5;">Choose from Crypto, Stocks, Forex, Indices, or Commodities. Each pair shows live TradingView charts.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:#ffb347;font-weight:700;margin-bottom:4px;">2. LONG OR SHORT</div>
+            <div style="font-size:11px;color:rgba(235,235,245,0.5);line-height:1.5;"><span style="color:#00d4aa;font-weight:700;">LONG</span> = profit when price goes UP. <span style="color:#ff4d6a;font-weight:700;">SHORT</span> = profit when price goes DOWN.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:#ffb347;font-weight:700;margin-bottom:4px;">3. SET LEVERAGE & AMOUNT</div>
+            <div style="font-size:11px;color:rgba(235,235,245,0.5);line-height:1.5;">Choose 5x-100x leverage. Enter margin amount. Set optional TP/SL prices.</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px;">
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:11px;color:#ffb347;font-weight:700;margin-bottom:4px;">4. FEES</div>
+            <div style="font-size:11px;color:rgba(235,235,245,0.5);line-height:1.5;">0.3% open + 0.3% close. All fees collected in CRO. Max payout: 20x margin.</div>
           </div>
         </div>
-      </div>
+      </details>
     </div>
+
+    <!-- Bottom Navigation Bar — Trading 212 Style -->
+    <nav data-testid="futures-bottom-nav" style="position:fixed;bottom:0;left:0;right:0;z-index:9998;background:rgba(8,10,20,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.06);padding:6px 0 max(6px,env(safe-area-inset-bottom));display:none;" id="futuresBottomNav">
+      <div style="display:flex;justify-content:space-around;align-items:center;max-width:500px;margin:0 auto;">
+        <button onclick="scrollToFuturesSection('chart')" class="bnav-btn bnav-active" data-testid="bnav-chart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          <span>Chart</span>
+        </button>
+        <button onclick="scrollToFuturesSection('trade')" class="bnav-btn" data-testid="bnav-trade">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+          <span>Trade</span>
+        </button>
+        <button onclick="scrollToFuturesSection('positions')" class="bnav-btn" data-testid="bnav-positions">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span>Positions</span>
+        </button>
+        <button onclick="scrollToFuturesSection('history')" class="bnav-btn" data-testid="bnav-history">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>History</span>
+        </button>
+        <button onclick="scrollToFuturesSection('pool')" class="bnav-btn" data-testid="bnav-pool">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Pool</span>
+        </button>
+      </div>
+    </nav>
+    <style>
+      .bnav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:rgba(235,235,245,0.3);font-family:'Space Grotesk',sans-serif;font-size:9px;font-weight:600;cursor:pointer;padding:6px 12px;border-radius:8px;transition:all .2s;letter-spacing:0.3px;}
+      .bnav-btn:hover,.bnav-btn.bnav-active{color:#ff8c00;}
+      .bnav-btn.bnav-active svg{stroke:#ff8c00;}
+      @media(min-width:769px){#futuresBottomNav{display:none!important;}}
+    </style>
 
   </div>
 
@@ -9519,6 +9531,9 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     if (btn.dataset.page === "otc") { renderOtcDeals(); updateOtcStats(); updateOtcBal(); }
     if (btn.dataset.page === "dao") { renderDaoProposals(); updateDaoStats(); }
     if (btn.dataset.page === "revenue") { loadRevRewardBalances(); }
+    // Toggle bottom nav for futures page
+    var bnav = document.getElementById('futuresBottomNav');
+    if (bnav) bnav.style.display = (btn.dataset.page === 'futures') ? 'block' : 'none';
     window.scrollTo(0,0);
   });
 });
@@ -12468,7 +12483,7 @@ function _showTxConfirmed() {
   stageConfirmed.classList.add('active');
   document.getElementById('txConfirmTitle').textContent = 'CONFIRMED';
 
-    // Generate fake tx hash
+    // Generate display tx hash
     const txHash = _generateTxHash();
     const shortHash = txHash.substring(0, 10) + '...' + txHash.substring(58);
     document.getElementById('txHashText').textContent = shortHash + ' — View on Cronoscan';
@@ -22766,52 +22781,56 @@ function openFuturesPosition() {
       var activeCurr = futuresState.currency || 'CRO';
 
       if (!state.signer) {
-        alert('WALLET NOT CONNECTED. Please connect your wallet first.');
+        showToast('Please connect your wallet first!', 'error');
         return;
       }
 
       var vaultAddr = getTradingVaultAddr();
       if (!vaultAddr) {
-        alert('NO VAULT ADDRESS. Contact support.');
+        showToast('No vault address configured. Contact support.', 'error');
         return;
       }
 
-      alert('STEP 1: Starting ' + activeCurr + ' deposit of ' + amt + ' to vault ' + vaultAddr.substring(0,10) + '...');
+      showToast('Starting ' + activeCurr + ' deposit to vault...', 'info');
 
       try {
         if (activeCurr === 'CRO') {
           // Simplest possible CRO transfer — sendTransaction to vault
-          alert('STEP 2: Sending ' + amt + ' CRO to vault. MetaMask will open now.');
+          showToast('Sending ' + amt + ' CRO to vault. Confirm in MetaMask...', 'info');
           var tx = await state.signer.sendTransaction({
             to: vaultAddr,
             value: ethers.parseEther(String(amt))
           });
-          alert('STEP 3: TX sent! Hash: ' + tx.hash + '\nWaiting for confirmation...');
+          showToast('TX sent! Hash: ' + tx.hash.substring(0,12) + '... Confirming...', 'info');
           await tx.wait();
-          alert('STEP 4: SUCCESS! ' + amt + ' CRO deposited to vault!');
+          showToast(amt + ' CRO deposited to vault!', 'success');
 
         } else if (activeCurr === 'GANG') {
           var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
           var gangABI = ['function transfer(address to, uint256 amount) returns (bool)'];
           var gangContract = new ethers.Contract(GANG_ADDR, gangABI, state.signer);
-          alert('STEP 2: Transferring ' + amt + ' GANG to vault. Wallet will open now.');
+          showToast('Transferring ' + amt + ' GANG to vault. Confirm in MetaMask...', 'info');
           var weiAmt = ethers.parseEther(String(amt));
           var tx = await gangContract.transfer(vaultAddr, weiAmt);
-          alert('STEP 3: TX sent! Hash: ' + tx.hash + '\nWaiting for confirmation...');
+          showToast('TX sent! Hash: ' + tx.hash.substring(0,12) + '... Confirming...', 'info');
           await tx.wait();
-          alert('STEP 4: SUCCESS! ' + amt + ' GANG deposited to vault!');
+          showToast(amt + ' GANG deposited to vault!', 'success');
 
         } else {
-          alert('STEP 2: Confirming ' + activeCurr + ' trade. Wallet will open now.');
+          showToast('Confirming ' + activeCurr + ' trade. Confirm in MetaMask...', 'info');
           var tx = await state.signer.sendTransaction({
             to: vaultAddr,
             value: ethers.parseEther('0')
           });
           await tx.wait();
-          alert('STEP 4: SUCCESS! ' + activeCurr + ' trade confirmed!');
+          showToast(activeCurr + ' trade confirmed on-chain!', 'success');
         }
       } catch(e) {
-        alert('ERROR at step: ' + (e.code || '') + '\n' + (e.shortMessage || e.message || String(e)));
+        if (e.code === 4001 || e.code === 'ACTION_REJECTED' || (e.message && e.message.includes('rejected'))) {
+          showToast('Transaction cancelled.', 'error');
+        } else {
+          showToast('Transaction failed: ' + (e.shortMessage || e.message || String(e)), 'error');
+        }
         return;
       }
 
@@ -22849,7 +22868,7 @@ function openFuturesPosition() {
 }
 
 function _doOpenFuturesPosition(amt, curr, price) {
-  // Fallback mocked version — overridden by real on-chain code when contract is deployed
+  // Legacy fallback — main flow uses inline on-chain logic in openFuturesPosition()
   const tp = parseFloat(document.getElementById('futuresTP')?.value) || 0;
   const sl = parseFloat(document.getElementById('futuresSL')?.value) || 0;
 
@@ -23725,6 +23744,35 @@ setTimeout(() => {
   // Update position PnL display every 1.5s
   setInterval(function() { updateFuturesPosInfo(); }, 1500);
 }, 2000);
+
+// ── Bottom Navigation Bar — show/hide based on active page ──
+function scrollToFuturesSection(section) {
+  var targets = {
+    'chart': '#futuresChart',
+    'trade': '#futuresOpenBtn',
+    'positions': '#futuresPositions',
+    'history': '#futuresHistory',
+    'pool': '#futuresOwnerPanel'
+  };
+  var sel = targets[section] || targets['chart'];
+  var el = document.querySelector(sel);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Update active state
+  document.querySelectorAll('.bnav-btn').forEach(function(btn) { btn.classList.remove('bnav-active'); });
+  var clicked = document.querySelector('[data-testid="bnav-' + section + '"]');
+  if (clicked) clicked.classList.add('bnav-active');
+}
+// Show bottom nav when on futures page
+(function() {
+  var origShowPage = window.showPage;
+  if (origShowPage) {
+    window.showPage = function(pg) {
+      origShowPage(pg);
+      var bnav = document.getElementById('futuresBottomNav');
+      if (bnav) bnav.style.display = (pg === 'futures') ? 'block' : 'none';
+    };
+  }
+})();
 
 // ─── REAL-TIME PRICE FEED via Binance WebSocket ───
 let _binanceWS = null;
