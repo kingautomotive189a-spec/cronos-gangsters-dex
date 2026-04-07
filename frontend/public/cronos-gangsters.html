@@ -4917,7 +4917,7 @@ function toggleNavMenu() {
         .cat-tab svg{flex-shrink:0;}
       </style>
       <!-- Asset Cards Grid -->
-      <div id="futuresAssetGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;padding:10px;max-height:260px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,140,0,0.2) transparent;"></div>
+      <div id="futuresAssetGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:10px;max-height:320px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,140,0,0.2) transparent;"></div>
       <!-- Compact Quick Filters -->
       <div style="padding:6px 10px 8px;border-top:1px solid rgba(255,255,255,0.3);display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
           <button class="pill-btn" onclick="filterFuturesCat('bigtech')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4285f4" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Big Tech</button>
@@ -4939,21 +4939,21 @@ function toggleNavMenu() {
         .pill-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:16px;border:1px solid rgba(255,255,255,0.35);background:rgba(255,255,255,0.15);color:rgba(235,235,245,0.55);font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
         .pill-btn:hover{border-color:rgba(255,140,0,0.4);color:rgba(235,235,245,0.8);background:rgba(255,140,0,0.1);}
         .pill-btn svg{flex-shrink:0;}
-        .asset-card{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.35);border-radius:8px;padding:8px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:4px;}
-        .asset-card:hover{border-color:rgba(255,140,0,0.4);background:rgba(255,140,0,0.08);transform:translateY(-1px);}
-        .asset-card.selected{border-color:#ff8c00;background:rgba(255,140,0,0.12);}
-        .asset-card .ac-logo{width:28px;height:28px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,0.15);}
-        .asset-card .ac-badge{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;}
+        .asset-card{background:#0e0e0e;border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:12px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:2px;}
+        .asset-card:hover{border-color:rgba(255,255,255,0.3);background:#161616;transform:translateY(-1px);}
+        .asset-card.selected{border-color:#ff8c00;background:rgba(255,140,0,0.08);}
+        .asset-card .ac-logo{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#1a1a1a;}
+        .asset-card .ac-badge{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;}
         @media(max-width:480px){
-          #futuresAssetGrid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr))!important;max-height:200px!important;}
+          #futuresAssetGrid{grid-template-columns:repeat(2,1fr)!important;max-height:280px!important;gap:8px!important;}
           .cat-tab{padding:8px 10px;font-size:10px;}
         }
         /* ── Mobile Contrast Fix for Crypto.com Wallet Browser ── */
-        #page-futures{background:#0d0f1a;}
-        .cat-tab{color:#b0b8cc;}
+        #page-futures{background:#000;}
+        .cat-tab{color:#888;}
         .cat-tab.active{color:#ff8c00;}
         .pill-btn{color:#b0b8cc;border-color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.1);}
-        .asset-card{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25);}
+        .asset-card{background:#0e0e0e;border-color:rgba(255,255,255,0.12);}
         .fulc-label{color:#b0bcd0;}
         .fulc-val{color:#e8ecf8;}
         .fulc-dotted{border-bottom-color:rgba(140,160,255,0.35);}
@@ -22251,20 +22251,20 @@ const FUTURES_PAIRS = {
   USDCHF: { yahoo: 'CHF=X', tv: 'FX:USDCHF', name: 'USD/CHF', type: 'forex', cat: ['forex'], logo: 'https://flagcdn.com/w80/ch.png', badge: 'CH', badgeColor: '#d52b1e', color: '#d52b1e' },
   EURGBP: { yahoo: 'EURGBP=X', tv: 'FX:EURGBP', name: 'EUR/GBP', type: 'forex', cat: ['forex'], logo: 'https://flagcdn.com/w80/eu.png', badge: 'EG', badgeColor: '#003399', color: '#003399' },
   // === INDICES (6) ===
-  NAS100: { yahoo: '^NDX', tv: 'PEPPERSTONE:NAS100', name: 'NASDAQ 100', type: 'index', cat: ['index'], badge: 'NDX', badgeColor: '#0096d6' },
-  SP500: { yahoo: '^GSPC', tv: 'PEPPERSTONE:US500', name: 'S&P 500', type: 'index', cat: ['index'], badge: '500', badgeColor: '#ef3e42' },
-  DJI: { yahoo: '^DJI', tv: 'TVC:DJI', name: 'Dow Jones', type: 'index', cat: ['index'], badge: 'DJI', badgeColor: '#1d6fa5' },
-  FTSE: { yahoo: '^FTSE', tv: 'TVC:UKX', name: 'FTSE 100', type: 'index', cat: ['index'], badge: 'FT', badgeColor: '#003366' },
-  DAX: { yahoo: '^GDAXI', tv: 'TVC:DEU40', name: 'DAX 40', type: 'index', cat: ['index'], badge: 'DAX', badgeColor: '#ffcc00' },
-  NIKKEI: { yahoo: '^N225', tv: 'TVC:NI225', name: 'Nikkei 225', type: 'index', cat: ['index'], badge: 'NK', badgeColor: '#bc002d' },
+  NAS100: { yahoo: '^NDX', tv: 'PEPPERSTONE:NAS100', name: 'NASDAQ 100', type: 'index', cat: ['index'], badge: '📈', badgeColor: '#0096d6', emoji: true },
+  SP500: { yahoo: '^GSPC', tv: 'PEPPERSTONE:US500', name: 'S&P 500', type: 'index', cat: ['index'], badge: '🇺🇸', badgeColor: '#ef3e42', emoji: true },
+  DJI: { yahoo: '^DJI', tv: 'TVC:DJI', name: 'Dow Jones', type: 'index', cat: ['index'], badge: '🏛️', badgeColor: '#1d6fa5', emoji: true },
+  FTSE: { yahoo: '^FTSE', tv: 'TVC:UKX', name: 'FTSE 100', type: 'index', cat: ['index'], badge: '🇬🇧', badgeColor: '#003366', emoji: true },
+  DAX: { yahoo: '^GDAXI', tv: 'TVC:DEU40', name: 'DAX 40', type: 'index', cat: ['index'], badge: '🇩🇪', badgeColor: '#ffcc00', emoji: true },
+  NIKKEI: { yahoo: '^N225', tv: 'TVC:NI225', name: 'Nikkei 225', type: 'index', cat: ['index'], badge: '🇯🇵', badgeColor: '#bc002d', emoji: true },
   // === COMMODITIES (7) ===
-  GOLD: { yahoo: 'GC=F', tv: 'TVC:GOLD', name: 'Gold', type: 'commodity', cat: ['commodity','metals'], badge: 'AU', badgeColor: '#ffd700' },
-  SILVER: { yahoo: 'SI=F', tv: 'TVC:SILVER', name: 'Silver', type: 'commodity', cat: ['commodity','metals'], badge: 'AG', badgeColor: '#c0c0c0' },
-  PLATINUM: { yahoo: 'PL=F', tv: 'TVC:PLATINUM', name: 'Platinum', type: 'commodity', cat: ['commodity','metals'], badge: 'PT', badgeColor: '#e5e4e2' },
-  OIL: { yahoo: 'CL=F', tv: 'TVC:USOIL', name: 'Crude Oil', type: 'commodity', cat: ['commodity','energy'], badge: 'OIL', badgeColor: '#2d2d2d' },
-  NATGAS: { yahoo: 'NG=F', tv: 'TVC:NATGAS', name: 'Natural Gas', type: 'commodity', cat: ['commodity','energy'], badge: 'GAS', badgeColor: '#4caf50' },
-  COPPER: { yahoo: 'HG=F', tv: 'TVC:COPPER', name: 'Copper', type: 'commodity', cat: ['commodity','metals'], badge: 'CU', badgeColor: '#b87333' },
-  WHEAT: { yahoo: 'ZW=F', tv: 'TVC:WHEAT', name: 'Wheat', type: 'commodity', cat: ['commodity'], badge: 'WH', badgeColor: '#daa520' }
+  GOLD: { yahoo: 'GC=F', tv: 'TVC:GOLD', name: 'Gold', type: 'commodity', cat: ['commodity','metals'], badge: '🥇', badgeColor: '#ffd700', emoji: true },
+  SILVER: { yahoo: 'SI=F', tv: 'TVC:SILVER', name: 'Silver', type: 'commodity', cat: ['commodity','metals'], badge: '🥈', badgeColor: '#c0c0c0', emoji: true },
+  PLATINUM: { yahoo: 'PL=F', tv: 'TVC:PLATINUM', name: 'Platinum', type: 'commodity', cat: ['commodity','metals'], badge: '💎', badgeColor: '#e5e4e2', emoji: true },
+  OIL: { yahoo: 'CL=F', tv: 'TVC:USOIL', name: 'Crude Oil', type: 'commodity', cat: ['commodity','energy'], badge: '🛢️', badgeColor: '#2d2d2d', emoji: true },
+  NATGAS: { yahoo: 'NG=F', tv: 'TVC:NATGAS', name: 'Natural Gas', type: 'commodity', cat: ['commodity','energy'], badge: '🔥', badgeColor: '#4caf50', emoji: true },
+  COPPER: { yahoo: 'HG=F', tv: 'TVC:COPPER', name: 'Copper', type: 'commodity', cat: ['commodity','metals'], badge: '🟤', badgeColor: '#b87333', emoji: true },
+  WHEAT: { yahoo: 'ZW=F', tv: 'TVC:WHEAT', name: 'Wheat', type: 'commodity', cat: ['commodity'], badge: '🌾', badgeColor: '#daa520', emoji: true }
 };
 
 let futuresState = {
@@ -22931,21 +22931,24 @@ function renderAssetGrid(cat) {
     if (_prev24hPrice[key] && _prev24hPrice[key] > 0) {
       change = ((price - _prev24hPrice[key]) / _prev24hPrice[key] * 100);
     }
-    var changeColor = change >= 0 ? '#26a69a' : '#ef5350';
+    var changeColor = change >= 0 ? '#00d4aa' : '#ff4444';
     var changePrefix = change >= 0 ? '+' : '';
+    var changeArrow = change >= 0 ? '↗' : '↘';
     var selected = futuresState.pair === key ? ' selected' : '';
-    // Logo or badge
+    // Logo: emoji or image with green dot like Trading 212
     var logoHtml = '';
-    if (p.logo) {
-      logoHtml = '<img src="' + p.logo + '" class="ac-logo" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" /><span class="ac-badge" style="display:none;background:' + (p.color || p.badgeColor || '#555') + ';">' + (p.badge || key.charAt(0)) + '</span>';
+    if (p.emoji) {
+      logoHtml = '<span style="font-size:28px;line-height:1;filter:drop-shadow(0 0 4px rgba(255,255,255,0.15));">' + p.badge + '</span><span style="width:8px;height:8px;border-radius:50%;background:#00d4aa;position:absolute;bottom:2px;right:2px;border:2px solid #0a0a0a;"></span>';
+    } else if (p.logo) {
+      logoHtml = '<img src="' + p.logo + '" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#1a1a1a;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" /><span class="ac-badge" style="display:none;background:' + (p.color || p.badgeColor || '#555') + ';width:36px;height:36px;font-size:12px;">' + (p.badge || key.charAt(0)) + '</span><span style="width:8px;height:8px;border-radius:50%;background:#00d4aa;position:absolute;bottom:2px;right:2px;border:2px solid #0a0a0a;"></span>';
     } else {
-      logoHtml = '<span class="ac-badge" style="background:' + (p.badgeColor || '#555') + ';">' + (p.badge || key.substring(0,2)) + '</span>';
+      logoHtml = '<span class="ac-badge" style="background:' + (p.badgeColor || '#555') + ';width:36px;height:36px;font-size:12px;">' + (p.badge || key.substring(0,2)) + '</span>';
     }
     html += '<div class="asset-card' + selected + '" onclick="selectFuturesPair(\'' + key + '\')" data-testid="asset-card-' + key.toLowerCase() + '">' +
-      logoHtml +
-      '<div style="font-family:\'Space Grotesk\',sans-serif;font-size:12px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + p.name + '</div>' +
-      '<div style="font-family:\'Space Mono\',monospace;font-size:13px;color:var(--text);font-weight:700;">' + (price > 0 ? '$' + _fmtPrice(price) : '—') + '</div>' +
-      '<div style="font-size:10px;color:' + changeColor + ';font-weight:600;">' + (price > 0 ? changePrefix + change.toFixed(2) + '%' : '') + '</div>' +
+      '<div style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;">' + logoHtml + '</div>' +
+      '<div style="font-family:\'Space Grotesk\',sans-serif;font-size:13px;color:#fff;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:4px;">' + p.name + '</div>' +
+      '<div style="font-family:\'Space Mono\',monospace;font-size:14px;color:#fff;font-weight:700;">' + (price > 0 ? '$' + _fmtPrice(price) : '—') + '</div>' +
+      '<div style="font-size:11px;color:' + changeColor + ';font-weight:700;">' + (price > 0 ? changeArrow + ' ' + changePrefix + change.toFixed(2) + '%' : '') + '</div>' +
     '</div>';
   }
   grid.innerHTML = html;

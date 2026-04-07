@@ -19,21 +19,22 @@ Web3 DeFi DApp on Cronos blockchain. Single-file HTML deployment (~28K lines) fo
 - DexScreener chart → CRO/GANG LP pair
 - `futuresBottomNav` overlay fix (`top:auto`)
 - Horizontal scroll lock (`overflow-x:hidden` + `touch-action:pan-y`)
-- **Homepage layout reorder**: Leverage showcase with LIVE prices (12 assets from Binance WS) → gangster cards → earn highlights → swap box
-- **Live price grid on homepage**: Bitcoin $68K, ETH $2K, NVDA $176, AAPL $252, Gold $4.7K, Nasdaq $24K, EUR/USD etc. — updates every 3 seconds via Binance WebSocket
-- **Leverage trading isolation**: Only shows on homepage (showcase) + leverage page — confirmed NOT on farms/liquidity/other pages
+- Homepage layout: Leverage showcase (live prices) → gangster cards → earn → swap
+- Live price grid on homepage (12 assets, Binance WS, 3s refresh)
+- Leverage isolation: homepage + leverage page ONLY
+- **Trading 212 style asset cards**: Pure black backgrounds (#000/#0e0e0e), bigger logos (36px), emoji icons for commodities/indices (🥇 Gold, 🛢️ Oil, 🌾 Wheat, 🇺🇸 S&P, etc.), green status dots, change arrows (↗↘), bolder text, 2-column grid
 
 ## Key Technical Notes
 - NEVER break into multiple files
-- Small search_replace chunks (50-100 lines max)
+- Small search_replace chunks
 - Do NOT touch wallet logic
 - Always generate ZIP after changes
 - `futuresBottomNav` MUST have `top:auto`
 - All `.page` divs need `overflow-x:hidden; max-width:100vw`
-- Homepage prices come from `futuresState.prices[]` (Binance WS) + `TOKENS[].price` (CoinGecko)
+- Commodities/indices use `emoji: true` flag for large emoji display
 
 ## Upcoming Tasks (P1)
-- Revamp rest of UI to match Trading 212 / Fulcrom Finance styling
+- Continue UI polish across other pages
 - CEX listings feature
 - Multi-chain expansion
 
