@@ -22010,8 +22010,50 @@ try {
   if (vol.totalTrades) futuresState.totalTrades = vol.totalTrades;
 } catch {}
 
-// Auto-clear old fake positions (pre-contract era) — FULLY DISABLED
-// All positions are now real on-chain trades and must NEVER be wiped
+// Auto-clear ALL fake positions/history/pools from before vault era — ONE TIME RESET
+(function() {
+  var resetKey = 'gang_futures_vault_reset_v1';
+  if (!localStorage.getItem(resetKey)) {
+    try {
+      var raw = localStorage.getItem('gang_futures_v2');
+      if (raw) {
+        var s = JSON.parse(raw);
+        s.positions = [];
+        s.history = [];
+        s.poolBalance = 0;
+        s.ownerDeposited = 0;
+        s.poolBalanceCRO = 0;
+        s.ownerDepositedCRO = 0;
+        s.volume24h = 0;
+        s.volume24hTimestamp = 0;
+        s.totalVolume = 0;
+        s.totalTrades = 0;
+        ['BTC','ETH','SOL','BNB','USDC','USDT'].forEach(function(t) {
+          s['poolBalance'+t] = 0;
+          s['ownerDeposited'+t] = 0;
+        });
+        localStorage.setItem('gang_futures_v2', JSON.stringify(s));
+      }
+      localStorage.setItem('gang_futures_vol', '{}');
+      localStorage.setItem(resetKey, '1');
+      // Reload state
+      futuresState.positions = [];
+      futuresState.history = [];
+      futuresState.poolBalance = 0;
+      futuresState.ownerDeposited = 0;
+      futuresState.poolBalanceCRO = 0;
+      futuresState.ownerDepositedCRO = 0;
+      futuresState.volume24h = 0;
+      futuresState.totalVolume = 0;
+      futuresState.totalTrades = 0;
+      ['BTC','ETH','SOL','BNB','USDC','USDT'].forEach(function(t) {
+        futuresState['poolBalance'+t] = 0;
+        futuresState['ownerDeposited'+t] = 0;
+      });
+      console.log('[LEVERAGE] Auto-cleared all fake data. Fresh start.');
+    } catch(e) { console.warn('Auto-clear error:', e); }
+  }
+})();
 
 // ══ TRADING VAULT CONTRACT ══
 const TRADING_VAULT_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"deposit","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"getBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalDeposited","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"userDeposits","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address payable","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawTo","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
