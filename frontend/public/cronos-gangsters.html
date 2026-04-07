@@ -25876,30 +25876,29 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
 
   // Clear ALL old/legacy positions from LocalStorage
   window.clearAllFuturesPositions = function() {
-    // Only clear OLD positions (non-onChain legacy ones) and trade history
-    // NEVER touch active on-chain positions
-    const activeOnChain = futuresState.positions.filter(function(p) { return p.onChain; });
-    const oldPositions = futuresState.positions.filter(function(p) { return !p.onChain; });
+    if (!confirm('FULL RESET: Clear ALL positions, history, pool balances, and counters?\n\nThis cannot be undone.')) return;
     
-    if (oldPositions.length === 0 && futuresState.history.length === 0) {
-      showToast('Nothing to clear — no old positions or history found.', 'info');
-      return;
-    }
-    
-    var msg = '';
-    if (oldPositions.length > 0) msg += oldPositions.length + ' old (pre-contract) positions';
-    if (futuresState.history.length > 0) msg += (msg ? ' and ' : '') + futuresState.history.length + ' trade history entries';
-    
-    if (!confirm('Clear ' + msg + '?\n\nYour ' + activeOnChain.length + ' active on-chain position(s) will NOT be touched.')) return;
-    
-    // Keep active on-chain positions, remove old ones
-    futuresState.positions = activeOnChain;
+    futuresState.positions = [];
     futuresState.history = [];
+    futuresState.poolBalance = 0;
+    futuresState.ownerDeposited = 0;
+    futuresState.poolBalanceCRO = 0;
+    futuresState.ownerDepositedCRO = 0;
+    futuresState.volume24h = 0;
+    futuresState.volume24hTimestamp = 0;
+    futuresState.totalVolume = 0;
+    futuresState.totalTrades = 0;
+    ['BTC','ETH','SOL','BNB','USDC','USDT'].forEach(function(t) {
+      futuresState['poolBalance'+t] = 0;
+      futuresState['ownerDeposited'+t] = 0;
+    });
     saveFuturesState();
+    localStorage.setItem('gang_futures_vol', '{}');
     updateFuturesPositions();
     updateFuturesPool();
     renderFuturesHistory();
-    showToast('Cleared ' + msg + '. Active positions untouched.', 'success');
+    if (typeof updateAccountOverview === 'function') updateAccountOverview();
+    showToast('Everything cleared. Fresh start!', 'success');
   };
 
   // ═══════════════════════════════════════════════════
