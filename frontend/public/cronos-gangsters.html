@@ -830,6 +830,18 @@
   </div>
 </header>
 <script>
+// ═══ FORCE WIPE ALL FAKE LEVERAGE DATA — RUNS IMMEDIATELY ═══
+(function(){
+  var k = 'gang_futures_vault_nuke_v2';
+  if (!localStorage.getItem(k)) {
+    localStorage.removeItem('gang_futures_v2');
+    localStorage.removeItem('gang_futures');
+    localStorage.removeItem('gang_futures_vol');
+    localStorage.setItem(k, Date.now());
+    console.log('[RESET] All fake leverage data wiped.');
+  }
+})();
+
 function toggleNavMenu() {
   const nav = document.getElementById('mainNav');
   const btn = document.getElementById('hamburgerBtn');
