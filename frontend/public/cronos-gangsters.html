@@ -4986,8 +4986,9 @@ function toggleNavMenu() {
           </div>
         </div>
       </div>
-      <div id="futuresChart" style="height:380px;background:#0a0c1c;">
+      <div id="futuresChart" style="height:380px;background:#0a0c1c;position:relative;overflow:hidden;">
         <div id="tradingview_chart" style="width:100%;height:100%;"></div>
+        <div id="chartPositionOverlay" style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:5;"></div>
       </div>
     </div>
 
@@ -22616,6 +22617,9 @@ function loadFuturesChart(pair) {
   if (!el) return;
   const p = FUTURES_PAIRS[pair];
   el.innerHTML = '';
+  // Clear position overlay when chart changes
+  var overlay = document.getElementById('chartPositionOverlay');
+  if (overlay) overlay.innerHTML = '';
   const script = document.createElement('script');
   script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
   script.type = 'text/javascript';
@@ -22663,6 +22667,65 @@ function loadFuturesChart(pair) {
   container.appendChild(inner);
   container.appendChild(script);
   el.appendChild(container);
+  // Render position lines after chart loads
+  setTimeout(function() { renderChartPositionLines(); }, 2000);
+}
+
+// ── Chart Position Entry Lines (Trading 212 style) ──
+function renderChartPositionLines() {
+  var overlay = document.getElementById('chartPositionOverlay');
+  if (!overlay) return;
+  var chartBox = document.getElementById('futuresChart');
+  if (!chartBox) return;
+  var chartH = chartBox.offsetHeight;
+  var currentPair = futuresState.pair;
+  var currentPrice = futuresState.prices[currentPair] || 0;
+  if (currentPrice <= 0) { overlay.innerHTML = ''; return; }
+  var myWallet = (state.address || 'demo').toLowerCase();
+  var openPositions = futuresState.positions.filter(function(p) {
+    return p.wallet === myWallet && p.status !== 'closed' && p.pair === currentPair;
+  });
+  if (openPositions.length === 0) { overlay.innerHTML = ''; return; }
+  // TradingView chart: toolbar ~6% top, volume pane ~22% bottom
+  var chartAreaTop = chartH * 0.06;
+  var chartAreaBottom = chartH * 0.78;
+  var chartAreaHeight = chartAreaBottom - chartAreaTop;
+  // Estimate visible price range (±2.5% for 5min chart)
+  var highPrice = currentPrice * 1.025;
+  var lowPrice = currentPrice * 0.975;
+  var html = '';
+  for (var i = 0; i < openPositions.length; i++) {
+    var pos = openPositions[i];
+    var entryPrice = pos.entryPrice;
+    var isLong = (pos.side || '').toLowerCase() === 'long';
+    var lineColor = isLong ? '#00d4aa' : '#ff4d6a';
+    var bgColor = isLong ? 'rgba(0,212,170,0.15)' : 'rgba(255,77,106,0.15)';
+    var sideLabel = isLong ? 'LONG' : 'SHORT';
+    var pctFromHigh = (highPrice - entryPrice) / (highPrice - lowPrice);
+    var yPos = chartAreaTop + (pctFromHigh * chartAreaHeight);
+    if (yPos < chartAreaTop - 10) yPos = chartAreaTop - 10;
+    if (yPos > chartAreaBottom + 10) yPos = chartAreaBottom + 10;
+    var priceDiff = (currentPrice - entryPrice) / entryPrice;
+    var pnlPct = isLong ? priceDiff * pos.leverage * 100 : -priceDiff * pos.leverage * 100;
+    var pnlColor = pnlPct >= 0 ? '#00d4aa' : '#ff4d6a';
+    var pnlSign = pnlPct >= 0 ? '+' : '';
+    // Entry price dashed line
+    html += '<div style="position:absolute;top:' + yPos + 'px;left:0;right:0;height:0;border-top:2px dashed ' + lineColor + ';opacity:0.85;"></div>';
+    // Price label on right
+    html += '<div style="position:absolute;top:' + (yPos - 12) + 'px;right:4px;background:' + lineColor + ';color:#000;font-family:\'Space Mono\',monospace;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;white-space:nowrap;">' + sideLabel + ' $' + _fmtPrice(entryPrice) + '</div>';
+    // PnL badge below price label
+    html += '<div style="position:absolute;top:' + (yPos + 2) + 'px;right:4px;background:' + bgColor + ';color:' + pnlColor + ';font-family:\'Space Mono\',monospace;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;white-space:nowrap;">' + pnlSign + pnlPct.toFixed(2) + '%</div>';
+    // Liquidation price line
+    var liqMove = 1 / pos.leverage;
+    var liqPrice = isLong ? entryPrice * (1 - liqMove) : entryPrice * (1 + liqMove);
+    var liqPctFromHigh = (highPrice - liqPrice) / (highPrice - lowPrice);
+    var liqY = chartAreaTop + (liqPctFromHigh * chartAreaHeight);
+    if (liqY >= chartAreaTop - 10 && liqY <= chartAreaBottom + 10) {
+      html += '<div style="position:absolute;top:' + liqY + 'px;left:0;right:0;height:0;border-top:1px dotted #ff2222;opacity:0.5;"></div>';
+      html += '<div style="position:absolute;top:' + (liqY - 10) + 'px;right:4px;background:#ff2222;color:#fff;font-family:\'Space Mono\',monospace;font-size:8px;font-weight:700;padding:1px 4px;border-radius:2px;opacity:0.7;">LIQ $' + _fmtPrice(liqPrice) + '</div>';
+    }
+  }
+  overlay.innerHTML = html;
 }
 
 function setFuturesPriceDisplay(pair, price, change) {
@@ -23175,6 +23238,7 @@ function openFuturesPosition() {
       if (typeof addPoints === 'function') addPoints(10, 'Leverage trade');
       updateFuturesPositions();
       updateFuturesPool();
+      renderChartPositionLines();
     }
   });
 }
@@ -23380,6 +23444,7 @@ function closeFuturesPosition(id) {
       updateFuturesPool();
       if (typeof renderFuturesHistory === 'function') renderFuturesHistory();
       if (typeof updateAccountOverview === 'function') updateAccountOverview();
+      renderChartPositionLines();
     }
   });
 }
@@ -24179,6 +24244,7 @@ function connectBinanceWS() {
         // Update display if this pair is currently viewed
         if (futuresState.pair === pair) {
           setFuturesPriceDisplay(pair, price, change24h);
+          renderChartPositionLines();
         }
         
         // Update PnL for open positions (throttled)
@@ -24309,6 +24375,7 @@ function simulateFuturesTick() {
     }
     // Update asset card prices in the grid (all pairs)
     renderAssetGrid(_currentCatFilter || 'all');
+    renderChartPositionLines();
     updateFuturesPosInfo();
     updateFuturesPositions();
   }
