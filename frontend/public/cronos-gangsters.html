@@ -23510,36 +23510,82 @@ function updateFuturesPool() {
   const yourBal = document.getElementById('futuresYourBalance');
   const curr = futuresState.currency;
   
-  const gangPool = futuresState.poolBalance;
-  const croPool = futuresState.poolBalanceCRO;
-  var activePool;
-  if (curr === 'CRO') activePool = croPool;
-  else if (curr === 'GANG') activePool = gangPool;
-  else activePool = futuresState['poolBalance' + curr] || 0;
-  const fmtPool = activePool >= 1e6 ? (activePool/1e6).toFixed(2)+'M' : activePool >= 1e3 ? (activePool/1e3).toFixed(1)+'K' : activePool.toFixed(activePool < 1 ? 6 : 2);
-  if (pool) pool.textContent = fmtPool + ' ' + curr;
+  // Read REAL CRO balance from vault on-chain
+  var vaultAddr = getTradingVaultAddr();
+  if (vaultAddr && state.provider) {
+    state.provider.getBalance(vaultAddr).then(function(rawBal) {
+      var realCroBal = parseFloat(ethers.formatEther(rawBal));
+      // Update CRO pool display with REAL on-chain balance
+      var croPoolEl = document.getElementById('futuresOwnerPoolCro');
+      if (croPoolEl) croPoolEl.textContent = realCroBal.toFixed(realCroBal < 1 ? 4 : 2);
+      var croProfitEl = document.getElementById('futuresOwnerProfitCro');
+      if (croProfitEl) {
+        var dep = futuresState.ownerDepositedCRO || 0;
+        var profit = realCroBal - dep;
+        croProfitEl.textContent = (profit >= 0 ? '+' : '') + profit.toFixed(profit < 1 && profit > -1 ? 4 : 2);
+        croProfitEl.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
+      }
+      // Update header pool display if CRO selected
+      if (curr === 'CRO' && pool) {
+        var fmtPool = realCroBal >= 1e6 ? (realCroBal/1e6).toFixed(2)+'M' : realCroBal >= 1e3 ? (realCroBal/1e3).toFixed(1)+'K' : realCroBal.toFixed(realCroBal < 1 ? 4 : 2);
+        pool.textContent = fmtPool + ' CRO';
+      }
+      // Sync localStorage with real balance
+      futuresState.poolBalanceCRO = realCroBal;
+      saveFuturesState();
+    }).catch(function(){});
 
-  // Owner panel - GANG
-  const gangPoolEl = document.getElementById('futuresOwnerPoolGang');
-  const gangProfitEl = document.getElementById('futuresOwnerProfitGang');
-  if (gangPoolEl) gangPoolEl.textContent = gangPool.toFixed(2);
-  if (gangProfitEl) {
-    const profit = gangPool - futuresState.ownerDeposited;
-    gangProfitEl.textContent = (profit >= 0 ? '+' : '') + profit.toFixed(2);
-    gangProfitEl.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
+    // Also read GANG balance from vault
+    try {
+      var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+      var gangABI = ['function balanceOf(address) view returns (uint256)'];
+      var gangContract = new ethers.Contract(GANG_ADDR, gangABI, state.provider);
+      gangContract.balanceOf(vaultAddr).then(function(gangRaw) {
+        var realGangBal = parseFloat(ethers.formatEther(gangRaw));
+        var gangPoolEl = document.getElementById('futuresOwnerPoolGang');
+        if (gangPoolEl) gangPoolEl.textContent = realGangBal.toFixed(realGangBal < 1 ? 4 : 2);
+        var gangProfitEl = document.getElementById('futuresOwnerProfitGang');
+        if (gangProfitEl) {
+          var dep = futuresState.ownerDeposited || 0;
+          var profit = realGangBal - dep;
+          gangProfitEl.textContent = (profit >= 0 ? '+' : '') + profit.toFixed(profit < 1 && profit > -1 ? 4 : 2);
+          gangProfitEl.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
+        }
+        if (curr === 'GANG' && pool) {
+          var fmtPool = realGangBal >= 1e6 ? (realGangBal/1e6).toFixed(2)+'M' : realGangBal >= 1e3 ? (realGangBal/1e3).toFixed(1)+'K' : realGangBal.toFixed(realGangBal < 1 ? 4 : 2);
+          pool.textContent = fmtPool + ' GANG';
+        }
+        futuresState.poolBalance = realGangBal;
+        saveFuturesState();
+      }).catch(function(){});
+    } catch(e) {}
+  } else {
+    // Fallback to localStorage if no provider
+    var gangPool = futuresState.poolBalance;
+    var croPool = futuresState.poolBalanceCRO;
+    var activePool = curr === 'CRO' ? croPool : curr === 'GANG' ? gangPool : (futuresState['poolBalance' + curr] || 0);
+    var fmtPool = activePool >= 1e6 ? (activePool/1e6).toFixed(2)+'M' : activePool >= 1e3 ? (activePool/1e3).toFixed(1)+'K' : activePool.toFixed(activePool < 1 ? 6 : 2);
+    if (pool) pool.textContent = fmtPool + ' ' + curr;
+
+    var gangPoolEl = document.getElementById('futuresOwnerPoolGang');
+    if (gangPoolEl) gangPoolEl.textContent = gangPool.toFixed(2);
+    var gangProfitEl = document.getElementById('futuresOwnerProfitGang');
+    if (gangProfitEl) {
+      var profit = gangPool - futuresState.ownerDeposited;
+      gangProfitEl.textContent = (profit >= 0 ? '+' : '') + profit.toFixed(2);
+      gangProfitEl.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
+    }
+    var croPoolEl = document.getElementById('futuresOwnerPoolCro');
+    if (croPoolEl) croPoolEl.textContent = croPool.toFixed(2);
+    var croProfitEl = document.getElementById('futuresOwnerProfitCro');
+    if (croProfitEl) {
+      var profit2 = croPool - futuresState.ownerDepositedCRO;
+      croProfitEl.textContent = (profit2 >= 0 ? '+' : '') + profit2.toFixed(2);
+      croProfitEl.style.color = profit2 >= 0 ? 'var(--green)' : 'var(--red)';
+    }
   }
 
-  // Owner panel - CRO
-  const croPoolEl = document.getElementById('futuresOwnerPoolCro');
-  const croProfitEl = document.getElementById('futuresOwnerProfitCro');
-  if (croPoolEl) croPoolEl.textContent = croPool.toFixed(2);
-  if (croProfitEl) {
-    const profit = croPool - futuresState.ownerDepositedCRO;
-    croProfitEl.textContent = (profit >= 0 ? '+' : '') + profit.toFixed(2);
-    croProfitEl.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
-  }
-
-  // Owner panels - BTC, ETH, SOL, BNB, USDC, USDT
+  // Other pools (BTC, ETH, SOL, BNB, USDC, USDT) — keep localStorage for now
   ['BTC','ETH','SOL','BNB','USDC','USDT'].forEach(function(t) {
     var suffix = t.charAt(0) + t.slice(1).toLowerCase();
     var poolEl = document.getElementById('futuresOwnerPool' + suffix);
@@ -23559,7 +23605,7 @@ function updateFuturesPool() {
   // Show owner panel
   const ownerPanel = document.getElementById('futuresOwnerPanel');
   if (ownerPanel) {
-    const isOwner = state.address?.toLowerCase() === TREASURY.address.toLowerCase();
+    const isOwner = state.address?.toLowerCase() === TREASURY_OWNER.toLowerCase();
     ownerPanel.style.display = isOwner ? 'block' : 'none';
   }
 }
