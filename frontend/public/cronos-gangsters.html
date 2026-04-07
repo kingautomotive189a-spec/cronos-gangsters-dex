@@ -22485,13 +22485,28 @@ async function deployTradingVault() {
     var btn = document.getElementById('deployTradingVaultBtn');
     if (btn) { btn.disabled = true; btn.textContent = 'DEPLOYING...'; }
     showToast('Deploying upgraded Trading Vault on Cronos...', 'info');
-    const factory = new ethers.ContractFactory(TRADING_VAULT_ABI, '0x' + TRADING_VAULT_BIN, state.signer);
+    
+    // Deploy using raw transaction for maximum compatibility
+    const bytecode = '0x' + TRADING_VAULT_BIN;
+    const nonce = await state.provider.getTransactionCount(await state.signer.getAddress());
     const feeData = await state.provider.getFeeData();
-    const gp = feeData.gasPrice || ethers.parseUnits('5000', 'gwei');
-    const contract = await factory.deploy({ gasLimit: 3000000, gasPrice: gp, type: 0 });
-    showToast('TX sent! Waiting for confirmation...', 'info');
-    await contract.waitForDeployment();
-    const addr = await contract.getAddress();
+    const gp = feeData.gasPrice || 5000000000000n;
+    
+    const tx = await state.signer.sendTransaction({
+      data: bytecode,
+      gasLimit: 4000000,
+      gasPrice: gp,
+      nonce: nonce,
+      type: 0,
+      value: 0
+    });
+    
+    showToast('TX sent: ' + tx.hash.substring(0,12) + '... Waiting...', 'info');
+    const receipt = await tx.wait();
+    const addr = receipt.contractAddress;
+    
+    if (!addr) { showToast('Deploy TX confirmed but no contract address found', 'error'); return; }
+    
     localStorage.setItem(LS_TRADING_VAULT, addr);
     showToast('New Vault deployed at ' + addr + ' — GANG withdrawals now enabled!', 'success');
     if (btn) { btn.disabled = false; btn.textContent = 'DEPLOYED'; }
@@ -22501,7 +22516,10 @@ async function deployTradingVault() {
     if (bannerEl) bannerEl.style.borderColor = 'rgba(0,212,170,0.3)';
   } catch(e) {
     console.error('Vault deploy error:', e);
-    showToast('Deploy failed: ' + (e.shortMessage || e.message), 'error');
+    var msg = e.shortMessage || e.message || String(e);
+    if (e.info && e.info.error) msg = e.info.error.message || msg;
+    if (e.error && e.error.message) msg = e.error.message;
+    showToast('Deploy failed: ' + msg, 'error');
     var btn2 = document.getElementById('deployTradingVaultBtn');
     if (btn2) { btn2.disabled = false; btn2.textContent = 'DEPLOY NEW VAULT'; }
   }
