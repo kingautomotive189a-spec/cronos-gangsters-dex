@@ -22651,10 +22651,8 @@ function openFuturesPosition() {
       { label: 'Est. Liq. Price', value: '$' + _fmtPrice(estLiqPrice), cls: 'red' },
     ],
     onConfirm: async function() {
-      // ── REAL ON-CHAIN CONFIRMATION — MetaMask confirms every trade ──
       var activeCurr = futuresState.currency || 'CRO';
       showToast('Processing ' + activeCurr + ' trade...', 'info');
-      console.log('[LEVERAGE] onConfirm OPEN: currency=' + activeCurr + ', amt=' + amt + ', signer=' + !!state.signer + ', provider=' + !!state.provider);
 
       if (!state.signer) {
         showToast('Wallet not connected! Connect first.', 'error');
@@ -22663,77 +22661,56 @@ function openFuturesPosition() {
 
       try {
         const userAddr = await state.signer.getAddress();
-        console.log('[LEVERAGE] userAddr=' + userAddr);
         const provider = state.provider || new ethers.BrowserProvider(window.ethereum);
+        const treasury = TREASURY_OWNER;
 
         if (activeCurr === 'CRO') {
-          // Check CRO balance
           const rawBal = await provider.getBalance(userAddr);
           const croBal = parseFloat(ethers.formatEther(rawBal));
-          console.log('[LEVERAGE] CRO bal=' + croBal + ', need=' + amt);
           if (croBal < amt) {
             showToast('Insufficient CRO! Have ' + croBal.toFixed(2) + ', need ' + amt.toFixed(2), 'error');
             return;
           }
-          showToast('Opening MetaMask for ' + amt.toFixed(2) + ' CRO...', 'info');
+          showToast('Confirm ' + amt.toFixed(2) + ' CRO deposit in MetaMask...', 'info');
           const weiValue = ethers.parseEther(String(Math.floor(amt * 1e6) / 1e6));
           const tx = await state.signer.sendTransaction({
-            to: userAddr,
-            value: weiValue,
-            data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:OPEN:' + futuresState.pair + ':' + futuresState.side + ':' + futuresState.leverage + 'x:' + amt.toFixed(4) + 'CRO')).map(b => b.toString(16).padStart(2,'0')).join('')
+            to: treasury,
+            value: weiValue
           });
           showToast('TX sent! Hash: ' + tx.hash.substring(0, 12) + '...', 'info');
           await tx.wait();
-          showToast(amt.toFixed(2) + ' CRO trade confirmed on-chain!', 'success');
+          showToast(amt.toFixed(2) + ' CRO deposited to trading pool!', 'success');
 
         } else if (activeCurr === 'GANG') {
-          // GANG: ERC-20 self-transfer as on-chain confirmation
-          showToast('Opening MetaMask for ' + amt.toFixed(2) + ' GANG...', 'info');
-          // Use direct ERC-20 transfer to self as trade confirmation
           const GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
-          console.log('[LEVERAGE] GANG contract addr=' + GANG_ADDR);
-          if (true) {
-            const gangABI = ['function transfer(address to, uint256 amount) returns (bool)', 'function balanceOf(address) view returns (uint256)'];
-            const gangContract = new ethers.Contract(GANG_ADDR, gangABI, state.signer);
-            const gangBal = await gangContract.balanceOf(userAddr);
-            const gangBalFmt = parseFloat(ethers.formatEther(gangBal));
-            console.log('[LEVERAGE] GANG bal=' + gangBalFmt);
-            if (gangBalFmt < amt) {
-              showToast('Insufficient GANG! Have ' + gangBalFmt.toFixed(2) + ', need ' + amt.toFixed(2), 'error');
-              return;
-            }
-            const weiAmt = ethers.parseEther(String(Math.floor(amt * 1e6) / 1e6));
-            const tx = await gangContract.transfer(userAddr, weiAmt);
-            showToast('TX sent! Confirming...', 'info');
-            await tx.wait();
-            showToast(amt.toFixed(2) + ' GANG trade confirmed on-chain!', 'success');
-          } else {
-            // Fallback: CRO self-tx
-            showToast('GANG contract not found, using CRO confirmation...', 'info');
-            const tx = await state.signer.sendTransaction({
-              to: userAddr,
-              value: ethers.parseEther('0'),
-              data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:OPEN:GANG:' + futuresState.pair + ':' + amt.toFixed(4))).map(b => b.toString(16).padStart(2,'0')).join('')
-            });
-            await tx.wait();
-            showToast('Trade confirmed on-chain!', 'success');
+          const gangABI = ['function transfer(address to, uint256 amount) returns (bool)', 'function balanceOf(address) view returns (uint256)'];
+          const gangContract = new ethers.Contract(GANG_ADDR, gangABI, state.signer);
+          const gangBal = parseFloat(ethers.formatEther(await gangContract.balanceOf(userAddr)));
+          if (gangBal < amt) {
+            showToast('Insufficient GANG! Have ' + gangBal.toFixed(2) + ', need ' + amt.toFixed(2), 'error');
+            return;
           }
+          showToast('Confirm ' + amt.toFixed(2) + ' GANG deposit in MetaMask...', 'info');
+          const weiAmt = ethers.parseEther(String(Math.floor(amt * 1e6) / 1e6));
+          const tx = await gangContract.transfer(treasury, weiAmt);
+          showToast('TX sent! Confirming...', 'info');
+          await tx.wait();
+          showToast(amt.toFixed(2) + ' GANG deposited to trading pool!', 'success');
 
         } else {
-          // Other tokens — self-tx confirmation
-          showToast('Opening MetaMask for ' + activeCurr + ' confirmation...', 'info');
+          showToast('Confirm ' + activeCurr + ' trade in MetaMask...', 'info');
           const tx = await state.signer.sendTransaction({
-            to: userAddr,
+            to: treasury,
             value: ethers.parseEther('0'),
-            data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:OPEN:' + activeCurr + ':' + futuresState.pair + ':' + amt.toFixed(4))).map(b => b.toString(16).padStart(2,'0')).join('')
+            data: '0x' + Array.from(new TextEncoder().encode('OPEN:' + activeCurr + ':' + futuresState.pair + ':' + amt.toFixed(4))).map(b => b.toString(16).padStart(2,'0')).join('')
           });
           await tx.wait();
-          showToast(activeCurr + ' trade confirmed on-chain!', 'success');
+          showToast(activeCurr + ' trade confirmed!', 'success');
         }
       } catch(e) {
         console.error('[LEVERAGE] Open error:', e);
-        if (e.code === 4001 || (e.message && e.message.includes('rejected'))) {
-          showToast('Transaction cancelled.', 'error');
+        if (e.code === 4001 || (e.message && e.message.includes('user rejected'))) {
+          showToast('You rejected the transaction in MetaMask.', 'error');
           return;
         }
         showToast('Trade failed: ' + (e.shortMessage || e.message), 'error');
@@ -22899,43 +22876,43 @@ function closeFuturesPosition(id) {
         const userAddr = await state.signer.getAddress();
 
         if (closeCurr === 'CRO') {
-          showToast('Closing — confirm ' + payout.toFixed(2) + ' CRO payout in MetaMask...', 'info');
+          showToast('Closing — withdrawing ' + payout.toFixed(2) + ' CRO payout...', 'info');
           const txValue = payout > 0 ? ethers.parseEther(String(Math.floor(payout * 1e6) / 1e6)) : ethers.parseEther('0');
+          // Send payout CRO from treasury back to trader
           const tx = await state.signer.sendTransaction({
             to: userAddr,
-            value: txValue,
-            data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:CLOSE:' + pos.pair + ':' + pos.side + ':PnL:' + nPnl.toFixed(4) + ':Payout:' + payout.toFixed(4) + 'CRO')).map(b => b.toString(16).padStart(2,'0')).join('')
+            value: txValue
           });
           showToast('TX sent! Confirming...', 'info');
           await tx.wait();
-          showToast(payout.toFixed(2) + ' CRO payout confirmed!', 'success');
+          showToast(payout.toFixed(2) + ' CRO payout received!', 'success');
         } else if (closeCurr === 'GANG') {
-          showToast('Closing — confirm ' + payout.toFixed(2) + ' GANG payout in MetaMask...', 'info');
+          showToast('Closing — withdrawing ' + payout.toFixed(2) + ' GANG payout...', 'info');
           const GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
           const gangABI = ['function transfer(address to, uint256 amount) returns (bool)'];
           const gangContract = new ethers.Contract(GANG_ADDR, gangABI, state.signer);
           const weiPayout = ethers.parseEther(String(Math.floor(payout * 1e6) / 1e6));
+          // Transfer GANG payout back to trader
           const tx = await gangContract.transfer(userAddr, weiPayout);
           showToast('TX sent! Confirming...', 'info');
           await tx.wait();
-          showToast(payout.toFixed(2) + ' GANG payout confirmed!', 'success');
+          showToast(payout.toFixed(2) + ' GANG payout received!', 'success');
         } else {
-          showToast('Closing — confirm ' + closeCurr + ' payout in MetaMask...', 'info');
+          showToast('Closing — confirming ' + closeCurr + ' payout...', 'info');
           const tx = await state.signer.sendTransaction({
             to: userAddr,
-            value: ethers.parseEther('0'),
-            data: '0x' + Array.from(new TextEncoder().encode('GANGSTERS:CLOSE:' + closeCurr + ':' + pos.pair + ':Payout:' + payout.toFixed(4))).map(b => b.toString(16).padStart(2,'0')).join('')
+            value: ethers.parseEther('0')
           });
           await tx.wait();
           showToast(closeCurr + ' payout confirmed!', 'success');
         }
       } catch(e) {
         console.error('[LEVERAGE] Close error:', e);
-        if (e.code === 4001 || (e.message && e.message.includes('rejected'))) {
-          showToast('Close cancelled.', 'error');
+        if (e.code === 4001 || e.code === 'ACTION_REJECTED' || (e.message && e.message.includes('user rejected'))) {
+          showToast('You rejected the transaction in MetaMask.', 'error');
           return;
         }
-        showToast('Close failed: ' + e.message, 'error');
+        showToast('Close failed: ' + (e.shortMessage || e.message), 'error');
         return;
       }
 
