@@ -22670,8 +22670,19 @@ function setFuturesPriceDisplay(pair, price, change) {
   _futuresLastApiPrice[pair] = price; // anchor for micro-volatility
   const priceEl = document.getElementById('futuresPairPrice');
   if (priceEl) {
-    priceEl.textContent = '$' + _fmtPrice(price);
+    var oldText = priceEl.textContent;
+    var newText = '$' + _fmtPrice(price);
+    priceEl.textContent = newText;
     priceEl.style.color = change >= 0 ? 'var(--green)' : 'var(--red)';
+    // Flash animation on price update like Trading 212
+    if (oldText !== newText && oldText !== '$—') {
+      priceEl.style.transition = 'none';
+      priceEl.style.opacity = '0.4';
+      requestAnimationFrame(function() {
+        priceEl.style.transition = 'opacity 0.3s ease';
+        priceEl.style.opacity = '1';
+      });
+    }
   }
   const changeEl = document.getElementById('futuresPairChange');
   if (changeEl) {
@@ -24074,8 +24085,8 @@ setTimeout(() => {
   _updateVolumeDisplay(); // Show existing volume
   // Connect to Binance WebSocket for real-time prices
   connectBinanceWS();
-  // Update homepage live price grid every 3 seconds
-  setInterval(_renderHomeLevPrices, 3000);
+  // Update homepage live price grid every 2 seconds for real-time feel
+  setInterval(_renderHomeLevPrices, 2000);
   // Fallback: Fetch price from API every 5 seconds in case WebSocket drops
   setInterval(updateFuturesPrice, 5000);
   // Update position PnL display every 1.5s
@@ -24282,11 +24293,22 @@ function simulateFuturesTick() {
       if (viewedPrice) {
         const priceEl = document.getElementById('futuresPairPrice');
         if (priceEl) {
-          const newText = '$' + _fmtPrice(viewedPrice);
-          priceEl.textContent = newText;
+          var oldText = priceEl.textContent;
+          var newText = '$' + _fmtPrice(viewedPrice);
+          if (oldText !== newText) {
+            priceEl.textContent = newText;
+            priceEl.style.transition = 'none';
+            priceEl.style.opacity = '0.4';
+            requestAnimationFrame(function() {
+              priceEl.style.transition = 'opacity 0.3s ease';
+              priceEl.style.opacity = '1';
+            });
+          }
         }
       }
     }
+    // Update asset card prices in the grid (all pairs)
+    renderAssetGrid(_currentCatFilter || 'all');
     updateFuturesPosInfo();
     updateFuturesPositions();
   }
@@ -24295,8 +24317,8 @@ function simulateFuturesTick() {
     updateCTStats();
   }
 }
-// Run simulation only for non-Binance pairs
-setInterval(simulateFuturesTick, 2000);
+// Run simulation only for non-Binance pairs — tick every 1s like Trading 212
+setInterval(simulateFuturesTick, 1000);
 
 // ══════════════════════════════════════════════════════════════
 // FEATURE: GANG TRACKER — FULL WALLET SCANNER
