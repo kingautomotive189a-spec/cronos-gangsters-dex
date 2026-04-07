@@ -22686,13 +22686,15 @@ function renderChartPositionLines() {
     return p.wallet === myWallet && p.status !== 'closed' && p.pair === currentPair;
   });
   if (openPositions.length === 0) { overlay.innerHTML = ''; return; }
-  // TradingView chart: toolbar ~6% top, volume pane ~22% bottom
+  // TradingView chart: current price line sits at roughly 50% of the chart area
+  // The chart area spans from ~6% to ~78% of total height
   var chartAreaTop = chartH * 0.06;
   var chartAreaBottom = chartH * 0.78;
   var chartAreaHeight = chartAreaBottom - chartAreaTop;
-  // Estimate visible price range (±2.5% for 5min chart)
-  var highPrice = currentPrice * 1.025;
-  var lowPrice = currentPrice * 0.975;
+  // Current price Y position = center of chart area (where TradingView renders the last price)
+  var currentPriceY = chartAreaTop + (chartAreaHeight * 0.5);
+  // Pixels per 1% price movement (estimated from TradingView 5min chart ~2.5% visible range)
+  var pxPerPercent = chartAreaHeight / 5.0; // 5% total range (±2.5%)
   var html = '';
   for (var i = 0; i < openPositions.length; i++) {
     var pos = openPositions[i];
@@ -22701,10 +22703,15 @@ function renderChartPositionLines() {
     var lineColor = isLong ? '#00d4aa' : '#ff4d6a';
     var bgColor = isLong ? 'rgba(0,212,170,0.15)' : 'rgba(255,77,106,0.15)';
     var sideLabel = isLong ? 'LONG' : 'SHORT';
-    var pctFromHigh = (highPrice - entryPrice) / (highPrice - lowPrice);
-    var yPos = chartAreaTop + (pctFromHigh * chartAreaHeight);
-    if (yPos < chartAreaTop - 10) yPos = chartAreaTop - 10;
-    if (yPos > chartAreaBottom + 10) yPos = chartAreaBottom + 10;
+    // Calculate Y offset from current price
+    // If entry > current price, line is ABOVE current price (lower Y value)
+    // If entry < current price, line is BELOW current price (higher Y value)
+    var pctDiff = ((currentPrice - entryPrice) / currentPrice) * 100;
+    var yPos = currentPriceY - (pctDiff * pxPerPercent);
+    // Clamp to visible chart area
+    if (yPos < chartAreaTop) yPos = chartAreaTop;
+    if (yPos > chartAreaBottom) yPos = chartAreaBottom;
+    // PnL
     var priceDiff = (currentPrice - entryPrice) / entryPrice;
     var pnlPct = isLong ? priceDiff * pos.leverage * 100 : -priceDiff * pos.leverage * 100;
     var pnlColor = pnlPct >= 0 ? '#00d4aa' : '#ff4d6a';
@@ -22718,9 +22725,9 @@ function renderChartPositionLines() {
     // Liquidation price line
     var liqMove = 1 / pos.leverage;
     var liqPrice = isLong ? entryPrice * (1 - liqMove) : entryPrice * (1 + liqMove);
-    var liqPctFromHigh = (highPrice - liqPrice) / (highPrice - lowPrice);
-    var liqY = chartAreaTop + (liqPctFromHigh * chartAreaHeight);
-    if (liqY >= chartAreaTop - 10 && liqY <= chartAreaBottom + 10) {
+    var liqPctDiff = ((currentPrice - liqPrice) / currentPrice) * 100;
+    var liqY = currentPriceY - (liqPctDiff * pxPerPercent);
+    if (liqY >= chartAreaTop && liqY <= chartAreaBottom) {
       html += '<div style="position:absolute;top:' + liqY + 'px;left:0;right:0;height:0;border-top:1px dotted #ff2222;opacity:0.5;"></div>';
       html += '<div style="position:absolute;top:' + (liqY - 10) + 'px;right:4px;background:#ff2222;color:#fff;font-family:\'Space Mono\',monospace;font-size:8px;font-weight:700;padding:1px 4px;border-radius:2px;opacity:0.7;">LIQ $' + _fmtPrice(liqPrice) + '</div>';
     }
