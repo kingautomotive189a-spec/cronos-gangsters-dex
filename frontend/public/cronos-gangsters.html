@@ -22758,70 +22758,54 @@ function openFuturesPosition() {
     ],
     onConfirm: async function() {
       var activeCurr = futuresState.currency || 'CRO';
-      showToast('Processing ' + activeCurr + ' trade...', 'info');
 
       if (!state.signer) {
-        showToast('Wallet not connected! Connect first.', 'error');
+        alert('WALLET NOT CONNECTED. Please connect your wallet first.');
         return;
       }
 
       var vaultAddr = getTradingVaultAddr();
       if (!vaultAddr) {
-        showToast('Vault address not found. Contact support.', 'error');
+        alert('NO VAULT ADDRESS. Contact support.');
         return;
       }
 
-      try {
-        const userAddr = await state.signer.getAddress();
-        const provider = state.provider || new ethers.BrowserProvider(window.ethereum);
+      alert('STEP 1: Starting ' + activeCurr + ' deposit of ' + amt + ' to vault ' + vaultAddr.substring(0,10) + '...');
 
+      try {
         if (activeCurr === 'CRO') {
-          const rawBal = await provider.getBalance(userAddr);
-          const croBal = parseFloat(ethers.formatEther(rawBal));
-          if (croBal < amt) {
-            showToast('Insufficient CRO! Have ' + croBal.toFixed(2) + ', need ' + amt.toFixed(2), 'error');
-            return;
-          }
-          showToast('Confirm ' + amt.toFixed(2) + ' CRO deposit to vault in MetaMask...', 'info');
-          const vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
-          const tx = await vaultContract.deposit({ value: ethers.parseEther(String(Math.floor(amt * 1e6) / 1e6)) });
-          showToast('TX sent! Hash: ' + tx.hash.substring(0, 12) + '...', 'info');
+          // Simplest possible CRO transfer — sendTransaction to vault
+          alert('STEP 2: Sending ' + amt + ' CRO to vault. MetaMask will open now.');
+          var tx = await state.signer.sendTransaction({
+            to: vaultAddr,
+            value: ethers.parseEther(String(amt))
+          });
+          alert('STEP 3: TX sent! Hash: ' + tx.hash + '\nWaiting for confirmation...');
           await tx.wait();
-          showToast(amt.toFixed(2) + ' CRO deposited to Trading Vault!', 'success');
-          updateTradingVaultBanner();
+          alert('STEP 4: SUCCESS! ' + amt + ' CRO deposited to vault!');
 
         } else if (activeCurr === 'GANG') {
-          const GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
-          const gangABI = ['function transfer(address to, uint256 amount) returns (bool)', 'function balanceOf(address) view returns (uint256)'];
-          const gangContract = new ethers.Contract(GANG_ADDR, gangABI, state.signer);
-          const gangBal = parseFloat(ethers.formatEther(await gangContract.balanceOf(userAddr)));
-          if (gangBal < amt) {
-            showToast('Insufficient GANG! Have ' + gangBal.toFixed(2) + ', need ' + amt.toFixed(2), 'error');
-            return;
-          }
-          showToast('Confirm ' + amt.toFixed(2) + ' GANG deposit in MetaMask...', 'info');
-          const weiAmt = ethers.parseEther(String(Math.floor(amt * 1e6) / 1e6));
-          const tx = await gangContract.transfer(vaultAddr, weiAmt);
-          showToast('TX sent! Confirming...', 'info');
+          var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+          var gangABI = ['function transfer(address to, uint256 amount) returns (bool)'];
+          var gangContract = new ethers.Contract(GANG_ADDR, gangABI, state.signer);
+          alert('STEP 2: Transferring ' + amt + ' GANG to vault. Wallet will open now.');
+          var weiAmt = ethers.parseEther(String(amt));
+          var tx = await gangContract.transfer(vaultAddr, weiAmt);
+          alert('STEP 3: TX sent! Hash: ' + tx.hash + '\nWaiting for confirmation...');
           await tx.wait();
-          showToast(amt.toFixed(2) + ' GANG deposited to Trading Vault!', 'success');
+          alert('STEP 4: SUCCESS! ' + amt + ' GANG deposited to vault!');
 
         } else {
-          showToast('Confirm ' + activeCurr + ' trade in MetaMask...', 'info');
-          const tx = await state.signer.sendTransaction({
+          alert('STEP 2: Confirming ' + activeCurr + ' trade. Wallet will open now.');
+          var tx = await state.signer.sendTransaction({
             to: vaultAddr,
             value: ethers.parseEther('0')
           });
           await tx.wait();
-          showToast(activeCurr + ' trade confirmed!', 'success');
+          alert('STEP 4: SUCCESS! ' + activeCurr + ' trade confirmed!');
         }
       } catch(e) {
-        console.error('[LEVERAGE] Open error:', e);
-        if (e.code === 4001 || e.code === 'ACTION_REJECTED' || (e.message && e.message.includes('user rejected'))) {
-          showToast('You rejected the transaction in MetaMask.', 'error');
-          return;
-        }
-        showToast('Trade failed: ' + (e.shortMessage || e.message), 'error');
+        alert('ERROR at step: ' + (e.code || '') + '\n' + (e.shortMessage || e.message || String(e)));
         return;
       }
 
