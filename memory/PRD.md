@@ -30,6 +30,8 @@ Web3 DeFi DApp on Cronos blockchain. Single-file HTML deployment (~28K lines).
 
 ## Completed (Latest — Apr 7 2026)
 - Liquidity page: collapsible "ADD / REMOVE LIQUIDITY" and "YOUR POSITIONS & TOP POOLS" sections using `<details>`/`<summary>` tags, default collapsed, styled with teal/gold aesthetics matching the Arsenal pattern
+- **PERFORMANCE FIX**: Parallelized ALL balance reads in `loadBalances()` — token balances, LP balances, and factory lookups now use `Promise.all` instead of sequential loops (was ~25 sequential RPC calls, now fires all at once)
+- Added `quickRefreshBalances()` function for instant targeted balance updates after swaps, add/remove liquidity, and leverage trades — only re-reads the 2 affected tokens instead of waiting for the full 15+ token refresh
 - ZIP regenerated
 
 ## Upcoming (P1)

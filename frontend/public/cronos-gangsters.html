@@ -9279,21 +9279,49 @@ async function autoDiscoverFarmPools() {
 }
 
 
+// Fast targeted balance refresh — only reads specific tokens (instant after swap)
+async function quickRefreshBalances(symbols) {
+  if (!state.address || !state.provider) return;
+  try {
+    const promises = symbols.map(async (sym) => {
+      try {
+        const tok = TOKENS[sym];
+        if (!tok) return;
+        if (tok.address === "native" || sym === "CRO") {
+          const bal = await state.provider.getBalance(state.address);
+          state.balances["CRO"] = parseFloat(ethers.formatEther(bal));
+        } else {
+          const contract = new ethers.Contract(tok.address, ERC20_ABI, state.provider);
+          const bal = await contract.balanceOf(state.address);
+          state.balances[sym] = parseFloat(ethers.formatUnits(bal, tok.decimals));
+        }
+      } catch {}
+    });
+    await Promise.all(promises);
+    updateBalanceDisplays();
+  } catch {}
+}
+
 async function loadBalances() {
   if (!state.address) return;
   try {
-    // Load native CRO balance
-    const croBalance = await state.provider.getBalance(state.address);
-    state.balances["CRO"] = parseFloat(ethers.formatEther(croBalance));
-
-    // Load ERC-20 token balances
-    for (const [sym, tok] of Object.entries(TOKENS)) {
-      if (tok.address === "native") continue;
+    // Load ALL token balances in PARALLEL (not sequential!)
+    const tokenEntries = Object.entries(TOKENS);
+    const balancePromises = tokenEntries.map(async ([sym, tok]) => {
       try {
-        const contract = new ethers.Contract(tok.address, ERC20_ABI, state.provider);
-        const bal = await contract.balanceOf(state.address);
-        state.balances[sym] = parseFloat(ethers.formatUnits(bal, tok.decimals));
-      } catch { state.balances[sym] = 0; }
+        if (tok.address === "native") {
+          const bal = await state.provider.getBalance(state.address);
+          return { sym, bal: parseFloat(ethers.formatEther(bal)) };
+        } else {
+          const contract = new ethers.Contract(tok.address, ERC20_ABI, state.provider);
+          const bal = await contract.balanceOf(state.address);
+          return { sym, bal: parseFloat(ethers.formatUnits(bal, tok.decimals)) };
+        }
+      } catch { return { sym, bal: 0 }; }
+    });
+    const balResults = await Promise.all(balancePromises);
+    for (const { sym, bal } of balResults) {
+      state.balances[sym] = bal;
     }
 
     // Load pending farm rewards from MasterChef (if deployed)
@@ -9362,31 +9390,32 @@ async function loadBalances() {
       } catch(e) { /* chef load skipped */ }
     }
 
-    // Load LP token wallet balances per farm
-    // Auto-discover lpAddr from VVS Factory if not set
+    // Load LP token wallet balances per farm — ALL IN PARALLEL
     if (!state.lpBalances) state.lpBalances = {};
     const factory = CONTRACTS.FACTORY ? new ethers.Contract(CONTRACTS.FACTORY, FACTORY_ABI, state.provider) : null;
-    for (const farm of FARMS) {
+
+    // First resolve any missing LP addresses (factory lookups in parallel)
+    const factoryLookups = FARMS.filter(f => !f.lpAddr && factory && f.tokens.length >= 2).map(async (farm) => {
       try {
-        // Resolve LP address — use configured one or query factory
-        let lpAddr = farm.lpAddr;
-        if (!lpAddr && factory && farm.tokens.length >= 2) {
-          const tA = TOKENS[farm.tokens[0]];
-          const tB = TOKENS[farm.tokens[1]];
-          if (tA && tB) {
-            const addrA = tA.address === "native" ? CONTRACTS.WCRO : tA.address;
-            const addrB = tB.address === "native" ? CONTRACTS.WCRO : tB.address;
-            try {
-              lpAddr = await factory.getPair(addrA, addrB);
-              if (lpAddr && lpAddr !== "0x0000000000000000000000000000000000000000") {
-                farm.lpAddr = lpAddr; // cache it so future calls are instant
-              } else {
-                lpAddr = null;
-              }
-            } catch { lpAddr = null; }
+        const tA = TOKENS[farm.tokens[0]];
+        const tB = TOKENS[farm.tokens[1]];
+        if (tA && tB) {
+          const addrA = tA.address === "native" ? CONTRACTS.WCRO : tA.address;
+          const addrB = tB.address === "native" ? CONTRACTS.WCRO : tB.address;
+          const lpAddr = await factory.getPair(addrA, addrB);
+          if (lpAddr && lpAddr !== "0x0000000000000000000000000000000000000000") {
+            farm.lpAddr = lpAddr;
           }
         }
-        if (lpAddr && lpAddr !== "native" && lpAddr !== "0x0000000000000000000000000000000000000000") {
+      } catch {}
+    });
+    await Promise.all(factoryLookups);
+
+    // Then read all LP balances in parallel
+    const lpBalPromises = FARMS.map(async (farm) => {
+      try {
+        const lpAddr = farm.lpAddr;
+        if (lpAddr && lpAddr !== "native" && lpAddr !== "" && lpAddr !== "0x0000000000000000000000000000000000000000") {
           const lp = new ethers.Contract(lpAddr, ERC20_ABI, state.provider);
           const bal = await lp.balanceOf(state.address);
           state.lpBalancesRaw[farm.pid] = bal;
@@ -9396,7 +9425,8 @@ async function loadBalances() {
           state.lpBalances[farm.pid] = state.lpBalances[farm.pid] || 0;
         }
       } catch { state.lpBalancesRaw[farm.pid] = 0n; state.lpBalances[farm.pid] = 0; }
-    }
+    });
+    await Promise.all(lpBalPromises);
 
     updateBalanceDisplays();
     // Refresh liq page if visible
@@ -10016,7 +10046,10 @@ async function doSwap() {
     addTx("Swap", `${fromAmt} ${fromSym} → ${toAmt.toFixed(4)} ${toSym}`, receipt.hash, "ok");
     showToast(`Swapped ${fromAmt} ${fromSym} for ~${toAmt.toFixed(4)} ${toSym}!`, "success");
     if (typeof addPoints === 'function') addPoints(10, 'Swap');
-    await loadBalances();
+    // Quick targeted refresh (instant — only re-reads the 2 swapped tokens)
+    await quickRefreshBalances([fromSym, toSym]);
+    // Full background refresh for farms/LP/etc
+    loadBalances();
     document.getElementById("swapFrom").value = "";
     document.getElementById("swapTo").value   = "";
 
@@ -11387,7 +11420,9 @@ async function doAddLiquidity() {
     if (typeof addPoints === 'function') addPoints(25, 'Add liquidity');
     document.getElementById("liqA").value = "";
     document.getElementById("liqB").value = "";
-    await loadBalances();
+    // Quick targeted refresh for the 2 tokens used
+    await quickRefreshBalances([symA, symB]);
+    loadBalances();
     updateBalanceDisplays();
     calcLiqRatio();
   } catch(e) {
@@ -11491,7 +11526,9 @@ async function doRemoveLiquidity() {
     showToast("✅ Liquidity removed successfully!", "success");
     document.getElementById("removeLPAmt").value = "";
     document.getElementById("removeSlider").value = 0;
-    await loadBalances();
+    // Quick targeted refresh for the 2 tokens received back
+    await quickRefreshBalances([symA, symB]);
+    loadBalances();
     updateBalanceDisplays();
     calcRemoveLiq();
   } catch(e) {
@@ -23259,6 +23296,8 @@ function openFuturesPosition() {
       }
 
       // ── On-chain confirmed — track position ──
+      // Quick refresh the currency that was just spent
+      quickRefreshBalances([activeCurr]);
       const _tp = parseFloat(document.getElementById('futuresTP')?.value) || 0;
       const _sl = parseFloat(document.getElementById('futuresSL')?.value) || 0;
       const _openingFee = amt * 0.003;
