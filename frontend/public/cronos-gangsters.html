@@ -22486,7 +22486,9 @@ async function deployTradingVault() {
     if (btn) { btn.disabled = true; btn.textContent = 'DEPLOYING...'; }
     showToast('Deploying upgraded Trading Vault on Cronos...', 'info');
     const factory = new ethers.ContractFactory(TRADING_VAULT_ABI, '0x' + TRADING_VAULT_BIN, state.signer);
-    const contract = await factory.deploy({ gasLimit: 3000000 });
+    const feeData = await state.provider.getFeeData();
+    const gp = feeData.gasPrice || ethers.parseUnits('5000', 'gwei');
+    const contract = await factory.deploy({ gasLimit: 3000000, gasPrice: gp, type: 0 });
     showToast('TX sent! Waiting for confirmation...', 'info');
     await contract.waitForDeployment();
     const addr = await contract.getAddress();
