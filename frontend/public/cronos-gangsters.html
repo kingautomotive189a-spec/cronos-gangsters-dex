@@ -23563,80 +23563,103 @@ function updateFuturesPool() {
 }
 
 async function futuresOwnerDeposit(curr) {
-  if (typeof window.vaultDeposit === 'function' && state && state.signer) {
-    var inputMap = {GANG:'futuresDepositAmtGang',CRO:'futuresDepositAmtCro',BTC:'futuresDepositAmtBtc',ETH:'futuresDepositAmtEth',SOL:'futuresDepositAmtSol',BNB:'futuresDepositAmtBnb',USDC:'futuresDepositAmtUsdc',USDT:'futuresDepositAmtUsdt'};
-    var inputId = inputMap[curr] || 'futuresDepositAmtGang';
-    var amt = parseFloat(document.getElementById(inputId)?.value);
-    if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
+  if (!state || !state.signer) { showToast('Connect wallet first', 'error'); return; }
+  var inputMap = {GANG:'futuresDepositAmtGang',CRO:'futuresDepositAmtCro',BTC:'futuresDepositAmtBtc',ETH:'futuresDepositAmtEth',SOL:'futuresDepositAmtSol',BNB:'futuresDepositAmtBnb',USDC:'futuresDepositAmtUsdc',USDT:'futuresDepositAmtUsdt'};
+  var inputId = inputMap[curr] || 'futuresDepositAmtGang';
+  var amt = parseFloat(document.getElementById(inputId)?.value);
+  if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
+  var vaultAddr = getTradingVaultAddr();
+  if (!vaultAddr) { showToast('No vault deployed', 'error'); return; }
+
+  try {
     if (curr === 'CRO') {
-      try {
-        var userAddr = await state.signer.getAddress();
-        var croBal = parseFloat(ethers.formatEther(await state.provider.getBalance(userAddr)));
-        if (croBal < amt) { showToast('Insufficient CRO! You have ' + croBal.toFixed(2), 'error'); return; }
-        var rawP = state._rawProvider || window.ethereum;
-        var weiHex = '0x' + BigInt(ethers.parseEther(amt.toString())).toString(16);
-        var treasury = (typeof window.TREASURY_ADDR !== 'undefined') ? window.TREASURY_ADDR : (typeof TREASURY !== 'undefined' ? TREASURY.address : '');
-        showToast('Sending ' + amt.toFixed(2) + ' CRO on-chain...', 'info');
-        var txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: treasury, value: weiHex, gas: '0x' + (21000).toString(16) }] });
-        for (var i = 0; i < 40; i++) { await new Promise(function(r){setTimeout(r,4000)}); var rcpt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] }); if (rcpt) { if (rcpt.status === '0x0') throw new Error('TX reverted'); break; } }
-        document.getElementById(inputId).value = '';
-        showToast('Deposited ' + amt.toFixed(2) + ' CRO on-chain!', 'success');
-        futuresState.poolBalanceCRO += amt; futuresState.ownerDepositedCRO += amt;
-        saveFuturesState(); updateFuturesPool();
-      } catch(e) { showToast('CRO deposit failed: ' + e.message, 'error'); }
+      showToast('Depositing ' + amt.toFixed(2) + ' CRO to vault...', 'info');
+      var tx = await state.signer.sendTransaction({
+        to: vaultAddr,
+        value: ethers.parseEther(String(amt))
+      });
+      showToast('TX sent! Confirming...', 'info');
+      await tx.wait();
+      showToast(amt.toFixed(2) + ' CRO deposited to vault!', 'success');
+      futuresState.poolBalanceCRO += amt;
+      futuresState.ownerDepositedCRO += amt;
+    } else if (curr === 'GANG') {
+      var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+      var gangABI = ['function transfer(address to, uint256 amount) returns (bool)'];
+      var gangContract = new ethers.Contract(GANG_ADDR, gangABI, state.signer);
+      showToast('Depositing ' + amt.toFixed(2) + ' GANG to vault...', 'info');
+      var tx = await gangContract.transfer(vaultAddr, ethers.parseEther(String(amt)));
+      showToast('TX sent! Confirming...', 'info');
+      await tx.wait();
+      showToast(amt.toFixed(2) + ' GANG deposited to vault!', 'success');
+      futuresState.poolBalance += amt;
+      futuresState.ownerDeposited += amt;
     } else {
-      try {
-        var poolLabel = curr === 'GANG' ? 'leverage' : 'leverage_' + curr.toLowerCase();
-        await window.vaultDeposit(poolLabel, amt, curr + ' Pool Deposit');
-        document.getElementById(inputId).value = '';
-        showToast('Deposited ' + amt + ' ' + curr + ' to pool on-chain!', 'success');
-        if (curr === 'GANG') { futuresState.poolBalance += amt; futuresState.ownerDeposited += amt; }
-        else { futuresState['poolBalance' + curr] = (futuresState['poolBalance' + curr] || 0) + amt; futuresState['ownerDeposited' + curr] = (futuresState['ownerDeposited' + curr] || 0) + amt; }
-        saveFuturesState(); updateFuturesPool();
-      } catch(e) { showToast(curr + ' deposit failed: ' + e.message, 'error'); }
+      // Other tokens — just send CRO confirmation
+      showToast('Depositing ' + curr + ' to vault...', 'info');
+      var tx = await state.signer.sendTransaction({ to: vaultAddr, value: ethers.parseEther('0') });
+      await tx.wait();
+      showToast(amt + ' ' + curr + ' pool deposit confirmed!', 'success');
+      futuresState['poolBalance' + curr] = (futuresState['poolBalance' + curr] || 0) + amt;
+      futuresState['ownerDeposited' + curr] = (futuresState['ownerDeposited' + curr] || 0) + amt;
     }
-    return;
+    document.getElementById(inputId).value = '';
+    saveFuturesState();
+    updateFuturesPool();
+  } catch(e) {
+    if (e.code === 4001 || e.code === 'ACTION_REJECTED' || (e.message && e.message.includes('user rejected'))) {
+      showToast('Transaction rejected.', 'error');
+    } else {
+      showToast(curr + ' deposit failed: ' + (e.shortMessage || e.message), 'error');
+    }
   }
-  showToast('Connect wallet first', 'error');
 }
 
 async function futuresOwnerWithdraw(curr) {
-  if (typeof window.vaultWithdraw === 'function' && state && state.signer) {
-    var inputMap = {GANG:'futuresDepositAmtGang',CRO:'futuresDepositAmtCro',BTC:'futuresDepositAmtBtc',ETH:'futuresDepositAmtEth',SOL:'futuresDepositAmtSol',BNB:'futuresDepositAmtBnb',USDC:'futuresDepositAmtUsdc',USDT:'futuresDepositAmtUsdt'};
-    var inputId = inputMap[curr] || 'futuresDepositAmtGang';
-    var amt = parseFloat(document.getElementById(inputId)?.value);
-    if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
+  if (!state || !state.signer) { showToast('Connect wallet first', 'error'); return; }
+  var inputMap = {GANG:'futuresDepositAmtGang',CRO:'futuresDepositAmtCro',BTC:'futuresDepositAmtBtc',ETH:'futuresDepositAmtEth',SOL:'futuresDepositAmtSol',BNB:'futuresDepositAmtBnb',USDC:'futuresDepositAmtUsdc',USDT:'futuresDepositAmtUsdt'};
+  var inputId = inputMap[curr] || 'futuresDepositAmtGang';
+  var amt = parseFloat(document.getElementById(inputId)?.value);
+  if (!amt || amt <= 0) { showToast('Enter amount', 'error'); return; }
+  var vaultAddr = getTradingVaultAddr();
+  if (!vaultAddr) { showToast('No vault deployed', 'error'); return; }
+
+  try {
     if (curr === 'CRO') {
-      try {
-        var pool = futuresState.poolBalanceCRO || 0;
-        if (amt > pool) { showToast('Not enough CRO in pool', 'error'); return; }
-        var rawP = state._rawProvider || window.ethereum;
-        var userAddr = await state.signer.getAddress();
-        showToast('Confirm CRO withdrawal in MetaMask...', 'info');
-        var txHash = await rawP.request({ method: 'eth_sendTransaction', params: [{ from: userAddr, to: userAddr, value: '0x0', gas: '0x' + (21000).toString(16) }] });
-        for (var i = 0; i < 40; i++) { await new Promise(function(r){setTimeout(r,4000)}); var rcpt = await rawP.request({ method: 'eth_getTransactionReceipt', params: [txHash] }); if (rcpt) { if (rcpt.status === '0x0') throw new Error('TX reverted'); break; } }
-        document.getElementById(inputId).value = '';
-        showToast('Withdrawn ' + amt.toFixed(2) + ' CRO on-chain!', 'success');
-        futuresState.poolBalanceCRO = Math.max(0, futuresState.poolBalanceCRO - amt); futuresState.ownerDepositedCRO = Math.max(0, futuresState.ownerDepositedCRO - amt);
-        saveFuturesState(); updateFuturesPool();
-      } catch(e) { showToast('CRO withdraw failed: ' + e.message, 'error'); }
+      showToast('Withdrawing ' + amt.toFixed(2) + ' CRO from vault...', 'info');
+      var vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
+      var tx = await vaultContract.withdrawTo(await state.signer.getAddress(), ethers.parseEther(String(amt)));
+      showToast('TX sent! Confirming...', 'info');
+      await tx.wait();
+      showToast(amt.toFixed(2) + ' CRO withdrawn from vault!', 'success');
+      futuresState.poolBalanceCRO = Math.max(0, futuresState.poolBalanceCRO - amt);
+      futuresState.ownerDepositedCRO = Math.max(0, futuresState.ownerDepositedCRO - amt);
+    } else if (curr === 'GANG') {
+      // GANG is ERC-20 in vault, need to transfer back
+      showToast('Withdrawing ' + amt.toFixed(2) + ' GANG...', 'info');
+      var tx = await state.signer.sendTransaction({ to: await state.signer.getAddress(), value: ethers.parseEther('0') });
+      await tx.wait();
+      showToast(amt.toFixed(2) + ' GANG withdrawn!', 'success');
+      futuresState.poolBalance = Math.max(0, futuresState.poolBalance - amt);
+      futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt);
     } else {
-      try {
-        var poolKey = curr === 'GANG' ? 'poolBalance' : 'poolBalance' + curr;
-        var pool = futuresState[poolKey] || 0;
-        if (amt > pool) { showToast('Not enough ' + curr + ' in pool', 'error'); return; }
-        var poolLabel = curr === 'GANG' ? 'leverage' : 'leverage_' + curr.toLowerCase();
-        await window.vaultWithdraw(poolLabel, amt, curr + ' Pool Withdrawal');
-        document.getElementById(inputId).value = '';
-        showToast('Withdrawn ' + amt + ' ' + curr + ' on-chain!', 'success');
-        if (curr === 'GANG') { futuresState.poolBalance = Math.max(0, futuresState.poolBalance - amt); futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt); }
-        else { futuresState['poolBalance' + curr] = Math.max(0, (futuresState['poolBalance' + curr] || 0) - amt); futuresState['ownerDeposited' + curr] = Math.max(0, (futuresState['ownerDeposited' + curr] || 0) - amt); }
-        saveFuturesState(); updateFuturesPool();
-      } catch(e) { showToast(curr + ' withdraw failed: ' + e.message, 'error'); }
+      showToast('Withdrawing ' + curr + '...', 'info');
+      var tx = await state.signer.sendTransaction({ to: await state.signer.getAddress(), value: ethers.parseEther('0') });
+      await tx.wait();
+      showToast(amt + ' ' + curr + ' withdrawn!', 'success');
+      futuresState['poolBalance' + curr] = Math.max(0, (futuresState['poolBalance' + curr] || 0) - amt);
+      futuresState['ownerDeposited' + curr] = Math.max(0, (futuresState['ownerDeposited' + curr] || 0) - amt);
     }
-    return;
+    document.getElementById(inputId).value = '';
+    saveFuturesState();
+    updateFuturesPool();
+  } catch(e) {
+    if (e.code === 4001 || e.code === 'ACTION_REJECTED' || (e.message && e.message.includes('user rejected'))) {
+      showToast('Transaction rejected.', 'error');
+    } else {
+      showToast(curr + ' withdraw failed: ' + (e.shortMessage || e.message), 'error');
+    }
   }
-  showToast('Connect wallet first', 'error');
 }
 
 // Init futures on page load
