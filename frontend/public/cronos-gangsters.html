@@ -5195,11 +5195,25 @@ function toggleNavMenu() {
 
     <!-- Owner Pool Controls (hidden for non-owners) -->
     <div id="futuresOwnerPanel" data-testid="futures-owner-panel" style="display:none;">
-      <div class="card" style="border-color:rgba(0,212,170,0.15);border-radius:12px;">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span style="font-family:'Space Grotesk',sans-serif;font-size:13px;color:#00d4aa;font-weight:700;letter-spacing:0.5px;">Owner Pool Controls</span>
-        </div>
+      <details id="poolControlsToggle" data-testid="pool-controls-toggle">
+        <summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;background:rgba(0,212,170,0.05);border:1px solid rgba(0,212,170,0.15);border-radius:14px;padding:14px 18px;transition:all .3s;user-select:none;margin-bottom:0;" onmouseover="this.style.borderColor='rgba(0,212,170,0.4)'" onmouseout="this.style.borderColor='rgba(0,212,170,0.15)'">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:38px;height:38px;border-radius:10px;background:rgba(0,212,170,0.1);display:flex;align-items:center;justify-content:center;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:14px;color:#00d4aa;font-weight:700;letter-spacing:0.5px;line-height:1;">Owner Pool Controls</div>
+              <div style="font-size:11px;color:rgba(235,235,245,0.4);margin-top:3px;">Total Vault: <span id="vaultTotalLiquidity" style="color:#ffb347;font-weight:700;">Loading...</span> &nbsp;|&nbsp; 8 pools — tap to manage</div>
+            </div>
+          </div>
+          <svg class="pool-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .3s;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <style>
+          #poolControlsToggle[open] .pool-chevron{transform:rotate(180deg);}
+          #poolControlsToggle summary::-webkit-details-marker{display:none;}
+          #poolControlsToggle[open] > summary{border-radius:14px 14px 0 0;border-bottom-color:transparent;}
+        </style>
+      <div class="card" style="border-color:rgba(0,212,170,0.15);border-radius:0 0 12px 12px;border-top:none;margin-top:0;">
 
         <!-- GANG Pool -->
         <div style="background:rgba(255,140,0,0.04);border:1px solid rgba(255,140,0,0.15);border-radius:12px;padding:14px;margin-bottom:10px;">
@@ -5361,6 +5375,7 @@ function toggleNavMenu() {
           </div>
         </div>
       </div>
+      </details>
     </div>
 
     <!-- How to Trade — Compact -->
@@ -23569,6 +23584,7 @@ function updateFuturesPool() {
       // Sync localStorage with real balance
       futuresState.poolBalanceCRO = realCroBal;
       saveFuturesState();
+      updateVaultTotalLiquidity();
     }).catch(function(){});
 
     // Also read GANG balance from vault
@@ -23593,6 +23609,7 @@ function updateFuturesPool() {
         }
         futuresState.poolBalance = realGangBal;
         saveFuturesState();
+        updateVaultTotalLiquidity();
       }).catch(function(){});
     } catch(e) {}
   } else {
@@ -23643,6 +23660,37 @@ function updateFuturesPool() {
   if (ownerPanel) {
     const isOwner = state.address?.toLowerCase() === TREASURY_OWNER.toLowerCase();
     ownerPanel.style.display = isOwner ? 'block' : 'none';
+  }
+
+  // Calculate & display total vault liquidity across all pools
+  updateVaultTotalLiquidity();
+}
+
+function updateVaultTotalLiquidity() {
+  var gangBal = futuresState.poolBalance || 0;
+  var croBal = futuresState.poolBalanceCRO || 0;
+  var parts = [];
+  if (gangBal > 0) parts.push(gangBal.toFixed(gangBal < 1 ? 4 : 2) + ' GANG');
+  if (croBal > 0) parts.push(croBal.toFixed(croBal < 1 ? 4 : 2) + ' CRO');
+  ['BTC','ETH','SOL','BNB','USDC','USDT'].forEach(function(t) {
+    var b = futuresState['poolBalance' + t] || 0;
+    if (b > 0) parts.push(b.toFixed(b < 1 ? 6 : 2) + ' ' + t);
+  });
+  var el = document.getElementById('vaultTotalLiquidity');
+  if (el) {
+    if (parts.length === 0) {
+      el.textContent = 'No deposits';
+    } else {
+      el.textContent = parts.join(' + ');
+    }
+  }
+  // Also update the main stats pool display with real vault CRO + GANG
+  var poolHeader = document.getElementById('futuresPoolBalance');
+  if (poolHeader && parts.length > 0) {
+    var mainParts = [];
+    if (gangBal > 0) mainParts.push((gangBal >= 1e3 ? (gangBal/1e3).toFixed(1)+'K' : gangBal.toFixed(gangBal < 1 ? 4 : 2)) + ' GANG');
+    if (croBal > 0) mainParts.push((croBal >= 1e3 ? (croBal/1e3).toFixed(1)+'K' : croBal.toFixed(croBal < 1 ? 4 : 2)) + ' CRO');
+    if (mainParts.length > 0) poolHeader.textContent = mainParts.join(' + ');
   }
 }
 

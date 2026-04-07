@@ -24,13 +24,15 @@ A massive 27,000+ line Web3 DApp deployed as a single HTML file (`cronos-gangste
 - [x] Rewrote `openFuturesPosition()` for real on-chain CRO/GANG transfers via MetaMask
 - [x] Rewrote `closeFuturesPosition()` for real on-chain vault withdrawals
 - [x] Rewrote `futuresOwnerDeposit()` / `futuresOwnerWithdraw()` for real vault operations
-- [x] Removed all fake mock fallback functions (`_realDoOpenFuturesPosition` etc. are now unused legacy)
+- [x] Removed all fake mock fallback functions
 - [x] Auto-wipe script for clearing old fake localStorage data
 - [x] Cache-busting version numbers for wallet browser caching
-- [x] Real on-chain pool balance reads (`provider.getBalance(vaultAddr)`)
+- [x] Real on-chain pool balance reads
 - [x] **Trading 212 UI Revamp** — Compact header, clean stats strip, horizontal account overview, cleaner asset browser, bottom nav bar, collapsible FAQ
 - [x] Replaced all debug `alert()` calls with clean `showToast()` notifications
-- [x] Cleaned up "fake" and "mock" comments throughout codebase
+- [x] **Collapsible "THE FULL ARSENAL"** — 32 feature grid wrapped in expandable `<details>` button
+- [x] **Collapsible Owner Pool Controls** — 8 pool deposit/withdraw boxes wrapped in expandable `<details>` with total vault liquidity summary
+- [x] Total vault liquidity display showing real on-chain GANG + CRO balances
 - [x] ZIP file regenerated for deployment
 
 ## Key Constraints
