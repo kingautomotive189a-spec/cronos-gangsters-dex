@@ -28,8 +28,12 @@ Web3 DeFi DApp on Cronos blockchain. Single-file HTML deployment (~28K lines).
 - ALWAYS verify div nesting with python depth counter after editing page-futures
 - Wallet code verified intact: doSwap, openFuturesPosition, showTradeConfirm, executeTradeConfirm, getTradingVaultAddr (0x68B1837b...)
 
+## Completed (Latest — Apr 7 2026)
+- Liquidity page: collapsible "ADD / REMOVE LIQUIDITY" and "YOUR POSITIONS & TOP POOLS" sections using `<details>`/`<summary>` tags, default collapsed, styled with teal/gold aesthetics matching the Arsenal pattern
+- ZIP regenerated
+
 ## Upcoming (P1)
-- UI polish remaining pages
+- UI polish remaining pages to match dark Trading 212 aesthetic
 - CEX listings
 - Multi-chain expansion
 

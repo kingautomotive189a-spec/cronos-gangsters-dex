@@ -1645,7 +1645,26 @@ function toggleNavMenu() {
 
 
       <!-- Add Liquidity -->
-      <div class="card">
+      <div class="card" style="padding:0;overflow:visible;">
+        <details id="liqAddRemoveToggle" data-testid="liq-add-remove-toggle">
+          <summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(0,212,170,0.08),rgba(0,150,136,0.04));border:1px solid rgba(0,212,170,0.2);border-radius:14px;padding:16px 20px;transition:all .3s;user-select:none;" onmouseover="this.style.borderColor='rgba(0,212,170,0.5)'" onmouseout="this.style.borderColor='rgba(0,212,170,0.2)'">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,rgba(0,212,170,0.15),rgba(0,150,136,0.1));display:flex;align-items:center;justify-content:center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              </div>
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#00d4aa;letter-spacing:2px;line-height:1;">ADD / REMOVE LIQUIDITY</div>
+                <div style="font-size:11px;color:var(--muted);letter-spacing:0.5px;margin-top:2px;">Provide tokens to pools & earn fees</div>
+              </div>
+            </div>
+            <svg class="liq-ar-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .3s;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <style>
+            #liqAddRemoveToggle[open] .liq-ar-chevron{transform:rotate(180deg);}
+            #liqAddRemoveToggle summary::-webkit-details-marker{display:none;}
+            #liqAddRemoveToggle[open] > summary{border-radius:14px 14px 0 0;border-bottom-color:transparent;margin-bottom:0;}
+          </style>
+          <div style="border:1px solid rgba(0,212,170,0.2);border-top:none;border-radius:0 0 14px 14px;padding:16px;background:rgba(0,212,170,0.02);">
         <div class="tab-row">
           <button class="tab-btn active" onclick="switchLiqTab('add',this)">Add Liquidity</button>
           <button class="tab-btn" onclick="switchLiqTab('remove',this)">Remove</button>
@@ -1799,10 +1818,31 @@ function toggleNavMenu() {
 
           <button class="btn-primary" onclick="reviewRemoveLiquidity()">REVIEW REMOVE LIQUIDITY</button>
         </div>
+          </div>
+        </details>
       </div>
 
       <!-- Your Positions -->
-      <div class="card">
+      <div class="card" style="padding:0;overflow:visible;">
+        <details id="liqPositionsToggle" data-testid="liq-positions-toggle">
+          <summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(212,160,23,0.08),rgba(255,140,0,0.04));border:1px solid rgba(212,160,23,0.2);border-radius:14px;padding:16px 20px;transition:all .3s;user-select:none;" onmouseover="this.style.borderColor='rgba(212,160,23,0.5)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,rgba(212,160,23,0.15),rgba(255,140,0,0.1));display:flex;align-items:center;justify-content:center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+              </div>
+              <div>
+                <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);letter-spacing:2px;line-height:1;">YOUR POSITIONS & TOP POOLS</div>
+                <div style="font-size:11px;color:var(--muted);letter-spacing:0.5px;margin-top:2px;">LP positions, pool stats & APR</div>
+              </div>
+            </div>
+            <svg class="liq-pos-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .3s;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <style>
+            #liqPositionsToggle[open] .liq-pos-chevron{transform:rotate(180deg);}
+            #liqPositionsToggle summary::-webkit-details-marker{display:none;}
+            #liqPositionsToggle[open] > summary{border-radius:14px 14px 0 0;border-bottom-color:transparent;margin-bottom:0;}
+          </style>
+          <div style="border:1px solid rgba(212,160,23,0.2);border-top:none;border-radius:0 0 14px 14px;padding:16px;background:rgba(212,160,23,0.02);">
         <div class="card-title">💼 Your Positions</div>
 
         <!-- Gangster images filling dark space -->
@@ -1838,6 +1878,8 @@ function toggleNavMenu() {
           <div class="gang-img-caption">🏙️ WHO WILL BE NEXT</div>
         </div>
 
+          </div>
+        </details>
       </div>
 
     </div>
