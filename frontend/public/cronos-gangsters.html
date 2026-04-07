@@ -24228,11 +24228,16 @@ async function futuresOwnerWithdraw(curr) {
       futuresState.poolBalanceCRO = Math.max(0, futuresState.poolBalanceCRO - amt);
       futuresState.ownerDepositedCRO = Math.max(0, futuresState.ownerDepositedCRO - amt);
     } else if (curr === 'GANG') {
-      // GANG is ERC-20 in vault, need to transfer back
-      showToast('Withdrawing ' + amt.toFixed(2) + ' GANG...', 'info');
-      var tx = await state.signer.sendTransaction({ to: await state.signer.getAddress(), value: ethers.parseEther('0') });
+      // GANG is ERC-20 in vault — use withdrawTokenTo to send it back
+      showToast('Withdrawing ' + amt.toFixed(2) + ' GANG from vault...', 'info');
+      var vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
+      var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+      var userAddr = await state.signer.getAddress();
+      var tx = await vaultContract.withdrawTokenTo(GANG_ADDR, userAddr, ethers.parseEther(String(amt)));
+      showToast('TX sent! Confirming...', 'info');
       await tx.wait();
-      showToast(amt.toFixed(2) + ' GANG withdrawn!', 'success');
+      showToast(amt.toFixed(2) + ' GANG withdrawn from vault!', 'success');
+      quickRefreshBalances(['GANG']);
       futuresState.poolBalance = Math.max(0, futuresState.poolBalance - amt);
       futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt);
     } else {
