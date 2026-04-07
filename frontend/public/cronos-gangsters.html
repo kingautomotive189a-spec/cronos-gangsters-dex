@@ -858,6 +858,9 @@ function toggleNavMenu() {
 
 <main>
 
+  <!-- ── Global Header Elements (only show on main page) ── -->
+  <div id="globalHeaderElements">
+
   <!-- ── Stats Bar ── -->
   <div class="stats-bar">
     <div class="stat-item">
@@ -1077,6 +1080,8 @@ function toggleNavMenu() {
   <style>
     @keyframes bannerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
   </style>
+
+  </div> <!-- end globalHeaderElements -->
 
   <!-- ══════════════════════════════════════
        SWAP PAGE
@@ -9532,6 +9537,12 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     const hamburger = document.getElementById('hamburgerBtn');
     if (mainNav) mainNav.classList.remove('nav-open');
     if (hamburger) hamburger.classList.remove('open');
+    // Show global header elements only on main page (swap)
+    var ghe = document.getElementById('globalHeaderElements');
+    if (ghe) ghe.style.display = (btn.dataset.page === 'swap') ? 'block' : 'none';
+    // Toggle bottom nav for futures page
+    var bnav = document.getElementById('futuresBottomNav');
+    if (bnav) bnav.style.display = (btn.dataset.page === 'futures') ? 'block' : 'none';
     if (btn.dataset.page === "farms") { renderFarms(); }
     if (btn.dataset.page === "vaults") { renderVaults(); loadVaultData(); }
     if (btn.dataset.page === "portfolio") renderPortfolio();
@@ -9563,9 +9574,6 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     if (btn.dataset.page === "otc") { renderOtcDeals(); updateOtcStats(); updateOtcBal(); }
     if (btn.dataset.page === "dao") { renderDaoProposals(); updateDaoStats(); }
     if (btn.dataset.page === "revenue") { loadRevRewardBalances(); }
-    // Toggle bottom nav for futures page
-    var bnav = document.getElementById('futuresBottomNav');
-    if (bnav) bnav.style.display = (btn.dataset.page === 'futures') ? 'block' : 'none';
     window.scrollTo(0,0);
   });
 });
@@ -9581,6 +9589,12 @@ function showPage(pageName) {
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     const pageEl = document.getElementById("page-" + pageName);
     if (pageEl) pageEl.classList.add("active");
+    // Show global header only on main page
+    var ghe = document.getElementById('globalHeaderElements');
+    if (ghe) ghe.style.display = (pageName === 'swap') ? 'block' : 'none';
+    // Toggle bottom nav for futures page
+    var bnav = document.getElementById('futuresBottomNav');
+    if (bnav) bnav.style.display = (pageName === 'futures') ? 'block' : 'none';
     window.scrollTo(0,0);
   }
 }

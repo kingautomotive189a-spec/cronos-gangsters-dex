@@ -33,6 +33,7 @@ A massive 27,000+ line Web3 DApp deployed as a single HTML file (`cronos-gangste
 - [x] **Collapsible "THE FULL ARSENAL"** — 32 feature grid wrapped in expandable `<details>` button
 - [x] **Collapsible Owner Pool Controls** — 8 pool deposit/withdraw boxes wrapped in expandable `<details>` with total vault liquidity summary
 - [x] Total vault liquidity display showing real on-chain GANG + CRO balances
+- [x] **Global Header Elements** — Stats bar, war images, contract banner, promo ticker now ONLY show on the main page, hidden on all other pages
 - [x] ZIP file regenerated for deployment
 
 ## Key Constraints
