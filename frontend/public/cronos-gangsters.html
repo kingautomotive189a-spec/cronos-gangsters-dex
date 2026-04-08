@@ -22820,23 +22820,12 @@ function renderChartPositionLines() {
   var chartAreaBottom = chartH * 0.82;
   var chartAreaHeight = chartAreaBottom - chartAreaTop;
 
-  // Find the price range we need to display (current price + all entry prices + liq prices)
-  var allPrices = [currentPrice];
-  for (var i = 0; i < openPositions.length; i++) {
-    allPrices.push(openPositions[i].entryPrice);
-    var liqMove = 1 / openPositions[i].leverage;
-    var isLong = (openPositions[i].side || '').toLowerCase() === 'long';
-    allPrices.push(isLong ? openPositions[i].entryPrice * (1 - liqMove) : openPositions[i].entryPrice * (1 + liqMove));
-  }
-  var minPrice = Math.min.apply(null, allPrices);
-  var maxPrice = Math.max.apply(null, allPrices);
-  // Add 15% padding above and below so lines aren't at edges
-  var pricePadding = (maxPrice - minPrice) * 0.15;
-  if (pricePadding < currentPrice * 0.005) pricePadding = currentPrice * 0.005; // minimum 0.5% padding
-  var visibleMin = minPrice - pricePadding;
-  var visibleMax = maxPrice + pricePadding;
+  // Match TradingView's visible range — center on current price with fixed % range
+  // TradingView 5m chart typically shows ~5% price range
+  var rangePercent = 0.04; // ±2% from current price (4% total)
+  var visibleMin = currentPrice * (1 - rangePercent / 2);
+  var visibleMax = currentPrice * (1 + rangePercent / 2);
   var priceRange = visibleMax - visibleMin;
-  if (priceRange <= 0) priceRange = 1;
 
   // Convert price to Y position — higher price = lower Y (top of chart)
   function priceToY(price) {
@@ -22845,11 +22834,6 @@ function renderChartPositionLines() {
   }
 
   var html = '';
-
-  // Draw CURRENT PRICE line — this is the anchor
-  var currentY = priceToY(currentPrice);
-  html += '<div style="position:absolute;top:' + currentY + 'px;left:0;right:0;height:0;border-top:1px solid rgba(255,255,255,0.4);z-index:1;"></div>';
-  html += '<div style="position:absolute;top:' + (currentY - 10) + 'px;left:4px;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-family:\'Space Mono\',monospace;font-size:8px;padding:1px 5px;border-radius:2px;white-space:nowrap;">NOW $' + _fmtPrice(currentPrice) + '</div>';
 
   // Draw entry price lines for each open position
   for (var i = 0; i < openPositions.length; i++) {
@@ -22875,13 +22859,6 @@ function renderChartPositionLines() {
     html += '<div style="position:absolute;top:' + (yPos - 12) + 'px;right:4px;background:' + lineColor + ';color:#000;font-family:\'Space Mono\',monospace;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;white-space:nowrap;z-index:3;">' + sideLabel + ' $' + _fmtPrice(entryPrice) + '</div>';
     // PnL badge below price label
     html += '<div style="position:absolute;top:' + (yPos + 2) + 'px;right:4px;background:' + bgColor + ';color:' + pnlColor + ';font-family:\'Space Mono\',monospace;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;white-space:nowrap;z-index:3;">' + pnlSign + pnlPct.toFixed(2) + '%</div>';
-
-    // Shaded zone between current price and entry price
-    var zoneTop = Math.min(currentY, yPos);
-    var zoneHeight = Math.abs(currentY - yPos);
-    if (zoneHeight > 2) {
-      html += '<div style="position:absolute;top:' + zoneTop + 'px;left:0;right:0;height:' + zoneHeight + 'px;background:' + bgColor + ';opacity:0.3;z-index:0;"></div>';
-    }
 
     // Liquidation price line
     var liqMove = 1 / pos.leverage;
