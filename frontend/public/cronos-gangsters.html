@@ -22901,14 +22901,15 @@ function renderChartPositionLines() {
   });
   if (openPositions.length === 0) { overlay.innerHTML = ''; return; }
 
-  // Chart visible area — ONLY the candlestick area (measured from real mobile screenshot)
-  // Toolbar+pair: 0-14%, Candles: 14%-42%, Volume: 42%-52%, RSI: 52%-68%, Time: 68%+
-  var chartAreaTop = chartH * 0.14;
-  var chartAreaBottom = chartH * 0.42;
+  // Chart visible area — measured from actual mobile screenshot
+  // Pair header area: 0-18%, Candle area with price scale: 18%-44%
+  // Volume bars: 35%-44% (overlaps), RSI: 48%-60%, Time axis: 62%+
+  var chartAreaTop = chartH * 0.18;
+  var chartAreaBottom = chartH * 0.44;
   var chartAreaHeight = chartAreaBottom - chartAreaTop;
 
-  // Match TradingView's visible price range — 5m chart shows ~1.5% range
-  var rangePercent = 0.015; // ±0.75% from current price (1.5% total)
+  // Match TradingView's actual visible range — 5m BTC chart shows ~5-6% range
+  var rangePercent = 0.055; // ±2.75% from current price
   var visibleMin = currentPrice * (1 - rangePercent / 2);
   var visibleMax = currentPrice * (1 + rangePercent / 2);
   var priceRange = visibleMax - visibleMin;
