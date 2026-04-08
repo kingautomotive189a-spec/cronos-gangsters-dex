@@ -692,13 +692,11 @@
       <button class="nav-btn active" data-page="swap"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg></span>Swap</button>
       <button class="nav-btn" data-page="liquidity"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></span>Liquidity</button>
       <button class="nav-btn" data-page="aggregator" data-testid="nav-aggregator-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span>DEX Aggregator</button>
-      <button class="nav-btn" data-page="limitorders" data-testid="nav-limitorders-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg></span>Limit Orders</button>
       <button class="nav-btn" data-page="sniper" data-testid="nav-sniper-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg></span>Sniper Bot</button>
       <div class="nav-divider"></div>
 
       <div class="nav-group-label">LEVERAGE</div>
       <button class="nav-btn" data-page="futures" data-testid="nav-futures-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 5-10"/></svg></span>Leverage Trading<span class="nav-desc">Up to 100x</span></button>
-      <button class="nav-btn" data-page="perpdex" data-testid="nav-perpdex-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-3 3"/><circle cx="18" cy="9" r="2"/></svg></span>Perpetual DEX<span class="nav-desc">No expiry</span></button>
       <button class="nav-btn" data-page="copytrade" data-testid="nav-copytrade-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Copy Trading<span class="nav-desc">Follow pros</span></button>
       <button class="nav-btn" data-page="flashloans" data-testid="nav-flashloans-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>Flash Loans</button>
       <button class="nav-btn" data-page="signals" data-testid="nav-signals-btn"><span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>Trading Signals<span class="nav-desc">Live Analysis</span></button>
@@ -979,10 +977,6 @@ function toggleNavMenu() {
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('revstaking')" style="cursor:pointer;color:#9c27b0;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">💎 REVENUE STAKING — EARN FEES</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span onclick="showPage('limitorders')" style="cursor:pointer;color:#42a5f5;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📋 LIMIT ORDERS — SET & FORGET</span>
-        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span onclick="showPage('perpdex')" style="cursor:pointer;color:#f44336;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📊 PERPETUAL DEX — NO EXPIRY</span>
-        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('otc')" style="cursor:pointer;color:#8d6e63;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🤝 OTC TRADING — BIG BLOCKS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('dao')" style="cursor:pointer;color:#78909c;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🏛 DAO GOVERNANCE — VOTE</span>
@@ -1041,10 +1035,6 @@ function toggleNavMenu() {
         <span onclick="showPage('copytrade')" style="cursor:pointer;color:#e91e63;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">👥 COPY TRADING — 0.3% FEE</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('revstaking')" style="cursor:pointer;color:#9c27b0;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">💎 REVENUE STAKING — EARN FEES</span>
-        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span onclick="showPage('limitorders')" style="cursor:pointer;color:#42a5f5;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📋 LIMIT ORDERS — SET & FORGET</span>
-        <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
-        <span onclick="showPage('perpdex')" style="cursor:pointer;color:#f44336;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">📊 PERPETUAL DEX — NO EXPIRY</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
         <span onclick="showPage('otc')" style="cursor:pointer;color:#8d6e63;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;white-space:nowrap;">🤝 OTC TRADING — BIG BLOCKS</span>
         <span style="color:var(--muted);font-size:11px;white-space:nowrap;">|</span>
@@ -1200,12 +1190,6 @@ function toggleNavMenu() {
       <div class="card" style="border-color:rgba(212,160,23,0.3);box-shadow:0 0 0 1px rgba(212,160,23,0.05),0 8px 32px rgba(0,0,0,0.4);">
         <div class="card-title"><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> Swap Tokens</div>
 
-        <!-- Swap / Limit Toggle -->
-        <div data-testid="swap-limit-tabs" style="display:flex;gap:0;margin-bottom:14px;background:var(--surface2);border-radius:10px;padding:3px;border:1px solid var(--border);">
-          <button id="tabSwap" data-testid="tab-swap" onclick="switchSwapMode('swap')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .2s;background:var(--gold);color:#000;">SWAP</button>
-          <button id="tabLimit" data-testid="tab-limit" onclick="switchSwapMode('limit')" style="flex:1;padding:8px;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);">LIMIT ORDER</button>
-        </div>
-
         <!-- Live Price Ticker -->
         <div class="price-ticker" id="swapPriceTicker">
           <span style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;flex-shrink:0">Live Prices</span>
@@ -1329,35 +1313,6 @@ function toggleNavMenu() {
 
         <button class="btn-primary" id="swapBtn" onclick="reviewSwap()"><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> REVIEW SWAP</button>
 
-        <!-- LIMIT ORDER PANEL (hidden by default) -->
-        <div id="limitOrderPanel" data-testid="limit-order-panel" style="display:none;">
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px;">
-            <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">TARGET PRICE (USD)</div>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <input class="swap-input" id="limitTargetPrice" data-testid="limit-target-price" type="number" step="any" placeholder="e.g. 0.0001" style="flex:1;" />
-              <span style="font-size:12px;color:var(--muted);">USD per <span id="limitFromSym">CRO</span></span>
-            </div>
-            <div style="font-size:11px;color:var(--muted);margin-top:6px;">Current: <span id="limitCurrentPrice" style="color:var(--green);">$—</span></div>
-          </div>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px;">
-            <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">AMOUNT TO SELL</div>
-            <input class="swap-input" id="limitAmount" data-testid="limit-amount" type="number" step="any" placeholder="0.0" style="width:100%;box-sizing:border-box;" />
-            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Balance: <span id="limitBalance">—</span></div>
-          </div>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px;">
-            <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">YOU RECEIVE (est.)</div>
-            <div id="limitReceiveEst" data-testid="limit-receive-est" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">—</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Buy token: <span id="limitToSym">GANG</span></div>
-          </div>
-          <div style="font-size:11px;color:var(--gold);margin-bottom:10px;text-align:center;">0.3% platform fee applies when order executes</div>
-          <button class="btn-primary" id="limitOrderBtn" data-testid="place-limit-order-btn" onclick="placeSwapLimitOrder()" style="background:linear-gradient(135deg,#ff6b35,#e55a2b);">PLACE LIMIT ORDER</button>
-          
-          <div style="margin-top:16px;">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;">OPEN ORDERS</div>
-            <div id="limitOrdersList" data-testid="limit-orders-list" style="font-size:13px;color:var(--muted);">No open orders</div>
-          </div>
-        </div>
-
         <!-- Import Custom Token -->
         <div style="margin-top:16px;background:rgba(212,160,23,0.10);border:1px solid rgba(212,160,23,0.45);border-radius:12px;padding:16px 18px;">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
@@ -1456,16 +1411,6 @@ function toggleNavMenu() {
           <div style="font-size:22px;margin-bottom:4px;">💎</div>
           <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#9c27b0;letter-spacing:1px;">REV STAKE</div>
           <div style="font-size:9px;color:var(--muted);margin-top:2px;">Earn platform fees</div>
-        </div>
-        <div class="card" onclick="showPage('limitorders')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(66,165,245,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#42a5f5'" onmouseout="this.style.borderColor='rgba(66,165,245,0.3)'">
-          <div style="font-size:22px;margin-bottom:4px;">📋</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#42a5f5;letter-spacing:1px;">LIMIT ORDERS</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">Set & forget</div>
-        </div>
-        <div class="card" onclick="showPage('perpdex')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(244,67,54,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#f44336'" onmouseout="this.style.borderColor='rgba(244,67,54,0.3)'">
-          <div style="font-size:22px;margin-bottom:4px;">📊</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#f44336;letter-spacing:1px;">PERP DEX</div>
-          <div style="font-size:9px;color:var(--muted);margin-top:2px;">No expiry</div>
         </div>
         <div class="card" onclick="showPage('otc')" style="cursor:pointer;padding:14px 8px;text-align:center;border-color:rgba(141,110,99,0.3);transition:all .2s;" onmouseover="this.style.borderColor='#8d6e63'" onmouseout="this.style.borderColor='rgba(141,110,99,0.3)'">
           <div style="font-size:22px;margin-bottom:4px;">🤝</div>
@@ -5858,7 +5803,7 @@ function toggleNavMenu() {
 
     <div style="text-align:center;margin-bottom:24px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#ff6ec7;line-height:1;text-shadow:0 0 30px rgba(255,110,199,0.3);">GANG DEX AGGREGATOR</div>
-      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Find the best price across all Cronos DEXs. Save money on every trade.</div>
+      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Real on-chain swaps via VVS Finance Router on Cronos. 0.3% routing fee.</div>
     </div>
 
     <!-- Stats -->
@@ -6115,6 +6060,20 @@ function toggleNavMenu() {
       <div class="stat-item"><div class="stat-label">YOUR SHARE</div><div class="stat-value" id="rsYourShare" data-testid="rs-your-share">0%</div></div>
       <div class="stat-item"><div class="stat-label">REV POOL</div><div class="stat-value" id="rsRevPool" data-testid="rs-rev-pool" style="color:#9c27b0;">0 CRO</div></div>
     </div>
+    <!-- Deploy Panel (shown when no contract deployed) -->
+    <div id="rsDeployPanel" style="margin-bottom:16px;">
+      <div class="card" style="border-color:rgba(39,174,96,0.4);">
+        <div class="card-title" style="color:var(--green);">DEPLOY REVENUE STAKING CONTRACT</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Owner must deploy the staking contract first. One-time MetaMask transaction.</div>
+        <button class="btn-primary" onclick="deployRevStaking()" style="width:100%;background:linear-gradient(135deg,#27ae60,#1a8a4a);">DEPLOY CONTRACT</button>
+      </div>
+    </div>
+    <div id="rsContractInfo" style="display:none;margin-bottom:16px;">
+      <div style="background:var(--surface2);border:1px solid rgba(39,174,96,0.3);border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);">CONTRACT:</div>
+        <div id="rsContractAddr" style="font-size:11px;color:var(--green);font-family:'Space Mono',monospace;word-break:break-all;">Not deployed</div>
+      </div>
+    </div>
     <div class="card" style="border-color:rgba(156,39,176,0.3);margin-bottom:16px;" data-testid="rs-stake-form">
       <div class="card-title" style="color:#9c27b0;">STAKE $GANG FOR REVENUE SHARE</div>
       <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Stake GANG tokens to earn a proportional share of ALL 0.3% platform fees. More staked = bigger share.</div>
@@ -6168,155 +6127,6 @@ function toggleNavMenu() {
         <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#9c27b0;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">3</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Earn your share</div><div style="font-size:11px;color:var(--muted);">Revenue is distributed proportionally to all stakers. Bigger stake = bigger share.</div></div></div>
         <div style="display:flex;gap:10px;align-items:flex-start;"><div style="background:#9c27b0;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;">4</div><div><div style="font-weight:700;color:var(--text);font-size:13px;">Claim anytime</div><div style="font-size:11px;color:var(--muted);">Claim your CRO rewards whenever you want. Unstake anytime — no lock period.</div></div></div>
       </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       LIMIT ORDERS PAGE
-  ══════════════════════════════════════ -->
-  <div class="page" id="page-limitorders" data-testid="page-limitorders">
-    <div style="text-align:center;margin-bottom:24px;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#42a5f5;line-height:1;text-shadow:0 0 30px rgba(66,165,245,0.3);">GANG LIMIT ORDERS</div>
-      <div style="font-size:14px;color:var(--muted);margin-top:6px;">Set your price. We execute when it hits. 0.3% fee.</div>
-    </div>
-    <div class="stats-bar" style="margin-bottom:20px;" data-testid="limitorders-stats-bar">
-      <div class="stat-item"><div class="stat-label">OPEN ORDERS</div><div class="stat-value" id="loOpenOrders" data-testid="lo-open-orders">0</div></div>
-      <div class="stat-item"><div class="stat-label">FILLED TODAY</div><div class="stat-value" id="loFilledToday" data-testid="lo-filled-today">0</div></div>
-      <div class="stat-item"><div class="stat-label">YOUR ORDERS</div><div class="stat-value" id="loYourOrders" data-testid="lo-your-orders">0</div></div>
-      <div class="stat-item"><div class="stat-label">EXEC FEE</div><div class="stat-value" style="color:#42a5f5;">0.3%</div></div>
-    </div>
-    <div class="card" style="border-color:rgba(66,165,245,0.3);margin-bottom:16px;" data-testid="lo-order-form">
-      <div class="card-title" style="color:#42a5f5;">PLACE LIMIT ORDER</div>
-      <div style="display:grid;gap:10px;margin-bottom:14px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <select id="loOrderType" data-testid="lo-order-type" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;"><option value="buy">BUY</option><option value="sell">SELL</option></select>
-          <div class="custom-token-select" id="loTokenWrap" style="position:relative;">
-            <button type="button" onclick="toggleTokenDropdown('loTokenWrap')" style="display:flex;align-items:center;gap:8px;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;cursor:pointer;outline:none;">
-              <img src="https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png" style="width:20px;height:20px;border-radius:50%;" loading="lazy">
-              <span style="font-weight:700;flex:1;text-align:left;">CRO</span>
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-            </button>
-            <div class="token-dropdown-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,16,26,0.98);border:1px solid var(--border);border-radius:10px;margin-top:4px;z-index:999;max-height:250px;overflow-y:auto;box-shadow:0 12px 36px rgba(0,0,0,0.6);padding:4px;min-width:160px;"></div>
-            <input type="hidden" id="loToken" value="CRO">
-          </div>
-        </div>
-        <input type="number" id="loPrice" data-testid="lo-price" placeholder="Target price (USD)" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;outline:none;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <span style="font-size:11px;color:var(--muted);">Balance: <span id="loAvailBal" data-testid="lo-avail-bal" style="color:var(--gold);font-weight:700;">0</span></span>
-        </div>
-        <div style="position:relative;">
-          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-size:10px;color:var(--muted);">Wallet: <span id="loGangBal" style="color:var(--gold);font-weight:600;">--</span></span></div>
-        <input type="number" id="loAmount" data-testid="lo-amount" placeholder="Amount" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
-          <button onclick="loSetMax()" data-testid="lo-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#42a5f5,#1e88e5);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(66,165,245,0.2);border-radius:8px;padding:10px 12px;">
-          <span style="font-size:12px;color:var(--muted);">Execution Fee (0.3%)</span>
-          <span id="loFeePreview" data-testid="lo-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#42a5f5;">0</span>
-        </div>
-      </div>
-      <button class="btn-primary" data-testid="lo-place-btn" onclick="placeLimitOrder()" style="width:100%;background:linear-gradient(135deg,#42a5f5,#1e88e5);font-size:16px;font-weight:800;">📋 PLACE LIMIT ORDER</button>
-    </div>
-    <div id="loOwnerPanel" data-testid="lo-owner-panel" style="display:none;margin-bottom:16px;">
-      <div class="card" style="border-color:rgba(39,174,96,0.4);">
-        <div class="card-title" style="color:var(--green);">OWNER — LIMIT ORDER REVENUE</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">0.3% fee on every executed limit order.</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div><div id="loOwnerFees" data-testid="lo-owner-fees" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</div></div>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">ORDERS FILLED</div><div id="loOwnerCount" data-testid="lo-owner-count" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#42a5f5;">0</div></div>
-        </div>
-        <button class="btn-primary" data-testid="lo-owner-collect-btn" onclick="loOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT LIMIT ORDER FEES</button>
-      </div>
-    </div>
-    <div class="card" style="margin-bottom:16px;">
-      <div class="card-title">YOUR OPEN ORDERS</div>
-      <div id="loOrdersList" data-testid="lo-orders-list" style="max-height:300px;overflow-y:auto;"><div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No open orders. Place one above.</div></div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       PERPETUAL DEX PAGE
-  ══════════════════════════════════════ -->
-  <div class="page" id="page-perpdex" data-testid="page-perpdex">
-    <div style="text-align:center;margin-bottom:20px;padding:16px 12px;background:linear-gradient(180deg,rgba(244,67,54,0.06) 0%,transparent 100%);border-radius:16px;border:1px solid rgba(244,67,54,0.08);">
-      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(244,67,54,0.1);border:1px solid rgba(244,67,54,0.25);border-radius:20px;padding:5px 14px;margin-bottom:12px;">
-        <span style="width:8px;height:8px;border-radius:50%;background:#f44336;display:inline-block;animation:pulseDot 2s ease-in-out infinite;"></span>
-        <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;color:#f44336;letter-spacing:1.5px;font-weight:600;">FULLY ON-CHAIN | CRONOS MAINNET</span>
-      </div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:#f44336;line-height:1;text-shadow:0 0 30px rgba(244,67,54,0.3);">GANG PERPETUAL DEX</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.45);margin-top:6px;line-height:1.6;max-width:480px;margin-left:auto;margin-right:auto;">Perpetual contracts with no expiry. Trade with up to 50x leverage, on-chain settlement via Protocol Vault. Every position confirmed through MetaMask.</div>
-    </div>
-    <div class="stats-bar" style="margin-bottom:20px;" data-testid="perpdex-stats-bar">
-      <div class="stat-item"><div class="stat-label">OPEN INTEREST</div><div class="stat-value" id="ppOpenInterest" data-testid="pp-open-interest">$0</div></div>
-      <div class="stat-item"><div class="stat-label">24H VOLUME</div><div class="stat-value" id="ppVolume" data-testid="pp-volume">$0</div></div>
-      <div class="stat-item"><div class="stat-label">YOUR POSITIONS</div><div class="stat-value" id="ppYourPos" data-testid="pp-your-pos">0</div></div>
-      <div class="stat-item"><div class="stat-label">TRADING FEE</div><div class="stat-value" style="color:#f44336;">0.3%</div></div>
-    </div>
-
-    <!-- Price + Chart (like Leverage Trading) -->
-    <div class="card" style="margin-bottom:14px;padding:0;overflow:hidden;border-color:rgba(244,67,54,0.2);">
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div id="ppPairLogo" style="width:32px;height:32px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#f7931a;flex-shrink:0;">
-            <img src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'"/>
-          </div>
-          <div>
-            <span id="ppPairName" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#f44336;letter-spacing:2px;">BTC-PERP</span>
-            <span style="font-size:10px;color:var(--muted);margin-left:8px;letter-spacing:1px;background:rgba(244,67,54,0.1);padding:2px 6px;border-radius:4px;">PERPETUAL</span>
-          </div>
-        </div>
-        <div style="text-align:right;">
-          <div id="ppPairPrice" data-testid="pp-pair-price" style="font-family:'Space Mono',monospace;font-size:18px;color:var(--green);">$—</div>
-          <div><span id="ppPairChange" style="font-size:13px;font-weight:700;color:var(--green);">—</span></div>
-        </div>
-      </div>
-      <div id="ppChartContainer" style="height:380px;background:#101420;">
-        <div id="pp_tradingview_chart" style="width:100%;height:100%;"></div>
-      </div>
-    </div>
-
-    <div class="card" style="border-color:rgba(244,67,54,0.3);margin-bottom:16px;" data-testid="pp-trade-form">
-      <div class="card-title" style="color:#f44336;">OPEN PERPETUAL POSITION</div>
-      <div style="display:grid;gap:10px;margin-bottom:14px;">
-        <select id="ppPair" data-testid="pp-pair" onchange="switchPPPair()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
-          <option value="BTC-PERP">BTC-PERP</option><option value="ETH-PERP">ETH-PERP</option><option value="CRO-PERP">CRO-PERP</option><option value="SOL-PERP">SOL-PERP</option><option value="GANG-PERP">GANG-PERP</option><option value="DOGE-PERP">DOGE-PERP</option><option value="AVAX-PERP">AVAX-PERP</option><option value="LINK-PERP">LINK-PERP</option>
-        </select>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-          <button id="ppLongBtn" data-testid="pp-long-btn" onclick="document.getElementById('ppDirection').value='long';this.style.background='#27ae60';this.style.color='#fff';document.getElementById('ppShortBtn').style.background='var(--surface2)';document.getElementById('ppShortBtn').style.color='var(--muted)';" style="padding:10px;border-radius:8px;border:1px solid var(--border);background:#27ae60;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;cursor:pointer;letter-spacing:2px;">LONG</button>
-          <button id="ppShortBtn" data-testid="pp-short-btn" onclick="document.getElementById('ppDirection').value='short';this.style.background='#e53935';this.style.color='#fff';document.getElementById('ppLongBtn').style.background='var(--surface2)';document.getElementById('ppLongBtn').style.color='var(--muted)';" style="padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-family:'Bebas Neue',sans-serif;font-size:16px;cursor:pointer;letter-spacing:2px;">SHORT</button>
-        </div>
-        <input type="hidden" id="ppDirection" value="long">
-        <select id="ppLeverage" data-testid="pp-leverage" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:13px;outline:none;cursor:pointer;">
-          <option value="5">5x Leverage</option><option value="10">10x Leverage</option><option value="20">20x Leverage</option><option value="30">30x Leverage</option><option value="50">50x Leverage</option>
-        </select>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-          <span style="font-size:11px;color:var(--muted);">Balance: <span id="ppAvailBal" data-testid="pp-avail-bal" style="color:var(--gold);font-weight:700;">0 CRO</span></span>
-        </div>
-        <div style="position:relative;">
-          <div style="display:flex;justify-content:flex-end;margin-bottom:4px;"><span style="font-size:10px;color:var(--muted);">Wallet: <span id="ppGangBal" style="color:var(--gold);font-weight:600;">--</span></span></div>
-          <input type="number" id="ppCollateral" data-testid="pp-collateral" placeholder="Collateral amount (CRO)" style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;padding-right:60px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;">
-          <button onclick="ppSetMax()" data-testid="pp-max-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:linear-gradient(135deg,#f44336,#c62828);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:1px;">MAX</button>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface2);border:1px solid rgba(244,67,54,0.2);border-radius:8px;padding:10px 12px;">
-          <span style="font-size:12px;color:var(--muted);">Trading Fee (0.3%)</span>
-          <span id="ppFeePreview" data-testid="pp-fee-preview" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#f44336;">0</span>
-        </div>
-      </div>
-      <button class="btn-primary" data-testid="pp-open-btn" onclick="openPerpPosition()" style="width:100%;background:linear-gradient(135deg,#f44336,#c62828);font-size:16px;font-weight:800;">📊 OPEN PERP POSITION</button>
-    </div>
-    <div id="ppOwnerPanel" data-testid="pp-owner-panel" style="display:none;margin-bottom:16px;">
-      <div class="card" style="border-color:rgba(39,174,96,0.4);">
-        <div class="card-title" style="color:var(--green);">OWNER — PERPETUAL DEX REVENUE</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">0.3% fee on every position opened and closed. Plus funding rate revenue.</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div><div id="ppOwnerFees" data-testid="pp-owner-fees" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--green);">0 CRO</div></div>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:9px;color:var(--muted);letter-spacing:1px;">POSITIONS OPENED</div><div id="ppOwnerCount" data-testid="pp-owner-count" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#f44336;">0</div></div>
-        </div>
-        <button class="btn-primary" data-testid="pp-owner-collect-btn" onclick="ppOwnerCollect()" style="width:100%;background:linear-gradient(135deg,var(--green),#1a8a4a);">COLLECT PERP DEX FEES</button>
-      </div>
-    </div>
-    <div class="card" style="margin-bottom:16px;">
-      <div class="card-title">YOUR OPEN POSITIONS</div>
-      <div id="ppPositionsList" data-testid="pp-positions-list" style="max-height:300px;overflow-y:auto;"><div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No open positions. Open one above.</div></div>
     </div>
   </div>
 
@@ -6526,14 +6336,6 @@ function toggleNavMenu() {
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
           <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">REV STAKING</div>
           <div data-testid="rev-revstaking-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#9c27b0;letter-spacing:1px;">0.3%</div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
-          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">LIMIT ORDERS</div>
-          <div data-testid="rev-limitorders-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#42a5f5;letter-spacing:1px;">0.3%</div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
-          <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">PERP DEX</div>
-          <div data-testid="rev-perpdex-summary" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:#f44336;letter-spacing:1px;">0.3%</div>
         </div>
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
           <div style="font-size:11px;color:var(--muted);letter-spacing:1px;">OTC DESK</div>
@@ -6840,42 +6642,6 @@ function toggleNavMenu() {
       </div>
       <button class="ref-copy-btn" onclick="revCollectRsFees()" style="width:100%;background:linear-gradient(135deg,#9c27b0,#7b1fa2);" data-testid="rev-rs-collect-btn">COLLECT STAKING MGMT FEES</button>
       <div id="revRsStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-rs-status"></div>
-    </div>
-
-    <!-- Limit Order Fees -->
-    <div class="ref-link-box" style="max-width:520px;border-color:rgba(66,165,245,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#42a5f5;">LIMIT ORDER FEES (0.3% PER FILL) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every limit order that gets filled/executed.</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-        <div style="background:var(--surface2);border:1px solid rgba(66,165,245,0.2);border-radius:10px;padding:10px;text-align:center;">
-          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
-          <div id="revLoFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-lo-fees">0 CRO</div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid rgba(66,165,245,0.2);border-radius:10px;padding:10px;text-align:center;">
-          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">ORDERS FILLED</div>
-          <div id="revLoCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#42a5f5;" data-testid="rev-lo-count">0</div>
-        </div>
-      </div>
-      <button class="ref-copy-btn" onclick="revCollectLoFees()" style="width:100%;background:linear-gradient(135deg,#42a5f5,#1e88e5);" data-testid="rev-lo-collect-btn">COLLECT LIMIT ORDER FEES</button>
-      <div id="revLoStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-lo-status"></div>
-    </div>
-
-    <!-- Perpetual DEX Fees -->
-    <div class="ref-link-box" style="max-width:520px;border-color:rgba(244,67,54,0.4);margin-bottom:16px;">
-      <div class="ref-link-label" style="color:#f44336;">PERPETUAL DEX FEES (0.3% PER TRADE) <span style="font-size:9px;background:#27ae60;color:#fff;padding:2px 6px;border-radius:4px;vertical-align:middle;">ON-CHAIN</span></div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">0.3% fee on every perpetual position opened and closed. Plus funding rate revenue.</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-        <div style="background:var(--surface2);border:1px solid rgba(244,67,54,0.2);border-radius:10px;padding:10px;text-align:center;">
-          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">TOTAL FEES</div>
-          <div id="revPpFees" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green);" data-testid="rev-pp-fees">0 CRO</div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid rgba(244,67,54,0.2);border-radius:10px;padding:10px;text-align:center;">
-          <div style="font-size:9px;color:var(--muted);letter-spacing:1px;">POSITIONS</div>
-          <div id="revPpCount" style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#f44336;" data-testid="rev-pp-count">0</div>
-        </div>
-      </div>
-      <button class="ref-copy-btn" onclick="revCollectPpFees()" style="width:100%;background:linear-gradient(135deg,#f44336,#c62828);" data-testid="rev-pp-collect-btn">COLLECT PERP DEX FEES</button>
-      <div id="revPpStatus" style="margin-top:8px;font-size:12px;display:none;" data-testid="rev-pp-status"></div>
     </div>
 
     <!-- OTC Trading Fees -->
@@ -9761,7 +9527,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     if (btn.dataset.page === "referral") updateReferralUI();
     if (btn.dataset.page === "nfts") { loadNftPreviewGallery(); updateNftUI(); }
     if (btn.dataset.page === "market") { initMarketplace(); }
-    if (btn.dataset.page === "revenue") { checkOwnerRevenue(); updateRevCopyFees(); updateRevPpFees(); updateRevOtcFees(); updateRevLoFees(); updateRevDaoFees(); updateRevRsFees(); }
+    if (btn.dataset.page === "revenue") { checkOwnerRevenue(); updateRevCopyFees(); updateRevOtcFees(); updateRevDaoFees(); updateRevRsFees(); }
     if (btn.dataset.page === "create") { renderDeployedTokens(); }
     if (btn.dataset.page === "launchpad") { loadLaunchpadPage(); }
     if (btn.dataset.page === "locker") { loadLockerPage(); }
@@ -9773,8 +9539,6 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     if (btn.dataset.page === "aggregator") { renderAggregator(); }
     if (btn.dataset.page === "copytrade") { renderCTLeaders(); renderCTHistory(); updateCTStats(); updateCtBal(); }
     if (btn.dataset.page === "revstaking") { updateRSStats(); updateRsBals(); }
-    if (btn.dataset.page === "limitorders") { renderLOOrders(); updateLOStats(); updateLoBal(); }
-    if (btn.dataset.page === "perpdex") { renderPPPositions(); updatePPStats(); updatePpBal(); switchPPPair(); }
     if (btn.dataset.page === "futures") { loadFuturesChart(futuresState.pair); }
     if (btn.dataset.page === "otc") { renderOtcDeals(); updateOtcStats(); updateOtcBal(); }
     if (btn.dataset.page === "dao") { renderDaoProposals(); updateDaoStats(); }
@@ -16158,8 +15922,6 @@ async function loadRevRewardBalances() {
   // Update new feature fees on Revenue page
   try { updateRevCopyFees(); } catch(e) {}
   try { updateRevRsFees(); } catch(e) {}
-  try { updateRevLoFees(); } catch(e) {}
-  try { updateRevPpFees(); } catch(e) {}
   try { updateRevOtcFees(); } catch(e) {}
   try { updateRevDaoFees(); } catch(e) {}
 }
@@ -19840,16 +19602,30 @@ function updateRevInsuranceFees() {
 }
 
 
-// ===== DEX AGGREGATOR ENGINE =====
+// ===== DEX AGGREGATOR ENGINE — REAL VVS FINANCE ROUTER =====
 const AGG_FEE = 0.3; // 0.3%
-const AGG_DEXS = [
-  { name: 'VVS Finance', tag: 'VVS', color: '#3b82f6', slippage: 0.3 },
-  { name: 'MM Finance', tag: 'MM', color: '#f59e0b', slippage: 0.25 },
-  { name: 'CronaSwap', tag: 'CS', color: '#8b5cf6', slippage: 0.35 },
-  { name: 'Fulcrom', tag: 'FC', color: '#ef4444', slippage: 0.4 },
-  { name: 'EbisusSwap', tag: 'EB', color: '#10b981', slippage: 0.28 },
-  { name: 'GANG Direct', tag: 'GG', color: '#ff6ec7', slippage: 0.3 },
+const VVS_ROUTER = '0x145863Eb42Cf62847A6Ca784e6416C1682b1b2Ae';
+const WCRO_ADDR = '0x5C7F8A570d578ED84E63fdFA7b1eE72dEae1AE23';
+const VVS_ROUTER_ABI = [
+  'function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) external payable returns (uint[] memory amounts)',
+  'function swapExactTokensForETH(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)',
+  'function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts)',
+  'function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts)'
 ];
+const ERC20_APPROVE_ABI = ['function approve(address spender, uint256 amount) external returns (bool)', 'function allowance(address owner, address spender) external view returns (uint256)'];
+
+// Token contract addresses on Cronos
+const AGG_TOKEN_ADDRS = {
+  'WCRO': WCRO_ADDR,
+  'CRO': WCRO_ADDR, // native CRO maps to WCRO for routing
+  'GANG': '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF',
+  'USDC': '0xc21223249CA28397B4B6541dfFaEcC539BfF0c59',
+  'USDT': '0x66e428c3f67a68878562e79A0234c1F83c208770',
+  'WETH': '0xe44Fd7fCb2b1581822D0c862B68222998a0c299a',
+  'VVS': '0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03',
+  'TONIC': '0xDD73dEa10ABC2Bff99c60882EC5b2B81Bb1Dc5B2',
+  'ATOM': '0xB888d8Dd1733d72681b30c00ee76BDE93ae7aa93'
+};
 
 function getAggState() {
   try { return JSON.parse(localStorage.getItem('gangAggState') || '{}'); } catch(e) { return {}; }
@@ -19893,9 +19669,9 @@ function renderAggregator() {
       const time = new Date(t.timestamp).toLocaleString();
       html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">';
       html += '<div><div style="font-weight:700;color:var(--text);font-size:13px;">🔀 ' + t.fromAmount.toLocaleString() + ' ' + t.fromToken + ' → ' + t.toAmount.toFixed(4) + ' ' + t.toToken + '</div>';
-      html += '<div style="font-size:10px;color:var(--muted);">via ' + t.dex + ' | ' + time + '</div></div>';
-      html += '<div style="text-align:right;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:14px;color:var(--green);">Saved ' + t.savings.toFixed(2) + '%</div>';
-      html += '<div style="font-size:9px;color:var(--muted);">vs worst rate</div></div>';
+      html += '<div style="font-size:10px;color:var(--muted);">via VVS Finance | ' + time + '</div></div>';
+      html += '<div style="text-align:right;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:14px;color:var(--green);">ON-CHAIN</div>';
+      html += '<div style="font-size:9px;color:var(--muted);">Real swap</div></div>';
       html += '</div>';
     });
     listEl.innerHTML = html;
@@ -19904,7 +19680,7 @@ function renderAggregator() {
   updateAggQuotes();
 }
 
-function updateAggQuotes() {
+async function updateAggQuotes() {
   const amount = parseFloat(document.getElementById('aggAmount')?.value) || 0;
   const fromToken = document.getElementById('aggFromToken')?.value || 'CRO';
   const toToken = document.getElementById('aggToToken')?.value || 'USDC';
@@ -19917,50 +19693,52 @@ function updateAggQuotes() {
   }
 
   if (!quotesGrid || amount <= 0) {
-    if (quotesGrid) quotesGrid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:16px;font-size:13px;">Enter an amount to see quotes from all DEXs</div>';
+    if (quotesGrid) quotesGrid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:16px;font-size:13px;">Enter an amount to see the real quote from VVS Finance</div>';
     return;
   }
 
-  // Generate simulated quotes
-  const baseRate = getSimulatedRate(fromToken, toToken);
-  let quotes = AGG_DEXS.map(dex => {
-    const variance = 1 + (Math.random() * 0.04 - 0.02); // +/- 2% variance
-    const rate = baseRate * variance;
-    const output = amount * rate;
-    return { ...dex, rate, output };
-  });
+  var fromAddr = AGG_TOKEN_ADDRS[fromToken];
+  var toAddr = AGG_TOKEN_ADDRS[toToken];
+  if (!fromAddr || !toAddr) {
+    quotesGrid.innerHTML = '<div style="text-align:center;color:var(--red);padding:16px;">Token not supported for on-chain swap</div>';
+    return;
+  }
 
-  // Sort by best output (highest is best)
-  quotes.sort((a, b) => b.output - a.output);
-  const bestOutput = quotes[0].output;
-  const worstOutput = quotes[quotes.length - 1].output;
+  // Build swap path via WCRO if needed
+  var path = [];
+  if (fromToken === 'CRO' || fromToken === 'WCRO') {
+    path = [WCRO_ADDR, toAddr];
+  } else if (toToken === 'CRO' || toToken === 'WCRO') {
+    path = [fromAddr, WCRO_ADDR];
+  } else {
+    path = [fromAddr, WCRO_ADDR, toAddr]; // route through WCRO
+  }
 
-  let html = '';
-  quotes.forEach((q, i) => {
-    const isBest = i === 0;
-    const diff = ((q.output - worstOutput) / worstOutput * 100).toFixed(2);
-    html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid ' + (isBest ? 'rgba(39,174,96,0.5)' : 'var(--border)') + ';border-radius:8px;' + (isBest ? 'box-shadow:0 0 12px rgba(39,174,96,0.2);' : '') + '">';
-    html += '<div style="display:flex;align-items:center;gap:10px;">';
-    html += '<div style="width:28px;height:28px;border-radius:50%;background:' + q.color + ';display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:9px;">' + q.tag + '</div>';
-    html += '<div><div style="font-weight:700;color:var(--text);font-size:13px;">' + q.name + '</div>';
-    html += '<div style="font-size:10px;color:var(--muted);">Rate: ' + q.rate.toFixed(6) + '</div></div></div>';
-    html += '<div style="text-align:right;">';
-    html += '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:16px;color:' + (isBest ? 'var(--green)' : 'var(--text)') + ';">' + q.output.toFixed(4) + ' ' + toToken + '</div>';
-    if (isBest) html += '<div style="font-size:9px;color:var(--green);font-weight:700;">BEST PRICE</div>';
-    else html += '<div style="font-size:9px;color:var(--muted);">+' + diff + '% vs worst</div>';
-    html += '</div></div>';
-  });
-  quotesGrid.innerHTML = html;
+  // Get real quote from VVS router
+  try {
+    var provider = new ethers.BrowserProvider(window.ethereum);
+    var router = new ethers.Contract(VVS_ROUTER, VVS_ROUTER_ABI, provider);
+    var amountInWei = ethers.parseEther(amount.toString());
+    var amounts = await router.getAmountsOut(amountInWei, path);
+    var amountOut = amounts[amounts.length - 1];
+    var outputFormatted = parseFloat(ethers.formatEther(amountOut));
+
+    quotesGrid.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px;background:var(--surface2);border:2px solid rgba(39,174,96,0.5);border-radius:10px;box-shadow:0 0 15px rgba(39,174,96,0.15);">' +
+      '<div style="display:flex;align-items:center;gap:10px;">' +
+      '<div style="width:32px;height:32px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:10px;">VVS</div>' +
+      '<div><div style="font-weight:700;color:var(--text);font-size:14px;">VVS Finance</div>' +
+      '<div style="font-size:10px;color:var(--green);font-weight:600;">REAL ON-CHAIN QUOTE</div></div></div>' +
+      '<div style="text-align:right;">' +
+      '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;color:var(--green);">' + outputFormatted.toFixed(4) + ' ' + toToken + '</div>' +
+      '<div style="font-size:10px;color:var(--muted);">Rate: 1 ' + fromToken + ' = ' + (outputFormatted / amount).toFixed(6) + ' ' + toToken + '</div></div></div>';
+  } catch(e) {
+    console.warn('VVS quote failed:', e);
+    quotesGrid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:16px;font-size:12px;">Could not fetch quote. Connect wallet and ensure you\'re on Cronos network.</div>';
+  }
 }
 
-function getSimulatedRate(from, to) {
-  const prices = { CRO: 0.12, GANG: 0.008, USDC: 1.0, WETH: 3200, WCRO: 0.12, VVS: 0.000003, TONIC: 0.0000001, ATOM: 9.5 };
-  const fromPrice = prices[from] || 1;
-  const toPrice = prices[to] || 1;
-  return fromPrice / toPrice;
-}
-
-function executeAggSwap() {
+async function executeAggSwap() {
+  if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
   const fromToken = document.getElementById('aggFromToken')?.value || 'CRO';
   const toToken = document.getElementById('aggToToken')?.value || 'USDC';
   const amount = parseFloat(document.getElementById('aggAmount')?.value);
@@ -19968,54 +19746,85 @@ function executeAggSwap() {
   if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
   if (fromToken === toToken) { showToast('Select different tokens', 'error'); return; }
 
-  const fee = amount * (AGG_FEE / 100);
-  const baseRate = getSimulatedRate(fromToken, toToken);
-  let bestDex = AGG_DEXS[0]; let bestRate = 0;
-  AGG_DEXS.forEach(dex => {
-    const variance = 1 + (Math.random() * 0.04 - 0.02);
-    const rate = baseRate * variance;
-    if (rate > bestRate) { bestRate = rate; bestDex = dex; }
-  });
-  const toAmount = (amount - fee) * bestRate;
+  var fromAddr = AGG_TOKEN_ADDRS[fromToken];
+  var toAddr = AGG_TOKEN_ADDRS[toToken];
+  if (!fromAddr || !toAddr) { showToast('Token not supported', 'error'); return; }
+
+  // Build swap path
+  var path = [];
+  var isCROIn = (fromToken === 'CRO');
+  var isCROOut = (toToken === 'CRO');
+  if (isCROIn) {
+    path = [WCRO_ADDR, toAddr];
+  } else if (isCROOut) {
+    path = [fromAddr, WCRO_ADDR];
+  } else {
+    path = [fromAddr, WCRO_ADDR, toAddr];
+  }
+
+  var amountInWei = ethers.parseEther(amount.toString());
+  var deadline = Math.floor(Date.now() / 1000) + 600; // 10 min deadline
+  var minOut = 0; // user accepts any amount (slippage tolerance 100% for simplicity)
 
   showTradeConfirm({
-    title: 'SWAP ' + fromToken + ' → ' + toToken,
-    priceFetcher: async function() { return bestRate; },
-    btnText: 'CONFIRM SWAP',
+    title: 'SWAP ' + fromToken + ' → ' + toToken + ' via VVS Finance',
+    priceFetcher: async function() { return 0; },
+    btnText: 'CONFIRM ON-CHAIN SWAP',
     btnColor: 'linear-gradient(135deg,#ff6ec7,#cc58a0)',
     details: [
       { label: 'You Pay', value: amount.toLocaleString() + ' ' + fromToken, cls: 'gold' },
-      { label: 'You Receive', value: toAmount.toFixed(4) + ' ' + toToken, cls: 'green' },
-      { label: 'Best Route', value: bestDex.name, cls: 'green' },
-      { label: 'Rate', value: '1 ' + fromToken + ' = ' + bestRate.toFixed(6) + ' ' + toToken },
-      { label: 'Fee (0.3% → CRO)', value: fee.toFixed(4) + ' CRO', cls: 'red' },
-      { label: 'Min. Received', value: (toAmount * 0.995).toFixed(4) + ' ' + toToken },
+      { label: 'Route', value: 'VVS Finance Router', cls: 'green' },
+      { label: 'Network', value: 'Cronos Mainnet', cls: 'green' },
+      { label: 'Fee (0.3% platform)', value: (amount * 0.003).toFixed(4) + ' ' + fromToken, cls: 'red' },
+      { label: 'Slippage', value: 'Market rate', cls: '' },
     ],
     onConfirm: async function() {
       try {
-        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
-          await window.vaultDeposit('aggregator', fee, 'DEX Aggregator — ' + amount + ' ' + fromToken + ' to ' + toToken);
-        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
-      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
-      _doAggSwap(fromToken, toToken, amount, fee, bestRate, bestDex, toAmount);
+        var router = new ethers.Contract(VVS_ROUTER, VVS_ROUTER_ABI, state.signer);
+        var tx;
+        if (isCROIn) {
+          // CRO → Token: send CRO as value
+          tx = await router.swapExactETHForTokens(minOut, path, state.address, deadline, { value: amountInWei });
+        } else if (isCROOut) {
+          // Token → CRO: approve first, then swap
+          var tokenContract = new ethers.Contract(fromAddr, ERC20_APPROVE_ABI, state.signer);
+          var allowance = await tokenContract.allowance(state.address, VVS_ROUTER);
+          if (allowance < amountInWei) {
+            showToast('Approving ' + fromToken + ' for VVS Router...', 'info');
+            var approveTx = await tokenContract.approve(VVS_ROUTER, ethers.MaxUint256);
+            await approveTx.wait();
+          }
+          tx = await router.swapExactTokensForETH(amountInWei, minOut, path, state.address, deadline);
+        } else {
+          // Token → Token: approve first, then swap
+          var tokenContract2 = new ethers.Contract(fromAddr, ERC20_APPROVE_ABI, state.signer);
+          var allowance2 = await tokenContract2.allowance(state.address, VVS_ROUTER);
+          if (allowance2 < amountInWei) {
+            showToast('Approving ' + fromToken + ' for VVS Router...', 'info');
+            var approveTx2 = await tokenContract2.approve(VVS_ROUTER, ethers.MaxUint256);
+            await approveTx2.wait();
+          }
+          tx = await router.swapExactTokensForTokens(amountInWei, minOut, path, state.address, deadline);
+        }
+        showToast('Swap submitted! Waiting for confirmation...', 'info');
+        var receipt = await tx.wait();
+        showToast('Swap confirmed! TX: ' + tx.hash.substring(0, 10) + '...', 'success');
+
+        // Record trade
+        var s = initAggState();
+        s.trades.push({ fromToken: fromToken, toToken: toToken, fromAmount: amount, toAmount: 0, fee: amount * 0.003, dex: 'VVS Finance', txHash: tx.hash, timestamp: Date.now() });
+        s.totalVolume = (s.totalVolume || 0) + amount;
+        s.tradeCount = (s.tradeCount || 0) + 1;
+        s.userTrades = (s.userTrades || 0) + 1;
+        saveAggState(s);
+        document.getElementById('aggAmount').value = '';
+        renderAggregator();
+        refreshBalancesOptimistic();
+      } catch(e) {
+        showToast('Swap failed: ' + (e.reason || e.message || 'Unknown error'), 'error');
+      }
     }
   });
-}
-
-function _doAggSwap(fromToken, toToken, amount, fee, bestRate, bestDex, toAmount) {
-  const savings = (Math.random() * 1.5 + 0.3).toFixed(2);
-
-  let s = initAggState();
-  s.trades.push({ fromToken, toToken, fromAmount: amount, toAmount, fee, dex: bestDex.name, savings: parseFloat(savings), timestamp: Date.now() });
-  s.ownerFees = (s.ownerFees || 0) + fee;
-  s.totalVolume = (s.totalVolume || 0) + amount;
-  s.tradeCount = (s.tradeCount || 0) + 1;
-  s.userTrades = (s.userTrades || 0) + 1;
-  saveAggState(s);
-
-  document.getElementById('aggAmount').value = '';
-  showToast('Swapped ' + amount.toLocaleString() + ' ' + fromToken + ' → ' + toAmount.toFixed(4) + ' ' + toToken + ' via ' + bestDex.name + '! Saved ~' + savings + '%', 'success');
-  renderAggregator();
 }
 
 function aggOwnerCollect() { if (window.aggOwnerCollect && window.aggOwnerCollect !== aggOwnerCollect) { window.aggOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
@@ -20301,508 +20110,173 @@ function initRSState() {
   if (!s.totalStaked && s.totalStaked !== 0) { s = { totalStaked: 50000, userStake: 0, pendingRewards: 0, ownerFees: 0, distributions: 0, revPool: 125.5 }; saveRSState(s); }
   return s;
 }
-function updateRSStats() {
-  const s = initRSState();
-  const elTotal = document.getElementById('rsTotal');
-  const elYour = document.getElementById('rsYourStake');
-  const elShare = document.getElementById('rsYourShare');
-  const elPool = document.getElementById('rsRevPool');
-  const elPending = document.getElementById('rsPendingRewards');
+// ═══════════════════════════════════════════════════════════════
+// REVENUE STAKING — REAL SMART CONTRACT INTEGRATION
+// ═══════════════════════════════════════════════════════════════
+var REV_STAKING_ABI = [
+  'function stake(uint256 amount) external',
+  'function unstake(uint256 amount) external',
+  'function claimReward() external',
+  'function depositRewards(uint256 durationSeconds) external payable',
+  'function earned(address account) external view returns (uint256)',
+  'function staked(address account) external view returns (uint256)',
+  'function totalStaked() external view returns (uint256)',
+  'function rewardPool() external view returns (uint256)',
+  'function rewardRate() external view returns (uint256)',
+  'function owner() external view returns (address)',
+  'function emergencyWithdraw() external'
+];
+var REV_STAKING_BYTECODE = '0x608060405234801561000f575f5ffd5b50604051611b78380380611b788339818101604052810190610031919061011b565b335f5f6101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055508060015f6101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055504260048190555050610146565b5f5ffd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f6100ea826100c1565b9050919050565b6100fa816100e0565b8114610104575f5ffd5b50565b5f81519050610115816100f1565b92915050565b5f602082840312156101305761012f6100bd565b5b5f61013d84828501610107565b91505092915050565b611a25806101535f395ff3fe608060405260043610610100575f3560e01c80638da5cb5b11610094578063b88a802f11610063578063b88a802f14610339578063ba7914921461034f578063cd3daf9d14610379578063db2e21bc146103a3578063df136d65146103b957610107565b80638da5cb5b146102815780639231cf74146102ab57806398807d84146102d5578063a694fc3a1461031157610107565b80637b0a47ee116100d05780637b0a47ee146101d5578063817b1cd2146101ff5780638b876347146102295780638bdf67f21461026557610107565b80628cc2621461010b5780630700037d146101475780632e17de781461018357806366666aa9146101ab57610107565b3661010757005b5f5ffd5b348015610116575f5ffd5b50610131600480360381019061012c9190611254565b6103e3565b60405161013e9190611297565b60405180910390f35b348015610152575f5ffd5b5061016d60048036038101906101689190611254565b6104de565b60405161017a9190611297565b60405180910390f35b34801561018e575f5ffd5b506101a960048036038101906101a491906112da565b6104f3565b005b3480156101b6575f5ffd5b506101bf6107e7565b6040516101cc9190611297565b60405180910390f35b3480156101e0575f5ffd5b506101e96107ed565b6040516101f69190611297565b60405180910390f35b34801561020a575f5ffd5b506102136107f3565b6040516102209190611297565b60405180910390f35b348015610234575f5ffd5b5061024f600480360381019061024a9190611254565b6107f9565b60405161025c9190611297565b60405180910390f35b61027f600480360381019061027a91906112da565b61080e565b005b34801561028c575f5ffd5b50610295610a7b565b6040516102a29190611314565b60405180910390f35b3480156102b6575f5ffd5b506102bf610a9f565b6040516102cc9190611297565b60405180910390f35b3480156102e0575f5ffd5b506102fb60048036038101906102f69190611254565b610aa5565b6040516103089190611297565b60405180910390f35b34801561031c575f5ffd5b50610337600480360381019061033291906112da565b610aba565b005b348015610344575f5ffd5b5061034d610d30565b005b34801561035a575f5ffd5b5061036361100b565b6040516103709190611388565b60405180910390f35b348015610384575f5ffd5b5061038d611030565b60405161039a9190611297565b60405180910390f35b3480156103ae575f5ffd5b506103b7611097565b005b3480156103c4575f5ffd5b506103cd6111f0565b6040516103da9190611297565b60405180910390f35b5f60095f8373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f2054670de0b6b3a764000060085f8573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f2054610471611030565b61047b91906113ce565b60075f8673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f20546104c39190611401565b6104cd919061146f565b6104d7919061149f565b9050919050565b6009602052805f5260405f205f915090505481565b336104fc611030565b600381905550426004819055505f73ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff16146105cb57610545816103e3565b60095f8373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f208190555060035460085f8373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f20819055505b5f821161060d576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016106049061152c565b60405180910390fd5b8160075f3373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f2054101561068d576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161068490611594565b60405180910390fd5b8160075f3373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f205f8282546106d991906113ce565b925050819055508160025f8282546106f191906113ce565b9250508190555060015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1663a9059cbb33846040518363ffffffff1660e01b81526004016107549291906115b2565b6020604051808303815f875af1158015610770573d5f5f3e3d5ffd5b505050506040513d601f19601f82011682018060405250810190610794919061160e565b503373ffffffffffffffffffffffffffffffffffffffff167f0f5bb82176feb1b5e747e28471aa92156a04d9f3ab9f45f28e2d704232b93f75836040516107db9190611297565b60405180910390a25050565b60065481565b60055481565b60025481565b6008602052805f5260405f205f915090505481565b5f5f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161461089c576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161089390611683565b60405180910390fd5b5f6108a5611030565b600381905550426004819055505f73ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff1614610974576108ee816103e3565b60095f8373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f208190555060035460085f8373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f20819055505b5f34116109b6576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016109ad906116eb565b60405180910390fd5b5f82116109f8576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016109ef90611753565b60405180910390fd5b3460065f828254610a09919061149f565b925050819055508134610a1c919061146f565b600581905550426004819055503373ffffffffffffffffffffffffffffffffffffffff167f7dbc080e4530c8bcf265eb5c9a35ae096ca1eb607b7e802b96581ef4c5e1a70334604051610a6f9190611297565b60405180910390a25050565b5f5f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60045481565b6007602052805f5260405f205f915090505481565b33610ac3611030565b600381905550426004819055505f73ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff1614610b9257610b0c816103e3565b60095f8373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f208190555060035460085f8373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f20819055505b5f8211610bd4576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610bcb906117bb565b60405180910390fd5b60015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166323b872dd3330856040518463ffffffff1660e01b8152600401610c32939291906117d9565b6020604051808303815f875af1158015610c4e573d5f5f3e3d5ffd5b505050506040513d601f19601f82011682018060405250810190610c72919061160e565b508160075f3373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f205f828254610cbf919061149f565b925050819055508160025f828254610cd7919061149f565b925050819055503373ffffffffffffffffffffffffffffffffffffffff167f9e71bc8eea02a63969f509818f2dafb9254532904319f9dbda79b67bd34a5f3d83604051610d249190611297565b60405180910390a25050565b33610d39611030565b600381905550426004819055505f73ffffffffffffffffffffffffffffffffffffffff168173ffffffffffffffffffffffffffffffffffffffff1614610e0857610d82816103e3565b60095f8373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f208190555060035460085f8373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f20819055505b5f60095f3373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f205490505f8111610e8b576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610e8290611858565b60405180910390fd5b80471015610ece576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610ec5906118c0565b60405180910390fd5b5f60095f3373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020015f20819055505f3373ffffffffffffffffffffffffffffffffffffffff1682604051610f359061190b565b5f6040518083038185875af1925050503d805f8114610f6f576040519150601f19603f3d011682016040523d82523d5f602084013e610f74565b606091505b5050905080610fb8576040517f08c379a0000000000000000000000000000000000000000000000000000000008152600401610faf90611969565b60405180910390fd5b3373ffffffffffffffffffffffffffffffffffffffff167f106f923f993c2149d49b4255ff723acafa1f2d94393f561d3eda32ae348f724183604051610ffe9190611297565b60405180910390a2505050565b60015f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b5f5f60025403611044576003549050611094565b5f6004544261105391906113ce565b9050600254670de0b6b3a76400006005548361106f9190611401565b6110799190611401565b611083919061146f565b600354611090919061149f565b9150505b90565b5f5f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614611125576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040161111c90611683565b60405180910390fd5b5f5f5f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff164760405161116a9061190b565b5f6040518083038185875af1925050503d805f81146111a4576040519150601f19603f3d011682016040523d82523d5f602084013e6111a9565b606091505b50509050806111ed576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004016111e4906119d1565b60405180910390fd5b50565b60035481565b5f5ffd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f611223826111fa565b9050919050565b61123381611219565b811461123d575f5ffd5b50565b5f8135905061124e8161122a565b92915050565b5f60208284031215611269576112686111f6565b5b5f61127684828501611240565b91505092915050565b5f819050919050565b6112918161127f565b82525050565b5f6020820190506112aa5f830184611288565b92915050565b6112b98161127f565b81146112c3575f5ffd5b50565b5f813590506112d4816112b0565b92915050565b5f602082840312156112ef576112ee6111f6565b5b5f6112fc848285016112c6565b91505092915050565b61130e81611219565b82525050565b5f6020820190506113275f830184611305565b92915050565b5f819050919050565b5f61135061134b611346846111fa565b61132d565b6111fa565b9050919050565b5f61136182611336565b9050919050565b5f61137282611357565b9050919050565b61138281611368565b82525050565b5f60208201905061139b5f830184611379565b92915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601160045260245ffd5b5f6113d88261127f565b91506113e38361127f565b92508282039050818111156113fb576113fa6113a1565b5b92915050565b5f61140b8261127f565b91506114168361127f565b92508282026114248161127f565b9150828204841483151761143b5761143a6113a1565b5b5092915050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52601260045260245ffd5b5f6114798261127f565b91506114848361127f565b92508261149457611493611442565b5b828204905092915050565b5f6114a98261127f565b91506114b48361127f565b92508282019050808211156114cc576114cb6113a1565b5b92915050565b5f82825260208201905092915050565b7f43616e6e6f7420756e7374616b652030000000000000000000000000000000005f82015250565b5f6115166010836114d2565b9150611521826114e2565b602082019050919050565b5f6020820190508181035f8301526115438161150a565b9050919050565b7f4e6f7420656e6f756768207374616b65640000000000000000000000000000005f82015250565b5f61157e6011836114d2565b91506115898261154a565b602082019050919050565b5f6020820190508181035f8301526115ab81611572565b9050919050565b5f6040820190506115c55f830185611305565b6115d26020830184611288565b9392505050565b5f8115159050919050565b6115ed816115d9565b81146115f7575f5ffd5b50565b5f81519050611608816115e4565b92915050565b5f60208284031215611623576116226111f6565b5b5f611630848285016115fa565b91505092915050565b7f4e6f74206f776e657200000000000000000000000000000000000000000000005f82015250565b5f61166d6009836114d2565b915061167882611639565b602082019050919050565b5f6020820190508181035f83015261169a81611661565b9050919050565b7f4d7573742073656e642043524f000000000000000000000000000000000000005f82015250565b5f6116d5600d836114d2565b91506116e0826116a1565b602082019050919050565b5f6020820190508181035f830152611702816116c9565b9050919050565b7f4475726174696f6e206d757374206265203e20300000000000000000000000005f82015250565b5f61173d6014836114d2565b915061174882611709565b602082019050919050565b5f6020820190508181035f83015261176a81611731565b9050919050565b7f43616e6e6f74207374616b6520300000000000000000000000000000000000005f82015250565b5f6117a5600e836114d2565b91506117b082611771565b602082019050919050565b5f6020820190508181035f8301526117d281611799565b9050919050565b5f6060820190506117ec5f830186611305565b6117f96020830185611305565b6118066040830184611288565b949350505050565b7f4e6f2072657761726473000000000000000000000000000000000000000000005f82015250565b5f611842600a836114d2565b915061184d8261180e565b602082019050919050565b5f6020820190508181035f83015261186f81611836565b9050919050565b7f496e73756666696369656e742043524f20696e20636f6e7472616374000000005f82015250565b5f6118aa601c836114d2565b91506118b582611876565b602082019050919050565b5f6020820190508181035f8301526118d78161189e565b9050919050565b5f81905092915050565b50565b5f6118f65f836118de565b9150611901826118e8565b5f82019050919050565b5f611915826118eb565b9150819050919050565b7f43524f207472616e73666572206661696c6564000000000000000000000000005f82015250565b5f6119536013836114d2565b915061195e8261191f565b602082019050919050565b5f6020820190508181035f83015261198081611947565b9050919050565b7f4661696c656400000000000000000000000000000000000000000000000000005f82015250565b5f6119bb6006836114d2565b91506119c682611987565b602082019050919050565b5f6020820190508181035f8301526119e8816119af565b905091905056fea2646970667358221220a98aa41012ec44bf0a0ff104caa67930b23550a0e2bbb9ec86ef32ea3c52f17564736f6c63430008220033';
+
+// Revenue Staking contract address (set after deployment)
+var _revStakingAddr = localStorage.getItem('gang_rev_staking_addr') || '';
+
+function getRSState() { try { return JSON.parse(localStorage.getItem('gangRevStakeState') || '{}'); } catch(e) { return {}; } }
+function saveRSState(s) { localStorage.setItem('gangRevStakeState', JSON.stringify(s)); }
+function initRSState() {
+  let s = getRSState();
+  if (!s.totalStaked) { s = { totalStaked: 0, userStake: 0, revPool: 0, pendingRewards: 0, ownerFees: 0, distributions: 0 }; saveRSState(s); }
+  return s;
+}
+
+// Deploy Revenue Staking contract
+async function deployRevStaking() {
+  if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+  try {
+    showToast('Deploying Revenue Staking contract... Confirm in MetaMask', 'info');
+    var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+    var factory = new ethers.ContractFactory(REV_STAKING_ABI, REV_STAKING_BYTECODE, state.signer);
+    var contract = await factory.deploy(GANG_ADDR);
+    await contract.waitForDeployment();
+    var addr = await contract.getAddress();
+    _revStakingAddr = addr;
+    localStorage.setItem('gang_rev_staking_addr', addr);
+    showToast('Revenue Staking deployed at: ' + addr, 'success');
+    updateRSStats();
+  } catch(e) {
+    showToast('Deploy failed: ' + (e.reason || e.message), 'error');
+  }
+}
+
+async function updateRSStats() {
+  var s = initRSState();
+  // Try to read from on-chain contract
+  if (_revStakingAddr && state.signer) {
+    try {
+      var provider = new ethers.BrowserProvider(window.ethereum);
+      var contract = new ethers.Contract(_revStakingAddr, REV_STAKING_ABI, provider);
+      var userAddr = state.address || await state.signer.getAddress();
+      var [totalStaked, userStake, earned, rewardPool] = await Promise.all([
+        contract.totalStaked(),
+        contract.staked(userAddr),
+        contract.earned(userAddr),
+        contract.rewardPool()
+      ]);
+      s.totalStaked = parseFloat(ethers.formatEther(totalStaked));
+      s.userStake = parseFloat(ethers.formatEther(userStake));
+      s.pendingRewards = parseFloat(ethers.formatEther(earned));
+      s.revPool = parseFloat(ethers.formatEther(rewardPool));
+      saveRSState(s);
+    } catch(e) { console.warn('Rev staking contract read failed:', e); }
+  }
+
+  var elTotal = document.getElementById('rsTotal');
+  var elYour = document.getElementById('rsYourStake');
+  var elShare = document.getElementById('rsYourShare');
+  var elPool = document.getElementById('rsRevPool');
+  var elPending = document.getElementById('rsPendingRewards');
   if (elTotal) elTotal.textContent = (s.totalStaked || 0).toLocaleString() + ' GANG';
   if (elYour) elYour.textContent = (s.userStake || 0).toLocaleString() + ' GANG';
-  const elYour2 = document.getElementById('rsStakedBal2');
+  var elYour2 = document.getElementById('rsStakedBal2');
   if (elYour2) elYour2.textContent = (s.userStake || 0).toLocaleString() + ' GANG';
   if (elShare) elShare.textContent = s.totalStaked > 0 ? ((s.userStake / s.totalStaked) * 100).toFixed(2) + '%' : '0%';
   if (elPool) elPool.textContent = (s.revPool || 0).toFixed(2) + ' CRO';
-  const newPendingText = (s.pendingRewards || 0).toFixed(4) + ' CRO';
-  if (elPending) {
-    const prev = elPending.textContent;
-    elPending.textContent = newPendingText;
-    if (prev !== newPendingText && s.pendingRewards > 0) pulseValue(elPending, false);
-  }
-  const isOwner = state.connectedAddress && CONTRACTS.TREASURY && state.connectedAddress.toLowerCase() === CONTRACTS.TREASURY.toLowerCase();
-  const ownerPanel = document.getElementById('rsOwnerPanel');
+  if (elPending) elPending.textContent = (s.pendingRewards || 0).toFixed(4) + ' CRO';
+
+  // Show deploy button if no contract
+  var deployPanel = document.getElementById('rsDeployPanel');
+  if (deployPanel) deployPanel.style.display = _revStakingAddr ? 'none' : 'block';
+  var contractInfo = document.getElementById('rsContractInfo');
+  if (contractInfo) contractInfo.style.display = _revStakingAddr ? 'block' : 'none';
+  var contractAddr = document.getElementById('rsContractAddr');
+  if (contractAddr) contractAddr.textContent = _revStakingAddr || 'Not deployed';
+
+  var isOwner = state.connectedAddress && CONTRACTS.TREASURY && state.connectedAddress.toLowerCase() === CONTRACTS.TREASURY.toLowerCase();
+  var ownerPanel = document.getElementById('rsOwnerPanel');
   if (ownerPanel) ownerPanel.style.display = isOwner ? 'block' : 'none';
-  if (isOwner) {
-    const elFees = document.getElementById('rsOwnerFees');
-    const elDist = document.getElementById('rsOwnerDist');
-    if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(4) + ' CRO';
-    if (elDist) elDist.textContent = s.distributions || 0;
-  }
 }
-function rsStake() {
-  const amount = parseFloat(document.getElementById('rsStakeAmount').value);
+
+async function rsStake() {
+  var amount = parseFloat(document.getElementById('rsStakeAmount').value);
   if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
-  if (!state || !state.signer) { showToast('Connect wallet first', 'error'); return; }
-  showTxConfirm({
-    title: 'Stake GANG',
-    iconHtml: '<div style="font-size:48px;">💎</div>',
-    detailsHtml: '<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Stake Amount:</span><span style="color:#9c27b0;font-weight:700;">' + amount.toLocaleString() + ' GANG</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Revenue Share:</span><span>Proportional to stake</span></div></div>',
-    onConfirm: async function() {
-      try {
-        if (typeof window.vaultDeposit === 'function') {
-          await window.vaultDeposit('revstaking', amount, 'Revenue Staking');
-        } else {
-          var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
-          var gangContract = new ethers.Contract(GANG_ADDR, ['function transfer(address to, uint256 amount) returns (bool)'], state.signer);
-          var vaultAddr = getTradingVaultAddr();
-          var tx = await gangContract.transfer(vaultAddr, ethers.parseEther(String(amount)));
-          await tx.wait();
-        }
-        var s = initRSState();
-        s.userStake = (s.userStake || 0) + amount;
-        s.totalStaked = (s.totalStaked || 0) + amount;
-        var reward = (s.revPool || 0) * (amount / s.totalStaked) * 0.1;
-        s.pendingRewards = (s.pendingRewards || 0) + reward;
-        saveRSState(s); updateRSStats(); updateRevRsFees();
-        showToast('Staked ' + amount.toLocaleString() + ' GANG for revenue sharing!', 'success');
-        document.getElementById('rsStakeAmount').value = '';
-      } catch(e) { showToast('Stake failed: ' + e.message, 'error'); }
+  if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+  if (!_revStakingAddr) { showToast('Revenue Staking contract not deployed. Owner must deploy first.', 'error'); return; }
+
+  try {
+    var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
+    var amountWei = ethers.parseEther(String(amount));
+    // Approve GANG for staking contract
+    var gangContract = new ethers.Contract(GANG_ADDR, ERC20_APPROVE_ABI, state.signer);
+    var allowance = await gangContract.allowance(state.address, _revStakingAddr);
+    if (allowance < amountWei) {
+      showToast('Approving GANG for staking...', 'info');
+      var approveTx = await gangContract.approve(_revStakingAddr, ethers.MaxUint256);
+      await approveTx.wait();
     }
-  });
+    // Stake
+    var contract = new ethers.Contract(_revStakingAddr, REV_STAKING_ABI, state.signer);
+    showToast('Staking ' + amount + ' GANG... Confirm in MetaMask', 'info');
+    var tx = await contract.stake(amountWei);
+    await tx.wait();
+    showToast('Staked ' + amount.toLocaleString() + ' GANG for revenue sharing!', 'success');
+    document.getElementById('rsStakeAmount').value = '';
+    updateRSStats();
+  } catch(e) { showToast('Stake failed: ' + (e.reason || e.message), 'error'); }
 }
-function rsUnstake() {
-  const amount = parseFloat(document.getElementById('rsStakeAmount').value);
-  const s = initRSState();
-  if (!amount || amount <= 0 || amount > (s.userStake || 0)) { showToast('Invalid unstake amount', 'error'); return; }
-  if (!state || !state.signer) { showToast('Connect wallet first', 'error'); return; }
-  showTxConfirm({
-    title: 'Unstake GANG',
-    iconHtml: '<div style="font-size:48px;">💎</div>',
-    detailsHtml: '<div style="text-align:center;font-size:14px;"><div style="color:var(--muted);margin-bottom:6px;">Unstake Amount</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:#e53935;">' + amount.toLocaleString() + ' GANG</div></div>',
-    onConfirm: async function() {
-      try {
-        if (typeof window.vaultWithdraw === 'function') {
-          await window.vaultWithdraw('revstaking', amount, 'Revenue Unstake');
-        } else {
-          var GANG_ADDR = '0x4cE15b52a34dE6F62448fDBAdDF1dB4811DDC3EF';
-          var vaultAddr = getTradingVaultAddr();
-          var vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
-          var userAddr = await state.signer.getAddress();
-          var tx = await vaultContract.withdrawTokenTo(GANG_ADDR, userAddr, ethers.parseEther(String(amount)));
-          await tx.wait();
-        }
-        s.userStake -= amount;
-        s.totalStaked = Math.max(0, (s.totalStaked || 0) - amount);
-        saveRSState(s); updateRSStats();
-        showToast('Unstaked ' + amount.toLocaleString() + ' GANG', 'success');
-        document.getElementById('rsStakeAmount').value = '';
-      } catch(e) { showToast('Unstake failed: ' + e.message, 'error'); }
-    }
-  });
+
+async function rsUnstake() {
+  var amount = parseFloat(document.getElementById('rsStakeAmount').value);
+  if (!amount || amount <= 0) { showToast('Enter a valid amount', 'error'); return; }
+  if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+  if (!_revStakingAddr) { showToast('Revenue Staking contract not deployed', 'error'); return; }
+
+  try {
+    var amountWei = ethers.parseEther(String(amount));
+    var contract = new ethers.Contract(_revStakingAddr, REV_STAKING_ABI, state.signer);
+    showToast('Unstaking ' + amount + ' GANG... Confirm in MetaMask', 'info');
+    var tx = await contract.unstake(amountWei);
+    await tx.wait();
+    showToast('Unstaked ' + amount.toLocaleString() + ' GANG', 'success');
+    document.getElementById('rsStakeAmount').value = '';
+    updateRSStats();
+  } catch(e) { showToast('Unstake failed: ' + (e.reason || e.message), 'error'); }
 }
-function rsClaim() {
-  const s = initRSState();
-  if (!s.pendingRewards || s.pendingRewards <= 0) { showToast('No rewards to claim', 'error'); return; }
-  if (!state || !state.signer) { showToast('Connect wallet first', 'error'); return; }
-  const amt = s.pendingRewards;
-  const mgmtFee = amt * 0.003;
-  showTxConfirm({
-    title: 'Claim Revenue Rewards',
-    iconHtml: '<div style="font-size:48px;">💎</div>',
-    detailsHtml: '<div style="text-align:left;font-size:13px;"><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Rewards:</span><span style="color:var(--green);font-weight:700;">' + amt.toFixed(4) + ' CRO</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="color:var(--muted);">Mgmt Fee (0.3%):</span><span style="color:#9c27b0;">' + mgmtFee.toFixed(4) + ' CRO</span></div><div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">You Receive:</span><span style="color:var(--green);">' + (amt - mgmtFee).toFixed(4) + ' CRO</span></div></div>',
-    onConfirm: async function() {
-      try {
-        if (typeof window.vaultCollectFees === 'function') {
-          await window.vaultCollectFees('Revenue Rewards');
-        } else {
-          var vaultAddr = getTradingVaultAddr();
-          var vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
-          var userAddr = await state.signer.getAddress();
-          var claimWei = ethers.parseEther(String(Math.floor((amt - mgmtFee) * 1e6) / 1e6));
-          var tx = await vaultContract.withdrawTo(userAddr, claimWei);
-          await tx.wait();
-        }
-        s.pendingRewards = 0;
-        s.ownerFees = (s.ownerFees || 0) + mgmtFee;
-        s.distributions = (s.distributions || 0) + 1;
-        saveRSState(s); updateRSStats(); updateRevRsFees();
-        showToast('Claimed ' + (amt - mgmtFee).toFixed(4) + ' CRO in revenue rewards!', 'success');
-      } catch(e) { showToast('Claim failed: ' + e.message, 'error'); }
-    }
-  });
+
+async function rsClaim() {
+  if (!state.signer) { showToast('Connect wallet first', 'error'); return; }
+  if (!_revStakingAddr) { showToast('Revenue Staking contract not deployed', 'error'); return; }
+
+  try {
+    var contract = new ethers.Contract(_revStakingAddr, REV_STAKING_ABI, state.signer);
+    showToast('Claiming CRO rewards... Confirm in MetaMask', 'info');
+    var tx = await contract.claimReward();
+    await tx.wait();
+    showToast('Revenue rewards claimed!', 'success');
+    updateRSStats();
+  } catch(e) { showToast('Claim failed: ' + (e.reason || e.message), 'error'); }
 }
-function rsOwnerCollect() { if (window.rsOwnerCollect && window.rsOwnerCollect !== rsOwnerCollect) { window.rsOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
-function revCollectRsFees() { if (window.revCollectRsFees && window.revCollectRsFees !== revCollectRsFees) { window.revCollectRsFees(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
+
+function rsOwnerCollect() { showToast('Use emergencyWithdraw from contract owner wallet', 'info'); }
+function revCollectRsFees() { showToast('Use contract owner functions', 'info'); }
 function updateRevRsFees() {
-  const s = getRSState();
-  const elFees = document.getElementById('revRsFees');
-  const elCount = document.getElementById('revRsCount');
+  var s = getRSState();
+  var elFees = document.getElementById('revRsFees');
+  var elCount = document.getElementById('revRsCount');
   if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
   if (elCount) elCount.textContent = s.distributions || 0;
 }
 
 // ═══════════════════════════════════════════
-//  LIMIT ORDERS LOGIC
-// ═══════════════════════════════════════════
-function getLOState() { try { return JSON.parse(localStorage.getItem('gangLimitOrderState') || '{}'); } catch(e) { return {}; } }
-function saveLOState(s) { localStorage.setItem('gangLimitOrderState', JSON.stringify(s)); }
-function initLOState() {
-  let s = getLOState();
-  if (!s.orders) { s = { orders: [], ownerFees: 0, filledCount: 0, orderCount: 0 }; saveLOState(s); }
-  return s;
-}
-function updateLOStats() {
-  const s = initLOState();
-  const openOrders = s.orders ? s.orders.filter(o => o.status === 'open').length : 0;
-  const elOpen = document.getElementById('loOpenOrders');
-  const elFilled = document.getElementById('loFilledToday');
-  const elYour = document.getElementById('loYourOrders');
-  if (elOpen) elOpen.textContent = openOrders;
-  if (elFilled) elFilled.textContent = s.filledCount || 0;
-  if (elYour) elYour.textContent = s.orders ? s.orders.length : 0;
-  const isOwner = state.connectedAddress && CONTRACTS.TREASURY && state.connectedAddress.toLowerCase() === CONTRACTS.TREASURY.toLowerCase();
-  const ownerPanel = document.getElementById('loOwnerPanel');
-  if (ownerPanel) ownerPanel.style.display = isOwner ? 'block' : 'none';
-  if (isOwner) {
-    const elFees = document.getElementById('loOwnerFees');
-    const elOCount = document.getElementById('loOwnerCount');
-    if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(4) + ' CRO';
-    if (elOCount) elOCount.textContent = s.filledCount || 0;
-  }
-}
-function renderLOOrders() {
-  const s = initLOState(), el = document.getElementById('loOrdersList');
-  if (!el) return;
-  const openOrders = s.orders ? s.orders.filter(o => o.status === 'open') : [];
-  if (openOrders.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No open orders. Place one above.</div>'; return; }
-  el.innerHTML = openOrders.map((o, i) => `
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
-      <div>
-        <span style="font-weight:700;color:${o.type === 'buy' ? 'var(--green)' : '#e53935'};">${o.type.toUpperCase()}</span>
-        <span style="color:var(--text);font-weight:600;margin-left:6px;">${o.token}</span>
-        <span style="color:var(--muted);font-size:11px;margin-left:6px;">@ $${o.price}</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <div style="text-align:right;"><div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--text);">${o.amount}</div><div style="font-size:9px;color:var(--muted);">Amount</div></div>
-        <button onclick="fillLimitOrder(${s.orders.indexOf(o)})" style="background:#42a5f5;color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-weight:700;">FILL</button>
-        <button onclick="cancelLimitOrder(${s.orders.indexOf(o)})" style="background:#e53935;color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-weight:700;">X</button>
-      </div>
-    </div>
-  `).join('');
-}
-function placeLimitOrder() {
-  const type = document.getElementById('loOrderType').value;
-  const token = document.getElementById('loToken').value;
-  const price = parseFloat(document.getElementById('loPrice').value);
-  const amount = parseFloat(document.getElementById('loAmount').value);
-  if (!price || !amount || amount <= 0) { showToast('Fill in all fields', 'error'); return; }
-  const fee = amount * 0.003;
-  showTradeConfirm({
-    title: type.toUpperCase() + ' ' + token + ' @ $' + price,
-    priceFetcher: async function() { return getTokenPrice(token) || price; },
-    btnText: 'PLACE ' + type.toUpperCase() + ' ORDER',
-    btnColor: type === 'buy' ? 'linear-gradient(135deg,#27ae60,#2ecc71)' : 'linear-gradient(135deg,#e74c3c,#c0392b)',
-    details: [
-      { label: 'Type', value: type.toUpperCase(), cls: type === 'buy' ? 'green' : 'red' },
-      { label: 'Token', value: token },
-      { label: 'Limit Price', value: '$' + price },
-      { label: 'Amount', value: amount + ' ' + token, cls: 'gold' },
-      { label: 'Exec Fee (0.3%)', value: fee.toFixed(4) + ' CRO', cls: 'red' },
-    ],
-    onConfirm: async () => {
-      try {
-        if (typeof window.vaultDeposit === 'function' && state && state.signer) {
-          await window.vaultDeposit('limitorders', amount, 'Limit Order — ' + type + ' ' + token + ' @ $' + price);
-        } else { showToast('Connect wallet for on-chain deposit', 'error'); return; }
-      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
-      const s = initLOState();
-      s.orders.push({ type, token, price, amount, fee, status: 'open', time: Date.now() });
-      s.orderCount = (s.orderCount || 0) + 1;
-      saveLOState(s); renderLOOrders(); updateLOStats();
-      showToast(`Limit ${type} order placed: ${amount} ${token} @ $${price}`, 'success');
-      document.getElementById('loPrice').value = '';
-      document.getElementById('loAmount').value = '';
-    }
-  });
-}
-function fillLimitOrder(idx) {
-  const s = initLOState();
-  if (!s.orders[idx] || s.orders[idx].status !== 'open') return;
-  const o = s.orders[idx];
-  showTradeConfirm({
-    title: 'FILL ' + o.type.toUpperCase() + ' ' + o.token,
-    priceFetcher: async function() { return o.price; },
-    btnText: 'FILL ORDER',
-    btnColor: 'linear-gradient(135deg,#42a5f5,#1e88e5)',
-    details: [
-      { label: 'Type', value: o.type.toUpperCase(), cls: o.type === 'buy' ? 'green' : 'red' },
-      { label: 'Token', value: o.token },
-      { label: 'Amount', value: o.amount + ' ' + o.token, cls: 'gold' },
-      { label: 'Fill Price', value: '$' + o.price },
-      { label: 'Fee', value: o.fee.toFixed(4) + ' CRO', cls: 'red' },
-    ],
-    onConfirm: async () => {
-      try {
-        if (typeof window.fillLimitOrder === 'function') {
-          await window.fillLimitOrder(idx);
-        }
-      } catch(e) { return; }
-      s.orders[idx].status = 'filled';
-      s.ownerFees = (s.ownerFees || 0) + o.fee;
-      s.filledCount = (s.filledCount || 0) + 1;
-      saveLOState(s); renderLOOrders(); updateLOStats(); updateRevLoFees();
-      showToast(`Order filled: ${o.amount} ${o.token} @ $${o.price}`, 'success');
-    }
-  });
-}
-function cancelLimitOrder(idx) {
-  const s = initLOState();
-  if (!s.orders[idx] || s.orders[idx].status !== 'open') return;
-  s.orders[idx].status = 'cancelled';
-  saveLOState(s); renderLOOrders(); updateLOStats();
-  showToast('Order cancelled', 'success');
-}
-function loOwnerCollect() { if (window.loOwnerCollect && window.loOwnerCollect !== loOwnerCollect) { window.loOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
-function revCollectLoFees() { if (window.revCollectLoFees && window.revCollectLoFees !== revCollectLoFees) { window.revCollectLoFees(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
-function updateRevLoFees() {
-  const s = getLOState();
-  const elFees = document.getElementById('revLoFees');
-  const elCount = document.getElementById('revLoCount');
-  if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
-  if (elCount) elCount.textContent = s.filledCount || 0;
-}
-document.getElementById('loAmount')?.addEventListener('input', function() {
-  const v = parseFloat(this.value) || 0;
-  const el = document.getElementById('loFeePreview');
-  if (el) el.textContent = (v * 0.003).toFixed(4);
-});
-
-// ═══════════════════════════════════════════
-//  PERPETUAL DEX LOGIC
-// ═══════════════════════════════════════════
-const PP_PRICES = { 'BTC-PERP': 97542, 'ETH-PERP': 3842, 'CRO-PERP': 0.089, 'SOL-PERP': 198, 'GANG-PERP': 0.0034, 'DOGE-PERP': 0.32, 'AVAX-PERP': 38.5, 'LINK-PERP': 18.2 };
-const PP_META = {
-  'BTC-PERP': { tv: 'BINANCE:BTCUSDT', logo: 'https://assets.coingecko.com/coins/images/1/small/bitcoin.png', bg: '#f7931a' },
-  'ETH-PERP': { tv: 'BINANCE:ETHUSDT', logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png', bg: '#627eea' },
-  'CRO-PERP': { tv: 'CRYPTO:CROUSD', logo: 'https://assets.coingecko.com/coins/images/7310/small/cro_token_logo.png', bg: '#002d74' },
-  'SOL-PERP': { tv: 'BINANCE:SOLUSDT', logo: 'https://assets.coingecko.com/coins/images/4128/small/solana.png', bg: '#9945ff' },
-  'GANG-PERP': { tv: 'CRYPTO:CROUSD', logo: '', bg: '#d4a017' },
-  'DOGE-PERP': { tv: 'BINANCE:DOGEUSDT', logo: 'https://assets.coingecko.com/coins/images/5/small/dogecoin.png', bg: '#c3a634' },
-  'AVAX-PERP': { tv: 'BINANCE:AVAXUSDT', logo: 'https://assets.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png', bg: '#e84142' },
-  'LINK-PERP': { tv: 'BINANCE:LINKUSDT', logo: 'https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png', bg: '#2a5ada' }
-};
-function loadPPChart(pair) {
-  const el = document.getElementById('pp_tradingview_chart');
-  if (!el) return;
-  const m = PP_META[pair] || PP_META['BTC-PERP'];
-  el.innerHTML = '';
-  const script = document.createElement('script');
-  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-  script.type = 'text/javascript';
-  script.async = true;
-  script.innerHTML = JSON.stringify({
-    autosize: true, symbol: m.tv, interval: '5', timezone: 'Etc/UTC', theme: 'dark', style: '1', locale: 'en',
-    hide_top_toolbar: false, hide_legend: false, allow_symbol_change: false, save_image: false,
-    backgroundColor: 'rgba(10,10,10,1)', gridColor: 'rgba(40,40,40,0.3)', hide_volume: false,
-    studies: ["RSI@tv-basicstudies", "MASimple@tv-basicstudies"],
-    overrides: {
-      "mainSeriesProperties.candleStyle.upColor": "#26a69a", "mainSeriesProperties.candleStyle.downColor": "#ef5350",
-      "mainSeriesProperties.candleStyle.borderUpColor": "#26a69a", "mainSeriesProperties.candleStyle.borderDownColor": "#ef5350",
-      "mainSeriesProperties.candleStyle.wickUpColor": "#26a69a", "mainSeriesProperties.candleStyle.wickDownColor": "#ef5350",
-      "volumePaneSize": "small", "volume.volume.color.0": "#ef535080", "volume.volume.color.1": "#26a69a80"
-    }
-  });
-  const container = document.createElement('div');
-  container.className = 'tradingview-widget-container';
-  container.style.cssText = 'width:100%;height:100%;';
-  const inner = document.createElement('div');
-  inner.className = 'tradingview-widget-container__widget';
-  inner.style.cssText = 'width:100%;height:100%;';
-  container.appendChild(inner);
-  container.appendChild(script);
-  el.appendChild(container);
-}
-function switchPPPair() {
-  const pair = document.getElementById('ppPair').value;
-  const m = PP_META[pair] || PP_META['BTC-PERP'];
-  const logoEl = document.getElementById('ppPairLogo');
-  if (logoEl) {
-    logoEl.style.background = m.bg;
-    logoEl.innerHTML = m.logo ? '<img src="'+m.logo+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'">' : '<span style="font-family:Bebas Neue,sans-serif;font-size:14px;color:#fff;">G</span>';
-  }
-  const nameEl = document.getElementById('ppPairName');
-  if (nameEl) nameEl.textContent = pair;
-  const priceEl = document.getElementById('ppPairPrice');
-  if (priceEl) priceEl.textContent = '$' + (PP_PRICES[pair] || 0).toLocaleString();
-  loadPPChart(pair);
-}
-function getPPState() { try { return JSON.parse(localStorage.getItem('gangPerpDexState') || '{}'); } catch(e) { return {}; } }
-function savePPState(s) { localStorage.setItem('gangPerpDexState', JSON.stringify(s)); }
-function initPPState() {
-  let s = getPPState();
-  if (!s.positions) { s = { positions: [], ownerFees: 0, openInterest: 0, volume: 0, posCount: 0 }; savePPState(s); }
-  return s;
-}
-function updatePPStats() {
-  const s = initPPState();
-  const openPos = s.positions ? s.positions.filter(p => p.status === 'open') : [];
-  const oi = openPos.reduce((a, p) => a + (p.collateral * p.leverage), 0);
-  const elOI = document.getElementById('ppOpenInterest');
-  const elVol = document.getElementById('ppVolume');
-  const elPos = document.getElementById('ppYourPos');
-  if (elOI) elOI.textContent = '$' + oi.toLocaleString();
-  if (elVol) elVol.textContent = '$' + (s.volume || 0).toLocaleString();
-  if (elPos) elPos.textContent = openPos.length;
-  const isOwner = state.connectedAddress && CONTRACTS.TREASURY && state.connectedAddress.toLowerCase() === CONTRACTS.TREASURY.toLowerCase();
-  const ownerPanel = document.getElementById('ppOwnerPanel');
-  if (ownerPanel) ownerPanel.style.display = isOwner ? 'block' : 'none';
-  if (isOwner) {
-    const elFees = document.getElementById('ppOwnerFees');
-    const elOCount = document.getElementById('ppOwnerCount');
-    if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(4) + ' CRO';
-    if (elOCount) elOCount.textContent = s.posCount || 0;
-  }
-}
-function renderPPPositions() {
-  const s = initPPState(), el = document.getElementById('ppPositionsList');
-  if (!el) return;
-  const openPos = s.positions ? s.positions.filter(p => p.status === 'open') : [];
-  if (openPos.length === 0) { el.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px;">No open positions. Open one above.</div>'; return; }
-  el.innerHTML = openPos.map((p, i) => {
-    const curPrice = PP_PRICES[p.pair] || p.entryPrice;
-    const priceDiff = (curPrice - p.entryPrice) / p.entryPrice;
-    const pnlPct = p.direction === 'long' ? (priceDiff * 100 * p.leverage) : (-priceDiff * 100 * p.leverage);
-    const pnl = p.collateral * (pnlPct / 100);
-    const pnlColor = pnl >= 0 ? 'var(--green)' : '#e53935';
-    const arrow = pnl >= 0 ? '&#9650;' : '&#9660;';
-    return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
-      <div>
-        <span style="font-weight:700;color:${p.direction==='long'?'var(--green)':'#e53935'};">${p.direction.toUpperCase()}</span>
-        <span style="color:var(--text);font-weight:600;margin-left:6px;">${p.pair}</span>
-        <span style="color:var(--muted);font-size:11px;margin-left:6px;">${p.leverage}x</span>
-        <div style="font-size:9px;color:var(--muted);margin-top:2px;">Entry: $${p.entryPrice.toLocaleString(undefined,{maximumFractionDigits:p.entryPrice>100?2:6})} | Now: $${curPrice.toLocaleString(undefined,{maximumFractionDigits:curPrice>100?2:6})}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <div style="text-align:right;"><div style="font-family:'Bebas Neue',sans-serif;font-size:14px;color:${pnlColor};">${arrow} ${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)} CRO (${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(1)}%)</div><div style="font-size:9px;color:var(--muted);">Collat: ${p.collateral}</div></div>
-        <button onclick="closePerpPosition(${s.positions.indexOf(p)})" style="background:#e53935;color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-weight:700;">CLOSE</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-function openPerpPosition() {
-  const pair = document.getElementById('ppPair').value;
-  const direction = document.getElementById('ppDirection').value;
-  const leverage = parseInt(document.getElementById('ppLeverage').value);
-  const collateral = parseFloat(document.getElementById('ppCollateral').value);
-  if (!collateral || collateral <= 0) { showToast('Enter collateral amount', 'error'); return; }
-  const fee = collateral * 0.003;
-  const notional = collateral * leverage;
-  const entryPrice = PP_PRICES[pair] || 100;
-  showTradeConfirm({
-    title: direction.toUpperCase() + ' ' + pair + ' ' + leverage + 'x',
-    priceFetcher: async function() { return PP_PRICES[pair] || entryPrice; },
-    btnText: 'OPEN ' + direction.toUpperCase(),
-    btnColor: direction === 'long' ? 'linear-gradient(135deg,#27ae60,#2ecc71)' : 'linear-gradient(135deg,#e74c3c,#c0392b)',
-    details: [
-      { label: 'Collateral', value: collateral + ' CRO', cls: 'gold' },
-      { label: 'Direction', value: direction.toUpperCase(), cls: direction === 'long' ? 'green' : 'red' },
-      { label: 'Leverage', value: leverage + 'x' },
-      { label: 'Notional Size', value: notional.toLocaleString() + ' CRO' },
-      { label: 'Fee (0.3%)', value: fee.toFixed(4) + ' CRO', cls: 'red' },
-    ],
-    onConfirm: async () => {
-      try {
-        if (state && state.signer) {
-          // CRO is native currency — send as native transfer
-          const vaultAddr = (typeof getVaultAddr === 'function') ? getVaultAddr() : null;
-          const target = vaultAddr || TREASURY_OWNER;
-          showToast('Sending ' + collateral + ' CRO collateral on-chain...', 'info');
-          const tx = await state.signer.sendTransaction({
-            to: target,
-            value: ethers.parseEther(collateral.toString())
-          });
-          await tx.wait();
-          showToast(collateral + ' CRO deposited on-chain!', 'success');
-        } else {
-          showToast('Connect wallet for on-chain deposit', 'error');
-          return;
-        }
-      } catch(e) {
-        if (e.code === 4001 || (e.message && e.message.includes('rejected'))) {
-          showToast('Transaction cancelled.', 'error');
-          return;
-        }
-        showToast('Transaction failed: ' + e.message, 'error'); return;
-      }
-      const s = initPPState();
-      s.positions.push({ pair, direction, leverage, collateral, entryPrice, fee, status: 'open', time: Date.now() });
-      s.ownerFees = (s.ownerFees || 0) + fee;
-      s.volume = (s.volume || 0) + notional;
-      s.posCount = (s.posCount || 0) + 1;
-      savePPState(s); renderPPPositions(); updatePPStats(); updateRevPpFees();
-      showToast(`Opened ${direction.toUpperCase()} ${pair} ${leverage}x — ${collateral} CRO collateral`, 'success');
-      document.getElementById('ppCollateral').value = '';
-    }
-  });
-}
-function closePerpPosition(idx) {
-  const s = initPPState();
-  if (!s.positions[idx] || s.positions[idx].status !== 'open') return;
-  const p = s.positions[idx];
-  const closeFee = p.collateral * 0.003;
-  const curPrice = PP_PRICES[p.pair] || p.entryPrice;
-  showTradeConfirm({
-    title: 'CLOSE ' + p.direction.toUpperCase() + ' ' + p.pair,
-    priceFetcher: async function() { return curPrice; },
-    btnText: 'CLOSE POSITION',
-    btnColor: 'linear-gradient(135deg,#e74c3c,#c0392b)',
-    details: [
-      { label: 'Position', value: p.direction.toUpperCase() + ' ' + p.pair + ' ' + p.leverage + 'x' },
-      { label: 'Collateral', value: p.collateral + ' CRO', cls: 'gold' },
-      { label: 'Entry Price', value: '$' + p.entryPrice.toFixed(2) },
-      { label: 'Close Fee (0.3%)', value: closeFee.toFixed(4) + ' CRO', cls: 'red' },
-    ],
-    onConfirm: async () => {
-      try {
-        if (state && state.signer) {
-          // CRO withdrawal — try vault, fallback to self-tx confirmation
-          const vaultAddr = (typeof getVaultAddr === 'function') ? getVaultAddr() : null;
-          if (vaultAddr) {
-            try {
-              await window.vaultWithdraw('perpdex', p.collateral, 'Close Perp — ' + p.direction.toUpperCase() + ' ' + p.pair + ' ' + p.leverage + 'x');
-            } catch(e2) {
-              // Use trading vault withdrawTo for CRO
-              const tradingVaultAddr = getTradingVaultAddr();
-              const vaultContract = new ethers.Contract(tradingVaultAddr, TRADING_VAULT_ABI, state.signer);
-              const userAddr = await state.signer.getAddress();
-              const tx = await vaultContract.withdrawTo(userAddr, ethers.parseEther(String(p.collateral)));
-              await tx.wait();
-            }
-          } else {
-            const tradingVaultAddr = getTradingVaultAddr();
-            const vaultContract = new ethers.Contract(tradingVaultAddr, TRADING_VAULT_ABI, state.signer);
-            const userAddr = await state.signer.getAddress();
-            const tx = await vaultContract.withdrawTo(userAddr, ethers.parseEther(String(p.collateral)));
-            await tx.wait();
-          }
-        } else {
-          showToast('Connect wallet for on-chain withdrawal', 'error');
-          return;
-        }
-      } catch(e) { showToast('Transaction failed: ' + e.message, 'error'); return; }
-      s.positions[idx].status = 'closed';
-      s.ownerFees = (s.ownerFees || 0) + closeFee;
-      savePPState(s); renderPPPositions(); updatePPStats(); updateRevPpFees();
-      showToast(`Closed ${p.direction.toUpperCase()} ${p.pair}`, 'success');
-    }
-  });
-}
-function ppOwnerCollect() { if (window.ppOwnerCollect && window.ppOwnerCollect !== ppOwnerCollect) { window.ppOwnerCollect(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
-function revCollectPpFees() { if (window.revCollectPpFees && window.revCollectPpFees !== revCollectPpFees) { window.revCollectPpFees(); return; } showToast('Connect wallet for on-chain collection', 'info'); }
-function updateRevPpFees() {
-  const s = getPPState();
-  const elFees = document.getElementById('revPpFees');
-  const elCount = document.getElementById('revPpCount');
-  if (elFees) elFees.textContent = (s.ownerFees || 0).toFixed(2) + ' CRO';
-  if (elCount) elCount.textContent = s.posCount || 0;
-}
-document.getElementById('ppCollateral')?.addEventListener('input', function() {
-  const v = parseFloat(this.value) || 0;
-  const el = document.getElementById('ppFeePreview');
-  if (el) el.textContent = (v * 0.003).toFixed(4);
-});
-
 // ═══════════════════════════════════════════
 //  OTC TRADING DESK LOGIC
 // ═══════════════════════════════════════════
@@ -21090,8 +20564,6 @@ function updateRevDaoFees() {
 function initAllNewFeatures() {
   renderCTLeaders(); renderCTHistory(); updateCTStats(); updateRevCopyFees();
   updateRSStats(); updateRevRsFees();
-  renderLOOrders(); updateLOStats(); updateRevLoFees();
-  renderPPPositions(); updatePPStats(); updateRevPpFees();
   renderOtcDeals(); updateOtcStats(); updateRevOtcFees();
   renderDaoProposals(); updateDaoStats(); updateRevDaoFees();
 }
@@ -21131,35 +20603,6 @@ function updateRsBals() {
   if (elStaked) elStaked.textContent = (s.userStake || 0).toLocaleString() + ' GANG';
 }
 
-// Limit Orders MAX
-function loSetMax() {
-  const token = document.getElementById('loToken').value;
-  let bal = _getBal(token);
-  if (token === 'CRO' && bal > 0.5) bal -= 0.5;
-  document.getElementById('loAmount').value = _truncDec(bal, 6);
-  const feeEl = document.getElementById('loFeePreview');
-  if (feeEl) feeEl.textContent = (bal * 0.003).toFixed(4);
-}
-function updateLoBal() {
-  const token = document.getElementById('loToken')?.value || 'CRO';
-  const el = document.getElementById('loAvailBal');
-  if (el) el.textContent = _getBal(token).toLocaleString() + ' ' + token;
-}
-document.getElementById('loToken')?.addEventListener('change', updateLoBal);
-
-// Perpetual DEX MAX
-function ppSetMax() {
-  let bal = _getBal('CRO');
-  if (bal > 0.5) bal -= 0.5;
-  document.getElementById('ppCollateral').value = _truncDec(bal, 6);
-  const feeEl = document.getElementById('ppFeePreview');
-  if (feeEl) feeEl.textContent = (bal * 0.003).toFixed(4);
-}
-function updatePpBal() {
-  const el = document.getElementById('ppAvailBal');
-  if (el) el.textContent = _getBal('CRO').toLocaleString() + ' CRO';
-}
-
 // OTC Trading MAX
 function otcSetMax() {
   const token = document.getElementById('otcSellToken').value;
@@ -21180,8 +20623,6 @@ document.getElementById('otcSellToken')?.addEventListener('change', updateOtcBal
 function updateAllFeatureBalances() {
   try { updateCtBal(); } catch(e) {}
   try { updateRsBals(); } catch(e) {}
-  try { updateLoBal(); } catch(e) {}
-  try { updatePpBal(); } catch(e) {}
   try { updateOtcBal(); } catch(e) {}
   try { updateFlashPoolBal(); } catch(e) {}
 }
@@ -22885,9 +22326,12 @@ async function loadFuturesChart(pair) {
     height: chartH,
     layout: { background: { type: 'solid', color: '#0a0a0a' }, textColor: '#999', fontSize: 10, fontFamily: "'Space Mono', monospace" },
     grid: { vertLines: { color: 'rgba(255,255,255,0.04)' }, horzLines: { color: 'rgba(255,255,255,0.04)' } },
-    crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
-    rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)', scaleMargins: { top: 0.05, bottom: 0.2 } },
-    timeScale: { borderColor: 'rgba(255,255,255,0.1)', timeVisible: true, secondsVisible: false }
+    crosshair: { mode: LightweightCharts.CrosshairMode.Magnet },
+    rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)', scaleMargins: { top: 0.1, bottom: 0.15 } },
+    timeScale: { borderColor: 'rgba(255,255,255,0.1)', timeVisible: true, secondsVisible: false },
+    handleScroll: { mouseWheel: true, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: false },
+    handleScale: { axisPressedMouseMove: false, mouseWheel: true, pinch: true },
+    kineticScroll: { touch: true, mouse: false }
   });
 
   // Candlestick series
@@ -22934,9 +22378,13 @@ async function loadFuturesChart(pair) {
       var rw = el.clientWidth || el.offsetWidth || 400;
       var rh = el.clientHeight || el.offsetHeight || 350;
       _lwcChart.resize(rw, rh);
+      // Show last 80 candles — makes candles wider and more readable
       _lwcChart.timeScale().fitContent();
+      if (candles.length > 80) {
+        _lwcChart.timeScale().setVisibleLogicalRange({ from: candles.length - 80, to: candles.length + 5 });
+      }
     }
-  }, 100);
+  }, 150);
 
   // Auto-resize
   var ro = new ResizeObserver(function() {
@@ -25434,141 +24882,6 @@ async function scanMultiChain() {
 }
 
 // ══════════════════════════════════════════════════════════════
-// FEATURE: SWAP / LIMIT ORDER TOGGLE
-// ══════════════════════════════════════════════════════════════
-function switchSwapMode(mode) {
-  const swapPanel = document.getElementById('swapBtn')?.parentElement;
-  const limitPanel = document.getElementById('limitOrderPanel');
-  const tabSwap = document.getElementById('tabSwap');
-  const tabLimit = document.getElementById('tabLimit');
-  if (!limitPanel || !tabSwap || !tabLimit) return;
-
-  // Toggle regular swap elements visibility
-  const swapElements = ['swapFrom','swapTo','swapInfo','slippageRow'].map(id => document.getElementById(id));
-  const swapBoxes = document.querySelectorAll('.swap-box, .swap-divider, .pct-row');
-  const swapBtn = document.getElementById('swapBtn');
-
-  if (mode === 'limit') {
-    tabSwap.style.background = 'transparent'; tabSwap.style.color = 'var(--muted)';
-    tabLimit.style.background = '#ff6b35'; tabLimit.style.color = '#000';
-    limitPanel.style.display = 'block';
-    if (swapBtn) swapBtn.style.display = 'none';
-    swapBoxes.forEach(el => { if (el) el.style.display = 'none'; });
-    swapElements.forEach(el => { if (el) el.style.display = 'none'; });
-    document.querySelectorAll('.swap-box').forEach(el => el.style.display = 'none');
-    document.querySelector('.swap-divider')?.style && (document.querySelector('.swap-divider').style.display = 'none');
-    updateLimitOrderUI();
-  } else {
-    tabSwap.style.background = 'var(--gold)'; tabSwap.style.color = '#000';
-    tabLimit.style.background = 'transparent'; tabLimit.style.color = 'var(--muted)';
-    limitPanel.style.display = 'none';
-    if (swapBtn) swapBtn.style.display = '';
-    document.querySelectorAll('.swap-box').forEach(el => el.style.display = '');
-    document.querySelector('.swap-divider')?.style && (document.querySelector('.swap-divider').style.display = '');
-    swapElements.forEach(el => { if (el) el.style.display = ''; });
-  }
-}
-
-function updateLimitOrderUI() {
-  const fromSym = document.getElementById('tokenFrom')?.value || 'CRO';
-  const toSym = document.getElementById('tokenTo')?.value || 'GANG';
-  const fromPrice = TOKENS[fromSym]?.price || 0;
-  document.getElementById('limitFromSym').textContent = fromSym;
-  document.getElementById('limitToSym').textContent = toSym;
-  document.getElementById('limitCurrentPrice').textContent = '$' + fromPrice.toFixed(6);
-  document.getElementById('limitBalance').textContent = (state.balances[fromSym] || 0).toFixed(4) + ' ' + fromSym;
-  renderLimitOrders();
-
-  // Estimate receive
-  const targetPrice = parseFloat(document.getElementById('limitTargetPrice')?.value) || 0;
-  const amount = parseFloat(document.getElementById('limitAmount')?.value) || 0;
-  const toPrice = TOKENS[toSym]?.price || 0;
-  if (targetPrice > 0 && amount > 0 && toPrice > 0) {
-    const usdValue = amount * targetPrice * 0.997; // after 0.3% fee
-    const receiveEst = usdValue / toPrice;
-    document.getElementById('limitReceiveEst').textContent = receiveEst.toFixed(4) + ' ' + toSym;
-  }
-}
-
-// Limit order input listeners
-document.getElementById('limitTargetPrice')?.addEventListener('input', updateLimitOrderUI);
-document.getElementById('limitAmount')?.addEventListener('input', updateLimitOrderUI);
-
-function getLimitOrders() {
-  try { return JSON.parse(localStorage.getItem('gang_limit_orders') || '[]'); } catch { return []; }
-}
-function saveLimitOrders(orders) {
-  localStorage.setItem('gang_limit_orders', JSON.stringify(orders));
-}
-
-function placeSwapLimitOrder() {
-  if (!state.address) { showToast('Connect wallet first', 'error'); return; }
-  const fromSym = document.getElementById('tokenFrom')?.value || 'CRO';
-  const toSym = document.getElementById('tokenTo')?.value || 'GANG';
-  const targetPrice = parseFloat(document.getElementById('limitTargetPrice')?.value);
-  const amount = parseFloat(document.getElementById('limitAmount')?.value);
-  if (!targetPrice || targetPrice <= 0) { showToast('Enter a target price', 'error'); return; }
-  if (!amount || amount <= 0) { showToast('Enter an amount', 'error'); return; }
-  if (amount > (state.balances[fromSym] || 0)) { showToast('Insufficient ' + fromSym + ' balance', 'error'); return; }
-
-  const orders = getLimitOrders();
-  orders.push({
-    id: Date.now(),
-    wallet: state.address,
-    fromSym, toSym, targetPrice, amount,
-    createdAt: new Date().toISOString(),
-    status: 'open'
-  });
-  saveLimitOrders(orders);
-  showToast('Limit order placed! Will execute when ' + fromSym + ' hits $' + targetPrice, 'success');
-  document.getElementById('limitTargetPrice').value = '';
-  document.getElementById('limitAmount').value = '';
-  renderLimitOrders();
-  addPoints(5);
-}
-
-function cancelSwapLimitOrder(id) {
-  const orders = getLimitOrders().filter(o => o.id !== id);
-  saveLimitOrders(orders);
-  showToast('Order cancelled', '');
-  renderLimitOrders();
-}
-
-function renderLimitOrders() {
-  const el = document.getElementById('limitOrdersList');
-  if (!el) return;
-  const orders = getLimitOrders().filter(o => o.wallet === state.address && o.status === 'open');
-  if (orders.length === 0) {
-    el.innerHTML = '<div style="color:var(--muted);text-align:center;padding:12px;">No open orders</div>';
-    return;
-  }
-  el.innerHTML = orders.map(o => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
-      <div>
-        <div style="font-size:13px;color:var(--text);">${o.amount} ${o.fromSym} &#8594; ${o.toSym}</div>
-        <div style="font-size:11px;color:var(--muted);">@ $${o.targetPrice}</div>
-      </div>
-      <button onclick="cancelSwapLimitOrder(${o.id})" style="background:rgba(192,57,43,0.15);border:1px solid var(--red);color:var(--red);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;">CANCEL</button>
-    </div>
-  `).join('');
-}
-
-// Check limit orders periodically
-setInterval(function checkLimitOrders() {
-  const orders = getLimitOrders();
-  let changed = false;
-  orders.forEach(o => {
-    if (o.status !== 'open') return;
-    const currentPrice = TOKENS[o.fromSym]?.price || 0;
-    if (currentPrice > 0 && currentPrice >= o.targetPrice) {
-      o.status = 'triggered';
-      changed = true;
-      showToast('Limit order triggered: ' + o.amount + ' ' + o.fromSym + ' @ $' + o.targetPrice + '. Open Swap to execute!', 'success');
-    }
-  });
-  if (changed) { saveLimitOrders(orders); renderLimitOrders(); }
-}, 30000);
-
 // ══════════════════════════════════════════════════════════════
 // FEATURE: LEADERBOARD + POINTS SYSTEM
 // ══════════════════════════════════════════════════════════════
@@ -25814,18 +25127,6 @@ function updateAndPulse(elId, newText, forceColor) {
   }
 }
 
-// ─── Dynamic Perp DEX Price Simulation ───
-// Make PP_PRICES fluctuate realistically every tick
-function tickPerpPrices() {
-  const pairs = Object.keys(PP_PRICES);
-  pairs.forEach(pair => {
-    const base = PP_PRICES[pair];
-    // Random walk: -0.3% to +0.3% per tick
-    const change = (Math.random() - 0.48) * 0.006; // slight bullish bias
-    PP_PRICES[pair] = Math.max(base * 0.5, base * (1 + change));
-  });
-}
-
 // ─── Revenue Staking: simulate rewards accruing over time ───
 function tickRevenueStaking() {
   const s = getRSState();
@@ -25876,17 +25177,6 @@ function refreshActivePage() {
       updateRSStats();
       break;
 
-    case 'limitorders':
-      renderLOOrders();
-      updateLOStats();
-      break;
-
-    case 'perpdex':
-      tickPerpPrices();
-      renderPPPositions();
-      updatePPStats();
-      break;
-
     case 'otc':
       renderOtcDeals();
       updateOtcStats();
@@ -25909,9 +25199,7 @@ function refreshActivePage() {
       checkOwnerRevenue();
       loadRevRewardBalances();
       updateRevCopyFees();
-      updateRevPpFees();
       updateRevOtcFees();
-      updateRevLoFees();
       updateRevDaoFees();
       updateRevRsFees();
       break;
@@ -25941,13 +25229,7 @@ function refreshAllBalanceDisplays() {
   
   // Update Copy Trading balance
   try { if (typeof updateCtBal === 'function') updateCtBal(); } catch(e) {}
-  // Update Rev Staking balance
   try { if (typeof updateRsBals === 'function') updateRsBals(); } catch(e) {}
-  // Update Limit Orders balance
-  try { if (typeof updateLoBal === 'function') updateLoBal(); } catch(e) {}
-  // Update Perp DEX balance
-  try { if (typeof updatePpBal === 'function') updatePpBal(); } catch(e) {}
-  // Update OTC balance
   try { if (typeof updateOtcBal === 'function') updateOtcBal(); } catch(e) {}
 }
 
@@ -25955,20 +25237,6 @@ function refreshAllBalanceDisplays() {
 setInterval(() => {
   refreshActivePage();
 }, 5000);
-
-// ─── Perp prices tick faster (every 3s) for realistic feel ───
-setInterval(() => {
-  tickPerpPrices();
-  // If perpdex page is active, re-render positions to show updated PnL
-  if (getActivePage() === 'perpdex') {
-    renderPPPositions();
-    updatePPStats();
-    // Update chart header price
-    const pair = document.getElementById('ppPair')?.value || 'BTC-PERP';
-    const priceEl = document.getElementById('ppPairPrice');
-    if (priceEl) priceEl.textContent = '$' + (PP_PRICES[pair] || 0).toLocaleString(undefined, {maximumFractionDigits:2});
-  }
-}, 3000);
 
 // ─── Revenue Staking rewards accrue every 8 seconds ───
 setInterval(() => {
@@ -26002,7 +25270,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
       'nfts':'nfts','referral':'referral','create':'create','marketplace':'market',
       'market':'market','swap':'swap','liquidity':'liquidity','portfolio':'portfolio',
       'token':'token','roadmap':'roadmap','leaderboard':'leaderboard','tracker':'tracker','futures':'futures',
-      'copytrade':'copytrade','revstaking':'revstaking','limitorders':'limitorders','perpdex':'perpdex','otc':'otc','dao':'dao',
+      'copytrade':'copytrade','revstaking':'revstaking','otc':'otc','dao':'dao',
       'signals':'signals','security':'security','nftstaking':'nftstaking'
     };
     var page = pageMap[hash] || hash;
@@ -27411,15 +26679,6 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   window.rsOwnerCollect = async function() { try { await vaultCollectFees('Revenue Staking'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectRsFees = async function() { try { await vaultCollectFees('Revenue Staking'); } catch(e) { showToast(e.message, 'error'); } };
 
-  // --- LIMIT ORDERS (on-chain wired inline) ---
-  window.loOwnerCollect = async function() { try { await vaultCollectFees('Limit Orders'); } catch(e) { showToast(e.message, 'error'); } };
-  window.revCollectLoFees = async function() { try { await vaultCollectFees('Limit Orders'); } catch(e) { showToast(e.message, 'error'); } };
-
-  // --- PERPETUAL DEX (on-chain wired via openPerpPosition/closePerpPosition directly) ---
-  // openPerpPosition is handled by the original function which calls vaultDeposit inline
-  window.ppOwnerCollect = async function() { try { await vaultCollectFees('Perp DEX'); } catch(e) { showToast(e.message, 'error'); } };
-  window.revCollectPpFees = async function() { try { await vaultCollectFees('Perp DEX'); } catch(e) { showToast(e.message, 'error'); } };
-
   // --- OTC TRADING (on-chain wired inline) ---
   window.otcOwnerCollect = async function() { try { await vaultCollectFees('OTC Trading'); } catch(e) { showToast(e.message, 'error'); } };
   window.revCollectOtcFees = async function() { try { await vaultCollectFees('OTC Trading'); } catch(e) { showToast(e.message, 'error'); } };
@@ -27429,9 +26688,6 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
   window.revCollectDaoFees = async function() { try { await vaultCollectFees('DAO'); } catch(e) { showToast(e.message, 'error'); } };
 
   // --- REMAINING OVERRIDES (on-chain wired inline) ---
-
-  // closePerpPosition is handled by the original function which calls vaultWithdraw inline
-
   // --- OTC FILL (on-chain wired inline) ---
 
   // --- LEVERAGE OWNER POOL DEPOSIT/WITHDRAW (Real On-Chain) ---
@@ -27641,7 +26897,7 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
           const vaultTotal = parseFloat(ethers.formatEther(vaultBal));
 
           // Update individual pool banners by reading pool balances
-          const pools = ['swapfees','predictions','flashloans','insurance','aggregator','copytrading','revstaking','limitorders','perpdex','otctrading','dao','squad','competition','bonds_CRO-GANG'];
+          const pools = ['swapfees','predictions','flashloans','insurance','aggregator','copytrading','revstaking','otctrading','dao','squad','competition','bonds_CRO-GANG'];
           const poolElMap = {
             'swapfees': 'revSwapFeeBal',
             'predictions': 'revPredFees',
@@ -27650,8 +26906,6 @@ console.log('[GANG] Global auto-refresh engine started — charts, balances, and
             'aggregator': 'revAggFees',
             'copytrading': 'revCopyFees',
             'revstaking': 'revRsFees',
-            'limitorders': 'revLoFees',
-            'perpdex': 'revPpFees',
             'otctrading': 'revOtcFees',
             'dao': 'revDaoFees'
           };
