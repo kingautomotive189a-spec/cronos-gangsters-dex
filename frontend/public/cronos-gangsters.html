@@ -522,7 +522,10 @@
   /* ── STAKING PAGE MOBILE ── */
   @media(max-width:700px){
     #page-staking>div:nth-of-type(3){grid-template-columns:1fr!important;}
+    #page-staking .staking-2col{grid-template-columns:1fr!important;}
   }
+  #page-staking{overflow-x:hidden;}
+  #page-staking *{box-sizing:border-box;max-width:100%;}
 
   /* ── SCROLLBAR ── */
   ::-webkit-scrollbar{width:5px;}
@@ -3206,7 +3209,7 @@ function toggleNavMenu() {
   <div class="page" id="page-staking">
 
     <!-- Hero strip -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
       <div class="gang-img-card">
         <img src="/img/enforcer.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-fit:cover;object-position:center top;" />
         <div class="gang-img-caption">🔒 LOCK & EARN</div>
@@ -3261,7 +3264,7 @@ function toggleNavMenu() {
       </div>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    <div class="staking-2col" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
 
       <!-- LEFT: Stake form -->
       <div>
@@ -3508,7 +3511,7 @@ function toggleNavMenu() {
         <div class="stat-item"><div class="stat-label">REWARD / NFT / DAY</div><div class="stat-value" style="color:var(--gold);">1 GANG</div></div>
         <div class="stat-item"><div class="stat-label">YOUR PENDING</div><div class="stat-value" id="nftPendingRewards" style="color:var(--green);" data-testid="nft-pending">0 GANG</div></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div class="staking-2col" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
         <div>
           <div class="card" style="border-color:rgba(212,160,23,0.35);margin-bottom:16px;">
             <div class="card-title" style="margin-bottom:4px;">STAKE YOUR NFT</div>
