@@ -24173,9 +24173,9 @@ function startPositionMonitor() {
         const currentPrice = futuresState.prices[pos.pair];
         if (!currentPrice || currentPrice <= 0) return; // No price data yet
         
-        // Minimum hold period — don't auto-close within 60 seconds of opening
+        // Brief grace period — wait for WebSocket price to arrive before checking
         var openedMs = pos.openedAt ? new Date(pos.openedAt).getTime() : 0;
-        if (Date.now() - openedMs < 60000) return;
+        if (Date.now() - openedMs < 5000) return;
         
         const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
         const sideNorm = (pos.side || '').toLowerCase();
