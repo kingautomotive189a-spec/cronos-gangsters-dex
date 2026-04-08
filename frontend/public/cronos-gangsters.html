@@ -24172,6 +24172,11 @@ function startPositionMonitor() {
         if (pos._autoClosing || pos.status === 'closed') return;
         const currentPrice = futuresState.prices[pos.pair];
         if (!currentPrice || currentPrice <= 0) return; // No price data yet
+        
+        // Minimum hold period — don't auto-close within 60 seconds of opening
+        var openedMs = pos.openedAt ? new Date(pos.openedAt).getTime() : 0;
+        if (Date.now() - openedMs < 60000) return;
+        
         const priceDiff = (currentPrice - pos.entryPrice) / pos.entryPrice;
         const sideNorm = (pos.side || '').toLowerCase();
         const liqMove = 1 / pos.leverage;
@@ -24839,14 +24844,17 @@ function simulateFuturesTick() {
 
     // Realistic random walk with momentum + mean reversion
     const assetType = fp ? fp.type : 'other';
-    // Higher volatility for exciting, unpredictable movement
-    let vol = assetType === 'commodity' ? 0.0025 : assetType === 'index' ? 0.0018 : 0.003;
+    // REALISTIC volatility — matches real-world markets
+    // Real stocks: ~1% per day = ~0.0007% per second
+    // Real commodities: ~1.5% per day
+    // Real indices: ~0.8% per day
+    let vol = assetType === 'commodity' ? 0.00012 : assetType === 'index' ? 0.00008 : 0.00015;
     
-    // Momentum — trend continuation (30% chance of a burst move)
+    // Momentum — trend continuation (5% chance of a moderate burst)
     if (!_futuresMomentum) _futuresMomentum = {};
     if (!_futuresMomentum[pair]) _futuresMomentum[pair] = 0;
-    if (Math.random() < 0.30) vol *= 2.5; // big candle move
-    if (Math.random() < 0.05) vol *= 5; // rare spike
+    if (Math.random() < 0.05) vol *= 1.5; // occasional bigger move (was 30% chance of 2.5x)
+    if (Math.random() < 0.01) vol *= 2.5; // rare spike (was 5% chance of 5x)
     
     // Gaussian-ish random using Box-Muller for more natural distribution
     const u1 = Math.random();
@@ -24861,8 +24869,9 @@ function simulateFuturesTick() {
     // Soft mean-reversion toward last known API price (prevents runaway drift)
     const anchor = _futuresLastApiPrice[pair] || basePrice;
     const drift = (newPrice - anchor) / anchor;
-    if (Math.abs(drift) > 0.02) {
-      newPrice = newPrice * (1 + (drift > 0 ? -0.001 : 0.001));
+    if (Math.abs(drift) > 0.005) {
+      // Strong pull back — prevent simulated prices from drifting more than 0.5% from anchor
+      newPrice = newPrice * (1 + (drift > 0 ? -0.01 : 0.01));
     }
     
     futuresState.prices[pair] = newPrice;
