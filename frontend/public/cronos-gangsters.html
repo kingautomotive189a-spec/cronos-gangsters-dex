@@ -9302,7 +9302,17 @@ async function quickRefreshBalances(symbols) {
     });
     await Promise.all(promises);
     updateBalanceDisplays();
+    // Also refresh the leverage pool display
+    if (typeof updateFuturesPool === 'function') updateFuturesPool();
   } catch {}
+}
+
+// Optimistic balance preview — instantly shows expected balance while tx confirms
+function optimisticBalanceUpdate(sym, delta) {
+  if (state.balances[sym] !== undefined) {
+    state.balances[sym] = Math.max(0, state.balances[sym] + delta);
+    updateBalanceDisplays();
+  }
 }
 
 async function loadBalances() {
@@ -22815,9 +22825,10 @@ function renderChartPositionLines() {
   });
   if (openPositions.length === 0) { overlay.innerHTML = ''; return; }
 
-  // Chart visible area (excluding TradingView toolbar at top and time axis at bottom)
+  // Chart visible area — ONLY the candlestick area (not volume/RSI indicators)
+  // On mobile with indicators: toolbar ~8%, candles 8%-52%, volume 52%-62%, RSI 62%-80%, time axis 80%+
   var chartAreaTop = chartH * 0.08;
-  var chartAreaBottom = chartH * 0.82;
+  var chartAreaBottom = chartH * 0.52;
   var chartAreaHeight = chartAreaBottom - chartAreaTop;
 
   // Match TradingView's visible range — center on current price with fixed % range
@@ -24220,8 +24231,10 @@ async function futuresOwnerDeposit(curr) {
         value: ethers.parseEther(String(amt))
       });
       showToast('TX sent! Confirming...', 'info');
+      optimisticBalanceUpdate('CRO', -amt);
       await tx.wait();
       showToast(amt.toFixed(2) + ' CRO deposited to vault!', 'success');
+      quickRefreshBalances(['CRO']);
       futuresState.poolBalanceCRO += amt;
       futuresState.ownerDepositedCRO += amt;
     } else if (curr === 'GANG') {
@@ -24231,8 +24244,10 @@ async function futuresOwnerDeposit(curr) {
       showToast('Depositing ' + amt.toFixed(2) + ' GANG to vault...', 'info');
       var tx = await gangContract.transfer(vaultAddr, ethers.parseEther(String(amt)));
       showToast('TX sent! Confirming...', 'info');
+      optimisticBalanceUpdate('GANG', -amt);
       await tx.wait();
       showToast(amt.toFixed(2) + ' GANG deposited to vault!', 'success');
+      quickRefreshBalances(['GANG']);
       futuresState.poolBalance += amt;
       futuresState.ownerDeposited += amt;
     } else {
@@ -24280,8 +24295,10 @@ async function futuresOwnerWithdraw(curr) {
       var vaultContract = new ethers.Contract(vaultAddr, TRADING_VAULT_ABI, state.signer);
       var tx = await vaultContract.withdrawTo(await state.signer.getAddress(), ethers.parseEther(String(amt)));
       showToast('TX sent! Confirming...', 'info');
+      optimisticBalanceUpdate('CRO', amt);
       await tx.wait();
       showToast(amt.toFixed(2) + ' CRO withdrawn from vault!', 'success');
+      quickRefreshBalances(['CRO']);
       futuresState.poolBalanceCRO = Math.max(0, futuresState.poolBalanceCRO - amt);
       futuresState.ownerDepositedCRO = Math.max(0, futuresState.ownerDepositedCRO - amt);
     } else if (curr === 'GANG') {
@@ -24292,8 +24309,10 @@ async function futuresOwnerWithdraw(curr) {
       var userAddr = await state.signer.getAddress();
       var tx = await vaultContract.withdrawTokenTo(GANG_ADDR, userAddr, ethers.parseEther(String(amt)));
       showToast('TX sent! Confirming...', 'info');
+      optimisticBalanceUpdate('GANG', amt);
       await tx.wait();
       showToast(amt.toFixed(2) + ' GANG withdrawn from vault!', 'success');
+      quickRefreshBalances(['GANG']);
       quickRefreshBalances(['GANG']);
       futuresState.poolBalance = Math.max(0, futuresState.poolBalance - amt);
       futuresState.ownerDeposited = Math.max(0, futuresState.ownerDeposited - amt);
@@ -24515,24 +24534,30 @@ function simulateFuturesTick() {
 
     // Realistic random walk with momentum + mean reversion
     const assetType = fp ? fp.type : 'other';
-    // Higher volatility for more realistic movement
-    let vol = assetType === 'commodity' ? 0.0012 : assetType === 'index' ? 0.0008 : 0.0015;
+    // Higher volatility for exciting, unpredictable movement
+    let vol = assetType === 'commodity' ? 0.0025 : assetType === 'index' ? 0.0018 : 0.003;
     
-    // Add random momentum bursts (10% chance of a bigger move)
-    if (Math.random() < 0.10) vol *= 3;
+    // Momentum — trend continuation (30% chance of a burst move)
+    if (!_futuresMomentum) _futuresMomentum = {};
+    if (!_futuresMomentum[pair]) _futuresMomentum[pair] = 0;
+    if (Math.random() < 0.30) vol *= 2.5; // big candle move
+    if (Math.random() < 0.05) vol *= 5; // rare spike
     
     // Gaussian-ish random using Box-Muller for more natural distribution
     const u1 = Math.random();
     const u2 = Math.random();
     const gaussian = Math.sqrt(-2 * Math.log(u1 || 0.001)) * Math.cos(2 * Math.PI * u2);
-    const move = gaussian * vol;
+    
+    // Add momentum drift (trends persist for a few ticks)
+    _futuresMomentum[pair] = _futuresMomentum[pair] * 0.85 + gaussian * 0.15;
+    const move = (_futuresMomentum[pair] + gaussian * 0.7) * vol;
     let newPrice = basePrice * (1 + move);
     
-    // Soft mean-reversion toward last known API price
+    // Soft mean-reversion toward last known API price (prevents runaway drift)
     const anchor = _futuresLastApiPrice[pair] || basePrice;
     const drift = (newPrice - anchor) / anchor;
-    if (Math.abs(drift) > 0.008) {
-      newPrice = newPrice * (1 + (drift > 0 ? -0.0005 : 0.0005));
+    if (Math.abs(drift) > 0.02) {
+      newPrice = newPrice * (1 + (drift > 0 ? -0.001 : 0.001));
     }
     
     futuresState.prices[pair] = newPrice;
