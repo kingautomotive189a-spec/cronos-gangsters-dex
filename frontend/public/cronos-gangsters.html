@@ -28194,8 +28194,15 @@ function nftpStakeFromPage(tokenId) {
 }
 
 async function loadNFTStakingPage() {
-  // Check wallet connection — use state.address or fallback to ethereum.selectedAddress
-  const addr = (state && state.address) ? state.address : (window.ethereum && window.ethereum.selectedAddress) ? window.ethereum.selectedAddress : null;
+  // Check wallet connection — try multiple sources
+  let addr = null;
+  if (state && state.address) addr = state.address;
+  if (!addr && window.ethereum) {
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      if (accounts && accounts.length > 0) addr = accounts[0];
+    } catch(e) {}
+  }
   if (!addr) {
     document.getElementById('nftpWalletGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--muted);font-size:12px;">Connect your wallet to load NFTs</div>';
     return;
@@ -28210,7 +28217,8 @@ async function loadNFTStakingPage() {
     const nft = new ethers.Contract(NFT_CONTRACT_ADDR, [
       'function tokensOfOwner(address) view returns(uint256[])',
       'function balanceOf(address) view returns(uint256)',
-      'function tokenURI(uint256) view returns(string)'
+      'function tokenURI(uint256) view returns(string)',
+      'function tokenOfOwnerByIndex(address,uint256) view returns(uint256)'
     ], provider);
 
     const walletGrid = document.getElementById('nftpWalletGrid');
@@ -28221,15 +28229,28 @@ async function loadNFTStakingPage() {
       walletTokens = await nft.tokensOfOwner(addr);
       walletTokens = walletTokens.map(t => Number(t));
     } catch(e) {
-      // tokensOfOwner not supported — fallback to balanceOf
-      console.warn('tokensOfOwner failed, trying balanceOf:', e);
+      // tokensOfOwner not supported — try ERC721Enumerable tokenOfOwnerByIndex
+      console.warn('tokensOfOwner failed, trying tokenOfOwnerByIndex:', e);
       try {
         const balance = Number(await nft.balanceOf(addr));
         if (balance > 0) {
-          // Generate placeholder IDs — contract doesn't support enumeration
-          for (let i = 0; i < balance; i++) walletTokens.push(i + 1);
+          const indexPromises = [];
+          for (let i = 0; i < balance; i++) {
+            indexPromises.push(nft.tokenOfOwnerByIndex(addr, i).then(t => Number(t)).catch(() => null));
+          }
+          const results = await Promise.all(indexPromises);
+          walletTokens = results.filter(id => id !== null);
         }
-      } catch(e2) { console.warn('balanceOf also failed:', e2); }
+      } catch(e2) {
+        console.warn('tokenOfOwnerByIndex also failed:', e2);
+        // Last resort — just show balance count
+        try {
+          const balance = Number(await nft.balanceOf(addr));
+          if (balance > 0) {
+            for (let i = 1; i <= balance; i++) walletTokens.push(i);
+          }
+        } catch(e3) {}
+      }
     }
 
     if (walletGrid) {
