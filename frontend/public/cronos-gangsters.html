@@ -22898,15 +22898,14 @@ function renderChartPositionLines() {
   });
   if (openPositions.length === 0) { overlay.innerHTML = ''; return; }
 
-  // Chart visible area — ONLY the candlestick area (not volume/RSI indicators)
-  // On mobile with indicators: toolbar ~8%, candles 8%-52%, volume 52%-62%, RSI 62%-80%, time axis 80%+
-  var chartAreaTop = chartH * 0.08;
-  var chartAreaBottom = chartH * 0.52;
+  // Chart visible area — ONLY the candlestick area (measured from real mobile screenshot)
+  // Toolbar+pair: 0-14%, Candles: 14%-42%, Volume: 42%-52%, RSI: 52%-68%, Time: 68%+
+  var chartAreaTop = chartH * 0.14;
+  var chartAreaBottom = chartH * 0.42;
   var chartAreaHeight = chartAreaBottom - chartAreaTop;
 
-  // Match TradingView's visible range — center on current price with fixed % range
-  // TradingView 5m chart typically shows ~5% price range
-  var rangePercent = 0.04; // ±2% from current price (4% total)
+  // Match TradingView's visible price range — 5m chart shows ~1.5% range
+  var rangePercent = 0.015; // ±0.75% from current price (1.5% total)
   var visibleMin = currentPrice * (1 - rangePercent / 2);
   var visibleMax = currentPrice * (1 + rangePercent / 2);
   var priceRange = visibleMax - visibleMin;
