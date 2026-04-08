@@ -42,6 +42,7 @@
 <link rel="dns-prefetch" href="https://assets.coingecko.com" />
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.9.0/ethers.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 
 <style>
   :root {
@@ -5106,9 +5107,15 @@ function toggleNavMenu() {
           </div>
         </div>
       </div>
-      <div id="futuresChart" style="height:380px;background:#0a0c1c;position:relative;overflow:hidden;">
-        <div id="tradingview_chart" style="width:100%;height:100%;"></div>
-        <div id="chartPositionOverlay" style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:5;"></div>
+      <div style="display:flex;align-items:center;gap:4px;padding:4px 8px;background:rgba(10,12,28,0.95);border-bottom:1px solid rgba(255,255,255,0.08);">
+        <button class="lwc-tf-btn active" data-tf="1" onclick="switchChartTimeframe('1',this)" style="font-family:'Space Mono',monospace;font-size:10px;padding:3px 7px;border:1px solid rgba(255,255,255,0.15);border-radius:4px;background:rgba(38,166,154,0.2);color:#26a69a;cursor:pointer;">1m</button>
+        <button class="lwc-tf-btn" data-tf="5" onclick="switchChartTimeframe('5',this)" style="font-family:'Space Mono',monospace;font-size:10px;padding:3px 7px;border:1px solid rgba(255,255,255,0.15);border-radius:4px;background:transparent;color:#888;cursor:pointer;">5m</button>
+        <button class="lwc-tf-btn" data-tf="15" onclick="switchChartTimeframe('15',this)" style="font-family:'Space Mono',monospace;font-size:10px;padding:3px 7px;border:1px solid rgba(255,255,255,0.15);border-radius:4px;background:transparent;color:#888;cursor:pointer;">15m</button>
+        <button class="lwc-tf-btn" data-tf="60" onclick="switchChartTimeframe('60',this)" style="font-family:'Space Mono',monospace;font-size:10px;padding:3px 7px;border:1px solid rgba(255,255,255,0.15);border-radius:4px;background:transparent;color:#888;cursor:pointer;">1H</button>
+        <button class="lwc-tf-btn" data-tf="240" onclick="switchChartTimeframe('240',this)" style="font-family:'Space Mono',monospace;font-size:10px;padding:3px 7px;border:1px solid rgba(255,255,255,0.15);border-radius:4px;background:transparent;color:#888;cursor:pointer;">4H</button>
+        <button class="lwc-tf-btn" data-tf="D" onclick="switchChartTimeframe('D',this)" style="font-family:'Space Mono',monospace;font-size:10px;padding:3px 7px;border:1px solid rgba(255,255,255,0.15);border-radius:4px;background:transparent;color:#888;cursor:pointer;">1D</button>
+      </div>
+      <div id="futuresChart" style="height:350px;background:#0a0c1c;position:relative;overflow:hidden;">
       </div>
     </div>
 
@@ -9768,6 +9775,7 @@ document.querySelectorAll(".nav-btn").forEach(btn => {
     if (btn.dataset.page === "revstaking") { updateRSStats(); updateRsBals(); }
     if (btn.dataset.page === "limitorders") { renderLOOrders(); updateLOStats(); updateLoBal(); }
     if (btn.dataset.page === "perpdex") { renderPPPositions(); updatePPStats(); updatePpBal(); switchPPPair(); }
+    if (btn.dataset.page === "futures") { loadFuturesChart(futuresState.pair); }
     if (btn.dataset.page === "otc") { renderOtcDeals(); updateOtcStats(); updateOtcBal(); }
     if (btn.dataset.page === "dao") { renderDaoProposals(); updateDaoStats(); }
     if (btn.dataset.page === "revenue") { loadRevRewardBalances(); }
@@ -22826,137 +22834,325 @@ function setFuturesLev(lev) {
   updateFuturesPosInfo();
 }
 
-function loadFuturesChart(pair) {
-  const el = document.getElementById('tradingview_chart');
-  if (!el) return;
-  const p = FUTURES_PAIRS[pair];
-  el.innerHTML = '';
-  // Clear position overlay when chart changes
-  var overlay = document.getElementById('chartPositionOverlay');
-  if (overlay) overlay.innerHTML = '';
-  const script = document.createElement('script');
-  script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-  script.type = 'text/javascript';
-  script.async = true;
-  script.innerHTML = JSON.stringify({
-    autosize: true,
-    symbol: p.tv,
-    interval: '5',
-    timezone: 'Etc/UTC',
-    theme: 'dark',
-    style: '1',
-    locale: 'en',
-    hide_top_toolbar: false,
-    hide_legend: false,
-    allow_symbol_change: false,
-    save_image: false,
-    backgroundColor: 'rgba(10,10,10,1)',
-    gridColor: 'rgba(40,40,40,0.3)',
-    hide_volume: false,
-    studies: ["RSI@tv-basicstudies", "MASimple@tv-basicstudies"],
-    overrides: {
-      "mainSeriesProperties.candleStyle.upColor": "#26a69a",
-      "mainSeriesProperties.candleStyle.downColor": "#ef5350",
-      "mainSeriesProperties.candleStyle.borderUpColor": "#26a69a",
-      "mainSeriesProperties.candleStyle.borderDownColor": "#ef5350",
-      "mainSeriesProperties.candleStyle.wickUpColor": "#26a69a",
-      "mainSeriesProperties.candleStyle.wickDownColor": "#ef5350",
-      "mainSeriesProperties.barStyle.upColor": "#26a69a",
-      "mainSeriesProperties.barStyle.downColor": "#ef5350",
-      "mainSeriesProperties.hollowCandleStyle.upColor": "#26a69a",
-      "mainSeriesProperties.hollowCandleStyle.downColor": "#ef5350",
-      "mainSeriesProperties.hollowCandleStyle.borderUpColor": "#26a69a",
-      "mainSeriesProperties.hollowCandleStyle.borderDownColor": "#ef5350",
-      "volumePaneSize": "small",
-      "volume.volume.color.0": "#ef535080",
-      "volume.volume.color.1": "#26a69a80"
-    }
+// ═══════════════════════════════════════════════════════════════
+// ── Lightweight Charts — Real Price Lines (replaces iframe overlay) ──
+// ═══════════════════════════════════════════════════════════════
+var _lwcChart = null;        // chart instance
+var _lwcCandleSeries = null; // candlestick series
+var _lwcVolumeSeries = null; // volume histogram
+var _lwcPriceLines = [];     // active position price lines
+var _lwcCurrentPair = '';    // currently loaded pair
+var _lwcCurrentTF = '1';     // current timeframe in minutes (or 'D')
+var _lwcLastCandle = null;   // last candle for real-time updates
+var _lwcCandleInterval = 60000; // ms per candle (1m default)
+
+// Binance interval string mapping
+var _tfToBinance = { '1': '1m', '5': '5m', '15': '15m', '60': '1h', '240': '4h', 'D': '1d' };
+var _tfToMs = { '1': 60000, '5': 300000, '15': 900000, '60': 3600000, '240': 14400000, 'D': 86400000 };
+
+function switchChartTimeframe(tf, btn) {
+  _lwcCurrentTF = tf;
+  _lwcCandleInterval = _tfToMs[tf] || 60000;
+  // Update button styles
+  document.querySelectorAll('.lwc-tf-btn').forEach(function(b) {
+    b.style.background = 'transparent';
+    b.style.color = '#888';
   });
-  const container = document.createElement('div');
-  container.className = 'tradingview-widget-container';
-  container.style.cssText = 'width:100%;height:100%;';
-  const inner = document.createElement('div');
-  inner.className = 'tradingview-widget-container__widget';
-  inner.style.cssText = 'width:100%;height:100%;';
-  container.appendChild(inner);
-  container.appendChild(script);
-  el.appendChild(container);
-  // Render position lines after chart loads
-  setTimeout(function() { renderChartPositionLines(); }, 2000);
+  if (btn) { btn.style.background = 'rgba(38,166,154,0.2)'; btn.style.color = '#26a69a'; }
+  loadFuturesChart(futuresState.pair);
 }
 
-// ── Chart Position Entry Lines (Trading 212 style) ──
-function renderChartPositionLines() {
-  var overlay = document.getElementById('chartPositionOverlay');
-  if (!overlay) return;
-  var chartBox = document.getElementById('futuresChart');
-  if (!chartBox) return;
-  var chartH = chartBox.offsetHeight;
-  var currentPair = futuresState.pair;
-  var currentPrice = futuresState.prices[currentPair] || 0;
-  if (currentPrice <= 0) { overlay.innerHTML = ''; return; }
-  var myWallet = (state.address || 'demo').toLowerCase();
-  var openPositions = futuresState.positions.filter(function(p) {
-    return p.wallet === myWallet && p.status !== 'closed' && p.pair === currentPair;
+async function loadFuturesChart(pair) {
+  var el = document.getElementById('futuresChart');
+  if (!el) return;
+  _lwcCurrentPair = pair;
+  var fp = FUTURES_PAIRS[pair];
+  if (!fp) return;
+
+  // Destroy previous chart
+  if (_lwcChart) { try { _lwcChart.remove(); } catch(e){} _lwcChart = null; }
+  _lwcCandleSeries = null;
+  _lwcVolumeSeries = null;
+  _lwcPriceLines = [];
+  _lwcLastCandle = null;
+  el.innerHTML = '';
+
+  // Create chart with proper dimensions
+  var chartW = el.clientWidth || el.offsetWidth || 400;
+  var chartH = el.clientHeight || el.offsetHeight || 350;
+  _lwcChart = LightweightCharts.createChart(el, {
+    width: chartW,
+    height: chartH,
+    layout: { background: { type: 'solid', color: '#0a0a0a' }, textColor: '#999', fontSize: 10, fontFamily: "'Space Mono', monospace" },
+    grid: { vertLines: { color: 'rgba(255,255,255,0.04)' }, horzLines: { color: 'rgba(255,255,255,0.04)' } },
+    crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+    rightPriceScale: { borderColor: 'rgba(255,255,255,0.1)', scaleMargins: { top: 0.05, bottom: 0.2 } },
+    timeScale: { borderColor: 'rgba(255,255,255,0.1)', timeVisible: true, secondsVisible: false }
   });
-  if (openPositions.length === 0) { overlay.innerHTML = ''; return; }
 
-  // Chart visible area — measured from actual mobile screenshot
-  // Pair header area: 0-18%, Candle area with price scale: 18%-44%
-  // Volume bars: 35%-44% (overlaps), RSI: 48%-60%, Time axis: 62%+
-  var chartAreaTop = chartH * 0.18;
-  var chartAreaBottom = chartH * 0.44;
-  var chartAreaHeight = chartAreaBottom - chartAreaTop;
+  // Candlestick series
+  _lwcCandleSeries = _lwcChart.addCandlestickSeries({
+    upColor: '#26a69a', downColor: '#ef5350',
+    borderUpColor: '#26a69a', borderDownColor: '#ef5350',
+    wickUpColor: '#26a69a', wickDownColor: '#ef5350'
+  });
 
-  // Match TradingView's actual visible range — 5m BTC chart shows ~5-6% range
-  var rangePercent = 0.055; // ±2.75% from current price
-  var visibleMin = currentPrice * (1 - rangePercent / 2);
-  var visibleMax = currentPrice * (1 + rangePercent / 2);
-  var priceRange = visibleMax - visibleMin;
+  // Volume series
+  _lwcVolumeSeries = _lwcChart.addHistogramSeries({
+    priceFormat: { type: 'volume' },
+    priceScaleId: 'vol',
+  });
+  _lwcChart.priceScale('vol').applyOptions({
+    scaleMargins: { top: 0.85, bottom: 0 }
+  });
 
-  // Convert price to Y position — higher price = lower Y (top of chart)
-  function priceToY(price) {
-    var ratio = (visibleMax - price) / priceRange;
-    return chartAreaTop + (ratio * chartAreaHeight);
+  // Fetch data
+  var candles = [];
+  var isCrypto = !!BINANCE_PAIR_MAP[pair];
+  var binanceInterval = _tfToBinance[_lwcCurrentTF] || '1m';
+
+  if (isCrypto) {
+    candles = await _fetchBinanceKlines(fp.symbol, binanceInterval, 300);
+  }
+  if (!candles || candles.length === 0) {
+    candles = _generateSyntheticCandles(pair, 200);
   }
 
-  var html = '';
+  if (candles.length > 0) {
+    _lwcCandleSeries.setData(candles);
+    _lwcVolumeSeries.setData(candles.map(function(c) {
+      return { time: c.time, value: c.volume || 0, color: c.close >= c.open ? 'rgba(38,166,154,0.4)' : 'rgba(239,83,80,0.4)' };
+    }));
+    _lwcLastCandle = candles[candles.length - 1];
+    // Force chart to zoom to fit all candle data
+    _lwcChart.timeScale().fitContent();
+  }
 
-  // Draw entry price lines for each open position
+  // Force resize to ensure canvas dimensions match container
+  setTimeout(function() {
+    if (_lwcChart) {
+      var rw = el.clientWidth || el.offsetWidth || 400;
+      var rh = el.clientHeight || el.offsetHeight || 350;
+      _lwcChart.resize(rw, rh);
+      _lwcChart.timeScale().fitContent();
+    }
+  }, 100);
+
+  // Auto-resize
+  var ro = new ResizeObserver(function() {
+    if (_lwcChart) _lwcChart.resize(el.clientWidth, el.clientHeight);
+  });
+  ro.observe(el);
+
+  // Draw position lines for current pair
+  _syncPositionPriceLines();
+
+  // Connect to kline WebSocket for real OHLCV data
+  _connectKlineWS(pair);
+}
+
+// Fetch real candles from Binance (may fail due to CORS in browsers)
+async function _fetchBinanceKlines(symbol, interval, limit) {
+  try {
+    var url = 'https://api.binance.com/api/v3/klines?symbol=' + symbol + '&interval=' + interval + '&limit=' + limit;
+    var resp = await fetch(url);
+    var data = await resp.json();
+    if (!Array.isArray(data)) return [];
+    return data.map(function(k) {
+      return {
+        time: Math.floor(k[0] / 1000),
+        open: parseFloat(k[1]),
+        high: parseFloat(k[2]),
+        low: parseFloat(k[3]),
+        close: parseFloat(k[4]),
+        volume: parseFloat(k[5])
+      };
+    });
+  } catch(e) {
+    console.warn('Binance klines fetch failed (CORS expected in browsers), using synthetic candles');
+    return [];
+  }
+}
+
+// Approximate prices for crypto pairs (used when no API data yet)
+var _defaultCryptoPrices = {
+  BTC: 71000, ETH: 2200, BNB: 620, CRO: 0.071, SOL: 135, XRP: 0.55,
+  DOGE: 0.08, ADA: 0.45, AVAX: 22, LINK: 15, ARB: 1.1, MATIC: 0.7,
+  DOT: 6.5, UNI: 7.5, SHIB: 0.000009, PEPE: 0.0000012, NEAR: 3.5,
+  ATOM: 8.5, FIL: 4.2, RENDER: 5.5
+};
+
+// Generate synthetic candle history for non-crypto pairs (and crypto when API unavailable)
+function _generateSyntheticCandles(pair, count) {
+  var price = futuresState.prices[pair] || _defaultCryptoPrices[pair] || 100;
+  if (price <= 0) price = _defaultCryptoPrices[pair] || 100;
+  var candles = [];
+  var intervalSec = (_lwcCandleInterval || 60000) / 1000;
+  var now = Math.floor(Date.now() / 1000);
+  // Round to interval boundary
+  now = Math.floor(now / intervalSec) * intervalSec;
+  var startTime = now - (count * intervalSec);
+  var fp = FUTURES_PAIRS[pair];
+  var vol = fp && fp.type === 'commodity' ? 0.002 : fp && fp.type === 'index' ? 0.0015 : 0.003;
+  var curPrice = price * (1 - vol * count * 0.01); // start lower to trend up to current price
+
+  for (var i = 0; i < count; i++) {
+    var t = startTime + (i * intervalSec);
+    var move = (Math.random() - 0.48) * vol * curPrice;
+    if (Math.random() < 0.1) move *= 3; // occasional big candle
+    var open = curPrice;
+    curPrice += move;
+    if (curPrice <= 0) curPrice = open * 0.99;
+    var close = curPrice;
+    var high = Math.max(open, close) * (1 + Math.random() * vol * 0.5);
+    var low = Math.min(open, close) * (1 - Math.random() * vol * 0.5);
+    candles.push({ time: t, open: open, high: high, low: low, close: close, volume: Math.random() * 1000 + 100 });
+  }
+  // Adjust final candle to match current price exactly
+  if (candles.length > 0) {
+    candles[candles.length - 1].close = price;
+    candles[candles.length - 1].high = Math.max(candles[candles.length - 1].high, price);
+    candles[candles.length - 1].low = Math.min(candles[candles.length - 1].low, price);
+  }
+  return candles;
+}
+
+// ── Real-time candle update ──
+function updateLwcCandle(pair, price) {
+  if (!_lwcCandleSeries || pair !== _lwcCurrentPair) return;
+  if (!price || price <= 0) return;
+  var intervalSec = (_lwcCandleInterval || 60000) / 1000;
+  var now = Math.floor(Date.now() / 1000);
+  var candleTime = Math.floor(now / intervalSec) * intervalSec;
+
+  if (_lwcLastCandle && _lwcLastCandle.time === candleTime) {
+    // Update existing candle
+    _lwcLastCandle.close = price;
+    if (price > _lwcLastCandle.high) _lwcLastCandle.high = price;
+    if (price < _lwcLastCandle.low) _lwcLastCandle.low = price;
+  } else {
+    // New candle
+    _lwcLastCandle = { time: candleTime, open: price, high: price, low: price, close: price, volume: 0 };
+  }
+  _lwcLastCandle.volume += 1;
+  try {
+    _lwcCandleSeries.update(_lwcLastCandle);
+    _lwcVolumeSeries.update({ time: _lwcLastCandle.time, value: _lwcLastCandle.volume, color: _lwcLastCandle.close >= _lwcLastCandle.open ? 'rgba(38,166,154,0.4)' : 'rgba(239,83,80,0.4)' });
+  } catch(e) {}
+}
+
+// ── Position Price Lines (FIXED at entry price — never drift!) ──
+function _syncPositionPriceLines() {
+  if (!_lwcCandleSeries) return;
+  // Remove old lines
+  _lwcPriceLines.forEach(function(line) {
+    try { _lwcCandleSeries.removePriceLine(line); } catch(e){}
+  });
+  _lwcPriceLines = [];
+
+  var myWallet = (state.address || 'demo').toLowerCase();
+  var openPositions = futuresState.positions.filter(function(p) {
+    return p.wallet === myWallet && p.status !== 'closed' && p.pair === _lwcCurrentPair;
+  });
+  if (openPositions.length === 0) return;
+
   for (var i = 0; i < openPositions.length; i++) {
     var pos = openPositions[i];
-    var entryPrice = pos.entryPrice;
     var isLong = (pos.side || '').toLowerCase() === 'long';
     var lineColor = isLong ? '#00d4aa' : '#ff4d6a';
-    var bgColor = isLong ? 'rgba(0,212,170,0.15)' : 'rgba(255,77,106,0.15)';
     var sideLabel = isLong ? 'LONG' : 'SHORT';
 
-    // Entry line Y position — calculated from same price scale as current price
-    var yPos = priceToY(entryPrice);
-
-    // PnL
-    var priceDiff = (currentPrice - entryPrice) / entryPrice;
-    var pnlPct = isLong ? priceDiff * pos.leverage * 100 : -priceDiff * pos.leverage * 100;
-    var pnlColor = pnlPct >= 0 ? '#00d4aa' : '#ff4d6a';
-    var pnlSign = pnlPct >= 0 ? '+' : '';
-
-    // Entry price dashed line
-    html += '<div style="position:absolute;top:' + yPos + 'px;left:0;right:0;height:0;border-top:2px dashed ' + lineColor + ';opacity:0.85;z-index:2;"></div>';
-    // Price label on right
-    html += '<div style="position:absolute;top:' + (yPos - 12) + 'px;right:4px;background:' + lineColor + ';color:#000;font-family:\'Space Mono\',monospace;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;white-space:nowrap;z-index:3;">' + sideLabel + ' $' + _fmtPrice(entryPrice) + '</div>';
-    // PnL badge below price label
-    html += '<div style="position:absolute;top:' + (yPos + 2) + 'px;right:4px;background:' + bgColor + ';color:' + pnlColor + ';font-family:\'Space Mono\',monospace;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;white-space:nowrap;z-index:3;">' + pnlSign + pnlPct.toFixed(2) + '%</div>';
+    // Entry price line — FIXED, never moves
+    var entryLine = _lwcCandleSeries.createPriceLine({
+      price: pos.entryPrice,
+      color: lineColor,
+      lineWidth: 2,
+      lineStyle: LightweightCharts.LineStyle.Dashed,
+      axisLabelVisible: true,
+      title: sideLabel + ' $' + _fmtPrice(pos.entryPrice)
+    });
+    _lwcPriceLines.push(entryLine);
 
     // Liquidation price line
     var liqMove = 1 / pos.leverage;
-    var liqPrice = isLong ? entryPrice * (1 - liqMove) : entryPrice * (1 + liqMove);
-    var liqY = priceToY(liqPrice);
-    if (liqY >= chartAreaTop && liqY <= chartAreaBottom) {
-      html += '<div style="position:absolute;top:' + liqY + 'px;left:0;right:0;height:0;border-top:1px dotted #ff2222;opacity:0.5;z-index:1;"></div>';
-      html += '<div style="position:absolute;top:' + (liqY - 10) + 'px;right:4px;background:#ff2222;color:#fff;font-family:\'Space Mono\',monospace;font-size:8px;font-weight:700;padding:1px 4px;border-radius:2px;opacity:0.7;z-index:3;">LIQ $' + _fmtPrice(liqPrice) + '</div>';
+    var liqPrice = isLong ? pos.entryPrice * (1 - liqMove) : pos.entryPrice * (1 + liqMove);
+    var liqLine = _lwcCandleSeries.createPriceLine({
+      price: liqPrice,
+      color: '#ff2222',
+      lineWidth: 1,
+      lineStyle: LightweightCharts.LineStyle.Dotted,
+      axisLabelVisible: true,
+      title: 'LIQ $' + _fmtPrice(liqPrice)
+    });
+    _lwcPriceLines.push(liqLine);
+
+    // TP line if set
+    if (pos.tp && pos.tp > 0) {
+      var tpLine = _lwcCandleSeries.createPriceLine({
+        price: pos.tp,
+        color: '#4caf50',
+        lineWidth: 1,
+        lineStyle: LightweightCharts.LineStyle.LargeDashed,
+        axisLabelVisible: true,
+        title: 'TP $' + _fmtPrice(pos.tp)
+      });
+      _lwcPriceLines.push(tpLine);
+    }
+
+    // SL line if set
+    if (pos.sl && pos.sl > 0) {
+      var slLine = _lwcCandleSeries.createPriceLine({
+        price: pos.sl,
+        color: '#ff9800',
+        lineWidth: 1,
+        lineStyle: LightweightCharts.LineStyle.LargeDashed,
+        axisLabelVisible: true,
+        title: 'SL $' + _fmtPrice(pos.sl)
+      });
+      _lwcPriceLines.push(slLine);
     }
   }
-  overlay.innerHTML = html;
+}
+
+// Legacy alias — all old callers now call this
+function renderChartPositionLines() {
+  _syncPositionPriceLines();
+}
+
+// ── Binance Kline WebSocket — real OHLCV candles for the viewed pair ──
+var _binanceKlineWS = null;
+function _connectKlineWS(pair) {
+  if (_binanceKlineWS) { try { _binanceKlineWS.close(); } catch(e){} _binanceKlineWS = null; }
+  if (!BINANCE_PAIR_MAP[pair]) return; // non-crypto pairs don't have Binance streams
+  var symbol = BINANCE_PAIR_MAP[pair]; // e.g. 'btcusdt'
+  var interval = _tfToBinance[_lwcCurrentTF] || '1m';
+  var wsUrl = 'wss://stream.binance.com:9443/ws/' + symbol + '@kline_' + interval;
+  try {
+    _binanceKlineWS = new WebSocket(wsUrl);
+    _binanceKlineWS.onmessage = function(event) {
+      try {
+        var msg = JSON.parse(event.data);
+        var k = msg.k;
+        if (!k) return;
+        var candle = {
+          time: Math.floor(k.t / 1000),
+          open: parseFloat(k.o),
+          high: parseFloat(k.h),
+          low: parseFloat(k.l),
+          close: parseFloat(k.c),
+          volume: parseFloat(k.v)
+        };
+        if (_lwcCandleSeries && pair === _lwcCurrentPair) {
+          _lwcLastCandle = candle;
+          try {
+            _lwcCandleSeries.update(candle);
+            _lwcVolumeSeries.update({ time: candle.time, value: candle.volume, color: candle.close >= candle.open ? 'rgba(38,166,154,0.4)' : 'rgba(239,83,80,0.4)' });
+          } catch(e){}
+        }
+      } catch(e) {}
+    };
+    _binanceKlineWS.onerror = function() { try { _binanceKlineWS.close(); } catch(e){} };
+  } catch(e) { console.warn('Kline WS failed:', e); }
 }
 
 function setFuturesPriceDisplay(pair, price, change) {
@@ -24454,7 +24650,11 @@ async function futuresOwnerWithdraw(curr) {
 
 // Init futures on page load
 setTimeout(() => {
-  loadFuturesChart('BTC');
+  // Only load chart if futures page is currently visible; otherwise it loads on page switch
+  var futPage = document.getElementById('page-futures');
+  if (futPage && (futPage.style.display === 'block' || futPage.classList.contains('active'))) {
+    loadFuturesChart('BTC');
+  }
   updateFuturesPrice();
   updateFuturesPool();
   renderFuturesHistory();
@@ -24556,7 +24756,7 @@ function connectBinanceWS() {
         // Update display if this pair is currently viewed
         if (futuresState.pair === pair) {
           setFuturesPriceDisplay(pair, price, change24h);
-          renderChartPositionLines();
+          updateLwcCandle(pair, price);
         }
         
         // Update PnL for open positions (throttled)
@@ -24693,7 +24893,11 @@ function simulateFuturesTick() {
     }
     // Update asset card prices in the grid (all pairs)
     renderAssetGrid(_currentCatFilter || 'all');
-    renderChartPositionLines();
+    // Update chart candle for currently viewed non-crypto pair
+    var viewedPairForChart = futuresState.pair;
+    if (!BINANCE_PAIR_MAP[viewedPairForChart]) {
+      updateLwcCandle(viewedPairForChart, futuresState.prices[viewedPairForChart]);
+    }
     updateFuturesPosInfo();
     updateFuturesPositions();
   }
