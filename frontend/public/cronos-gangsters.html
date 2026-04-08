@@ -1119,7 +1119,19 @@ function toggleNavMenu() {
       </div>
     </div>
 
-    <!-- ══ LEVERAGE TRADING SHOWCASE ══ -->
+    <!-- ══ LEVERAGE TRADING SHOWCASE — Collapsible ══ -->
+    <details id="homeLevToggle" data-testid="home-lev-toggle">
+      <summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(255,140,0,0.08),rgba(255,140,0,0.02));border:1px solid rgba(255,140,0,0.25);border-radius:14px;padding:14px 16px;margin-bottom:12px;transition:all .3s;user-select:none;" onmouseover="this.style.borderColor='rgba(255,140,0,0.5)'" onmouseout="this.style.borderColor='rgba(255,140,0,0.25)'">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="1.8"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:#fff;line-height:1;">LEVERAGE <span style="color:#ff8c00;">TRADING</span></div>
+            <div style="font-size:10px;color:rgba(235,235,245,0.45);margin-top:1px;">69 pairs up to 100x — Live prices</div>
+          </div>
+        </div>
+        <svg class="home-lev-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .3s;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <style>#homeLevToggle[open] .home-lev-chev{transform:rotate(180deg);}#homeLevToggle summary::-webkit-details-marker{display:none;}</style>
     <div data-testid="leverage-showcase" onclick="showPage('futures')" style="cursor:pointer;margin-bottom:20px;background:linear-gradient(135deg,rgba(255,140,0,0.08),rgba(255,140,0,0.02));border:1px solid rgba(255,140,0,0.25);border-radius:16px;padding:20px;transition:all .3s;position:relative;overflow:hidden;" onmouseover="this.style.borderColor='rgba(255,140,0,0.5)';this.style.boxShadow='0 0 30px rgba(255,140,0,0.1)'" onmouseout="this.style.borderColor='rgba(255,140,0,0.25)';this.style.boxShadow='none'">
       <div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,#ff8c00,#cc7000);padding:4px 14px;border-radius:0 16px 0 12px;font-family:'Space Grotesk',sans-serif;font-size:10px;color:#000;font-weight:700;letter-spacing:1px;">FLAGSHIP</div>
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
@@ -1175,63 +1187,11 @@ function toggleNavMenu() {
         <span style="font-size:9px;color:#ff8c00;background:rgba(255,140,0,0.1);padding:3px 8px;border-radius:4px;font-weight:700;cursor:pointer;">+47 more</span>
       </div>
       <!-- Live Price Grid for Homepage -->
-      <div id="homeLevPriceGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px;"></div>
+      <div id="homeLevPriceGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:14px;"></div>
     </div>
+    </details>
 
-    <!-- ── PROTOCOL TRUST + GANGSTER CARDS (below leverage showcase) ── -->
-    <div data-testid="protocol-trust" style="text-align:center;margin:28px 0 16px;padding:0 12px;">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;font-weight:800;color:var(--gold);letter-spacing:2px;">BUILT DIFFERENT. BUILT ON-CHAIN.</div>
-      <div style="max-width:480px;margin:8px auto 0;font-family:'Space Grotesk',sans-serif;font-size:12px;color:rgba(235,235,245,0.45);line-height:1.7;letter-spacing:0.2px;">GANG DEX runs entirely on Cronos mainnet. Every position, every swap, every yield harvest is a verifiable blockchain transaction. No backend tricks, no simulated balances — just pure, transparent, decentralized finance secured by smart contracts you can audit on CronoScan.</div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
-      <div class="gang-img-card" onclick="showPage('futures')" style="cursor:pointer;">
-        <img src="/img/make_money.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
-        <div class="gang-img-caption">📈 LEVERAGE TRADING</div>
-      </div>
-      <div class="gang-img-card" onclick="showPage('tracker')" style="cursor:pointer;">
-        <img src="/img/the_boss.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
-        <div class="gang-img-caption">🔍 GANG TRACKER</div>
-      </div>
-      <div class="gang-img-card" onclick="showPage('farms')" style="cursor:pointer;">
-        <img src="/img/the_don.png" class="gang-side-img" loading="lazy" decoding="async" style="height:180px;object-position:center top;" />
-        <div class="gang-img-caption">🌾 YIELD FARMS</div>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
-      <div class="gang-img-card" onclick="showPage('vaults')" style="cursor:pointer;">
-        <img src="/img/the_family.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
-        <div class="gang-img-caption">🏦 AUTO VAULTS</div>
-      </div>
-      <div class="gang-img-card" onclick="showPage('staking')" style="cursor:pointer;">
-        <img src="/img/stay_strapped.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
-        <div class="gang-img-caption">🔒 STAKING</div>
-      </div>
-      <div class="gang-img-card" onclick="showPage('lottery')" style="cursor:pointer;">
-        <img src="/img/street_style.png" class="gang-side-img" loading="lazy" decoding="async" style="height:160px;object-position:center top;" />
-        <div class="gang-img-caption">🎰 LOTTERY</div>
-      </div>
-    </div>
-
-    <!-- ══ EARN HIGHLIGHTS ══ -->
-    <div data-testid="earn-highlights" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;">
-      <div onclick="showPage('farms')" style="cursor:pointer;background:linear-gradient(135deg,rgba(39,174,96,0.08),rgba(39,174,96,0.02));border:1px solid rgba(39,174,96,0.2);border-radius:14px;padding:16px 12px;text-align:center;transition:all .3s;" onmouseover="this.style.borderColor='rgba(39,174,96,0.5)'" onmouseout="this.style.borderColor='rgba(39,174,96,0.2)'">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="1.8" style="margin-bottom:6px;"><path d="M12 22c4-4 8-7.5 8-12a8 8 0 10-16 0c0 4.5 4 8 8 12z"/><circle cx="12" cy="10" r="3"/></svg>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--green);letter-spacing:2px;">FARMS</div>
-        <div style="font-size:9px;color:rgba(235,235,245,0.4);margin-top:2px;">Yield Farming</div>
-      </div>
-      <div onclick="showPage('staking')" style="cursor:pointer;background:linear-gradient(135deg,rgba(212,160,23,0.08),rgba(212,160,23,0.02));border:1px solid rgba(212,160,23,0.2);border-radius:14px;padding:16px 12px;text-align:center;transition:all .3s;" onmouseover="this.style.borderColor='rgba(212,160,23,0.5)'" onmouseout="this.style.borderColor='rgba(212,160,23,0.2)'">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" style="margin-bottom:6px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);letter-spacing:2px;">STAKE</div>
-        <div style="font-size:9px;color:rgba(235,235,245,0.4);margin-top:2px;">Up to 300% APY</div>
-      </div>
-      <div onclick="showPage('revstaking')" style="cursor:pointer;background:linear-gradient(135deg,rgba(156,39,176,0.08),rgba(156,39,176,0.02));border:1px solid rgba(156,39,176,0.2);border-radius:14px;padding:16px 12px;text-align:center;transition:all .3s;" onmouseover="this.style.borderColor='rgba(156,39,176,0.5)'" onmouseout="this.style.borderColor='rgba(156,39,176,0.2)'">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9c27b0" stroke-width="1.8" style="margin-bottom:6px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#9c27b0;letter-spacing:2px;">POOLS</div>
-        <div style="font-size:9px;color:rgba(235,235,245,0.4);margin-top:2px;">Earn Revenue</div>
-      </div>
-    </div>
-
-    <!-- ── SWAP BOX FIRST ── -->
+    <!-- ── SWAP BOX ── -->
     <div class="swap-wrap">
       <div class="card" style="border-color:rgba(212,160,23,0.3);box-shadow:0 0 0 1px rgba(212,160,23,0.05),0 8px 32px rgba(0,0,0,0.4);">
         <div class="card-title"><img loading="lazy" src="/gang-logo.png" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;"> Swap Tokens</div>
@@ -1617,6 +1577,46 @@ function toggleNavMenu() {
       </div>
       </details>
     </div>
+
+    <!-- ── GANGSTER CARDS (below swap) ── -->
+    <details id="homeGangCardsToggle" data-testid="home-gang-toggle" style="margin-top:16px;">
+      <summary style="cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,rgba(212,160,23,0.08),rgba(212,160,23,0.02));border:1px solid rgba(212,160,23,0.2);border-radius:14px;padding:12px 16px;margin-bottom:8px;transition:all .3s;user-select:none;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px;line-height:1;">EXPLORE FEATURES</div>
+          <div style="font-size:10px;color:rgba(235,235,245,0.4);">Tap to expand</div>
+        </div>
+        <svg class="home-gang-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .3s;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <style>#homeGangCardsToggle[open] .home-gang-chev{transform:rotate(180deg);}#homeGangCardsToggle summary::-webkit-details-marker{display:none;}</style>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div class="gang-img-card" onclick="showPage('futures')" style="cursor:pointer;">
+          <img src="/img/make_money.png" class="gang-side-img" loading="lazy" decoding="async" style="height:140px;object-position:center top;" />
+          <div class="gang-img-caption">LEVERAGE TRADING</div>
+        </div>
+        <div class="gang-img-card" onclick="showPage('tracker')" style="cursor:pointer;">
+          <img src="/img/the_boss.png" class="gang-side-img" loading="lazy" decoding="async" style="height:140px;object-position:center top;" />
+          <div class="gang-img-caption">GANG TRACKER</div>
+        </div>
+        <div class="gang-img-card" onclick="showPage('farms')" style="cursor:pointer;">
+          <img src="/img/the_don.png" class="gang-side-img" loading="lazy" decoding="async" style="height:140px;object-position:center top;" />
+          <div class="gang-img-caption">YIELD FARMS</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div class="gang-img-card" onclick="showPage('vaults')" style="cursor:pointer;">
+          <img src="/img/the_family.png" class="gang-side-img" loading="lazy" decoding="async" style="height:140px;object-position:center top;" />
+          <div class="gang-img-caption">AUTO VAULTS</div>
+        </div>
+        <div class="gang-img-card" onclick="showPage('staking')" style="cursor:pointer;">
+          <img src="/img/stay_strapped.png" class="gang-side-img" loading="lazy" decoding="async" style="height:140px;object-position:center top;" />
+          <div class="gang-img-caption">STAKING</div>
+        </div>
+        <div class="gang-img-card" onclick="showPage('lottery')" style="cursor:pointer;">
+          <img src="/img/street_style.png" class="gang-side-img" loading="lazy" decoding="async" style="height:140px;object-position:center top;" />
+          <div class="gang-img-caption">LOTTERY</div>
+        </div>
+      </div>
+    </details>
 
   </div>
 

@@ -34,7 +34,10 @@ Web3 DeFi DApp on Cronos blockchain. Single-file HTML deployment (~28K lines).
 - Added `quickRefreshBalances()` function for instant targeted balance updates after swaps, add/remove liquidity, and leverage trades — only re-reads the 2 affected tokens instead of waiting for the full 15+ token refresh
 - **CRITICAL FIX — GANG WITHDRAWAL**: Upgraded Trading Vault contract to support ERC-20 token withdrawals via `withdrawTokenTo(token, to, amount)`. Old vault was CRO-only — GANG went in but never came out. Now closing a GANG leverage position calls `vaultContract.withdrawTokenTo(GANG_ADDR, userAddr, payoutWei)` to actually return GANG to the user's wallet.
 - **CRITICAL FIX — INCONSISTENT STATS**: Fixed homepage showing random/different liquidity values every page load. Root cause: 3 competing sources (DexScreener, on-chain LP reader, vault fallback) were racing to overwrite `statTVL`. Now on-chain LP reader is the single authoritative source. Also removed fake $71K volume (was showing accumulated LIFETIME localStorage trades, not real 24h volume). Now only shows real DexScreener 24h volume.
-- **CHART LINE FIX**: Adjusted TradingView entry price line Y-position anchor from 50% to 45% chart area and widened the scale for better price-line alignment.
+- **UI COMPACTION**: Homepage restructured — Leverage Trading and Gangster Cards wrapped in collapsible dropdowns, price grid fixed to 2 columns on mobile, "BUILT DIFFERENT" text removed, gangster cards moved below swap into collapsible "EXPLORE FEATURES" section
+- **SPEED**: Added optimistic balance updates — wallet balance shows instantly on screen when TX is sent (before blockchain confirms), then real refresh after confirmation
+- **PRICES**: Doubled volatility, added momentum (trends persist), 30% chance of big candle moves, 5% chance of spikes for more exciting, unpredictable price action
+- **CHART LINE**: Fixed chart area to candlestick zone only (8%-52%), excluded volume/RSI indicators from price mapping
 - ZIP regenerated
 
 ## Upcoming (P1)
